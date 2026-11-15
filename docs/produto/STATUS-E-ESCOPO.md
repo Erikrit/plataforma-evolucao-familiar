@@ -7,8 +7,8 @@
 | Visão e princípios | Aprovados |
 | Módulo 01 — Fundação Familiar | Especificação v1.0; **implementação parcial**: bootstrap FF-01 e fluxo mínimo FF-02 presentes |
 | Módulo 02 — Cuidados da Vovó | Especificação v1.0; **sem implementação funcional de cuidados constatada** |
-| Módulo 03 — Laurinha | Especificação funcional **v1.1 proposta**, pendente de aceite final; sem implementação observada |
-| Módulo 04 — Evolução Familiar | Especificação funcional **v1.1 proposta**, pendente de aceite final; sem implementação observada |
+| Módulo 03 — Laurinha | Especificação funcional **v1.1 aprovada**; sem implementação observada |
+| Módulo 04 — Evolução Familiar | Especificação funcional **v1.1 aprovada**; sem implementação observada |
 | Arquitetura | Next.js, NestJS, Prisma, PostgreSQL e Docker Compose já presentes no código; demais decisões preliminares |
 | Autorização contextual/convites | **Não implementados** no código inspecionado (só verificação básica de `familiaId` por sessão) |
 | Autenticação | **Provisória**, com token de sessão no banco e `localStorage` no cliente |
@@ -33,11 +33,16 @@
 
 **Processo de desenvolvimento:** `docs/esteira/`, `.cursor/`, `AGENTS.md`, scripts correspondentes. Existe no repositório por decisão prévia, mas sua especificação e operação são tratadas em outro contexto. **Não houve alterações nesses arquivos nesta revisão.**
 
-## Decisões pendentes de aceite
+## Decisões funcionais aprovadas em 2026-11-15
 
-1. Confirmar revisão v1.1 dos módulos 03/04: nome + dificuldade padrão, guardar para depois, Concluiu/Participou, histórico/resumo com PDF.
-2. Confirmar valores de estrelas: simples 5/3, média 10/5, desafiadora 15/8; podem mudar sem alterar princípios.
-3. Validar UX com família e confiabilidade dos lembretes em dispositivos reais.
+- **Módulo 03 v1.1:** nome + dificuldade predefinida como simples, guardar para depois, registro Concluiu/Participou, histórico no Módulo 04, sem cadastro de não realização.
+- **Estrelas:** dificuldade simples = 5/3; média = 10/5; desafiadora = 15/8 (Concluiu/Participou). Cálculo automático, sem aprovação manual, sem reescrever créditos históricos.
+- **Módulo 04 v1.1:** histórico individual e resumo contextual, poucos destaques familiares, PDF como ação do resumo.
+
+## Validações ainda pendentes
+
+- Experiência de uso real com a família e confiabilidade de lembretes nos dispositivos previstos.
+- Controles de autenticação e autorização antes do uso de informações reais sensíveis.
 
 ## Ordem funcional
 
