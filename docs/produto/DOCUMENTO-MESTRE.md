@@ -1,6 +1,6 @@
 # Documento Mestre do Produto — v1.0
 
-**Estado:** baseline funcional consolidada. Módulo 01 (Fundação Familiar) com implementação local validada na esteira; módulos 02–04 ainda não implementados. Sem deploy.  
+**Estado:** baseline funcional aprovada; módulos 01 e 02 implementados localmente em `develop` com evidências QG-3 registradas e lacunas de segurança/UX. Revisões funcionais v1.1 dos módulos 03 e 04 aprovadas em 2026-11-15, sem implementação integral. Sem deploy ou homologação.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
 
 ## 1. Visão
@@ -34,38 +34,59 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 
 ## 5. Módulo 02 — Cuidados da Vovó
 
-- Medicamento com **nome, horários e informações adicionais somente quando essenciais**.
+- Cadastro simplificado de medicamento **aprovado em 2026-11-15**: nome, primeiro horário, doses por dia e duração (contínua ou por dias), com sugestões matemáticas de horário editáveis e conferidas com a prescrição antes dos lembretes. Não deduzir intervalo clínico a partir do número de doses; opções especiais apenas quando necessárias.
 - Receita como foto ou PDF opcional; um arquivo pode estar associado a mais de um medicamento. Não exigir transcrição integral.
 - Rotina do dia em cartões clicáveis que abrem escolhas; tocar não confirma automaticamente.
 - Estados exibidos: **tomou conforme relato**, **informou que não tomou**, **sem confirmação**. Sem registro não significa não tomado.
 - Alteração de horário e encerramento preservam histórico; correções rastreáveis.
 - Consultas, exames e anexos com cadastro simples, atividades relevantes de apoio e companhia com registro rápido.
 - Visão da colaboradora em seções separadas: medicamentos, atividades de apoio e consultas, com próximo cuidado relevante destacado.
-- Lembretes discretos, destinatários autorizados, sem alertas alarmistas nem recomendações de doses.
+- **Lembretes aprovados em 2026-11-15:** um aviso discreto por ocorrência de medicamento no horário conferido; destinatários explicitamente selecionados e autorizados (Vovó, responsáveis e colaboradora quando aplicável); sem cobrança repetida por falta de confirmação e sem inferir dose não tomada. Consultas/exames com data permitem aviso antecipado simples; cancelamentos e alterações atualizam avisos futuros. Privacidade inclusive na tela bloqueada; entrega real depende de validação nos dispositivos. Não é canal único de segurança.
 - Histórico automático, relatório por período com prévia e exportação PDF.
 
 **Não é sistema médico:** não interpretar exames, diagnosticar, orientar compensação de dose ou tomar decisão terapêutica.
 
 ## 6. Módulo 03 — Desenvolvimento da Laurinha
 
-- Biblioteca de desafios presenciais e simples, organizados por categoria e dificuldade.
-- Desafios personalizados e planejamento semanal **opcional**, liderado pela Mikaela.
-- Adulto registra **concluiu / tentou / não realizou**, observação opcional.
-- **Estrelas automáticas sem aprovação manual**; esforço pode ser reconhecido, ausência não gera punição.
-- Regras de pontos simples e transparentes, consistentes, protegidas contra duplicidade.
-- Recompensas extras combinadas pela família; não condicionar alimentação, cuidados, afeto ou necessidades básicas à pontuação.
-- Histórico educativo baseado em experiências e observações; pontuação não representa diagnóstico, inteligência ou avaliação clínica.
-- Não implementar XP/níveis complexos ou jogos digitais no MVP.
+**Revisão funcional v1.1 aprovada**, detalhada em `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md`.
+
+- Biblioteca curta de atividades presenciais e atividades personalizadas.
+- Cadastro próprio: **nome**; dificuldade predefinida como simples e alterável. Categoria e instruções opcionais.
+- Organização opcional **Guardar para depois**, sem planejamento com datas obrigatórias, atrasos ou cobrança.
+- Adulto registra apenas **Concluiu** ou **Participou**. **Não realizada** não requer registro.
+- Estrelas automáticas e transparentes, sem aprovação da Mikaela, penalidades, ranking ou avaliação clínica.
+- Tabela de estrelas **aprovada**: simples 5/3; média 10/5; desafiadora 15/8 (concluiu/participou).
+- Repetições legítimas de uma brincadeira são permitidas, reenvios acidentais não duplicam créditos.
+- Recompensas opcionais; não condicionam necessidades básicas e afeto.
+- Histórico aprofundado e resumo da evolução ficam no **Módulo 04**, sem telas ou dados duplicados.
 
 ## 7. Módulo 04 — Evolução Familiar
 
-Histórico **por pessoa**, filtros de período e categoria, detalhes expansíveis, resumo familiar apenas de acontecimentos importantes e autorizados; evitar um feed de todas as doses e atividades. Painéis pequenos com informações qualitativas. Relatórios da Vovó e Laurinha derivados dos registros já existentes, com prévia e PDF; sem preenchimento adicional.
+**Revisão funcional v1.1 aprovada**, detalhada em `docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md`.
 
-## 8. Fora do MVP
+- Duas experiências centrais: **Histórico individual** e **Resumo da pessoa**, com filtros simples.
+- Vovó: doses previstas, tomadas informadas, não tomadas informadas, sem confirmação, consultas e exames; respeitar alterações históricas de programação e dados autorizados.
+- Laurinha: experiências, categorias quando disponíveis, conquistas e observações **já existentes**, sem converter estrelas em medidas de inteligência.
+- Resumo familiar limitado a poucos destaques relevantes e autorizados na página inicial, sem feed próprio nem publicações manuais.
+- Relatório PDF como ação do Resumo: período → prévia → exportação, sem recadastrar dados nem incluir anexos sensíveis por padrão.
+- Sem dashboards genéricos, gráficos obrigatórios, ranking ou cobrança.
+- Autorização vale para detalhes, metadados, indicadores, prévia e PDF.
+
+## 8. Decisões transversais de experiência móvel e privacidade — aprovadas em 2026-11-15
+
+- **Mobile-first sem exclusividade:** experiência prioritária no celular, adequada também ao computador, com botões legíveis, poucos toques e conteúdo centrado nas pessoas.
+- **Navegação única, contexto variável:** estrutura básica consistente; cartões, ações e informações visíveis apenas com autorização.
+- **Autorização sem burocracia:** perfis predefinidos, personalização opcional; parentesco, responsabilidade e permissão são conceitos distintos.
+- **Autonomia e proteção:** a Vovó compreende quem acompanha seus cuidados e pode participar das escolhas legítimas; administrador não herda acesso clínico irrestrito; dados infantis e documentos sensíveis permanecem protegidos.
+- **Notificações discretas por padrão:** detalhamento sensível apenas mediante escolha e autorização, sem exposição indevida em telas bloqueadas.
+- **Estado de gravação confiável:** diante de falha de conexão, não afirmar que um registro foi salvo.
+- PWA ou aplicativo nativo ainda depende de avaliação técnica e testes reais de notificações, sem ampliar requisitos funcionais por conveniência da tecnologia.
+
+## 9. Fora do MVP
 
 Agenda universal, Kanban, rankings de produtividade, gestão trabalhista/financeira da colaboradora, prontuário completo, OCR clínico de receitas, diagnóstico por IA, jogos digitais, SaaS/billing, chat familiar e árvore genealógica complexa.
 
-## 9. Critérios de sucesso
+## 10. Critérios de sucesso
 
 - Operações frequentes resolvidas com interações rápidas e campos mínimos.
 - Autonomia da Vovó preservada; dados de saúde e da criança restritos a usuários autorizados.
@@ -74,6 +95,6 @@ Agenda universal, Kanban, rankings de produtividade, gestão trabalhista/finance
 - Histórico e relatórios aproveitam os dados existentes.
 - UX validada com usuários reais antes da conclusão do MVP.
 
-## 10. Controle de mudanças
+## 11. Controle de mudanças
 
 Toda alteração deve registrar: problema resolvido, novo trabalho imposto à família, possibilidade de reutilizar dados existentes, risco de privacidade/segurança, alternativas mais simples, aprovação e impacto. **Não criar funcionalidade sem valor demonstrável.**

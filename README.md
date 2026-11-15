@@ -1,6 +1,6 @@
 # Plataforma de Evolução Familiar
 
-> **Status:** especificação do produto + implementação local do **módulo 01 (Fundação Familiar)**. Demais módulos ainda não implementados. Sem deploy.
+> **Status:** implementação local dos módulos 01 e 02 presente em `develop`, com evidências QG-3 registradas; módulos 03 e 04 ainda não implementados integralmente. Autenticação provisória, UX e notificações ainda não homologadas. Sem deploy; não usar dados reais sensíveis.
 
 Plataforma para apoiar o cuidado, as rotinas e o desenvolvimento de integrantes da família, preservando o histórico ao longo do tempo — sem transformar o cotidiano em prestação de contas.
 
@@ -20,8 +20,8 @@ Plataforma para apoiar o cuidado, as rotinas e o desenvolvimento de integrantes 
 - [Decisões arquiteturais](docs/arquitetura/DECISOES.md)
 - [Módulo 01 — Fundação Familiar](docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md)
 - [Módulo 02 — Cuidados da Vovó](docs/modulos/02-cuidados-vovo/ESPECIFICACAO.md)
-- [Módulo 03 — Desenvolvimento da Laurinha](docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) — resumo funcional, detalhamento pendente
-- [Módulo 04 — Evolução Familiar](docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md) — resumo funcional, detalhamento pendente
+- [Módulo 03 — Desenvolvimento da Laurinha](docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) — especificação funcional v1.1 aprovada
+- [Módulo 04 — Evolução Familiar](docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md) — especificação funcional v1.1 aprovada
 
 ## Como usar
 
@@ -38,7 +38,7 @@ Não inferir que documentos marcados como *proposta* ou *pendente* estejam defin
 
 Direção tecnológica (ADR-003): Next.js/React, NestJS/TypeScript, PostgreSQL, Prisma e Docker Compose em monólito modular (`apps/api`, `apps/web`).
 
-### Execução local
+### Bootstrap local (FF-01)
 
 ```bash
 cp .env.example .env
@@ -55,10 +55,14 @@ npm run dev:api
 npm run dev:web
 ```
 
-PostgreSQL do Compose: `localhost:5433`. API: `http://localhost:3001` (`GET /saude`). Web: `http://localhost:3000`.  
-Admin local provisório: `PEF_ADMIN_*` em `.env.example` (dados fictícios).  
-Regressão do módulo 01 (API no ar): `npm run smoke:modulo-01`.  
-Estado da esteira: `docs/esteira/estado/atual.json` (`01-fundacao-familiar` → COMPLETED).
+PostgreSQL do Compose escuta em `localhost:5433` (evita conflito com instalações locais na 5432).  
+Healthcheck da API: `GET http://localhost:3001/saude`.  
+Admin local provisório: ver `PEF_ADMIN_*` em `.env.example` (dados fictícios).  
+Smoke FF-02 (API no ar): `npm run smoke:ff02`. O módulo 02 possui scripts smoke em `apps/api/scripts/` e evidências em `docs/esteira/estado/`, mas a suíte não foi reexecutada nesta integração.
+
+## Situação e restrições
+
+Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar funcionalidades previstas, implementadas e ainda pendentes. O código atual não oferece proteção adequada para dados reais da família: sessões provisórias e autorização de informações sensíveis ainda necessitam revisão; a implementação local do módulo 02 não implica homologação. As especificações funcionais v1.1 dos módulos 03 e 04, incluindo os valores de estrelas (5/3, 10/5, 15/8 por dificuldade e resultado), foram aprovadas em 2026-11-15. A aprovação não significa que tenham sido implementadas.
 
 ## Privacidade
 

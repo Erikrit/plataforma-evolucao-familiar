@@ -1,6 +1,6 @@
 # Arquitetura preliminar — Plataforma de Evolução Familiar
 
-**Situação:** direção arquitetural preliminar em uso no monólito local (`apps/api`, `apps/web`). Contratos REST e autenticação definitiva ainda sujeitos a validação; módulo 01 implementado localmente.
+**Situação:** monólito local em `develop` com módulos 01 e 02 implementados e evidências de testes registradas, sem homologação para dados reais; módulos 03 e 04 ainda não implementados integralmente. Contratos e segurança definitiva pendentes. Ver `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## Estrutura lógica
 
@@ -41,8 +41,9 @@ Módulos lógicos:
 
 ### Desenvolvimento
 
-`desafio`, `desafio_planejado`, `participacao_desafio`, `movimento_estrelas`, `recompensa`, `resgate_recompensa` (a necessidade de tabela separada de resgate será revisada na modelagem final).
+`desafio`, `desafio_guardado` (opcional), `participacao_desafio`, `movimento_estrelas`, `recompensa`, `resgate_recompensa` (a necessidade de tabela separada de resgate será revisada na modelagem final).
 
+- Revisão funcional v1.1 proposta: guardar atividade opcionalmente, sem planejamento semanal com prazo. Apenas Concluiu/Participou são registrados; não realizada não exige lançamento.
 - Participação e estrelas são uma transação lógica.
 - Reenvio da mesma participação não duplica pontos; execução nova legítima é permitida.
 - Resgates não podem gerar saldo negativo sob concorrência.
@@ -50,7 +51,7 @@ Módulos lógicos:
 
 ### Acompanhamento
 
-O histórico consulta registros de origem com autorização por pessoa e período. Estrutura auxiliar de eventos só se houver necessidade comprovada. PDFs gerados sob demanda, sem armazenar cópias por padrão.
+A experiência funcional v1.1 proposta possui **Histórico individual** e **Resumo da pessoa**, com PDF acionado no resumo; o resumo familiar são apenas poucos destaques na home. O histórico consulta registros de origem com autorização por pessoa e período. Estrutura auxiliar de eventos só se houver necessidade comprovada. PDFs gerados sob demanda, sem armazenar cópias por padrão.
 
 ## Contratos de API — rascunho
 

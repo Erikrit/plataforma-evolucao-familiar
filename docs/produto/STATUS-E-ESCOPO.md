@@ -1,34 +1,43 @@
 # Estado das decisões e escopo
 
-Atualizado em 2026-11-15.
+**Revisão reconciliada:** 2026-11-15. **Referência de implementação:** `develop`. **Fonte funcional:** especificações aprovadas neste PR. Evidências de testes são registros locais não reexecutados nesta reconciliação.
 
-| Elemento | Estado |
+| Elemento | Situação |
 |---|---|
-| Princípios e visão | Aprovados |
-| Módulos do MVP | Aprovados conceitualmente |
-| Fundação Familiar | Especificação v1.0; implementação local FF-01..FF-06 concluída e QG-3 PASS; auth definitiva ainda pendente |
-| Cuidados da Vovó | Implementado localmente (CV-01..CV-06, QG-3 PASS); ACE-C12 lembretes em dispositivos reais ainda PENDING |
-| Desenvolvimento da Laurinha | Visão aprovada; especificação funcional completa pendente |
-| Evolução Familiar | Visão aprovada; especificação funcional completa pendente |
-| Arquitetura e contratos REST | Propostas preliminares; detalhadas parcialmente na Fundação |
-| Notificações de medicamentos | Estratégia e teste em dispositivos reais pendentes |
-| Interface com usuários reais | Validação pendente |
-| Infraestrutura/código | Monólito local ativo (`apps/api`, `apps/web`, Compose); smokes do módulo 01; sem deploy |
+| Visão e princípios | Aprovados |
+| Módulo 01 — Fundação Familiar | Especificação v1.1 aprovada; FF-01..FF-06 implementados localmente com QG-3 PASS registrado; privacidade/UX v1.1, autenticação definitiva e homologação pendentes |
+| Módulo 02 — Cuidados da Vovó | Especificação v1.3 aprovada; CV-01..CV-06 implementados localmente, QG-3 PASS registrado; cadastro revisado, notificações reais (ACE-C12) e segurança pendentes |
+| Módulo 03 — Desenvolvimento da Laurinha | Especificação funcional v1.1 aprovada; não implementado |
+| Módulo 04 — Evolução Familiar | Especificação funcional v1.1 aprovada; histórico e resumo parciais já existem no módulo 02, sem módulo 04 completo |
+| Autenticação | Sessão provisória e token no localStorage, inadequados para uso real sensível sem revisão |
+| Autorizações | Código contextual presente, mas acesso de administrador a cuidados sensíveis requer correção antes de uso real |
+| Interface móvel | Estrutura mobile-first presente; sem homologação com usuários reais |
+| Testes | Evidências locais dos módulos 01 e 02 em `docs/esteira/estado/`; não reexecutadas nesta integração |
+| Deploy | Nenhum deployment homologado |
 
-## Ordem funcional sugerida
+## Evidências e limites
 
-1. Fundação Familiar
-2. Cuidados da Vovó
-3. Desenvolvimento da Laurinha
-4. Evolução Familiar
+- Código em `apps/api/`, `apps/web/`; scripts smoke por incremento e resultados em `docs/esteira/estado/`.
+- `docs/esteira/estado/evidencia-modulo-01.json` e `evidencia-modulo-02.json` registram QG-3 PASS; não equivalem a validação independente ou em dispositivo real.
+- Repositório público: não incluir dados reais de crianças, receitas, exames, credenciais ou segredos.
+- Sem nova execução de testes, alteração de código, configuração de esteira ou deploy como parte deste PR documental.
 
-Histórico básico e segurança não devem ser postergados para o quarto módulo.
+## Decisões funcionais aprovadas em 2026-11-15
 
-## Distinção entre conversas e artefatos
+- Experiência móvel centrada em pessoas, poucos toques, conectividade instável tratada com mensagens honestas e notificações discretas.
+- Perfis de acesso prontos e ajustáveis; parentesco e papel de administrador **não** liberam dados médicos/infantis indiscriminadamente.
+- Cuidados v1.3: primeiro horário, quantidade de doses, duração, sugestões matemáticas somente quando clinicamente compatíveis e conferência explícita antes dos lembretes. Não deduzir intervalo terapêutico.
+- Lembretes aos autorizados, sem cobrança; ACE-C12 só após validação em dispositivos reais.
+- Desenvolvimento v1.1: guardar brincadeiras sem prazo; registrar somente Concluiu/Participou, sem cobrança por não realização. Estrelas: simples 5/3, média 10/5, desafiadora 15/8.
+- Evolução v1.1: histórico individual e resumo da pessoa com PDF sob demanda; poucos destaques na home.
 
-**Produto (fontes oficiais):** `docs/produto/`, `docs/arquitetura/`, `docs/modulos/` — especificação e evolução funcional.  
-**Esteira (separação lógica, mesmo repositório — ADR-012):** `AGENTS.md`, `.cursor/`, `docs/esteira/`, `scripts/esteira/` — orquestração, skills, hooks e estados de execução.
+## Priorização de acompanhamento
 
-Não misturar regras funcionais do produto com procedimentos da esteira. A esteira não altera requisitos aprovados automaticamente.
+1. Reconciliar documentação aprovada com o código existente, preservando status e evidências.
+2. Corrigir autenticação e autorização de dados sensíveis antes de usar dados reais.
+3. Adequar UX de cadastro de medicamentos, notificações e testar nos dispositivos previstos.
+4. Planejar o módulo 03 com base na especificação v1.1.
 
-Histórico: a orientação inicial (ADR-011) separava a automação deste repositório; a decisão vigente permite a esteira aqui com isolamento documental.
+## Separação de responsabilidades
+
+**Produto:** `docs/produto/`, `docs/modulos/`, `docs/arquitetura/`. **Esteira:** `docs/esteira/`, `.cursor/`, `AGENTS.md`, `scripts/esteira/`. A documentação aprovada não prova implementação e a esteira não modifica requisitos automaticamente.
