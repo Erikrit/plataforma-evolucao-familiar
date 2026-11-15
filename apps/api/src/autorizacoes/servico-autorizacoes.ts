@@ -198,6 +198,76 @@ export class ServicoAutorizacoes {
     return visao.ids.has(pessoaId);
   }
 
+  /** Visualizar rotina/cuidados da pessoa-alvo. */
+  async podeVerCuidados(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    return this.podeVerPessoa(familiaId, pessoaId, usuario);
+  }
+
+  /** Registrar relato de dose ou atividade (responsável ou colaboradora autorizada). */
+  async podeRegistrarRelatoCuidados(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
+      "administrador",
+      "responsavel_cuidados",
+      "colaboradora_cuidados",
+    ]);
+  }
+
+  /** Cadastrar/alterar programação — colaboradora NÃO por padrão (CUI-F04). */
+  async podeAlterarProgramacaoCuidados(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
+      "administrador",
+      "responsavel_cuidados",
+    ]);
+  }
+
+  async podeOrganizarConsultasExames(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    return this.podeAlterarProgramacaoCuidados(familiaId, pessoaId, usuario);
+  }
+
+  async podeExportarRelatorioCuidados(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    return this.podeAlterarProgramacaoCuidados(familiaId, pessoaId, usuario);
+  }
+
+  private async temResponsabilidadeSobrePessoa(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+    permitidas: Responsabilidade[],
+  ): Promise<boolean> {
+    if (usuario.pessoa.familiaId !== familiaId) return false;
+    const autorizacoes = await this.prisma.autorizacao.findMany({
+      where: { familiaId, usuarioId: usuario.id, ativa: true },
+    });
+    for (const a of autorizacoes) {
+      if (!permitidas.includes(a.responsabilidade as Responsabilidade)) continue;
+      if (a.responsabilidade === "administrador" && a.pessoaAlvoId === null) {
+        return true;
+      }
+      if (a.pessoaAlvoId === pessoaId) return true;
+    }
+    return false;
+  }
+
   async cartoesInicio(familiaId: string, usuario: UsuarioAutenticado) {
     await this.garantirFamilia(familiaId, usuario);
     const visao = await this.idsPessoasVisiveis(familiaId, usuario);

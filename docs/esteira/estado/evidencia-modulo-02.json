@@ -1,0 +1,43 @@
+{
+  "incrementoId": "CV-01-CV-06",
+  "moduloId": "02-cuidados-vovo",
+  "geradoEm": "2026-11-15T12:00:00.000Z",
+  "fingerprint": "803f9fc3c906f5f2",
+  "checagens": [
+    { "nome": "typecheck-api", "status": "PASS", "evidencia": "docs/esteira/estado/qg3-typecheck-api.txt" },
+    { "nome": "typecheck-web", "status": "PASS" },
+    { "nome": "build-api", "status": "PASS" },
+    { "nome": "build-web", "status": "PASS" },
+    { "nome": "smoke:cv01", "status": "PASS", "aceite": ["ACE-C01", "ACE-C02"] },
+    { "nome": "smoke:cv02", "status": "PASS", "aceite": ["ACE-C03", "ACE-C04", "ACE-C05"] },
+    { "nome": "smoke:cv03", "status": "PASS", "aceite": ["ACE-C06", "ACE-C07"] },
+    { "nome": "smoke:cv04", "status": "PASS", "aceite": ["ACE-C08"] },
+    { "nome": "smoke:cv05", "status": "PASS", "aceite": ["ACE-C09", "ACE-C10"] },
+    { "nome": "smoke:cv06", "status": "PASS", "aceite": ["ACE-C11"], "aceC12": "PENDING documentado" },
+    {
+      "nome": "smoke:modulo-02 / QG-3",
+      "status": "PASS",
+      "saida": {
+        "ok": true,
+        "resultados": [
+          { "script": "smoke-cv01.mjs", "label": "ACE-C01/C02", "ok": true, "exit": 0 },
+          { "script": "smoke-cv02.mjs", "label": "ACE-C03/C04/C05", "ok": true, "exit": 0 },
+          { "script": "smoke-cv03.mjs", "label": "ACE-C06/C07", "ok": true, "exit": 0 },
+          { "script": "smoke-cv04.mjs", "label": "ACE-C08", "ok": true, "exit": 0 },
+          { "script": "smoke-cv05.mjs", "label": "ACE-C09/C10", "ok": true, "exit": 0 },
+          { "script": "smoke-cv06.mjs", "label": "ACE-C11 + ACE-C12-PENDING", "ok": true, "exit": 0 }
+        ]
+      }
+    },
+    {
+      "nome": "verifier",
+      "status": "PASS",
+      "agente": "79d9223b-e8e7-4c44-91f6-e68e5987e49c"
+    }
+  ],
+  "notas": [
+    "ACE-C12 permanece PENDING até teste de lembretes/PWA em aparelhos reais (DECISOES.md).",
+    "Auth provisória herdada do módulo 01.",
+    "Sem commit/push pela esteira."
+  ]
+}

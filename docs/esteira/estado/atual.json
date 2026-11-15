@@ -1,438 +1,106 @@
 {
-  "moduloId": "01-fundacao-familiar",
+  "moduloId": "02-cuidados-vovo",
   "incrementoId": null,
   "requisitos": [
-    "FUN-01",
-    "FUN-02",
-    "FUN-03",
-    "FUN-04",
-    "FUN-05",
-    "FAM-R01",
-    "FAM-R02",
-    "FAM-R03",
-    "FAM-R04",
-    "FAM-R05",
-    "FAM-R06",
-    "FAM-R07",
-    "FAM-R08",
-    "FAM-R09",
-    "FAM-R10",
-    "FAM-R11",
-    "FAM-R12",
-    "ACE-01",
-    "ACE-02",
-    "ACE-03",
-    "ACE-04",
-    "ACE-05",
-    "ACE-06",
-    "ACE-07",
-    "ACE-08",
-    "ACE-09",
-    "ACE-10"
+    "CUI-F01",
+    "CUI-F02",
+    "CUI-F03",
+    "CUI-F04",
+    "CUI-F05",
+    "CUI-F06",
+    "CUI-F07",
+    "CUI-F08",
+    "CUI-F09",
+    "CUI-F10",
+    "ACE-C01",
+    "ACE-C02",
+    "ACE-C03",
+    "ACE-C04",
+    "ACE-C05",
+    "ACE-C06",
+    "ACE-C07",
+    "ACE-C08",
+    "ACE-C09",
+    "ACE-C10",
+    "ACE-C11",
+    "ACE-C12"
   ],
   "estado": "COMPLETED",
   "dependencias": [
-    "Stack preliminar ADR-001/002/003 (Next.js, NestJS, Prisma, PostgreSQL, Docker Compose)",
-    "Autenticação/invalidação de sessão ainda 'A validar' em DECISOES.md — usar sessão provisória até decisão humana",
-    "Contratos REST candidatos em ARQUITETURA.md — detalhar na implementação sem tratar como API congelada",
-    "Nenhum módulo de produto predecessor; Fundação é a base para Cuidados/Desenvolvimento/Evolução"
+    "Módulo 01 Fundação Familiar COMPLETED",
+    "Autorizações contextuais e sessão provisória",
+    "ADR-004, ADR-007, ADR-009, ADR-010",
+    "Lembretes em dispositivos reais ainda 'A validar' (ACE-C12 PENDING)"
   ],
   "arquivos": [
     "apps/api/prisma/schema.prisma",
-    "apps/api/src/convites/servico-convites.ts",
+    "apps/api/src/cuidados/**",
+    "apps/api/src/anexos/**",
     "apps/api/src/autorizacoes/servico-autorizacoes.ts",
-    "apps/api/src/pessoas/servico-pessoas.ts",
-    "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
-    "apps/api/scripts/smoke-modulo-01.mjs"
+    "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+    "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx",
+    "apps/api/scripts/smoke-modulo-02.mjs"
   ],
   "planejamento": {
     "especificacao": {
-      "caminho": "docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md",
+      "caminho": "docs/modulos/02-cuidados-vovo/ESPECIFICACAO.md",
       "versao": "v1.0",
-      "status": "preparada para validação e desenvolvimento, sem implementação"
+      "status": "implementada localmente (CV-01..CV-06)"
     },
     "aprovado": [
-      "Princípios e visão do produto",
-      "Escopo conceitual do módulo Fundação Familiar",
-      "Regras FAM-R01..R12 e funcionalidades FUN-01..05",
-      "ADR-001..006 e ADR-012 (direções conceituais)"
+      "Escopo CUI-F01..F10",
+      "ADR-004, ADR-007, ADR-009, ADR-010"
     ],
     "preliminar": [
-      "Next.js + NestJS + Prisma + Docker Compose (ADR-003)",
-      "Endpoints REST candidatos",
-      "Layout exato do monólito modular no repositório"
+      "Contratos REST de cuidados (candidatos detalhados na implementação)",
+      "Armazenamento privado local autenticado (compatível ADR-004)"
     ],
     "pendente": [
-      "Mecanismo de autenticação e invalidação de sessões",
-      "Contratos exatos da API",
-      "Validação de interface com usuários reais",
-      "Infraestrutura/código (não iniciado)"
+      "Frequências especiais (DECISOES.md)",
+      "Lembretes/PWA em dispositivos reais (ACE-C12)",
+      "Auth definitiva"
     ],
-    "riscos": [
-      {
-        "id": "R-ALTO-01",
-        "nivel": "alto",
-        "tema": "Autorização por pessoa/contexto e vazamento (colaboradora → Laurinha, isolamento entre famílias)",
-        "mitigacao": "Enforcement no backend desde FF-03; testes de negação de URL e isolamento em FF-05"
-      },
-      {
-        "id": "R-ALTO-02",
-        "nivel": "alto",
-        "tema": "Revogação deve invalidar sessão imediatamente sem apagar histórico",
-        "mitigacao": "Modelo de autorização com vigência + invalidação de sessão em FF-05; auth provisória documentada"
-      },
-      {
-        "id": "R-MED-01",
-        "nivel": "medio",
-        "tema": "Mecanismo de autenticação ainda não aprovado",
-        "mitigacao": "Sessão provisória em FF-02; marcar NEEDS_DECISION se a família exigir escolha antes de convites reais"
-      },
-      {
-        "id": "R-MED-02",
-        "nivel": "medio",
-        "tema": "UX mobile-first e esforço mínimo",
-        "mitigacao": "Formulários mínimos (nome suficiente); validar viewport móvel em FF-06"
-      },
-      {
-        "id": "R-BAIXO-01",
-        "nivel": "baixo",
-        "tema": "Campos opcionais / perfil progressivo",
-        "mitigacao": "Não bloquear cadastro; completar em FUN-02"
-      }
-    ],
-    "criteriosAceite": [
-      {
-        "id": "ACE-01",
-        "texto": "Cadastrar Vovó apenas com nome",
-        "fun": [
-          "FUN-01"
-        ],
-        "regras": [
-          "FAM-R01",
-          "FAM-R09"
-        ]
-      },
-      {
-        "id": "ACE-02",
-        "texto": "Cadastrar Laurinha sem conta",
-        "fun": [
-          "FUN-01"
-        ],
-        "regras": [
-          "FAM-R01"
-        ]
-      },
-      {
-        "id": "ACE-03",
-        "texto": "Convidar colaboradora externa com autorização somente para Vovó",
-        "fun": [
-          "FUN-03",
-          "FUN-04"
-        ],
-        "regras": [
-          "FAM-R02",
-          "FAM-R05",
-          "FAM-R06"
-        ]
-      },
-      {
-        "id": "ACE-04",
-        "texto": "Negar acesso à Laurinha, inclusive URL direta, para colaboradora",
-        "fun": [
-          "FUN-04"
-        ],
-        "regras": [
-          "FAM-R06",
-          "FAM-R10",
-          "FAM-R11"
-        ]
-      },
-      {
-        "id": "ACE-05",
-        "texto": "Acumular responsabilidades em usuário autorizado",
-        "fun": [
-          "FUN-04"
-        ],
-        "regras": [
-          "FAM-R04"
-        ]
-      },
-      {
-        "id": "ACE-06",
-        "texto": "Revogar acesso e sessão sem apagar históricos",
-        "fun": [
-          "FUN-04"
-        ],
-        "regras": [
-          "FAM-R07",
-          "FAM-R08"
-        ]
-      },
-      {
-        "id": "ACE-07",
-        "texto": "Mostrar somente cartões permitidos",
-        "fun": [
-          "FUN-05"
-        ],
-        "regras": [
-          "FAM-R10"
-        ]
-      },
-      {
-        "id": "ACE-08",
-        "texto": "Funcionar em telas de celular",
-        "fun": [
-          "FUN-05",
-          "FUN-02"
-        ],
-        "regras": []
-      },
-      {
-        "id": "ACE-09",
-        "texto": "Não solicitar dados sem necessidade funcional",
-        "fun": [
-          "FUN-01",
-          "FUN-02"
-        ],
-        "regras": [
-          "FAM-R09"
-        ]
-      },
-      {
-        "id": "ACE-10",
-        "texto": "Impedir vazamento de dados entre famílias",
-        "fun": [
-          "FUN-04"
-        ],
-        "regras": [
-          "FAM-R12",
-          "FAM-R11"
-        ]
-      }
-    ],
+    "riscos": [],
+    "criteriosAceite": [],
     "incrementos": [
-      {
-        "id": "FF-01",
-        "titulo": "Bootstrap do monólito modular",
-        "objetivo": "Criar esqueleto executável local (Compose + NestJS/Prisma + Next.js) com healthcheck, sem regras de negócio além de sanity",
-        "requisitos": [],
-        "aceite": [
-          "App sobe localmente",
-          "Typecheck/lint baseline",
-          "PostgreSQL acessível via Compose"
-        ],
-        "arquivosPrevistos": [
-          "docker-compose.yml",
-          "apps/api/**",
-          "apps/web/**",
-          "package.json",
-          ".env.example"
-        ],
-        "qg": [
-          "QG-1",
-          "QG-2-parcial"
-        ],
-        "dependeDe": []
-      },
-      {
-        "id": "FF-02",
-        "titulo": "Família seed, pessoa e sessão provisória do administrador",
-        "objetivo": "Cadastrar pessoa só com nome; Laurinha sem conta; admin autenticado de forma provisória",
-        "requisitos": [
-          "FUN-01",
-          "FAM-R01",
-          "FAM-R09",
-          "ACE-01",
-          "ACE-02",
-          "ACE-09"
-        ],
-        "aceite": [
-          "ACE-01",
-          "ACE-02",
-          "ACE-09"
-        ],
-        "arquivosPrevistos": [
-          "schema Prisma familia/pessoa/usuario",
-          "POST/GET pessoas",
-          "UI cadastro mínimo",
-          "auth provisória"
-        ],
-        "qg": [
-          "QG-1",
-          "QG-2"
-        ],
-        "dependeDe": [
-          "FF-01"
-        ],
-        "notaAuth": "Sessão provisória; mecanismo definitivo pendente em DECISOES.md"
-      },
-      {
-        "id": "FF-03",
-        "titulo": "Autorizações contextuais + home com cartões filtrados",
-        "objetivo": "Perfis/responsabilidades acumuláveis; backend valida; home mobile com cartões autorizados",
-        "requisitos": [
-          "FUN-04",
-          "FUN-05",
-          "FAM-R03",
-          "FAM-R04",
-          "FAM-R05",
-          "FAM-R10",
-          "FAM-R11",
-          "ACE-05",
-          "ACE-07"
-        ],
-        "aceite": [
-          "ACE-05",
-          "ACE-07"
-        ],
-        "arquivosPrevistos": [
-          "autorizacao",
-          "GET home/cartões",
-          "guards backend",
-          "UI home"
-        ],
-        "qg": [
-          "QG-1",
-          "QG-2"
-        ],
-        "dependeDe": [
-          "FF-02"
-        ]
-      },
-      {
-        "id": "FF-04",
-        "titulo": "Convites e colaboradora restrita à Vovó",
-        "objetivo": "Admin convida; ativação; colaboradora só acessa contexto Vovó; nega Laurinha inclusive URL",
-        "requisitos": [
-          "FUN-03",
-          "FAM-R02",
-          "FAM-R06",
-          "ACE-03",
-          "ACE-04"
-        ],
-        "aceite": [
-          "ACE-03",
-          "ACE-04"
-        ],
-        "arquivosPrevistos": [
-          "convite",
-          "ativação",
-          "testes de negação de acesso"
-        ],
-        "qg": [
-          "QG-1",
-          "QG-2"
-        ],
-        "dependeDe": [
-          "FF-03"
-        ]
-      },
-      {
-        "id": "FF-05",
-        "titulo": "Revogação, preservação de histórico e isolamento entre famílias",
-        "objetivo": "Revogar acesso/sessão na hora; histórico permanece; isolamento FAM-R12 testado",
-        "requisitos": [
-          "FAM-R07",
-          "FAM-R08",
-          "FAM-R12",
-          "ACE-06",
-          "ACE-10"
-        ],
-        "aceite": [
-          "ACE-06",
-          "ACE-10"
-        ],
-        "arquivosPrevistos": [
-          "revogação",
-          "invalidação sessão",
-          "testes isolamento"
-        ],
-        "qg": [
-          "QG-1",
-          "QG-2"
-        ],
-        "dependeDe": [
-          "FF-04"
-        ]
-      },
-      {
-        "id": "FF-06",
-        "titulo": "Perfil individual e fechamento do módulo",
-        "objetivo": "Perfil progressivo + entradas para áreas autorizadas (stubs); viewport móvel; QG-3 do módulo",
-        "requisitos": [
-          "FUN-02",
-          "ACE-08"
-        ],
-        "aceite": [
-          "ACE-08",
-          "demais ACE revalidados"
-        ],
-        "arquivosPrevistos": [
-          "UI perfil",
-          "stubs de navegação",
-          "suite regressão módulo"
-        ],
-        "qg": [
-          "QG-1",
-          "QG-2",
-          "QG-3"
-        ],
-        "dependeDe": [
-          "FF-05"
-        ]
-      }
+      { "id": "CV-01", "titulo": "Modelo + cadastro medicamento" },
+      { "id": "CV-02", "titulo": "Rotina + registro de dose" },
+      { "id": "CV-03", "titulo": "Vigência, encerramento, permissões" },
+      { "id": "CV-04", "titulo": "Consultas, exames, apoio" },
+      { "id": "CV-05", "titulo": "Anexos privados + histórico" },
+      { "id": "CV-06", "titulo": "Resumo/PDF, lembretes, QG-3" }
     ]
   },
   "verificacao": {
-    "qg1": {
-      "status": "PASS"
-    },
-    "qg2": {
-      "status": "PASS"
-    },
+    "qg1": { "status": "PASS" },
+    "qg2": { "status": "PASS" },
     "qg3": {
       "status": "PASS",
       "verifier": "PASS",
-      "evidencia": "docs/esteira/estado/evidencia-modulo-01.json"
+      "evidencia": "docs/esteira/estado/evidencia-modulo-02.json",
+      "aceC12": "PENDING documentado"
     },
     "evidencias": [
-      "docs/esteira/estado/evidencia-modulo-01.json",
-      "docs/esteira/estado/smoke-modulo-01-saida.json"
+      "docs/esteira/estado/evidencia-modulo-02.json",
+      "docs/esteira/estado/smoke-modulo-02-saida.json",
+      "docs/esteira/estado/qg3-typecheck-api.txt"
     ]
   },
-  "fingerprint": "eb25f364bf8334b3",
+  "fingerprint": "803f9fc3c906f5f2",
   "tentativasCorrecao": {},
-  "proximaAcao": "Modulo 01 concluido localmente. Proximo produto: modulo 02 Cuidados da Vovo (apos planejamento). Auth definitiva ainda pendente em DECISOES.md.",
-  "atualizadoEm": "2026-11-15T03:54:44.528Z",
-  "notas": "Modulo 01 Fundação Familiar COMPLETED (FF-01..FF-06). Auth provisoria. Sem commit/push.",
+  "proximaAcao": "Modulo 02 concluido localmente. Proximo produto: modulo 03 Desenvolvimento Laurinha (apos planejamento). ACE-C12 e auth definitiva ainda pendentes em DECISOES.md.",
+  "atualizadoEm": "2026-11-15T12:05:00.000Z",
+  "notas": "Modulo 02 Cuidados da Vovo COMPLETED (CV-01..CV-06). ACE-C12 PENDING (dispositivos reais). Auth provisoria. Sem commit/push.",
   "incrementosConcluidos": [
-    {
-      "id": "FF-01",
-      "status": "COMPLETED"
-    },
-    {
-      "id": "FF-02",
-      "status": "COMPLETED"
-    },
-    {
-      "id": "FF-03",
-      "status": "COMPLETED"
-    },
-    {
-      "id": "FF-04",
-      "status": "COMPLETED"
-    },
-    {
-      "id": "FF-05",
-      "status": "COMPLETED"
-    },
-    {
-      "id": "FF-06",
-      "status": "COMPLETED"
-    }
+    { "id": "CV-01", "status": "COMPLETED" },
+    { "id": "CV-02", "status": "COMPLETED" },
+    { "id": "CV-03", "status": "COMPLETED" },
+    { "id": "CV-04", "status": "COMPLETED" },
+    { "id": "CV-05", "status": "COMPLETED" },
+    { "id": "CV-06", "status": "COMPLETED" }
   ],
   "modulo": {
-    "id": "01-fundacao-familiar",
+    "id": "02-cuidados-vovo",
     "status": "COMPLETED",
     "qg3": "PASS"
   }

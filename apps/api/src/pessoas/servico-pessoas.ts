@@ -84,9 +84,9 @@ export class ServicoPessoas {
       possuiConta: Boolean(pessoa.usuario),
       emailConta: pessoa.usuario?.email ?? null,
       areas: [
-        { id: "cuidados", rotulo: "Cuidados", disponivel: false },
+        { id: "cuidados", rotulo: "Cuidados", disponivel: true },
         { id: "desenvolvimento", rotulo: "Desenvolvimento", disponivel: false },
-        { id: "historico", rotulo: "Histórico", disponivel: false },
+        { id: "historico", rotulo: "Histórico", disponivel: true },
       ],
     };
   }

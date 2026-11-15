@@ -7,7 +7,7 @@ Atualizado em 2026-11-15.
 | Princípios e visão | Aprovados |
 | Módulos do MVP | Aprovados conceitualmente |
 | Fundação Familiar | Especificação v1.0; implementação local FF-01..FF-06 concluída e QG-3 PASS; auth definitiva ainda pendente |
-| Cuidados da Vovó | Especificação funcional v1.0 preparada; sem implementação |
+| Cuidados da Vovó | Implementado localmente (CV-01..CV-06, QG-3 PASS); ACE-C12 lembretes em dispositivos reais ainda PENDING |
 | Desenvolvimento da Laurinha | Visão aprovada; especificação funcional completa pendente |
 | Evolução Familiar | Visão aprovada; especificação funcional completa pendente |
 | Arquitetura e contratos REST | Propostas preliminares; detalhadas parcialmente na Fundação |

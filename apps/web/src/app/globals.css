@@ -165,3 +165,43 @@ button:disabled {
   }
 }
 
+.cuidados-mobile {
+  max-width: 28rem;
+}
+
+.cartao-dose {
+  width: 100%;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--texto);
+}
+
+.destaque-proximo {
+  border-color: var(--destaque);
+}
+
+.painel-confirmacao {
+  margin-top: 1rem;
+}
+
+.acoes-relato {
+  display: grid;
+  gap: 0.5rem;
+}
+
+button.secundario {
+  background: transparent;
+  color: var(--texto);
+  border: 1px solid var(--borda);
+}
+
+@media (max-width: 480px) {
+  .cuidados-mobile h1 {
+    font-size: 1.35rem;
+  }
+
+  .acoes-relato button {
+    min-height: 2.75rem;
+  }
+}
+

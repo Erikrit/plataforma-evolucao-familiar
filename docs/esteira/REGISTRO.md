@@ -4,13 +4,36 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
 ## Estado atual (2026-11-15)
 
+- **Módulo 02 Cuidados da Vovó:** COMPLETED (CV-01..CV-06, QG-3 PASS)
 - **Módulo 01 Fundação Familiar:** COMPLETED (FF-01..FF-06, QG-3 PASS)
 - **Estado persistido:** `docs/esteira/estado/atual.json`
-- **Evidência do módulo:** `docs/esteira/estado/evidencia-modulo-01.json`
+- **Evidência do módulo 02:** `docs/esteira/estado/evidencia-modulo-02.json`
 - **App local:** `apps/api` + `apps/web` + Compose (Postgres `:5433`)
 - **Auth:** provisória (pendente em `docs/arquitetura/DECISOES.md`)
-- **Próximo:** módulo 02 — Cuidados da Vovó (`module-planning`)
+- **ACE-C12:** PENDING (lembretes/PWA em dispositivos reais)
+- **Próximo:** módulo 03 — Desenvolvimento Laurinha (`module-planning`)
 - **Commit/push/deploy:** sob decisão humana; não feitos pela esteira
+
+## 2026-11-15 — Módulo 02 COMPLETED (CV-01..CV-06 + QG-3)
+
+- **Módulo:** `02-cuidados-vovo` — COMPLETED
+- **Entrega:** medicamentos/programação/doses, rotina do dia, consultas/exames/apoio, anexos privados, histórico derivado, resumo/PDF, lembretes derivados, UI mobile
+- **Aceites ACE-C01..C11:** PASS (`npm run smoke:modulo-02`); **ACE-C12:** PENDING documentado
+- **QG-1/QG-2/QG-3:** PASS · Verifier PASS ([verifier](79d9223b-e8e7-4c44-91f6-e68e5987e49c))
+- **Evidência:** `docs/esteira/estado/evidencia-modulo-02.json`
+- **Fingerprint:** `803f9fc3c906f5f2`
+- **Commit/push:** não executados
+- **Próximo produto:** módulo 03 — Desenvolvimento Laurinha (após `module-planning`)
+
+## 2026-11-15 — Planejamento módulo 02 Cuidados da Vovó
+
+- **Skill:** `module-planning`
+- **Fonte:** `docs/modulos/02-cuidados-vovo/ESPECIFICACAO.md` v1.0
+- **Incrementos:** CV-01..CV-06
+- **Riscos altos:** dados de saúde/anexos; colaboradora vs prescrição/Laurinha
+- **ACE-C12:** PENDING até dispositivos reais
+- **Código de cuidados:** ainda não criado neste passo
+- **Commit/push:** não executados
 
 ## 2026-11-15 — Módulo 01 COMPLETED (FF-04..FF-06 + QG-3)
 
@@ -74,9 +97,9 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
 | Gate | Escopo | Estado atual |
 |---|---|---|
-| QG-1 | typecheck, lint, testes do diff | PASS no módulo 01 |
-| QG-2 | build, smokes, verifier | PASS nos incrementos FF-01..FF-06 |
-| QG-3 | módulo completo | PASS (`smoke:modulo-01` + verifier) |
+| QG-1 | typecheck, lint, testes do diff | PASS nos módulos 01 e 02 |
+| QG-2 | build, smokes, verifier | PASS FF-01..06 e CV-01..06 |
+| QG-3 | módulo completo | PASS módulo 01 e 02 (`smoke:modulo-02` + verifier) |
 
 ## Limitações conhecidas
 

@@ -107,8 +107,20 @@ export default function PaginaPerfil() {
           <ul className="lista-pessoas">
             {perfil.areas.map((area) => (
               <li key={area.id}>
-                {area.rotulo}
-                {area.disponivel ? "" : " · em breve"}
+                {area.disponivel && area.id === "cuidados" ? (
+                  <Link href={`/pessoas/${perfil.id}/cuidados`}>
+                    {area.rotulo}
+                  </Link>
+                ) : area.disponivel && area.id === "historico" ? (
+                  <Link href={`/pessoas/${perfil.id}/historico`}>
+                    {area.rotulo}
+                  </Link>
+                ) : (
+                  <>
+                    {area.rotulo}
+                    {area.disponivel ? "" : " · em breve"}
+                  </>
+                )}
               </li>
             ))}
           </ul>
