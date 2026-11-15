@@ -41,7 +41,7 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 - Alteração de horário e encerramento preservam histórico; correções rastreáveis.
 - Consultas, exames e anexos com cadastro simples, atividades relevantes de apoio e companhia com registro rápido.
 - Visão da colaboradora em seções separadas: medicamentos, atividades de apoio e consultas, com próximo cuidado relevante destacado.
-- Lembretes discretos, destinatários autorizados, sem alertas alarmistas nem recomendações de doses.
+- **Lembretes aprovados em 2026-11-15:** um aviso discreto por ocorrência de medicamento no horário conferido; destinatários explicitamente selecionados e autorizados (Vovó, responsáveis e colaboradora quando aplicável); sem cobrança repetida por falta de confirmação e sem inferir dose não tomada. Consultas/exames com data permitem aviso antecipado simples; cancelamentos e alterações atualizam avisos futuros. Privacidade inclusive na tela bloqueada; entrega real depende de validação nos dispositivos. Não é canal único de segurança.
 - Histórico automático, relatório por período com prévia e exportação PDF.
 
 **Não é sistema médico:** não interpretar exames, diagnosticar, orientar compensação de dose ou tomar decisão terapêutica.
