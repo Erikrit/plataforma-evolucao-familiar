@@ -6,7 +6,7 @@
 |---|---|
 | Visão e princípios | Aprovados |
 | Módulo 01 — Fundação Familiar | Especificação v1.0; **implementação parcial**: bootstrap FF-01 e fluxo mínimo FF-02 presentes |
-| Módulo 02 — Cuidados da Vovó | Especificação v1.0; **sem implementação funcional de cuidados constatada** |
+| Módulo 02 — Cuidados da Vovó | Especificação v1.1 com cadastro simplificado aprovado; **sem implementação funcional de cuidados constatada** |
 | Módulo 03 — Laurinha | Especificação funcional **v1.1 aprovada**; sem implementação observada |
 | Módulo 04 — Evolução Familiar | Especificação funcional **v1.1 aprovada**; sem implementação observada |
 | Arquitetura | Next.js, NestJS, Prisma, PostgreSQL e Docker Compose já presentes no código; demais decisões preliminares |
@@ -34,6 +34,8 @@
 **Processo de desenvolvimento:** `docs/esteira/`, `.cursor/`, `AGENTS.md`, scripts correspondentes. Existe no repositório por decisão prévia, mas sua especificação e operação são tratadas em outro contexto. **Não houve alterações nesses arquivos nesta revisão.**
 
 ## Decisões funcionais aprovadas em 2026-11-15
+
+- **Módulo 02 v1.1:** cadastro de medicamento por nome, primeiro horário, número de doses diárias e duração (contínua ou dias). Sugestões de horários editáveis apenas para conferência com prescrição, sem inferir intervalo terapêutico; frequências especiais em opções progressivas.
 
 - **Módulo 03 v1.1:** nome + dificuldade predefinida como simples, guardar para depois, registro Concluiu/Participou, histórico no Módulo 04, sem cadastro de não realização.
 - **Estrelas:** dificuldade simples = 5/3; média = 10/5; desafiadora = 15/8 (Concluiu/Participou). Cálculo automático, sem aprovação manual, sem reescrever créditos históricos.
