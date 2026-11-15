@@ -1,6 +1,6 @@
 # Módulo 02 — Cuidados da Vovó
 
-**Versão:** especificação funcional v1.0  
+**Versão:** especificação funcional v1.1 — cadastro simplificado aprovado em 2026-11-15  
 **Status:** preparada para validação e desenvolvimento, sem implementação.  
 **Dependência:** Fundação Familiar.
 
@@ -19,7 +19,22 @@ Organizar medicamentos, consultas, exames e atividades relevantes de companhia e
 
 ### CUI-F01 — Cadastrar medicamento
 
-Nome, horários e campos adicionais apenas se essenciais à prescrição (frequência, instruções especiais). Receita como imagem/PDF opcional, sem transcrição integral. Uma receita pode servir a vários medicamentos. Mostrar conferência antes de ativar lembretes. Não extrair dose automaticamente da imagem.
+**Cadastro padrão, com poucos campos:**
+- Nome do medicamento.
+- Primeiro horário.
+- Quantidade de doses ao dia.
+- Duração: uso contínuo ou quantidade de dias.
+- Horários sugeridos automaticamente **quando a frequência e o intervalo da prescrição permitirem**; possibilidade de ajustar ou informar os horários exatamente como constam da orientação vigente.
+- Receita em foto/PDF opcional; um documento pode corresponder a vários medicamentos. Não transcrever tudo nem extrair dados da imagem automaticamente.
+
+**Regras de segurança e simplicidade:**
+- O cálculo de horários é apenas um auxílio matemático **para conferência**, não uma definição de tratamento. O sistema não presume que múltiplas doses podem ser distribuídas igualmente em 24 horas, nem inventa intervalo clínico. Sem intervalo claro, orientar o preenchimento dos horários prescritos.
+- Mostrar os horários calculados/editados e pedir conferência com a orientação vigente **antes de ativar os lembretes**.
+- Se a prescrição for por intervalo (por exemplo, a cada 8 horas), os horários podem atravessar a meia-noite; a apresentação deve indicar corretamente os dias e o fim do período. Não equiparar automaticamente “3 doses por dia” a “a cada 8 horas”.
+- Opções especiais (dias alternados, dias específicos, intervalo próprio ou instruções adicionais) aparecem somente quando a pessoa realmente precisar.
+- A quantidade de dias define o período de programação, sem alterar prescrição por conta própria. Para uso contínuo não inventar data de encerramento.
+- Não exigir fabricante, farmácia, estoque, preço ou outros campos sem necessidade para lembrar/cuidar.
+- O sistema não faz recomendações clínicas de dose, duração ou horários.
 
 ### CUI-F02 — Rotina do dia
 
@@ -59,7 +74,7 @@ Período selecionável; distinguir previstas, informadas como tomadas, informada
 
 ## 4. Fluxos essenciais
 
-1. **Cadastro:** responsável → novo medicamento → nome/horários → receita opcional → conferir → ativar.
+1. **Cadastro:** responsável → novo medicamento → nome + primeiro horário + quantidade de doses/dia + duração (contínua ou por dias) → conferir horários sugeridos ou informar os prescritos → receita opcional → ativar lembretes.
 2. **Registro:** tocar cartão → selecionar relato da Vovó → confirmar → atualizar histórico automaticamente.
 3. **Correção:** abrir registro → corrigir → salvar → preservar valor anterior e autoria.
 4. **Alteração médica:** atualizar programação com vigência → anexar nova receita opcional → preservar passado.
@@ -80,7 +95,7 @@ Período selecionável; distinguir previstas, informadas como tomadas, informada
 
 ## 6. Dados informados versus automáticos
 
-- Medicamento: **informado** nome, horários e instruções indispensáveis; **opcional** receita/observação; **automático** autor, vigências, identificadores.
+- Medicamento: **informado** nome, primeiro horário, doses por dia, duração contínua ou em dias e horários conferidos; **opcional** receita, observação, frequência especial/intervalo quando aplicável; **automático** sugestão matemática de horários quando segura, autor, vigências e identificadores.
 - Dose: **informada** situação e eventual horário efetivo; **automático** ocorrência, autor, momento e trilha de correções.
 - Consulta: **informado** data/hora e descrição; restantes opcionais.
 - Exame: **informado** descrição; data/documento opcionais.
@@ -92,7 +107,10 @@ Concorrência de dois registros da mesma dose; reconfirmação; relato tardio; a
 
 ## 8. Critérios de aceitação
 
-- [ ] Cadastrar medicamento sem transcrever receita.
+- [ ] Cadastrar medicamento com nome, primeiro horário, doses por dia e duração sem transcrever receita.
+- [ ] Exibir sugestão de horários editável, sempre exigindo conferência antes de ativar lembretes; jamais inferir horários clínicos apenas do número de doses.
+- [ ] Permitir uso contínuo, período em dias e horários prescritos manualmente; mostrar opções especiais só quando necessárias.
+- [ ] Representar corretamente intervalos que atravessam a meia-noite, quando informados explicitamente.
 - [ ] Associar um PDF/foto a vários medicamentos quando necessário.
 - [ ] Exibir rotina e estados corretos, incluindo frequência especial suportada.
 - [ ] Cartão abre confirmação sem registrar automaticamente.
