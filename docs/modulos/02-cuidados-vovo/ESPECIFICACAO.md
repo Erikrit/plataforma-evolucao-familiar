@@ -1,6 +1,6 @@
 # Módulo 02 — Cuidados da Vovó
 
-**Versão:** especificação funcional v1.1 — cadastro simplificado aprovado em 2026-11-15  
+**Versão:** especificação funcional v1.2 — cadastro simplificado e comportamento dos lembretes aprovados em 2026-11-15  
 **Status:** preparada para validação e desenvolvimento, sem implementação.  
 **Dependência:** Fundação Familiar.
 
@@ -62,7 +62,28 @@ Registrar atividades familiares realmente relevantes; conclusão rápida, observ
 
 ### CUI-F08 — Lembretes
 
-Derivados de programações e compromissos, a destinatários autorizados; sem cobrança insistente. Sem confirmação comunica somente que não há registro. PWA/notificação exige validação em aparelhos reais; não é canal único de segurança de medicamentos.
+**Objetivo:** lembrar de cuidados e compromissos de maneira discreta, sem fiscalizar pessoas nem tornar o registro obrigatório.
+
+**Medicamentos**
+- Cada ocorrência prevista pode gerar **um lembrete no horário cadastrado e conferido**, durante a vigência da programação ativa.
+- O lembrete identifica de maneira clara e discreta o medicamento e o horário, sem recomendar ajustes de dose.
+- A Vovó pode ser destinatária quando possuir acesso e desejar receber notificações; responsáveis autorizados podem ser incluídos de forma simples e explícita. A colaboradora só recebe lembretes da rotina da Vovó se estiver autorizada e designada para recebê-los.
+- O sistema não presume que todos os familiares devam receber a mesma notificação. Os destinatários podem ser ajustados sem modificar a prescrição.
+- **Ausência de confirmação não gera cobrança repetida nem aviso automático afirmando que a dose não foi tomada.** Na rotina, a situação permanece *sem confirmação* até haver relato ou correção.
+- Confirmar, corrigir, suspender, encerrar ou alterar a programação deve manter os lembretes futuros coerentes com a programação vigente, sem duplicar avisos.
+- Notificações devem ser discretas e preservar a privacidade: a tela bloqueada não deve revelar dados médicos além do permitido pelo destinatário.
+
+**Consultas e exames**
+- Compromissos com data/hora podem receber aviso antecipado simples, direcionado somente a destinatários autorizados. O momento do aviso deve seguir uma escolha simples do usuário; não exigir configurações complexas.
+- Consultas canceladas não geram próximos lembretes. Exames sem data/hora não geram aviso agendado.
+- Evitar lembretes repetidos, insistentes ou alarmistas.
+
+**Experiência e limitações**
+- O usuário visualiza a programação e sabe quem será lembrado, sem gerenciar uma lista complexa de regras.
+- O sistema não apresenta uma notificação como prova de que o medicamento foi usado ou de que o aviso foi lido.
+- Entrega de avisos depende de permissões e condições reais dos dispositivos; canais e confiabilidade devem ser validados no uso real, sem prometer funcionamento infalível.
+- **A plataforma não é o único mecanismo de segurança para medicamentos.** Caso falhem notificações, a rotina permanece consultável no aplicativo, sem inventar confirmações.
+- Nenhuma escolha de PWA, aplicativo nativo ou fornecedor de notificações é estabelecida por esta especificação; aqui definimos apenas o comportamento esperado.
 
 ### CUI-F09 — Histórico
 
@@ -121,7 +142,12 @@ Concorrência de dois registros da mesma dose; reconfirmação; relato tardio; a
 - [ ] Anexos privados acessíveis apenas com autorização.
 - [ ] Histórico e relatório derivados dos registros.
 - [ ] UX móvel validada com Vovó e colaboradora.
-- [ ] Lembretes testados nos dispositivos reais, com limitações documentadas.
+- [ ] Cada ocorrência prevista ativa gera lembrete no horário conferido, apenas aos destinatários escolhidos e autorizados.
+- [ ] Falta de confirmação mantém *sem confirmação*, sem mensagens repetidas de cobrança ou inferência de não tomada.
+- [ ] Suspensões, encerramentos, alterações de horário e cancelamentos de consultas atualizam os avisos futuros.
+- [ ] Compromissos com data/hora permitem lembrete antecipado simples; exames sem data não criam avisos fictícios.
+- [ ] Avisos e prévias preservam privacidade, inclusive em tela bloqueada.
+- [ ] Lembretes testados nos dispositivos reais, com limitações documentadas; notificações não são o único mecanismo de segurança.
 
 ## 9. Fora do MVP
 
