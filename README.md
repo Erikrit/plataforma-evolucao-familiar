@@ -20,8 +20,8 @@ Plataforma para apoiar o cuidado, as rotinas e o desenvolvimento de integrantes 
 - [Decisões arquiteturais](docs/arquitetura/DECISOES.md)
 - [Módulo 01 — Fundação Familiar](docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md)
 - [Módulo 02 — Cuidados da Vovó](docs/modulos/02-cuidados-vovo/ESPECIFICACAO.md)
-- [Módulo 03 — Desenvolvimento da Laurinha](docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) — especificação funcional v1.1 proposta, pendente de aceite final
-- [Módulo 04 — Evolução Familiar](docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md) — especificação funcional v1.1 proposta, pendente de aceite final
+- [Módulo 03 — Desenvolvimento da Laurinha](docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) — especificação funcional v1.1 aprovada
+- [Módulo 04 — Evolução Familiar](docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md) — especificação funcional v1.1 aprovada
 
 ## Como usar
 
@@ -62,7 +62,7 @@ Smoke FF-02 (API no ar): `npm run smoke:ff02`.
 
 ## Situação e restrições
 
-Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar funcionalidades previstas, implementadas e ainda pendentes. O código atual não oferece proteção adequada para dados reais da família: sessões provisórias e autorizações contextuais ainda incompletas. As especificações dos módulos 03 e 04 foram detalhadas como propostas v1.1; seus valores de estrelas ainda não foram aprovados.
+Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar funcionalidades previstas, implementadas e ainda pendentes. O código atual não oferece proteção adequada para dados reais da família: sessões provisórias e autorizações contextuais ainda incompletas. As especificações funcionais v1.1 dos módulos 03 e 04, incluindo os valores de estrelas (5/3, 10/5, 15/8 por dificuldade e resultado), foram aprovadas em 2026-11-15. A aprovação não significa que tenham sido implementadas.
 
 ## Privacidade
 
