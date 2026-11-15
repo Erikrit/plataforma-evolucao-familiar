@@ -24,7 +24,11 @@ Atualizado em 2026-11-14. **Nenhum código implementado ou testado.**
 
 Histórico básico e segurança não devem ser postergados para o quarto módulo.
 
-## Distinção entre conversas
+## Distinção entre conversas e artefatos
 
-**Neste repositório:** especificação e evolução do produto.  
-**Em conversa separada:** orquestração, ferramentas, skills e configuração de agentes da esteira de desenvolvimento. Não adicionar configurações de agentes automaticamente aqui.
+**Produto (fontes oficiais):** `docs/produto/`, `docs/arquitetura/`, `docs/modulos/` — especificação e evolução funcional.  
+**Esteira (separação lógica, mesmo repositório — ADR-012):** `AGENTS.md`, `.cursor/`, `docs/esteira/`, `scripts/esteira/` — orquestração, skills, hooks e estados de execução.
+
+Não misturar regras funcionais do produto com procedimentos da esteira. A esteira não altera requisitos aprovados automaticamente.
+
+Histórico: a orientação inicial (ADR-011) separava a automação deste repositório; a decisão vigente permite a esteira aqui com isolamento documental.

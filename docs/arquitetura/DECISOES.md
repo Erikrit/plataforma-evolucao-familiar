@@ -14,7 +14,8 @@ Decisões abaixo são direções preliminares aprovadas conceitualmente, não pr
 | ADR-008 | Estrelas automáticas por participação | Reduzir passos e retirar aprovação manual |
 | ADR-009 | Histórico derivado dos registros de origem | Evitar duplicação e recadastro |
 | ADR-010 | PDF sob demanda | Evitar duplicação de dados sensíveis |
-| ADR-011 | Sem push/esteira de agentes neste repositório inicial | Separação entre concepção de produto e automação |
+| ADR-011 | Sem push/esteira de agentes neste repositório inicial | Separação entre concepção de produto e automação (histórico; supersedido por ADR-012 quanto à localização da esteira) |
+| ADR-012 | Esteira de desenvolvimento permitida neste repositório | Mantém o mesmo checkout, com separação lógica da documentação funcional do produto; agentes/skills/hooks não alteram requisitos aprovados automaticamente |
 
 ## A validar
 

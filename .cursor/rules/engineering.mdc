@@ -1,0 +1,38 @@
+---
+description: Regras permanentes da esteira e localização das fontes oficiais do produto
+alwaysApply: true
+---
+
+# Engenharia — esteira PEF
+
+## Fontes oficiais
+
+- Produto: `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md`
+- Arquitetura/ADRs: `docs/arquitetura/ARQUITETURA.md`, `docs/arquitetura/DECISOES.md`
+- Módulos: `docs/modulos/*/ESPECIFICACAO.md`
+- Esteira: `AGENTS.md`, `docs/esteira/REGISTRO.md`, `docs/esteira/estado/atual.json`
+
+Não duplicar esses documentos em prompts. Ler só o trecho necessário.
+
+## Separação lógica (ADR-012)
+
+Artefatos da esteira (`.cursor/`, `docs/esteira/`, `scripts/esteira/`, `AGENTS.md`) não misturam regras funcionais do produto. Não alterar requisitos aprovados sem autorização humana.
+
+## Fluxo mínimo
+
+1. Skill `module-planning` antes de implementar um módulo.
+2. Skill `implementation-workflow` por incremento vertical pequeno.
+3. Skill `quality-gate` (QG-1 → verifier → QG-2; QG-3 ao fechar módulo).
+4. Persistir estado em `docs/esteira/estado/atual.json`.
+
+## Qualidade sem aplicação fictícia
+
+Ainda sem app executável: não inventar código só para “passar” gates. Verificações sem alvo = `PENDING` ou `BLOCKED` (motivo). `NOT_APPLICABLE` só se a verificação realmente não se aplica.
+
+## Segurança operacional
+
+Proibido: commit, push, tag, release, PR, deploy, publish, git destrutivo. Não contornar hooks. Sem segredos/dados reais no repositório. Nomes em português no código do produto (exceto APIs/libs e convenções já estabelecidas).
+
+## Retomada
+
+Antes de continuar: ler estado persistido, `git status` (leitura), comparar fingerprint/arquivos. Máximo 3 correções da mesma causa raiz → `BLOCKED`.

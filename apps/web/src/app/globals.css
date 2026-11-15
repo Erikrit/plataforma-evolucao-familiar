@@ -1,0 +1,119 @@
+:root {
+  --fundo: #f3efe6;
+  --texto: #1f2a24;
+  --destaque: #2f6f4e;
+  --borda: #d5cbb8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  color: var(--texto);
+  background:
+    radial-gradient(circle at top left, #fff8e8 0%, transparent 45%),
+    linear-gradient(160deg, #f7f2e8 0%, #ebe4d6 100%);
+}
+
+main {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+}
+
+h1 {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+
+p {
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.status {
+  border: 1px solid var(--borda);
+  border-radius: 0.75rem;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.status strong {
+  color: var(--destaque);
+}
+
+code {
+  font-size: 0.9em;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.75rem;
+}
+
+.formulario {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.formulario label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.formulario input {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--borda);
+  border-radius: 0.55rem;
+  font: inherit;
+  background: #fff;
+}
+
+button {
+  font: inherit;
+  border: 0;
+  border-radius: 0.55rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--destaque);
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cabecalho-sessao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lista-pessoas {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.ajuda {
+  color: #5b655e;
+  font-size: 0.92rem;
+}
+
+.erro {
+  color: #8a2f2f;
+  margin-top: 0.75rem;
+}

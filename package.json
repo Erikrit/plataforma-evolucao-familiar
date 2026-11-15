@@ -1,0 +1,31 @@
+{
+  "name": "plataforma-evolucao-familiar",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run start:dev -w @pef/api",
+    "dev:web": "npm run dev -w @pef/web",
+    "build": "npm run build -w @pef/api && npm run build -w @pef/web",
+    "typecheck": "npm run typecheck -w @pef/api && npm run typecheck -w @pef/web",
+    "lint": "eslint .",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "db:generate": "npm run prisma:generate -w @pef/api",
+    "db:push": "npm run prisma:push -w @pef/api",
+    "db:seed": "npm run db:seed -w @pef/api",
+    "db:ping": "npm run db:ping -w @pef/api",
+    "smoke:ff02": "npm run smoke:ff02 -w @pef/api"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1"
+  },
+  "engines": {
+    "node": ">=20.13.0"
+  }
+}

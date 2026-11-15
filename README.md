@@ -25,13 +25,40 @@ Plataforma para apoiar o cuidado, as rotinas e o desenvolvimento de integrantes 
 
 ## Como usar
 
-Este repositório documenta **o produto**. Configurações, agentes e skills da esteira de desenvolvimento pertencem ao trabalho separado sobre automação. Uma esteira poderá consumir os arquivos deste repositório, sem alterar os requisitos aprovados automaticamente.
+Este repositório documenta **o produto** e, a partir da decisão ADR-012, também pode conter a **esteira inteligente de desenvolvimento**, desde que logicamente separada da especificação funcional.
+
+- Fontes oficiais do produto: `docs/produto/`, `docs/arquitetura/`, `docs/modulos/`
+- Esteira (agentes, skills, hooks, estados): `AGENTS.md`, `.cursor/`, `docs/esteira/`, `scripts/esteira/`
+
+A esteira consome as especificações; não altera requisitos aprovados automaticamente.
 
 Não inferir que documentos marcados como *proposta* ou *pendente* estejam definitivamente aprovados. Cada mudança de escopo deve ser registrada.
 
 ## Desenvolvimento
 
-Direção tecnológica **preliminar**, não implementada: Next.js/React, NestJS/TypeScript, PostgreSQL, Prisma, armazenamento privado compatível com S3 e Docker Compose. Nenhuma dependência ou infraestrutura foi instalada aqui.
+Direção tecnológica (ADR-003): Next.js/React, NestJS/TypeScript, PostgreSQL, Prisma e Docker Compose em monólito modular (`apps/api`, `apps/web`).
+
+### Bootstrap local (FF-01)
+
+```bash
+cp .env.example .env
+npm install
+npm run docker:up
+npm run db:generate
+npm run db:push
+npm run db:seed
+npm run db:ping
+npm run typecheck
+npm run lint
+npm run dev:api
+# outro terminal:
+npm run dev:web
+```
+
+PostgreSQL do Compose escuta em `localhost:5433` (evita conflito com instalações locais na 5432).  
+Healthcheck da API: `GET http://localhost:3001/saude`.  
+Admin local provisório: ver `PEF_ADMIN_*` em `.env.example` (dados fictícios).  
+Smoke FF-02 (API no ar): `npm run smoke:ff02`.
 
 ## Privacidade
 
