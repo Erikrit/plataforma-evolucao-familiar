@@ -72,11 +72,21 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 - Sem dashboards genéricos, gráficos obrigatórios, ranking ou cobrança.
 - Autorização vale para detalhes, metadados, indicadores, prévia e PDF.
 
-## 8. Fora do MVP
+## 8. Decisões transversais de experiência móvel e privacidade — aprovadas em 2026-11-15
+
+- **Mobile-first sem exclusividade:** experiência prioritária no celular, adequada também ao computador, com botões legíveis, poucos toques e conteúdo centrado nas pessoas.
+- **Navegação única, contexto variável:** estrutura básica consistente; cartões, ações e informações visíveis apenas com autorização.
+- **Autorização sem burocracia:** perfis predefinidos, personalização opcional; parentesco, responsabilidade e permissão são conceitos distintos.
+- **Autonomia e proteção:** a Vovó compreende quem acompanha seus cuidados e pode participar das escolhas legítimas; administrador não herda acesso clínico irrestrito; dados infantis e documentos sensíveis permanecem protegidos.
+- **Notificações discretas por padrão:** detalhamento sensível apenas mediante escolha e autorização, sem exposição indevida em telas bloqueadas.
+- **Estado de gravação confiável:** diante de falha de conexão, não afirmar que um registro foi salvo.
+- PWA ou aplicativo nativo ainda depende de avaliação técnica e testes reais de notificações, sem ampliar requisitos funcionais por conveniência da tecnologia.
+
+## 9. Fora do MVP
 
 Agenda universal, Kanban, rankings de produtividade, gestão trabalhista/financeira da colaboradora, prontuário completo, OCR clínico de receitas, diagnóstico por IA, jogos digitais, SaaS/billing, chat familiar e árvore genealógica complexa.
 
-## 9. Critérios de sucesso
+## 10. Critérios de sucesso
 
 - Operações frequentes resolvidas com interações rápidas e campos mínimos.
 - Autonomia da Vovó preservada; dados de saúde e da criança restritos a usuários autorizados.
@@ -85,6 +95,6 @@ Agenda universal, Kanban, rankings de produtividade, gestão trabalhista/finance
 - Histórico e relatórios aproveitam os dados existentes.
 - UX validada com usuários reais antes da conclusão do MVP.
 
-## 10. Controle de mudanças
+## 11. Controle de mudanças
 
 Toda alteração deve registrar: problema resolvido, novo trabalho imposto à família, possibilidade de reutilizar dados existentes, risco de privacidade/segurança, alternativas mais simples, aprovação e impacto. **Não criar funcionalidade sem valor demonstrável.**
