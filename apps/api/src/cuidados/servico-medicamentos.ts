@@ -31,7 +31,12 @@ export class ServicoMedicamentos {
 
   async listar(pessoaId: string, usuario: UsuarioAutenticado) {
     const pessoa = await this.exigirPessoaVisivel(pessoaId, usuario);
-    return this.prisma.medicamento.findMany({
+    const podeAnexos = await this.autorizacoes.podeConsultarAnexosCuidados(
+      pessoa.familiaId,
+      pessoa.id,
+      usuario,
+    );
+    const lista = await this.prisma.medicamento.findMany({
       where: { pessoaId: pessoa.id },
       orderBy: { criadoEm: "desc" },
       include: {
@@ -39,6 +44,11 @@ export class ServicoMedicamentos {
         anexos: { select: { anexoId: true } },
       },
     });
+    if (podeAnexos) return lista;
+    return lista.map(({ anexos: _anexos, ...resto }) => ({
+      ...resto,
+      anexos: [],
+    }));
   }
 
   async cadastrar(

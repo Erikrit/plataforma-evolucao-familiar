@@ -21,6 +21,11 @@ export class ServicoAcompanhamento {
     periodo?: { de?: string; ate?: string },
   ) {
     const pessoa = await this.exigirVisao(pessoaId, usuario);
+    const podeAnexos = await this.autorizacoes.podeConsultarAnexosCuidados(
+      pessoa.familiaId,
+      pessoa.id,
+      usuario,
+    );
     const de = periodo?.de ? new Date(periodo.de) : new Date(0);
     const ate = periodo?.ate ? new Date(periodo.ate) : new Date();
 
@@ -90,7 +95,7 @@ export class ServicoAcompanhamento {
         quando: e.criadoEm,
         resumo: e.descricao,
         origemId: e.id,
-        anexoId: e.anexoId,
+        ...(podeAnexos && e.anexoId ? { anexoId: e.anexoId } : {}),
       })),
       ...atividades.map((a) => ({
         tipo: "atividade_apoio",

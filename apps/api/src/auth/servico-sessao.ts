@@ -2,12 +2,17 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { ServicoPrisma } from "../prisma/servico-prisma";
 import { verificarSenha } from "../comum/senha";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
 
 const DURACAO_SESSAO_MS = 12 * 60 * 60 * 1000;
+export const NOME_COOKIE_SESSAO = "pef_sessao";
+
+export function hashTokenSessao(token: string): string {
+  return createHash("sha256").update(token, "utf8").digest("hex");
+}
 
 @Injectable()
 export class ServicoSessao {
@@ -23,18 +28,19 @@ export class ServicoSessao {
     }
 
     const token = randomBytes(32).toString("hex");
+    const tokenHash = hashTokenSessao(token);
     const sessao = await this.prisma.sessaoProvisoria.create({
       data: {
-        token,
+        token: tokenHash,
         usuarioId: usuario.id,
         expiraEm: new Date(Date.now() + DURACAO_SESSAO_MS),
       },
     });
 
     return {
-      token: sessao.token,
+      token,
       expiraEm: sessao.expiraEm.toISOString(),
-      provisoria: true,
+      autenticacao: "sessao_mvp",
       usuario: {
         id: usuario.id,
         email: usuario.email,
@@ -54,8 +60,9 @@ export class ServicoSessao {
       throw new UnauthorizedException("Sessão ausente.");
     }
 
+    const tokenHash = hashTokenSessao(token);
     const sessao = await this.prisma.sessaoProvisoria.findUnique({
-      where: { token },
+      where: { token: tokenHash },
       include: { usuario: { include: { pessoa: true } } },
     });
 
@@ -71,7 +78,9 @@ export class ServicoSessao {
 
   async sair(token: string | undefined) {
     if (!token) return { ok: true };
-    await this.prisma.sessaoProvisoria.deleteMany({ where: { token } });
+    await this.prisma.sessaoProvisoria.deleteMany({
+      where: { token: hashTokenSessao(token) },
+    });
     return { ok: true };
   }
 
@@ -80,5 +89,12 @@ export class ServicoSessao {
       where: { usuarioId },
     });
     return { invalidadas: resultado.count };
+  }
+
+  async limparExpiradas() {
+    const resultado = await this.prisma.sessaoProvisoria.deleteMany({
+      where: { expiraEm: { lt: new Date() } },
+    });
+    return { removidas: resultado.count };
   }
 }

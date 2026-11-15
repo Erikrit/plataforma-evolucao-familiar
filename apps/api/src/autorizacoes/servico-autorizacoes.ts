@@ -51,7 +51,9 @@ export class ServicoAutorizacoes {
     const usuarioId = (entrada.usuarioId ?? "").trim();
     const responsabilidadeBruta = (entrada.responsabilidade ?? "").trim();
     if (!usuarioId || !ehResponsabilidade(responsabilidadeBruta)) {
-      throw new BadRequestException("Usuário e responsabilidade válidos são obrigatórios.");
+      throw new BadRequestException(
+        "Usuário e responsabilidade válidos são obrigatórios.",
+      );
     }
     const responsabilidade = responsabilidadeBruta;
 
@@ -102,23 +104,39 @@ export class ServicoAutorizacoes {
     return this.formatar(criada.id);
   }
 
+  async ehAdministradorFamilia(
+    familiaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    if (usuario.pessoa.familiaId !== familiaId) return false;
+    const admin = await this.prisma.autorizacao.findFirst({
+      where: {
+        familiaId,
+        usuarioId: usuario.id,
+        responsabilidade: "administrador",
+        pessoaAlvoId: null,
+        ativa: true,
+      },
+    });
+    return Boolean(admin);
+  }
+
+  /**
+   * Pessoas visíveis na gestão/cadastro.
+   * Administrador vê todas para convites/cadastro; isso NÃO libera dados clínicos.
+   */
   async idsPessoasVisiveis(
     familiaId: string,
     usuario: UsuarioAutenticado,
   ): Promise<{ adminFamilia: boolean; ids: Set<string> | "todas" }> {
-    const autorizacoes = await this.prisma.autorizacao.findMany({
-      where: { familiaId, usuarioId: usuario.id, ativa: true },
-    });
-
-    if (
-      autorizacoes.some(
-        (a) =>
-          a.responsabilidade === "administrador" && a.pessoaAlvoId === null,
-      )
-    ) {
+    const adminFamilia = await this.ehAdministradorFamilia(familiaId, usuario);
+    if (adminFamilia) {
       return { adminFamilia: true, ids: "todas" };
     }
 
+    const autorizacoes = await this.prisma.autorizacao.findMany({
+      where: { familiaId, usuarioId: usuario.id, ativa: true },
+    });
     const ids = new Set<string>();
     ids.add(usuario.pessoa.id);
     for (const a of autorizacoes) {
@@ -131,8 +149,7 @@ export class ServicoAutorizacoes {
     familiaId: string,
     usuario: UsuarioAutenticado,
   ): Promise<boolean> {
-    const visao = await this.idsPessoasVisiveis(familiaId, usuario);
-    return visao.adminFamilia;
+    return this.ehAdministradorFamilia(familiaId, usuario);
   }
 
   async exigirAdministrador(
@@ -198,36 +215,56 @@ export class ServicoAutorizacoes {
     return visao.ids.has(pessoaId);
   }
 
-  /** Visualizar rotina/cuidados da pessoa-alvo. */
+  /**
+   * Rotina/cuidados: responsabilidade clínica contextual ou a própria pessoa.
+   * Administrador sozinho NÃO herda acesso clínico.
+   */
   async podeVerCuidados(
     familiaId: string,
     pessoaId: string,
     usuario: UsuarioAutenticado,
   ): Promise<boolean> {
-    return this.podeVerPessoa(familiaId, pessoaId, usuario);
-  }
-
-  /** Registrar relato de dose ou atividade (responsável ou colaboradora autorizada). */
-  async podeRegistrarRelatoCuidados(
-    familiaId: string,
-    pessoaId: string,
-    usuario: UsuarioAutenticado,
-  ): Promise<boolean> {
+    if (usuario.pessoa.familiaId !== familiaId) return false;
+    if (usuario.pessoa.id === pessoaId) return true;
     return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
-      "administrador",
       "responsavel_cuidados",
       "colaboradora_cuidados",
     ]);
   }
 
-  /** Cadastrar/alterar programação — colaboradora NÃO por padrão (CUI-F04). */
+  /** Documentos/anexos sensíveis: responsável de cuidados ou a própria pessoa. */
+  async podeConsultarAnexosCuidados(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    if (usuario.pessoa.familiaId !== familiaId) return false;
+    if (usuario.pessoa.id === pessoaId) return true;
+    return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
+      "responsavel_cuidados",
+    ]);
+  }
+
+  /** Registrar relato de dose ou atividade. */
+  async podeRegistrarRelatoCuidados(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    if (usuario.pessoa.id === pessoaId) return true;
+    return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
+      "responsavel_cuidados",
+      "colaboradora_cuidados",
+    ]);
+  }
+
+  /** Cadastrar/alterar programação — colaboradora e admin puro NÃO (CUI-F04). */
   async podeAlterarProgramacaoCuidados(
     familiaId: string,
     pessoaId: string,
     usuario: UsuarioAutenticado,
   ): Promise<boolean> {
     return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
-      "administrador",
       "responsavel_cuidados",
     ]);
   }
@@ -259,9 +296,8 @@ export class ServicoAutorizacoes {
       where: { familiaId, usuarioId: usuario.id, ativa: true },
     });
     for (const a of autorizacoes) {
-      if (!permitidas.includes(a.responsabilidade as Responsabilidade)) continue;
-      if (a.responsabilidade === "administrador" && a.pessoaAlvoId === null) {
-        return true;
+      if (!permitidas.includes(a.responsabilidade as Responsabilidade)) {
+        continue;
       }
       if (a.pessoaAlvoId === pessoaId) return true;
     }
@@ -287,17 +323,28 @@ export class ServicoAutorizacoes {
 
     const autorizacoes = await this.listarDoUsuario(familiaId, usuario);
 
-    return {
-      familiaId,
-      cartoes: pessoas.map((p) => ({
+    const cartoes = [];
+    for (const p of pessoas) {
+      const cuidados = await this.podeVerCuidados(familiaId, p.id, usuario);
+      cartoes.push({
         pessoaId: p.id,
         nome: p.nome,
         vinculo: p.vinculo,
         possuiConta: Boolean(p.usuario),
         resumo: p.vinculo ? `Vínculo: ${p.vinculo}` : "Pessoa da família",
-      })),
+        areasAutorizadas: {
+          cuidados,
+          historico: cuidados,
+        },
+      });
+    }
+
+    return {
+      familiaId,
+      cartoes,
       autorizacoes,
       filtradoPorAutorizacao: visao.ids !== "todas",
+      adminSemAcessoClinicoAutomatico: true,
     };
   }
 

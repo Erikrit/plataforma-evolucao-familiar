@@ -1,0 +1,8 @@
+QG-1 typecheck — correção QA UI/sessão cookie-only
+Data: 2026-11-15
+
+@pef/web: PASS (tsc --noEmit exit 0)
+@pef/api: PASS (tsc --noEmit exit 0)
+
+Escopo: cookie-only web, logout DELETE, gates sem sessão,
+seleção por pessoaId, seed canônico, ativar convite, UX cuidados.

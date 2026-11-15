@@ -30,13 +30,18 @@ export class ServicoAnexos {
     }
     const pessoaId = entrada.pessoaId?.trim() || null;
     if (pessoaId) {
-      const pode = await this.autorizacoes.podeVerCuidados(
+      const pode = await this.autorizacoes.podeConsultarAnexosCuidados(
         familiaId,
         pessoaId,
         usuario,
       );
       if (!pode) {
         throw new ForbiddenException("Sem acesso à pessoa do anexo (ACE-C09).");
+      }
+    } else {
+      const admin = await this.autorizacoes.podeGerirPessoas(familiaId, usuario);
+      if (!admin) {
+        throw new ForbiddenException("Anexo sem pessoa exige administrador.");
       }
     }
 
@@ -81,7 +86,7 @@ export class ServicoAnexos {
       throw new ForbiddenException("Anexo fora do alcance da sessão.");
     }
     if (anexo.pessoaId) {
-      const pode = await this.autorizacoes.podeVerCuidados(
+      const pode = await this.autorizacoes.podeConsultarAnexosCuidados(
         anexo.familiaId,
         anexo.pessoaId,
         usuario,

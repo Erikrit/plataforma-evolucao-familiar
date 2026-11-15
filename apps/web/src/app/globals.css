@@ -84,7 +84,8 @@ h2 {
   font-size: 0.95rem;
 }
 
-.formulario input {
+.formulario input,
+.formulario select {
   width: 100%;
   padding: 0.65rem 0.75rem;
   border: 1px solid var(--borda);
@@ -131,6 +132,16 @@ button:disabled {
 .erro {
   color: #8a2f2f;
   margin-top: 0.75rem;
+}
+
+.sucesso {
+  color: #1f5c3a;
+  margin-top: 0.75rem;
+}
+
+.mono {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.8rem;
 }
 
 .bloco {

@@ -57,6 +57,7 @@ model Usuario {
 
 model SessaoProvisoria {
   id        String   @id @default(cuid())
+  /// Armazena SHA-256 do token opaco (não o segredo em claro).
   token     String   @unique
   usuarioId String   @map("usuario_id")
   expiraEm  DateTime @map("expira_em")

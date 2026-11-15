@@ -5,10 +5,11 @@ import {
   Get,
   Post,
   Req,
+  Res,
   UseGuards,
 } from "@nestjs/common";
-import type { Request } from "express";
-import { ServicoSessao } from "./servico-sessao";
+import type { Request, Response } from "express";
+import { NOME_COOKIE_SESSAO, ServicoSessao } from "./servico-sessao";
 import { extrairToken, GuardaSessao } from "./guarda-sessao";
 import type { RequisicaoComUsuario } from "../comum/tipos-requisicao";
 
@@ -22,15 +23,25 @@ export class ControladorSessao {
   constructor(private readonly sessoes: ServicoSessao) {}
 
   @Post("sessoes")
-  async entrar(@Body() corpo: CorpoEntrada) {
+  async entrar(
+    @Body() corpo: CorpoEntrada,
+    @Res({ passthrough: true }) resposta: Response,
+  ) {
     const email = (corpo.email ?? "").trim();
     const senha = corpo.senha ?? "";
-    return this.sessoes.entrar(email, senha);
+    const sessao = await this.sessoes.entrar(email, senha);
+    this.definirCookieSessao(resposta, sessao.token, sessao.expiraEm);
+    return sessao;
   }
 
   @Delete("sessoes")
-  async sair(@Req() requisicao: Request) {
-    return this.sessoes.sair(extrairToken(requisicao));
+  async sair(
+    @Req() requisicao: Request,
+    @Res({ passthrough: true }) resposta: Response,
+  ) {
+    const resultado = await this.sessoes.sair(extrairToken(requisicao));
+    this.limparCookieSessao(resposta);
+    return resultado;
   }
 
   @Get("me")
@@ -45,7 +56,30 @@ export class ControladorSessao {
         nome: usuario.pessoa.nome,
         familiaId: usuario.pessoa.familiaId,
       },
-      autenticacao: "provisoria",
+      autenticacao: "sessao_mvp",
     };
+  }
+
+  private definirCookieSessao(
+    resposta: Response,
+    token: string,
+    expiraEmIso: string,
+  ) {
+    const seguro = process.env.COOKIE_SECURE === "true";
+    resposta.cookie(NOME_COOKIE_SESSAO, token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: seguro,
+      path: "/",
+      expires: new Date(expiraEmIso),
+    });
+  }
+
+  private limparCookieSessao(resposta: Response) {
+    resposta.clearCookie(NOME_COOKIE_SESSAO, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    });
   }
 }

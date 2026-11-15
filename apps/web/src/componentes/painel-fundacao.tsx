@@ -1,55 +1,80 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
+  ativarConvite,
   concederAutorizacao,
   criarConvite,
   criarPessoa,
   entrar,
+  limparSessaoLegada,
   obterInicio,
+  obterMe,
+  sair,
   type AutorizacaoResumo,
   type CartaoInicio,
-  type SessaoResposta,
+  type UsuarioSessao,
 } from "@/lib/api";
 
-const CHAVE_SESSAO = "pef.sessao.ff03";
-
-type SessaoLocal = SessaoResposta;
-
-function lerSessao(): SessaoLocal | null {
-  if (typeof window === "undefined") return null;
-  const bruto = window.localStorage.getItem(CHAVE_SESSAO);
-  if (!bruto) return null;
-  try {
-    return JSON.parse(bruto) as SessaoLocal;
-  } catch {
-    return null;
-  }
-}
-
 export function PainelFundacao() {
-  const [sessao, setSessao] = useState<SessaoLocal | null>(() => lerSessao());
-  const [email, setEmail] = useState("admin@pef.local");
-  const [senha, setSenha] = useState("admin-local");
+  const [usuario, setUsuario] = useState<UsuarioSessao | null>(null);
+  const [pronto, setPronto] = useState(false);
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const [nome, setNome] = useState("");
   const [cartoes, setCartoes] = useState<CartaoInicio[]>([]);
   const [autorizacoes, setAutorizacoes] = useState<AutorizacaoResumo[]>([]);
   const [filtrado, setFiltrado] = useState(false);
   const [emailConvite, setEmailConvite] = useState("nova.colab@pef.local");
+  const [pessoaAlvoConviteId, setPessoaAlvoConviteId] = useState("");
+  const [pessoaAlvoDesenvId, setPessoaAlvoDesenvId] = useState("");
   const [tokenConvite, setTokenConvite] = useState<string | null>(null);
+  const [tokenAtivar, setTokenAtivar] = useState("");
+  const [senhaAtivar, setSenhaAtivar] = useState("");
+  const [nomeAtivar, setNomeAtivar] = useState("");
   const [erro, setErro] = useState<string | null>(null);
+  const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
 
-  useEffect(() => {
-    if (!sessao) return;
-    void carregarInicio(sessao).catch((e) => {
-      setErro(e instanceof Error ? e.message : "Falha ao carregar início");
-    });
-  }, [sessao]);
+  const pessoasUnicas = useMemo(() => {
+    const mapa = new Map<string, CartaoInicio>();
+    for (const c of cartoes) mapa.set(c.pessoaId, c);
+    return [...mapa.values()].sort((a, b) => a.nome.localeCompare(b.nome, "pt"));
+  }, [cartoes]);
 
-  async function carregarInicio(atual: SessaoLocal) {
-    const inicio = await obterInicio(atual.usuario.pessoa.familiaId, atual.token);
+  useEffect(() => {
+    limparSessaoLegada();
+    void (async () => {
+      try {
+        const me = await obterMe();
+        if (me) {
+          setUsuario(me);
+          await carregarInicio(me);
+        }
+      } catch (e) {
+        setErro(e instanceof Error ? e.message : "Falha ao verificar sessão");
+      } finally {
+        setPronto(true);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!pessoaAlvoConviteId && pessoasUnicas.length > 0) {
+      const preferida =
+        pessoasUnicas.find((p) => /vovó|vovo/i.test(p.nome)) ?? pessoasUnicas[0];
+      setPessoaAlvoConviteId(preferida.pessoaId);
+    }
+    if (!pessoaAlvoDesenvId && pessoasUnicas.length > 0) {
+      const preferida =
+        pessoasUnicas.find((p) => /laurinha/i.test(p.nome)) ?? pessoasUnicas[0];
+      setPessoaAlvoDesenvId(preferida.pessoaId);
+    }
+  }, [pessoasUnicas, pessoaAlvoConviteId, pessoaAlvoDesenvId]);
+
+  async function carregarInicio(atual: UsuarioSessao) {
+    const inicio = await obterInicio(atual.pessoa.familiaId);
     setCartoes(inicio.cartoes);
     setAutorizacoes(inicio.autorizacoes);
     setFiltrado(inicio.filtradoPorAutorizacao);
@@ -59,11 +84,12 @@ export function PainelFundacao() {
     evento.preventDefault();
     setCarregando(true);
     setErro(null);
+    setSucesso(null);
     try {
       const nova = await entrar(email, senha);
-      window.localStorage.setItem(CHAVE_SESSAO, JSON.stringify(nova));
-      setSessao(nova);
-      await carregarInicio(nova);
+      setUsuario(nova.usuario);
+      await carregarInicio(nova.usuario);
+      setSucesso("Sessão iniciada.");
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Falha ao entrar");
     } finally {
@@ -73,13 +99,15 @@ export function PainelFundacao() {
 
   async function aoCadastrar(evento: FormEvent) {
     evento.preventDefault();
-    if (!sessao) return;
+    if (!usuario) return;
     setCarregando(true);
     setErro(null);
+    setSucesso(null);
     try {
-      await criarPessoa(sessao.usuario.pessoa.familiaId, sessao.token, nome);
+      const criada = await criarPessoa(usuario.pessoa.familiaId, nome);
       setNome("");
-      await carregarInicio(sessao);
+      await carregarInicio(usuario);
+      setSucesso(`Pessoa “${criada.nome}” cadastrada.`);
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Falha ao cadastrar");
     } finally {
@@ -88,26 +116,26 @@ export function PainelFundacao() {
   }
 
   async function aoConvidarColaboradora() {
-    if (!sessao) return;
-    const vovo = cartoes.find((c) => c.nome === "Vovó");
-    if (!vovo) {
-      setErro("Cadastre Vovó antes de convidar colaboradora.");
+    if (!usuario || !pessoaAlvoConviteId) {
+      setErro("Selecione a pessoa-alvo do convite.");
       return;
     }
     setCarregando(true);
     setErro(null);
+    setSucesso(null);
     try {
-      const convite = await criarConvite(
-        sessao.usuario.pessoa.familiaId,
-        sessao.token,
-        {
-          email: emailConvite,
-          nomeConvidado: "Colaboradora Convidada",
-          responsabilidade: "colaboradora_cuidados",
-          pessoaAlvoId: vovo.pessoaId,
-        },
-      );
+      const alvo = pessoasUnicas.find((p) => p.pessoaId === pessoaAlvoConviteId);
+      const convite = await criarConvite(usuario.pessoa.familiaId, {
+        email: emailConvite,
+        nomeConvidado: "Colaboradora Convidada",
+        responsabilidade: "colaboradora_cuidados",
+        pessoaAlvoId: pessoaAlvoConviteId,
+      });
       setTokenConvite(convite.token);
+      setTokenAtivar(convite.token);
+      setSucesso(
+        `Convite gerado para ${alvo?.nome ?? "pessoa selecionada"}.`,
+      );
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Falha no convite");
     } finally {
@@ -115,22 +143,42 @@ export function PainelFundacao() {
     }
   }
 
+  async function aoAtivarConvite(evento: FormEvent) {
+    evento.preventDefault();
+    setCarregando(true);
+    setErro(null);
+    setSucesso(null);
+    try {
+      await ativarConvite(tokenAtivar.trim(), {
+        senha: senhaAtivar,
+        nome: nomeAtivar.trim() || undefined,
+      });
+      setSenhaAtivar("");
+      setSucesso("Convite ativado. A colaboradora já pode entrar.");
+      if (usuario) await carregarInicio(usuario);
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "Falha ao ativar convite");
+    } finally {
+      setCarregando(false);
+    }
+  }
+
   async function aoAcumularDesenvolvimento() {
-    if (!sessao) return;
-    const laurinha = cartoes.find((c) => c.nome === "Laurinha");
-    if (!laurinha) {
-      setErro("Cadastre Laurinha antes de acumular responsabilidade.");
+    if (!usuario || !pessoaAlvoDesenvId) {
+      setErro("Selecione a pessoa para desenvolvimento.");
       return;
     }
     setCarregando(true);
     setErro(null);
+    setSucesso(null);
     try {
-      await concederAutorizacao(sessao.usuario.pessoa.familiaId, sessao.token, {
-        usuarioId: sessao.usuario.id,
+      await concederAutorizacao(usuario.pessoa.familiaId, {
+        usuarioId: usuario.id,
         responsabilidade: "responsavel_desenvolvimento",
-        pessoaAlvoId: laurinha.pessoaId,
+        pessoaAlvoId: pessoaAlvoDesenvId,
       });
-      await carregarInicio(sessao);
+      await carregarInicio(usuario);
+      setSucesso("Responsabilidade de desenvolvimento concedida.");
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Falha ao conceder");
     } finally {
@@ -138,14 +186,32 @@ export function PainelFundacao() {
     }
   }
 
-  function aoSair() {
-    window.localStorage.removeItem(CHAVE_SESSAO);
-    setSessao(null);
-    setCartoes([]);
-    setAutorizacoes([]);
+  async function aoSair() {
+    setCarregando(true);
+    setErro(null);
+    setSucesso(null);
+    try {
+      await sair();
+    } catch {
+      /* limpeza local mesmo se a API falhar */
+    } finally {
+      setUsuario(null);
+      setCartoes([]);
+      setAutorizacoes([]);
+      setTokenConvite(null);
+      setCarregando(false);
+    }
   }
 
-  if (!sessao) {
+  if (!pronto) {
+    return (
+      <section className="status" aria-busy="true">
+        <p className="ajuda">Verificando sessão…</p>
+      </section>
+    );
+  }
+
+  if (!usuario) {
     return (
       <section className="status">
         <h2>Entrar (sessão provisória)</h2>
@@ -174,6 +240,7 @@ export function PainelFundacao() {
           </button>
         </form>
         {erro ? <p className="erro">{erro}</p> : null}
+        {sucesso ? <p className="sucesso">{sucesso}</p> : null}
       </section>
     );
   }
@@ -182,9 +249,9 @@ export function PainelFundacao() {
     <section className="status">
       <header className="cabecalho-sessao">
         <p>
-          Olá, <strong>{sessao.usuario.pessoa.nome}</strong>
+          Olá, <strong>{usuario.pessoa.nome}</strong>
         </p>
-        <button type="button" onClick={aoSair}>
+        <button type="button" onClick={() => void aoSair()} disabled={carregando}>
           Sair
         </button>
       </header>
@@ -221,6 +288,7 @@ export function PainelFundacao() {
             <li key={cartao.pessoaId} className="cartao-pessoa">
               <strong>{cartao.nome}</strong>
               <span>{cartao.resumo}</span>
+              <span className="ajuda mono">id: {cartao.pessoaId.slice(0, 8)}…</span>
               <Link href={`/pessoas/${cartao.pessoaId}`}>Abrir perfil</Link>
             </li>
           ))}
@@ -246,8 +314,22 @@ export function PainelFundacao() {
                 required
               />
             </label>
-            <button type="submit" disabled={carregando}>
-              Gerar convite para Vovó
+            <label>
+              Pessoa-alvo dos cuidados
+              <select
+                value={pessoaAlvoConviteId}
+                onChange={(e) => setPessoaAlvoConviteId(e.target.value)}
+                required
+              >
+                {pessoasUnicas.map((p) => (
+                  <option key={p.pessoaId} value={p.pessoaId}>
+                    {p.nome} ({p.pessoaId.slice(0, 8)}…)
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button type="submit" disabled={carregando || !pessoaAlvoConviteId}>
+              Gerar convite
             </button>
           </form>
           {tokenConvite ? (
@@ -259,6 +341,45 @@ export function PainelFundacao() {
       ) : null}
 
       <div className="bloco">
+        <h2>Ativar convite</h2>
+        <form onSubmit={aoAtivarConvite} className="formulario">
+          <label>
+            Token
+            <input
+              value={tokenAtivar}
+              onChange={(e) => setTokenAtivar(e.target.value)}
+              required
+              autoComplete="off"
+            />
+          </label>
+          <label>
+            Nome (opcional)
+            <input
+              value={nomeAtivar}
+              onChange={(e) => setNomeAtivar(e.target.value)}
+              autoComplete="name"
+            />
+          </label>
+          <label>
+            Senha da nova conta
+            <input
+              type="password"
+              value={senhaAtivar}
+              onChange={(e) => setSenhaAtivar(e.target.value)}
+              required
+              autoComplete="new-password"
+            />
+          </label>
+          <button type="submit" disabled={carregando}>
+            Ativar
+          </button>
+        </form>
+        <p className="ajuda">
+          Também em <Link href="/convites/ativar">/convites/ativar</Link>.
+        </p>
+      </div>
+
+      <div className="bloco">
         <h2>Autorizações ativas</h2>
         <ul className="lista-pessoas">
           {autorizacoes.map((a) => (
@@ -268,16 +389,34 @@ export function PainelFundacao() {
             </li>
           ))}
         </ul>
-        <button
-          type="button"
-          onClick={() => void aoAcumularDesenvolvimento()}
-          disabled={carregando}
+        <form
+          className="formulario"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void aoAcumularDesenvolvimento();
+          }}
         >
-          Acumular responsabilidade de desenvolvimento (ACE-05)
-        </button>
+          <label>
+            Pessoa (desenvolvimento)
+            <select
+              value={pessoaAlvoDesenvId}
+              onChange={(e) => setPessoaAlvoDesenvId(e.target.value)}
+            >
+              {pessoasUnicas.map((p) => (
+                <option key={p.pessoaId} value={p.pessoaId}>
+                  {p.nome} ({p.pessoaId.slice(0, 8)}…)
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="submit" disabled={carregando || !pessoaAlvoDesenvId}>
+            Acumular responsabilidade de desenvolvimento (ACE-05)
+          </button>
+        </form>
       </div>
 
       {erro ? <p className="erro">{erro}</p> : null}
+      {sucesso ? <p className="sucesso">{sucesso}</p> : null}
     </section>
   );
 }

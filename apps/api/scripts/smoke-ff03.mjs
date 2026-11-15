@@ -3,6 +3,7 @@
  */
 import { randomBytes, scryptSync } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
+import { IDS_SEED, resolverPessoa } from "./lib-authz-smoke.mjs";
 
 const base = process.env.API_URL ?? "http://localhost:3001";
 const emailAdmin = process.env.PEF_ADMIN_EMAIL ?? "admin@pef.local";
@@ -50,23 +51,14 @@ try {
     "x-sessao-token": tokenAdmin,
   };
 
-  async function garantirPessoa(nome) {
-    const lista = await fetch(`${base}/familias/${familiaId}/pessoas`, {
-      headers: headersAdmin,
-    });
-    const dados = await json(lista);
-    const existente = (dados.corpo ?? []).find((p) => p.nome === nome);
-    if (existente) return existente;
-    const criada = await fetch(`${base}/familias/${familiaId}/pessoas`, {
-      method: "POST",
-      headers: headersAdmin,
-      body: JSON.stringify({ nome }),
-    });
-    return (await json(criada)).corpo;
-  }
-
-  const vovo = await garantirPessoa("Vovó");
-  const laurinha = await garantirPessoa("Laurinha");
+  const vovo = await resolverPessoa(base, headersAdmin, familiaId, {
+    idSeed: IDS_SEED.vovo,
+    nome: "Vovó",
+  });
+  const laurinha = await resolverPessoa(base, headersAdmin, familiaId, {
+    idSeed: IDS_SEED.laurinha,
+    nome: "Laurinha",
+  });
 
   const acumulada = await fetch(`${base}/familias/${familiaId}/autorizacoes`, {
     method: "POST",

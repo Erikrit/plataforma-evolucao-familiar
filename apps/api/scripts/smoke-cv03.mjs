@@ -1,4 +1,10 @@
 /** Smoke CV-03: ACE-C06 vigência/correção; ACE-C07 colaboradora negada. */
+import {
+  garantirResponsavelCuidados,
+  resolverPessoa,
+  IDS_SEED,
+} from "./lib-authz-smoke.mjs";
+
 const base = process.env.API_URL ?? "http://localhost:3001";
 const emailAdmin = process.env.PEF_ADMIN_EMAIL ?? "admin@pef.local";
 const senhaAdmin = process.env.PEF_ADMIN_SENHA ?? "admin-local";
@@ -34,25 +40,22 @@ try {
     "x-sessao-token": admin.token,
   };
 
-  async function pessoa(nome) {
-    const lista = await json(
-      await fetch(`${base}/familias/${familiaId}/pessoas`, { headers: h }),
-    );
-    const achada = (lista.corpo ?? []).find((p) => p.nome === nome);
-    if (achada) return achada;
-    return (
-      await json(
-        await fetch(`${base}/familias/${familiaId}/pessoas`, {
-          method: "POST",
-          headers: h,
-          body: JSON.stringify({ nome }),
-        }),
-      )
-    ).corpo;
-  }
+  const vovo = await resolverPessoa(base, h, familiaId, {
+    idSeed: IDS_SEED.vovo,
+    nome: "Vovó",
+  });
+  const laurinha = await resolverPessoa(base, h, familiaId, {
+    idSeed: IDS_SEED.laurinha,
+    nome: "Laurinha",
+  });
 
-  const vovo = await pessoa("Vovó");
-  const laurinha = await pessoa("Laurinha");
+  await garantirResponsavelCuidados(
+    base,
+    h,
+    familiaId,
+    admin.usuario.id,
+    vovo.id,
+  );
 
   const med = await json(
     await fetch(`${base}/pessoas/${vovo.id}/medicamentos`, {

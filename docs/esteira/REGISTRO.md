@@ -4,15 +4,31 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
 ## Estado atual (2026-11-15)
 
+- **Correção auth/autorização:** COMPLETED (SA-01..SA-04, QG-3 PASS, verifier PASS)
 - **Módulo 02 Cuidados da Vovó:** COMPLETED (CV-01..CV-06, QG-3 PASS)
 - **Módulo 01 Fundação Familiar:** COMPLETED (FF-01..FF-06, QG-3 PASS)
 - **Estado persistido:** `docs/esteira/estado/atual.json`
-- **Evidência do módulo 02:** `docs/esteira/estado/evidencia-modulo-02.json`
+- **Evidência authz:** `docs/esteira/estado/evidencia-correcao-authz.json`
 - **App local:** `apps/api` + `apps/web` + Compose (Postgres `:5433`)
-- **Auth:** provisória (pendente em `docs/arquitetura/DECISOES.md`)
+- **Auth:** sessão MVP (hash SHA-256 + cookie httpOnly); IdP definitivo ainda em DECISOES.md
 - **ACE-C12:** PENDING (lembretes/PWA em dispositivos reais)
-- **Próximo:** módulo 03 — Desenvolvimento Laurinha (`module-planning`)
+- **Próximo produto:** módulo 03 — Desenvolvimento Laurinha (`module-planning`)
 - **Commit/push/deploy:** sob decisão humana; não feitos pela esteira
+
+## 2026-11-15 — Correção auth/autorização COMPLETED (SA-01..SA-04)
+
+- **Causas corrigidas:** admin com clínica automática; `podeVerCuidados`≡visão de pessoa; anexos amplos; token em claro
+- **QG-1/QG-2/QG-3:** PASS · Verifier PASS ([verifier](e313a9af-9b15-4051-8b94-18f1737e38d1))
+- **Evidências:** `smoke-authz-critico-saida.json`, `smoke-modulo-01-pos-authz.json`, `smoke-modulo-02-pos-authz.json`
+- **Fingerprint:** `2d79762e2e65ffba`
+- **Commit/push:** não executados
+
+## 2026-11-15 — Planejamento correção auth/autorização
+
+- **Skill:** `module-planning` + execução via `implementation-workflow`
+- **Causas:** admin com acesso clínico automático; cuidados≡visão de pessoa; anexos amplos; token em texto puro
+- **Incrementos:** SA-01 (permissões) → SA-02 (anexos/áreas) → SA-03 (sessão) → SA-04 (testes/QG)
+- **Commit/push:** não executados
 
 ## 2026-11-15 — Módulo 02 COMPLETED (CV-01..CV-06 + QG-3)
 

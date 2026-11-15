@@ -33,6 +33,28 @@ try {
     },
   });
 
+  const pessoaVovo = await prisma.pessoa.upsert({
+    where: { id: "pessoa_vovo_seed" },
+    update: { nome: "Vovó", familiaId: familia.id },
+    create: {
+      id: "pessoa_vovo_seed",
+      familiaId: familia.id,
+      nome: "Vovó",
+      vinculo: "avó",
+    },
+  });
+
+  const pessoaLaurinha = await prisma.pessoa.upsert({
+    where: { id: "pessoa_laurinha_seed" },
+    update: { nome: "Laurinha", familiaId: familia.id },
+    create: {
+      id: "pessoa_laurinha_seed",
+      familiaId: familia.id,
+      nome: "Laurinha",
+      vinculo: "filha",
+    },
+  });
+
   const usuarioAdmin = await prisma.usuario.upsert({
     where: { email: emailAdmin },
     update: {
@@ -73,10 +95,15 @@ try {
       ok: true,
       familiaId: familia.id,
       adminEmail: emailAdmin,
+      pessoasCanonicas: {
+        admin: pessoaAdmin.id,
+        vovo: pessoaVovo.id,
+        laurinha: pessoaLaurinha.id,
+      },
       autorizacaoAdmin: true,
       aviso: "Credenciais locais fictícias; não usar dados reais.",
       fingerprintSeed: createHash("sha256")
-        .update(`${familia.id}:${emailAdmin}:admin`)
+        .update(`${familia.id}:${emailAdmin}:admin:vovo:laurinha`)
         .digest("hex")
         .slice(0, 12),
     }),

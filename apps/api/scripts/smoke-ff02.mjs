@@ -1,6 +1,8 @@
 /**
  * Smoke FF-02: ACE-01, ACE-02, ACE-09 (cadastro só com nome; sem conta).
  */
+import { IDS_SEED, resolverPessoa } from "./lib-authz-smoke.mjs";
+
 const base = process.env.API_URL ?? "http://localhost:3001";
 const email = process.env.PEF_ADMIN_EMAIL ?? "admin@pef.local";
 const senha = process.env.PEF_ADMIN_SENHA ?? "admin-local";
@@ -39,31 +41,49 @@ try {
     "x-sessao-token": token,
   };
 
-  const vovo = await fetch(`${base}/familias/${familiaId}/pessoas`, {
+  const stamp = Date.now();
+  const nomeA = `FF02-A-${stamp}`;
+  const nomeB = `FF02-B-${stamp}`;
+  const pessoaA = await fetch(`${base}/familias/${familiaId}/pessoas`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ nome: "Vovó" }),
+    body: JSON.stringify({ nome: nomeA }),
   });
-  const vovoJson = await json(vovo);
+  const pessoaAJson = await json(pessoaA);
   registrar(
     "ACE-01",
-    vovo.status < 300 && vovoJson.corpo?.nome === "Vovó" && !vovoJson.corpo?.possuiConta,
-    vovoJson.corpo,
+    pessoaA.status < 300 &&
+      pessoaAJson.corpo?.nome === nomeA &&
+      !pessoaAJson.corpo?.possuiConta,
+    pessoaAJson.corpo,
   );
 
-  const laurinha = await fetch(`${base}/familias/${familiaId}/pessoas`, {
+  const pessoaB = await fetch(`${base}/familias/${familiaId}/pessoas`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ nome: "Laurinha" }),
+    body: JSON.stringify({ nome: nomeB }),
   });
-  const laurinhaJson = await json(laurinha);
+  const pessoaBJson = await json(pessoaB);
   registrar(
     "ACE-02",
-    laurinha.status < 300 &&
-      laurinhaJson.corpo?.nome === "Laurinha" &&
-      !laurinhaJson.corpo?.possuiConta,
-    laurinhaJson.corpo,
+    pessoaB.status < 300 &&
+      pessoaBJson.corpo?.nome === nomeB &&
+      !pessoaBJson.corpo?.possuiConta,
+    pessoaBJson.corpo,
   );
+
+  const vovoCanon = await resolverPessoa(base, headers, familiaId, {
+    idSeed: IDS_SEED.vovo,
+    nome: "Vovó",
+  });
+  const laurinhaCanon = await resolverPessoa(base, headers, familiaId, {
+    idSeed: IDS_SEED.laurinha,
+    nome: "Laurinha",
+  });
+  registrar("seed-vovo-laurinha", !!vovoCanon?.id && !!laurinhaCanon?.id, {
+    vovoId: vovoCanon?.id,
+    laurinhaId: laurinhaCanon?.id,
+  });
 
   const semNome = await fetch(`${base}/familias/${familiaId}/pessoas`, {
     method: "POST",
@@ -79,7 +99,11 @@ try {
   const nomes = (listaJson.corpo ?? []).map((p) => p.nome);
   registrar(
     "listar-pessoas",
-    lista.status < 300 && nomes.includes("Vovó") && nomes.includes("Laurinha"),
+    lista.status < 300 &&
+      nomes.includes(nomeA) &&
+      nomes.includes(nomeB) &&
+      nomes.includes("Vovó") &&
+      nomes.includes("Laurinha"),
     { nomes },
   );
 

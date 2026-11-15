@@ -1,4 +1,6 @@
 /** Smoke CV-01: ACE-C01 cadastro sem OCR; ACE-C02 anexo compartilhado. */
+import { garantirResponsavelCuidados, resolverPessoa, IDS_SEED } from "./lib-authz-smoke.mjs";
+
 const base = process.env.API_URL ?? "http://localhost:3001";
 const emailAdmin = process.env.PEF_ADMIN_EMAIL ?? "admin@pef.local";
 const senhaAdmin = process.env.PEF_ADMIN_SENHA ?? "admin-local";
@@ -34,20 +36,18 @@ try {
     "x-sessao-token": admin.token,
   };
 
-  let vovo = (
-    await json(await fetch(`${base}/familias/${familiaId}/pessoas`, { headers: h }))
-  ).corpo.find((p) => p.nome === "Vovó");
-  if (!vovo) {
-    vovo = (
-      await json(
-        await fetch(`${base}/familias/${familiaId}/pessoas`, {
-          method: "POST",
-          headers: h,
-          body: JSON.stringify({ nome: "Vovó" }),
-        }),
-      )
-    ).corpo;
-  }
+  const vovo = await resolverPessoa(base, h, familiaId, {
+    idSeed: IDS_SEED.vovo,
+    nome: "Vovó",
+  });
+
+  await garantirResponsavelCuidados(
+    base,
+    h,
+    familiaId,
+    admin.usuario.id,
+    vovo.id,
+  );
 
   const anexo = await json(
     await fetch(`${base}/familias/${familiaId}/anexos`, {

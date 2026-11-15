@@ -2,12 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-
-type Sessao = {
-  token: string;
-  usuario: { pessoa: { familiaId: string } };
-};
+import { useParams, useRouter } from "next/navigation";
+import { obterHistorico, obterMe } from "@/lib/api";
 
 type Evento = {
   tipo: string;
@@ -16,36 +12,33 @@ type Evento = {
   origemId: string;
 };
 
-const CHAVE = "pef.sessao.ff03";
-const base = () => process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
-
 export default function PaginaHistorico() {
   const params = useParams<{ pessoaId: string }>();
+  const router = useRouter();
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [erro, setErro] = useState<string | null>(null);
+  const [carregando, setCarregando] = useState(true);
+  const [autenticado, setAutenticado] = useState(false);
 
   useEffect(() => {
-    const bruto = window.localStorage.getItem(CHAVE);
-    if (!bruto) {
-      setErro("Faça login na página inicial.");
-      return;
-    }
-    const s = JSON.parse(bruto) as Sessao;
     void (async () => {
-      const resposta = await fetch(
-        `${base()}/pessoas/${params.pessoaId}/historico`,
-        { headers: { "x-sessao-token": s.token }, cache: "no-store" },
-      );
-      if (!resposta.ok) {
-        setErro(
-          resposta.status === 403
-            ? "Acesso negado ao histórico."
-            : `Erro ${resposta.status}`,
-        );
-        return;
+      setCarregando(true);
+      setErro(null);
+      try {
+        const me = await obterMe();
+        if (!me) {
+          setAutenticado(false);
+          setErro("Faça login na página inicial.");
+          return;
+        }
+        setAutenticado(true);
+        const dados = await obterHistorico(params.pessoaId);
+        setEventos(dados.eventos);
+      } catch (e) {
+        setErro(e instanceof Error ? e.message : "Falha ao carregar");
+      } finally {
+        setCarregando(false);
       }
-      const dados = (await resposta.json()) as { eventos: Evento[] };
-      setEventos(dados.eventos);
     })();
   }, [params.pessoaId]);
 
@@ -56,14 +49,33 @@ export default function PaginaHistorico() {
       </p>
       <h1>Histórico</h1>
       <p className="ajuda">Derivado dos registros de origem (ADR-009).</p>
-      {erro ? <p className="erro">{erro}</p> : null}
-      <ul className="lista-pessoas">
-        {eventos.map((e) => (
-          <li key={`${e.tipo}-${e.origemId}-${e.quando}`}>
-            <strong>{e.tipo}</strong> — {e.resumo}
-          </li>
-        ))}
-      </ul>
+      {carregando ? <p className="ajuda">Carregando…</p> : null}
+      {erro ? (
+        <p className="erro">
+          {erro}{" "}
+          {!autenticado ? (
+            <button
+              type="button"
+              className="secundario"
+              onClick={() => router.push("/")}
+            >
+              Ir para entrar
+            </button>
+          ) : null}
+        </p>
+      ) : null}
+      {!carregando && autenticado && eventos.length === 0 ? (
+        <p className="ajuda">Nenhum evento registrado ainda.</p>
+      ) : null}
+      {autenticado ? (
+        <ul className="lista-pessoas">
+          {eventos.map((e) => (
+            <li key={`${e.tipo}-${e.origemId}-${e.quando}`}>
+              <strong>{e.tipo}</strong> — {e.resumo}
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </main>
   );
 }

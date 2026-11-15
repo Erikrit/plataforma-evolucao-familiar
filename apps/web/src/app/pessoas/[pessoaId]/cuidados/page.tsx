@@ -1,13 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useCallback, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-
-type Sessao = {
-  token: string;
-  usuario: { pessoa: { familiaId: string } };
-};
+import { FormEvent, useCallback, useEffect, useId, useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import {
+  cadastrarMedicamento,
+  criarConsulta,
+  obterCuidadosHoje,
+  obterMe,
+  obterPessoa,
+  registrarAtividadeApoio,
+  registrarDose,
+} from "@/lib/api";
 
 type CartaoDose = {
   medicamentoId: string;
@@ -29,121 +33,137 @@ type Rotina = {
   regra: string;
 };
 
-const CHAVE = "pef.sessao.ff03";
-const base = () => process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
-
 export default function PaginaCuidados() {
   const params = useParams<{ pessoaId: string }>();
-  const [sessao, setSessao] = useState<Sessao | null>(null);
+  const router = useRouter();
+  const tituloDialogId = useId();
+  const dialogRef = useRef<HTMLSectionElement | null>(null);
+  const [autenticado, setAutenticado] = useState(false);
+  const [nomePessoa, setNomePessoa] = useState<string>("");
   const [rotina, setRotina] = useState<Rotina | null>(null);
   const [erro, setErro] = useState<string | null>(null);
+  const [sucesso, setSucesso] = useState<string | null>(null);
+  const [carregando, setCarregando] = useState(true);
   const [nomeMed, setNomeMed] = useState("");
   const [horarios, setHorarios] = useState("08:00");
   const [selecionado, setSelecionado] = useState<CartaoDose | null>(null);
   const [atividade, setAtividade] = useState("");
+  const [consultaDesc, setConsultaDesc] = useState("");
+  const [consultaQuando, setConsultaQuando] = useState("");
 
-  const carregar = useCallback(async (s: Sessao, pessoaId: string) => {
-    const resposta = await fetch(
-      `${base()}/pessoas/${pessoaId}/cuidados/hoje`,
-      { headers: { "x-sessao-token": s.token }, cache: "no-store" },
-    );
-    if (!resposta.ok) {
-      throw new Error(
-        resposta.status === 403
-          ? "Acesso negado aos cuidados."
-          : `Erro ${resposta.status}`,
-      );
-    }
-    setRotina((await resposta.json()) as Rotina);
+  const carregar = useCallback(async (pessoaId: string) => {
+    setRotina((await obterCuidadosHoje(pessoaId)) as Rotina);
   }, []);
 
   useEffect(() => {
-    const bruto = window.localStorage.getItem(CHAVE);
-    if (!bruto) {
-      setErro("Faça login na página inicial.");
-      return;
-    }
-    const s = JSON.parse(bruto) as Sessao;
-    setSessao(s);
-    void carregar(s, params.pessoaId).catch((e) =>
-      setErro(e instanceof Error ? e.message : "Falha ao carregar"),
-    );
+    void (async () => {
+      setCarregando(true);
+      setErro(null);
+      try {
+        const me = await obterMe();
+        if (!me) {
+          setAutenticado(false);
+          setErro("Faça login na página inicial.");
+          return;
+        }
+        setAutenticado(true);
+        const perfil = (await obterPessoa(
+          me.pessoa.familiaId,
+          params.pessoaId,
+        )) as { nome: string };
+        setNomePessoa(perfil.nome);
+        await carregar(params.pessoaId);
+      } catch (e) {
+        setErro(e instanceof Error ? e.message : "Falha ao carregar");
+      } finally {
+        setCarregando(false);
+      }
+    })();
   }, [params.pessoaId, carregar]);
 
-  async function cadastrarMedicamento(evento: FormEvent) {
+  useEffect(() => {
+    if (!selecionado || !dialogRef.current) return;
+    const primeiro = dialogRef.current.querySelector<HTMLButtonElement>("button");
+    primeiro?.focus();
+  }, [selecionado]);
+
+  async function aoCadastrarMedicamento(evento: FormEvent) {
     evento.preventDefault();
-    if (!sessao) return;
+    if (!autenticado) return;
     setErro(null);
-    const resposta = await fetch(
-      `${base()}/pessoas/${params.pessoaId}/medicamentos`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-sessao-token": sessao.token,
-        },
-        body: JSON.stringify({
-          nome: nomeMed,
-          horarios: horarios.split(",").map((h) => h.trim()),
-          ativar: true,
-        }),
-      },
-    );
-    if (!resposta.ok) {
+    setSucesso(null);
+    try {
+      await cadastrarMedicamento(params.pessoaId, {
+        nome: nomeMed,
+        horarios: horarios.split(",").map((h) => h.trim()),
+        ativar: true,
+      });
+      setNomeMed("");
+      await carregar(params.pessoaId);
+      setSucesso("Medicamento cadastrado e ativado.");
+    } catch {
       setErro("Não foi possível cadastrar o medicamento.");
-      return;
     }
-    setNomeMed("");
-    await carregar(sessao, params.pessoaId);
   }
 
   async function confirmarRelato(situacao: string) {
-    if (!sessao || !selecionado) return;
+    if (!selecionado || !autenticado) return;
     setErro(null);
-    const resposta = await fetch(
-      `${base()}/medicamentos/${selecionado.medicamentoId}/doses/registros`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-sessao-token": sessao.token,
-        },
-        body: JSON.stringify({
-          data: rotina?.data,
-          horario: selecionado.horario,
-          situacao,
-        }),
-      },
-    );
-    if (!resposta.ok) {
+    setSucesso(null);
+    try {
+      await registrarDose(selecionado.medicamentoId, {
+        data: rotina?.data,
+        horario: selecionado.horario,
+        situacao,
+      });
+      setSelecionado(null);
+      await carregar(params.pessoaId);
+      setSucesso("Relato registrado.");
+    } catch {
       setErro("Não foi possível registrar o relato.");
-      return;
     }
-    setSelecionado(null);
-    await carregar(sessao, params.pessoaId);
   }
 
-  async function registrarApoio(evento: FormEvent) {
+  async function aoRegistrarApoio(evento: FormEvent) {
     evento.preventDefault();
-    if (!sessao) return;
-    const resposta = await fetch(
-      `${base()}/pessoas/${params.pessoaId}/atividades-apoio`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-sessao-token": sessao.token,
-        },
-        body: JSON.stringify({ descricao: atividade }),
-      },
-    );
-    if (!resposta.ok) {
+    if (!autenticado) return;
+    setErro(null);
+    setSucesso(null);
+    try {
+      await registrarAtividadeApoio(params.pessoaId, atividade);
+      setAtividade("");
+      await carregar(params.pessoaId);
+      setSucesso("Atividade de apoio registrada.");
+    } catch {
       setErro("Não foi possível registrar a atividade.");
-      return;
     }
-    setAtividade("");
-    await carregar(sessao, params.pessoaId);
   }
+
+  async function aoCriarConsulta(evento: FormEvent) {
+    evento.preventDefault();
+    if (!autenticado) return;
+    setErro(null);
+    setSucesso(null);
+    try {
+      const dataHora = new Date(consultaQuando);
+      if (Number.isNaN(dataHora.getTime())) {
+        setErro("Informe data e hora válidas da consulta.");
+        return;
+      }
+      await criarConsulta(params.pessoaId, {
+        especialidadeOuDescricao: consultaDesc,
+        dataHora: dataHora.toISOString(),
+      });
+      setConsultaDesc("");
+      setConsultaQuando("");
+      await carregar(params.pessoaId);
+      setSucesso("Consulta agendada.");
+    } catch {
+      setErro("Não foi possível agendar a consulta.");
+    }
+  }
+
+  const podeEditar = autenticado && !carregando && !erro?.startsWith("Acesso");
 
   return (
     <main className="cuidados-mobile">
@@ -155,9 +175,24 @@ export default function PaginaCuidados() {
         Organize medicamentos e apoio. Toque no cartão abre opções — não confirma
         sozinho.
       </p>
-      {erro ? <p className="erro">{erro}</p> : null}
+      {carregando ? <p className="ajuda">Carregando…</p> : null}
+      {erro ? (
+        <p className="erro">
+          {erro}{" "}
+          {!autenticado ? (
+            <button
+              type="button"
+              className="secundario"
+              onClick={() => router.push("/")}
+            >
+              Ir para entrar
+            </button>
+          ) : null}
+        </p>
+      ) : null}
+      {sucesso ? <p className="sucesso">{sucesso}</p> : null}
 
-      {rotina?.proximoCuidado ? (
+      {podeEditar && rotina?.proximoCuidado ? (
         <section className="status destaque-proximo">
           <h2>Próximo cuidado</h2>
           <p>
@@ -167,114 +202,146 @@ export default function PaginaCuidados() {
         </section>
       ) : null}
 
-      <section className="bloco">
-        <h2>Medicamentos de hoje</h2>
-        <ul className="grade-cartoes">
-          {(rotina?.secoes.medicamentos ?? []).map((c) => (
-            <li key={`${c.medicamentoId}-${c.horario}`}>
-              <button
-                type="button"
-                className="cartao-pessoa cartao-dose"
-                onClick={() => setSelecionado(c)}
-              >
-                <strong>{c.nome}</strong>
-                <span>
-                  {c.horario} · {rotuloSituacao(c.situacao)}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-        <p className="ajuda">{rotina?.regra}</p>
-      </section>
+      {podeEditar ? (
+        <>
+          <section className="bloco">
+            <h2>Medicamentos de hoje</h2>
+            <ul className="grade-cartoes">
+              {(rotina?.secoes.medicamentos ?? []).map((c) => (
+                <li key={`${c.medicamentoId}-${c.horario}`}>
+                  <button
+                    type="button"
+                    className="cartao-pessoa cartao-dose"
+                    onClick={() => setSelecionado(c)}
+                  >
+                    <strong>{c.nome}</strong>
+                    <span>
+                      {c.horario} · {rotuloSituacao(c.situacao)}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <p className="ajuda">{rotina?.regra}</p>
+          </section>
 
-      {selecionado ? (
-        <section className="status painel-confirmacao" role="dialog">
-          <h2>Relato da Vovó</h2>
-          <p>
-            {selecionado.nome} às {selecionado.horario}
-          </p>
-          <div className="acoes-relato">
-            <button
-              type="button"
-              onClick={() => void confirmarRelato("tomou_conforme_informacao")}
+          {selecionado ? (
+            <section
+              ref={dialogRef}
+              className="status painel-confirmacao"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={tituloDialogId}
             >
-              Informou que tomou
-            </button>
-            <button
-              type="button"
-              className="secundario"
-              onClick={() => void confirmarRelato("informou_nao_tomou")}
-            >
-              Informou que não tomou
-            </button>
-            <button
-              type="button"
-              className="secundario"
-              onClick={() => setSelecionado(null)}
-            >
-              Cancelar
-            </button>
-          </div>
-        </section>
+              <h2 id={tituloDialogId}>
+                Relato{nomePessoa ? ` de ${nomePessoa}` : ""}
+              </h2>
+              <p>
+                {selecionado.nome} às {selecionado.horario}
+              </p>
+              <div className="acoes-relato">
+                <button
+                  type="button"
+                  onClick={() => void confirmarRelato("tomou_conforme_informacao")}
+                >
+                  Informou que tomou
+                </button>
+                <button
+                  type="button"
+                  className="secundario"
+                  onClick={() => void confirmarRelato("informou_nao_tomou")}
+                >
+                  Informou que não tomou
+                </button>
+                <button
+                  type="button"
+                  className="secundario"
+                  onClick={() => setSelecionado(null)}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </section>
+          ) : null}
+
+          <section className="bloco">
+            <h2>Novo medicamento</h2>
+            <form onSubmit={aoCadastrarMedicamento} className="formulario">
+              <label>
+                Nome
+                <input
+                  value={nomeMed}
+                  onChange={(e) => setNomeMed(e.target.value)}
+                  required
+                />
+              </label>
+              <label>
+                Horários (HH:MM, separados por vírgula)
+                <input
+                  value={horarios}
+                  onChange={(e) => setHorarios(e.target.value)}
+                  required
+                />
+              </label>
+              <button type="submit">Cadastrar e ativar</button>
+            </form>
+          </section>
+
+          <section className="bloco">
+            <h2>Atividade de apoio</h2>
+            <form onSubmit={aoRegistrarApoio} className="formulario">
+              <label>
+                Descrição
+                <input
+                  value={atividade}
+                  onChange={(e) => setAtividade(e.target.value)}
+                  required
+                />
+              </label>
+              <button type="submit">Registrar</button>
+            </form>
+            <ul className="lista-pessoas">
+              {(rotina?.secoes.atividadesApoio ?? []).map((a) => (
+                <li key={a.id}>{a.descricao}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="bloco">
+            <h2>Consultas</h2>
+            <ul className="lista-pessoas">
+              {(rotina?.secoes.consultas ?? []).map((c) => (
+                <li key={c.id}>{c.especialidadeOuDescricao}</li>
+              ))}
+            </ul>
+            <form onSubmit={aoCriarConsulta} className="formulario">
+              <label>
+                Especialidade ou descrição
+                <input
+                  value={consultaDesc}
+                  onChange={(e) => setConsultaDesc(e.target.value)}
+                  required
+                />
+              </label>
+              <label>
+                Data e hora
+                <input
+                  type="datetime-local"
+                  value={consultaQuando}
+                  onChange={(e) => setConsultaQuando(e.target.value)}
+                  required
+                />
+              </label>
+              <button type="submit">Agendar consulta</button>
+            </form>
+            <p>
+              <Link href={`/pessoas/${params.pessoaId}/historico`}>
+                Ver histórico →
+              </Link>
+            </p>
+          </section>
+        </>
       ) : null}
-
-      <section className="bloco">
-        <h2>Novo medicamento</h2>
-        <form onSubmit={cadastrarMedicamento} className="formulario">
-          <label>
-            Nome
-            <input
-              value={nomeMed}
-              onChange={(e) => setNomeMed(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Horários (HH:MM, separados por vírgula)
-            <input
-              value={horarios}
-              onChange={(e) => setHorarios(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Cadastrar e ativar</button>
-        </form>
-      </section>
-
-      <section className="bloco">
-        <h2>Atividade de apoio</h2>
-        <form onSubmit={registrarApoio} className="formulario">
-          <label>
-            Descrição
-            <input
-              value={atividade}
-              onChange={(e) => setAtividade(e.target.value)}
-              required
-            />
-          </label>
-          <button type="submit">Registrar</button>
-        </form>
-        <ul className="lista-pessoas">
-          {(rotina?.secoes.atividadesApoio ?? []).map((a) => (
-            <li key={a.id}>{a.descricao}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="bloco">
-        <h2>Consultas de hoje</h2>
-        <ul className="lista-pessoas">
-          {(rotina?.secoes.consultas ?? []).map((c) => (
-            <li key={c.id}>{c.especialidadeOuDescricao}</li>
-          ))}
-        </ul>
-        <p>
-          <Link href={`/pessoas/${params.pessoaId}/historico`}>
-            Ver histórico →
-          </Link>
-        </p>
-      </section>
     </main>
   );
 }

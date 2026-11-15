@@ -75,6 +75,11 @@ export class ServicoPessoas {
       },
     });
     if (!pessoa) throw new NotFoundException("Pessoa não encontrada.");
+    const cuidados = await this.autorizacoes.podeVerCuidados(
+      familiaId,
+      pessoaId,
+      usuario,
+    );
     return {
       id: pessoa.id,
       nome: pessoa.nome,
@@ -84,9 +89,13 @@ export class ServicoPessoas {
       possuiConta: Boolean(pessoa.usuario),
       emailConta: pessoa.usuario?.email ?? null,
       areas: [
-        { id: "cuidados", rotulo: "Cuidados", disponivel: true },
-        { id: "desenvolvimento", rotulo: "Desenvolvimento", disponivel: false },
-        { id: "historico", rotulo: "Histórico", disponivel: true },
+        { id: "cuidados", rotulo: "Cuidados", disponivel: cuidados },
+        {
+          id: "desenvolvimento",
+          rotulo: "Desenvolvimento",
+          disponivel: false,
+        },
+        { id: "historico", rotulo: "Histórico", disponivel: cuidados },
       ],
     };
   }

@@ -1,6 +1,7 @@
 /** Smoke FF-05: ACE-06 revogação+sessão; ACE-10 isolamento entre famílias. */
 import { randomBytes, scryptSync } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
+import { IDS_SEED, resolverPessoa } from "./lib-authz-smoke.mjs";
 
 const base = process.env.API_URL ?? "http://localhost:3001";
 const emailAdmin = process.env.PEF_ADMIN_EMAIL ?? "admin@pef.local";
@@ -43,21 +44,10 @@ try {
     "x-sessao-token": admin.token,
   };
 
-  const lista = await json(
-    await fetch(`${base}/familias/${familiaId}/pessoas`, { headers: h }),
-  );
-  let vovo = (lista.corpo ?? []).find((p) => p.nome === "Vovó");
-  if (!vovo) {
-    vovo = (
-      await json(
-        await fetch(`${base}/familias/${familiaId}/pessoas`, {
-          method: "POST",
-          headers: h,
-          body: JSON.stringify({ nome: "Vovó" }),
-        }),
-      )
-    ).corpo;
-  }
+  const vovo = await resolverPessoa(base, h, familiaId, {
+    idSeed: IDS_SEED.vovo,
+    nome: "Vovó",
+  });
 
   const email = `revogar.${Date.now()}@pef.local`;
   const convite = (

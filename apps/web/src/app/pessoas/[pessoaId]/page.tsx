@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import {
+  atualizarPessoa,
+  obterMe,
+  obterPessoa,
+  type UsuarioSessao,
+} from "@/lib/api";
 
 type Perfil = {
   id: string;
@@ -13,72 +19,62 @@ type Perfil = {
   areas: { id: string; rotulo: string; disponivel: boolean }[];
 };
 
-type Sessao = {
-  token: string;
-  usuario: { pessoa: { familiaId: string } };
-};
-
-const CHAVE = "pef.sessao.ff03";
-const base = () => process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
-
 export default function PaginaPerfil() {
   const params = useParams<{ pessoaId: string }>();
+  const router = useRouter();
   const [perfil, setPerfil] = useState<Perfil | null>(null);
+  const [usuario, setUsuario] = useState<UsuarioSessao | null>(null);
   const [vinculo, setVinculo] = useState("");
   const [erro, setErro] = useState<string | null>(null);
-  const [sessao, setSessao] = useState<Sessao | null>(null);
+  const [sucesso, setSucesso] = useState<string | null>(null);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    const bruto = window.localStorage.getItem(CHAVE);
-    if (!bruto) {
-      setErro("Faça login na página inicial.");
-      return;
-    }
-    const s = JSON.parse(bruto) as Sessao;
-    setSessao(s);
-    void carregar(s, params.pessoaId).catch((e) =>
-      setErro(e instanceof Error ? e.message : "Falha ao carregar"),
-    );
+    void (async () => {
+      setCarregando(true);
+      setErro(null);
+      try {
+        const me = await obterMe();
+        if (!me) {
+          setErro("Faça login na página inicial.");
+          setCarregando(false);
+          return;
+        }
+        setUsuario(me);
+        const dados = (await obterPessoa(
+          me.pessoa.familiaId,
+          params.pessoaId,
+        )) as Perfil;
+        setPerfil(dados);
+        setVinculo(dados.vinculo ?? "");
+      } catch (e) {
+        setErro(e instanceof Error ? e.message : "Falha ao carregar");
+      } finally {
+        setCarregando(false);
+      }
+    })();
   }, [params.pessoaId]);
-
-  async function carregar(s: Sessao, pessoaId: string) {
-    const resposta = await fetch(
-      `${base()}/familias/${s.usuario.pessoa.familiaId}/pessoas/${pessoaId}`,
-      { headers: { "x-sessao-token": s.token }, cache: "no-store" },
-    );
-    if (!resposta.ok) {
-      throw new Error(
-        resposta.status === 403
-          ? "Acesso negado a esta pessoa."
-          : `Erro ${resposta.status}`,
-      );
-    }
-    const dados = (await resposta.json()) as Perfil;
-    setPerfil(dados);
-    setVinculo(dados.vinculo ?? "");
-  }
 
   async function aoSalvar(evento: FormEvent) {
     evento.preventDefault();
-    if (!sessao || !perfil) return;
+    if (!usuario || !perfil) return;
     setErro(null);
-    const resposta = await fetch(
-      `${base()}/familias/${sessao.usuario.pessoa.familiaId}/pessoas/${perfil.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "content-type": "application/json",
-          "x-sessao-token": sessao.token,
-        },
-        body: JSON.stringify({ vinculo }),
-      },
-    );
-    if (!resposta.ok) {
+    setSucesso(null);
+    try {
+      const dados = (await atualizarPessoa(
+        usuario.pessoa.familiaId,
+        perfil.id,
+        { vinculo },
+      )) as Perfil;
+      setPerfil(dados);
+      setVinculo(dados.vinculo ?? "");
+      setSucesso("Vínculo salvo.");
+    } catch {
       setErro("Não foi possível salvar.");
-      return;
     }
-    await carregar(sessao, perfil.id);
   }
+
+  const semSessao = !carregando && !usuario;
 
   return (
     <main>
@@ -86,8 +82,19 @@ export default function PaginaPerfil() {
         <Link href="/">← Início</Link>
       </p>
       <h1>Perfil</h1>
-      {erro ? <p className="erro">{erro}</p> : null}
-      {perfil ? (
+      {carregando ? <p className="ajuda">Carregando…</p> : null}
+      {erro ? (
+        <p className="erro">
+          {erro}{" "}
+          {semSessao ? (
+            <button type="button" className="secundario" onClick={() => router.push("/")}>
+              Ir para entrar
+            </button>
+          ) : null}
+        </p>
+      ) : null}
+      {sucesso ? <p className="sucesso">{sucesso}</p> : null}
+      {perfil && usuario ? (
         <section className="status">
           <h2>{perfil.nome}</h2>
           <p className="ajuda">

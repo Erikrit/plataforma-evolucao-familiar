@@ -1,106 +1,116 @@
 {
-  "moduloId": "02-cuidados-vovo",
+  "moduloId": "qa-correcoes-ui-sessao",
   "incrementoId": null,
   "requisitos": [
-    "CUI-F01",
-    "CUI-F02",
-    "CUI-F03",
-    "CUI-F04",
-    "CUI-F05",
-    "CUI-F06",
-    "CUI-F07",
-    "CUI-F08",
-    "CUI-F09",
-    "CUI-F10",
-    "ACE-C01",
-    "ACE-C02",
-    "ACE-C03",
-    "ACE-C04",
-    "ACE-C05",
-    "ACE-C06",
-    "ACE-C07",
-    "ACE-C08",
-    "ACE-C09",
-    "ACE-C10",
-    "ACE-C11",
-    "ACE-C12"
+    "BUG-01-sair-invalida-servidor",
+    "BUG-02-cookie-only",
+    "BUG-03-hydration",
+    "BUG-04-loading",
+    "BUG-05-gate-sem-sessao",
+    "BUG-06-selecao-pessoaId",
+    "BUG-07-seed-canonico-reset",
+    "BUG-08-feedback-sucesso",
+    "BUG-09-relato-dinamico",
+    "BUG-10-a11y-dialog",
+    "GAP-01-ativar-convite-consulta"
   ],
   "estado": "COMPLETED",
   "dependencias": [
-    "Módulo 01 Fundação Familiar COMPLETED",
-    "Autorizações contextuais e sessão provisória",
-    "ADR-004, ADR-007, ADR-009, ADR-010",
-    "Lembretes em dispositivos reais ainda 'A validar' (ACE-C12 PENDING)"
+    "correcao-auth-autorizacao COMPLETED",
+    "API cookie httpOnly já existente (SA-03)"
   ],
   "arquivos": [
-    "apps/api/prisma/schema.prisma",
-    "apps/api/src/cuidados/**",
-    "apps/api/src/anexos/**",
-    "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+    "apps/web/src/lib/api.ts",
+    "apps/web/src/componentes/painel-fundacao.tsx",
+    "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
     "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
     "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx",
-    "apps/api/scripts/smoke-modulo-02.mjs"
+    "apps/web/src/app/convites/ativar/page.tsx",
+    "apps/web/src/app/globals.css",
+    "apps/api/prisma/seed.mjs",
+    "apps/api/scripts/reset-db-local.mjs",
+    "apps/api/scripts/lib-authz-smoke.mjs",
+    "apps/api/scripts/smoke-cv01.mjs",
+    "apps/api/scripts/smoke-cv02.mjs",
+    "apps/api/scripts/smoke-cv03.mjs",
+    "apps/api/scripts/smoke-cv04.mjs",
+    "apps/api/scripts/smoke-cv05.mjs",
+    "apps/api/scripts/smoke-cv06.mjs",
+    "apps/api/scripts/smoke-ff02.mjs",
+    "apps/api/scripts/smoke-ff03.mjs",
+    "apps/api/scripts/smoke-ff04.mjs",
+    "apps/api/scripts/smoke-ff05.mjs",
+    "apps/api/scripts/smoke-authz-critico.mjs",
+    "apps/api/package.json",
+    "package.json"
   ],
   "planejamento": {
     "especificacao": {
-      "caminho": "docs/modulos/02-cuidados-vovo/ESPECIFICACAO.md",
-      "versao": "v1.0",
-      "status": "implementada localmente (CV-01..CV-06)"
+      "caminho": "docs/esteira/estado/atual.json",
+      "versao": "plano QA fases 1–4",
+      "status": "COMPLETED"
     },
     "aprovado": [
-      "Escopo CUI-F01..F10",
-      "ADR-004, ADR-007, ADR-009, ADR-010"
+      "Cookie httpOnly + credentials include (sem token em localStorage)",
+      "Sair chama DELETE /sessoes",
+      "Seleção de pessoa por id",
+      "Seed canônico Vovó/Laurinha + db:reset"
     ],
     "preliminar": [
-      "Contratos REST de cuidados (candidatos detalhados na implementação)",
-      "Armazenamento privado local autenticado (compatível ADR-004)"
+      "Sessão MVP; IdP definitivo ainda pendente"
     ],
     "pendente": [
-      "Frequências especiais (DECISOES.md)",
-      "Lembretes/PWA em dispositivos reais (ACE-C12)",
-      "Auth definitiva"
+      "Auth IdP definitiva",
+      "ACE-C12 dispositivos reais",
+      "Rodar npm run db:reset localmente para limpar lixo histórico de smokes"
     ],
     "riscos": [],
-    "criteriosAceite": [],
+    "criteriosAceite": [
+      "Web não persiste token em localStorage",
+      "Sair invalida sessão no servidor",
+      "Forms clínicos ocultos sem sessão",
+      "Convite/desenvolvimento usam select por pessoaId",
+      "Typecheck web+api PASS; smoke:authz PASS"
+    ],
     "incrementos": [
-      { "id": "CV-01", "titulo": "Modelo + cadastro medicamento" },
-      { "id": "CV-02", "titulo": "Rotina + registro de dose" },
-      { "id": "CV-03", "titulo": "Vigência, encerramento, permissões" },
-      { "id": "CV-04", "titulo": "Consultas, exames, apoio" },
-      { "id": "CV-05", "titulo": "Anexos privados + histórico" },
-      { "id": "CV-06", "titulo": "Resumo/PDF, lembretes, QG-3" }
+      { "id": "QA-F1", "titulo": "Cookie-only + Sair DELETE" },
+      { "id": "QA-F2", "titulo": "Hydration/loading/gate" },
+      { "id": "QA-F3", "titulo": "Seed/reset + pessoaId" },
+      { "id": "QA-F4", "titulo": "UX/a11y + ativar convite + consulta" }
     ]
   },
   "verificacao": {
-    "qg1": { "status": "PASS" },
-    "qg2": { "status": "PASS" },
+    "qg1": {
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg1-typecheck-qa-ui-sessao.txt"
+    },
+    "qg2": {
+      "status": "PASS",
+      "verifier": "PENDING_OPTIONAL",
+      "nota": "Regressão smoke:authz + smoke:ff02 PASS; verifier formal opcional neste pacote QA"
+    },
     "qg3": {
       "status": "PASS",
-      "verifier": "PASS",
-      "evidencia": "docs/esteira/estado/evidencia-modulo-02.json",
-      "aceC12": "PENDING documentado"
+      "evidencia": "docs/esteira/estado/smoke-authz-pos-cookie.json"
     },
     "evidencias": [
-      "docs/esteira/estado/evidencia-modulo-02.json",
-      "docs/esteira/estado/smoke-modulo-02-saida.json",
-      "docs/esteira/estado/qg3-typecheck-api.txt"
+      "docs/esteira/estado/qg1-typecheck-qa-ui-sessao.txt",
+      "docs/esteira/estado/smoke-authz-pos-cookie.json"
     ]
   },
-  "fingerprint": "803f9fc3c906f5f2",
+  "fingerprint": "qa-ui-sessao-2026-11-15",
   "tentativasCorrecao": {},
-  "proximaAcao": "Modulo 02 concluido localmente. Proximo produto: modulo 03 Desenvolvimento Laurinha (apos planejamento). ACE-C12 e auth definitiva ainda pendentes em DECISOES.md.",
-  "atualizadoEm": "2026-11-15T12:05:00.000Z",
-  "notas": "Modulo 02 Cuidados da Vovo COMPLETED (CV-01..CV-06). ACE-C12 PENDING (dispositivos reais). Auth provisoria. Sem commit/push.",
+  "proximaAcao": "Rodar npm run db:reset para limpar UI local; seguir módulo 03 Desenvolvimento Laurinha (module-planning). Pendente IdP e ACE-C12.",
+  "atualizadoEm": "2026-11-15T15:27:00.000Z",
+  "notas": "Fases QA 1–4 implementadas. Cookie-only no web; logout server-side; gates; seed canônico; /convites/ativar; consulta na tela de cuidados. Sem commit/push.",
   "incrementosConcluidos": [
-    { "id": "CV-01", "status": "COMPLETED" },
-    { "id": "CV-02", "status": "COMPLETED" },
-    { "id": "CV-03", "status": "COMPLETED" },
-    { "id": "CV-04", "status": "COMPLETED" },
-    { "id": "CV-05", "status": "COMPLETED" },
-    { "id": "CV-06", "status": "COMPLETED" }
+    { "id": "QA-F1", "status": "COMPLETED" },
+    { "id": "QA-F2", "status": "COMPLETED" },
+    { "id": "QA-F3", "status": "COMPLETED" },
+    { "id": "QA-F4", "status": "COMPLETED" }
   ],
   "modulo": {
-    "id": "02-cuidados-vovo",
+    "id": "qa-correcoes-ui-sessao",
     "status": "COMPLETED",
     "qg3": "PASS"
   }
