@@ -34,7 +34,7 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 
 ## 5. Módulo 02 — Cuidados da Vovó
 
-- Medicamento com **nome, horários e informações adicionais somente quando essenciais**.
+- Cadastro simplificado de medicamento **aprovado em 2026-11-15**: nome, primeiro horário, doses por dia e duração (contínua ou por dias), com sugestões matemáticas de horário editáveis e conferidas com a prescrição antes dos lembretes. Não deduzir intervalo clínico a partir do número de doses; opções especiais apenas quando necessárias.
 - Receita como foto ou PDF opcional; um arquivo pode estar associado a mais de um medicamento. Não exigir transcrição integral.
 - Rotina do dia em cartões clicáveis que abrem escolhas; tocar não confirma automaticamente.
 - Estados exibidos: **tomou conforme relato**, **informou que não tomou**, **sem confirmação**. Sem registro não significa não tomado.
