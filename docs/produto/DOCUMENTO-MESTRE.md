@@ -1,6 +1,6 @@
 # Documento Mestre do Produto — v1.0
 
-**Estado:** baseline funcional do produto; **implementação parcial** do Módulo 01 verificada por inspeção da branch `feature/modulo1` em 2026-11-15. Revisões v1.1 dos módulos 03/04 propostas, ainda sem aceite final.  
+**Estado:** baseline funcional do produto; **implementação parcial** do Módulo 01 verificada por inspeção da branch `feature/modulo1` em 2026-11-15. Revisões funcionais v1.1 dos módulos 03 e 04 aprovadas em 2026-11-15; implementação não concluída.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
 
 ## 1. Visão
@@ -48,21 +48,21 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 
 ## 6. Módulo 03 — Desenvolvimento da Laurinha
 
-**Proposta de revisão funcional v1.1, pendente de aceite final**, detalhada em `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md`.
+**Revisão funcional v1.1 aprovada**, detalhada em `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md`.
 
 - Biblioteca curta de atividades presenciais e atividades personalizadas.
 - Cadastro próprio: **nome**; dificuldade predefinida como simples e alterável. Categoria e instruções opcionais.
 - Organização opcional **Guardar para depois**, sem planejamento com datas obrigatórias, atrasos ou cobrança.
 - Adulto registra apenas **Concluiu** ou **Participou**. **Não realizada** não requer registro.
 - Estrelas automáticas e transparentes, sem aprovação da Mikaela, penalidades, ranking ou avaliação clínica.
-- Tabela v1.1 proposta, **ainda não aprovada**: simples 5/3; média 10/5; desafiadora 15/8 (concluiu/participou).
+- Tabela de estrelas **aprovada**: simples 5/3; média 10/5; desafiadora 15/8 (concluiu/participou).
 - Repetições legítimas de uma brincadeira são permitidas, reenvios acidentais não duplicam créditos.
 - Recompensas opcionais; não condicionam necessidades básicas e afeto.
 - Histórico aprofundado e resumo da evolução ficam no **Módulo 04**, sem telas ou dados duplicados.
 
 ## 7. Módulo 04 — Evolução Familiar
 
-**Proposta de revisão funcional v1.1, pendente de aceite final**, detalhada em `docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md`.
+**Revisão funcional v1.1 aprovada**, detalhada em `docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md`.
 
 - Duas experiências centrais: **Histórico individual** e **Resumo da pessoa**, com filtros simples.
 - Vovó: doses previstas, tomadas informadas, não tomadas informadas, sem confirmação, consultas e exames; respeitar alterações históricas de programação e dados autorizados.
