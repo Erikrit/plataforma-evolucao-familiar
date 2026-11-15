@@ -1,6 +1,6 @@
 {
   "moduloId": "01-fundacao-familiar",
-  "incrementoId": "FF-03",
+  "incrementoId": null,
   "requisitos": [
     "FUN-01",
     "FUN-02",
@@ -30,7 +30,7 @@
     "ACE-09",
     "ACE-10"
   ],
-  "estado": "READY",
+  "estado": "COMPLETED",
   "dependencias": [
     "Stack preliminar ADR-001/002/003 (Next.js, NestJS, Prisma, PostgreSQL, Docker Compose)",
     "Autenticação/invalidação de sessão ainda 'A validar' em DECISOES.md — usar sessão provisória até decisão humana",
@@ -39,10 +39,11 @@
   ],
   "arquivos": [
     "apps/api/prisma/schema.prisma",
-    "apps/api/src/auth/servico-sessao.ts",
+    "apps/api/src/convites/servico-convites.ts",
+    "apps/api/src/autorizacoes/servico-autorizacoes.ts",
     "apps/api/src/pessoas/servico-pessoas.ts",
-    "apps/web/src/componentes/painel-fundacao.tsx",
-    "apps/api/scripts/smoke-ff02.mjs"
+    "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
+    "apps/api/scripts/smoke-modulo-01.mjs"
   ],
   "planejamento": {
     "especificacao": {
@@ -384,46 +385,55 @@
   },
   "verificacao": {
     "qg1": {
-      "status": "PASS",
-      "motivo": "typecheck+lint+smoke"
+      "status": "PASS"
     },
     "qg2": {
-      "status": "PASS",
-      "motivo": "builds + verifier PASS",
-      "verifier": "PASS"
+      "status": "PASS"
     },
     "qg3": {
-      "status": "PENDING",
-      "motivo": "Aguardando FF-06"
-    },
-    "ff02": {
-      "status": "COMPLETED",
-      "evidencia": "docs/esteira/estado/evidencia-ff-02.json"
+      "status": "PASS",
+      "verifier": "PASS",
+      "evidencia": "docs/esteira/estado/evidencia-modulo-01.json"
     },
     "evidencias": [
-      "docs/esteira/estado/evidencia-ff-02.json",
-      "docs/esteira/estado/smoke-ff02-saida.json"
+      "docs/esteira/estado/evidencia-modulo-01.json",
+      "docs/esteira/estado/smoke-modulo-01-saida.json"
     ]
   },
-  "fingerprint": "d5c2d556be253b77",
+  "fingerprint": "eb25f364bf8334b3",
   "tentativasCorrecao": {},
-  "proximaAcao": "Executar implementation-workflow no incremento FF-03 (autorizacoes + home com cartoes).",
-  "atualizadoEm": "2026-11-15T02:34:24.890Z",
-  "notas": "FF-02 COMPLETED. Auth provisoria. Pronto para FF-03.",
+  "proximaAcao": "Modulo 01 concluido localmente. Proximo produto: modulo 02 Cuidados da Vovo (apos planejamento). Auth definitiva ainda pendente em DECISOES.md.",
+  "atualizadoEm": "2026-11-15T03:54:44.528Z",
+  "notas": "Modulo 01 Fundação Familiar COMPLETED (FF-01..FF-06). Auth provisoria. Sem commit/push.",
   "incrementosConcluidos": [
-    {
-      "id": "FF-01",
-      "status": "COMPLETED",
-      "fingerprint": "0c3ce18cb0e69f31"
-    },
     {
       "id": "FF-01",
       "status": "COMPLETED"
     },
     {
       "id": "FF-02",
-      "status": "COMPLETED",
-      "fingerprint": "d5c2d556be253b77"
+      "status": "COMPLETED"
+    },
+    {
+      "id": "FF-03",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "FF-04",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "FF-05",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "FF-06",
+      "status": "COMPLETED"
     }
-  ]
+  ],
+  "modulo": {
+    "id": "01-fundacao-familiar",
+    "status": "COMPLETED",
+    "qg3": "PASS"
+  }
 }

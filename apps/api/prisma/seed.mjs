@@ -33,7 +33,7 @@ try {
     },
   });
 
-  await prisma.usuario.upsert({
+  const usuarioAdmin = await prisma.usuario.upsert({
     where: { email: emailAdmin },
     update: {
       pessoaId: pessoaAdmin.id,
@@ -47,14 +47,36 @@ try {
     },
   });
 
+  const authAdmin = await prisma.autorizacao.findFirst({
+    where: {
+      familiaId: familia.id,
+      usuarioId: usuarioAdmin.id,
+      responsabilidade: "administrador",
+      pessoaAlvoId: null,
+      ativa: true,
+    },
+  });
+  if (!authAdmin) {
+    await prisma.autorizacao.create({
+      data: {
+        id: "auth_admin_seed",
+        familiaId: familia.id,
+        usuarioId: usuarioAdmin.id,
+        responsabilidade: "administrador",
+        pessoaAlvoId: null,
+      },
+    });
+  }
+
   console.log(
     JSON.stringify({
       ok: true,
       familiaId: familia.id,
       adminEmail: emailAdmin,
+      autorizacaoAdmin: true,
       aviso: "Credenciais locais fictícias; não usar dados reais.",
       fingerprintSeed: createHash("sha256")
-        .update(`${familia.id}:${emailAdmin}`)
+        .update(`${familia.id}:${emailAdmin}:admin`)
         .digest("hex")
         .slice(0, 12),
     }),

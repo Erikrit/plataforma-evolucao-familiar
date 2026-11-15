@@ -8,42 +8,46 @@ datasource db {
 }
 
 model Familia {
-  id        String   @id @default(cuid())
-  nome      String
-  criadaEm  DateTime @default(now()) @map("criada_em")
-  pessoas   Pessoa[]
+  id           String         @id @default(cuid())
+  nome         String
+  criadaEm     DateTime       @default(now()) @map("criada_em")
+  pessoas      Pessoa[]
+  autorizacoes Autorizacao[]
+  convites     Convite[]
 
   @@map("familia")
 }
 
 model Pessoa {
-  id             String    @id @default(cuid())
-  familiaId      String    @map("familia_id")
-  nome           String
-  dataNascimento DateTime? @map("data_nascimento")
-  vinculo        String?
-  criadaEm       DateTime  @default(now()) @map("criada_em")
-  familia        Familia   @relation(fields: [familiaId], references: [id])
-  usuario        Usuario?
+  id                   String        @id @default(cuid())
+  familiaId            String        @map("familia_id")
+  nome                 String
+  dataNascimento       DateTime?     @map("data_nascimento")
+  vinculo              String?
+  criadaEm             DateTime      @default(now()) @map("criada_em")
+  familia              Familia       @relation(fields: [familiaId], references: [id])
+  usuario              Usuario?
+  autorizacoesComoAlvo Autorizacao[] @relation("PessoaAlvo")
+  convitesComoAlvo     Convite[]     @relation("ConvitePessoaAlvo")
 
   @@index([familiaId])
   @@map("pessoa")
 }
 
-/// Conta de acesso. Separada de Pessoa (ADR-005 / FAM-R01).
 model Usuario {
-  id           String             @id @default(cuid())
-  pessoaId     String             @unique @map("pessoa_id")
-  email        String             @unique
-  senhaHash    String             @map("senha_hash")
-  criadoEm     DateTime           @default(now()) @map("criado_em")
-  pessoa       Pessoa             @relation(fields: [pessoaId], references: [id])
-  sessoes      SessaoProvisoria[]
+  id            String             @id @default(cuid())
+  pessoaId      String             @unique @map("pessoa_id")
+  email         String             @unique
+  senhaHash     String             @map("senha_hash")
+  criadoEm      DateTime           @default(now()) @map("criado_em")
+  pessoa        Pessoa             @relation(fields: [pessoaId], references: [id])
+  sessoes       SessaoProvisoria[]
+  autorizacoes  Autorizacao[]
+  convitesCriados Convite[]        @relation("ConviteCriador")
 
   @@map("usuario")
 }
 
-/// Autenticação provisória até decisão definitiva (DECISOES.md).
 model SessaoProvisoria {
   id        String   @id @default(cuid())
   token     String   @unique
@@ -54,4 +58,43 @@ model SessaoProvisoria {
 
   @@index([usuarioId])
   @@map("sessao_provisoria")
+}
+
+model Autorizacao {
+  id               String    @id @default(cuid())
+  familiaId        String    @map("familia_id")
+  usuarioId        String    @map("usuario_id")
+  pessoaAlvoId     String?   @map("pessoa_alvo_id")
+  responsabilidade String
+  ativa            Boolean   @default(true)
+  concedidaEm      DateTime  @default(now()) @map("concedida_em")
+  revogadaEm       DateTime? @map("revogada_em")
+  familia          Familia   @relation(fields: [familiaId], references: [id])
+  usuario          Usuario   @relation(fields: [usuarioId], references: [id])
+  pessoaAlvo       Pessoa?   @relation("PessoaAlvo", fields: [pessoaAlvoId], references: [id])
+
+  @@index([familiaId, usuarioId])
+  @@index([usuarioId, ativa])
+  @@map("autorizacao")
+}
+
+/// Convite com validade e uso único (FUN-03 / FAM-R02).
+model Convite {
+  id               String    @id @default(cuid())
+  token            String    @unique
+  familiaId        String    @map("familia_id")
+  email            String
+  nomeConvidado    String?   @map("nome_convidado")
+  responsabilidade String
+  pessoaAlvoId     String?   @map("pessoa_alvo_id")
+  criadoPorId      String    @map("criado_por_id")
+  expiraEm         DateTime  @map("expira_em")
+  usadoEm          DateTime? @map("usado_em")
+  criadoEm         DateTime  @default(now()) @map("criado_em")
+  familia          Familia   @relation(fields: [familiaId], references: [id])
+  pessoaAlvo       Pessoa?   @relation("ConvitePessoaAlvo", fields: [pessoaAlvoId], references: [id])
+  criadoPor        Usuario   @relation("ConviteCriador", fields: [criadoPorId], references: [id])
+
+  @@index([familiaId])
+  @@map("convite")
 }

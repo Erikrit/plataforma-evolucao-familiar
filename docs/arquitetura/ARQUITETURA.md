@@ -1,6 +1,6 @@
 # Arquitetura preliminar — Plataforma de Evolução Familiar
 
-**Situação:** direção arquitetural proposta; tecnologias e contratos sujeitos a avaliação antes da implementação.
+**Situação:** direção arquitetural preliminar em uso no monólito local (`apps/api`, `apps/web`). Contratos REST e autenticação definitiva ainda sujeitos a validação; módulo 01 implementado localmente.
 
 ## Estrutura lógica
 

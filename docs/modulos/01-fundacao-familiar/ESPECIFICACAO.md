@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
 **Versão:** especificação funcional v1.0  
-**Status:** preparada para validação e desenvolvimento, sem implementação.
+**Status:** especificação vigente; implementação local FF-01..FF-06 concluída (esteira, QG-3 PASS). Auth definitiva ainda pendente em `docs/arquitetura/DECISOES.md`.
 
 ## 1. Objetivo
 
@@ -75,16 +75,18 @@ Convite expirado ou já utilizado; nomes parecidos; conta revogada durante sess�
 
 ## 8. Critérios de aceitação
 
-- [ ] Cadastrar Vovó apenas com nome.
-- [ ] Cadastrar Laurinha sem conta.
-- [ ] Convidar colaboradora externa com autorização somente para Vovó.
-- [ ] Negar acesso à Laurinha, inclusive URL direta, para colaboradora.
-- [ ] Acumular responsabilidades em usuário autorizado.
-- [ ] Revogar acesso e sessão sem apagar históricos.
-- [ ] Mostrar somente cartões permitidos.
-- [ ] Funcionar em telas de celular.
-- [ ] Não solicitar dados sem necessidade funcional.
-- [ ] Impedir vazamento de dados entre famílias.
+Validação local via smokes da esteira (`npm run smoke:modulo-01`), sem validação com usuários reais.
+
+- [x] Cadastrar Vovó apenas com nome. (ACE-01)
+- [x] Cadastrar Laurinha sem conta. (ACE-02)
+- [x] Convidar colaboradora externa com autorização somente para Vovó. (ACE-03)
+- [x] Negar acesso à Laurinha, inclusive URL direta, para colaboradora. (ACE-04)
+- [x] Acumular responsabilidades em usuário autorizado. (ACE-05)
+- [x] Revogar acesso e sessão sem apagar históricos. (ACE-06)
+- [x] Mostrar somente cartões permitidos. (ACE-07)
+- [x] Funcionar em telas de celular. (ACE-08 — checagem estrutural mobile-first; validação com dispositivo real pendente)
+- [x] Não solicitar dados sem necessidade funcional. (ACE-09)
+- [x] Impedir vazamento de dados entre famílias. (ACE-10)
 
 ## 9. Integrações
 

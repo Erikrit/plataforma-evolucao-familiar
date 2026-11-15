@@ -1,6 +1,6 @@
 # Plataforma de Evolução Familiar
 
-> **Status:** repositório de especificação do produto. Ainda não contém aplicação executável.
+> **Status:** especificação do produto + implementação local do **módulo 01 (Fundação Familiar)**. Demais módulos ainda não implementados. Sem deploy.
 
 Plataforma para apoiar o cuidado, as rotinas e o desenvolvimento de integrantes da família, preservando o histórico ao longo do tempo — sem transformar o cotidiano em prestação de contas.
 
@@ -38,7 +38,7 @@ Não inferir que documentos marcados como *proposta* ou *pendente* estejam defin
 
 Direção tecnológica (ADR-003): Next.js/React, NestJS/TypeScript, PostgreSQL, Prisma e Docker Compose em monólito modular (`apps/api`, `apps/web`).
 
-### Bootstrap local (FF-01)
+### Execução local
 
 ```bash
 cp .env.example .env
@@ -55,10 +55,10 @@ npm run dev:api
 npm run dev:web
 ```
 
-PostgreSQL do Compose escuta em `localhost:5433` (evita conflito com instalações locais na 5432).  
-Healthcheck da API: `GET http://localhost:3001/saude`.  
-Admin local provisório: ver `PEF_ADMIN_*` em `.env.example` (dados fictícios).  
-Smoke FF-02 (API no ar): `npm run smoke:ff02`.
+PostgreSQL do Compose: `localhost:5433`. API: `http://localhost:3001` (`GET /saude`). Web: `http://localhost:3000`.  
+Admin local provisório: `PEF_ADMIN_*` em `.env.example` (dados fictícios).  
+Regressão do módulo 01 (API no ar): `npm run smoke:modulo-01`.  
+Estado da esteira: `docs/esteira/estado/atual.json` (`01-fundacao-familiar` → COMPLETED).
 
 ## Privacidade
 

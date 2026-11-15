@@ -1,6 +1,6 @@
 # Documento Mestre do Produto — v1.0
 
-**Estado:** baseline funcional consolidada; produto não implementado.  
+**Estado:** baseline funcional consolidada. Módulo 01 (Fundação Familiar) com implementação local validada na esteira; módulos 02–04 ainda não implementados. Sem deploy.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
 
 ## 1. Visão
