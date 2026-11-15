@@ -1,6 +1,6 @@
 # Documento Mestre do Produto — v1.0
 
-**Estado:** baseline funcional consolidada; produto não implementado.  
+**Estado:** baseline funcional do produto; **implementação parcial** do Módulo 01 verificada por inspeção da branch `feature/modulo1` em 2026-11-15. Revisões v1.1 dos módulos 03/04 propostas, ainda sem aceite final.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
 
 ## 1. Visão
@@ -48,18 +48,29 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 
 ## 6. Módulo 03 — Desenvolvimento da Laurinha
 
-- Biblioteca de desafios presenciais e simples, organizados por categoria e dificuldade.
-- Desafios personalizados e planejamento semanal **opcional**, liderado pela Mikaela.
-- Adulto registra **concluiu / tentou / não realizou**, observação opcional.
-- **Estrelas automáticas sem aprovação manual**; esforço pode ser reconhecido, ausência não gera punição.
-- Regras de pontos simples e transparentes, consistentes, protegidas contra duplicidade.
-- Recompensas extras combinadas pela família; não condicionar alimentação, cuidados, afeto ou necessidades básicas à pontuação.
-- Histórico educativo baseado em experiências e observações; pontuação não representa diagnóstico, inteligência ou avaliação clínica.
-- Não implementar XP/níveis complexos ou jogos digitais no MVP.
+**Proposta de revisão funcional v1.1, pendente de aceite final**, detalhada em `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md`.
+
+- Biblioteca curta de atividades presenciais e atividades personalizadas.
+- Cadastro próprio: **nome**; dificuldade predefinida como simples e alterável. Categoria e instruções opcionais.
+- Organização opcional **Guardar para depois**, sem planejamento com datas obrigatórias, atrasos ou cobrança.
+- Adulto registra apenas **Concluiu** ou **Participou**. **Não realizada** não requer registro.
+- Estrelas automáticas e transparentes, sem aprovação da Mikaela, penalidades, ranking ou avaliação clínica.
+- Tabela v1.1 proposta, **ainda não aprovada**: simples 5/3; média 10/5; desafiadora 15/8 (concluiu/participou).
+- Repetições legítimas de uma brincadeira são permitidas, reenvios acidentais não duplicam créditos.
+- Recompensas opcionais; não condicionam necessidades básicas e afeto.
+- Histórico aprofundado e resumo da evolução ficam no **Módulo 04**, sem telas ou dados duplicados.
 
 ## 7. Módulo 04 — Evolução Familiar
 
-Histórico **por pessoa**, filtros de período e categoria, detalhes expansíveis, resumo familiar apenas de acontecimentos importantes e autorizados; evitar um feed de todas as doses e atividades. Painéis pequenos com informações qualitativas. Relatórios da Vovó e Laurinha derivados dos registros já existentes, com prévia e PDF; sem preenchimento adicional.
+**Proposta de revisão funcional v1.1, pendente de aceite final**, detalhada em `docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md`.
+
+- Duas experiências centrais: **Histórico individual** e **Resumo da pessoa**, com filtros simples.
+- Vovó: doses previstas, tomadas informadas, não tomadas informadas, sem confirmação, consultas e exames; respeitar alterações históricas de programação e dados autorizados.
+- Laurinha: experiências, categorias quando disponíveis, conquistas e observações **já existentes**, sem converter estrelas em medidas de inteligência.
+- Resumo familiar limitado a poucos destaques relevantes e autorizados na página inicial, sem feed próprio nem publicações manuais.
+- Relatório PDF como ação do Resumo: período → prévia → exportação, sem recadastrar dados nem incluir anexos sensíveis por padrão.
+- Sem dashboards genéricos, gráficos obrigatórios, ranking ou cobrança.
+- Autorização vale para detalhes, metadados, indicadores, prévia e PDF.
 
 ## 8. Fora do MVP
 
