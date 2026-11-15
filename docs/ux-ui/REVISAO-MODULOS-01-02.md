@@ -1,9 +1,11 @@
 # Revisão de UX — módulos implementados 01 e 02
 
-**Referência auditada:** branch `develop`, commit `2e42faefc8ad57f3f784f9bf1c59f072a76d91f5` (2026-11-15).  
-**Estado:** correções de UX propostas e direção aprovada; **ainda não implementadas nem homologadas em dispositivos**.  
-**Tipo de evidência:** inspeção estática do código. Não confundir hipótese de uso com falha reproduzida em teste real.  
-**Guia transversal:** `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`.
+**Referência auditada:** branch `develop` (2026-11-15).  
+**Estado:** correções UX-01..UX-14 implementadas; QG-3 local PASS (capturas emuladas + smokes). Homologação com usuários/dispositivos reais e ACE-C12 ainda pendentes.  
+**Tipo de evidência:** implementação local + typecheck/build + capturas emuladas; não confundir com homologação em aparelho físico do usuário.  
+**Guia transversal:** `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`.  
+**Fonte de status corrente:** `docs/produto/STATUS-E-ESCOPO.md` e `docs/esteira/estado/atual.json`.  
+**Evidência QG-3:** `docs/esteira/estado/evidencia-qg3-ux-01-02.json`.
 
 ## Regras de execução
 

@@ -3,7 +3,20 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
-  ativarConvite,
+  Accordion,
+  Anchor,
+  Button,
+  Card,
+  Group,
+  PasswordInput,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core";
+import {
   concederAutorizacao,
   criarConvite,
   criarPessoa,
@@ -16,6 +29,23 @@ import {
   type CartaoInicio,
   type UsuarioSessao,
 } from "@/lib/api";
+import {
+  EstadoCarregando,
+  EstadoVazio,
+  MensagemFeedback,
+} from "@/componentes/feedback";
+
+const rotulosResponsabilidade: Record<string, string> = {
+  administrador: "Administração da família",
+  responsavel_cuidados: "Cuidados",
+  responsavel_desenvolvimento: "Desenvolvimento",
+  colaboradora_cuidados: "Colaboração nos cuidados",
+  participante_limitado: "Participação limitada",
+};
+
+function rotuloResponsabilidade(codigo: string): string {
+  return rotulosResponsabilidade[codigo] ?? codigo.replaceAll("_", " ");
+}
 
 export function PainelFundacao() {
   const [usuario, setUsuario] = useState<UsuarioSessao | null>(null);
@@ -26,13 +56,14 @@ export function PainelFundacao() {
   const [cartoes, setCartoes] = useState<CartaoInicio[]>([]);
   const [autorizacoes, setAutorizacoes] = useState<AutorizacaoResumo[]>([]);
   const [filtrado, setFiltrado] = useState(false);
-  const [emailConvite, setEmailConvite] = useState("nova.colab@pef.local");
-  const [pessoaAlvoConviteId, setPessoaAlvoConviteId] = useState("");
-  const [pessoaAlvoDesenvId, setPessoaAlvoDesenvId] = useState("");
-  const [tokenConvite, setTokenConvite] = useState<string | null>(null);
-  const [tokenAtivar, setTokenAtivar] = useState("");
-  const [senhaAtivar, setSenhaAtivar] = useState("");
-  const [nomeAtivar, setNomeAtivar] = useState("");
+  const [emailConvite, setEmailConvite] = useState("");
+  const [pessoaAlvoConviteId, setPessoaAlvoConviteId] = useState<string | null>(
+    null,
+  );
+  const [pessoaAlvoDesenvId, setPessoaAlvoDesenvId] = useState<string | null>(
+    null,
+  );
+  const [linkAtivacao, setLinkAtivacao] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
@@ -42,6 +73,17 @@ export function PainelFundacao() {
     for (const c of cartoes) mapa.set(c.pessoaId, c);
     return [...mapa.values()].sort((a, b) => a.nome.localeCompare(b.nome, "pt"));
   }, [cartoes]);
+
+  const opcoesPessoas = useMemo(
+    () =>
+      pessoasUnicas.map((p) => ({
+        value: p.pessoaId,
+        label: p.nome,
+      })),
+    [pessoasUnicas],
+  );
+
+  const podeAdministrar = Boolean(usuario) && !filtrado;
 
   useEffect(() => {
     limparSessaoLegada();
@@ -53,7 +95,7 @@ export function PainelFundacao() {
           await carregarInicio(me);
         }
       } catch (e) {
-        setErro(e instanceof Error ? e.message : "Falha ao verificar sessão");
+        setErro(e instanceof Error ? e.message : "Não foi possível verificar a sessão");
       } finally {
         setPronto(true);
       }
@@ -89,9 +131,9 @@ export function PainelFundacao() {
       const nova = await entrar(email, senha);
       setUsuario(nova.usuario);
       await carregarInicio(nova.usuario);
-      setSucesso("Sessão iniciada.");
+      setSucesso("Você entrou.");
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Falha ao entrar");
+      setErro(e instanceof Error ? e.message : "Não foi possível entrar");
     } finally {
       setCarregando(false);
     }
@@ -107,9 +149,9 @@ export function PainelFundacao() {
       const criada = await criarPessoa(usuario.pessoa.familiaId, nome);
       setNome("");
       await carregarInicio(usuario);
-      setSucesso(`Pessoa “${criada.nome}” cadastrada.`);
+      setSucesso(`${criada.nome} foi adicionada à família.`);
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Falha ao cadastrar");
+      setErro(e instanceof Error ? e.message : "Não foi possível cadastrar");
     } finally {
       setCarregando(false);
     }
@@ -117,7 +159,7 @@ export function PainelFundacao() {
 
   async function aoConvidarColaboradora() {
     if (!usuario || !pessoaAlvoConviteId) {
-      setErro("Selecione a pessoa-alvo do convite.");
+      setErro("Escolha a pessoa que a colaboradora vai acompanhar.");
       return;
     }
     setCarregando(true);
@@ -131,33 +173,13 @@ export function PainelFundacao() {
         responsabilidade: "colaboradora_cuidados",
         pessoaAlvoId: pessoaAlvoConviteId,
       });
-      setTokenConvite(convite.token);
-      setTokenAtivar(convite.token);
+      const caminho = `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
+      setLinkAtivacao(caminho);
       setSucesso(
-        `Convite gerado para ${alvo?.nome ?? "pessoa selecionada"}.`,
+        `Convite pronto para ${alvo?.nome ?? "a pessoa escolhida"}. Abra o link de ativação quando a pessoa for criar a conta.`,
       );
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Falha no convite");
-    } finally {
-      setCarregando(false);
-    }
-  }
-
-  async function aoAtivarConvite(evento: FormEvent) {
-    evento.preventDefault();
-    setCarregando(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      await ativarConvite(tokenAtivar.trim(), {
-        senha: senhaAtivar,
-        nome: nomeAtivar.trim() || undefined,
-      });
-      setSenhaAtivar("");
-      setSucesso("Convite ativado. A colaboradora já pode entrar.");
-      if (usuario) await carregarInicio(usuario);
-    } catch (e) {
-      setErro(e instanceof Error ? e.message : "Falha ao ativar convite");
+      setErro(e instanceof Error ? e.message : "Não foi possível gerar o convite");
     } finally {
       setCarregando(false);
     }
@@ -165,7 +187,7 @@ export function PainelFundacao() {
 
   async function aoAcumularDesenvolvimento() {
     if (!usuario || !pessoaAlvoDesenvId) {
-      setErro("Selecione a pessoa para desenvolvimento.");
+      setErro("Escolha a pessoa para acompanhamento de desenvolvimento.");
       return;
     }
     setCarregando(true);
@@ -178,9 +200,9 @@ export function PainelFundacao() {
         pessoaAlvoId: pessoaAlvoDesenvId,
       });
       await carregarInicio(usuario);
-      setSucesso("Responsabilidade de desenvolvimento concedida.");
+      setSucesso("Acesso de desenvolvimento concedido.");
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Falha ao conceder");
+      setErro(e instanceof Error ? e.message : "Não foi possível conceder o acesso");
     } finally {
       setCarregando(false);
     }
@@ -198,225 +220,246 @@ export function PainelFundacao() {
       setUsuario(null);
       setCartoes([]);
       setAutorizacoes([]);
-      setTokenConvite(null);
+      setLinkAtivacao(null);
       setCarregando(false);
     }
   }
 
   if (!pronto) {
-    return (
-      <section className="status" aria-busy="true">
-        <p className="ajuda">Verificando sessão…</p>
-      </section>
-    );
+    return <EstadoCarregando rotulo="Verificando sessão…" />;
   }
 
   if (!usuario) {
     return (
-      <section className="status">
-        <h2>Entrar (sessão provisória)</h2>
-        <form onSubmit={aoEntrar} className="formulario">
-          <label>
-            E-mail
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="username"
-              required
-            />
-          </label>
-          <label>
-            Senha
-            <input
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              autoComplete="current-password"
-              required
-            />
-          </label>
-          <button type="submit" disabled={carregando}>
-            Entrar
-          </button>
-        </form>
-        {erro ? <p className="erro">{erro}</p> : null}
-        {sucesso ? <p className="sucesso">{sucesso}</p> : null}
-      </section>
+      <Card withBorder padding="lg" radius="md">
+        <Stack gap="md">
+          <Title order={2}>Entrar</Title>
+          <Text c="dimmed" size="sm">
+            Use o e-mail e a senha da sua conta familiar.
+          </Text>
+          <form onSubmit={aoEntrar}>
+            <Stack gap="sm">
+              <TextInput
+                label="E-mail"
+                value={email}
+                onChange={(e) => setEmail(e.currentTarget.value)}
+                autoComplete="username"
+                required
+                type="email"
+              />
+              <PasswordInput
+                label="Senha"
+                value={senha}
+                onChange={(e) => setSenha(e.currentTarget.value)}
+                autoComplete="current-password"
+                required
+              />
+              <Button type="submit" loading={carregando}>
+                Entrar
+              </Button>
+            </Stack>
+          </form>
+          <Text size="sm">
+            Recebeu um convite?{" "}
+            <Anchor component={Link} href="/convites/ativar">
+              Ativar convite
+            </Anchor>
+          </Text>
+          <MensagemFeedback erro={erro} sucesso={sucesso} />
+        </Stack>
+      </Card>
     );
   }
 
   return (
-    <section className="status">
-      <header className="cabecalho-sessao">
-        <p>
-          Olá, <strong>{usuario.pessoa.nome}</strong>
-        </p>
-        <button type="button" onClick={() => void aoSair()} disabled={carregando}>
-          Sair
-        </button>
-      </header>
-
-      {!filtrado ? (
-        <form onSubmit={aoCadastrar} className="formulario">
-          <h2>Adicionar pessoa</h2>
-          <p className="ajuda">Só o nome é necessário.</p>
-          <label>
-            Nome
-            <input
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              placeholder="Ex.: Vovó"
-              required
-              autoComplete="off"
-            />
-          </label>
-          <button type="submit" disabled={carregando || !nome.trim()}>
-            Salvar
-          </button>
-        </form>
-      ) : null}
-
-      <div className="bloco">
-        <h2>Início — cartões autorizados</h2>
-        <p className="ajuda">
-          {filtrado
-            ? "Lista filtrada pela sua autorização (FAM-R10)."
-            : "Visão de administrador da família."}
-        </p>
-        <ul className="grade-cartoes">
-          {cartoes.map((cartao) => (
-            <li key={cartao.pessoaId} className="cartao-pessoa">
-              <strong>{cartao.nome}</strong>
-              <span>{cartao.resumo}</span>
-              <span className="ajuda mono">id: {cartao.pessoaId.slice(0, 8)}…</span>
-              <Link href={`/pessoas/${cartao.pessoaId}`}>Abrir perfil</Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {!filtrado ? (
-        <div className="bloco">
-          <h2>Convidar colaboradora (FF-04)</h2>
-          <form
-            className="formulario"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void aoConvidarColaboradora();
-            }}
-          >
-            <label>
-              E-mail
-              <input
-                value={emailConvite}
-                onChange={(e) => setEmailConvite(e.target.value)}
-                type="email"
-                required
-              />
-            </label>
-            <label>
-              Pessoa-alvo dos cuidados
-              <select
-                value={pessoaAlvoConviteId}
-                onChange={(e) => setPessoaAlvoConviteId(e.target.value)}
-                required
-              >
-                {pessoasUnicas.map((p) => (
-                  <option key={p.pessoaId} value={p.pessoaId}>
-                    {p.nome} ({p.pessoaId.slice(0, 8)}…)
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button type="submit" disabled={carregando || !pessoaAlvoConviteId}>
-              Gerar convite
-            </button>
-          </form>
-          {tokenConvite ? (
-            <p className="ajuda">
-              Token: <code>{tokenConvite}</code>
-            </p>
-          ) : null}
-        </div>
-      ) : null}
-
-      <div className="bloco">
-        <h2>Ativar convite</h2>
-        <form onSubmit={aoAtivarConvite} className="formulario">
-          <label>
-            Token
-            <input
-              value={tokenAtivar}
-              onChange={(e) => setTokenAtivar(e.target.value)}
-              required
-              autoComplete="off"
-            />
-          </label>
-          <label>
-            Nome (opcional)
-            <input
-              value={nomeAtivar}
-              onChange={(e) => setNomeAtivar(e.target.value)}
-              autoComplete="name"
-            />
-          </label>
-          <label>
-            Senha da nova conta
-            <input
-              type="password"
-              value={senhaAtivar}
-              onChange={(e) => setSenhaAtivar(e.target.value)}
-              required
-              autoComplete="new-password"
-            />
-          </label>
-          <button type="submit" disabled={carregando}>
-            Ativar
-          </button>
-        </form>
-        <p className="ajuda">
-          Também em <Link href="/convites/ativar">/convites/ativar</Link>.
-        </p>
-      </div>
-
-      <div className="bloco">
-        <h2>Autorizações ativas</h2>
-        <ul className="lista-pessoas">
-          {autorizacoes.map((a) => (
-            <li key={a.id}>
-              <code>{a.responsabilidade}</code>
-              {a.pessoaAlvo ? ` → ${a.pessoaAlvo.nome}` : " → família"}
-            </li>
-          ))}
-        </ul>
-        <form
-          className="formulario"
-          onSubmit={(e) => {
-            e.preventDefault();
-            void aoAcumularDesenvolvimento();
-          }}
+    <Stack gap="lg">
+      <Group justify="space-between" align="center" wrap="wrap">
+        <Text>
+          Olá, <Text span fw={600}>{usuario.pessoa.nome}</Text>
+        </Text>
+        <Button
+          variant="default"
+          onClick={() => void aoSair()}
+          loading={carregando}
         >
-          <label>
-            Pessoa (desenvolvimento)
-            <select
-              value={pessoaAlvoDesenvId}
-              onChange={(e) => setPessoaAlvoDesenvId(e.target.value)}
-            >
-              {pessoasUnicas.map((p) => (
-                <option key={p.pessoaId} value={p.pessoaId}>
-                  {p.nome} ({p.pessoaId.slice(0, 8)}…)
-                </option>
-              ))}
-            </select>
-          </label>
-          <button type="submit" disabled={carregando || !pessoaAlvoDesenvId}>
-            Acumular responsabilidade de desenvolvimento (ACE-05)
-          </button>
-        </form>
-      </div>
+          Sair
+        </Button>
+      </Group>
 
-      {erro ? <p className="erro">{erro}</p> : null}
-      {sucesso ? <p className="sucesso">{sucesso}</p> : null}
-    </section>
+      <Stack gap="sm">
+        <Title order={2}>Pessoas</Title>
+        <Text c="dimmed" size="sm">
+          {filtrado
+            ? "Mostramos apenas quem você pode acompanhar."
+            : "Toque em uma pessoa para ver o perfil e as áreas disponíveis."}
+        </Text>
+
+        {cartoes.length === 0 ? (
+          <EstadoVazio
+            titulo="Nenhuma pessoa por aqui ainda"
+            descricao={
+              podeAdministrar
+                ? "Abra Gerenciar família para adicionar a primeira pessoa."
+                : "Quando alguém te autorizar, a pessoa aparecerá nesta lista."
+            }
+          />
+        ) : (
+          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
+            {cartoes.map((cartao) => (
+              <Card
+                key={cartao.pessoaId}
+                component={Link}
+                href={`/pessoas/${cartao.pessoaId}`}
+                withBorder
+                padding="md"
+                radius="md"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <Stack gap={4}>
+                  <Text fw={600} size="lg">
+                    {cartao.nome}
+                  </Text>
+                  {cartao.resumo ? (
+                    <Text size="sm" c="dimmed">
+                      {cartao.resumo}
+                    </Text>
+                  ) : null}
+                  <Text size="sm" c="azul" fw={500}>
+                    Abrir perfil
+                  </Text>
+                </Stack>
+              </Card>
+            ))}
+          </SimpleGrid>
+        )}
+      </Stack>
+
+      {podeAdministrar ? (
+        <Accordion variant="contained" radius="md">
+          <Accordion.Item value="gerenciar">
+            <Accordion.Control>
+              <Text fw={600}>Gerenciar família</Text>
+            </Accordion.Control>
+            <Accordion.Panel>
+              <Stack gap="lg">
+                <form onSubmit={aoCadastrar}>
+                  <Stack gap="sm">
+                    <Title order={3}>Adicionar pessoa</Title>
+                    <Text size="sm" c="dimmed">
+                      Só o nome é necessário agora.
+                    </Text>
+                    <TextInput
+                      label="Nome"
+                      value={nome}
+                      onChange={(e) => setNome(e.currentTarget.value)}
+                      placeholder="Ex.: Vovó"
+                      required
+                      autoComplete="off"
+                    />
+                    <Button
+                      type="submit"
+                      loading={carregando}
+                      disabled={!nome.trim()}
+                    >
+                      Salvar
+                    </Button>
+                  </Stack>
+                </form>
+
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void aoConvidarColaboradora();
+                  }}
+                >
+                  <Stack gap="sm">
+                    <Title order={3}>Convidar colaboradora</Title>
+                    <Text size="sm" c="dimmed">
+                      A pessoa receberá acesso só aos cuidados autorizados.
+                    </Text>
+                    <TextInput
+                      label="E-mail"
+                      value={emailConvite}
+                      onChange={(e) => setEmailConvite(e.currentTarget.value)}
+                      type="email"
+                      required
+                      placeholder="email@exemplo.com"
+                    />
+                    <Select
+                      label="Quem ela vai acompanhar"
+                      data={opcoesPessoas}
+                      value={pessoaAlvoConviteId}
+                      onChange={setPessoaAlvoConviteId}
+                      required
+                      searchable
+                    />
+                    <Button
+                      type="submit"
+                      loading={carregando}
+                      disabled={!pessoaAlvoConviteId}
+                    >
+                      Gerar convite
+                    </Button>
+                    {linkAtivacao ? (
+                      <Text size="sm">
+                        Link de ativação:{" "}
+                        <Anchor component={Link} href={linkAtivacao}>
+                          abrir página de ativação
+                        </Anchor>
+                      </Text>
+                    ) : null}
+                  </Stack>
+                </form>
+
+                <Stack gap="sm">
+                  <Title order={3}>Acessos desta família</Title>
+                  {autorizacoes.length === 0 ? (
+                    <Text size="sm" c="dimmed">
+                      Ainda não há acessos listados.
+                    </Text>
+                  ) : (
+                    <Stack gap={6} component="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                      {autorizacoes.map((a) => (
+                        <Text key={a.id} component="li" size="sm">
+                          {rotuloResponsabilidade(a.responsabilidade)}
+                          {a.pessoaAlvo ? ` → ${a.pessoaAlvo.nome}` : " → família toda"}
+                        </Text>
+                      ))}
+                    </Stack>
+                  )}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      void aoAcumularDesenvolvimento();
+                    }}
+                  >
+                    <Stack gap="sm">
+                      <Select
+                        label="Conceder acesso de desenvolvimento"
+                        description="Você passa a acompanhar também o desenvolvimento desta pessoa."
+                        data={opcoesPessoas}
+                        value={pessoaAlvoDesenvId}
+                        onChange={setPessoaAlvoDesenvId}
+                        searchable
+                      />
+                      <Button
+                        type="submit"
+                        variant="light"
+                        loading={carregando}
+                        disabled={!pessoaAlvoDesenvId}
+                      >
+                        Conceder acesso
+                      </Button>
+                    </Stack>
+                  </form>
+                </Stack>
+              </Stack>
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
+      ) : null}
+
+      <MensagemFeedback erro={erro} sucesso={sucesso} />
+    </Stack>
   );
 }

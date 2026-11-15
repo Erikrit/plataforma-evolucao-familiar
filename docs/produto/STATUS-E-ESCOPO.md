@@ -6,11 +6,11 @@
 |---|---|
 | Visão e princípios | Aprovados |
 | Módulo 01 — Fundação Familiar | Especificação v1.1 aprovada; FF-01..FF-06 implementados localmente com QG-3 PASS registrado; privacidade/UX v1.1, autenticação definitiva e homologação pendentes |
-| Módulo 02 — Cuidados da Vovó | Especificação v1.3 aprovada; CV-01..CV-06 implementados localmente, QG-3 PASS registrado; cadastro revisado, notificações reais (ACE-C12) e segurança pendentes |
+| Módulo 02 — Cuidados da Vovó | Especificação v1.3 aprovada; CV-01..CV-06 + cadastro/alteração de programação v1.3 implementados localmente (QG-3 módulo base PASS); notificações reais (ACE-C12) e homologação pendentes |
 | Módulo 03 — Desenvolvimento da Laurinha | Especificação funcional v1.1 aprovada; não implementado |
 | Módulo 04 — Evolução Familiar | Especificação funcional v1.1 aprovada; histórico e resumo parciais já existem no módulo 02, sem módulo 04 completo |
-| Autenticação | Sessão provisória e token no localStorage, inadequados para uso real sensível sem revisão |
-| Autorizações | Código contextual presente, mas acesso de administrador a cuidados sensíveis requer correção antes de uso real |
+| Autenticação | Sessão MVP com cookie httpOnly (hash SHA-256); IdP definitivo ainda pendente em DECISOES.md — inadequado para dados reais sensíveis sem revisão |
+| Autorizações | Código contextual presente e correções SA-01..SA-04 registradas; IdP definitivo e homologação ainda pendentes |
 | Interface móvel | Estrutura mobile-first presente; sem homologação com usuários reais |
 | Testes | Evidências locais dos módulos 01 e 02 em `docs/esteira/estado/`; não reexecutadas nesta integração |
 | Deploy | Nenhum deployment homologado |
@@ -33,10 +33,10 @@
 
 ## Priorização de acompanhamento
 
-1. Reconciliar documentação aprovada com o código existente, preservando status e evidências.
-2. Corrigir autenticação e autorização de dados sensíveis antes de usar dados reais.
-3. Adequar UX de cadastro de medicamentos, notificações e testar nos dispositivos previstos.
-4. Planejar o módulo 03 com base na especificação v1.1.
+1. Homologar UX 01/02 (QG-3 visual) e validar ACE-C12 em dispositivos reais.
+2. Selecionar autenticação definitiva (IdP) antes de usar dados reais sensíveis.
+3. Planejar o módulo 03 com base na especificação v1.1.
+4. Completar módulo 04 (histórico/resumo) sobre a base já existente no 02.
 
 ## Separação de responsabilidades
 

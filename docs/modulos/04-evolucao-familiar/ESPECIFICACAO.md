@@ -1,7 +1,7 @@
 # Módulo 04 — Evolução Familiar
 
 **Versão:** 1.1 — revisão funcional simplificada  
-**Estado:** especificação funcional v1.1 aprovada para o MVP; substitui o resumo v1.0.  
+**Estado:** especificação funcional v1.1 aprovada para o MVP (fonte oficial deste módulo).  
 **Dependências funcionais:** Módulo 01 para pessoas/autorizações; registros de cuidados do 02 e experiências do 03 à medida que existirem.
 
 ## 1. Propósito

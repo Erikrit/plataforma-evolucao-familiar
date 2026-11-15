@@ -4,11 +4,27 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
+  Accordion,
+  Anchor,
+  Button,
+  Card,
+  Container,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core";
+import {
   atualizarPessoa,
   obterMe,
   obterPessoa,
   type UsuarioSessao,
 } from "@/lib/api";
+import {
+  EstadoCarregando,
+  EstadoVazio,
+  MensagemFeedback,
+} from "@/componentes/feedback";
 
 type Perfil = {
   id: string;
@@ -28,6 +44,7 @@ export default function PaginaPerfil() {
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(true);
+  const [salvando, setSalvando] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -36,7 +53,7 @@ export default function PaginaPerfil() {
       try {
         const me = await obterMe();
         if (!me) {
-          setErro("Faça login na página inicial.");
+          setErro("Entre na página inicial para ver este perfil.");
           setCarregando(false);
           return;
         }
@@ -48,7 +65,7 @@ export default function PaginaPerfil() {
         setPerfil(dados);
         setVinculo(dados.vinculo ?? "");
       } catch (e) {
-        setErro(e instanceof Error ? e.message : "Falha ao carregar");
+        setErro(e instanceof Error ? e.message : "Não foi possível carregar o perfil");
       } finally {
         setCarregando(false);
       }
@@ -58,6 +75,7 @@ export default function PaginaPerfil() {
   async function aoSalvar(evento: FormEvent) {
     evento.preventDefault();
     if (!usuario || !perfil) return;
+    setSalvando(true);
     setErro(null);
     setSucesso(null);
     try {
@@ -68,71 +86,129 @@ export default function PaginaPerfil() {
       )) as Perfil;
       setPerfil(dados);
       setVinculo(dados.vinculo ?? "");
-      setSucesso("Vínculo salvo.");
+      setSucesso("Informações atualizadas.");
     } catch {
-      setErro("Não foi possível salvar.");
+      setErro("Não foi possível salvar. Tente de novo.");
+    } finally {
+      setSalvando(false);
     }
   }
 
   const semSessao = !carregando && !usuario;
 
   return (
-    <main>
-      <p>
-        <Link href="/">← Início</Link>
-      </p>
-      <h1>Perfil</h1>
-      {carregando ? <p className="ajuda">Carregando…</p> : null}
-      {erro ? (
-        <p className="erro">
-          {erro}{" "}
-          {semSessao ? (
-            <button type="button" className="secundario" onClick={() => router.push("/")}>
-              Ir para entrar
-            </button>
-          ) : null}
-        </p>
-      ) : null}
-      {sucesso ? <p className="sucesso">{sucesso}</p> : null}
-      {perfil && usuario ? (
-        <section className="status">
-          <h2>{perfil.nome}</h2>
-          <p className="ajuda">
-            {perfil.possuiConta ? "Possui conta" : "Sem conta (FAM-R01)"}
-          </p>
-          <form onSubmit={aoSalvar} className="formulario">
-            <label>
-              Vínculo (opcional)
-              <input
-                value={vinculo}
-                onChange={(e) => setVinculo(e.target.value)}
-              />
-            </label>
-            <button type="submit">Salvar</button>
-          </form>
-          <h2>Áreas</h2>
-          <ul className="lista-pessoas">
-            {perfil.areas.map((area) => (
-              <li key={area.id}>
-                {area.disponivel && area.id === "cuidados" ? (
-                  <Link href={`/pessoas/${perfil.id}/cuidados`}>
-                    {area.rotulo}
-                  </Link>
-                ) : area.disponivel && area.id === "historico" ? (
-                  <Link href={`/pessoas/${perfil.id}/historico`}>
-                    {area.rotulo}
-                  </Link>
-                ) : (
-                  <>
-                    {area.rotulo}
-                    {area.disponivel ? "" : " · em breve"}
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-    </main>
+    <Container component="main" size="sm" py="lg" px="md">
+      <Stack gap="lg">
+        <Anchor component={Link} href="/" size="sm">
+          ← Nossa família
+        </Anchor>
+
+        {carregando ? <EstadoCarregando rotulo="Carregando perfil…" /> : null}
+
+        <MensagemFeedback erro={erro} sucesso={sucesso} />
+
+        {semSessao ? (
+          <Button variant="light" onClick={() => router.push("/")}>
+            Ir para entrar
+          </Button>
+        ) : null}
+
+        {perfil && usuario ? (
+          <Stack gap="lg">
+            <Stack gap={4}>
+              <Title order={1}>{perfil.nome}</Title>
+              <Text c="dimmed" size="sm">
+                {perfil.possuiConta
+                  ? "Tem conta na plataforma"
+                  : "Ainda sem conta — pode ser acompanhada pela família"}
+              </Text>
+              {perfil.vinculo ? (
+                <Text size="sm">Vínculo: {perfil.vinculo}</Text>
+              ) : null}
+            </Stack>
+
+            <Stack gap="sm">
+              <Title order={2}>Áreas disponíveis</Title>
+              {perfil.areas.length === 0 ? (
+                <EstadoVazio
+                  titulo="Nenhuma área liberada"
+                  descricao="Quando houver autorização, as opções aparecem aqui."
+                />
+              ) : (
+                <Stack gap="sm">
+                  {perfil.areas.map((area) => {
+                    const disponivel =
+                      area.disponivel &&
+                      (area.id === "cuidados" || area.id === "historico");
+                    const href =
+                      area.id === "cuidados"
+                        ? `/pessoas/${perfil.id}/cuidados`
+                        : area.id === "historico"
+                          ? `/pessoas/${perfil.id}/historico`
+                          : null;
+
+                    if (disponivel && href) {
+                      return (
+                        <Card
+                          key={area.id}
+                          component={Link}
+                          href={href}
+                          withBorder
+                          padding="md"
+                          radius="md"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <Text fw={600}>{area.rotulo}</Text>
+                          <Text size="sm" c="azul">
+                            Abrir
+                          </Text>
+                        </Card>
+                      );
+                    }
+
+                    return (
+                      <Card key={area.id} withBorder padding="md" radius="md">
+                        <Text fw={600}>{area.rotulo}</Text>
+                        <Text size="sm" c="dimmed">
+                          {area.disponivel
+                            ? "Em breve nesta versão"
+                            : "Sem acesso no momento — peça autorização a quem administra a família"}
+                        </Text>
+                      </Card>
+                    );
+                  })}
+                </Stack>
+              )}
+            </Stack>
+
+            <Accordion variant="contained" radius="md">
+              <Accordion.Item value="dados">
+                <Accordion.Control>
+                  <Text fw={600}>Editar vínculo e dados</Text>
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <form onSubmit={aoSalvar}>
+                    <Stack gap="sm">
+                      <Text size="sm" c="dimmed">
+                        Opcional. Não impede o uso das áreas autorizadas.
+                      </Text>
+                      <TextInput
+                        label="Vínculo familiar"
+                        description="Ex.: mãe, filha, neta"
+                        value={vinculo}
+                        onChange={(e) => setVinculo(e.currentTarget.value)}
+                      />
+                      <Button type="submit" loading={salvando}>
+                        Salvar
+                      </Button>
+                    </Stack>
+                  </form>
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
+          </Stack>
+        ) : null}
+      </Stack>
+    </Container>
   );
 }

@@ -1,6 +1,6 @@
 # Plataforma de Evolução Familiar
 
-> **Status:** implementação local dos módulos 01 e 02 presente em `develop`, com evidências QG-3 registradas; módulos 03 e 04 ainda não implementados integralmente. Autenticação provisória, UX e notificações ainda não homologadas. Sem deploy; não usar dados reais sensíveis.
+> **Status:** implementação local dos módulos 01 e 02 presente em `develop`, com evidências QG-3 registradas e cadastro/programação de medicamentos alinhados à especificação v1.3; módulos 03 e 04 ainda não implementados integralmente. Sessão MVP (cookie httpOnly), UX e notificações ainda sem homologação em dispositivos reais. Sem deploy; não usar dados reais sensíveis.
 
 Plataforma para apoiar o cuidado, as rotinas e o desenvolvimento de integrantes da família, preservando o histórico ao longo do tempo — sem transformar o cotidiano em prestação de contas.
 
@@ -62,7 +62,7 @@ Smoke FF-02 (API no ar): `npm run smoke:ff02`. O módulo 02 possui scripts smoke
 
 ## Situação e restrições
 
-Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar funcionalidades previstas, implementadas e ainda pendentes. O código atual não oferece proteção adequada para dados reais da família: sessões provisórias e autorização de informações sensíveis ainda necessitam revisão; a implementação local do módulo 02 não implica homologação. As especificações funcionais v1.1 dos módulos 03 e 04, incluindo os valores de estrelas (5/3, 10/5, 15/8 por dificuldade e resultado), foram aprovadas em 2026-11-15. A aprovação não significa que tenham sido implementadas.
+Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar funcionalidades previstas, implementadas e ainda pendentes. O código atual não oferece proteção adequada para dados reais da família: a sessão MVP (cookie httpOnly) e a autorização contextual ainda carecem de IdP definitivo e homologação; a implementação local do módulo 02 não implica homologação. As especificações funcionais v1.1 dos módulos 03 e 04, incluindo os valores de estrelas (5/3, 10/5, 15/8 por dificuldade e resultado), foram aprovadas em 2026-11-15. A aprovação não significa que tenham sido implementadas.
 
 ## Privacidade
 

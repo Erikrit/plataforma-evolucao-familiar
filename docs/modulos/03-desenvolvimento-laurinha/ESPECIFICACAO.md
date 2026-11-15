@@ -1,7 +1,7 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
 **Versão:** 1.1 — revisão funcional simplificada  
-**Estado:** especificação funcional v1.1 aprovada para o MVP; substitui o resumo v1.0.  
+**Estado:** especificação funcional v1.1 aprovada para o MVP (fonte oficial deste módulo).  
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
 

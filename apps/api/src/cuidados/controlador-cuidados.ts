@@ -54,6 +54,12 @@ export class ControladorCuidados {
       frequencia?: string;
       anexoIds?: string[];
       ativar?: boolean;
+      primeiroHorario?: string;
+      dosesPorDia?: number;
+      duracaoTipo?: "continua" | "dias" | string;
+      duracaoDias?: number | null;
+      horariosConferidos?: boolean;
+      intervaloHoras?: number | null;
     },
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
@@ -71,7 +77,17 @@ export class ControladorCuidados {
   @Put("medicamentos/:medicamentoId/programacao")
   alterarProgramacao(
     @Param("medicamentoId") medicamentoId: string,
-    @Body() corpo: { horarios?: string[]; frequencia?: string },
+    @Body()
+    corpo: {
+      horarios?: string[];
+      frequencia?: string;
+      primeiroHorario?: string;
+      dosesPorDia?: number;
+      duracaoTipo?: "continua" | "dias" | string;
+      duracaoDias?: number | null;
+      horariosConferidos?: boolean;
+      intervaloHoras?: number | null;
+    },
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.medicamentos.alterarProgramacao(

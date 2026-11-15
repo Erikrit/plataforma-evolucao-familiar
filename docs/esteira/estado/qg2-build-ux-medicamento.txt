@@ -1,0 +1,4 @@
+comando: npm run build -w @pef/web; npm run build -w @pef/api
+exit: 0 / 0
+quando: 2026-11-15T17:41Z
+incremento: UX-MEDICAMENTO

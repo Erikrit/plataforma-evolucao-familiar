@@ -162,15 +162,21 @@ model MedicamentoAnexo {
 
 /// Programação com vigência; alteração cria nova linha sem sobrescrever o passado (CUI-F04).
 model ProgramacaoMedicamento {
-  id              String      @id @default(cuid())
-  medicamentoId   String      @map("medicamento_id")
-  horarios        Json
-  frequencia      String      @default("diaria")
-  vigenciaInicio  DateTime    @map("vigencia_inicio")
-  vigenciaFim     DateTime?   @map("vigencia_fim")
-  criadoPorId     String      @map("criado_por_id")
-  criadoEm        DateTime    @default(now()) @map("criado_em")
-  medicamento     Medicamento @relation(fields: [medicamentoId], references: [id])
+  id                 String      @id @default(cuid())
+  medicamentoId      String      @map("medicamento_id")
+  horarios           Json
+  frequencia         String      @default("diaria")
+  primeiroHorario    String?     @map("primeiro_horario")
+  dosesPorDia        Int?        @map("doses_por_dia")
+  duracaoTipo        String      @default("continua") @map("duracao_tipo")
+  duracaoDias        Int?        @map("duracao_dias")
+  horariosConferidos Boolean     @default(false) @map("horarios_conferidos")
+  intervaloHoras     Int?        @map("intervalo_horas")
+  vigenciaInicio     DateTime    @map("vigencia_inicio")
+  vigenciaFim        DateTime?   @map("vigencia_fim")
+  criadoPorId        String      @map("criado_por_id")
+  criadoEm           DateTime    @default(now()) @map("criado_em")
+  medicamento        Medicamento @relation(fields: [medicamentoId], references: [id])
 
   @@index([medicamentoId, vigenciaInicio])
   @@map("programacao_medicamento")

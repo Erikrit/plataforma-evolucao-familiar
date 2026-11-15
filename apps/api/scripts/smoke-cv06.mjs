@@ -109,8 +109,17 @@ try {
     css.includes("cuidados-mobile") &&
       css.includes("@media (max-width: 480px)") &&
       pagina.includes("confirmaAoTocar") &&
-      pagina.includes("painel-confirmacao"),
-    { cssOk: css.includes("cuidados-mobile") },
+      // UX-09: Drawer acessível substitui o painel-confirmacao legado
+      (pagina.includes("Drawer") || pagina.includes("painel-confirmacao")),
+    {
+      cssOk: css.includes("cuidados-mobile"),
+      relato:
+        pagina.includes("Drawer")
+          ? "Drawer"
+          : pagina.includes("painel-confirmacao")
+            ? "painel-confirmacao"
+            : null,
+    },
   );
 
   const falhou = resultados.some((r) => !r.ok);

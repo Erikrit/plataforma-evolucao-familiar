@@ -219,15 +219,55 @@ export async function obterCuidadosHoje(pessoaId: string) {
   return resposta.json();
 }
 
+export type CadastroMedicamento = {
+  nome: string;
+  horarios: string[];
+  ativar?: boolean;
+  primeiroHorario?: string;
+  dosesPorDia?: number;
+  duracaoTipo?: "continua" | "dias";
+  duracaoDias?: number | null;
+  horariosConferidos?: boolean;
+  intervaloHoras?: number | null;
+  instrucoes?: string;
+};
+
 export async function cadastrarMedicamento(
   pessoaId: string,
-  corpo: { nome: string; horarios: string[]; ativar?: boolean },
+  corpo: CadastroMedicamento,
 ) {
   const resposta = await fetchApi(`/pessoas/${pessoaId}/medicamentos`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(corpo),
   });
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return resposta.json();
+}
+
+export type AlteracaoProgramacaoMedicamento = {
+  horarios: string[];
+  frequencia?: string;
+  primeiroHorario?: string;
+  dosesPorDia?: number;
+  duracaoTipo?: "continua" | "dias";
+  duracaoDias?: number | null;
+  horariosConferidos?: boolean;
+  intervaloHoras?: number | null;
+};
+
+export async function alterarProgramacaoMedicamento(
+  medicamentoId: string,
+  corpo: AlteracaoProgramacaoMedicamento,
+) {
+  const resposta = await fetchApi(
+    `/medicamentos/${medicamentoId}/programacao`,
+    {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(corpo),
+    },
+  );
   if (!resposta.ok) throw new Error(await lerErro(resposta));
   return resposta.json();
 }

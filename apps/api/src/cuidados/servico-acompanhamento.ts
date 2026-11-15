@@ -74,20 +74,20 @@ export class ServicoAcompanhamento {
       ...doses.map((d) => ({
         tipo: d.substituiId ? "correcao_dose" : "registro_dose",
         quando: d.registradoEm,
-        resumo: `${d.medicamento.nome}: ${d.situacao}`,
+        resumo: `${d.medicamento.nome}: ${this.rotuloSituacaoDose(d.situacao)}`,
         origemId: d.id,
         versaoAtiva: d.versaoAtiva,
       })),
       ...programacoes.map((p) => ({
         tipo: "programacao",
         quando: p.criadoEm,
-        resumo: `Programação ${p.medicamento.nome}: ${JSON.stringify(p.horarios)}`,
+        resumo: `${p.medicamento.nome}: horários ${this.formatarHorarios(p.horarios)}`,
         origemId: p.id,
       })),
       ...consultas.map((c) => ({
         tipo: "consulta",
         quando: c.dataHora,
-        resumo: `${c.especialidadeOuDescricao} (${c.status})`,
+        resumo: `${c.especialidadeOuDescricao} (${this.rotuloStatusConsulta(c.status)})`,
         origemId: c.id,
       })),
       ...exames.map((e) => ({
@@ -106,7 +106,7 @@ export class ServicoAcompanhamento {
       ...medicamentos.map((m) => ({
         tipo: m.encerradoEm ? "encerramento" : "suspensao",
         quando: (m.encerradoEm ?? m.suspensoEm)!,
-        resumo: `${m.nome} → ${m.status}`,
+        resumo: `${m.nome}: ${this.rotuloStatusMedicamento(m.status)}`,
         origemId: m.id,
       })),
     ].sort((a, b) => b.quando.getTime() - a.quando.getTime());
@@ -318,6 +318,38 @@ export class ServicoAcompanhamento {
     }
     corpo += `trailer<< /Size ${xref + 1} /Root 1 0 R >>\nstartxref\n${startxref}\n%%EOF`;
     return Buffer.from(corpo, "utf8");
+  }
+
+  private rotuloSituacaoDose(situacao: string) {
+    if (situacao === "tomou_conforme_informacao") return "informou que tomou";
+    if (situacao === "informou_nao_tomou") return "informou que não tomou";
+    return situacao.replaceAll("_", " ");
+  }
+
+  private rotuloStatusConsulta(status: string) {
+    const mapa: Record<string, string> = {
+      agendada: "agendada",
+      realizada: "realizada",
+      cancelada: "cancelada",
+    };
+    return mapa[status] ?? status.replaceAll("_", " ");
+  }
+
+  private rotuloStatusMedicamento(status: string) {
+    const mapa: Record<string, string> = {
+      ativo: "ativo",
+      rascunho: "rascunho",
+      suspenso: "suspenso",
+      encerrado: "encerrado",
+    };
+    return mapa[status] ?? status.replaceAll("_", " ");
+  }
+
+  private formatarHorarios(horarios: unknown) {
+    const lista = Array.isArray(horarios)
+      ? horarios.filter((h): h is string => typeof h === "string")
+      : [];
+    return lista.length > 0 ? lista.join(", ") : "sem horários";
   }
 
   private async exigirVisao(pessoaId: string, usuario: UsuarioAutenticado) {

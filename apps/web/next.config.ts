@@ -6,6 +6,9 @@ const configuracao: NextConfig = {
     // Lint roda via `npm run lint` na raiz (QG-1).
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    optimizePackageImports: ["@mantine/core", "@mantine/hooks", "@mantine/notifications"],
+  },
 };
 
 export default configuracao;

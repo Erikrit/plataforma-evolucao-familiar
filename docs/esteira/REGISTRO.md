@@ -4,6 +4,10 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
 ## Estado atual (2026-11-15)
 
+- **UX consolidação 01/02:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-ux-01-02.json`
+- **CV-PROG-V13:** COMPLETED — metadados v1.3 em `alterarProgramacao` + limpeza docs obsoletas
+- **Próximo:** módulo 03 — Desenvolvimento Laurinha (`module-planning`)
+- **Docs:** `REVISAO-INTEGRADA-2026-11-15.md` removida (não era fonte corrente; usar STATUS-E-ESCOPO)
 - **Correção auth/autorização:** COMPLETED (SA-01..SA-04, QG-3 PASS, verifier PASS)
 - **Módulo 02 Cuidados da Vovó:** COMPLETED (CV-01..CV-06, QG-3 PASS)
 - **Módulo 01 Fundação Familiar:** COMPLETED (FF-01..FF-06, QG-3 PASS)
@@ -12,8 +16,91 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 - **App local:** `apps/api` + `apps/web` + Compose (Postgres `:5433`)
 - **Auth:** sessão MVP (hash SHA-256 + cookie httpOnly); IdP definitivo ainda em DECISOES.md
 - **ACE-C12:** PENDING (lembretes/PWA em dispositivos reais)
-- **Próximo produto:** módulo 03 — Desenvolvimento Laurinha (`module-planning`)
+- **Próximo produto após UX 01/02:** módulo 03 — Desenvolvimento Laurinha (`module-planning`)
 - **Commit/push/deploy:** sob decisão humana; não feitos pela esteira
+
+## 2026-11-15 — QG-3 UX consolidação 01/02 PASS
+
+- **Smokes:** cv03, authz, modulo-02, cv05 PASS
+- **Visual:** capturas 320/375/390 + desktop em `docs/esteira/estado/qg3-capturas/`
+- **Correções no gate:** ACE-C11 (Drawer); histórico em linguagem familiar
+- **ACE-C12:** PENDING (dispositivos reais)
+- **Evidência:** `docs/esteira/estado/evidencia-qg3-ux-01-02.json`
+- **Fingerprint:** `ux-01-02-qg3-2026-11-15`
+- **Commit/push:** não executados
+
+## 2026-11-15 — CV-PROG-V13 COMPLETED (metadados v1.3 + docs)
+
+- **Entrega:** `alterarProgramacao` persiste metadados CUI-F01; `resolverMetadadosProgramacao` compartilhado; contrato web/API; remoção de `REVISAO-INTEGRADA`; STATUS/ESPECIFICACAO/README alinhados
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](c2b9f6bc-619a-4250-9049-09078c164801))
+- **Fingerprint:** `cv-prog-v13-2026-11-15`
+- **Próximo:** QG-3 / revisão visual integrada
+- **Commit/push:** não executados
+
+## 2026-11-15 — UX-MEDICAMENTO COMPLETED (opção A / UX-11)
+
+- **Decisão:** A — adequar API/Prisma + UI
+- **Entrega:** campos v1.3; UI com conferência; `ativar` exige `horariosConferidos`; sugestão só com intervalo explícito
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](76c1bc8d-5025-4107-9979-1056466f0996))
+- **Fingerprint:** `ux-medicamento-2026-11-15`
+- **Próximo:** QG-3 / revisão visual integrada
+- **Commit/push:** não executados
+
+## 2026-11-15 — UX-MEDICAMENTO NEEDS_DECISION (UX-11) — resolvido com opção A
+
+- **Motivo original:** contrato incompleto vs CUI-F01 v1.3
+- **Resolução:** opção A aprovada pelo operador
+- **Commit/push:** não executados
+
+## 2026-11-15 — UX-CUIDADOS-LISTAS COMPLETED (UX-12/13)
+
+- **Entrega:** consultas/apoio legíveis; histórico cronológico sem ADR-009
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](4ad3d9c9-6283-4f88-b214-cdc44a6b6528))
+- **Fingerprint:** `ux-cuidados-listas-2026-11-15`
+- **Commit/push:** não executados
+
+## 2026-11-15 — UX-CUIDADOS-ROTINA COMPLETED (UX-07..10)
+
+- **Entrega:** hierarquia rotina/outros/gerenciar; Drawer relato; anti-reenvio
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](5fd7c7b2-24d2-4f48-8c7b-4ea83e86976a))
+- **Fingerprint:** `ux-cuidados-rotina-2026-11-15`
+- **Commit/push:** não executados
+
+## 2026-11-15 — UX-PERFIL-CONVITE COMPLETED (UX-04/05)
+
+- **Entrega:** perfil com áreas em destaque + vínculo no Accordion; ativação com token da URL
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](fe57a657-2235-4bdc-b513-227ba1cb65e1))
+- **Fingerprint:** `ux-perfil-convite-2026-11-15`
+- **Commit/push:** não executados
+
+## 2026-11-15 — UX-HOME COMPLETED (pessoas-primeiro + microcopy)
+
+- **Incremento:** UX-HOME (UX-01..UX-03)
+- **Entrega:** cartões primeiro; Gerenciar família em Accordion; sem jargão/ids na home
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](f80afdb7-6106-48b7-a1f0-f487696e05a9))
+- **Fingerprint:** `ux-home-2026-11-15`
+- **Próximo:** UX-PERFIL-CONVITE
+- **Commit/push:** não executados
+
+## 2026-11-15 — UX-BASE COMPLETED (Mantine + Azul Contemporâneo)
+
+- **Incremento:** UX-BASE (UX-06 + base UX-14)
+- **Entrega:** Mantine 8, tema, providers, PostCSS, feedback compartilhado, tokens Azul Contemporâneo
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](18595357-cc53-4cd6-a487-4c3b9d6058bb))
+- **Evidências:** `qg1-typecheck-ux-base.txt`, `qg2-build-ux-base.txt`
+- **Fingerprint:** `ux-base-2026-11-15`
+- **Próximo:** UX-HOME
+- **Commit/push:** não executados
+
+## 2026-11-15 — Planejamento consolidação UX/UI (UX-01..UX-14)
+
+- **Skill:** `module-planning`
+- **Fontes:** `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`, `REVISAO-MODULOS-01-02.md`, `DIRETRIZES-PROXIMOS-MODULOS-E-EXECUCAO.md`
+- **Reconciliação:** `develop` limpa = `origin/develop` @ `9083b92`; pacote QA anterior COMPLETED
+- **Viabilidade Mantine:** PROSSEGUIR com v8 (`@mantine/core` + hooks + notifications); stack Next 15/React 19; sem lib concorrente
+- **Incrementos:** UX-BASE → UX-HOME → UX-PERFIL-CONVITE → UX-CUIDADOS-ROTINA → UX-CUIDADOS-LISTAS → UX-MEDICAMENTO (possível NEEDS_DECISION)
+- **Fora de escopo:** módulos 03/04 nesta execução
+- **Commit/push:** não executados
 
 ## 2026-11-15 — Correção auth/autorização COMPLETED (SA-01..SA-04)
 

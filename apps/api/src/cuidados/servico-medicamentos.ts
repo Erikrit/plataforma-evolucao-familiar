@@ -13,13 +13,36 @@ import {
   type SituacaoDose,
 } from "./permissoes-cuidados";
 
-type EntradaMedicamento = {
-  nome?: string;
-  instrucoes?: string;
+type EntradaMetadadosProgramacao = {
   horarios?: string[];
   frequencia?: string;
+  /** CUI-F01 v1.3 */
+  primeiroHorario?: string;
+  dosesPorDia?: number;
+  duracaoTipo?: "continua" | "dias" | string;
+  duracaoDias?: number | null;
+  horariosConferidos?: boolean;
+  /** Opcional: só para auxiliar sugestão matemática quando a prescrição traz intervalo explícito. */
+  intervaloHoras?: number | null;
+};
+
+type EntradaMedicamento = EntradaMetadadosProgramacao & {
+  nome?: string;
+  instrucoes?: string;
   anexoIds?: string[];
   ativar?: boolean;
+};
+
+type MetadadosProgramacaoResolvidos = {
+  horarios: string[];
+  frequencia: string;
+  primeiroHorario: string;
+  dosesPorDia: number;
+  duracaoTipo: "continua" | "dias";
+  duracaoDias: number | null;
+  horariosConferidos: boolean;
+  intervaloHoras: number | null;
+  vigenciaFim: Date | null;
 };
 
 @Injectable()
@@ -71,13 +94,12 @@ export class ServicoMedicamentos {
     const nome = (entrada.nome ?? "").trim();
     if (!nome) throw new BadRequestException("Nome do medicamento é obrigatório.");
 
-    const horarios = this.normalizarHorarios(entrada.horarios);
-    if (horarios.length === 0) {
-      throw new BadRequestException("Informe ao menos um horário.");
-    }
-
     const ativar = Boolean(entrada.ativar);
     const agora = new Date();
+    const meta = this.resolverMetadadosProgramacao(entrada, {
+      exigirConferencia: ativar,
+      vigenciaInicio: agora,
+    });
 
     const medicamento = await this.prisma.$transaction(async (tx) => {
       const criado = await tx.medicamento.create({
@@ -90,9 +112,16 @@ export class ServicoMedicamentos {
           ativadoEm: ativar ? agora : null,
           programacoes: {
             create: {
-              horarios,
-              frequencia: (entrada.frequencia ?? "diaria").trim() || "diaria",
+              horarios: meta.horarios,
+              frequencia: meta.frequencia,
+              primeiroHorario: meta.primeiroHorario,
+              dosesPorDia: meta.dosesPorDia,
+              duracaoTipo: meta.duracaoTipo,
+              duracaoDias: meta.duracaoDias,
+              horariosConferidos: meta.horariosConferidos,
+              intervaloHoras: meta.intervaloHoras,
               vigenciaInicio: agora,
+              vigenciaFim: meta.vigenciaFim,
               criadoPorId: usuario.id,
             },
           },
@@ -144,6 +173,26 @@ export class ServicoMedicamentos {
     if (med.status === "encerrado") {
       throw new BadRequestException("Medicamento encerrado não pode ser reativado neste fluxo.");
     }
+    const programacao = await this.prisma.programacaoMedicamento.findFirst({
+      where: { medicamentoId: med.id, vigenciaFim: null },
+      orderBy: { vigenciaInicio: "desc" },
+    });
+    if (!programacao) {
+      throw new BadRequestException("Não há programação vigente para ativar.");
+    }
+    const legadoPreV13 =
+      programacao.primeiroHorario == null && programacao.dosesPorDia == null;
+    if (!programacao.horariosConferidos && !legadoPreV13) {
+      throw new BadRequestException(
+        "Confira os horários com a orientação vigente antes de ativar.",
+      );
+    }
+    if (!programacao.horariosConferidos && legadoPreV13) {
+      await this.prisma.programacaoMedicamento.update({
+        where: { id: programacao.id },
+        data: { horariosConferidos: true },
+      });
+    }
     await this.prisma.medicamento.update({
       where: { id: med.id },
       data: { status: "ativo", ativadoEm: new Date(), suspensoEm: null },
@@ -154,14 +203,15 @@ export class ServicoMedicamentos {
   async alterarProgramacao(
     medicamentoId: string,
     usuario: UsuarioAutenticado,
-    entrada: { horarios?: string[]; frequencia?: string },
+    entrada: EntradaMetadadosProgramacao,
   ) {
     const med = await this.carregarMedicamentoGerenciavel(medicamentoId, usuario);
-    const horarios = this.normalizarHorarios(entrada.horarios);
-    if (horarios.length === 0) {
-      throw new BadRequestException("Informe ao menos um horário.");
-    }
     const agora = new Date();
+    const meta = this.resolverMetadadosProgramacao(entrada, {
+      // Programação vigente alimenta lembretes; exige conferência salvo legado só-horarios.
+      exigirConferencia: true,
+      vigenciaInicio: agora,
+    });
     await this.prisma.$transaction(async (tx) => {
       await tx.programacaoMedicamento.updateMany({
         where: {
@@ -173,9 +223,16 @@ export class ServicoMedicamentos {
       await tx.programacaoMedicamento.create({
         data: {
           medicamentoId: med.id,
-          horarios,
-          frequencia: (entrada.frequencia ?? "diaria").trim() || "diaria",
+          horarios: meta.horarios,
+          frequencia: meta.frequencia,
+          primeiroHorario: meta.primeiroHorario,
+          dosesPorDia: meta.dosesPorDia,
+          duracaoTipo: meta.duracaoTipo,
+          duracaoDias: meta.duracaoDias,
+          horariosConferidos: meta.horariosConferidos,
+          intervaloHoras: meta.intervaloHoras,
           vigenciaInicio: agora,
+          vigenciaFim: meta.vigenciaFim,
           criadoPorId: usuario.id,
         },
       });
@@ -434,12 +491,113 @@ export class ServicoMedicamentos {
     });
   }
 
+  private resolverMetadadosProgramacao(
+    entrada: EntradaMetadadosProgramacao,
+    opcoes: { exigirConferencia: boolean; vigenciaInicio: Date },
+  ): MetadadosProgramacaoResolvidos {
+    const horarios = this.normalizarHorarios(entrada.horarios);
+    if (horarios.length === 0) {
+      throw new BadRequestException("Informe ao menos um horário.");
+    }
+
+    const primeiroHorario = this.normalizarUmHorario(
+      entrada.primeiroHorario ?? horarios[0],
+    );
+    if (!primeiroHorario) {
+      throw new BadRequestException("Informe o primeiro horário.");
+    }
+
+    const dosesPorDia =
+      entrada.dosesPorDia !== undefined && entrada.dosesPorDia !== null
+        ? Number(entrada.dosesPorDia)
+        : horarios.length;
+    if (!Number.isInteger(dosesPorDia) || dosesPorDia < 1 || dosesPorDia > 24) {
+      throw new BadRequestException("Quantidade de doses ao dia inválida.");
+    }
+    if (horarios.length !== dosesPorDia) {
+      throw new BadRequestException(
+        "Confira os horários: a quantidade deve coincidir com as doses ao dia.",
+      );
+    }
+    if (horarios[0] !== primeiroHorario) {
+      throw new BadRequestException(
+        "O primeiro horário conferido deve ser o mesmo informado no cadastro.",
+      );
+    }
+
+    const duracaoTipo = entrada.duracaoTipo === "dias" ? "dias" : "continua";
+    let duracaoDias: number | null = null;
+    if (duracaoTipo === "dias") {
+      duracaoDias = Number(entrada.duracaoDias);
+      if (!Number.isInteger(duracaoDias) || duracaoDias < 1) {
+        throw new BadRequestException(
+          "Informe a quantidade de dias da programação.",
+        );
+      }
+    }
+
+    const intervaloHoras =
+      entrada.intervaloHoras === undefined || entrada.intervaloHoras === null
+        ? null
+        : Number(entrada.intervaloHoras);
+    if (
+      intervaloHoras !== null &&
+      (!Number.isInteger(intervaloHoras) ||
+        intervaloHoras < 1 ||
+        intervaloHoras > 24)
+    ) {
+      throw new BadRequestException("Intervalo em horas inválido.");
+    }
+
+    const legadoSemMetadados =
+      entrada.dosesPorDia === undefined &&
+      entrada.primeiroHorario === undefined &&
+      entrada.duracaoTipo === undefined;
+    const horariosConferidos = legadoSemMetadados
+      ? true
+      : Boolean(entrada.horariosConferidos);
+    if (opcoes.exigirConferencia && !horariosConferidos) {
+      throw new BadRequestException(
+        "Confira os horários com a orientação vigente antes de ativar.",
+      );
+    }
+
+    let vigenciaFim: Date | null = null;
+    if (duracaoTipo === "dias" && duracaoDias) {
+      vigenciaFim = new Date(opcoes.vigenciaInicio);
+      vigenciaFim.setUTCDate(vigenciaFim.getUTCDate() + duracaoDias);
+    }
+
+    return {
+      horarios,
+      frequencia: (entrada.frequencia ?? "diaria").trim() || "diaria",
+      primeiroHorario,
+      dosesPorDia,
+      duracaoTipo,
+      duracaoDias,
+      horariosConferidos,
+      intervaloHoras,
+      vigenciaFim,
+    };
+  }
+
+  private normalizarUmHorario(valor?: string | null): string | null {
+    if (!valor) return null;
+    const limpo = String(valor).trim();
+    return /^\d{2}:\d{2}$/.test(limpo) ? limpo : null;
+  }
+
   private normalizarHorarios(horarios?: string[]): string[] {
     if (!Array.isArray(horarios)) return [];
-    const limpos = horarios
-      .map((h) => String(h).trim())
-      .filter((h) => /^\d{2}:\d{2}$/.test(h));
-    return [...new Set(limpos)].sort();
+    const vistos = new Set<string>();
+    const limpos: string[] = [];
+    for (const h of horarios) {
+      const limpo = this.normalizarUmHorario(h);
+      if (!limpo || vistos.has(limpo)) continue;
+      vistos.add(limpo);
+      limpos.push(limpo);
+    }
+    return limpos;
   }
 
   private async exigirPessoaVisivel(pessoaId: string, usuario: UsuarioAutenticado) {
