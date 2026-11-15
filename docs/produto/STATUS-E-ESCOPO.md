@@ -5,8 +5,8 @@
 | Elemento | Situação verificada |
 |---|---|
 | Visão e princípios | Aprovados |
-| Módulo 01 — Fundação Familiar | Especificação v1.0; **implementação parcial**: bootstrap FF-01 e fluxo mínimo FF-02 presentes |
-| Módulo 02 — Cuidados da Vovó | Especificação v1.1 com cadastro simplificado aprovado; **sem implementação funcional de cuidados constatada** |
+| Módulo 01 — Fundação Familiar | Especificação v1.1 (experiência móvel/privacidade aprovadas); **implementação parcial** na base previamente inspecionada |
+| Módulo 02 — Cuidados da Vovó | Especificação v1.3 (cadastro, lembretes e experiência móvel/privacidade aprovados); **sem implementação funcional de cuidados constatada na base inspecionada** |
 | Módulo 03 — Laurinha | Especificação funcional **v1.1 aprovada**; sem implementação observada |
 | Módulo 04 — Evolução Familiar | Especificação funcional **v1.1 aprovada**; sem implementação observada |
 | Arquitetura | Next.js, NestJS, Prisma, PostgreSQL e Docker Compose já presentes no código; demais decisões preliminares |
@@ -34,6 +34,10 @@
 **Processo de desenvolvimento:** `docs/esteira/`, `.cursor/`, `AGENTS.md`, scripts correspondentes. Existe no repositório por decisão prévia, mas sua especificação e operação são tratadas em outro contexto. **Não houve alterações nesses arquivos nesta revisão.**
 
 ## Decisões funcionais aprovadas em 2026-11-15
+
+- **Experiência móvel transversal:** uso prioritário em celular e adequado ao computador, navegação centrada nas pessoas, botões legíveis e poucos toques; mesma estrutura básica, conteúdo e operações filtrados por autorização.
+- **Privacidade funcional:** perfis prontos com ajuste opcional; vínculo familiar e administração não equivalem a acesso sensível; Vovó compreende quem acompanha seus cuidados e participa das escolhas legítimas; colaboradora sem acesso automático a dados de Laurinha ou documentos clínicos completos.
+- **Notificações e conectividade:** avisos discretos por padrão, detalhamento sensível só com escolha e autorização; em falha de rede não declarar registro concluído. PWA versus aplicativo nativo fica para validação técnica e testes em dispositivos reais.
 
 - **Módulo 02 v1.2:** cadastro de medicamento por nome, primeiro horário, número de doses diárias e duração (contínua ou dias). Sugestões de horários editáveis apenas para conferência com prescrição, sem inferir intervalo terapêutico; frequências especiais em opções progressivas.
 - **Comportamento dos lembretes:** aviso nos horários confirmados, para destinatários escolhidos e autorizados; compromissos com data/hora podem ter aviso antecipado simples. Sem cobrança por falta de confirmação, sem divulgação indevida de informações sensíveis, e atualização de avisos futuros quando houver mudança/cancelamento. Canais e entrega efetiva ainda dependem de validação prática.
