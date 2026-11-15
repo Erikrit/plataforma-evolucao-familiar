@@ -35,7 +35,8 @@
 
 ## Decisões funcionais aprovadas em 2026-11-15
 
-- **Módulo 02 v1.1:** cadastro de medicamento por nome, primeiro horário, número de doses diárias e duração (contínua ou dias). Sugestões de horários editáveis apenas para conferência com prescrição, sem inferir intervalo terapêutico; frequências especiais em opções progressivas.
+- **Módulo 02 v1.2:** cadastro de medicamento por nome, primeiro horário, número de doses diárias e duração (contínua ou dias). Sugestões de horários editáveis apenas para conferência com prescrição, sem inferir intervalo terapêutico; frequências especiais em opções progressivas.
+- **Comportamento dos lembretes:** aviso nos horários confirmados, para destinatários escolhidos e autorizados; compromissos com data/hora podem ter aviso antecipado simples. Sem cobrança por falta de confirmação, sem divulgação indevida de informações sensíveis, e atualização de avisos futuros quando houver mudança/cancelamento. Canais e entrega efetiva ainda dependem de validação prática.
 
 - **Módulo 03 v1.1:** nome + dificuldade predefinida como simples, guardar para depois, registro Concluiu/Participou, histórico no Módulo 04, sem cadastro de não realização.
 - **Estrelas:** dificuldade simples = 5/3; média = 10/5; desafiadora = 15/8 (Concluiu/Participou). Cálculo automático, sem aprovação manual, sem reescrever créditos históricos.
