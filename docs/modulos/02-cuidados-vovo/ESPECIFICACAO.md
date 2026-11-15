@@ -1,6 +1,6 @@
 # Módulo 02 — Cuidados da Vovó
 
-**Versão:** especificação funcional v1.2 — cadastro simplificado e comportamento dos lembretes aprovados em 2026-11-15  
+**Versão:** especificação funcional v1.3 — cadastro, lembretes e experiência móvel/privacidade aprovados em 2026-11-15  
 **Status:** preparada para validação e desenvolvimento, sem implementação.  
 **Dependência:** Fundação Familiar.
 
@@ -71,7 +71,7 @@ Registrar atividades familiares realmente relevantes; conclusão rápida, observ
 - O sistema não presume que todos os familiares devam receber a mesma notificação. Os destinatários podem ser ajustados sem modificar a prescrição.
 - **Ausência de confirmação não gera cobrança repetida nem aviso automático afirmando que a dose não foi tomada.** Na rotina, a situação permanece *sem confirmação* até haver relato ou correção.
 - Confirmar, corrigir, suspender, encerrar ou alterar a programação deve manter os lembretes futuros coerentes com a programação vigente, sem duplicar avisos.
-- Notificações devem ser discretas e preservar a privacidade: a tela bloqueada não deve revelar dados médicos além do permitido pelo destinatário.
+- Notificações devem ser **discretas por padrão**, sem nome de medicamento na tela bloqueada; apresentação detalhada somente por escolha expressa e autorização adequada, considerando o risco de aparelhos compartilhados.
 
 **Consultas e exames**
 - Compromissos com data/hora podem receber aviso antecipado simples, direcionado somente a destinatários autorizados. O momento do aviso deve seguir uma escolha simples do usuário; não exigir configurações complexas.
@@ -92,6 +92,14 @@ Linha do tempo individual com doses, mudanças de programação, consultas, exam
 ### CUI-F10 — Resumo e PDF
 
 Período selecionável; distinguir previstas, informadas como tomadas, informadas como não tomadas e não confirmadas. Consultas, exames e observações pertinentes. Prévia antes de PDF. Sem inferência clínica.
+
+### CUI-F11 — Experiência móvel e autonomia
+
+- A Vovó visualiza uma rotina simples com o próximo cuidado e pode confirmar seu próprio relato quando tiver acesso; o cartão abre opções e não confirma automaticamente.
+- Responsáveis autorizados visualizam o acompanhamento relevante; colaboradora vê **somente** medicamentos, apoio e consultas atribuídos, sem navegar por documentos sensíveis ou dados de crianças sem autorização específica.
+- Botões legíveis, poucos toques e confirmação compreensível; a plataforma não impõe relatórios de turno.
+- A Vovó deve compreender quem recebe informações de seus cuidados e participar das escolhas de compartilhamento conforme sua autonomia e as autorizações legítimas.
+- Erro de rede não pode ser apresentado como confirmação de dose. Manter `sem confirmação` até registro confirmado e não gerar cobranças de ausência.
 
 ## 4. Fluxos essenciais
 
@@ -141,7 +149,10 @@ Concorrência de dois registros da mesma dose; reconfirmação; relato tardio; a
 - [ ] Consultas, exames e atividades de apoio com poucos campos.
 - [ ] Anexos privados acessíveis apenas com autorização.
 - [ ] Histórico e relatório derivados dos registros.
-- [ ] UX móvel validada com Vovó e colaboradora.
+- [ ] UX móvel validada com Vovó e colaboradora, sem navegação complexa ou cobranças de uso.
+- [ ] Vovó pode compreender destinatários e acessos aos seus cuidados, preservando sua autonomia.
+- [ ] Avisos são discretos por padrão; detalhamento sensível exige escolha expressa e autorização.
+- [ ] Falha de conexão não gera confirmação falsa de dose.
 - [ ] Cada ocorrência prevista ativa gera lembrete no horário conferido, apenas aos destinatários escolhidos e autorizados.
 - [ ] Falta de confirmação mantém *sem confirmação*, sem mensagens repetidas de cobrança ou inferência de não tomada.
 - [ ] Suspensões, encerramentos, alterações de horário e cancelamentos de consultas atualizam os avisos futuros.
