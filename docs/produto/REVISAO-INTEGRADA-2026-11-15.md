@@ -18,7 +18,7 @@
 ## Inconsistências encontradas e tratadas
 
 1. Documentos de status e README afirmavam que não havia código. **Corrigido** para implementação parcial com evidência do FF-01/FF-02.
-2. Módulos 03/04 continham resumos obsoletos e marcados como especificação pendente. **Substituídos** por especificações v1.1 completas, mas ainda **pendentes de aceite final**.
+2. Módulos 03/04 continham resumos obsoletos e marcados como especificação pendente. **Substituídos** por especificações v1.1 completas, **aprovadas funcionalmente em 2026-11-15**.
 3. Documento Mestre ainda falava em planejamento semanal e opção "não realizou" para Laurinha. **Atualizado** para "guardar para depois" e somente "Concluiu"/"Participou".
 4. Arquitetura conceitual ainda previa `desafio_planejado` com calendário e painéis separados. **Alinhada** à simplificação proposta.
 5. A ausência de autorização contextual na implementação não estava clara para consumidores da documentação. **Registrado** como pendência crítica.
@@ -33,10 +33,10 @@
 
 Não se trata de falha de aceite completo do módulo 01: ele ainda está em implementação. **Não declarar Fundação Familiar pronta** com base apenas no FF-02.
 
-## Decisões funcionais ainda pendentes de aceite
+## Decisões funcionais aprovadas em 2026-11-15
 
 - Módulo 03 v1.1: nome mínimo; dificuldade simples predefinida; guardar para depois; resultado somente Concluiu/Participou; sem cadastro de não realização.
-- Estrelas v1.1: simples 5/3, média 10/5, desafiadora 15/8 (**valores ilustrativos, aguardam confirmação**).
+- Estrelas v1.1 **confirmadas**: simples 5/3, média 10/5, desafiadora 15/8 (Concluiu/Participou). Valores históricos preservados.
 - Módulo 04 v1.1: histórico individual + resumo contextual; poucos destaques na home; PDF como ação do resumo.
 
 ## Preservação dos princípios
@@ -48,4 +48,4 @@ Não se trata de falha de aceite completo do módulo 01: ele ainda está em impl
 
 ## Regra de mudança
 
-A adoção desta proposta v1.1 depende de aceite do produto. A existência do arquivo em branch de revisão **não autoriza implementação automática de novas funcionalidades**, nem altera a branch de trabalho `feature/modulo1` até revisão/integração.
+As propostas funcionais v1.1 foram **aprovadas pelo responsável do produto**. A aprovação de produto **não equivale a implementação concluída** nem integra automaticamente a branch de trabalho `feature/modulo1`: a incorporação documental segue revisão/merge separado.
