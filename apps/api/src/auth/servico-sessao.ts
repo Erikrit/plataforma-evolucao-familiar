@@ -74,4 +74,11 @@ export class ServicoSessao {
     await this.prisma.sessaoProvisoria.deleteMany({ where: { token } });
     return { ok: true };
   }
+
+  async invalidarSessoesDoUsuario(usuarioId: string) {
+    const resultado = await this.prisma.sessaoProvisoria.deleteMany({
+      where: { usuarioId },
+    });
+    return { invalidadas: resultado.count };
+  }
 }

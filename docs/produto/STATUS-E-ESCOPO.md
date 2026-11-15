@@ -1,56 +1,43 @@
 # Estado das decisões e escopo
 
-**Revisão:** 2026-11-15. **Base inspecionada:** `feature/modulo1` no commit `2c015c530736e9a1f3b51756f144487246e8c043`. A documentação de produto e a implementação têm ciclos distintos.
+**Revisão reconciliada:** 2026-11-15. **Referência de implementação:** `develop`. **Fonte funcional:** especificações aprovadas neste PR. Evidências de testes são registros locais não reexecutados nesta reconciliação.
 
-| Elemento | Situação verificada |
+| Elemento | Situação |
 |---|---|
 | Visão e princípios | Aprovados |
-| Módulo 01 — Fundação Familiar | Especificação v1.1 (experiência móvel/privacidade aprovadas); **implementação parcial** na base previamente inspecionada |
-| Módulo 02 — Cuidados da Vovó | Especificação v1.3 (cadastro, lembretes e experiência móvel/privacidade aprovados); **sem implementação funcional de cuidados constatada na base inspecionada** |
-| Módulo 03 — Laurinha | Especificação funcional **v1.1 aprovada**; sem implementação observada |
-| Módulo 04 — Evolução Familiar | Especificação funcional **v1.1 aprovada**; sem implementação observada |
-| Arquitetura | Next.js, NestJS, Prisma, PostgreSQL e Docker Compose já presentes no código; demais decisões preliminares |
-| Autorização contextual/convites | **Não implementados** no código inspecionado (só verificação básica de `familiaId` por sessão) |
-| Autenticação | **Provisória**, com token de sessão no banco e `localStorage` no cliente |
-| Notificações, anexos privados e PDFs | Não constatados como funcionalidades implementadas |
-| Validação real de UX | Pendente |
+| Módulo 01 — Fundação Familiar | Especificação v1.1 aprovada; FF-01..FF-06 implementados localmente com QG-3 PASS registrado; privacidade/UX v1.1, autenticação definitiva e homologação pendentes |
+| Módulo 02 — Cuidados da Vovó | Especificação v1.3 aprovada; CV-01..CV-06 implementados localmente, QG-3 PASS registrado; cadastro revisado, notificações reais (ACE-C12) e segurança pendentes |
+| Módulo 03 — Desenvolvimento da Laurinha | Especificação funcional v1.1 aprovada; não implementado |
+| Módulo 04 — Evolução Familiar | Especificação funcional v1.1 aprovada; histórico e resumo parciais já existem no módulo 02, sem módulo 04 completo |
+| Autenticação | Sessão provisória e token no localStorage, inadequados para uso real sensível sem revisão |
+| Autorizações | Código contextual presente, mas acesso de administrador a cuidados sensíveis requer correção antes de uso real |
+| Interface móvel | Estrutura mobile-first presente; sem homologação com usuários reais |
+| Testes | Evidências locais dos módulos 01 e 02 em `docs/esteira/estado/`; não reexecutadas nesta integração |
+| Deploy | Nenhum deployment homologado |
 
-## Evidências verificadas no repositório
+## Evidências e limites
 
-- `apps/api/prisma/schema.prisma`: `Familia`, `Pessoa`, `Usuario`, `SessaoProvisoria`, ainda sem modelos de autorização contextual.
-- `apps/api/src/auth/`: entrada, consulta de sessão e saída provisórias.
-- `apps/api/src/pessoas/`: listagem e criação de pessoas por família; nome obrigatório apenas.
-- `apps/web/src/componentes/painel-fundacao.tsx`: formulário de login provisório, cadastro com nome e listagem simples de pessoas, ainda sem cartões individuais concluídos.
-- `docs/esteira/estado/evidencia-ff-02.json` registra PASS em typecheck, lint, build e smoke FF-02. **São evidências registradas no repositório; esta revisão não executou testes ou implantou a aplicação.**
-
-## Atenção antes do uso com dados reais
-
-**Impedimento de segurança:** a autenticação ainda é experimental. O frontend guarda token em `localStorage`, pré-preenche credenciais fictícias de desenvolvimento, e o backend não possui autorização contextual por pessoa/módulo. O repositório está **público**. Não inserir informações médicas, dados privados de crianças ou credenciais reais até concluir autenticação segura, autorização contextual e validações apropriadas. Credenciais seed são apenas para desenvolvimento local; nunca para produção.
-
-## Separação de escopos
-
-**Produto:** `docs/produto/`, `docs/modulos/` e decisões funcionais pertinentes de `docs/arquitetura/`. Esta conversa só trata do produto.
-
-**Processo de desenvolvimento:** `docs/esteira/`, `.cursor/`, `AGENTS.md`, scripts correspondentes. Existe no repositório por decisão prévia, mas sua especificação e operação são tratadas em outro contexto. **Não houve alterações nesses arquivos nesta revisão.**
+- Código em `apps/api/`, `apps/web/`; scripts smoke por incremento e resultados em `docs/esteira/estado/`.
+- `docs/esteira/estado/evidencia-modulo-01.json` e `evidencia-modulo-02.json` registram QG-3 PASS; não equivalem a validação independente ou em dispositivo real.
+- Repositório público: não incluir dados reais de crianças, receitas, exames, credenciais ou segredos.
+- Sem nova execução de testes, alteração de código, configuração de esteira ou deploy como parte deste PR documental.
 
 ## Decisões funcionais aprovadas em 2026-11-15
 
-- **Experiência móvel transversal:** uso prioritário em celular e adequado ao computador, navegação centrada nas pessoas, botões legíveis e poucos toques; mesma estrutura básica, conteúdo e operações filtrados por autorização.
-- **Privacidade funcional:** perfis prontos com ajuste opcional; vínculo familiar e administração não equivalem a acesso sensível; Vovó compreende quem acompanha seus cuidados e participa das escolhas legítimas; colaboradora sem acesso automático a dados de Laurinha ou documentos clínicos completos.
-- **Notificações e conectividade:** avisos discretos por padrão, detalhamento sensível só com escolha e autorização; em falha de rede não declarar registro concluído. PWA versus aplicativo nativo fica para validação técnica e testes em dispositivos reais.
+- Experiência móvel centrada em pessoas, poucos toques, conectividade instável tratada com mensagens honestas e notificações discretas.
+- Perfis de acesso prontos e ajustáveis; parentesco e papel de administrador **não** liberam dados médicos/infantis indiscriminadamente.
+- Cuidados v1.3: primeiro horário, quantidade de doses, duração, sugestões matemáticas somente quando clinicamente compatíveis e conferência explícita antes dos lembretes. Não deduzir intervalo terapêutico.
+- Lembretes aos autorizados, sem cobrança; ACE-C12 só após validação em dispositivos reais.
+- Desenvolvimento v1.1: guardar brincadeiras sem prazo; registrar somente Concluiu/Participou, sem cobrança por não realização. Estrelas: simples 5/3, média 10/5, desafiadora 15/8.
+- Evolução v1.1: histórico individual e resumo da pessoa com PDF sob demanda; poucos destaques na home.
 
-- **Módulo 02 v1.2:** cadastro de medicamento por nome, primeiro horário, número de doses diárias e duração (contínua ou dias). Sugestões de horários editáveis apenas para conferência com prescrição, sem inferir intervalo terapêutico; frequências especiais em opções progressivas.
-- **Comportamento dos lembretes:** aviso nos horários confirmados, para destinatários escolhidos e autorizados; compromissos com data/hora podem ter aviso antecipado simples. Sem cobrança por falta de confirmação, sem divulgação indevida de informações sensíveis, e atualização de avisos futuros quando houver mudança/cancelamento. Canais e entrega efetiva ainda dependem de validação prática.
+## Priorização de acompanhamento
 
-- **Módulo 03 v1.1:** nome + dificuldade predefinida como simples, guardar para depois, registro Concluiu/Participou, histórico no Módulo 04, sem cadastro de não realização.
-- **Estrelas:** dificuldade simples = 5/3; média = 10/5; desafiadora = 15/8 (Concluiu/Participou). Cálculo automático, sem aprovação manual, sem reescrever créditos históricos.
-- **Módulo 04 v1.1:** histórico individual e resumo contextual, poucos destaques familiares, PDF como ação do resumo.
+1. Reconciliar documentação aprovada com o código existente, preservando status e evidências.
+2. Corrigir autenticação e autorização de dados sensíveis antes de usar dados reais.
+3. Adequar UX de cadastro de medicamentos, notificações e testar nos dispositivos previstos.
+4. Planejar o módulo 03 com base na especificação v1.1.
 
-## Validações ainda pendentes
+## Separação de responsabilidades
 
-- Experiência de uso real com a família e confiabilidade de lembretes nos dispositivos previstos.
-- Controles de autenticação e autorização antes do uso de informações reais sensíveis.
-
-## Ordem funcional
-
-01 Fundação Familiar → 02 Cuidados → 03 Laurinha → 04 Evolução, porém autoria, autorização e histórico mínimo não devem ser adiados até o quarto módulo.
+**Produto:** `docs/produto/`, `docs/modulos/`, `docs/arquitetura/`. **Esteira:** `docs/esteira/`, `.cursor/`, `AGENTS.md`, `scripts/esteira/`. A documentação aprovada não prova implementação e a esteira não modifica requisitos automaticamente.

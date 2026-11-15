@@ -5,8 +5,8 @@ export default function PaginaInicial() {
     <main>
       <h1>Plataforma de Evolução Familiar</h1>
       <p>
-        Fundação Familiar · FF-02 — cadastro de pessoa com nome e sessão
-        provisória do administrador.
+        Fundação Familiar — pessoas, autorizações, convites e página inicial
+        centrada em cartões.
       </p>
       <PainelFundacao />
     </main>

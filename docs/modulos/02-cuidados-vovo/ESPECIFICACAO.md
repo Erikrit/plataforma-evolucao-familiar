@@ -1,7 +1,7 @@
 # Módulo 02 — Cuidados da Vovó
 
 **Versão:** especificação funcional v1.3 — cadastro, lembretes e experiência móvel/privacidade aprovados em 2026-11-15  
-**Status:** preparada para validação e desenvolvimento, sem implementação.  
+**Status:** CV-01..CV-06 presentes em `develop` com evidências locais QG-3 PASS; as alterações de cadastro/lembretes/privacidade da v1.3 ainda não estão integralmente implementadas. ACE-C12 pendente de teste em dispositivos reais.  
 **Dependência:** Fundação Familiar.
 
 ## 1. Objetivo

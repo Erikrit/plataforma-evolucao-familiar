@@ -1,6 +1,6 @@
 # Documento Mestre do Produto — v1.0
 
-**Estado:** baseline funcional do produto; **implementação parcial** do Módulo 01 verificada por inspeção da branch `feature/modulo1` em 2026-11-15. Revisões funcionais v1.1 dos módulos 03 e 04 aprovadas em 2026-11-15; implementação não concluída.  
+**Estado:** baseline funcional aprovada; módulos 01 e 02 implementados localmente em `develop` com evidências QG-3 registradas e lacunas de segurança/UX. Revisões funcionais v1.1 dos módulos 03 e 04 aprovadas em 2026-11-15, sem implementação integral. Sem deploy ou homologação.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
 
 ## 1. Visão

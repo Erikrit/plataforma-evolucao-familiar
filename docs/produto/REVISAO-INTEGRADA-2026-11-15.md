@@ -1,4 +1,4 @@
-# Revisão integrada do produto e do estado do repositório — 2026-11-15
+> **Registro histórico:** a inspeção abaixo refere-se exclusivamente ao estado anterior da branch `feature/modulo1` em `2c015c530736e9a1f3b51756f144487246e8c043`. Não descreve o estado atual de `develop`. Para situação corrente, consultar [STATUS-E-ESCOPO.md](STATUS-E-ESCOPO.md).\n\n# Revisão integrada do produto e do estado do repositório — 2026-11-15
 
 **Base de referência:** `feature/modulo1` @ `2c015c530736e9a1f3b51756f144487246e8c043`.  
 **Escopo desta revisão:** somente documentos do produto e arquitetura funcional. Nenhum código, configuração da esteira, merge ou deploy foi alterado.

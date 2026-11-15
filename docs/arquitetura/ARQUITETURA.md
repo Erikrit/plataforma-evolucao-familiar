@@ -1,6 +1,6 @@
 # Arquitetura preliminar — Plataforma de Evolução Familiar
 
-**Situação:** arquitetura proposta com bootstrap e fluxo parcial do módulo 01 já presentes na branch `feature/modulo1`; demais contratos e módulos não estão implementados. Ver `docs/produto/STATUS-E-ESCOPO.md`.
+**Situação:** monólito local em `develop` com módulos 01 e 02 implementados e evidências de testes registradas, sem homologação para dados reais; módulos 03 e 04 ainda não implementados integralmente. Contratos e segurança definitiva pendentes. Ver `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## Estrutura lógica
 

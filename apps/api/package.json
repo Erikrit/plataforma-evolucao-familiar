@@ -11,7 +11,18 @@
     "prisma:push": "prisma db push",
     "db:ping": "node scripts/ping-db.mjs",
     "db:seed": "node prisma/seed.mjs",
-    "smoke:ff02": "node scripts/smoke-ff02.mjs"
+    "smoke:ff02": "node scripts/smoke-ff02.mjs",
+    "smoke:ff03": "node scripts/smoke-ff03.mjs",
+    "smoke:ff04": "node scripts/smoke-ff04.mjs",
+    "smoke:ff05": "node scripts/smoke-ff05.mjs",
+    "smoke:modulo-01": "node scripts/smoke-modulo-01.mjs",
+    "smoke:cv01": "node scripts/smoke-cv01.mjs",
+    "smoke:cv02": "node scripts/smoke-cv02.mjs",
+    "smoke:cv03": "node scripts/smoke-cv03.mjs",
+    "smoke:cv04": "node scripts/smoke-cv04.mjs",
+    "smoke:cv05": "node scripts/smoke-cv05.mjs",
+    "smoke:cv06": "node scripts/smoke-cv06.mjs",
+    "smoke:modulo-02": "node scripts/smoke-modulo-02.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.12",

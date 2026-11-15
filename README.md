@@ -1,6 +1,6 @@
 # Plataforma de Evolução Familiar
 
-> **Status:** documentação de produto e implementação parcial da Fundação Familiar na branch `feature/modulo1`. Autenticação provisória: somente ambiente local de teste, sem dados reais.
+> **Status:** implementação local dos módulos 01 e 02 presente em `develop`, com evidências QG-3 registradas; módulos 03 e 04 ainda não implementados integralmente. Autenticação provisória, UX e notificações ainda não homologadas. Sem deploy; não usar dados reais sensíveis.
 
 Plataforma para apoiar o cuidado, as rotinas e o desenvolvimento de integrantes da família, preservando o histórico ao longo do tempo — sem transformar o cotidiano em prestação de contas.
 
@@ -58,11 +58,11 @@ npm run dev:web
 PostgreSQL do Compose escuta em `localhost:5433` (evita conflito com instalações locais na 5432).  
 Healthcheck da API: `GET http://localhost:3001/saude`.  
 Admin local provisório: ver `PEF_ADMIN_*` em `.env.example` (dados fictícios).  
-Smoke FF-02 (API no ar): `npm run smoke:ff02`.
+Smoke FF-02 (API no ar): `npm run smoke:ff02`. O módulo 02 possui scripts smoke em `apps/api/scripts/` e evidências em `docs/esteira/estado/`, mas a suíte não foi reexecutada nesta integração.
 
 ## Situação e restrições
 
-Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar funcionalidades previstas, implementadas e ainda pendentes. O código atual não oferece proteção adequada para dados reais da família: sessões provisórias e autorizações contextuais ainda incompletas. As especificações funcionais v1.1 dos módulos 03 e 04, incluindo os valores de estrelas (5/3, 10/5, 15/8 por dificuldade e resultado), foram aprovadas em 2026-11-15. A aprovação não significa que tenham sido implementadas.
+Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar funcionalidades previstas, implementadas e ainda pendentes. O código atual não oferece proteção adequada para dados reais da família: sessões provisórias e autorização de informações sensíveis ainda necessitam revisão; a implementação local do módulo 02 não implica homologação. As especificações funcionais v1.1 dos módulos 03 e 04, incluindo os valores de estrelas (5/3, 10/5, 15/8 por dificuldade e resultado), foram aprovadas em 2026-11-15. A aprovação não significa que tenham sido implementadas.
 
 ## Privacidade
 

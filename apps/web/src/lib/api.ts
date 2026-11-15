@@ -8,6 +8,28 @@ export type PessoaResumo = {
   emailConta?: string | null;
 };
 
+export type CartaoInicio = {
+  pessoaId: string;
+  nome: string;
+  vinculo: string | null;
+  possuiConta: boolean;
+  resumo: string;
+};
+
+export type AutorizacaoResumo = {
+  id: string;
+  responsabilidade: string;
+  pessoaAlvoId: string | null;
+  pessoaAlvo?: { id: string; nome: string } | null;
+};
+
+export type InicioResposta = {
+  familiaId: string;
+  cartoes: CartaoInicio[];
+  autorizacoes: AutorizacaoResumo[];
+  filtradoPorAutorizacao: boolean;
+};
+
 export type SessaoResposta = {
   token: string;
   usuario: {
@@ -16,6 +38,17 @@ export type SessaoResposta = {
     pessoa: { id: string; nome: string; familiaId: string };
   };
 };
+
+async function lerErro(resposta: Response) {
+  const texto = await resposta.text();
+  try {
+    const json = JSON.parse(texto) as { message?: string | string[] };
+    if (Array.isArray(json.message)) return json.message.join("; ");
+    return json.message ?? texto;
+  } catch {
+    return texto || `HTTP ${resposta.status}`;
+  }
+}
 
 export async function entrar(
   email: string,
@@ -26,24 +59,20 @@ export async function entrar(
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ email, senha }),
   });
-  if (!resposta.ok) {
-    throw new Error("Não foi possível entrar.");
-  }
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
   return (await resposta.json()) as SessaoResposta;
 }
 
-export async function listarPessoas(
+export async function obterInicio(
   familiaId: string,
   token: string,
-): Promise<PessoaResumo[]> {
-  const resposta = await fetch(`${base()}/familias/${familiaId}/pessoas`, {
+): Promise<InicioResposta> {
+  const resposta = await fetch(`${base()}/familias/${familiaId}/inicio`, {
     headers: { "x-sessao-token": token },
     cache: "no-store",
   });
-  if (!resposta.ok) {
-    throw new Error("Falha ao listar pessoas.");
-  }
-  return (await resposta.json()) as PessoaResumo[];
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return (await resposta.json()) as InicioResposta;
 }
 
 export async function criarPessoa(
@@ -59,9 +88,49 @@ export async function criarPessoa(
     },
     body: JSON.stringify({ nome }),
   });
-  if (!resposta.ok) {
-    const corpo = await resposta.text();
-    throw new Error(corpo || "Falha ao cadastrar pessoa.");
-  }
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
   return (await resposta.json()) as PessoaResumo;
+}
+
+export async function criarConvite(
+  familiaId: string,
+  token: string,
+  corpo: {
+    email: string;
+    nomeConvidado?: string;
+    responsabilidade: string;
+    pessoaAlvoId: string;
+  },
+) {
+  const resposta = await fetch(`${base()}/familias/${familiaId}/convites`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-sessao-token": token,
+    },
+    body: JSON.stringify(corpo),
+  });
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return (await resposta.json()) as { token: string; email: string };
+}
+
+export async function concederAutorizacao(
+  familiaId: string,
+  token: string,
+  corpo: {
+    usuarioId: string;
+    responsabilidade: string;
+    pessoaAlvoId?: string | null;
+  },
+) {
+  const resposta = await fetch(`${base()}/familias/${familiaId}/autorizacoes`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-sessao-token": token,
+    },
+    body: JSON.stringify(corpo),
+  });
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return resposta.json();
 }
