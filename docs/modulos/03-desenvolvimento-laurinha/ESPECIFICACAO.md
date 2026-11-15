@@ -1,7 +1,7 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
 **Versão:** 1.1 — revisão funcional simplificada  
-**Estado:** proposta revisada para aceite final; substitui o resumo v1.0.  
+**Estado:** especificação funcional v1.1 aprovada para o MVP; substitui o resumo v1.0.  
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
 
@@ -60,7 +60,7 @@ Observação qualitativa opcional, nunca exigida. O sistema acrescenta pessoa, d
 
 Sem aprovação manual, sem envio de quantidade pelo frontend, sem ranking, sequência diária, bônus por assiduidade ou perda de estrelas por emoções/comportamento.
 
-**Tabela simples proposta para aceite final:**
+**Tabela de estrelas aprovada para o MVP:**
 
 | Dificuldade | Concluiu | Participou |
 |---|---:|---:|
@@ -68,7 +68,7 @@ Sem aprovação manual, sem envio de quantidade pelo frontend, sem ranking, sequ
 | Média | 10 | 5 |
 | Desafiadora | 15 | 8 |
 
-A dificuldade vem predefinida nas atividades do catálogo e em simples nas personalizadas. Valores são **proposta v1.1, ainda não aprovados explicitamente**. A regra deve ser transparente; o valor concedido em cada execução é preservado mesmo se valores futuros mudarem. O registro de participação e o movimento de estrelas formam uma operação consistente.
+A dificuldade vem predefinida nas atividades do catálogo e em simples nas personalizadas. **Valores aprovados em 2026-11-15.** Mudanças futuras exigem decisão explícita de produto e não alteram créditos históricos. A regra deve ser transparente; o valor concedido em cada execução é preservado mesmo se valores futuros mudarem. O registro de participação e o movimento de estrelas formam uma operação consistente.
 
 ### DEV-F06 — Estrelas e recompensas
 
