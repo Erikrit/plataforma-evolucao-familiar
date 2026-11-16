@@ -1,6 +1,6 @@
 # Documento Mestre do Produto — v1.0
 
-**Estado:** baseline funcional aprovada; módulos 01 e 02 implementados localmente em `develop` com evidências QG-3 registradas e lacunas de segurança/UX. Revisões funcionais v1.1 dos módulos 03 e 04 aprovadas em 2026-11-15, sem implementação integral. Sem deploy ou homologação.  
+**Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
 
 ## 1. Visão
