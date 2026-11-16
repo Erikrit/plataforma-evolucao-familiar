@@ -1,6 +1,6 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.1 — experiência móvel e privacidade funcional aprovadas em 2026-11-15  
+**Versão:** especificação funcional v1.2 — experiência móvel e gestão simplificada de acessos (CT-20261116-001 aprovado em 2026-11-16)  
 **Status funcional:** especificação aprovada. Estado do código, evidências e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
@@ -31,7 +31,17 @@ Somente administrador inicial convida no MVP. Vincular conta a pessoa existente 
 
 ### FUN-04 — Autorizações
 
-Perfis predefinidos: administrador, responsável por cuidados, responsável por desenvolvimento, colaboradora de cuidados, participante limitado. Responsabilidades acumuláveis e restritas a contextos. Revogação imediata das operações e sessões afetadas; histórico preservado.
+**Experiência do MVP:** a família gerencia **pessoas, responsabilidades simples e quem acompanha quem**, utilizando três perfis apresentados na interface: **Administrador**, **Responsável** e **Colaborador**. O sistema reutiliza internamente as autorizações contextualizadas por pessoa, domínio e operação já existentes; os três perfis são uma **simplificação de apresentação**, não novos papéis ou novas concessões automáticas.
+
+- **Administrador:** organiza pessoas, convites e vínculos de acompanhamento. Pode consultar **metadados mínimos das autorizações que administra** (nome/identificação compreensível do participante, pessoa acompanhada, papel e situação ativa), mas **não recebe acesso automático** a dados clínicos ou infantis.
+- **Responsável:** acompanha e organiza as atividades da **pessoa para a qual possui autorização**, dentro do domínio permitido (por exemplo, cuidados ou desenvolvimento), sem herdar acesso a outras pessoas.
+- **Colaborador:** consulta a rotina e registra ocorrências **somente onde autorizado**; não administra pessoas nem altera prescrições por padrão.
+
+A interface **não** oferece no MVP matriz por operação, perfis personalizados, exceções avançadas por campo/documento ou painel de auditoria. Ações seguras continuam controladas pelas verificações contextuais existentes; nenhuma função de administração amplia permissões de conteúdo sensível. Responsabilidades técnicas podem acumular quando legitimamente concedidas; a interface permanece simples.
+
+O administrador pode **adicionar ou retirar um participante** do acompanhamento permitido usando os mecanismos existentes de convite, autorização e revogação. Revogação bloqueia novas operações e sessões afetadas, preservando histórico e autoria.
+
+**CT-20261116-001:** visão administrativa mostra somente **quem acompanha cada pessoa, em qual papel e se o acesso está ativo**. Convite pendente não é acesso ativo. A listagem detalhada de operações/escopos permanece interna e não é requisito de UI do MVP.
 
 ### FUN-05 — Página inicial
 
@@ -46,8 +56,8 @@ A estrutura básica de navegação permanece consistente para todos; **conteúdo
 ### FUN-07 — Privacidade compreensível, sem excesso de configuração
 
 - Distinguir **vínculo familiar**, **responsabilidade** e **autorização**. Um vínculo ou o papel de administrador não concede acesso geral a dados médicos ou infantis.
-- Oferecer **perfis de acesso prontos**, com ajustes opcionais quando necessários. Autorizações contextualizadas por pessoa, função e operação; não obrigar configuração granular em cada cadastro.
-- A Vovó, sendo pessoa adulta independente, deve poder compreender quem tem acesso aos seus cuidados e exercer escolhas de compartilhamento conforme suas condições de acesso e base legítima de autorização. Seu histórico não se torna público aos familiares por presunção.
+- Exibir **três perfis simples** (Administrador, Responsável, Colaborador) e o vínculo de acompanhamento. Não oferecer configuração granular por operação no MVP; manter a autorização contextual internamente, sem inventar concessões.
+- A Vovó, sendo adulta independente, deve **compreender quem acompanha seus cuidados**. Quando possuir conta e acesso próprio, pode consultar em modo **somente leitura** os nomes e papéis dos participantes com autorização ativa relacionada aos seus próprios dados. Se não tiver conta, não é obrigada a criá-la apenas para isso; a informação pode ser explicada por responsável legitimamente autorizado. Essa consulta não concede poderes de administração; escolhas de compartilhamento respeitam as autorizações e condições legítimas. Seu histórico clínico não se torna público aos familiares por presunção.
 - A colaboradora acessa somente o necessário para a rotina autorizada da Vovó; não recebe dados da Laurinha nem todos os documentos médicos por padrão.
 - Listagens, cartões, resumos, anexos, avisos e exportações devem obedecer às autorizações. Dados sensíveis não podem vazar por prévias, contagens ou notificação de tela bloqueada.
 - Notificações **discretas por padrão**; apresentação detalhada somente quando expressamente escolhida e permitida. Não pressupor que o bloqueio de tela impedirá toda exposição em dispositivos compartilhados.
@@ -79,9 +89,9 @@ A estrutura básica de navegação permanece consistente para todos; **conteúdo
 
 ## 6. Permissões de referência
 
-- Administrador: pessoas, convites e autorizações; acesso a informações sensíveis sujeito às autorizações e regras de privacidade.
+- Administrador: pessoas, convites e visão simples de quem acompanha quem; acesso ao conteúdo sensível sujeito às autorizações existentes, nunca automático.
 - Mikaela: desenvolvimento da Laurinha, conforme autorização.
-- Colaboradora: rotina autorizada da Vovó; não acessar Laurinha, nem modificar prescrição.
+- Colaboradora (perfil visual Colaborador): somente rotina autorizada da Vovó; não acessar Laurinha, nem modificar prescrição.
 - Laurinha: não precisa possuir conta.
 - Vovó: acesso próprio opcional, preservando autonomia.
 
@@ -100,7 +110,10 @@ Convite expirado ou já utilizado; nomes parecidos; conta revogada durante sess�
 - [ ] Mostrar somente cartões permitidos.
 - [ ] Funcionar em telas de celular e computador, com navegação principal centrada nas pessoas, leitura confortável e ações rápidas.
 - [ ] Aplicar a mesma navegação básica, restringindo conteúdos e operações a cada autorização.
-- [ ] Disponibilizar perfis de acesso predefinidos sem obrigar configuração avançada.
+- [ ] Apresentar somente Administrador, Responsável e Colaborador na experiência de gestão, associados a pessoas acompanhadas; nenhuma matriz de permissões por operação ou perfis personalizados no MVP.
+- [ ] Administrador autorizado identifica quem acompanha cada pessoa, papel e situação ativa, sem acesso automático a dados clínicos ou infantis.
+- [ ] Pessoa acompanhada com conta pode entender quem possui acesso ativo aos seus próprios dados, sem adquirir administração.
+- [ ] Convites pendentes não aparecem como acesso ativo; revogação mantém isolamento e histórico.
 - [ ] Permitir compreender claramente quem pode acessar os cuidados da Vovó, preservando sua autonomia.
 - [ ] Não vazar dados sensíveis por cartões, contagens, prévias, avisos ou telas bloqueadas.
 - [ ] Em falha de conexão, informar que a operação não foi salva; não confirmar falsamente.
