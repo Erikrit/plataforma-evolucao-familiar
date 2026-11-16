@@ -1,6 +1,6 @@
-# Diretrizes UX para módulos 03/04 e transferência ao desenvolvimento
+# Diretrizes UX para os módulos 03 e 04 — referência e validação
 
-**Estado:** orientação documental para implementação futura. A especificação funcional de cada módulo prevalece.  
+**Estado:** orientação UX aprovada como referência; módulos 03/04 já possuem implementação local e QG-3 PASS registrado em `develop`, sem homologação em usuários/dispositivos reais. A especificação funcional de cada módulo prevalece; estado corrente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Base:** `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` + `docs/ux-ui/REVISAO-MODULOS-01-02.md`.  
 **Não autoriza:** novos requisitos, criação de dados duplicados, mudanças de permissão ou commit/push/deploy automatizado.
 
@@ -37,13 +37,12 @@
 
 Utilizar **module-planning → implementation-workflow → quality-gate/verifier** definidos no repositório. O trabalho de UI deve ser recortado em incrementos pequenos que preservem funcionalidades, dados e autorizações.
 
-**Ordem e dependências:**
-1. Ler `docs/produto/STATUS-E-ESCOPO.md`, especificações e este guia, além do estado da esteira `docs/esteira/estado/atual.json`. Reconciliar mudanças de branch e tarefas em andamento; **não substituir planejamento/estado ativo sem conferir**.
-2. Planejar correções `UX-01..UX-14` a partir de `REVISAO-MODULOS-01-02.md` em slices pequenos; validar a escolha do Mantine contra stack, versões atuais e custo de migração. Se incompatível ou de alto custo, parar para decisão UX, sem adicionar outra biblioteca automaticamente.
-3. Implementar base visual e fluxos do módulo 01; depois 02, preservando UI funcional e contratos. Não entregar páginas de placeholder, navegação vazia nem expandir APIs sem necessidade aprovada.
-4. Para lacunas de regra de negócio, registrar `NEEDS_DECISION` e fornecer prompt curto para Produto; continuar apenas os slices visuais independentes.
-5. Rodar gates e verifier existentes, checar UI manual nos tamanhos móveis/desktop, teclado e perfis autorizados, captura visual e regressões. Não tratar evidência de build como aceite UX.
-6. Somente com 01/02 consistentes, aplicar guia a novos módulos 03 e 04 na ordem prevista pelo planejamento de produto.
+**Leitura e validação do que existe:**
+1. Consultar `docs/produto/STATUS-E-ESCOPO.md` e a versão aprovada das especificações; inspecionar a branch/commit atualmente relevantes.
+2. Tratar as diretrizes desta revisão como **critério de verificação** das telas 03/04 existentes, não como instrução para reimplementá-las do zero.
+3. Registrar somente divergências observadas de UX, acessibilidade, autorização e privacidade, com evidência e prioridade. Ajustes visuais L1 podem ser resolvidos por UX; comportamento novo, permissão ou obrigação exige avaliação pela especialidade competente.
+4. Evidências QG-3 locais não substituem homologação com familiares, testes de acessibilidade e validação em aparelhos reais; não declarar aceite antes dessas verificações.
+5. Informar discrepâncias relevantes em `docs/produto/STATUS-E-ESCOPO.md` ou por CT, conforme `docs/produto/GOVERNANCA.md`; preserva-se o registro histórico do desenvolvimento.
 
 **O guia não altera as regras da esteira:** respeitar proibição de commit/push/deploy automático especificada em `AGENTS.md` e `.cursor/skills/implementation-workflow/SKILL.md`. Revisão e publicação de código permanecem sob controle humano.
 
@@ -51,4 +50,4 @@ Utilizar **module-planning → implementation-workflow → quality-gate/verifier
 
 Cada slice registra: problema/ID, arquivos alterados, tela antes/depois, impactos de acessibilidade, testes realizados, efeito sobre autorizações, evidência visual e pendências. Fazer uma **revisão integrada de UX** após 01/02 e somente então decidir detalhes remanescentes, sem interromper o desenvolvimento por preferências cosméticas menores.
 
-Este documento é um contrato de experiência para os módulos seguintes, não uma ordem para implementá-los antes dos critérios e prioridades do Produto.
+Este documento preserva critérios de experiência para os módulos existentes; não é ordem para reimplementação ou mudança de requisitos aprovados.
