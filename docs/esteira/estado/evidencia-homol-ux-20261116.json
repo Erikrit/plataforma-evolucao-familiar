@@ -1,0 +1,60 @@
+{
+  "demandaId": "DEM-HOMOL-UX-20261116",
+  "perfil": "homologacao",
+  "commit": "71c6444d915aa449de9e910f3c9acb1cfe2a8982",
+  "branch": "develop",
+  "veredictoTecnico": "FAIL",
+  "verifierId": "ac0570d9-36b6-4add-8740-805e52d735c4",
+  "verifier": "FAIL",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "reconciliacaoVerifierAnterior": {
+    "observacao": "DEM-UX-NAV-ADM: verifier oficial BLOCKED Ask/shell; independente PASS",
+    "nestaHomologacao": "Verifier oficial executado (readonly) retornou FAIL por UX-ACC-01/CUI residual; shell Ask limitado no subagente, evidências do orquestrador aceitas"
+  },
+  "checagens": [
+    {
+      "nome": "typecheck-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-typecheck-web.txt"
+    },
+    {
+      "nome": "smoke-authz",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-smoke-authz.txt"
+    },
+    {
+      "nome": "smoke-ct-acessos",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-smoke-ct-acessos.txt"
+    },
+    {
+      "nome": "smoke-cv03",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-smoke-cv03.txt"
+    },
+    {
+      "nome": "smoke-dl02",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-smoke-dl02.txt"
+    },
+    {
+      "nome": "smoke-ef05",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-smoke-ef05.txt"
+    },
+    {
+      "nome": "build-web-concorrente",
+      "status": "BLOCKED",
+      "motivo": "EPERM .next/trace com next:dev; evidência anterior qg2-build-web-ux-nav.txt PASS"
+    },
+    {
+      "nome": "inspecao-browser-desktop",
+      "status": "PASS_COM_ACHADOS"
+    },
+    {
+      "nome": "mobile-fisico-familia",
+      "status": "PENDING_HUMAN"
+    }
+  ],
+  "geradoEm": "2026-11-16T21:27:55.935Z"
+}

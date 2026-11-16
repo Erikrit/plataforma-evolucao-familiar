@@ -5,10 +5,35 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-16)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
-- **DEM-UX-NAV-ADM-20261116:** COMPLETED — fingerprint `sha256:db65d95aa716c68e` · verifier PASS (independente)
+- **DEM-HOMOL-UX-20261116:** COMPLETED — homologação técnica **FAIL** (UX-ACC-01 + Drawer desktop); humana PENDING_HUMAN · [verifier](ac0570d9-36b6-4add-8740-805e52d735c4)
+- **DEM-UX-NAV-ADM-20261116:** COMPLETED — fingerprint `sha256:db65d95aa716c68e` · verifier PASS (independente); humana PENDING_HUMAN
 - **DEM-CT-20261116-001:** COMPLETED — fingerprint `sha256:2a04c89c9f1f00e7` · verifier PASS (reutilizar GET /acessos)
 - **Módulo 04 Evolução Familiar:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-04.json`
 - **Módulo 03 Desenvolvimento Laurinha:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-03.json`
+
+## 2026-11-16 — DEM-HOMOL-UX-20261116 COMPLETED (técnico FAIL)
+
+- **Perfil:** quality-gate `homologacao` · sem implementação
+- **HEAD:** `71c6444` · branch `develop`
+- **Veredicto técnico:** FAIL · Verifier FAIL ([verifier](ac0570d9-36b6-4add-8740-805e52d735c4))
+- **OK estrutural:** UX-NAV-01/02, UX-ADM-01/02, UX-DES-01, UX-EVO-01 (desktop/API)
+- **Falha:** UX-ACC-01; UX-CUI-01 parcial (Drawer bottom full-height no desktop)
+- **Smokes/typecheck:** PASS · Build desta corrida BLOCKED (EPERM com next:dev); build anterior UX PASS
+- **Humana/dispositivos:** PENDING_HUMAN
+- **Reconciliação:** bloqueio Ask/shell da demanda anterior não impede esta homologação; achados de a11y/UX residuais são o FAIL
+- **Ambiente:** após build concorrente, web local em 500 — reiniciar `next:dev` / limpar `.next` antes de nova UI
+- **Commit/push:** não executados
+- **Próximo:** correções UX-ACC/CUI via task-routing; depois homologação humana
+
+## 2026-11-16 — Triagem DEM-HOMOL-UX-20261116 (READY→IN_PROGRESS)
+
+- **Tipo:** homologacao · **Origem:** humano + PENDING_HUMAN pós DEM-UX-NAV-ADM
+- **Aprovação:** L1 Acompanhamento/Qualidade + UX (sem alteração de regra funcional)
+- **Fluxo:** task-routing → quality-gate (perfil homologação); sem implementation-workflow
+- **Escopo:** UX-NAV-01/02, UX-ADM-01/02, UX-CUI-01, UX-DES-01, UX-EVO-01, UX-ACC-01
+- **Risco:** médio (authz de visibilidade / privacidade na inspeção; sem ampliar permissões)
+- **Reconciliação:** HEAD `71c6444`; verifier oficial anterior BLOCKED (Ask/shell) — revalidar com evidências técnicas; humana permanece PENDING_HUMAN
+- **Commit/push:** não executados
 
 ## 2026-11-16 — DEM-UX-NAV-ADM-20261116 COMPLETED
 

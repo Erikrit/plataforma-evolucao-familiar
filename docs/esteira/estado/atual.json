@@ -2,8 +2,8 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "af9a172060ed91d7c846ce209486bab15e32d564",
-    "nota": "HEAD reconcileado ao iniciar DEM-UX-NAV-ADM-20261116 (após DEM-CT-20261116-001); alterações locais ainda não commitadas"
+    "commit": "71c6444d915aa449de9e910f3c9acb1cfe2a8982",
+    "nota": "Homologação UX no HEAD 71c6444"
   },
   "moduloId": "04-evolucao-familiar",
   "incrementoId": "EF-06",
@@ -106,6 +106,58 @@
   "demanda": null,
   "demandasConcluidas": [
     {
+      "id": "DEM-HOMOL-UX-20261116",
+      "tipo": "homologacao",
+      "origem": "humano + DEM-UX-NAV-ADM PENDING_HUMAN + GUIA §7",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "FAIL",
+      "criteriosAceite": [
+        "UX-NAV-01",
+        "UX-NAV-02",
+        "UX-ADM-01",
+        "UX-ADM-02",
+        "UX-CUI-01",
+        "UX-DES-01",
+        "UX-EVO-01",
+        "UX-ACC-01"
+      ],
+      "criteriosOk": [
+        "UX-NAV-01",
+        "UX-NAV-02",
+        "UX-ADM-01",
+        "UX-ADM-02",
+        "UX-DES-01",
+        "UX-EVO-01"
+      ],
+      "criteriosFalha": [
+        "UX-ACC-01",
+        "UX-CUI-01 (parcial: drawer desktop)"
+      ],
+      "qg1": "PASS",
+      "qg2": "PASS_COM_ACHADOS",
+      "verifier": "FAIL",
+      "verifierId": "ac0570d9-36b6-4add-8740-805e52d735c4",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/evidencia-homol-ux-20261116.json",
+        "docs/esteira/estado/homol-ux-typecheck-web.txt",
+        "docs/esteira/estado/homol-ux-smoke-authz.txt",
+        "docs/esteira/estado/homol-ux-smoke-ct-acessos.txt",
+        "docs/esteira/estado/homol-ux-smoke-cv03.txt",
+        "docs/esteira/estado/homol-ux-smoke-dl02.txt",
+        "docs/esteira/estado/homol-ux-smoke-ef05.txt",
+        "docs/esteira/estado/homol-ux-build-web.txt"
+      ],
+      "arquivos": [
+        "apps/web/src/componentes/navegacao-app.tsx",
+        "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+        "apps/web/src/componentes/contexto-sessao.tsx",
+        "apps/web/src/app/pessoas"
+      ],
+      "notaAmbiente": "Build concorrente com next:dev causou EPERM e 500 em .next; reiniciar web local antes de nova inspeção UI.",
+      "concluidaEm": "2026-11-16T21:27:55.935Z"
+    },
+    {
       "id": "DEM-UX-NAV-ADM-20261116",
       "tipo": "melhoria_ux",
       "origem": "humano + docs/ux-ui/REVISAO-MODULOS-01-02.md (revisão integrada 2026-11-16)",
@@ -184,9 +236,9 @@
       "concluidaEm": "2026-11-16T18:35:00.000Z"
     }
   ],
-  "proximaAcao": "DEM-UX-NAV-ADM-20261116 COMPLETED. Homologação dispositivos UX-ACC-01 PENDING_HUMAN. Aguardar próxima demanda via task-routing.",
-  "atualizadoEm": "2026-11-16T19:42:59.309Z",
-  "notas": "Última demanda: UX navegação/admin/refinos. CT acessos reutilizado. Sem commit/push. Histórico módulos 01–04 e DEM-CT preservados.",
+  "proximaAcao": "Homologação técnica FAIL (UX-ACC/CUI residual). Abrir correções via task-routing; humana PENDING_HUMAN. Reiniciar next:dev se 500.",
+  "atualizadoEm": "2026-11-16T21:27:55.935Z",
+  "notas": "DEM-HOMOL-UX-20261116 concluída como investigação. Sem implementação/commit/push. Verifier FAIL não equivale a homologação humana.",
   "decisaoPendente": null,
   "moduloAnterior": {
     "id": "03-desenvolvimento-laurinha",
