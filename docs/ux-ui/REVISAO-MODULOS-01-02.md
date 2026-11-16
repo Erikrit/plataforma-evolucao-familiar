@@ -108,9 +108,17 @@ encaminhamento: "Arquitetura deve confirmar quais leituras/identidades/operaçõ
 
 **Observação:** `listarDoUsuario` retorna autorizações do usuário autenticado; `cartoesInicio` propaga essa lista. O serviço já possui operação de revogação, mas isto **não prova** que o fluxo/contrato de gestão total está disponível ou autorizado à interface. O CT não deve criar acesso novo, endpoint ou operação por presunção. Não gerar arquivo individual para o CT. Após resposta de Arquitetura, atualizar apenas a fonte dona da solução/UX pertinente, conforme governança.
 
+### Decisão de Produto sobre o CT — 2026-11-16
+
+**CT-20261116-001: APROVADO e DOCUMENTADO**, conforme `docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md` v1.2, FUN-04/FUN-07. A descrição `PROPOSTA` no bloco histórico acima é o estado **da emissão original**, não a situação atual.
+
+**Resultado funcional aprovado:** a experiência do MVP exibe somente **Administrador, Responsável e Colaborador** e a relação **quem acompanha quem**. A tela administrativa apresenta participante, pessoa acompanhada, papel e situação de acesso, sem matrizes por operação, personalizações avançadas ou dados sensíveis. Pessoa acompanhada com conta pode consultar em leitura simples quem possui acesso ativo a seus dados, sem poder de administrar; sem conta, não é obrigada a se cadastrar só para isso. A arquitetura mantém as verificações de autorização existentes, sem conceder novos acessos automaticamente.
+
+**UX-ADM-02:** pode prosseguir com a visão simplificada acima, sujeita à implementação e validação técnica de leitura autorizada. Não exibir dados de outras famílias, nem usar a listagem como autorização de leitura clínica/infantil. Nenhuma autorização granular é solicitada à família.
+
 ### Próximo encaminhamento
 
 1. Entregar UX-NAV-01/02 e UX-ADM-01 em incrementos pequenos via esteira existente, respeitando contratos e permissões.
-2. Enviar somente o CT-20261116-001 para avaliação de Arquitetura; UX-ADM-02 deve ficar condicionado ao retorno.
+2. CT-20261116-001 concluído em Produto; UX-ADM-02 passa a depender somente de consulta segura dos metadados mínimos e da validação de Arquitetura, sem nova decisão funcional por padrão.
 3. Revisar UX dos módulos 02–04 após navegação compartilhada, sem recriar funcionalidades nem reabrir regras aprovadas.
 4. Exigir inspeção visual em aparelhos reais, teclado/leitor de tela e perfis autorizados antes de chamar a experiência de homologada.
