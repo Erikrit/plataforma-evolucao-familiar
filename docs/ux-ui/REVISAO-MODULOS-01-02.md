@@ -63,3 +63,54 @@ Corrigir somente o que estiver dentro do comportamento funcional vigente. Reutil
 6. Verificação UX integrada em celular/desktop, por autorização, rede e acessibilidade.
 
 Não considerar terminado sem capturas reais e verificação dos critérios; execução técnica, alteração de código e gestão da esteira são externas à conversa de UX.
+
+## Revisão integrada de navegação e administração — 2026-11-16
+
+**Origem:** testes exploratórios relatados pelo responsável pelo produto (menus confusos, componentes pouco organizados, baixa interatividade e dificuldade em permissões), complementados por inspeção estática de `develop` no commit `a17f4a311ab5724690536895196673488971cc67`. **Não é homologação de uso.** Esta revisão é adicional às correções históricas UX-01..UX-14 já implementadas; não reabrir esses itens como se fossem pendentes.
+
+**Decisões de UX aprovadas:** navegação compartilhada `AppShell` no desktop e `Drawer` no celular; navegação contextual por pessoa selecionada; menu administrativo único **Gerenciar família**, com seções Pessoas, Acessos e permissões e Convites; sem ferramentas de administração repetidas em telas de acompanhamento; operações cotidianas de cuidados e desenvolvimento continuam dentro de cada módulo. Ver `GUIA-DE-EXPERIENCIA.md` §4.1–4.2.
+
+### Correções de UX a planejar (não implementadas por esta documentação)
+
+| ID | Escopo | Evidência/impacto | Critério de aceite de UX | Prioridade |
+|---|---|---|---|---|
+| UX-NAV-01 | Layout global | Páginas possuem links próprios de retorno, sem `AppShell` compartilhado | Desktop tem menu lateral; celular Drawer; navegação segura por teclado e responsiva | Alta |
+| UX-NAV-02 | Contexto individual | Retornos ao perfil são necessários entre áreas | Pessoa selecionada, área ativa e links autorizados claros; retorno à família sem labirinto | Alta |
+| UX-ADM-01 | Administração | `painel-fundacao.tsx` mistura convites, cadastro e autorizações no Accordion da home | Administração organizada em um local, sem duplicação em telas de acompanhamento | Alta |
+| UX-ADM-02 | Clareza de acessos | API de início expõe principalmente autorizações do usuário atual, sem identidade de todos os autorizados | Exibir somente relações autorizadas que o contrato efetivamente suporta; completar visão de quem acompanha quem **após CT** | Alta, dependente |
+| UX-CUI-01 | Cuidados | Gestão e consultas/apoio dentro de página longa | Ação cotidiana primeiro, gestão contextual sob demanda; sem alterar relato ou tratamento | Média |
+| UX-DES-01 | Desenvolvimento | Estrelas, histórico e cadastros precedem biblioteca; cartão de brincadeira usa `onClick` sem semântica nativa de botão | Biblioteca/participação prioritárias; cartões teclado/foco acessíveis; regras de estrelas preservadas | Alta |
+| UX-EVO-01 | Evolução | Histórico e resumo em páginas separadas com navegação própria | Acessos contextuais a Histórico e Resumo, filtros simples, retorno à pessoa | Média |
+| UX-ACC-01 | Transversal | Padrões interativos distintos entre telas | Contraste/foco/ordem de teclado, estados de rede e acessibilidade verificados | Alta |
+
+### Transferência entre especialidades — CT-20261116-001
+
+```yaml
+CT: CT-20261116-001
+origem: UX
+destino: Arquitetura
+problema: "A interface atual não disponibiliza uma visão administrativa clara de todos os usuários autorizados, suas responsabilidades e pessoas-alvo; o início retorna principalmente autorizações do usuário autenticado."
+decisao_ou_proposta: "Verificar capacidades e contratos atuais para uma visão administrativa de acessos legível e segura, sem ampliar dados ou permissões."
+justificativa: "Evitar gerenciamento confuso e apresentação enganosa de quem acompanha cada pessoa."
+status: PROPOSTA
+impactos: [UX, ARQUITETURA, PRIVACIDADE]
+dependencias: ["FUN-04", "FUN-07", "FAM-R11"]
+referencias:
+  - "docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md"
+  - "apps/web/src/lib/api.ts"
+  - "apps/web/src/componentes/painel-fundacao.tsx"
+  - "apps/api/src/autorizacoes/servico-autorizacoes.ts"
+  - "docs/ux-ui/GUIA-DE-EXPERIENCIA.md"
+branch_inspecionada: develop
+commit_inspecionado: a17f4a311ab5724690536895196673488971cc67
+encaminhamento: "Arquitetura deve confirmar quais leituras/identidades/operações estão autorizadas e disponíveis, identificar lacunas e devolver proposta técnica ou NEEDS_DECISION. Não alterar funcionalidade sem aval de Produto quando necessário."
+```
+
+**Observação:** `listarDoUsuario` retorna autorizações do usuário autenticado; `cartoesInicio` propaga essa lista. O serviço já possui operação de revogação, mas isto **não prova** que o fluxo/contrato de gestão total está disponível ou autorizado à interface. O CT não deve criar acesso novo, endpoint ou operação por presunção. Não gerar arquivo individual para o CT. Após resposta de Arquitetura, atualizar apenas a fonte dona da solução/UX pertinente, conforme governança.
+
+### Próximo encaminhamento
+
+1. Entregar UX-NAV-01/02 e UX-ADM-01 em incrementos pequenos via esteira existente, respeitando contratos e permissões.
+2. Enviar somente o CT-20261116-001 para avaliação de Arquitetura; UX-ADM-02 deve ficar condicionado ao retorno.
+3. Revisar UX dos módulos 02–04 após navegação compartilhada, sem recriar funcionalidades nem reabrir regras aprovadas.
+4. Exigir inspeção visual em aparelhos reais, teclado/leitor de tela e perfis autorizados antes de chamar a experiência de homologada.
