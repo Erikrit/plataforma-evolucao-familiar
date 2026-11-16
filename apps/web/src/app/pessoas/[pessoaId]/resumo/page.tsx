@@ -159,16 +159,15 @@ export default function PaginaResumo() {
     (resumoDev != null && resumoDev.experiencias.length > 0);
 
   return (
-    <Container component="main" size="sm" py="lg" px="md">
+    <Container component="main" size="sm" px={0}>
       <Stack gap="lg">
-        <Anchor component={Link} href={`/pessoas/${params.pessoaId}`} size="sm">
-          ← {nomePessoa || "Perfil"}
-        </Anchor>
-
         <Stack gap={4}>
-          <Title order={1}>Resumo</Title>
+          <Title order={1}>
+            Resumo{nomePessoa ? ` · ${nomePessoa}` : ""}
+          </Title>
           <Text c="dimmed" size="sm">
-            Visão curta do período — relatos da família, sem diagnóstico.
+            Visão curta do período — relatos da família, sem diagnóstico. Filtros
+            simples abaixo; retorno à pessoa pelo menu.
           </Text>
         </Stack>
 

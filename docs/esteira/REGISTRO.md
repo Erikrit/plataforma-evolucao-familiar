@@ -5,9 +5,30 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-16)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
-- **DEM-CT-20261116-001:** COMPLETED — fingerprint `sha256:2a04c89c9f1f00e7` · verifier PASS
+- **DEM-UX-NAV-ADM-20261116:** COMPLETED — fingerprint `sha256:db65d95aa716c68e` · verifier PASS (independente)
+- **DEM-CT-20261116-001:** COMPLETED — fingerprint `sha256:2a04c89c9f1f00e7` · verifier PASS (reutilizar GET /acessos)
 - **Módulo 04 Evolução Familiar:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-04.json`
 - **Módulo 03 Desenvolvimento Laurinha:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-03.json`
+
+## 2026-11-16 — DEM-UX-NAV-ADM-20261116 COMPLETED
+
+- **Entrega:** AppShell + Drawer; nav contextual por pessoa; `/gerenciar-familia` (Pessoas/Acessos/Convites); home sem admin; refinos CUI/DES/EVO; CT acessos reutilizado
+- **QG-1/QG-2:** PASS · Verifier PASS ([verificação independente](25127f08-94fa-4193-9832-a0cfda7c2efa); subagente oficial Ask/shell BLOCKED)
+- **Fingerprint:** `sha256:db65d95aa716c68e` (algoritmo `simular-retomada.mjs`)
+- **Evidências:** `qg1-typecheck-web-ux-nav.txt`, `qg2-build-web-ux-nav.txt`, `qg2-smoke-ct-acessos-ux-nav.txt`, `qg2-smoke-authz-ux-nav.txt`
+- **Homologação humana/dispositivos:** PENDING_HUMAN (UX-ACC-01)
+- **Commit/push:** não executados
+- **Próximo:** task-routing / homologação familiar em aparelhos reais
+
+## 2026-11-16 — Triagem DEM-UX-NAV-ADM-20261116 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_ux · **Origem:** revisão UX integrada + pedido humano
+- **Aprovação:** L2 DOCUMENTADA (GUIA §4.1–4.2; CT-20261116-001 já DOCUMENTADO; DEM-CT COMPLETED)
+- **Fluxo:** task-routing → implementation-workflow → quality-gate (module-planning omitido — decomposição já na revisão UX)
+- **Escopo:** UX-NAV-01/02, UX-ADM-01/02, UX-CUI-01, UX-DES-01, UX-EVO-01, UX-ACC-01
+- **Risco:** médio (UI/authz de visibilidade; sem ampliar permissões)
+- **Reconciliação:** HEAD `af9a172` vs estado anterior `e2b47b4`; workspace limpo; histórico preservado
+- **Commit/push:** não executados
 
 ## 2026-11-16 — DEM-CT-20261116-001 COMPLETED
 

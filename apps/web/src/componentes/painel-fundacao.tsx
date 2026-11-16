@@ -1,42 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
-  Accordion,
   Anchor,
   Button,
   Card,
-  Group,
   PasswordInput,
-  Select,
   SimpleGrid,
   Stack,
   Text,
   TextInput,
   Title,
 } from "@mantine/core";
-import {
-  concederAutorizacao,
-  criarConvite,
-  criarPessoa,
-  entrar,
-  limparSessaoLegada,
-  obterInicio,
-  obterMe,
-  revogarAutorizacao,
-  sair,
-  type AcessoResumo,
-  type AcessosResposta,
-  type CartaoInicio,
-  type DestaqueInicio,
-  type UsuarioSessao,
-} from "@/lib/api";
+import { useSessao } from "@/componentes/contexto-sessao";
 import {
   EstadoCarregando,
   EstadoVazio,
   MensagemFeedback,
 } from "@/componentes/feedback";
+import { entrar, type AcessoResumo } from "@/lib/api";
 
 function textoAcesso(a: AcessoResumo): string {
   const alvo = a.pessoaAcompanhadaNome
@@ -46,103 +29,22 @@ function textoAcesso(a: AcessoResumo): string {
 }
 
 export function PainelFundacao() {
-  const [usuario, setUsuario] = useState<UsuarioSessao | null>(null);
-  const [pronto, setPronto] = useState(false);
+  const {
+    pronto,
+    usuario,
+    cartoes,
+    destaques,
+    acessos,
+    filtradoPorAutorizacao,
+    podeGerenciarFamilia,
+    entrarNaSessao,
+    erroSessao,
+  } = useSessao();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [nome, setNome] = useState("");
-  const [cartoes, setCartoes] = useState<CartaoInicio[]>([]);
-  const [destaques, setDestaques] = useState<DestaqueInicio[]>([]);
-  const [acessos, setAcessos] = useState<AcessosResposta | null>(null);
-  const [filtrado, setFiltrado] = useState(false);
-  const [emailConvite, setEmailConvite] = useState("");
-  const [pessoaAlvoConviteId, setPessoaAlvoConviteId] = useState<string | null>(
-    null,
-  );
-  const [pessoaAlvoDesenvId, setPessoaAlvoDesenvId] = useState<string | null>(
-    null,
-  );
-  const [linkAtivacao, setLinkAtivacao] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
-
-  const pessoasUnicas = useMemo(() => {
-    const mapa = new Map<string, CartaoInicio>();
-    for (const c of cartoes) mapa.set(c.pessoaId, c);
-    return [...mapa.values()].sort((a, b) => a.nome.localeCompare(b.nome, "pt"));
-  }, [cartoes]);
-
-  const opcoesPessoas = useMemo(
-    () =>
-      pessoasUnicas.map((p) => ({
-        value: p.pessoaId,
-        label: p.nome,
-      })),
-    [pessoasUnicas],
-  );
-
-  const podeAdministrar = Boolean(usuario) && !filtrado;
-
-  useEffect(() => {
-    limparSessaoLegada();
-    void (async () => {
-      try {
-        const me = await obterMe();
-        if (me) {
-          setUsuario(me);
-          await carregarInicio(me);
-        }
-      } catch (e) {
-        setErro(e instanceof Error ? e.message : "Não foi possível verificar a sessão");
-      } finally {
-        setPronto(true);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (!pessoaAlvoConviteId && pessoasUnicas.length > 0) {
-      const preferida =
-        pessoasUnicas.find((p) => /vovó|vovo/i.test(p.nome)) ?? pessoasUnicas[0];
-      setPessoaAlvoConviteId(preferida.pessoaId);
-    }
-    if (!pessoaAlvoDesenvId && pessoasUnicas.length > 0) {
-      const preferida =
-        pessoasUnicas.find((p) => /laurinha/i.test(p.nome)) ?? pessoasUnicas[0];
-      setPessoaAlvoDesenvId(preferida.pessoaId);
-    }
-  }, [pessoasUnicas, pessoaAlvoConviteId, pessoaAlvoDesenvId]);
-
-  async function carregarInicio(atual: UsuarioSessao) {
-    const inicio = await obterInicio(atual.pessoa.familiaId);
-    setCartoes(inicio.cartoes);
-    setDestaques(inicio.destaques ?? []);
-    setAcessos(
-      inicio.acessos ?? {
-        modo: "proprios_dados",
-        somenteLeitura: true,
-        itens: [],
-      },
-    );
-    setFiltrado(inicio.filtradoPorAutorizacao);
-  }
-
-  async function aoRevogarAcesso(autorizacaoId: string) {
-    if (!usuario) return;
-    setCarregando(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      await revogarAutorizacao(usuario.pessoa.familiaId, autorizacaoId);
-      await carregarInicio(usuario);
-      setSucesso("Acesso retirado. Novas operações desse participante ficam bloqueadas.");
-    } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível revogar o acesso");
-    } finally {
-      setCarregando(false);
-    }
-  }
 
   async function aoEntrar(evento: FormEvent) {
     evento.preventDefault();
@@ -151,99 +53,11 @@ export function PainelFundacao() {
     setSucesso(null);
     try {
       const nova = await entrar(email, senha);
-      setUsuario(nova.usuario);
-      await carregarInicio(nova.usuario);
+      await entrarNaSessao(nova.usuario);
       setSucesso("Você entrou.");
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Não foi possível entrar");
     } finally {
-      setCarregando(false);
-    }
-  }
-
-  async function aoCadastrar(evento: FormEvent) {
-    evento.preventDefault();
-    if (!usuario) return;
-    setCarregando(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      const criada = await criarPessoa(usuario.pessoa.familiaId, nome);
-      setNome("");
-      await carregarInicio(usuario);
-      setSucesso(`${criada.nome} foi adicionada à família.`);
-    } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível cadastrar");
-    } finally {
-      setCarregando(false);
-    }
-  }
-
-  async function aoConvidarColaboradora() {
-    if (!usuario || !pessoaAlvoConviteId) {
-      setErro("Escolha a pessoa que a colaboradora vai acompanhar.");
-      return;
-    }
-    setCarregando(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      const alvo = pessoasUnicas.find((p) => p.pessoaId === pessoaAlvoConviteId);
-      const convite = await criarConvite(usuario.pessoa.familiaId, {
-        email: emailConvite,
-        nomeConvidado: "Colaboradora Convidada",
-        responsabilidade: "colaboradora_cuidados",
-        pessoaAlvoId: pessoaAlvoConviteId,
-      });
-      const caminho = `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
-      setLinkAtivacao(caminho);
-      setSucesso(
-        `Convite pronto para ${alvo?.nome ?? "a pessoa escolhida"}. Abra o link de ativação quando a pessoa for criar a conta.`,
-      );
-    } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível gerar o convite");
-    } finally {
-      setCarregando(false);
-    }
-  }
-
-  async function aoAcumularDesenvolvimento() {
-    if (!usuario || !pessoaAlvoDesenvId) {
-      setErro("Escolha a pessoa para acompanhamento de desenvolvimento.");
-      return;
-    }
-    setCarregando(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      await concederAutorizacao(usuario.pessoa.familiaId, {
-        usuarioId: usuario.id,
-        responsabilidade: "responsavel_desenvolvimento",
-        pessoaAlvoId: pessoaAlvoDesenvId,
-      });
-      await carregarInicio(usuario);
-      setSucesso("Acesso de desenvolvimento concedido.");
-    } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível conceder o acesso");
-    } finally {
-      setCarregando(false);
-    }
-  }
-
-  async function aoSair() {
-    setCarregando(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      await sair();
-    } catch {
-      /* limpeza local mesmo se a API falhar */
-    } finally {
-      setUsuario(null);
-      setCartoes([]);
-      setDestaques([]);
-      setAcessos(null);
-      setLinkAtivacao(null);
       setCarregando(false);
     }
   }
@@ -288,7 +102,7 @@ export function PainelFundacao() {
               Ativar convite
             </Anchor>
           </Text>
-          <MensagemFeedback erro={erro} sucesso={sucesso} />
+          <MensagemFeedback erro={erro ?? erroSessao} sucesso={sucesso} />
         </Stack>
       </Card>
     );
@@ -296,18 +110,9 @@ export function PainelFundacao() {
 
   return (
     <Stack gap="lg">
-      <Group justify="space-between" align="center" wrap="wrap">
-        <Text>
-          Olá, <Text span fw={600}>{usuario.pessoa.nome}</Text>
-        </Text>
-        <Button
-          variant="default"
-          onClick={() => void aoSair()}
-          loading={carregando}
-        >
-          Sair
-        </Button>
-      </Group>
+      <Text>
+        Olá, <Text span fw={600}>{usuario.pessoa.nome}</Text>
+      </Text>
 
       {acessos &&
       acessos.modo === "proprios_dados" &&
@@ -361,7 +166,7 @@ export function PainelFundacao() {
       <Stack gap="sm">
         <Title order={2}>Pessoas</Title>
         <Text c="dimmed" size="sm">
-          {filtrado
+          {filtradoPorAutorizacao
             ? "Mostramos apenas quem você pode acompanhar."
             : "Toque em uma pessoa para ver o perfil e as áreas disponíveis."}
         </Text>
@@ -370,8 +175,8 @@ export function PainelFundacao() {
           <EstadoVazio
             titulo="Nenhuma pessoa por aqui ainda"
             descricao={
-              podeAdministrar
-                ? "Abra Gerenciar família para adicionar a primeira pessoa."
+              podeGerenciarFamilia
+                ? "Abra Gerenciar família no menu para adicionar a primeira pessoa."
                 : "Quando alguém te autorizar, a pessoa aparecerá nesta lista."
             }
           />
@@ -406,152 +211,24 @@ export function PainelFundacao() {
         )}
       </Stack>
 
-      {podeAdministrar ? (
-        <Accordion variant="contained" radius="md">
-          <Accordion.Item value="gerenciar">
-            <Accordion.Control>
-              <Text fw={600}>Gerenciar família</Text>
-            </Accordion.Control>
-            <Accordion.Panel>
-              <Stack gap="lg">
-                <form onSubmit={aoCadastrar}>
-                  <Stack gap="sm">
-                    <Title order={3}>Adicionar pessoa</Title>
-                    <Text size="sm" c="dimmed">
-                      Só o nome é necessário agora.
-                    </Text>
-                    <TextInput
-                      label="Nome"
-                      value={nome}
-                      onChange={(e) => setNome(e.currentTarget.value)}
-                      placeholder="Ex.: Vovó"
-                      required
-                      autoComplete="off"
-                    />
-                    <Button
-                      type="submit"
-                      loading={carregando}
-                      disabled={!nome.trim()}
-                    >
-                      Salvar
-                    </Button>
-                  </Stack>
-                </form>
-
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    void aoConvidarColaboradora();
-                  }}
-                >
-                  <Stack gap="sm">
-                    <Title order={3}>Convidar colaboradora</Title>
-                    <Text size="sm" c="dimmed">
-                      A pessoa receberá acesso só aos cuidados autorizados.
-                    </Text>
-                    <TextInput
-                      label="E-mail"
-                      value={emailConvite}
-                      onChange={(e) => setEmailConvite(e.currentTarget.value)}
-                      type="email"
-                      required
-                      placeholder="email@exemplo.com"
-                    />
-                    <Select
-                      label="Quem ela vai acompanhar"
-                      data={opcoesPessoas}
-                      value={pessoaAlvoConviteId}
-                      onChange={setPessoaAlvoConviteId}
-                      required
-                      searchable
-                    />
-                    <Button
-                      type="submit"
-                      loading={carregando}
-                      disabled={!pessoaAlvoConviteId}
-                    >
-                      Gerar convite
-                    </Button>
-                    {linkAtivacao ? (
-                      <Text size="sm">
-                        Link de ativação:{" "}
-                        <Anchor component={Link} href={linkAtivacao}>
-                          abrir página de ativação
-                        </Anchor>
-                      </Text>
-                    ) : null}
-                  </Stack>
-                </form>
-
-                <Stack gap="sm">
-                  <Title order={3}>Acessos desta família</Title>
-                  <Text size="sm" c="dimmed">
-                    Quem acompanha quem, com papel simples. Sem matriz de permissões.
-                  </Text>
-                  {!acessos || acessos.itens.length === 0 ? (
-                    <Text size="sm" c="dimmed">
-                      Ainda não há acessos ativos listados.
-                    </Text>
-                  ) : (
-                    <Stack gap="xs" component="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                      {acessos.itens.map((a) => (
-                        <Group
-                          key={a.id}
-                          component="li"
-                          justify="space-between"
-                          align="flex-start"
-                          wrap="nowrap"
-                          gap="sm"
-                        >
-                          <Text size="sm">{textoAcesso(a)}</Text>
-                          {a.papel !== "Administrador" ? (
-                            <Button
-                              size="compact-sm"
-                              variant="subtle"
-                              color="red"
-                              loading={carregando}
-                              onClick={() => void aoRevogarAcesso(a.id)}
-                            >
-                              Retirar
-                            </Button>
-                          ) : null}
-                        </Group>
-                      ))}
-                    </Stack>
-                  )}
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      void aoAcumularDesenvolvimento();
-                    }}
-                  >
-                    <Stack gap="sm">
-                      <Select
-                        label="Conceder acesso de desenvolvimento"
-                        description="Você passa a acompanhar também o desenvolvimento desta pessoa."
-                        data={opcoesPessoas}
-                        value={pessoaAlvoDesenvId}
-                        onChange={setPessoaAlvoDesenvId}
-                        searchable
-                      />
-                      <Button
-                        type="submit"
-                        variant="light"
-                        loading={carregando}
-                        disabled={!pessoaAlvoDesenvId}
-                      >
-                        Conceder acesso
-                      </Button>
-                    </Stack>
-                  </form>
-                </Stack>
-              </Stack>
-            </Accordion.Panel>
-          </Accordion.Item>
-        </Accordion>
+      {podeGerenciarFamilia ? (
+        <Card
+          component={Link}
+          href="/gerenciar-familia"
+          withBorder
+          padding="md"
+          radius="md"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Text fw={600}>Gerenciar família</Text>
+          <Text size="sm" c="dimmed">
+            Pessoas, acessos e convites — área administrativa separada do
+            acompanhamento.
+          </Text>
+        </Card>
       ) : null}
 
-      <MensagemFeedback erro={erro} sucesso={sucesso} />
+      <MensagemFeedback erro={erro ?? erroSessao} sucesso={sucesso} />
     </Stack>
   );
 }

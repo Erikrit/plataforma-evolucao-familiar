@@ -5,7 +5,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Accordion,
-  Anchor,
   Button,
   Card,
   Container,
@@ -97,12 +96,8 @@ export default function PaginaPerfil() {
   const semSessao = !carregando && !usuario;
 
   return (
-    <Container component="main" size="sm" py="lg" px="md">
+    <Container component="main" size="sm" px={0}>
       <Stack gap="lg">
-        <Anchor component={Link} href="/" size="sm">
-          ← Nossa família
-        </Anchor>
-
         {carregando ? <EstadoCarregando rotulo="Carregando perfil…" /> : null}
 
         <MensagemFeedback erro={erro} sucesso={sucesso} />

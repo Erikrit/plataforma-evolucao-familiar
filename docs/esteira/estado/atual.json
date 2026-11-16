@@ -2,12 +2,16 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "e2b47b4893027f486e194d222008a052a7509d81",
-    "nota": "HEAD ao iniciar demanda CT-20261116-001"
+    "commit": "af9a172060ed91d7c846ce209486bab15e32d564",
+    "nota": "HEAD reconcileado ao iniciar DEM-UX-NAV-ADM-20261116 (após DEM-CT-20261116-001); alterações locais ainda não commitadas"
   },
   "moduloId": "04-evolucao-familiar",
   "incrementoId": "EF-06",
-  "requisitos": ["EVO-R04", "EVO-R09", "EVO-R12"],
+  "requisitos": [
+    "EVO-R04",
+    "EVO-R09",
+    "EVO-R12"
+  ],
   "estado": "COMPLETED",
   "dependencias": [
     "Módulo 01–03 COMPLETED",
@@ -62,8 +66,12 @@
     ]
   },
   "verificacao": {
-    "qg1": { "status": "PASS" },
-    "qg2": { "status": "PASS" },
+    "qg1": {
+      "status": "PASS"
+    },
+    "qg2": {
+      "status": "PASS"
+    },
     "qg3": {
       "status": "PASS",
       "evidencia": "docs/esteira/estado/evidencia-qg3-modulo-04.json"
@@ -98,11 +106,61 @@
   "demanda": null,
   "demandasConcluidas": [
     {
+      "id": "DEM-UX-NAV-ADM-20261116",
+      "tipo": "melhoria_ux",
+      "origem": "humano + docs/ux-ui/REVISAO-MODULOS-01-02.md (revisão integrada 2026-11-16)",
+      "estado": "COMPLETED",
+      "criteriosAceite": [
+        "UX-NAV-01",
+        "UX-NAV-02",
+        "UX-ADM-01",
+        "UX-ADM-02",
+        "UX-CUI-01",
+        "UX-DES-01",
+        "UX-EVO-01",
+        "UX-ACC-01"
+      ],
+      "fingerprint": "sha256:db65d95aa716c68e",
+      "fingerprintFull": "sha256:db65d95aa716c68e3d18dc75bf56b651c29fe1b07004bfc835562a31582d43fe",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "25127f08-94fa-4193-9832-a0cfda7c2efa",
+      "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente com shell PASS (typecheck+smokes+critérios). Homologação humana PENDING_HUMAN.",
+      "evidencias": [
+        "docs/esteira/estado/qg1-typecheck-web-ux-nav.txt",
+        "docs/esteira/estado/qg2-build-web-ux-nav.txt",
+        "docs/esteira/estado/qg2-smoke-ct-acessos-ux-nav.txt",
+        "docs/esteira/estado/qg2-smoke-authz-ux-nav.txt"
+      ],
+      "arquivos": [
+        "apps/web/src/componentes/contexto-sessao.tsx",
+        "apps/web/src/componentes/navegacao-app.tsx",
+        "apps/web/src/componentes/provedores-app.tsx",
+        "apps/web/src/componentes/painel-fundacao.tsx",
+        "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+        "apps/web/src/app/gerenciar-familia/page.tsx",
+        "apps/web/src/app/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/resumo/page.tsx",
+        "apps/web/src/lib/api.ts"
+      ],
+      "homologacaoHumana": "PENDING_HUMAN",
+      "concluidaEm": "2026-11-16T19:42:59.309Z"
+    },
+    {
       "id": "DEM-CT-20261116-001",
       "tipo": "melhoria_funcional",
       "origem": "CT-20261116-001",
       "estado": "COMPLETED",
-      "criteriosAceite": ["FUN-04", "FUN-07", "FAM-R11"],
+      "criteriosAceite": [
+        "FUN-04",
+        "FUN-07",
+        "FAM-R11"
+      ],
       "fingerprint": "sha256:2a04c89c9f1f00e7",
       "qg1": "PASS",
       "qg2": "PASS",
@@ -126,9 +184,9 @@
       "concluidaEm": "2026-11-16T18:35:00.000Z"
     }
   ],
-  "proximaAcao": "DEM-CT-20261116-001 COMPLETED. Aguardar próxima demanda via task-routing (homologação familiar ainda PENDING_HUMAN).",
-  "atualizadoEm": "2026-11-16T18:35:00.000Z",
-  "notas": "Última demanda: consulta de acessos CT-20261116-001. Histórico módulos 01–04 preservado.",
+  "proximaAcao": "DEM-UX-NAV-ADM-20261116 COMPLETED. Homologação dispositivos UX-ACC-01 PENDING_HUMAN. Aguardar próxima demanda via task-routing.",
+  "atualizadoEm": "2026-11-16T19:42:59.309Z",
+  "notas": "Última demanda: UX navegação/admin/refinos. CT acessos reutilizado. Sem commit/push. Histórico módulos 01–04 e DEM-CT preservados.",
   "decisaoPendente": null,
   "moduloAnterior": {
     "id": "03-desenvolvimento-laurinha",

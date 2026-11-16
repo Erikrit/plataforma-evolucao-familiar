@@ -5,7 +5,6 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Accordion,
-  Anchor,
   Button,
   Card,
   Container,
@@ -315,16 +314,15 @@ export default function PaginaDesenvolvimento() {
   const saldo = estrelas?.saldoDisponivel ?? 0;
 
   return (
-    <Container component="main" size="sm" py="lg" px="md">
+    <Container component="main" size="sm" px={0}>
       <Stack gap="lg">
-        <Anchor component={Link} href={`/pessoas/${params.pessoaId}`} size="sm">
-          ← {nomePessoa || "Perfil"}
-        </Anchor>
-
         <Stack gap={4}>
-          <Title order={1}>Desenvolvimento</Title>
+          <Title order={1}>
+            Desenvolvimento{nomePessoa ? ` · ${nomePessoa}` : ""}
+          </Title>
           <Text c="dimmed" size="sm">
-            Brincadeiras presenciais — sem cobrança, sem prazo, sem ranking.
+            Biblioteca e participação primeiro — sem cobrança, sem prazo, sem
+            ranking.
           </Text>
         </Stack>
 
@@ -342,6 +340,72 @@ export default function PaginaDesenvolvimento() {
 
         {podeVer ? (
           <Stack gap="lg">
+            <SegmentedControl
+              fullWidth
+              value={filtro}
+              onChange={(v) => setFiltro(v as FiltroLista)}
+              data={[
+                { label: "Explorar", value: "todas" },
+                { label: "Guardadas", value: "guardadas" },
+              ]}
+            />
+
+            <Stack gap="sm">
+              <Title order={2}>{tituloLista}</Title>
+              {desafios.length === 0 ? (
+                <EstadoVazio
+                  titulo={
+                    filtro === "guardadas"
+                      ? "Nenhuma guardada"
+                      : "Nenhuma brincadeira ainda"
+                  }
+                  descricao={
+                    filtro === "guardadas"
+                      ? "Toque em Guardar numa brincadeira para vê-la aqui. Sem prazos."
+                      : "Crie uma ou aguarde a biblioteca da família."
+                  }
+                />
+              ) : (
+                desafios.map((desafio) => (
+                  <Card
+                    key={desafio.id}
+                    component="button"
+                    type="button"
+                    withBorder
+                    padding="md"
+                    radius="md"
+                    onClick={() => abrirDesafio(desafio)}
+                    style={{
+                      cursor: "pointer",
+                      textAlign: "left",
+                      width: "100%",
+                      font: "inherit",
+                      color: "inherit",
+                      background: "var(--mantine-color-body)",
+                    }}
+                  >
+                    <Stack gap={4}>
+                      <Text fw={600}>{desafio.nome}</Text>
+                      <Text size="sm" c="dimmed">
+                        {ROTULOS_DIFICULDADE[desafio.dificuldade] ??
+                          desafio.dificuldade}
+                        {desafio.categoria
+                          ? ` · ${ROTULOS_CATEGORIA[desafio.categoria] ?? desafio.categoria}`
+                          : ""}
+                        {desafio.guardado ? " · Guardada" : ""}
+                        {desafio.origem === "personalizada"
+                          ? " · Sua família"
+                          : ""}
+                      </Text>
+                      <Text size="sm" c="azul">
+                        Abrir
+                      </Text>
+                    </Stack>
+                  </Card>
+                ))
+              )}
+            </Stack>
+
             <Card withBorder padding="md" radius="md">
               <Stack gap="xs">
                 <Text fw={600}>Estrelas</Text>
@@ -368,23 +432,12 @@ export default function PaginaDesenvolvimento() {
             >
               <Text fw={600}>Ver evolução no histórico</Text>
               <Text size="sm" c="dimmed">
-                Abre a linha do tempo familiar (módulo 04) — sem segundo
-                cadastro.
+                Linha do tempo familiar — sem segundo cadastro.
               </Text>
               <Text size="sm" c="azul">
                 Abrir histórico
               </Text>
             </Card>
-
-            <SegmentedControl
-              fullWidth
-              value={filtro}
-              onChange={(v) => setFiltro(v as FiltroLista)}
-              data={[
-                { label: "Explorar", value: "todas" },
-                { label: "Guardadas", value: "guardadas" },
-              ]}
-            />
 
             <Accordion variant="contained" radius="md">
               <Accordion.Item value="criar">
@@ -492,53 +545,6 @@ export default function PaginaDesenvolvimento() {
                 </Accordion.Panel>
               </Accordion.Item>
             </Accordion>
-
-            <Stack gap="sm">
-              <Title order={2}>{tituloLista}</Title>
-              {desafios.length === 0 ? (
-                <EstadoVazio
-                  titulo={
-                    filtro === "guardadas"
-                      ? "Nenhuma guardada"
-                      : "Nenhuma brincadeira ainda"
-                  }
-                  descricao={
-                    filtro === "guardadas"
-                      ? "Toque em Guardar numa brincadeira para vê-la aqui. Sem prazos."
-                      : "Crie uma ou aguarde a biblioteca da família."
-                  }
-                />
-              ) : (
-                desafios.map((desafio) => (
-                  <Card
-                    key={desafio.id}
-                    withBorder
-                    padding="md"
-                    radius="md"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => abrirDesafio(desafio)}
-                  >
-                    <Stack gap={4}>
-                      <Text fw={600}>{desafio.nome}</Text>
-                      <Text size="sm" c="dimmed">
-                        {ROTULOS_DIFICULDADE[desafio.dificuldade] ??
-                          desafio.dificuldade}
-                        {desafio.categoria
-                          ? ` · ${ROTULOS_CATEGORIA[desafio.categoria] ?? desafio.categoria}`
-                          : ""}
-                        {desafio.guardado ? " · Guardada" : ""}
-                        {desafio.origem === "personalizada"
-                          ? " · Sua família"
-                          : ""}
-                      </Text>
-                      <Text size="sm" c="azul">
-                        Abrir
-                      </Text>
-                    </Stack>
-                  </Card>
-                ))
-              )}
-            </Stack>
           </Stack>
         ) : null}
       </Stack>

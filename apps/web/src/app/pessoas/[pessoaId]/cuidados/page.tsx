@@ -263,16 +263,12 @@ export default function PaginaCuidados() {
   const apoios = rotina?.secoes.atividadesApoio ?? [];
 
   return (
-    <Container component="main" size="sm" py="lg" px="md" className="cuidados-mobile">
+    <Container component="main" size="sm" px={0} className="cuidados-mobile">
       <Stack gap="lg">
-        <Anchor component={Link} href={`/pessoas/${params.pessoaId}`} size="sm">
-          ← {nomePessoa || "Perfil"}
-        </Anchor>
-
         <Stack gap={4}>
           <Title order={1}>Cuidados{nomePessoa ? ` de ${nomePessoa}` : ""}</Title>
           <Text c="dimmed" size="sm">
-            Toque no cartão para escolher o relato. Nada é registrado sozinho.
+            Rotina de hoje primeiro. Cadastros ficam em Gerenciar cuidados, sob demanda.
           </Text>
         </Stack>
 

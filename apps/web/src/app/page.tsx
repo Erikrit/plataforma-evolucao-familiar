@@ -3,7 +3,7 @@ import { PainelFundacao } from "@/componentes/painel-fundacao";
 
 export default function PaginaInicial() {
   return (
-    <Container component="main" size="sm" py="lg" px="md">
+    <Container component="main" size="sm" px={0}>
       <Title order={1}>Nossa família</Title>
       <Text c="dimmed" mb="md">
         Pessoas que você pode acompanhar, com acesso conforme sua autorização.

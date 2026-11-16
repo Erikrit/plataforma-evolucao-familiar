@@ -11,12 +11,19 @@ export type PessoaResumo = {
   emailConta?: string | null;
 };
 
+export type AreasAutorizadasCartao = {
+  cuidados: boolean;
+  desenvolvimento: boolean;
+  historico: boolean;
+};
+
 export type CartaoInicio = {
   pessoaId: string;
   nome: string;
   vinculo: string | null;
   possuiConta: boolean;
   resumo: string;
+  areasAutorizadas?: AreasAutorizadasCartao;
 };
 
 export type DestaqueInicio = {

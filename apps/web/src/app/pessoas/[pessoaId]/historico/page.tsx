@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
-  Anchor,
   Button,
   Card,
   Container,
@@ -133,40 +131,15 @@ export default function PaginaHistorico() {
     <Container
       component="main"
       size="sm"
-      py="lg"
-      px="md"
+      px={0}
       className="cuidados-mobile"
     >
       <Stack gap="lg">
         <Stack gap={4}>
-          <Anchor component={Link} href={`/pessoas/${params.pessoaId}`} size="sm">
-            ← Perfil
-          </Anchor>
-          {dominios?.cuidados ? (
-            <Anchor
-              component={Link}
-              href={`/pessoas/${params.pessoaId}/cuidados`}
-              size="sm"
-            >
-              Ver cuidados
-            </Anchor>
-          ) : null}
-          {dominios?.desenvolvimento ? (
-            <Anchor
-              component={Link}
-              href={`/pessoas/${params.pessoaId}/desenvolvimento`}
-              size="sm"
-            >
-              Ver desenvolvimento
-            </Anchor>
-          ) : null}
-        </Stack>
-
-        <Stack gap={4}>
           <Title order={1}>Histórico</Title>
           <Text c="dimmed" size="sm">
-            Linha do tempo a partir dos registros já feitos — sem cadastro
-            extra.
+            Linha do tempo a partir dos registros já feitos — use o menu para
+            voltar à pessoa ou abrir Cuidados e Desenvolvimento.
           </Text>
         </Stack>
 
