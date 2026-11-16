@@ -2,11 +2,14 @@
 
 Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
-## Estado atual (2026-11-15)
+## Estado atual (2026-11-16)
+
+- **Módulo 04 Evolução Familiar:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-04.json`
+- **Módulo 03 Desenvolvimento Laurinha:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-03.json`
+
 
 - **UX consolidação 01/02:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-ux-01-02.json`
 - **CV-PROG-V13:** COMPLETED — metadados v1.3 em `alterarProgramacao` + limpeza docs obsoletas
-- **Próximo:** módulo 03 — Desenvolvimento Laurinha (`module-planning`)
 - **Docs:** `REVISAO-INTEGRADA-2026-11-15.md` removida (não era fonte corrente; usar STATUS-E-ESCOPO)
 - **Correção auth/autorização:** COMPLETED (SA-01..SA-04, QG-3 PASS, verifier PASS)
 - **Módulo 02 Cuidados da Vovó:** COMPLETED (CV-01..CV-06, QG-3 PASS)
@@ -16,8 +19,114 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 - **App local:** `apps/api` + `apps/web` + Compose (Postgres `:5433`)
 - **Auth:** sessão MVP (hash SHA-256 + cookie httpOnly); IdP definitivo ainda em DECISOES.md
 - **ACE-C12:** PENDING (lembretes/PWA em dispositivos reais)
-- **Próximo produto após UX 01/02:** módulo 03 — Desenvolvimento Laurinha (`module-planning`)
 - **Commit/push/deploy:** sob decisão humana; não feitos pela esteira
+
+## 2026-11-16 — Módulo 04 COMPLETED (EF-06 + QG-3)
+
+- **EF-06:** destaques discretos em `/familias/:id/inicio` + seção “Para acompanhar” na home; authz por domínio; sem ranking/cobrança
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](b26db6d1-5a99-45cb-865b-b240239f53d9))
+- **QG-3:** PASS — `smoke:modulo-04` (reset + EF-01..EF-06)
+- **Fingerprint módulo:** `ef-modulo04-qg3-2026-11-16`
+- **Evidência:** `docs/esteira/estado/evidencia-qg3-modulo-04.json`
+- **Próximo:** designação humana do próximo módulo
+- **Commit/push:** não executados
+
+## 2026-11-16 — EF-05 COMPLETED
+
+- **EF-05:** `GET /resumo-previa` + PDF unificado por domínio autorizado; sem anexos; colaboradora 403; UI Exportar PDF em `/resumo`
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](b8b12bac-0352-4d8f-970e-4e1b78ae3130))
+- **Fingerprint:** `ef05-2026-11-16`
+- **Próximo:** EF-06 (destaques home + QG-3)
+- **Commit/push:** não executados
+
+## 2026-11-16 — EF-04 COMPLETED
+
+- **EF-04:** GET `/resumo-desenvolvimento` (experiências, categorias, estrelas, observações) + UI `/resumo`; personalizada sem categoria → `nao_classificada`; sem clínica/ranking
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](154e2cdf-934f-4fd0-b44d-e0a5ea3522fc))
+- **Fingerprint:** `ef04-2026-11-16`
+- **Próximo:** EF-05 (prévia/PDF autorizados)
+- **Commit/push:** não executados
+
+## 2026-11-15 — EF-01..EF-03 COMPLETED (pausa M04)
+
+- **EF-01:** histórico unificado + authz domínio · Verifier PASS ([verifier](22602b81-3adf-4bef-8e1f-101960402b5b))
+- **EF-02:** filtros período/domínio + UI histórico · Verifier PASS ([verifier](84711f1e-7823-48fb-8dae-1db0cb8297a5))
+- **EF-03:** resumo Vovó (previstos/tomadas/não tomadas/sem confirmação) + UI `/resumo` · Verifier PASS ([verifier](06ee571f-88c6-44f6-bcac-8f4ff036404d)); correção datas civis 1/3
+- **Pausa:** contexto longo; retomar com `implementation-workflow` em EF-04
+- **Restante M04:** EF-04 resumo Laurinha → EF-05 PDF → EF-06 destaques + QG-3
+- **Commit/push:** não executados
+
+## 2026-11-15 — Módulo 03 COMPLETED + planejamento Módulo 04
+
+- **Módulo 03:** DL-01..DL-06 COMPLETED; QG-3 PASS ([verifier DL-06](eceeba42-1498-4c75-9f62-92a773b2e6b0))
+- **Fingerprint:** `dl-modulo03-qg3-13844004b669409f`
+- **Entrega final:** UI saldo/recompensas/resgate; link histórico; authz histórico cuidados||desenvolvimento; smoke-modulo-03
+- **Módulo 04:** planejado EF-01 (histórico unificado) → EF-02 UI/filtros → EF-03 resumo Vovó → EF-04 resumo Laurinha → EF-05 PDF → EF-06 destaques+QG-3
+- **Commit/push:** não executados
+
+## 2026-11-15 — DL-06 COMPLETED (UI saldo + link M04 + QG-3)
+
+- **Entrega:** card estrelas/recompensas/resgate; link histórico; exigirVisao desenvolvimento; smokes dl05 + modulo-03
+- **QG-1/QG-2/QG-3:** PASS · Verifier PASS ([verifier](eceeba42-1498-4c75-9f62-92a773b2e6b0))
+- **Fingerprint módulo:** `dl-modulo03-qg3-13844004b669409f`
+- **Próximo:** módulo 04 EF-01
+- **Commit/push:** não executados
+
+## 2026-11-15 — DL-05 COMPLETED (UI explorar/criar/guardar/registrar)
+
+- **Entrega:** página `/pessoas/[id]/desenvolvimento`; link no perfil; cliente API; gate `podeVer`; só Concluiu/Participou
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](8b73259a-9333-47e4-b309-24443c0538d0))
+- **Fingerprint:** `dl05-2026-11-15`
+- **Evidências:** `qg1-typecheck-dl05.txt`, `qg2-build-dl05.txt`
+- **Correção:** authz UI (1/3) — ocultar formulários sem acesso
+- **Próximo:** DL-06 (saldo/recompensas + link histórico M04 + QG-3)
+- **Commit/push:** não executados
+
+## 2026-11-15 — DL-04 COMPLETED (recompensas + resgate)
+
+- **Entrega:** CRUD recompensas; resgate com `custoAplicado`; GET estrelas enriquecido; Serializable anti-saldo-negativo
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](8bd6ec6a-f458-4ad1-a69d-f9b422a28640))
+- **Fingerprint:** `dl04-2026-11-15`
+- **Evidências:** `qg1-typecheck-dl04.txt`, `qg2-build-dl04.txt`, `qg2-smoke-dl04.txt`
+- **Próximo:** DL-05 (UI mobile)
+- **Commit/push:** não executados
+
+## 2026-11-15 — DL-03 COMPLETED (participação + estrelas)
+
+- **Entrega:** POST participações Concluiu/Participou; estrelas 5/3·15 atômicas; idempotência `execucaoChave`; snapshot; correção; GET estrelas
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](81ba359d-03e1-4327-8409-7dfca96209a6))
+- **Fingerprint:** `dl03-2026-11-15`
+- **Evidências:** `qg1-typecheck-dl03.txt`, `qg2-build-dl03.txt`, `qg2-smoke-dl03.txt`
+- **Próximo:** DL-04 (recompensas/resgate)
+- **Commit/push:** não executados
+
+## 2026-11-15 — DL-02 COMPLETED (personalizada + guardar)
+
+- **Entrega:** POST personalizada (nome mín., dificuldade simples); guardar/retirar; PATCH metadados; flag `guardado` na listagem
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](efde3595-c3b1-43f8-a35c-80dcd36a3ab7))
+- **Fingerprint:** `dl02-2026-11-15`
+- **Evidências:** `qg1-typecheck-dl02.txt`, `qg2-build-dl02.txt`, `qg2-smoke-dl02.txt`
+- **Próximo:** DL-03 (participação + estrelas)
+- **Commit/push:** não executados
+
+## 2026-11-15 — DL-01 COMPLETED (biblioteca + authz desenvolvimento)
+
+- **Entrega:** schema domínio; `podeVerDesenvolvimento`; seed 6 atividades; `GET /pessoas/:id/desafios` e `GET /desafios?pessoaId=`; área no perfil/cartões
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](cb9b5f2f-1cfb-4361-9be3-176591b91b47))
+- **Fingerprint:** `dl01-2026-11-15`
+- **Evidências:** `qg1-typecheck-dl01.txt`, `qg2-build-dl01.txt`, `qg2-smoke-dl01.txt`
+- **Próximo:** DL-02 (personalizada + guardar)
+- **Commit/push:** não executados
+
+## 2026-11-15 — Planejamento módulo 03 READY (DL-01..DL-06)
+
+- **Espec:** `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md` v1.1 aprovada
+- **Incrementos:** DL-01 schema/authz/biblioteca → DL-02 personalizada/guardar → DL-03 participação/estrelas → DL-04 recompensas → DL-05 UI fluxos → DL-06 UI saldo + link M04 + QG-3
+- **Riscos altos:** privacidade infantil (ADR-006); idempotência/concorrência de estrelas e resgates (ADR-008)
+- **Preliminares:** contratos HTTP; tabela de resgate na modelagem
+- **Fora deste módulo:** IdP definitivo; M04 completo; ACE-C12
+- **Próximo:** `implementation-workflow` DL-01
+- **Commit/push:** não executados
 
 ## 2026-11-15 — QG-3 UX consolidação 01/02 PASS
 

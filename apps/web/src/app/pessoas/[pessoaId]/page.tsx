@@ -139,13 +139,20 @@ export default function PaginaPerfil() {
                   {perfil.areas.map((area) => {
                     const disponivel =
                       area.disponivel &&
-                      (area.id === "cuidados" || area.id === "historico");
+                      (area.id === "cuidados" ||
+                        area.id === "historico" ||
+                        area.id === "desenvolvimento" ||
+                        area.id === "resumo");
                     const href =
                       area.id === "cuidados"
                         ? `/pessoas/${perfil.id}/cuidados`
                         : area.id === "historico"
                           ? `/pessoas/${perfil.id}/historico`
-                          : null;
+                          : area.id === "desenvolvimento"
+                            ? `/pessoas/${perfil.id}/desenvolvimento`
+                            : area.id === "resumo"
+                              ? `/pessoas/${perfil.id}/resumo`
+                              : null;
 
                     if (disponivel && href) {
                       return (

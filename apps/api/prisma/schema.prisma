@@ -15,6 +15,7 @@ model Familia {
   autorizacoes Autorizacao[]
   convites     Convite[]
   anexos       Anexo[]
+  desafios     Desafio[]
 
   @@map("familia")
 }
@@ -35,6 +36,11 @@ model Pessoa {
   exames               Exame[]
   atividadesApoio      RegistroAtividade[]
   anexos               Anexo[]
+  desafiosGuardados    DesafioGuardado[]
+  participacoesDesafio ParticipacaoDesafio[]
+  movimentosEstrelas   MovimentoEstrelas[]
+  recompensas          Recompensa[]
+  resgatesRecompensa   ResgateRecompensa[]
 
   @@index([familiaId])
   @@map("pessoa")
@@ -51,6 +57,9 @@ model Usuario {
   autorizacoes    Autorizacao[]
   convitesCriados Convite[]          @relation("ConviteCriador")
   anexosCriados   Anexo[]            @relation("AnexoCriador")
+  desafiosCriados Desafio[]          @relation("DesafioCriador")
+  participacoesRegistradas ParticipacaoDesafio[] @relation("ParticipacaoAutor")
+  resgatesFeitos  ResgateRecompensa[] @relation("ResgateAutor")
 
   @@map("usuario")
 }
@@ -249,4 +258,117 @@ model RegistroAtividade {
 
   @@index([pessoaId, concluidaEm])
   @@map("registro_atividade")
+}
+
+/// Biblioteca curada (familiaId nulo) ou brincadeira personalizada da família (DEV-F01/F02).
+model Desafio {
+  id              String              @id @default(cuid())
+  familiaId       String?             @map("familia_id")
+  nome            String
+  instrucao       String?
+  categoria       String?
+  dificuldade     String              @default("simples")
+  materiais       String?
+  duracaoMinutos  Int?                @map("duracao_minutos")
+  origem          String              @default("catalogo")
+  ativo           Boolean             @default(true)
+  criadoPorId     String?             @map("criado_por_id")
+  criadoEm        DateTime            @default(now()) @map("criado_em")
+  familia         Familia?            @relation(fields: [familiaId], references: [id])
+  criadoPor       Usuario?            @relation("DesafioCriador", fields: [criadoPorId], references: [id])
+  guardados       DesafioGuardado[]
+  participacoes   ParticipacaoDesafio[]
+
+  @@index([familiaId, ativo])
+  @@index([origem, ativo])
+  @@index([categoria])
+  @@map("desafio")
+}
+
+/// Guardar para depois, sem prazo (DEV-F03).
+model DesafioGuardado {
+  id         String   @id @default(cuid())
+  pessoaId   String   @map("pessoa_id")
+  desafioId  String   @map("desafio_id")
+  guardadoEm DateTime @default(now()) @map("guardado_em")
+  pessoa     Pessoa   @relation(fields: [pessoaId], references: [id])
+  desafio    Desafio  @relation(fields: [desafioId], references: [id])
+
+  @@unique([pessoaId, desafioId])
+  @@index([pessoaId])
+  @@map("desafio_guardado")
+}
+
+/// Participação presencial; estrelas snapshot na própria linha (DEV-F04/F05).
+model ParticipacaoDesafio {
+  id                   String              @id @default(cuid())
+  pessoaId             String              @map("pessoa_id")
+  desafioId            String              @map("desafio_id")
+  resultado            String
+  observacao           String?
+  execucaoChave        String              @map("execucao_chave")
+  dificuldadeAplicada  String              @map("dificuldade_aplicada")
+  estrelasConcedidas   Int                 @map("estrelas_concedidas")
+  registradoPorId      String              @map("registrado_por_id")
+  registradoEm         DateTime            @default(now()) @map("registrado_em")
+  versaoAtiva          Boolean             @default(true) @map("versao_ativa")
+  substituiId          String?             @map("substitui_id")
+  pessoa               Pessoa              @relation(fields: [pessoaId], references: [id])
+  desafio              Desafio             @relation(fields: [desafioId], references: [id])
+  registradoPor        Usuario             @relation("ParticipacaoAutor", fields: [registradoPorId], references: [id])
+  substitui            ParticipacaoDesafio? @relation("CorrecaoParticipacao", fields: [substituiId], references: [id])
+  corrigidaPor         ParticipacaoDesafio[] @relation("CorrecaoParticipacao")
+  movimentos           MovimentoEstrelas[]
+
+  @@unique([execucaoChave])
+  @@index([pessoaId, registradoEm])
+  @@index([desafioId])
+  @@map("participacao_desafio")
+}
+
+model MovimentoEstrelas {
+  id             String               @id @default(cuid())
+  pessoaId       String               @map("pessoa_id")
+  tipo           String
+  quantidade     Int
+  saldoApos      Int                  @map("saldo_apos")
+  participacaoId String?              @map("participacao_id")
+  resgateId      String?              @map("resgate_id")
+  criadoEm       DateTime             @default(now()) @map("criado_em")
+  pessoa         Pessoa               @relation(fields: [pessoaId], references: [id])
+  participacao   ParticipacaoDesafio? @relation(fields: [participacaoId], references: [id])
+  resgate        ResgateRecompensa?   @relation(fields: [resgateId], references: [id])
+
+  @@index([pessoaId, criadoEm])
+  @@map("movimento_estrelas")
+}
+
+model Recompensa {
+  id        String              @id @default(cuid())
+  pessoaId  String              @map("pessoa_id")
+  nome      String
+  custo     Int
+  ativa     Boolean             @default(true)
+  criadoEm  DateTime            @default(now()) @map("criado_em")
+  pessoa    Pessoa              @relation(fields: [pessoaId], references: [id])
+  resgates  ResgateRecompensa[]
+
+  @@index([pessoaId, ativa])
+  @@map("recompensa")
+}
+
+model ResgateRecompensa {
+  id            String             @id @default(cuid())
+  recompensaId  String             @map("recompensa_id")
+  pessoaId      String             @map("pessoa_id")
+  custoAplicado Int                @map("custo_aplicado")
+  resgatadoPorId String            @map("resgatado_por_id")
+  resgatadoEm   DateTime           @default(now()) @map("resgatado_em")
+  recompensa    Recompensa         @relation(fields: [recompensaId], references: [id])
+  pessoa        Pessoa             @relation(fields: [pessoaId], references: [id])
+  resgatadoPor  Usuario            @relation("ResgateAutor", fields: [resgatadoPorId], references: [id])
+  movimentos    MovimentoEstrelas[]
+
+  @@index([pessoaId, resgatadoEm])
+  @@map("resgate_recompensa")
 }

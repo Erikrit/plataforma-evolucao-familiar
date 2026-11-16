@@ -73,6 +73,37 @@ export async function garantirResponsavelCuidados(
   return corpo;
 }
 
+export async function garantirResponsavelDesenvolvimento(
+  base,
+  headers,
+  familiaId,
+  usuarioId,
+  pessoaAlvoId,
+) {
+  const r = await fetch(`${base}/familias/${familiaId}/autorizacoes`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      usuarioId,
+      responsabilidade: "responsavel_desenvolvimento",
+      pessoaAlvoId,
+    }),
+  });
+  const texto = await r.text();
+  let corpo;
+  try {
+    corpo = JSON.parse(texto);
+  } catch {
+    corpo = texto;
+  }
+  if (r.status >= 300) {
+    throw new Error(
+      `falha ao conceder responsavel_desenvolvimento: ${JSON.stringify(corpo)}`,
+    );
+  }
+  return corpo;
+}
+
 export async function login(base, email, senha) {
   const r = await fetch(`${base}/sessoes`, {
     method: "POST",

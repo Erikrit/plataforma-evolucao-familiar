@@ -27,6 +27,7 @@ import {
   sair,
   type AutorizacaoResumo,
   type CartaoInicio,
+  type DestaqueInicio,
   type UsuarioSessao,
 } from "@/lib/api";
 import {
@@ -54,6 +55,7 @@ export function PainelFundacao() {
   const [senha, setSenha] = useState("");
   const [nome, setNome] = useState("");
   const [cartoes, setCartoes] = useState<CartaoInicio[]>([]);
+  const [destaques, setDestaques] = useState<DestaqueInicio[]>([]);
   const [autorizacoes, setAutorizacoes] = useState<AutorizacaoResumo[]>([]);
   const [filtrado, setFiltrado] = useState(false);
   const [emailConvite, setEmailConvite] = useState("");
@@ -118,6 +120,7 @@ export function PainelFundacao() {
   async function carregarInicio(atual: UsuarioSessao) {
     const inicio = await obterInicio(atual.pessoa.familiaId);
     setCartoes(inicio.cartoes);
+    setDestaques(inicio.destaques ?? []);
     setAutorizacoes(inicio.autorizacoes);
     setFiltrado(inicio.filtradoPorAutorizacao);
   }
@@ -219,6 +222,7 @@ export function PainelFundacao() {
     } finally {
       setUsuario(null);
       setCartoes([]);
+      setDestaques([]);
       setAutorizacoes([]);
       setLinkAtivacao(null);
       setCarregando(false);
@@ -285,6 +289,37 @@ export function PainelFundacao() {
           Sair
         </Button>
       </Group>
+
+      {destaques.length > 0 ? (
+        <Stack gap="sm">
+          <Title order={2}>Para acompanhar</Title>
+          <Text c="dimmed" size="sm">
+            Poucos acontecimentos recentes ou próximos, só do que você pode ver.
+          </Text>
+          <Stack gap="xs">
+            {destaques.map((d) => (
+              <Card
+                key={`${d.tipo}-${d.pessoaId}-${d.quando}`}
+                component={Link}
+                href={`/pessoas/${d.pessoaId}`}
+                withBorder
+                padding="sm"
+                radius="md"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <Stack gap={2}>
+                  <Text size="sm" fw={600}>
+                    {d.titulo}
+                  </Text>
+                  <Text size="xs" c="dimmed">
+                    {d.pessoaNome}
+                  </Text>
+                </Stack>
+              </Card>
+            ))}
+          </Stack>
+        </Stack>
+      ) : null}
 
       <Stack gap="sm">
         <Title order={2}>Pessoas</Title>

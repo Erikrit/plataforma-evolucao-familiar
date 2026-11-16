@@ -12,6 +12,12 @@ const prisma = new PrismaClient();
 const raizApi = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const tabelas = [
+  "movimento_estrelas",
+  "resgate_recompensa",
+  "participacao_desafio",
+  "desafio_guardado",
+  "recompensa",
+  "desafio",
   "registro_dose",
   "programacao_medicamento",
   "medicamento_anexo",

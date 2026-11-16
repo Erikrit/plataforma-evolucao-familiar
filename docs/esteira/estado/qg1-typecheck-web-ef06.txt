@@ -1,0 +1,4 @@
+comando: npx tsc --noEmit -p tsconfig.json (apps/web)
+exit_code: 0
+resultado: PASS
+incremento: EF-06

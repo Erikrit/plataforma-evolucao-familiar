@@ -1,155 +1,145 @@
 {
-  "moduloId": "ux-consolidacao-01-02",
-  "incrementoId": "CV-PROG-V13",
-  "requisitos": ["CUI-F01", "CUI-F04", "UX-11"],
+  "moduloId": "04-evolucao-familiar",
+  "incrementoId": "EF-06",
+  "requisitos": ["EVO-R04", "EVO-R09", "EVO-R12"],
   "estado": "COMPLETED",
   "dependencias": [
-    "UX-MEDICAMENTO COMPLETED",
-    "docs/modulos/02-cuidados-vovo/ESPECIFICACAO.md v1.3",
-    "decisão humana: opção A (adequar API/Prisma)"
+    "Módulo 01–03 COMPLETED",
+    "EF-01..EF-05 COMPLETED",
+    "docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md v1.1"
   ],
   "arquivos": [
-    "apps/api/src/cuidados/servico-medicamentos.ts",
-    "apps/api/src/cuidados/controlador-cuidados.ts",
+    "apps/api/src/autorizacoes/servico-autorizacoes.ts",
     "apps/web/src/lib/api.ts",
-    "docs/modulos/02-cuidados-vovo/ESPECIFICACAO.md",
-    "docs/produto/STATUS-E-ESCOPO.md",
-    "docs/ux-ui/REVISAO-MODULOS-01-02.md",
-    "docs/produto/REVISAO-INTEGRADA-2026-11-15.md",
-    "README.md"
+    "apps/web/src/componentes/painel-fundacao.tsx",
+    "apps/api/scripts/smoke-ef06.mjs",
+    "apps/api/scripts/smoke-modulo-04.mjs",
+    "apps/api/package.json"
   ],
   "planejamento": {
     "especificacao": {
-      "caminho": "docs/modulos/02-cuidados-vovo/ESPECIFICACAO.md",
-      "versao": "v1.3",
+      "caminho": "docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md",
+      "versao": "v1.1",
       "status": "aprovado"
     },
-    "aprovado": [
-      "Propagar metadados CUI-F01 v1.3 em alterarProgramacao (CUI-F04)",
-      "Compatibilidade legado horarios[] para smokes",
-      "Remover/atualizar docs que descrevem estado pré-v1.3 e confundem fontes oficiais"
-    ],
-    "preliminar": [],
-    "pendente": [
-      "QG-3 / revisão visual integrada do pacote UX 01/02",
-      "ACE-C12 dispositivos reais"
-    ],
-    "riscos": [
+    "incrementos": [
       {
-        "id": "R-PROG-SMOKE",
-        "nivel": "baixo",
-        "descricao": "PUT programacao com só horarios[] permanece compatível (legadoSemMetadados)"
+        "id": "EF-01",
+        "status": "COMPLETED",
+        "aceite": "Histórico unificado + authz por domínio"
+      },
+      {
+        "id": "EF-02",
+        "status": "COMPLETED",
+        "aceite": "Filtros período/domínio + UI histórico"
+      },
+      {
+        "id": "EF-03",
+        "status": "COMPLETED",
+        "aceite": "Resumo Vovó previstos/tomadas/não tomadas/sem confirmação + UI"
+      },
+      {
+        "id": "EF-04",
+        "status": "COMPLETED",
+        "aceite": "GET resumo Laurinha + UI /resumo; sem clínica/ranking; nao_classificada"
+      },
+      {
+        "id": "EF-05",
+        "status": "COMPLETED",
+        "aceite": "Prévia/PDF autorizados; sem anexos; colaboradora sem export"
+      },
+      {
+        "id": "EF-06",
+        "status": "COMPLETED",
+        "aceite": "Destaques discretos na home + QG-3 módulo 04"
       }
-    ],
-    "criteriosAceite": [
-      "alterarProgramacao persiste primeiroHorario, dosesPorDia, duracao, conferência e intervalo",
-      "legado só-horarios deriva metadados e marca conferido",
-      "STATUS/ESPECIFICACAO/UX sem afirmar que cadastro v1.3 não foi implementado",
-      "REVISAO-INTEGRADA removida (não é fonte corrente)",
-      "Typecheck API PASS"
     ]
   },
   "verificacao": {
-    "qg1": {
-      "status": "PASS",
-      "evidencia": "docs/esteira/estado/qg1-typecheck-cv-prog-v13.txt"
-    },
-    "qg2": {
-      "status": "PASS",
-      "evidencia": "docs/esteira/estado/qg2-build-cv-prog-v13.txt",
-      "verifier": "PASS",
-      "verifierId": "c2b9f6bc-619a-4250-9049-09078c164801"
-    },
+    "qg1": { "status": "PASS" },
+    "qg2": { "status": "PASS" },
     "qg3": {
       "status": "PASS",
-      "evidencia": "docs/esteira/estado/evidencia-qg3-ux-01-02.json",
-      "nota": "ACE-C12 permanece PENDING (dispositivos reais)"
+      "evidencia": "docs/esteira/estado/evidencia-qg3-modulo-04.json"
     },
     "evidencias": [
-      "docs/esteira/estado/qg1-typecheck-cv-prog-v13.txt",
-      "docs/esteira/estado/qg2-build-cv-prog-v13.txt",
-      "docs/esteira/estado/qg3-smoke-cv03.txt",
-      "docs/esteira/estado/qg3-smoke-authz.txt",
-      "docs/esteira/estado/qg3-smoke-modulo-02.txt",
-      "docs/esteira/estado/qg3-smoke-cv05.txt",
-      "docs/esteira/estado/evidencia-qg3-ux-01-02.json",
-      "docs/esteira/estado/qg3-capturas/"
-    ]
+      "docs/esteira/estado/qg1-typecheck-ef06.txt",
+      "docs/esteira/estado/qg1-typecheck-web-ef06.txt",
+      "docs/esteira/estado/qg2-smoke-ef06.txt",
+      "docs/esteira/estado/qg2-build-ef06.txt",
+      "docs/esteira/estado/qg3-smoke-modulo-04.txt",
+      "docs/esteira/estado/evidencia-qg3-modulo-04.json"
+    ],
+    "ultimoIncremento": {
+      "id": "EF-06",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "qg3": "PASS",
+      "verifier": "PASS",
+      "verifierId": "b26db6d1-5a99-45cb-865b-b240239f53d9",
+      "evidencias": [
+        "docs/esteira/estado/qg1-typecheck-ef06.txt",
+        "docs/esteira/estado/qg1-typecheck-web-ef06.txt",
+        "docs/esteira/estado/qg2-smoke-ef06.txt",
+        "docs/esteira/estado/qg2-build-ef06.txt",
+        "docs/esteira/estado/qg3-smoke-modulo-04.txt"
+      ]
+    }
   },
-  "fingerprint": "ux-01-02-qg3-2026-11-15",
-  "tentativasCorrecao": {
-    "ace-c11-drawer": 1,
-    "historico-linguagem-familiar": 1
-  },
-  "proximaAcao": "Commit sob decisão humana; em seguida module-planning do módulo 03. Sem commit/push automático.",
-  "atualizadoEm": "2026-11-15T18:30:00.000Z",
-  "notas": "Pacote UX 01/02 QG-3 PASS. Correções no QG-3: smoke ACE-C11 (Drawer) + histórico linguagem familiar. ACE-C12 PENDING.",
+  "fingerprint": "ef-modulo04-qg3-2026-11-16",
+  "tentativasCorrecao": {},
+  "proximaAcao": "Módulo 04 COMPLETED. Aguardar designação do próximo módulo (humano).",
+  "atualizadoEm": "2026-11-16T11:12:00.000Z",
+  "notas": "Módulo 04 Evolução Familiar CLOSED (EF-01..EF-06 + QG-3 PASS).",
   "decisaoPendente": null,
-  "decisaoResolvida": {
-    "id": "UX-11-CONTRATO-MEDICAMENTO",
-    "escolha": "A",
-    "quando": "2026-11-15"
+  "moduloAnterior": {
+    "id": "03-desenvolvimento-laurinha",
+    "status": "COMPLETED",
+    "qg3": "PASS",
+    "fingerprint": "dl-modulo03-qg3-13844004b669409f"
   },
   "incrementosConcluidos": [
     {
-      "id": "UX-BASE",
+      "id": "EF-01",
       "status": "COMPLETED",
-      "requisitos": ["UX-06", "UX-14-base"],
-      "fingerprint": "ux-base-2026-11-15",
-      "verifier": "PASS"
+      "fingerprint": "ef01-2026-11-15",
+      "verifierId": "22602b81-3adf-4bef-8e1f-101960402b5b"
     },
     {
-      "id": "UX-HOME",
+      "id": "EF-02",
       "status": "COMPLETED",
-      "requisitos": ["UX-01", "UX-02", "UX-03"],
-      "fingerprint": "ux-home-2026-11-15",
-      "verifier": "PASS",
-      "verifierId": "f80afdb7-6106-48b7-a1f0-f487696e05a9"
+      "fingerprint": "ef02-2026-11-15",
+      "verifierId": "84711f1e-7823-48fb-8dae-1db0cb8297a5"
     },
     {
-      "id": "UX-PERFIL-CONVITE",
+      "id": "EF-03",
       "status": "COMPLETED",
-      "requisitos": ["UX-04", "UX-05"],
-      "fingerprint": "ux-perfil-convite-2026-11-15",
-      "verifier": "PASS",
-      "verifierId": "fe57a657-2235-4bdc-b513-227ba1cb65e1"
+      "fingerprint": "ef03-2026-11-15",
+      "verifierId": "06ee571f-88c6-44f6-bcac-8f4ff036404d"
     },
     {
-      "id": "UX-CUIDADOS-ROTINA",
+      "id": "EF-04",
       "status": "COMPLETED",
-      "requisitos": ["UX-07", "UX-08", "UX-09", "UX-10"],
-      "fingerprint": "ux-cuidados-rotina-2026-11-15",
-      "verifier": "PASS",
-      "verifierId": "5fd7c7b2-24d2-4f48-8c7b-4ea83e86976a"
+      "fingerprint": "ef04-2026-11-16",
+      "verifierId": "154e2cdf-934f-4fd0-b44d-e0a5ea3522fc"
     },
     {
-      "id": "UX-CUIDADOS-LISTAS",
+      "id": "EF-05",
       "status": "COMPLETED",
-      "requisitos": ["UX-12", "UX-13"],
-      "fingerprint": "ux-cuidados-listas-2026-11-15",
-      "verifier": "PASS",
-      "verifierId": "4ad3d9c9-6283-4f88-b214-cdc44a6b6528"
+      "fingerprint": "ef05-2026-11-16",
+      "verifierId": "b8b12bac-0352-4d8f-970e-4e1b78ae3130"
     },
     {
-      "id": "UX-MEDICAMENTO",
+      "id": "EF-06",
       "status": "COMPLETED",
-      "requisitos": ["UX-11"],
-      "fingerprint": "ux-medicamento-2026-11-15",
-      "verifier": "PASS",
-      "verifierId": "76c1bc8d-5025-4107-9979-1056466f0996"
-    },
-    {
-      "id": "CV-PROG-V13",
-      "status": "COMPLETED",
-      "requisitos": ["CUI-F01", "CUI-F04", "UX-11"],
-      "fingerprint": "cv-prog-v13-2026-11-15",
-      "verifier": "PASS",
-      "verifierId": "c2b9f6bc-619a-4250-9049-09078c164801"
+      "fingerprint": "ef06-2026-11-16",
+      "verifierId": "b26db6d1-5a99-45cb-865b-b240239f53d9"
     }
   ],
   "modulo": {
-    "id": "ux-consolidacao-01-02",
+    "id": "04-evolucao-familiar",
     "status": "COMPLETED",
-    "qg3": "PASS"
+    "qg3": "PASS",
+    "fingerprint": "ef-modulo04-qg3-2026-11-16"
   }
 }

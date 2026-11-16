@@ -80,6 +80,11 @@ export class ServicoPessoas {
       pessoaId,
       usuario,
     );
+    const desenvolvimento = await this.autorizacoes.podeVerDesenvolvimento(
+      familiaId,
+      pessoaId,
+      usuario,
+    );
     return {
       id: pessoa.id,
       nome: pessoa.nome,
@@ -93,9 +98,18 @@ export class ServicoPessoas {
         {
           id: "desenvolvimento",
           rotulo: "Desenvolvimento",
-          disponivel: false,
+          disponivel: desenvolvimento,
         },
-        { id: "historico", rotulo: "Histórico", disponivel: cuidados },
+        {
+          id: "historico",
+          rotulo: "Histórico",
+          disponivel: cuidados || desenvolvimento,
+        },
+        {
+          id: "resumo",
+          rotulo: "Resumo",
+          disponivel: cuidados || desenvolvimento,
+        },
       ],
     };
   }

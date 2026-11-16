@@ -232,6 +232,22 @@ export class ServicoAutorizacoes {
     ]);
   }
 
+  /**
+   * Desenvolvimento da criança: só responsável de desenvolvimento (ou a própria pessoa).
+   * Admin puro e colaboradora de cuidados NÃO acessam (DEV / FAM-R03/R06).
+   */
+  async podeVerDesenvolvimento(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    if (usuario.pessoa.familiaId !== familiaId) return false;
+    if (usuario.pessoa.id === pessoaId) return true;
+    return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
+      "responsavel_desenvolvimento",
+    ]);
+  }
+
   /** Documentos/anexos sensíveis: responsável de cuidados ou a própria pessoa. */
   async podeConsultarAnexosCuidados(
     familiaId: string,
@@ -285,6 +301,24 @@ export class ServicoAutorizacoes {
     return this.podeAlterarProgramacaoCuidados(familiaId, pessoaId, usuario);
   }
 
+  /**
+   * PDF completo: responsável de cuidados ou de desenvolvimento.
+   * Colaboradora e admin puro não exportam (EVO-R05 / CUI).
+   */
+  async podeExportarRelatorio(
+    familiaId: string,
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ): Promise<boolean> {
+    const [cuidados, desenvolvimento] = await Promise.all([
+      this.podeExportarRelatorioCuidados(familiaId, pessoaId, usuario),
+      this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
+        "responsavel_desenvolvimento",
+      ]),
+    ]);
+    return cuidados || desenvolvimento;
+  }
+
   private async temResponsabilidadeSobrePessoa(
     familiaId: string,
     pessoaId: string,
@@ -324,8 +358,17 @@ export class ServicoAutorizacoes {
     const autorizacoes = await this.listarDoUsuario(familiaId, usuario);
 
     const cartoes = [];
+    const idsCuidados: string[] = [];
+    const idsDesenvolvimento: string[] = [];
     for (const p of pessoas) {
       const cuidados = await this.podeVerCuidados(familiaId, p.id, usuario);
+      const desenvolvimento = await this.podeVerDesenvolvimento(
+        familiaId,
+        p.id,
+        usuario,
+      );
+      if (cuidados) idsCuidados.push(p.id);
+      if (desenvolvimento) idsDesenvolvimento.push(p.id);
       cartoes.push({
         pessoaId: p.id,
         nome: p.nome,
@@ -334,18 +377,116 @@ export class ServicoAutorizacoes {
         resumo: p.vinculo ? `Vínculo: ${p.vinculo}` : "Pessoa da família",
         areasAutorizadas: {
           cuidados,
-          historico: cuidados,
+          desenvolvimento,
+          historico: cuidados || desenvolvimento,
         },
       });
     }
 
+    const destaques = await this.montarDestaquesInicio(
+      pessoas.map((p) => ({ id: p.id, nome: p.nome })),
+      idsCuidados,
+      idsDesenvolvimento,
+    );
+
     return {
       familiaId,
       cartoes,
+      destaques,
       autorizacoes,
       filtradoPorAutorizacao: visao.ids !== "todas",
       adminSemAcessoClinicoAutomatico: true,
     };
+  }
+
+  /**
+   * Poucos destaques autorizados na home (EVO-R04/R09/R12).
+   * Sem feed, ranking, contagens privadas ou mensagens de cobrança.
+   */
+  private async montarDestaquesInicio(
+    pessoas: { id: string; nome: string }[],
+    idsCuidados: string[],
+    idsDesenvolvimento: string[],
+  ) {
+    const nomePorId = new Map(pessoas.map((p) => [p.id, p.nome]));
+    type Destaque = {
+      tipo: "consulta_proxima" | "experiencia_recente";
+      pessoaId: string;
+      pessoaNome: string;
+      titulo: string;
+      quando: Date;
+    };
+    const candidatos: Destaque[] = [];
+    const agora = new Date();
+    const limite = 3;
+
+    if (idsCuidados.length > 0) {
+      const consultas = await this.prisma.consulta.findMany({
+        where: {
+          pessoaId: { in: idsCuidados },
+          status: "agendada",
+          dataHora: { gte: agora },
+        },
+        orderBy: { dataHora: "asc" },
+        take: limite,
+        select: {
+          pessoaId: true,
+          especialidadeOuDescricao: true,
+          dataHora: true,
+        },
+      });
+      for (const c of consultas) {
+        candidatos.push({
+          tipo: "consulta_proxima",
+          pessoaId: c.pessoaId,
+          pessoaNome: nomePorId.get(c.pessoaId) ?? "Pessoa",
+          titulo: `Consulta: ${c.especialidadeOuDescricao}`,
+          quando: c.dataHora,
+        });
+      }
+    }
+
+    if (idsDesenvolvimento.length > 0) {
+      const desde = new Date(agora.getTime() - 7 * 864e5);
+      const participacoes = await this.prisma.participacaoDesafio.findMany({
+        where: {
+          pessoaId: { in: idsDesenvolvimento },
+          versaoAtiva: true,
+          resultado: "concluiu",
+          registradoEm: { gte: desde, lte: agora },
+        },
+        orderBy: { registradoEm: "desc" },
+        take: limite,
+        include: { desafio: { select: { nome: true } } },
+      });
+      for (const p of participacoes) {
+        candidatos.push({
+          tipo: "experiencia_recente",
+          pessoaId: p.pessoaId,
+          pessoaNome: nomePorId.get(p.pessoaId) ?? "Pessoa",
+          titulo: `Conquista: ${p.desafio.nome}`,
+          quando: p.registradoEm,
+        });
+      }
+    }
+
+    candidatos.sort((a, b) => {
+      if (a.tipo !== b.tipo) {
+        return a.tipo === "consulta_proxima" ? -1 : 1;
+      }
+      if (a.tipo === "consulta_proxima") {
+        return a.quando.getTime() - b.quando.getTime();
+      }
+      return b.quando.getTime() - a.quando.getTime();
+    });
+
+    return candidatos.slice(0, limite).map((d) => ({
+      tipo: d.tipo,
+      pessoaId: d.pessoaId,
+      pessoaNome: d.pessoaNome,
+      titulo: d.titulo,
+      quando: d.quando.toISOString(),
+    }));
   }
 
   private async formatar(id: string) {

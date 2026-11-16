@@ -19,6 +19,14 @@ export type CartaoInicio = {
   resumo: string;
 };
 
+export type DestaqueInicio = {
+  tipo: "consulta_proxima" | "experiencia_recente";
+  pessoaId: string;
+  pessoaNome: string;
+  titulo: string;
+  quando: string;
+};
+
 export type AutorizacaoResumo = {
   id: string;
   responsabilidade: string;
@@ -29,6 +37,7 @@ export type AutorizacaoResumo = {
 export type InicioResposta = {
   familiaId: string;
   cartoes: CartaoInicio[];
+  destaques?: DestaqueInicio[];
   autorizacoes: AutorizacaoResumo[];
   filtradoPorAutorizacao: boolean;
 };
@@ -314,8 +323,35 @@ export async function criarConsulta(
   return resposta.json();
 }
 
-export async function obterHistorico(pessoaId: string) {
-  const resposta = await fetchApi(`/pessoas/${pessoaId}/historico`);
+export type EventoHistorico = {
+  tipo: string;
+  dominio?: "cuidados" | "desenvolvimento";
+  quando: string;
+  resumo: string;
+  origemId: string;
+  categoria?: string | null;
+};
+
+export type HistoricoResposta = {
+  pessoaId: string;
+  derivadoDeRegistrosOrigem?: boolean;
+  dominios?: { cuidados: boolean; desenvolvimento: boolean };
+  filtro?: { de: string | null; ate: string | null; dominio: string | null };
+  eventos: EventoHistorico[];
+};
+
+export async function obterHistorico(
+  pessoaId: string,
+  filtro?: { de?: string; ate?: string; dominio?: string },
+): Promise<HistoricoResposta> {
+  const params = new URLSearchParams();
+  if (filtro?.de) params.set("de", filtro.de);
+  if (filtro?.ate) params.set("ate", filtro.ate);
+  if (filtro?.dominio) params.set("dominio", filtro.dominio);
+  const q = params.toString();
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/historico${q ? `?${q}` : ""}`,
+  );
   if (!resposta.ok) {
     throw new Error(
       resposta.status === 403
@@ -325,12 +361,386 @@ export async function obterHistorico(pessoaId: string) {
           : `Erro ${resposta.status}`,
     );
   }
-  return (await resposta.json()) as {
-    eventos: {
-      tipo: string;
-      quando: string;
-      resumo: string;
-      origemId: string;
-    }[];
+  return (await resposta.json()) as HistoricoResposta;
+}
+
+export type DesafioResumo = {
+  id: string;
+  nome: string;
+  instrucao: string | null;
+  categoria: string | null;
+  dificuldade: string;
+  materiais: string | null;
+  duracaoMinutos: number | null;
+  origem: string;
+  familiaId: string | null;
+  guardado: boolean;
+};
+
+export type ListaDesafios = {
+  pessoaId: string;
+  total: number;
+  desafios: DesafioResumo[];
+};
+
+export type ParticipacaoRegistrada = {
+  id: string;
+  pessoaId: string;
+  desafioId: string;
+  resultado: string;
+  observacao: string | null;
+  execucaoChave: string;
+  dificuldadeAplicada: string;
+  estrelasConcedidas: number;
+  registradoEm: string;
+  idempotente: boolean;
+  saldoAtual: number;
+};
+
+export type EstrelasResumo = {
+  pessoaId: string;
+  saldoDisponivel: number;
+  totalConquistado: number;
+  totalResgatado: number;
+  movimentosRecentes: {
+    id: string;
+    tipo: string;
+    quantidade: number;
+    saldoApos: number;
+    criadoEm: string;
+  }[];
+  resgatesRecentes: {
+    id: string;
+    recompensaId: string;
+    nome: string;
+    custoAplicado: number;
+    resgatadoEm: string;
+  }[];
+};
+
+export type RecompensaResumo = {
+  id: string;
+  nome: string;
+  custo: number;
+  ativa: boolean;
+};
+
+function erroDesenvolvimento(status: number, fallback: string) {
+  if (status === 403) return "Acesso negado ao desenvolvimento.";
+  if (status === 401) return "Faça login na página inicial.";
+  return fallback;
+}
+
+export type ResumoCuidados = {
+  pessoaId: string;
+  tipo: string;
+  periodo: { de: string; ate: string };
+  doses: {
+    previstos: number;
+    tomadasInformadas: number;
+    naoTomadasInformadas: number;
+    semConfirmacao: number;
   };
+  esclarecimento: string;
+  consultas: {
+    id: string;
+    especialidadeOuDescricao: string;
+    dataHora: string;
+    status: string;
+  }[];
+  exames: { id: string; descricao: string; criadoEm: string }[];
+  inferenciaClinica: boolean;
+};
+
+export async function obterResumoCuidados(
+  pessoaId: string,
+  periodo: { de: string; ate: string },
+): Promise<ResumoCuidados> {
+  const params = new URLSearchParams({
+    de: periodo.de,
+    ate: periodo.ate,
+  });
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/resumo-cuidados?${params}`,
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      resposta.status === 403
+        ? "Acesso negado ao resumo."
+        : resposta.status === 401
+          ? "Faça login na página inicial."
+          : await lerErro(resposta),
+    );
+  }
+  return (await resposta.json()) as ResumoCuidados;
+}
+
+export type ResumoDesenvolvimento = {
+  pessoaId: string;
+  tipo: string;
+  periodo: { de: string; ate: string };
+  experiencias: {
+    id: string;
+    nome: string;
+    categoria: string;
+    origem: string;
+    resultado: string;
+    estrelasConcedidas: number;
+    observacao: string | null;
+    registradoEm: string;
+  }[];
+  categoriasExploradas: { categoria: string; quantidade: number }[];
+  estrelas: {
+    concedidasNoPeriodo: number;
+    esclarecimento: string;
+  };
+  observacoes: {
+    experienciaId: string;
+    nome: string;
+    texto: string;
+    registradoEm: string;
+  }[];
+  inferenciaClinica: boolean;
+  ranking: boolean;
+};
+
+export async function obterResumoDesenvolvimento(
+  pessoaId: string,
+  periodo: { de: string; ate: string },
+): Promise<ResumoDesenvolvimento> {
+  const params = new URLSearchParams({
+    de: periodo.de,
+    ate: periodo.ate,
+  });
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/resumo-desenvolvimento?${params}`,
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      resposta.status === 403
+        ? "Acesso negado ao resumo."
+        : resposta.status === 401
+          ? "Faça login na página inicial."
+          : await lerErro(resposta),
+    );
+  }
+  return (await resposta.json()) as ResumoDesenvolvimento;
+}
+
+export type ResumoPrevia = {
+  pessoaId: string;
+  periodo: { de: string; ate: string };
+  geradoEm: string;
+  dominios: { cuidados: boolean; desenvolvimento: boolean };
+  cuidados: ResumoCuidados | null;
+  desenvolvimento: ResumoDesenvolvimento | null;
+  anexosIncluidos: boolean;
+  inferenciaClinica: boolean;
+  avisoPrivacidade: string;
+  previa: boolean;
+};
+
+export type RelatorioPdf = {
+  previa: ResumoPrevia;
+  pdfBase64: string;
+  mimeTipo: string;
+  anexosIncluidos: boolean;
+};
+
+export async function obterResumoPrevia(
+  pessoaId: string,
+  periodo: { de: string; ate: string },
+): Promise<ResumoPrevia> {
+  const params = new URLSearchParams({
+    de: periodo.de,
+    ate: periodo.ate,
+  });
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/resumo-previa?${params}`,
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      resposta.status === 403
+        ? "Acesso negado ao resumo."
+        : resposta.status === 401
+          ? "Faça login na página inicial."
+          : await lerErro(resposta),
+    );
+  }
+  return (await resposta.json()) as ResumoPrevia;
+}
+
+export async function obterRelatorioPdf(
+  pessoaId: string,
+  periodo: { de: string; ate: string },
+): Promise<RelatorioPdf> {
+  const params = new URLSearchParams({
+    de: periodo.de,
+    ate: periodo.ate,
+  });
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/relatorio.pdf?${params}`,
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      resposta.status === 403
+        ? "Colaboradora não exporta PDF completo por padrão."
+        : resposta.status === 401
+          ? "Faça login na página inicial."
+          : await lerErro(resposta),
+    );
+  }
+  return (await resposta.json()) as RelatorioPdf;
+}
+
+export async function listarDesafios(
+  pessoaId: string,
+  filtro?: { categoria?: string; guardados?: boolean },
+): Promise<ListaDesafios> {
+  const params = new URLSearchParams();
+  if (filtro?.categoria) params.set("categoria", filtro.categoria);
+  if (filtro?.guardados) params.set("guardados", "1");
+  const q = params.toString();
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/desafios${q ? `?${q}` : ""}`,
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return (await resposta.json()) as ListaDesafios;
+}
+
+export async function criarDesafioPersonalizado(
+  pessoaId: string,
+  corpo: {
+    nome: string;
+    dificuldade?: string;
+    instrucao?: string | null;
+    categoria?: string | null;
+    materiais?: string | null;
+  },
+): Promise<DesafioResumo> {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/desafios`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(corpo),
+  });
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return (await resposta.json()) as DesafioResumo;
+}
+
+export async function guardarDesafio(pessoaId: string, desafioId: string) {
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/desafios/${desafioId}/guardar`,
+    { method: "POST" },
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return resposta.json();
+}
+
+export async function retirarDesafioGuardado(
+  pessoaId: string,
+  desafioId: string,
+) {
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/desafios/${desafioId}/guardar`,
+    { method: "DELETE" },
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return resposta.json();
+}
+
+export async function registrarParticipacaoDesafio(
+  pessoaId: string,
+  corpo: {
+    desafioId: string;
+    resultado: "concluiu" | "participou";
+    observacao?: string | null;
+    execucaoChave?: string;
+  },
+): Promise<ParticipacaoRegistrada> {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/participacoes`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(corpo),
+  });
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return (await resposta.json()) as ParticipacaoRegistrada;
+}
+
+export async function obterEstrelas(pessoaId: string): Promise<EstrelasResumo> {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/estrelas`);
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return (await resposta.json()) as EstrelasResumo;
+}
+
+export async function listarRecompensas(
+  pessoaId: string,
+): Promise<RecompensaResumo[]> {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/recompensas`);
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  const corpo = (await resposta.json()) as
+    | RecompensaResumo[]
+    | { recompensas: RecompensaResumo[] };
+  return Array.isArray(corpo) ? corpo : corpo.recompensas;
+}
+
+export async function criarRecompensa(
+  pessoaId: string,
+  corpo: { nome: string; custo: number },
+): Promise<RecompensaResumo> {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/recompensas`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(corpo),
+  });
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return (await resposta.json()) as RecompensaResumo;
+}
+
+export async function resgatarRecompensa(
+  pessoaId: string,
+  recompensaId: string,
+) {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/resgates`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ recompensaId }),
+  });
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return resposta.json();
 }

@@ -24,7 +24,20 @@
     "smoke:cv05": "node scripts/smoke-cv05.mjs",
     "smoke:cv06": "node scripts/smoke-cv06.mjs",
     "smoke:modulo-02": "node scripts/smoke-modulo-02.mjs",
-    "smoke:authz": "node scripts/smoke-authz-critico.mjs"
+    "smoke:authz": "node scripts/smoke-authz-critico.mjs",
+    "smoke:dl01": "node scripts/smoke-dl01.mjs",
+    "smoke:dl02": "node scripts/smoke-dl02.mjs",
+    "smoke:dl03": "node scripts/smoke-dl03.mjs",
+    "smoke:dl04": "node scripts/smoke-dl04.mjs",
+    "smoke:dl05": "node scripts/smoke-dl05.mjs",
+    "smoke:modulo-03": "node scripts/smoke-modulo-03.mjs",
+    "smoke:ef01": "node scripts/smoke-ef01.mjs",
+    "smoke:ef02": "node scripts/smoke-ef02.mjs",
+    "smoke:ef03": "node scripts/smoke-ef03.mjs",
+    "smoke:ef04": "node scripts/smoke-ef04.mjs",
+    "smoke:ef05": "node scripts/smoke-ef05.mjs",
+    "smoke:ef06": "node scripts/smoke-ef06.mjs",
+    "smoke:modulo-04": "node scripts/smoke-modulo-04.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.12",

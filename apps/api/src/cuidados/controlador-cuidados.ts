@@ -240,11 +240,13 @@ export class ControladorCuidados {
     @Param("pessoaId") pessoaId: string,
     @Query("de") de: string | undefined,
     @Query("ate") ate: string | undefined,
+    @Query("dominio") dominio: string | undefined,
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.acompanhamento.historico(pessoaId, requisicao.usuario!, {
       de,
       ate,
+      dominio,
     });
   }
 
@@ -269,6 +271,36 @@ export class ControladorCuidados {
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.acompanhamento.resumo(pessoaId, requisicao.usuario!, {
+      de: de ?? new Date(0).toISOString(),
+      ate: ate ?? new Date().toISOString(),
+    });
+  }
+
+  @Get("pessoas/:pessoaId/resumo-desenvolvimento")
+  resumoDesenvolvimento(
+    @Param("pessoaId") pessoaId: string,
+    @Query("de") de: string,
+    @Query("ate") ate: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.acompanhamento.resumoDesenvolvimento(
+      pessoaId,
+      requisicao.usuario!,
+      {
+        de: de ?? new Date(0).toISOString(),
+        ate: ate ?? new Date().toISOString(),
+      },
+    );
+  }
+
+  @Get("pessoas/:pessoaId/resumo-previa")
+  resumoPrevia(
+    @Param("pessoaId") pessoaId: string,
+    @Query("de") de: string,
+    @Query("ate") ate: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.acompanhamento.previaResumo(pessoaId, requisicao.usuario!, {
       de: de ?? new Date(0).toISOString(),
       ate: ate ?? new Date().toISOString(),
     });
