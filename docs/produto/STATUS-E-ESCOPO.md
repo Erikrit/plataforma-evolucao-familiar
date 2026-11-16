@@ -40,7 +40,7 @@
 
 **Não duplicar regras detalhadas aqui.** Este arquivo consolida estado, riscos e encaminhamentos, e não substitui suas fontes.
 
-**CT-20261116-001 — decisão funcional aprovada e documentada:** gestão de acessos no MVP apresenta apenas Administrador, Responsável e Colaborador e relação quem acompanha quem; sem matriz de permissões na UI. O administrador visualiza somente metadados necessários, e a pessoa acompanhada com conta pode saber quem tem acesso ativo aos próprios dados. A implementação/validação dessa consulta permanece assunto técnico, sem ampliação de permissões. Fonte: Módulo 01 v1.2, FUN-04/FUN-07.
+**CT-20261116-001 — decisão funcional aprovada e documentada:** gestão de acessos no MVP apresenta apenas Administrador, Responsável e Colaborador e relação quem acompanha quem; sem matriz de permissões na UI. O administrador visualiza somente metadados necessários, e a pessoa acompanhada com conta pode saber quem tem acesso ativo aos próprios dados. Fonte: Módulo 01 v1.2, FUN-04/FUN-07. **Implementação local:** demanda `DEM-CT-20261116-001` COMPLETED na esteira (`GET /acessos`, UI e smokes); **não** equivale a homologação familiar nem revisão de segurança em produção.
 
 ## Pendências e encaminhamentos abertos
 

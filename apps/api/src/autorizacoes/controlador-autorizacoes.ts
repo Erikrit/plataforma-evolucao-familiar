@@ -40,6 +40,15 @@ export class ControladorAutorizacoes {
     return this.autorizacoes.listarDoUsuario(familiaId, requisicao.usuario!);
   }
 
+  /** Metadados de acesso (FUN-04/FUN-07); não amplia permissões. */
+  @Get("acessos")
+  listarAcessos(
+    @Param("familiaId") familiaId: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.autorizacoes.listarAcessos(familiaId, requisicao.usuario!);
+  }
+
   @Post("autorizacoes")
   conceder(
     @Param("familiaId") familiaId: string,

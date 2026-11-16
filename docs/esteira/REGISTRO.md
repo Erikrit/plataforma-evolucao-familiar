@@ -5,8 +5,26 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-16)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
+- **DEM-CT-20261116-001:** COMPLETED — fingerprint `sha256:2a04c89c9f1f00e7` · verifier PASS
 - **Módulo 04 Evolução Familiar:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-04.json`
 - **Módulo 03 Desenvolvimento Laurinha:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-03.json`
+
+## 2026-11-16 — DEM-CT-20261116-001 COMPLETED
+
+- **Entrega:** `GET /familias/:id/acessos` + papéis MVP; admin lista quem acompanha quem; Vovó (com conta) lê quem acessa seus dados; UI sem matriz; revogar via DELETE existente; `smoke:ct-acessos`
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](8fe0305e-48a2-4d23-bb62-08469cbf8e2d))
+- **Fingerprint:** `sha256:2a04c89c9f1f00e7`
+- **Evidências:** `qg1-typecheck-*-ct-acessos.txt`, `qg2-smoke-ct-acessos.txt`, `qg2-smoke-authz-ct-acessos.txt`
+- **Não feito:** homologação humana/dispositivos; commit/push
+- **Próximo:** task-routing para nova demanda
+
+## 2026-11-16 — Triagem DEM-CT-20261116-001 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_funcional · **Origem:** CT-20261116-001 · **Aprovação:** DOCUMENTADA (Módulo 01 v1.2 FUN-04/FUN-07)
+- **Fluxo:** task-routing → implementation-workflow → quality-gate (sem module-planning)
+- **Risco:** alto (auth/privacidade) · **Aceite:** FUN-04, FUN-07, FAM-R11
+- **Escopo:** metadados de acessos (Admin/Responsável/Colaborador + quem acompanha quem); sem matriz; sem ampliar permissões
+- **Commit/push:** não executados
 
 ## 2026-11-16 — Evolução da esteira (Desenvolvimento Contínuo v2)
 

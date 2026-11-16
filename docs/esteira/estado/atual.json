@@ -2,8 +2,8 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "af8906c1cc3eb4e8ebc1ba155694a2ac76f67fa3",
-    "nota": "HEAD no momento da evolução da esteira v2; reconciliar se a branch avançar"
+    "commit": "e2b47b4893027f486e194d222008a052a7509d81",
+    "nota": "HEAD ao iniciar demanda CT-20261116-001"
   },
   "moduloId": "04-evolucao-familiar",
   "incrementoId": "EF-06",
@@ -96,10 +96,39 @@
   "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
   "tentativasCorrecao": {},
   "demanda": null,
-  "demandasConcluidas": [],
-  "proximaAcao": "Esteira v2 pronta. Usar task-routing para a próxima demanda (correção, UX, CT aprovado, módulo ou homologação). Não implementar CT-20261116-001 nesta evolução de processo.",
-  "atualizadoEm": "2026-11-16T18:10:00.000Z",
-  "notas": "Módulo 04 COMPLETED preservado. Schema v2: demandas independentes em `demanda`/`demandasConcluidas` sem sobrescrever histórico de módulos.",
+  "demandasConcluidas": [
+    {
+      "id": "DEM-CT-20261116-001",
+      "tipo": "melhoria_funcional",
+      "origem": "CT-20261116-001",
+      "estado": "COMPLETED",
+      "criteriosAceite": ["FUN-04", "FUN-07", "FAM-R11"],
+      "fingerprint": "sha256:2a04c89c9f1f00e7",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "8fe0305e-48a2-4d23-bb62-08469cbf8e2d",
+      "evidencias": [
+        "docs/esteira/estado/qg1-typecheck-api-ct-acessos.txt",
+        "docs/esteira/estado/qg1-typecheck-web-ct-acessos.txt",
+        "docs/esteira/estado/qg2-smoke-ct-acessos.txt",
+        "docs/esteira/estado/qg2-smoke-authz-ct-acessos.txt"
+      ],
+      "arquivos": [
+        "apps/api/src/autorizacoes/responsabilidades.ts",
+        "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+        "apps/api/src/autorizacoes/controlador-autorizacoes.ts",
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/componentes/painel-fundacao.tsx",
+        "apps/api/scripts/smoke-ct-acessos.mjs",
+        "apps/api/package.json"
+      ],
+      "concluidaEm": "2026-11-16T18:35:00.000Z"
+    }
+  ],
+  "proximaAcao": "DEM-CT-20261116-001 COMPLETED. Aguardar próxima demanda via task-routing (homologação familiar ainda PENDING_HUMAN).",
+  "atualizadoEm": "2026-11-16T18:35:00.000Z",
+  "notas": "Última demanda: consulta de acessos CT-20261116-001. Histórico módulos 01–04 preservado.",
   "decisaoPendente": null,
   "moduloAnterior": {
     "id": "03-desenvolvimento-laurinha",

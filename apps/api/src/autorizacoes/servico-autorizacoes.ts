@@ -10,6 +10,7 @@ import { ServicoSessao } from "../auth/servico-sessao";
 import {
   ehResponsabilidade,
   escopoFamilia,
+  papelApresentacao,
   type Responsabilidade,
 } from "./responsabilidades";
 
@@ -34,6 +35,55 @@ export class ServicoAutorizacoes {
         pessoaAlvo: { select: { id: true, nome: true } },
       },
     });
+  }
+
+  /**
+   * Metadados mínimos de acesso (CT-20261116-001 / FUN-04 / FUN-07).
+   * Admin: quem acompanha quem na família. Pessoa com conta: só quem acessa os próprios dados.
+   * Não expõe matriz de operações nem dados clínicos/infantis.
+   */
+  async listarAcessos(familiaId: string, usuario: UsuarioAutenticado) {
+    await this.garantirFamilia(familiaId, usuario);
+    const adminFamilia = await this.ehAdministradorFamilia(familiaId, usuario);
+    const onde = adminFamilia
+      ? { familiaId, ativa: true }
+      : {
+          familiaId,
+          ativa: true,
+          pessoaAlvoId: usuario.pessoa.id,
+        };
+
+    const linhas = await this.prisma.autorizacao.findMany({
+      where: onde,
+      orderBy: [{ concedidaEm: "asc" }],
+      select: {
+        id: true,
+        responsabilidade: true,
+        pessoaAlvoId: true,
+        ativa: true,
+        pessoaAlvo: { select: { id: true, nome: true } },
+        usuario: {
+          select: {
+            id: true,
+            pessoa: { select: { id: true, nome: true } },
+          },
+        },
+      },
+    });
+
+    return {
+      modo: adminFamilia ? ("administracao" as const) : ("proprios_dados" as const),
+      somenteLeitura: !adminFamilia,
+      itens: linhas.map((linha) => ({
+        id: linha.id,
+        participanteNome: linha.usuario.pessoa.nome,
+        participantePessoaId: linha.usuario.pessoa.id,
+        papel: papelApresentacao(linha.responsabilidade),
+        pessoaAcompanhadaNome: linha.pessoaAlvo?.nome ?? null,
+        pessoaAcompanhadaId: linha.pessoaAlvoId,
+        ativo: linha.ativa,
+      })),
+    };
   }
 
   async conceder(
@@ -356,6 +406,7 @@ export class ServicoAutorizacoes {
     });
 
     const autorizacoes = await this.listarDoUsuario(familiaId, usuario);
+    const acessos = await this.listarAcessos(familiaId, usuario);
 
     const cartoes = [];
     const idsCuidados: string[] = [];
@@ -394,6 +445,7 @@ export class ServicoAutorizacoes {
       cartoes,
       destaques,
       autorizacoes,
+      acessos,
       filtradoPorAutorizacao: visao.ids !== "todas",
       adminSemAcessoClinicoAutomatico: true,
     };

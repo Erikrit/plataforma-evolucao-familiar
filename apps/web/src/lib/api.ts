@@ -34,11 +34,28 @@ export type AutorizacaoResumo = {
   pessoaAlvo?: { id: string; nome: string } | null;
 };
 
+export type AcessoResumo = {
+  id: string;
+  participanteNome: string;
+  participantePessoaId: string;
+  papel: "Administrador" | "Responsável" | "Colaborador";
+  pessoaAcompanhadaNome: string | null;
+  pessoaAcompanhadaId: string | null;
+  ativo: boolean;
+};
+
+export type AcessosResposta = {
+  modo: "administracao" | "proprios_dados";
+  somenteLeitura: boolean;
+  itens: AcessoResumo[];
+};
+
 export type InicioResposta = {
   familiaId: string;
   cartoes: CartaoInicio[];
   destaques?: DestaqueInicio[];
   autorizacoes: AutorizacaoResumo[];
+  acessos?: AcessosResposta;
   filtradoPorAutorizacao: boolean;
 };
 
@@ -210,6 +227,24 @@ export async function concederAutorizacao(
     headers: { "content-type": "application/json" },
     body: JSON.stringify(corpo),
   });
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return resposta.json();
+}
+
+export async function obterAcessos(familiaId: string) {
+  const resposta = await fetchApi(`/familias/${familiaId}/acessos`);
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return (await resposta.json()) as AcessosResposta;
+}
+
+export async function revogarAutorizacao(
+  familiaId: string,
+  autorizacaoId: string,
+) {
+  const resposta = await fetchApi(
+    `/familias/${familiaId}/autorizacoes/${autorizacaoId}`,
+    { method: "DELETE" },
+  );
   if (!resposta.ok) throw new Error(await lerErro(resposta));
   return resposta.json();
 }

@@ -24,8 +24,10 @@ import {
   limparSessaoLegada,
   obterInicio,
   obterMe,
+  revogarAutorizacao,
   sair,
-  type AutorizacaoResumo,
+  type AcessoResumo,
+  type AcessosResposta,
   type CartaoInicio,
   type DestaqueInicio,
   type UsuarioSessao,
@@ -36,16 +38,11 @@ import {
   MensagemFeedback,
 } from "@/componentes/feedback";
 
-const rotulosResponsabilidade: Record<string, string> = {
-  administrador: "Administração da família",
-  responsavel_cuidados: "Cuidados",
-  responsavel_desenvolvimento: "Desenvolvimento",
-  colaboradora_cuidados: "Colaboração nos cuidados",
-  participante_limitado: "Participação limitada",
-};
-
-function rotuloResponsabilidade(codigo: string): string {
-  return rotulosResponsabilidade[codigo] ?? codigo.replaceAll("_", " ");
+function textoAcesso(a: AcessoResumo): string {
+  const alvo = a.pessoaAcompanhadaNome
+    ? a.pessoaAcompanhadaNome
+    : "família (administração)";
+  return `${a.participanteNome} · ${a.papel} · acompanha ${alvo}${a.ativo ? "" : " · inativo"}`;
 }
 
 export function PainelFundacao() {
@@ -56,7 +53,7 @@ export function PainelFundacao() {
   const [nome, setNome] = useState("");
   const [cartoes, setCartoes] = useState<CartaoInicio[]>([]);
   const [destaques, setDestaques] = useState<DestaqueInicio[]>([]);
-  const [autorizacoes, setAutorizacoes] = useState<AutorizacaoResumo[]>([]);
+  const [acessos, setAcessos] = useState<AcessosResposta | null>(null);
   const [filtrado, setFiltrado] = useState(false);
   const [emailConvite, setEmailConvite] = useState("");
   const [pessoaAlvoConviteId, setPessoaAlvoConviteId] = useState<string | null>(
@@ -121,8 +118,30 @@ export function PainelFundacao() {
     const inicio = await obterInicio(atual.pessoa.familiaId);
     setCartoes(inicio.cartoes);
     setDestaques(inicio.destaques ?? []);
-    setAutorizacoes(inicio.autorizacoes);
+    setAcessos(
+      inicio.acessos ?? {
+        modo: "proprios_dados",
+        somenteLeitura: true,
+        itens: [],
+      },
+    );
     setFiltrado(inicio.filtradoPorAutorizacao);
+  }
+
+  async function aoRevogarAcesso(autorizacaoId: string) {
+    if (!usuario) return;
+    setCarregando(true);
+    setErro(null);
+    setSucesso(null);
+    try {
+      await revogarAutorizacao(usuario.pessoa.familiaId, autorizacaoId);
+      await carregarInicio(usuario);
+      setSucesso("Acesso retirado. Novas operações desse participante ficam bloqueadas.");
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "Não foi possível revogar o acesso");
+    } finally {
+      setCarregando(false);
+    }
   }
 
   async function aoEntrar(evento: FormEvent) {
@@ -223,7 +242,7 @@ export function PainelFundacao() {
       setUsuario(null);
       setCartoes([]);
       setDestaques([]);
-      setAutorizacoes([]);
+      setAcessos(null);
       setLinkAtivacao(null);
       setCarregando(false);
     }
@@ -289,6 +308,24 @@ export function PainelFundacao() {
           Sair
         </Button>
       </Group>
+
+      {acessos &&
+      acessos.modo === "proprios_dados" &&
+      acessos.itens.length > 0 ? (
+        <Stack gap="sm">
+          <Title order={2}>Quem acompanha você</Title>
+          <Text c="dimmed" size="sm">
+            Somente leitura: nomes e papéis com acesso ativo aos seus dados.
+          </Text>
+          <Stack gap={6} component="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+            {acessos.itens.map((a) => (
+              <Text key={a.id} component="li" size="sm">
+                {textoAcesso(a)}
+              </Text>
+            ))}
+          </Stack>
+        </Stack>
+      ) : null}
 
       {destaques.length > 0 ? (
         <Stack gap="sm">
@@ -448,17 +485,37 @@ export function PainelFundacao() {
 
                 <Stack gap="sm">
                   <Title order={3}>Acessos desta família</Title>
-                  {autorizacoes.length === 0 ? (
+                  <Text size="sm" c="dimmed">
+                    Quem acompanha quem, com papel simples. Sem matriz de permissões.
+                  </Text>
+                  {!acessos || acessos.itens.length === 0 ? (
                     <Text size="sm" c="dimmed">
-                      Ainda não há acessos listados.
+                      Ainda não há acessos ativos listados.
                     </Text>
                   ) : (
-                    <Stack gap={6} component="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                      {autorizacoes.map((a) => (
-                        <Text key={a.id} component="li" size="sm">
-                          {rotuloResponsabilidade(a.responsabilidade)}
-                          {a.pessoaAlvo ? ` → ${a.pessoaAlvo.nome}` : " → família toda"}
-                        </Text>
+                    <Stack gap="xs" component="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                      {acessos.itens.map((a) => (
+                        <Group
+                          key={a.id}
+                          component="li"
+                          justify="space-between"
+                          align="flex-start"
+                          wrap="nowrap"
+                          gap="sm"
+                        >
+                          <Text size="sm">{textoAcesso(a)}</Text>
+                          {a.papel !== "Administrador" ? (
+                            <Button
+                              size="compact-sm"
+                              variant="subtle"
+                              color="red"
+                              loading={carregando}
+                              onClick={() => void aoRevogarAcesso(a.id)}
+                            >
+                              Retirar
+                            </Button>
+                          ) : null}
+                        </Group>
                       ))}
                     </Stack>
                   )}
