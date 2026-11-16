@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
 **Versão:** especificação funcional v1.1 — experiência móvel e privacidade funcional aprovadas em 2026-11-15  
-**Status:** FF-01..FF-06 presentes em `develop`, com QG-3 PASS registrado em evidência local; requisitos novos de privacidade e UX da v1.1 pendentes de verificação e adequação. Autenticação definitiva ainda pendente.
+**Status funcional:** especificação aprovada. Estado do código, evidências e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
 
