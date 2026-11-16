@@ -7,9 +7,10 @@ alwaysApply: true
 
 ## Fontes oficiais
 
-- Produto: `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md`
+- Produto: `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md`, `docs/produto/GOVERNANCA.md`
 - Arquitetura/ADRs: `docs/arquitetura/ARQUITETURA.md`, `docs/arquitetura/DECISOES.md`
 - Módulos: `docs/modulos/*/ESPECIFICACAO.md`
+- UX: `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`
 - Esteira: `AGENTS.md`, `docs/esteira/REGISTRO.md`, `docs/esteira/estado/atual.json`
 
 Não duplicar esses documentos em prompts. Ler só o trecho necessário.
@@ -18,16 +19,19 @@ Não duplicar esses documentos em prompts. Ler só o trecho necessário.
 
 Artefatos da esteira (`.cursor/`, `docs/esteira/`, `scripts/esteira/`, `AGENTS.md`) não misturam regras funcionais do produto. Não alterar requisitos aprovados sem autorização humana.
 
-## Fluxo mínimo
+## Fluxo mínimo (desenvolvimento contínuo)
 
-1. Skill `module-planning` antes de implementar um módulo.
-2. Skill `implementation-workflow` por incremento vertical pequeno.
-3. Skill `quality-gate` (QG-1 → verifier → QG-2; QG-3 ao fechar módulo).
-4. Persistir estado em `docs/esteira/estado/atual.json`.
+1. Skill `task-routing` ao receber qualquer demanda.
+2. Skill `module-planning` só para novo módulo ou mudança complexa.
+3. Skill `implementation-workflow` para incremento planejado ou demanda delimitada aprovada.
+4. Skill `quality-gate` (QG-1 → verifier → QG-2; QG-3 ao fechar; homologação quando pedida).
+5. Persistir estado em `docs/esteira/estado/atual.json` sem apagar histórico de módulos/demandas.
 
-## Qualidade sem aplicação fictícia
+## Qualidade com evidência real
 
-Ainda sem app executável: não inventar código só para “passar” gates. Verificações sem alvo = `PENDING` ou `BLOCKED` (motivo). `NOT_APPLICABLE` só se a verificação realmente não se aplica.
+Aplicação local em `apps/api` e `apps/web`. Não inventar código nem resultados só para “passar” gates. Verificações sem alvo = `PENDING` ou `BLOCKED` (motivo). `NOT_APPLICABLE` só se a verificação realmente não se aplica. Homologação humana/dispositivos = `PENDING_HUMAN`, nunca PASS automático. Auth, autorização, privacidade e persistência tocadas exigem checagens críticas pertinentes.
+
+Fingerprints novos: hash verificável dos arquivos afetados. Evidência antiga não cobre código alterado.
 
 ## Segurança operacional
 
@@ -35,4 +39,4 @@ Proibido: commit, push, tag, release, PR, deploy, publish, git destrutivo. Não 
 
 ## Retomada
 
-Antes de continuar: ler estado persistido, `git status` (leitura), comparar fingerprint/arquivos. Máximo 3 correções da mesma causa raiz → `BLOCKED`.
+Antes de continuar: ler estado persistido (`demanda` ou incremento), `git status` (leitura), comparar fingerprint/arquivos. Máximo 3 correções da mesma causa raiz → `BLOCKED`.

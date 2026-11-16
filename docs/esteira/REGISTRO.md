@@ -4,8 +4,18 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
 ## Estado atual (2026-11-16)
 
+- **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
 - **Módulo 04 Evolução Familiar:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-04.json`
 - **Módulo 03 Desenvolvimento Laurinha:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-03.json`
+
+## 2026-11-16 — Evolução da esteira (Desenvolvimento Contínuo v2)
+
+- **Escopo:** processo apenas — skill `task-routing`; adaptação de `module-planning`, `implementation-workflow`, `quality-gate`, `verifier`, `AGENTS.md`, `engineering.mdc`, GOVERNANCA §9
+- **Estado:** schema v2 com `demanda: null`; histórico de módulos 01–04 preservado; fingerprints históricos simbólicos mantidos
+- **Não implementado:** CT-20261116-001 nem melhorias UX de produto
+- **Validação:** `validar-bootstrap.mjs`, `testar-hooks.mjs`, `simular-roteamento.mjs`, `simular-retomada.mjs`
+- **Commit/push:** não executados
+
 
 
 - **UX consolidação 01/02:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-ux-01-02.json`

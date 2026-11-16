@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Validação não destrutiva do bootstrap da esteira.
+ * Validação não destrutiva da esteira de desenvolvimento contínuo.
  * Não executa commit/push/deploy.
  */
-import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -46,28 +46,60 @@ function lerMdFrontmatter(caminhoRel) {
     erros.push(`Frontmatter não fechado: ${caminhoRel}`);
     return null;
   }
-  const fm = texto.slice(3, fim).trim();
+  const fm = texto
+    .slice(3, fim)
+    .replace(/\r/g, "")
+    .replace(/^\n/, "");
   const campos = {};
-  for (const linha of fm.split("\n")) {
+  const linhas = fm.split("\n");
+  let chaveAtual = null;
+  let buffer = [];
+  const finalizar = () => {
+    if (!chaveAtual) return;
+    const bruto = buffer.join("\n").trim();
+    campos[chaveAtual] = bruto.replace(/^["']|["']$/g, "");
+    chaveAtual = null;
+    buffer = [];
+  };
+  for (const linhaBruta of linhas) {
+    const linha = linhaBruta;
+    const indentada = /^\s/.test(linha);
     const m = linha.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
-    if (m) campos[m[1]] = m[2].replace(/^["']|["']$/g, "");
+    if (m && !indentada) {
+      finalizar();
+      chaveAtual = m[1];
+      const valor = m[2].trim();
+      if (valor === ">" || valor === ">|" || valor === ">-" || valor === "|" || valor === "|-") {
+        buffer = [];
+      } else {
+        buffer = [valor];
+        finalizar();
+      }
+      continue;
+    }
+    if (chaveAtual != null) {
+      buffer.push(linha.replace(/^\s+/, ""));
+    }
   }
+  finalizar();
   return { texto, campos };
 }
 
-// Arquivos obrigatórios
 exigir("AGENTS.md", "instruções");
 exigir(".cursor/rules/engineering.mdc", "regra permanente");
 exigir(".cursor/agents/verifier.md", "subagente");
+exigir(".cursor/skills/task-routing/SKILL.md", "skill");
 exigir(".cursor/skills/module-planning/SKILL.md", "skill");
 exigir(".cursor/skills/implementation-workflow/SKILL.md", "skill");
 exigir(".cursor/skills/quality-gate/SKILL.md", "skill");
 exigir("docs/esteira/REGISTRO.md", "registro");
 exigir("docs/esteira/estado/atual.json", "estado");
+exigir("docs/produto/GOVERNANCA.md", "governança");
 exigir(".cursor/hooks/bloquear-shell.mjs", "hook");
 exigir(".cursor/hooks/bloquear-mcp.mjs", "hook");
 exigir(".cursor/hooks/bloquear-pretool.mjs", "hook");
 exigir(".cursor/hooks/lib/politica-proibida.mjs", "política");
+exigir("scripts/esteira/simular-roteamento.mjs", "simulação");
 
 const hooks = lerJson(".cursor/hooks.json");
 if (hooks) {
@@ -94,6 +126,7 @@ if (verifier?.campos) {
 }
 
 for (const skill of [
+  "task-routing",
   "module-planning",
   "implementation-workflow",
   "quality-gate",
@@ -112,6 +145,17 @@ if (regra?.campos && !/true/i.test(String(regra.campos.alwaysApply ?? ""))) {
   erros.push("engineering.mdc: alwaysApply deveria ser true");
 } else if (regra) ok.push("engineering.mdc alwaysApply");
 
+const agents = exigir("AGENTS.md", "AGENTS");
+if (agents) {
+  const texto = readFileSync(agents, "utf8");
+  if (!texto.includes("task-routing")) {
+    erros.push("AGENTS.md: deve referenciar task-routing");
+  } else ok.push("AGENTS.md referencia task-routing");
+  if (!texto.includes("GOVERNANCA.md")) {
+    avisos.push("AGENTS.md: convém referenciar GOVERNANCA.md");
+  }
+}
+
 const estado = lerJson("docs/esteira/estado/atual.json");
 if (estado) {
   for (const campo of [
@@ -127,6 +171,26 @@ if (estado) {
   ]) {
     if (!(campo in estado)) erros.push(`estado/atual.json sem campo ${campo}`);
   }
+  if (!("demanda" in estado)) {
+    erros.push("estado/atual.json sem campo demanda (schema v2)");
+  } else {
+    ok.push("Campo demanda presente");
+  }
+  if (!("demandasConcluidas" in estado)) {
+    erros.push("estado/atual.json sem demandasConcluidas");
+  } else if (!Array.isArray(estado.demandasConcluidas)) {
+    erros.push("demandasConcluidas deve ser array");
+  } else ok.push("demandasConcluidas array");
+  if (!estado.schemaVersao || estado.schemaVersao < 2) {
+    erros.push("schemaVersao deve ser >= 2");
+  } else ok.push(`schemaVersao=${estado.schemaVersao}`);
+  if (!estado.modulo || estado.modulo.status !== "COMPLETED") {
+    avisos.push("Histórico de módulo 04 esperado COMPLETED após evolução v2");
+  } else ok.push("Histórico de módulo preservado");
+  if (!Array.isArray(estado.incrementosConcluidos) || estado.incrementosConcluidos.length === 0) {
+    avisos.push("incrementosConcluidos vazio — histórico pode ter sido perdido");
+  } else ok.push(`incrementosConcluidos=${estado.incrementosConcluidos.length}`);
+
   const permitidos = [
     "PENDING",
     "READY",
@@ -138,16 +202,28 @@ if (estado) {
   if (estado.estado && !permitidos.includes(estado.estado)) {
     erros.push(`estado inválido: ${estado.estado}`);
   } else if (estado.estado) ok.push(`Estado esteira: ${estado.estado}`);
-}
 
-// Não deve existir app inventada nesta fase
-for (const suspeito of ["apps", "src", "frontend", "backend", "packages"]) {
-  const p = join(raiz, suspeito);
-  if (existsSync(p) && statSync(p).isDirectory()) {
-    const filhos = readdirSync(p);
-    if (filhos.length) avisos.push(`Diretório de código presente: ${suspeito}/ (não esperado no bootstrap puro)`);
+  if (estado.demanda != null) {
+    for (const campo of ["id", "tipo", "estado", "fluxo", "proximaAcao"]) {
+      if (!(campo in estado.demanda)) {
+        erros.push(`demanda ativa sem campo ${campo}`);
+      }
+    }
   }
 }
+
+const appApi = existsSync(join(raiz, "apps/api"));
+const appWeb = existsSync(join(raiz, "apps/web"));
+if (appApi && appWeb) {
+  ok.push("App local presente (apps/api + apps/web)");
+} else {
+  avisos.push("App local parcial/ausente — gates de produto podem ficar PENDING/BLOCKED");
+}
+
+const governanca = readFileSync(join(raiz, "docs/produto/GOVERNANCA.md"), "utf8");
+if (!governanca.includes("task-routing")) {
+  erros.push("GOVERNANCA.md § interface deve mencionar task-routing");
+} else ok.push("GOVERNANCA referencia task-routing");
 
 const resumo = {
   ok: erros.length === 0,

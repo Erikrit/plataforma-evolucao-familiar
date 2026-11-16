@@ -100,9 +100,9 @@ Para continuação, informar: objetivo atual, especialista, caminhos relevantes,
 
 ## 9. Interface com o desenvolvimento existente
 
-A governança entrega **especificação aprovada e suas referências** ao fluxo existente (`module-planning` → `implementation-workflow` → `quality-gate`). O fluxo devolve evidências, divergências e `NEEDS_DECISION`, sem tornar testes uma aprovação de produto.
+A governança entrega **especificação aprovada e suas referências** ao fluxo de desenvolvimento contínuo (`task-routing` → `module-planning` quando necessário → `implementation-workflow` → `quality-gate`). O fluxo devolve evidências, divergências e `NEEDS_DECISION`, sem tornar testes uma aprovação de produto.
 
-**Esta fase não altera** `AGENTS.md`, `.cursor/`, `scripts/esteira/` ou `docs/esteira/`. Nenhum agente/automação deve executar `git commit`, `git push`, merge ou deploy automaticamente. Publicação e integração do material documental exigem ação humana separada.
+A esteira (`.cursor/`, `scripts/esteira/`, `docs/esteira/`, `AGENTS.md`) evolui para receber correções, melhorias, CTs aprovados, módulos e homologação, **sem** criar requisitos novos nem duplicar decisões. Alterações de processo da esteira não substituem aprovação L3 de produto. Nenhum agente/automação deve executar `git commit`, `git push`, merge ou deploy automaticamente. Publicação e integração do material documental exigem ação humana separada.
 
 ## 10. Quando revisar a governança
 

@@ -1,46 +1,69 @@
 ---
 name: implementation-workflow
 description: >-
-  Implementa um incremento vertical de forma incremental, com contexto mínimo,
-  verificações rápidas e correções localizadas. Use após o planejamento do
-  módulo, durante IN_PROGRESS, ou ao retomar um incremento interrompido.
+  Implementa incremento de módulo ou demanda delimitada já triada, com contexto
+  mínimo, correção localizada e verificação independente. Use após
+  task-routing/module-planning, durante IN_PROGRESS, ou ao retomar trabalho
+  interrompido.
 ---
 
 # Implementation workflow
 
 ## Pré-condições
 
-- Incremento definido por `module-planning`.
+Aceitar **uma** das entradas:
+
+1. **Incremento de módulo** definido por `module-planning`.
+2. **Demanda delimitada e aprovada** por `task-routing` (tipos `correcao`,
+   `melhoria_funcional`, `melhoria_ux`, `refatoracao`, ou `transversal` já
+   decomposta).
+
+Também:
+
 - Estado lido de `docs/esteira/estado/atual.json` e reconciliado com o workspace.
 - Fontes oficiais referenciadas por caminho — não colar Documento Mestre inteiro.
+- Sem aprovação exigida (L3 / CT pendente) → não implementar; reportar `NEEDS_DECISION`.
 
 ## Contexto mínimo
 
 Carregar apenas:
 
-1. Trechos da especificação do incremento (requisitos + aceite).
+1. Trechos da especificação/critérios da demanda ou incremento.
 2. ADRs relevantes.
-3. Arquivos já existentes tocados pelo incremento.
+3. Arquivos já existentes tocados pela demanda.
 4. Esta skill + `quality-gate` quando for verificar.
+5. `task-routing` só se a classificação ainda estiver ambígua.
 
 ## Ciclo
 
-1. Marcar estado `IN_PROGRESS`; listar arquivos alvo.
-2. Implementar o menor slice que avance os critérios do incremento.
-3. Rodar QG-1 (`quality-gate`, perfil rápido).
+1. Marcar estado `IN_PROGRESS` na demanda/incremento ativo; listar arquivos alvo.
+2. Implementar o menor slice que avance os critérios.
+3. Rodar QG-1 (`quality-gate`, perfil rápido / por impacto).
 4. Se falhar: corrigir só a causa; incrementar contador da causa raiz (máx. 3 → `BLOCKED`).
 5. Em sucesso QG-1: estado `IN_VALIDATION`; acionar subagente `verifier`.
-6. Rodar QG-2 conforme aplicabilidade.
-7. Se verifier = `PASS` e QG-2 ok: marcar incremento `COMPLETED`, gravar fingerprint e evidências.
+6. Rodar QG-2 conforme aplicabilidade e risco.
+7. Se verifier = `PASS` e QG-2 ok: marcar `COMPLETED`, gravar **fingerprint hash**
+   verificável dos arquivos afetados e evidências; arquivar em `demandasConcluidas`
+   ou `incrementosConcluidos` sem apagar histórico anterior.
 8. Caso contrário: `FAIL` → correção localizada; `BLOCKED`/`NEEDS_DECISION` → parar e reportar.
 
 ## Retomada
 
-1. Ler `atual.json`.
+1. Ler `atual.json` (`demanda` ativa ou incremento de módulo).
 2. `git status` (leitura) + arquivos não rastreados.
-3. Se fingerprint e critérios ainda válidos: não reimplementar.
-4. Continuar na `proximaAcao`.
+3. Recalcular fingerprint hash dos arquivos listados; se divergir do registrado,
+   **não** reutilizar evidência antiga — revalidar.
+4. Se fingerprint e critérios ainda válidos: não reimplementar.
+5. Continuar na `proximaAcao`.
+
+## Fingerprint
+
+- Formato futuro: hash SHA-256 (ou prefixo estável) do conteúdo dos arquivos
+  afetados + revisão (`branch`/`commit` de referência).
+- Evidências históricas simbólicas permanecem como registro; não reescrever
+  artificialmente. Novas conclusões usam hash real.
 
 ## Proibições
 
-Sem commit/push/deploy. Sem expandir escopo. Sem dados reais/segredos.
+Sem commit/push/deploy. Sem expandir escopo além da triagem/planejamento.
+Sem dados reais/segredos. Não implementar CT ou melhoria sem aprovação vigente.

@@ -1,4 +1,10 @@
 {
+  "schemaVersao": 2,
+  "revisao": {
+    "branch": "develop",
+    "commit": "af8906c1cc3eb4e8ebc1ba155694a2ac76f67fa3",
+    "nota": "HEAD no momento da evolução da esteira v2; reconciliar se a branch avançar"
+  },
   "moduloId": "04-evolucao-familiar",
   "incrementoId": "EF-06",
   "requisitos": ["EVO-R04", "EVO-R09", "EVO-R12"],
@@ -87,10 +93,13 @@
     }
   },
   "fingerprint": "ef-modulo04-qg3-2026-11-16",
+  "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
   "tentativasCorrecao": {},
-  "proximaAcao": "Módulo 04 COMPLETED. Aguardar designação do próximo módulo (humano).",
-  "atualizadoEm": "2026-11-16T11:12:00.000Z",
-  "notas": "Módulo 04 Evolução Familiar CLOSED (EF-01..EF-06 + QG-3 PASS).",
+  "demanda": null,
+  "demandasConcluidas": [],
+  "proximaAcao": "Esteira v2 pronta. Usar task-routing para a próxima demanda (correção, UX, CT aprovado, módulo ou homologação). Não implementar CT-20261116-001 nesta evolução de processo.",
+  "atualizadoEm": "2026-11-16T18:10:00.000Z",
+  "notas": "Módulo 04 COMPLETED preservado. Schema v2: demandas independentes em `demanda`/`demandasConcluidas` sem sobrescrever histórico de módulos.",
   "decisaoPendente": null,
   "moduloAnterior": {
     "id": "03-desenvolvimento-laurinha",
