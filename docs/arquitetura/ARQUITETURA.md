@@ -1,6 +1,6 @@
 # Arquitetura preliminar — Plataforma de Evolução Familiar
 
-**Situação:** monólito local em `develop` com módulos 01 e 02 implementados e evidências de testes registradas, sem homologação para dados reais; módulos 03 e 04 ainda não implementados integralmente. Contratos e segurança definitiva pendentes. Ver `docs/produto/STATUS-E-ESCOPO.md`.
+**Situação:** arquitetura preliminar e contratos candidatos. Há código dos módulos 01–04 em `develop` e evidências locais registradas, **sem homologação para dados reais**. Para o estado corrente, consultar `docs/produto/STATUS-E-ESCOPO.md`; para contratos realmente existentes, examinar as rotas do commit relevante.
 
 ## Estrutura lógica
 
@@ -43,7 +43,7 @@ Módulos lógicos:
 
 `desafio`, `desafio_guardado` (opcional), `participacao_desafio`, `movimento_estrelas`, `recompensa`, `resgate_recompensa` (a necessidade de tabela separada de resgate será revisada na modelagem final).
 
-- Revisão funcional v1.1 proposta: guardar atividade opcionalmente, sem planejamento semanal com prazo. Apenas Concluiu/Participou são registrados; não realizada não exige lançamento.
+- Revisão funcional v1.1 **aprovada**: guardar atividade opcionalmente, sem planejamento semanal com prazo. Apenas Concluiu/Participou são registrados; não realizada não exige lançamento.
 - Participação e estrelas são uma transação lógica.
 - Reenvio da mesma participação não duplica pontos; execução nova legítima é permitida.
 - Resgates não podem gerar saldo negativo sob concorrência.
@@ -51,7 +51,7 @@ Módulos lógicos:
 
 ### Acompanhamento
 
-A experiência funcional v1.1 proposta possui **Histórico individual** e **Resumo da pessoa**, com PDF acionado no resumo; o resumo familiar são apenas poucos destaques na home. O histórico consulta registros de origem com autorização por pessoa e período. Estrutura auxiliar de eventos só se houver necessidade comprovada. PDFs gerados sob demanda, sem armazenar cópias por padrão.
+A experiência funcional v1.1 **aprovada** possui **Histórico individual** e **Resumo da pessoa**, com PDF acionado no resumo; o resumo familiar são apenas poucos destaques na home. O histórico consulta registros de origem com autorização por pessoa e período. Estrutura auxiliar de eventos só se houver necessidade comprovada. PDFs gerados sob demanda, sem armazenar cópias por padrão.
 
 ## Contratos de API — rascunho
 
@@ -72,7 +72,7 @@ A experiência funcional v1.1 proposta possui **Histórico individual** e **Resu
 - `GET /pessoas/{id}/estrelas`; `GET|POST /pessoas/{id}/recompensas`; `POST /pessoas/{id}/resgates`
 - `GET /pessoas/{id}/historico`; `GET /pessoas/{id}/acompanhamento`; `GET /familias/{id}/resumo`; `GET /pessoas/{id}/relatorio.pdf`
 
-São endpoints **candidatos**, não contratos finalizados ou implementados. Os formatos, validações, autenticação, estados e idempotência serão detalhados na implementação.
+Esta lista é um **rascunho conceitual histórico**, não um inventário confiável dos endpoints já implementados. Para contratos reais, inspecionar controladores/rotas da branch e do commit relevante; decisões sobre formatos, validações, segurança e idempotência pertencem à Arquitetura. Não alterar regras funcionais por inferência da lista.
 
 ## Preocupações transversais
 
