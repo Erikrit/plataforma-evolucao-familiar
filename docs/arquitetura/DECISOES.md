@@ -20,7 +20,7 @@ Decisões abaixo são direções preliminares aprovadas conceitualmente, não pr
 ## A validar
 
 - Mecanismo de autenticação e invalidação de sessões.
-- Frequências especiais de medicamentos e regras de programação.
+- Casos-limite e validação técnica da programação de medicamentos: **comportamento funcional do MVP já aprovado na especificação v1.3 do Módulo 02**; não reabrir a regra nem inventar horários clínicos.
 - Confiabilidade e canais dos lembretes em dispositivos reais.
 - Contratos exatos da API, restrições e política de dados.
 - Necessidade de PWA ou alternativa móvel adicional.
