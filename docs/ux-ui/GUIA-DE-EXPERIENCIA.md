@@ -1,6 +1,6 @@
 # Guia de Experiência UX/UI — Plataforma de Evolução Familiar
 
-**Versão:** 2.0 — organização de Consultas e exames por perfil aprovada em 2026-11-17  
+**Versão:** 2.1 — fluxos mínimos de agendamento e exame aprovados em 2026-11-17  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
@@ -97,7 +97,9 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - **Administrador:** não recebe automaticamente acesso a consultas, exames ou anexos pelo papel administrativo.
 - **Estados de persistência:** nunca exibir conclusão de upload/agendamento sem confirmação do servidor; oferecer erro compreensível, sem duplicar registro ao tentar novamente.
 
-**Próximo desenho:** validar cadastro de consulta e fluxo contextual de anexo de exame, comparando Responsável e Integrante, antes de implementar.
+**Fluxos validados como direção UX em 2026-11-17:** para o **Responsável autorizado**, agendamento solicita inicialmente apenas descrição/especialidade, data e horário; revisão simples antes de salvar, sem exigir médico, endereço, telefone ou observações. O horário apresenta horas cheias selecionáveis com opção de horário exato quando necessário. Para **registro de exame**, apresentar descrição como único campo obrigatório, data e anexo opcionais; um **Integrante** somente vê a opção de registrar/anexar se a autorização e a operação já existirem. Não exigir texto após anexar, não obrigar data desconhecida e não ampliar acesso ao documento. Em ambos os casos, confirmar sucesso apenas após persistência real, sem duplicar gravações. Os protótipos não representam prova de contrato, capacidade ou permissão efetiva.
+
+**Próximo desenho:** Apoio e companhia (CUI-F07) com registro rápido, observação opcional e nenhum relatório de turno, comparando Integrante e Responsável.
 
 ## 5. Regras de interação reutilizáveis
 

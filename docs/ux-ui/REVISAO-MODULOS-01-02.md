@@ -198,3 +198,9 @@ encaminhamento: "Arquitetura deve confirmar quais leituras/identidades/operaçõ
 **Cadastro mínimo:** descrição/especialidade, data e horário para consulta (CUI-F05); para exames, descrição obrigatória e data/arquivo opcionais (CUI-F06). Apresentar seleção simples de hora cheia com opção de horário exato quando necessário, sem arredondar. Sem formulários na Rotina, sem dados duplicados e sem criar funcionalidade ou autorização por pressuposição.
 
 **Próxima validação UX:** agendamento simples pelo Responsável e registro/anexo de exame pela perspectiva do Integrante, condicionados às permissões/contratos existentes. **Não implementado; UX real permanece pendente de homologação humana.**
+
+### Aprovação dos fluxos de agendamento e exame — 2026-11-17
+
+**Status: DIREÇÃO UX APROVADA E DOCUMENTADA.** O responsável pelo produto aprovou: (a) **Agendar consulta** pelo Responsável autorizado, com descrição/especialidade, data e horário mínimos, seletor de horas cheias e exceção para hora exata; sem obrigar local, médico, telefone ou observação; e (b) **Registrar exame** com descrição obrigatória, data e arquivo opcionais, sem exigir observação para anexar. A experiência Integrante somente oferece registro e anexos quando respaldados por autorização contextual e contrato existente. Nenhum upload ou acesso a arquivo sensível pode ser inferido do rótulo de perfil.
+
+**Diretriz canônica:** `GUIA-DE-EXPERIENCIA.md` §4.5. **Próxima etapa UX:** Apoio e companhia, registro cotidiano simples e não obrigatório, por Integrante/Responsável. A aprovação é de design; ainda não comprova implementação ou homologação humana.
