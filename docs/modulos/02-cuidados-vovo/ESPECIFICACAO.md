@@ -1,6 +1,6 @@
 # Módulo 02 — Cuidados da Vovó
 
-**Versão:** especificação funcional v1.3 — cadastro, lembretes e experiência móvel/privacidade aprovados em 2026-11-15  
+**Versão:** especificação funcional v1.4 — preserva regras de cuidados v1.3 e esclarece o perfil visual Integrante em 2026-11-16  
 **Status funcional:** especificação aprovada. Estado do código, evidências, notificações e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Dependência:** Fundação Familiar.
 
@@ -12,7 +12,7 @@ Organizar medicamentos, consultas, exames e atividades relevantes de companhia e
 
 - **Vovó:** pessoa independente e fonte prioritária de confirmação de uso; acesso próprio opcional.
 - **Responsável por cuidados:** cadastra e altera programação, organiza compromissos.
-- **Colaboradora adulta externa:** visualiza rotina autorizada e registra relatos/atividades de apoio; não altera prescrição por padrão.
+- **Colaboradora adulta externa (experiência visual Integrante):** visualiza rotina autorizada e registra relatos/atividades de apoio; não altera prescrição por padrão. O vínculo permanece externo/contratado, não familiar.
 - **Administrador:** gerencia permissões sem acesso clínico irrestrito automático.
 
 ## 3. Funcionalidades e regras
@@ -112,7 +112,7 @@ Período selecionável; distinguir previstas, informadas como tomadas, informada
 
 ## 5. Permissões
 
-| Operação | Vovó | Responsável | Colaboradora |
+| Operação | Vovó | Responsável | Colaboradora externa (experiência Integrante) |
 |---|---|---|---|
 | Visualizar rotina | Própria | Se autorizado | Somente atribuído |
 | Confirmar próprio relato/registrar relato | Sim | Sim | Sim, se autorizado |

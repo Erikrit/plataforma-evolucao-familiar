@@ -1,4 +1,4 @@
-# Documento Mestre do Produto — v1.0
+# Documento Mestre do Produto — v1.1
 
 **Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
@@ -27,6 +27,16 @@ Organizar cuidados, desenvolvimento e acontecimentos relevantes das pessoas, pre
 - **Mikaela:** responsável principal por selecionar e organizar os desafios educativos; não precisa aprovar cada concessão de estrelas.
 
 Uma pessoa pode existir sem conta de acesso. Parentesco não equivale a permissão. O administrador não recebe automaticamente acesso irrestrito a informações confidenciais.
+
+### Experiências de uso e nomenclatura — decisão aprovada em 2026-11-16
+
+A interface apresenta três **perfis de experiência/responsabilidade**: **Administrador**, **Responsável** e **Integrante** (nome aprovado em substituição ao rótulo visual anterior “Colaborador”). Esses nomes orientam a organização das telas, **não são concessões automáticas de acesso** nem exigem renomeação de identificadores técnicos existentes.
+
+- **Administrador:** gerencia pessoas, convites, vínculos e autorizações, com visão dos metadados mínimos de quem acompanha quem. Não recebe automaticamente acesso a medicamentos, relatórios clínicos, exames ou desenvolvimento infantil.
+- **Responsável:** planeja e gerencia medicamentos, consultas, atividades e relatórios **apenas para as pessoas e domínios autorizados**.
+- **Integrante:** acompanha a rotina autorizada e registra relatos, ocorrências e apoios com poucos toques; anexos de exames ou observações somente quando a operação estiver prevista e autorizada. Não administra pessoas nem modifica prescrições/programações por padrão.
+
+**Perfil ≠ vínculo ≠ autorização:** “Integrante” é o nome da experiência de participação; **integrante familiar** e **colaborador(a) externo(a)/contratado(a)** são tipos de vínculo distintos. Uma pessoa externa não passa a ser familiar por receber esse perfil. Uma pessoa pode acumular responsabilidades quando expressamente autorizada; cada ação depende de verificações contextuais de pessoa, domínio e operação. A Vovó mantém autonomia e pode acessar a própria rotina quando possuir conta e permissão. A navegação-base é compartilhada, adaptando áreas e ações sem criar três aplicações.
 
 ## 4. Módulo 01 — Fundação Familiar
 
