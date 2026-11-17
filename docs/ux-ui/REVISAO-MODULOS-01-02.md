@@ -122,3 +122,25 @@ encaminhamento: "Arquitetura deve confirmar quais leituras/identidades/operaçõ
 2. CT-20261116-001 concluído em Produto; UX-ADM-02 passa a depender somente de consulta segura dos metadados mínimos e da validação de Arquitetura, sem nova decisão funcional por padrão.
 3. Revisar UX dos módulos 02–04 após navegação compartilhada, sem recriar funcionalidades nem reabrir regras aprovadas.
 4. Exigir inspeção visual em aparelhos reais, teclado/leitor de tela e perfis autorizados antes de chamar a experiência de homologada.
+
+## Reprovação em teste de uso e redesenho proposto — 2026-11-16
+
+**Fonte:** observações expressas do responsável pelo produto após testes com a interface. **Referência do código inspecionado:** `develop` em `e150b70eb4824ea0fedc4679610e254ed02fc5fe`. **Situação:** **UX REPROVADA** nos testes relatados; a homologação técnica `DEM-HOMOL-UX-20261116-R2` permanece `PASS` para suas verificações automatizadas, mas **não constitui aceite de experiência** nem homologação completa para dados reais.
+
+**Achados relatados:** telas sem identidade visual suficientemente reconhecível; ausência de ícones semânticos; informação e instruções repetidas; pouca distinção entre confirmação de relato de cuidados e participação/conclusão em desenvolvimento; criação de medicamentos/consultas misturada na mesma tela da rotina; esforço de navegação e leitura desnecessário. A inspeção estática encontrou formulários no Accordion `Gerenciar cuidados` em `apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx`, mensagens explicativas no topo das páginas e componentes visuais amplamente genéricos. Sem alegar que houve auditoria visual completa por captura em dispositivo real nesta revisão.
+
+**Decisão de organização de UX (L2, aprovada pelo responsável pelo produto):** manter a **Rotina** de Cuidados centrada no acompanhamento, movendo criação de medicamentos e consultas para **subnavegação contextual do próprio módulo**, acessível somente aos autorizados. Reutilizar a distinção **acompanhar/consultar versus criar/administrar** nos demais módulos quando aplicável, sem transformar a navegação geral em um menu extenso e sem afastar ações de uso frequente. Diretriz primária: `GUIA-DE-EXPERIENCIA.md` §4.3.
+
+**Plano proposto — design antes de implementar:**
+
+| ID | Prioridade | Resultado esperado | Limites |
+|---|---|---|---|
+| UX-RED-01 | Alta | Definir padrões visuais reais de título, ícones, cartões, estados, botões de escolha e redução de textos repetidos | Reutilizar Mantine e tema atual; manter acessibilidade |
+| UX-RED-02 | Alta | Desenhar Rotina / Medicamentos / Consultas da Vovó com ações de cadastro fora da Rotina | Preservar programação, relatos, autorizações e ações já aprovadas |
+| UX-RED-03 | Alta | Desenhar biblioteca/participação da Laurinha com confirmações distintas e criação/recompensas em contexto secundário | Sem mudar estrelas, regras ou obrigatoriedade |
+| UX-RED-04 | Média | Aplicar o mesmo princípio de hierarquia a Gestão familiar e Evolução, somente onde eliminar ruído real | Sem novas telas ou menus por formalidade |
+| UX-RED-05 | Alta | Validar visualmente protótipos e jornadas antes de abrir incrementos técnicos; repetir avaliação humana após entrega | Não converter PASS técnico em aceite UX |
+
+**Critérios mínimos para superar a reprovação:** tela cotidiana sem formulário de cadastro permanente; ação principal inequívoca; usuário identifica visualmente relatos e participações diferentes; sem instruções autorreferentes repetidas; ícones com texto e foco acessível; subnavegação não exige navegar por menus globais; funcionalidades e permissões preservadas. A validação requer apreciação explícita do responsável pelo produto sobre os desenhos e novo teste de uso, não apenas testes automatizados.
+
+**Encaminhamento:** especialidade UX prepara proposta de telas concretas (primeiro Cuidados, depois Desenvolvimento); Arquitetura só é consultada se surgir alteração material de contrato/roteamento/autorização; Acompanhamento mantém a reprovação de UX aberta até evidência de novo aceite humano. Esta revisão não solicita reimplementar CT-20261116-001 nem altera regras funcionais.

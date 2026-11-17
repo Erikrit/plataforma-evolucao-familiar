@@ -1,6 +1,6 @@
 # Guia de Experiência UX/UI — Plataforma de Evolução Familiar
 
-**Versão:** 1.1 — identidade aprovada em 2026-11-15; navegação e administração aprovadas em 2026-11-16  
+**Versão:** 1.2 — identidade e navegação aprovadas; revisão de hierarquia e ações secundárias em 2026-11-16  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
@@ -53,6 +53,19 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - **Acessos:** distinguir pessoa acompanhada, usuário com acesso, responsabilidade e escopo. Identificadores técnicos só para diagnóstico, jamais como principal rótulo. Não prometer listar, editar ou revogar autorizações até confirmar contratos e políticas vigentes.
 - **Dependência transversal:** `CT-20261116-001` na revisão de UX, status `PROPOSTA` para Arquitetura. Refere-se à capacidade de montar visão administrativa segura de acessos; não autoriza nova operação de permissão.
 
+### 4.3 Hierarquia de ações e subnavegação contextual — decisão UX aprovada em 2026-11-16
+
+**Origem:** reprovação expressa de experiência em testes de uso da família, após a homologação técnica R2. A reprovação da experiência não invalida os PASS de typecheck/smokes nem comprova uma falha de regras de negócio.
+
+- **Tela principal de Cuidados:** deve ser enxuta e dedicada à rotina, horários, relatos pendentes e informações de acompanhamento realmente úteis. Retirar da composição principal formulários de criação e instruções longas sobre o uso do sistema.
+- **Subnavegação de Cuidados da pessoa:** disponibilizar, quando autorizado, um agrupamento contextual como **Rotina**, **Medicamentos**, **Consultas e exames** e **Outros cuidados** somente se os respectivos destinos/conteúdos já existirem e agregarem valor. **Adicionar medicamento** e **Adicionar consulta** são ações secundárias em seus contextos próprios, não formulários permanentes na tela Rotina.
+- **Sem multiplicar menus globais:** esse agrupamento é local à pessoa/módulo, não outra seção administrativa global. No desktop pode ser subnavegação discreta; no celular, controles compactos e rotulados, sem exigir vários toques para uma ação recorrente. Não duplicar links que levem ao mesmo conteúdo.
+- **Reutilização do padrão:** Desenvolvimento apresenta brincadeiras e participação primeiro; criação de brincadeira e gestão de recompensas ficam em ações secundárias do módulo. Evolução apresenta histórico/resumo primeiro, e filtros/exportação somente no contexto apropriado. Gestão familiar continua exclusivamente em Gerenciar família.
+- **Confirmações contextualizadas:** relatos sobre medicamentos e participação em brincadeiras possuem ícones, rótulos, hierarquia e feedback distintos, preservando exatamente as escolhas, consequências, persistência e permissões atuais. Ícones complementam, não substituem texto nem representam punição.
+- **Identidade e concisão:** usar uma família consistente de ícones com rótulos, tokens Mantine existentes, cartões com funções visuais distintas (informação, item acionável, estado, gestão), contraste e foco. Eliminar títulos repetidos do cabeçalho, descrições autorreferentes (por exemplo, instruções sobre onde ficam formulários) e parágrafos que expliquem a arquitetura do sistema ao usuário. Manter apenas instruções realmente necessárias à segurança, uso correto e consentimento.
+- **Limite de decisão:** esta é uma diretriz de **UX L2 aprovada quanto à organização de interfaces**. Não cria novas permissões, entidades, operações clínicas, regras de agendamento nem altera definição de participação/estrelas. Rotas/subtelas são opções de implementação a validar no desenho UX antes da esteira.
+- **Aceite:** primeiro validar propostas visuais das jornadas Cuidados e Desenvolvimento com responsável do produto; somente depois encaminhar implementação incremental via `task-routing`, acompanhada de testes técnicos e novo teste humano.
+
 ## 5. Regras de interação reutilizáveis
 
 1. **Ação mais frequente primeiro**; revelar configuração e campos opcionais sob demanda, com rótulos explícitos.
@@ -82,6 +95,10 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - [ ] Gestão familiar está centralizada, sem botões/formulários administrativos repetidos nas áreas de acompanhamento.
 - [ ] Informações de autorização exibidas ao administrador não excedem contratos e acessos aprovados.
 - [ ] A ação principal de cada tela é reconhecível sem ler instruções técnicas.
+- [ ] Rotina de Cuidados não contém formulários de criação permanentes; ações de medicamentos/consultas ficam em subnavegação contextual acessível.
+- [ ] Desenvolvimento e módulos similares separam acompanhamento e criação/gestão sem adicionar menus globais redundantes.
+- [ ] Ícones semânticos e rótulos tornam as ações e estados distinguíveis; as telas não repetem títulos ou explicações do sistema.
+- [ ] Confirmações de Cuidados e Desenvolvimento são visualmente diferentes e preservam regras e feedback de persistência.
 - [ ] Operações frequentes requerem poucos passos e evitam redigitação.
 - [ ] Cada estado (vazio, loading, erro, sucesso, sem confirmação) é compreensível.
 - [ ] Não há feedback de sucesso antes da persistência; erro de rede é explícito.

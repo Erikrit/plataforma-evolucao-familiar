@@ -55,3 +55,11 @@
 ## Limites de segurança e execução
 
 O repositório é público. Não incluir imagens de crianças, prescrições, exames, segredos ou dados reais da família. Esta reconciliação é **somente documental**; não altera implementação, estado da esteira, commits, push, merge ou deploy.
+
+## Atualização de homologação UX — 2026-11-16 (posterior à revisão documental acima)
+
+**Referência da inspeção:** `develop` em `e150b70eb4824ea0fedc4679610e254ed02fc5fe`. A homologação técnica R2 `DEM-HOMOL-UX-20261116-R2` registra `PASS` em `docs/esteira/estado/evidencia-homol-ux-r2-20261116.json`; **não equivale ao aceite UX nem à homologação humana**.
+
+**Resultado do teste de uso relatado pelo responsável pelo produto:** **UX REPROVADA**, por falta de identidade visual/ícones, repetição de textos/instruções, confirmação de ações pouco diferenciada e formulários de medicamentos/consultas competindo com a rotina de Cuidados. Trata-se de novo achado humano após os testes técnicos, sem alterar retrospectivamente os resultados automatizados. O escopo e a proposta de organização estão em `docs/ux-ui/REVISAO-MODULOS-01-02.md` e o padrão aprovado em `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` §4.3.
+
+**Próxima ação:** desenhar e validar as jornadas de Cuidados e Desenvolvimento antes de programar; depois implementar alterações UX delimitadas e repetir homologação técnica e de uso. **Status de experiência: NÃO HOMOLOGADA.** Permanecem as pendências de segurança e dispositivos reais descritas acima.
