@@ -3,6 +3,7 @@
 **Versão:** 2.2 — observação opcional na Rotina e experiências diferenciadas aprovadas em 2026-11-17  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
+**Revisão integrada de Cuidados para entrega à esteira:** `docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md` (evidências, divergências e proposta incremental, sem alterar regras canônicas).  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
 
 ## 1. Objetivo e limites
