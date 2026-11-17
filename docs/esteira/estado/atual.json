@@ -2,8 +2,8 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "71c6444d915aa449de9e910f3c9acb1cfe2a8982",
-    "nota": "Homologação UX no HEAD 71c6444"
+    "commit": "bb73e8bf5b424f15003fb1d141433b0334403668",
+    "nota": "DEM-HOMOL-UX-R2 PASS; código UX local sem commit"
   },
   "moduloId": "04-evolucao-familiar",
   "incrementoId": "EF-06",
@@ -105,6 +105,88 @@
   "tentativasCorrecao": {},
   "demanda": null,
   "demandasConcluidas": [
+    {
+      "id": "DEM-HOMOL-UX-20261116-R2",
+      "tipo": "homologacao",
+      "origem": "humano — nova tentativa pós DEM-COR-UX-HOMOL",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "UX-NAV-01",
+        "UX-NAV-02",
+        "UX-ADM-01",
+        "UX-ADM-02",
+        "UX-CUI-01",
+        "UX-DES-01",
+        "UX-EVO-01",
+        "UX-ACC-01"
+      ],
+      "criteriosOk": [
+        "UX-NAV-01",
+        "UX-NAV-02",
+        "UX-ADM-01",
+        "UX-ADM-02",
+        "UX-CUI-01",
+        "UX-DES-01",
+        "UX-EVO-01",
+        "UX-ACC-01"
+      ],
+      "criteriosFalha": [],
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "b8945c64-bab2-4726-bac7-f58d3810ac1c",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/evidencia-homol-ux-r2-20261116.json",
+        "docs/esteira/estado/homol-ux-r2-typecheck-web.txt",
+        "docs/esteira/estado/homol-ux-r2-smoke-authz.txt",
+        "docs/esteira/estado/homol-ux-r2-smoke-ct-acessos.txt",
+        "docs/esteira/estado/homol-ux-r2-smoke-cv03.txt",
+        "docs/esteira/estado/homol-ux-r2-check-msg-rede.txt"
+      ],
+      "concluidaEm": "2026-11-17T00:13:56.267Z"
+    },
+    {
+      "id": "DEM-COR-UX-HOMOL-20261116",
+      "tipo": "melhoria_ux",
+      "origem": "humano + achados DEM-HOMOL-UX-20261116 (UX-ACC-01, UX-CUI-01)",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "UX-ACC-01",
+        "UX-CUI-01"
+      ],
+      "criteriosOk": [
+        "UX-ACC-01",
+        "UX-CUI-01"
+      ],
+      "criteriosFalha": [],
+      "fingerprint": "sha256:46b2078e73b0c6d5",
+      "fingerprintFull": "sha256:46b2078e73b0c6d559ee8aadccbdf286c527329cc160d14befc7f863cb32f5bf",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "a6551ef3-2348-4942-a1aa-0e0e09a9684c",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/evidencia-cor-ux-homol-20261116.json",
+        "docs/esteira/estado/qg1-typecheck-web-cor-ux.txt",
+        "docs/esteira/estado/qg2-build-web-cor-ux.txt",
+        "docs/esteira/estado/qg2-smoke-cv03-cor-ux.txt",
+        "docs/esteira/estado/qg2-smoke-authz-cor-ux.txt",
+        "docs/esteira/estado/qg2-check-msg-rede-cor-ux.txt"
+      ],
+      "arquivos": [
+        "apps/web/src/componentes/navegacao-app.tsx",
+        "apps/web/src/componentes/feedback.tsx",
+        "apps/web/src/componentes/contexto-sessao.tsx",
+        "apps/web/src/componentes/painel-fundacao.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx"
+      ],
+      "concluidaEm": "2026-11-16T23:53:23.631Z"
+    },
     {
       "id": "DEM-HOMOL-UX-20261116",
       "tipo": "homologacao",
@@ -236,9 +318,9 @@
       "concluidaEm": "2026-11-16T18:35:00.000Z"
     }
   ],
-  "proximaAcao": "Homologação técnica FAIL (UX-ACC/CUI residual). Abrir correções via task-routing; humana PENDING_HUMAN. Reiniciar next:dev se 500.",
-  "atualizadoEm": "2026-11-16T21:27:55.935Z",
-  "notas": "DEM-HOMOL-UX-20261116 concluída como investigação. Sem implementação/commit/push. Verifier FAIL não equivale a homologação humana.",
+  "proximaAcao": "Homologação técnica R2 PASS. Humana PENDING_HUMAN em aparelhos reais. Correções UX ainda sem commit.",
+  "atualizadoEm": "2026-11-17T00:13:56.267Z",
+  "notas": "DEM-COR-UX-HOMOL-20261116 fechada tecnicamente. Homologação humana permanece PENDING_HUMAN. Build web sem EPERM (sem next:dev concorrente).",
   "decisaoPendente": null,
   "moduloAnterior": {
     "id": "03-desenvolvimento-laurinha",

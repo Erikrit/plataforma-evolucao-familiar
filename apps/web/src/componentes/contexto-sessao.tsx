@@ -18,6 +18,7 @@ import {
   type DestaqueInicio,
   type UsuarioSessao,
 } from "@/lib/api";
+import { mensagemErroAmigavel } from "@/componentes/feedback";
 
 type EstadoSessao = {
   pronto: boolean;
@@ -90,7 +91,7 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
         }
       } catch (e) {
         setErroSessao(
-          e instanceof Error ? e.message : "Não foi possível verificar a sessão",
+          mensagemErroAmigavel(e, "Não foi possível verificar a sessão"),
         );
       } finally {
         setPronto(true);

@@ -18,6 +18,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   cadastrarMedicamento,
   criarConsulta,
@@ -76,6 +77,8 @@ export default function PaginaCuidados() {
   const [consultaDesc, setConsultaDesc] = useState("");
   const [consultaQuando, setConsultaQuando] = useState("");
   const [enviandoForm, setEnviandoForm] = useState(false);
+  /** Alinhado ao breakpoint `sm` do AppShell: painel inferior no celular; lateral proporcional no desktop. */
+  const ehCelular = useMediaQuery("(max-width: 47.99em)", true);
 
   const dosesNumericas = useMemo(() => {
     const n = Number(dosesPorDia);
@@ -570,10 +573,10 @@ export default function PaginaCuidados() {
           onClose={() => {
             if (!registrando) setSelecionado(null);
           }}
-          position="bottom"
+          position={ehCelular ? "bottom" : "right"}
           title={`Relato${nomePessoa ? ` de ${nomePessoa}` : ""}`}
           padding="md"
-          size="auto"
+          size={ehCelular ? "auto" : "md"}
           overlayProps={{ backgroundOpacity: 0.35 }}
           closeOnEscape={!registrando}
           closeOnClickOutside={!registrando}

@@ -80,8 +80,13 @@ function MenuNavegacao({
   onNavegar?: () => void;
 }) {
   const pathname = usePathname();
-  const { usuario, cartoes, podeGerenciarFamilia, limparSessaoLocal } =
-    useSessao();
+  const {
+    pronto,
+    usuario,
+    cartoes,
+    podeGerenciarFamilia,
+    limparSessaoLocal,
+  } = useSessao();
   const [saindo, setSaindo] = useState(false);
   const [areasFallback, setAreasFallback] =
     useState<AreasAutorizadasCartao | null>(null);
@@ -162,6 +167,16 @@ function MenuNavegacao({
       setSaindo(false);
       onNavegar?.();
     }
+  }
+
+  if (!pronto) {
+    return (
+      <Stack gap="xs" p="md" role="status" aria-live="polite">
+        <Text size="sm" c="dimmed">
+          Verificando sessão…
+        </Text>
+      </Stack>
+    );
   }
 
   if (!usuario) {

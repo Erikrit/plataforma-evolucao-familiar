@@ -7,6 +7,38 @@ type PropsMensagem = {
   sucesso?: string | null;
 };
 
+const MSG_REDE =
+  "Não foi possível conectar. Verifique a internet e tente de novo.";
+
+/** Normaliza mensagens técnicas de rede/fetch para linguagem familiar (UX-ACC-01). */
+export function mensagemErroAmigavel(
+  erro: unknown,
+  fallback = "Não foi possível concluir",
+): string {
+  if (!(erro instanceof Error)) return fallback;
+  const texto = erro.message.trim();
+  if (!texto) return fallback;
+  if (
+    /failed to fetch|networkerror|load failed|fetch failed|network request failed/i.test(
+      texto,
+    )
+  ) {
+    return MSG_REDE;
+  }
+  return texto;
+}
+
+function normalizarTextoErro(texto: string): string {
+  if (
+    /failed to fetch|networkerror|load failed|fetch failed|network request failed/i.test(
+      texto,
+    )
+  ) {
+    return MSG_REDE;
+  }
+  return texto;
+}
+
 /** Feedback local após operação: erro explícito; sucesso só quando o chamador confirmar persistência. */
 export function MensagemFeedback({ erro, sucesso }: PropsMensagem) {
   if (!erro && !sucesso) return null;
@@ -15,7 +47,7 @@ export function MensagemFeedback({ erro, sucesso }: PropsMensagem) {
     <Stack gap="xs" mt="sm" role="status" aria-live="polite">
       {erro ? (
         <Alert color="red" title="Não foi possível concluir" variant="light">
-          {erro}
+          {normalizarTextoErro(erro)}
         </Alert>
       ) : null}
       {sucesso ? (

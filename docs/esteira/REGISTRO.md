@@ -5,11 +5,51 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-16)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
+- **DEM-HOMOL-UX-20261116-R2:** COMPLETED — homologação técnica **PASS** · [verifier](b8945c64-bab2-4726-bac7-f58d3810ac1c); humana PENDING_HUMAN
+- **DEM-COR-UX-HOMOL-20261116:** COMPLETED — correção UX-ACC-01 + UX-CUI-01 PASS · fingerprint `sha256:46b2078e73b0c6d5` · [verifier](a6551ef3-2348-4942-a1aa-0e0e09a9684c); humana PENDING_HUMAN
 - **DEM-HOMOL-UX-20261116:** COMPLETED — homologação técnica **FAIL** (UX-ACC-01 + Drawer desktop); humana PENDING_HUMAN · [verifier](ac0570d9-36b6-4add-8740-805e52d735c4)
+
+## 2026-11-16 — DEM-HOMOL-UX-20261116-R2 COMPLETED (técnico PASS)
+
+- **Perfil:** quality-gate `homologacao` · sem implementação
+- **Revalidação:** flash sessão PASS · mensagem rede PT PASS · Drawer desktop lateral PASS
+- **Smokes/typecheck:** PASS · Verifier PASS ([verifier](b8945c64-bab2-4726-bac7-f58d3810ac1c))
+- **Humana/dispositivos:** PENDING_HUMAN
+- **Evidência:** `docs/esteira/estado/evidencia-homol-ux-r2-20261116.json`
+- **Commit/push:** não executados
+- **Próximo:** homologação humana em aparelhos; commit das correções UX sob decisão humana
+
+## 2026-11-16 — Triagem DEM-HOMOL-UX-20261116-R2 (READY→IN_PROGRESS)
+
+- **Tipo:** homologacao · **Origem:** pedido humano de nova tentativa pós DEM-COR-UX-HOMOL
+- **Aprovação:** L1 Qualidade/UX · sem implementação nesta demanda
+- **Fluxo:** task-routing → quality-gate (perfil homologação)
+- **Foco:** revalidar UX-ACC-01 e UX-CUI-01 corrigidos + regressão NAV/ADM/DES/EVO
+- **Commit/push:** não executados
 - **DEM-UX-NAV-ADM-20261116:** COMPLETED — fingerprint `sha256:db65d95aa716c68e` · verifier PASS (independente); humana PENDING_HUMAN
 - **DEM-CT-20261116-001:** COMPLETED — fingerprint `sha256:2a04c89c9f1f00e7` · verifier PASS (reutilizar GET /acessos)
 - **Módulo 04 Evolução Familiar:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-04.json`
 - **Módulo 03 Desenvolvimento Laurinha:** COMPLETED (QG-3 PASS) — evidência `docs/esteira/estado/evidencia-qg3-modulo-03.json`
+
+## 2026-11-16 — DEM-COR-UX-HOMOL-20261116 COMPLETED
+
+- **Entrega:** flash sessão na nav; erro rede em PT; Drawer cuidados/desenvolvimento proporcional no desktop
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](a6551ef3-2348-4942-a1aa-0e0e09a9684c))
+- **Fingerprint:** `sha256:46b2078e73b0c6d5`
+- **Evidências:** `evidencia-cor-ux-homol-20261116.json`, `qg1-typecheck-web-cor-ux.txt`, `qg2-build-web-cor-ux.txt` (sem EPERM), smokes cv03/authz
+- **Humana/dispositivos:** PENDING_HUMAN
+- **Commit/push:** não executados
+- **Próximo:** homologação humana rápida (reload + Drawer desktop + celular)
+
+## 2026-11-16 — Triagem DEM-COR-UX-HOMOL-20261116 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_ux (correção residual) · **Origem:** achados DEM-HOMOL-UX-20261116
+- **Aprovação:** L1 APROVADA (UX; sem regra funcional nova)
+- **Fluxo:** task-routing → implementation-workflow → quality-gate
+- **Escopo:** UX-ACC-01 (flash sessão; erro rede PT); UX-CUI-01 (Drawer proporcional no desktop)
+- **Risco:** baixo · **HEAD base:** `bb73e8b` (docs Homoloção) / código produto `71c6444`
+- **Humana:** permanece PENDING_HUMAN
+- **Commit/push:** não executados
 
 ## 2026-11-16 — DEM-HOMOL-UX-20261116 COMPLETED (técnico FAIL)
 

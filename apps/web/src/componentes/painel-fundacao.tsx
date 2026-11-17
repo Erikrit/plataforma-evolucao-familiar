@@ -18,6 +18,7 @@ import {
   EstadoCarregando,
   EstadoVazio,
   MensagemFeedback,
+  mensagemErroAmigavel,
 } from "@/componentes/feedback";
 import { entrar, type AcessoResumo } from "@/lib/api";
 
@@ -56,7 +57,7 @@ export function PainelFundacao() {
       await entrarNaSessao(nova.usuario);
       setSucesso("Você entrou.");
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível entrar");
+      setErro(mensagemErroAmigavel(e, "Não foi possível entrar"));
     } finally {
       setCarregando(false);
     }

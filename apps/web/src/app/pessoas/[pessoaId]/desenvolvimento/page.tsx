@@ -17,6 +17,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   criarDesafioPersonalizado,
   criarRecompensa,
@@ -88,6 +89,7 @@ export default function PaginaDesenvolvimento() {
   const [custoRecompensa, setCustoRecompensa] = useState<number | string>(5);
   const [enviandoRecompensa, setEnviandoRecompensa] = useState(false);
   const [resgatandoId, setResgatandoId] = useState<string | null>(null);
+  const ehCelular = useMediaQuery("(max-width: 47.99em)", true);
 
   const carregarDesafios = useCallback(
     async (pessoaId: string, apenasGuardados: boolean) => {
@@ -552,8 +554,8 @@ export default function PaginaDesenvolvimento() {
       <Drawer
         opened={Boolean(podeVer && selecionado)}
         onClose={() => setSelecionado(null)}
-        position="bottom"
-        size="auto"
+        position={ehCelular ? "bottom" : "right"}
+        size={ehCelular ? "auto" : "md"}
         title={selecionado?.nome ?? "Brincadeira"}
         padding="md"
       >
