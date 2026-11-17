@@ -1,6 +1,6 @@
 # Guia de Experiência UX/UI — Plataforma de Evolução Familiar
 
-**Versão:** 1.9 — experiências por perfil e simplicidade do Integrante validadas em 2026-11-17  
+**Versão:** 2.0 — organização de Consultas e exames por perfil aprovada em 2026-11-17  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
@@ -86,6 +86,18 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 **Microinterações aprovadas:** observações de apoio são opcionais, curtas e contextuais; não exigir relato de turno nem justificativa por ausência de marcação. Relatos sobre medicamentos só alteram estado após confirmação explícita e sucesso real da persistência; falhas deixam a ocorrência sem confirmação. Anexos/exames somente quando operação e escopo estiverem previstos e autorizados. A orientação aprovada é de **design**, não prova de implementação ou homologação de UX no aplicativo.
 
 **Critérios de aceite de UX:** comparar as mesmas jornadas com três contextos de autorização; o terceiro perfil consegue registrar uma ocorrência com poucos toques e sem ver cadastros; Responsável encontra configurações somente no contexto adequado; Administrador gerencia família sem exposição de conteúdo sensível; estados de falha de gravação e permissões revogadas permanecem corretos.
+
+### 4.5 Consultas e exames — direção UX aprovada em 2026-11-17
+
+- **Uma única área no menu lateral contextual:** `Consultas e exames`, com itens visualmente distinguíveis por ícone, rótulo, data e estado. Não criar vários menus para recursos pequenos nem exibir cadastros permanentes na Rotina.
+- **Listar antes de cadastrar:** mostrar compromissos e exames autorizados de modo conciso; tocar um item abre detalhes. Ações de agendar/editar/cancelar/concluir ficam disponíveis no contexto de **Responsável** legitimamente autorizado, não repetidas em cada cartão.
+- **Agendamento mínimo:** descrição ou especialidade, data e horário; demais detalhes opcionais. Escolha fácil de hora cheia como padrão visual, com possibilidade de horário exato sem arredondamento caso a consulta esteja marcada em minutos específicos. Não duplicar informações nem pedir dados clínicos desnecessários.
+- **Exame:** descrição obrigatória; data e arquivo opcionais conforme CUI-F06, vínculo à consulta se disponível. Exibir arquivos apenas quando autorizados; não interpretar resultados nem tratá-los como orientação clínica.
+- **Integrante:** ver somente compromissos pertinentes à pessoa acompanhada e ações de registro/anexo **se já previstas e autorizadas**, sem controlar agendamentos nem acessar documentos sensíveis por presunção. Envio de exames/observações por esse perfil exige confirmação de operação autorizada e contrato existente; este aceite de UX não concede uma nova permissão.
+- **Administrador:** não recebe automaticamente acesso a consultas, exames ou anexos pelo papel administrativo.
+- **Estados de persistência:** nunca exibir conclusão de upload/agendamento sem confirmação do servidor; oferecer erro compreensível, sem duplicar registro ao tentar novamente.
+
+**Próximo desenho:** validar cadastro de consulta e fluxo contextual de anexo de exame, comparando Responsável e Integrante, antes de implementar.
 
 ## 5. Regras de interação reutilizáveis
 
