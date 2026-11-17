@@ -1,6 +1,6 @@
 # Guia de Experiência UX/UI — Plataforma de Evolução Familiar
 
-**Versão:** 1.3 — identidade e navegação aprovadas; menu contextual de Cuidados e critérios de esforço mínimo confirmados em 2026-11-16  
+**Versão:** 1.4 — identidade e navegação aprovadas; saudação contextual e concisão da Rotina de Cuidados aprovadas em 2026-11-16  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
@@ -59,6 +59,7 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 
 - **Tela principal de Cuidados:** deve ser enxuta e dedicada à rotina, horários, relatos pendentes e informações de acompanhamento realmente úteis. Retirar da composição principal formulários de criação e instruções longas sobre o uso do sistema.
 - **Menu lateral contextual de Cuidados — escolha explícita do responsável pelo produto:** as áreas **Rotina**, **Medicamentos**, **Consultas e exames** e **Outros cuidados**, se autorizadas e úteis, devem aparecer como itens/subitens do menu lateral compartilhado, sob o contexto da pessoa. A entrada principal de Cuidados abre **somente a Rotina**, sem abas internas duplicadas nem navegação de categorias dentro do conteúdo. **Adicionar medicamento** e **Adicionar consulta** pertencem às respectivas áreas e não aparecem como formulários permanentes na Rotina.
+- **Saudação da Rotina aprovada:** substituir a pilha de títulos e instruções (como “Rotina da Vovó” / “Hoje” / “Para acompanhar hoje” / “Os cuidados do dia...”) por **uma frase acolhedora, curta e contextual** com o nome cadastrado da pessoa acompanhada, por exemplo: **“Vovó, olha o que temos para hoje!”**. Não fixar “Vovó” no código nem duplicar a saudação com outro título de conteúdo. Os cartões autoexplicativos exibem horário, item, estado e ação; não adicionar texto didático quando a interface já comunicar a ação. Preservar instruções indispensáveis à segurança, ao consentimento e à confirmação do relato. A frase pode ser ajustada para nomes/formas de tratamento diferentes, com linguagem natural, sem presumir parentesco ou que o usuário autenticado seja a pessoa acompanhada.
 - **Uma navegação, sem menus paralelos:** estender o menu lateral contextual já existente no AppShell; no celular, os mesmos destinos ficam no Drawer da navegação global. Não criar uma segunda barra de abas, um menu flutuante ou menu administrativo. Evitar submenu profundo e links redundantes; garantir acesso rápido à Rotina sem abrir o menu a cada relato.
 - **Reutilização do padrão:** Desenvolvimento apresenta brincadeiras e participação primeiro; criação de brincadeira e gestão de recompensas ficam em ações secundárias do módulo. Evolução apresenta histórico/resumo primeiro, e filtros/exportação somente no contexto apropriado. Gestão familiar continua exclusivamente em Gerenciar família.
 - **Confirmações contextualizadas:** relatos sobre medicamentos e participação em brincadeiras possuem ícones, rótulos, hierarquia e feedback distintos, preservando exatamente as escolhas, consequências, persistência e permissões atuais. Ícones complementam, não substituem texto nem representam punição.
@@ -96,6 +97,7 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - [ ] Gestão familiar está centralizada, sem botões/formulários administrativos repetidos nas áreas de acompanhamento.
 - [ ] Informações de autorização exibidas ao administrador não excedem contratos e acessos aprovados.
 - [ ] A ação principal de cada tela é reconhecível sem ler instruções técnicas.
+- [ ] A Rotina começa por uma única saudação contextual com o nome da pessoa acompanhada, sem repetir “Rotina”, “Hoje” e descrições autoexplicativas.
 - [ ] A entrada de Cuidados mostra apenas a Rotina; Medicamentos, Consultas e Outros cuidados ficam no menu lateral contextual (Drawer global no celular), sem abas duplicadas no conteúdo.
 - [ ] Rotina de Cuidados não contém formulários de criação permanentes; cadastro de medicamentos/consultas está no contexto da área correspondente.
 - [ ] Registros frequentes são rápidos e sem entrada duplicada; nenhuma explicação ou etapa supérflua obriga a família a alimentar o sistema.
