@@ -1,4 +1,4 @@
-# Documento Mestre do Produto — v1.1
+# Documento Mestre do Produto — v1.2
 
 **Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
@@ -34,7 +34,7 @@ A interface apresenta três **perfis de experiência/responsabilidade**: **Admin
 
 - **Administrador:** gerencia pessoas, convites, vínculos e autorizações, com visão dos metadados mínimos de quem acompanha quem. Não recebe automaticamente acesso a medicamentos, relatórios clínicos, exames ou desenvolvimento infantil.
 - **Responsável:** planeja e gerencia medicamentos, consultas, atividades e relatórios **apenas para as pessoas e domínios autorizados**.
-- **Integrante:** acompanha a rotina autorizada e registra relatos, ocorrências e apoios com poucos toques; anexos de exames ou observações somente quando a operação estiver prevista e autorizada. Não administra pessoas nem modifica prescrições/programações por padrão.
+- **Integrante:** acompanha a rotina autorizada e registra relatos/ocorrências com poucos toques; dispõe de **observação diária opcional na própria Rotina** quando autorizada, sem categorias obrigatórias de apoio nem relatório de turno. Anexos de exames somente quando a operação estiver prevista e autorizada. Não administra pessoas nem modifica prescrições/programações por padrão.
 
 **Perfil ≠ vínculo ≠ autorização:** “Integrante” é o nome da experiência de participação; **integrante familiar** e **colaborador(a) externo(a)/contratado(a)** são tipos de vínculo distintos. Uma pessoa externa não passa a ser familiar por receber esse perfil. Uma pessoa pode acumular responsabilidades quando expressamente autorizada; cada ação depende de verificações contextuais de pessoa, domínio e operação. A Vovó mantém autonomia e pode acessar a própria rotina quando possuir conta e permissão. A navegação-base é compartilhada, adaptando áreas e ações sem criar três aplicações.
 
@@ -49,8 +49,8 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 - Rotina do dia em cartões clicáveis que abrem escolhas; tocar não confirma automaticamente.
 - Estados exibidos: **tomou conforme relato**, **informou que não tomou**, **sem confirmação**. Sem registro não significa não tomado.
 - Alteração de horário e encerramento preservam histórico; correções rastreáveis.
-- Consultas, exames e anexos com cadastro simples, atividades relevantes de apoio e companhia com registro rápido.
-- Visão da colaboradora em seções separadas: medicamentos, atividades de apoio e consultas, com próximo cuidado relevante destacado.
+- Consultas, exames e anexos com cadastro simples; **apoio e companhia são registrados por uma observação diária opcional na própria Rotina**, sem menus ou categorias de atividades obrigatórias. Histórico aproveita o registro existente, sem digitação repetida.
+- **Integrante:** vê somente cuidados e compromissos autorizados e pode escrever observação breve, sem telas de cadastro de medicamentos/consultas ou formulários de relatório de turno. **Responsável:** usa a mesma Rotina e acessa gestão de medicamentos, consultas e exames no menu lateral contextual, conforme autorização.
 - **Lembretes aprovados em 2026-11-15:** um aviso discreto por ocorrência de medicamento no horário conferido; destinatários explicitamente selecionados e autorizados (Vovó, responsáveis e colaboradora quando aplicável); sem cobrança repetida por falta de confirmação e sem inferir dose não tomada. Consultas/exames com data permitem aviso antecipado simples; cancelamentos e alterações atualizam avisos futuros. Privacidade inclusive na tela bloqueada; entrega real depende de validação nos dispositivos. Não é canal único de segurança.
 - Histórico automático, relatório por período com prévia e exportação PDF.
 

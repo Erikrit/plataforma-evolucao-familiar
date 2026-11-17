@@ -1,12 +1,12 @@
 # Módulo 02 — Cuidados da Vovó
 
-**Versão:** especificação funcional v1.4 — preserva regras de cuidados v1.3 e esclarece o perfil visual Integrante em 2026-11-16  
+**Versão:** especificação funcional v1.5 — observação diária opcional em substituição às categorias de apoio, aprovada em 2026-11-17  
 **Status funcional:** especificação aprovada. Estado do código, evidências, notificações e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Dependência:** Fundação Familiar.
 
 ## 1. Objetivo
 
-Organizar medicamentos, consultas, exames e atividades relevantes de companhia e apoio; permitir registro rápido de informações relatadas pela Vovó; preservar histórico. Não é prontuário eletrônico nem substitui orientação clínica.
+Organizar medicamentos, consultas e exames, com observações simples sobre apoio, companhia e acontecimentos relevantes diretamente na Rotina diária; permitir registro rápido de informações relatadas pela Vovó; preservar histórico. Não é prontuário eletrônico nem substitui orientação clínica.
 
 ## 2. Participantes
 
@@ -38,7 +38,7 @@ Organizar medicamentos, consultas, exames e atividades relevantes de companhia e
 
 ### CUI-F02 — Rotina do dia
 
-Seções: medicamentos, atividades de apoio e consultas, com próximo cuidado relevante destacado. Cartão clicável mostra nome, horário e situação; tocar abre opções, **não confirma**. Situações: **tomou conforme informação**, **informou que não tomou**, **sem confirmação**. Ausência de registro não equivale a não tomada.
+Exibir medicamentos e consultas/compromissos autorizados, com próximo cuidado relevante destacado, e **um campo opcional de observação do dia** acessível na própria Rotina para quem puder registrar. Não criar menu independente de Apoio e companhia nem categorias predefinidas obrigatórias. Cartão clicável mostra nome, horário e situação; tocar abre opções, **não confirma**. Situações: **tomou conforme informação**, **informou que não tomou**, **sem confirmação**. Ausência de registro não equivale a não tomada.
 
 ### CUI-F03 — Registrar dose
 
@@ -58,7 +58,9 @@ Descrição; data se conhecida; arquivo opcional. Possível vínculo a consulta.
 
 ### CUI-F07 — Apoio e companhia
 
-Registrar atividades familiares realmente relevantes; conclusão rápida, observação opcional. Não exigir diário de turno, controle trabalhista ou ranking.
+**Decisão funcional aprovada em 2026-11-17:** substituir o fluxo de categorias/cartões de apoio e companhia por **uma observação breve e opcional por registro do dia**, diretamente na Rotina da pessoa acompanhada. Não pedir categoria, classificação, atividade ou justificativa; não exigir registro diário. O campo pode ficar vazio sem gerar pendência ou cobrança. Quando registrada, a observação inclui automaticamente pessoa acompanhada, autor e momento, e aparece no histórico autorizado sem recadastro. O Responsável pode consultar as observações no acompanhamento/Evolução, conforme autorização. **Registrar observação exige autorização contextual explícita;** a decisão não libera automaticamente dados a familiares, administradores nem terceiros. Não é relatório de turno, controle trabalhista, avaliação clínica ou ranking.
+
+**Dependência de implementação:** verificar se a operação atual de registro de apoio comporta texto livre sem exigir categoria/atividade. Se não comportar, propor a menor adaptação do contrato/dados/autorizações existente, com avaliação de Arquitetura e preservação de registros históricos; não presumir que a API de observações esteja pronta nem criar um módulo novo. Prever correção/autoria e feedback de gravação real conforme as regras gerais.
 
 ### CUI-F08 — Lembretes
 
@@ -96,7 +98,7 @@ Período selecionável; distinguir previstas, informadas como tomadas, informada
 ### CUI-F11 — Experiência móvel e autonomia
 
 - A Vovó visualiza uma rotina simples com o próximo cuidado e pode confirmar seu próprio relato quando tiver acesso; o cartão abre opções e não confirma automaticamente.
-- Responsáveis autorizados visualizam o acompanhamento relevante; colaboradora vê **somente** medicamentos, apoio e consultas atribuídos, sem navegar por documentos sensíveis ou dados de crianças sem autorização específica.
+- Responsáveis autorizados visualizam o acompanhamento relevante e observações permitidas; **Integrante**, inclusive colaboradora externa, vê somente medicamentos e consultas atribuídos e registra observação diária opcional quando autorizado, sem navegar por documentos sensíveis ou dados de crianças sem autorização específica.
 - Botões legíveis, poucos toques e confirmação compreensível; a plataforma não impõe relatórios de turno.
 - A Vovó deve compreender quem recebe informações de seus cuidados e participar das escolhas de compartilhamento conforme sua autonomia e as autorizações legítimas.
 - Erro de rede não pode ser apresentado como confirmação de dose. Manter `sem confirmação` até registro confirmado e não gerar cobranças de ausência.
@@ -107,7 +109,7 @@ Período selecionável; distinguir previstas, informadas como tomadas, informada
 2. **Registro:** tocar cartão → selecionar relato da Vovó → confirmar → atualizar histórico automaticamente.
 3. **Correção:** abrir registro → corrigir → salvar → preservar valor anterior e autoria.
 4. **Alteração médica:** atualizar programação com vigência → anexar nova receita opcional → preservar passado.
-5. **Colaboradora:** acessar apenas Vovó → seções de medicamentos, atividades, consultas → registrar ocorrência relevante.
+5. **Integrante (colaboradora externa):** acessar apenas Vovó → Rotina de medicamentos e compromissos autorizados → relatar dose ou registrar observação breve opcional; sem categorias de apoio ou configuração.
 6. **Consulta/exame:** cadastro simples → lembrete opcional → realização/cancelamento → arquivo opcional.
 
 ## 5. Permissões
@@ -119,7 +121,7 @@ Período selecionável; distinguir previstas, informadas como tomadas, informada
 | Cadastrar/alterar programação | Não por padrão | Sim | Não |
 | Consultar documentos | Próprios | Se autorizado | Apenas estritamente necessário |
 | Organizar consultas/exames | Conforme configuração | Sim | Não por padrão |
-| Registrar atividade de apoio | Conforme configuração | Sim | Se atribuída |
+| Registrar observação diária opcional | Conforme configuração | Se autorizado | Se autorizado para a pessoa |
 | Exportar PDF completo | Conforme configuração | Se autorizado | Não por padrão |
 
 ## 6. Dados informados versus automáticos
