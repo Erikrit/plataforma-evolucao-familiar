@@ -1,6 +1,6 @@
 # Guia de Experiência UX/UI — Plataforma de Evolução Familiar
 
-**Versão:** 1.2 — identidade e navegação aprovadas; revisão de hierarquia e ações secundárias em 2026-11-16  
+**Versão:** 1.3 — identidade e navegação aprovadas; menu contextual de Cuidados e critérios de esforço mínimo confirmados em 2026-11-16  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
@@ -58,12 +58,13 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 **Origem:** reprovação expressa de experiência em testes de uso da família, após a homologação técnica R2. A reprovação da experiência não invalida os PASS de typecheck/smokes nem comprova uma falha de regras de negócio.
 
 - **Tela principal de Cuidados:** deve ser enxuta e dedicada à rotina, horários, relatos pendentes e informações de acompanhamento realmente úteis. Retirar da composição principal formulários de criação e instruções longas sobre o uso do sistema.
-- **Subnavegação de Cuidados da pessoa:** disponibilizar, quando autorizado, um agrupamento contextual como **Rotina**, **Medicamentos**, **Consultas e exames** e **Outros cuidados** somente se os respectivos destinos/conteúdos já existirem e agregarem valor. **Adicionar medicamento** e **Adicionar consulta** são ações secundárias em seus contextos próprios, não formulários permanentes na tela Rotina.
-- **Sem multiplicar menus globais:** esse agrupamento é local à pessoa/módulo, não outra seção administrativa global. No desktop pode ser subnavegação discreta; no celular, controles compactos e rotulados, sem exigir vários toques para uma ação recorrente. Não duplicar links que levem ao mesmo conteúdo.
+- **Menu lateral contextual de Cuidados — escolha explícita do responsável pelo produto:** as áreas **Rotina**, **Medicamentos**, **Consultas e exames** e **Outros cuidados**, se autorizadas e úteis, devem aparecer como itens/subitens do menu lateral compartilhado, sob o contexto da pessoa. A entrada principal de Cuidados abre **somente a Rotina**, sem abas internas duplicadas nem navegação de categorias dentro do conteúdo. **Adicionar medicamento** e **Adicionar consulta** pertencem às respectivas áreas e não aparecem como formulários permanentes na Rotina.
+- **Uma navegação, sem menus paralelos:** estender o menu lateral contextual já existente no AppShell; no celular, os mesmos destinos ficam no Drawer da navegação global. Não criar uma segunda barra de abas, um menu flutuante ou menu administrativo. Evitar submenu profundo e links redundantes; garantir acesso rápido à Rotina sem abrir o menu a cada relato.
 - **Reutilização do padrão:** Desenvolvimento apresenta brincadeiras e participação primeiro; criação de brincadeira e gestão de recompensas ficam em ações secundárias do módulo. Evolução apresenta histórico/resumo primeiro, e filtros/exportação somente no contexto apropriado. Gestão familiar continua exclusivamente em Gerenciar família.
 - **Confirmações contextualizadas:** relatos sobre medicamentos e participação em brincadeiras possuem ícones, rótulos, hierarquia e feedback distintos, preservando exatamente as escolhas, consequências, persistência e permissões atuais. Ícones complementam, não substituem texto nem representam punição.
 - **Identidade e concisão:** usar uma família consistente de ícones com rótulos, tokens Mantine existentes, cartões com funções visuais distintas (informação, item acionável, estado, gestão), contraste e foco. Eliminar títulos repetidos do cabeçalho, descrições autorreferentes (por exemplo, instruções sobre onde ficam formulários) e parágrafos que expliquem a arquitetura do sistema ao usuário. Manter apenas instruções realmente necessárias à segurança, uso correto e consentimento.
 - **Limite de decisão:** esta é uma diretriz de **UX L2 aprovada quanto à organização de interfaces**. Não cria novas permissões, entidades, operações clínicas, regras de agendamento nem altera definição de participação/estrelas. Rotas/subtelas são opções de implementação a validar no desenho UX antes da esteira.
+- **Três princípios inegociáveis do produto (fonte canônica: `docs/produto/DOCUMENTO-MESTRE.md` §2):** (1) **Evolução familiar:** acompanhar pessoas, rotinas, cuidados e desenvolvimento ao longo do tempo; (2) **Esforço mínimo:** registrar informações rapidamente, sem preencher dados repetidos; (3) **Organização sem cobrança:** lembrar, incentivar e acompanhar, sem transformar a rotina familiar em obrigação. **Critério de bloqueio UX:** se alimentar o sistema for trabalhoso, a experiência falha mesmo com testes técnicos verdes. Qualquer novo passo, campo, tela ou instrução precisa justificar valor real e não repetição.
 - **Aceite:** primeiro validar propostas visuais das jornadas Cuidados e Desenvolvimento com responsável do produto; somente depois encaminhar implementação incremental via `task-routing`, acompanhada de testes técnicos e novo teste humano.
 
 ## 5. Regras de interação reutilizáveis
@@ -95,7 +96,9 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - [ ] Gestão familiar está centralizada, sem botões/formulários administrativos repetidos nas áreas de acompanhamento.
 - [ ] Informações de autorização exibidas ao administrador não excedem contratos e acessos aprovados.
 - [ ] A ação principal de cada tela é reconhecível sem ler instruções técnicas.
-- [ ] Rotina de Cuidados não contém formulários de criação permanentes; ações de medicamentos/consultas ficam em subnavegação contextual acessível.
+- [ ] A entrada de Cuidados mostra apenas a Rotina; Medicamentos, Consultas e Outros cuidados ficam no menu lateral contextual (Drawer global no celular), sem abas duplicadas no conteúdo.
+- [ ] Rotina de Cuidados não contém formulários de criação permanentes; cadastro de medicamentos/consultas está no contexto da área correspondente.
+- [ ] Registros frequentes são rápidos e sem entrada duplicada; nenhuma explicação ou etapa supérflua obriga a família a alimentar o sistema.
 - [ ] Desenvolvimento e módulos similares separam acompanhamento e criação/gestão sem adicionar menus globais redundantes.
 - [ ] Ícones semânticos e rótulos tornam as ações e estados distinguíveis; as telas não repetem títulos ou explicações do sistema.
 - [ ] Confirmações de Cuidados e Desenvolvimento são visualmente diferentes e preservam regras e feedback de persistência.
