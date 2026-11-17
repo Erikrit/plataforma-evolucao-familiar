@@ -1,6 +1,6 @@
 # Guia de Experiência UX/UI — Plataforma de Evolução Familiar
 
-**Versão:** 1.8 — Integrante aprovado como perfil de experiência em 2026-11-16  
+**Versão:** 1.9 — experiências por perfil e simplicidade do Integrante validadas em 2026-11-17  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
@@ -80,6 +80,10 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - **Navegação:** o mesmo AppShell/Drawer serve a todos; o que muda são destinos, conteúdos, ações e prioridades conforme perfil combinado com autorizações existentes. O início contextual do terceiro perfil deve priorizar Rotina e poucos toques para reportar, enquanto o Responsável pode acessar programação em Medicamentos/Consultas no menu lateral. Não renderizar itens vazios ou indisponíveis; o backend continua exigindo permissão em cada operação.
 - **Vocabulário aprovado por Produto:** **Integrante** substitui **Colaborador** como rótulo do terceiro perfil de experiência na interface e nos textos funcionais. É nome de participação operacional, **não indica parentesco**. Em convites e identificação, preservar o vínculo específico **familiar** ou **colaborador(a) externo(a)/contratado(a)**. Não renomear enums/roles técnicas nem ampliar permissões por consequência do rótulo.
 - **Limites que continuam exigindo decisão de Produto:** conceder ao Integrante upload de exames ou registros de observação não autorizados hoje; ampliar relatórios de administrador; criar permissões, endpoints ou obrigações de dados. A aprovação do rótulo **não autoriza** novas capacidades. Consultar Produto e Arquitetura somente diante de lacuna efetiva.
+
+**Direção visual aprovada em 2026-11-17:** usar a **visão do Integrante como referência de simplicidade** para a plataforma inteira. Para Integrante, começar pela Rotina contextual da pessoa acompanhada com cartões de horário/estado/ação e registro em poucos toques; **nenhum cadastro, administração ou configuração** em sua experiência padrão. Para Responsável, preservar a mesma Rotina limpa, disponibilizando Medicamentos, Consultas e outras configurações autorizadas exclusivamente em destinos do menu lateral contextual, e não em cartões adicionais da Rotina. Para Administrador, priorizar pessoas, convites, vínculos e relação quem acompanha quem, sem inferir acesso a conteúdo sensível. Para a própria Vovó com conta, priorizar leitura e relato de sua rotina conforme autorização, **sem novo perfil administrativo**. Se houver responsabilidades acumuladas, compor apenas ações efetivamente autorizadas, evitando telas duplicadas.
+
+**Microinterações aprovadas:** observações de apoio são opcionais, curtas e contextuais; não exigir relato de turno nem justificativa por ausência de marcação. Relatos sobre medicamentos só alteram estado após confirmação explícita e sucesso real da persistência; falhas deixam a ocorrência sem confirmação. Anexos/exames somente quando operação e escopo estiverem previstos e autorizados. A orientação aprovada é de **design**, não prova de implementação ou homologação de UX no aplicativo.
 
 **Critérios de aceite de UX:** comparar as mesmas jornadas com três contextos de autorização; o terceiro perfil consegue registrar uma ocorrência com poucos toques e sem ver cadastros; Responsável encontra configurações somente no contexto adequado; Administrador gerencia família sem exposição de conteúdo sensível; estados de falha de gravação e permissões revogadas permanecem corretos.
 
