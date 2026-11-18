@@ -5,7 +5,29 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-18)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
+- **DEM-UX-HOM-20261118:** COMPLETED técnico PASS · fingerprint `sha256:9f6ab4a42a59c149` · [verifier](e5ccff07-38c8-4231-ac68-7ff4d28d56fe); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-ESTEIRA-IW-COMMITMSG-20261118:** COMPLETED — `implementation-workflow` passa a exigir `mensagemCommit` no resumo em `COMPLETED`
+
+## 2026-11-18 — DEM-UX-HOM-20261118 COMPLETED (técnico PASS)
+
+- **Tipo:** transversal · slices A (authz/perfil) → B (estados/feedback) → C (microcopy/rótulos)
+- **QG-1/QG-2/QG-3:** PASS · Verifier PASS ([verifier](e5ccff07-38c8-4231-ac68-7ff4d28d56fe))
+- **Fingerprint:** `sha256:9f6ab4a42a59c149`
+- **Pendência:** UX-HOM-02-SELETOR NEEDS_DECISION (opções de vínculo)
+- **Humana:** PENDING_HUMAN · status UX oficial permanece REPROVADA
+- **Evidência:** `evidencia-ux-hom-20261118.json`
+- **Commit/push:** não executados
+- **Próximo:** homologação humana expressa; commit sob decisão humana
+
+## 2026-11-18 — Triagem DEM-UX-HOM-20261118 (READY→IN_PROGRESS)
+
+- **Tipo:** transversal (correção UX com risco alto — authz/saúde/criança)
+- **Origem:** `PLANO-CORRETIVO-HOMOLOGACAO-20261118.md` + `REVISAO-MODULOS-01-02.md` UX-HOM-01..07
+- **Aprovação:** L2 Produto APROVADA (plano corretivo); seletor de vínculos = NEEDS_DECISION (não inventar opções)
+- **Fluxo:** task-routing → implementation-workflow (slices A/B/C) → quality-gate + verifier + QG-3; sem module-planning
+- **HEAD reconciliado:** `2d9b7ae` develop, working tree limpa
+- **Commit/push:** não executados
+- **Próximo:** Slice A (UX-HOM-01/02)
 - **DEM-HOMOL-CUI-20261117:** COMPLETED — validação integrada §5.5 **técnica PASS** · [verifier](4ef6dcc6-051d-47d9-802e-2be0cd3fa459); humana PENDING_HUMAN
 - **DEM-CUI-UX-CONS-20261117:** COMPLETED — Consultas e exames (3 fatias) PASS · fingerprint `sha256:de1eade8ffd58638` · [verifier](5815ebc1-8b1a-4298-9116-b2d55aa5f175); humana PENDING_HUMAN
 - **DEM-CUI-UX-MED-20261117:** COMPLETED — Medicamentos PASS · fingerprint `sha256:c9a5c265a942a508` · [verifier](499257c4-d934-4188-8b08-59cf6ed32954); humana PENDING_HUMAN

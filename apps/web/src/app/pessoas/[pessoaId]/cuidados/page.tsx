@@ -11,7 +11,6 @@ import {
   Stack,
   Text,
   Textarea,
-  ThemeIcon,
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -21,6 +20,10 @@ import {
   EstadoVazio,
   MensagemFeedback,
 } from "@/componentes/feedback";
+import {
+  MarcadorSituacaoDose,
+  MarcadorTipoItem,
+} from "@/componentes/icones-experiencia";
 import {
   obterCuidadosHoje,
   obterMe,
@@ -203,7 +206,7 @@ export default function PaginaRotinaCuidados() {
                 {consultas.map((c) => (
                   <Card key={c.id} withBorder padding="md" radius="md">
                     <Group gap="sm" wrap="nowrap" align="flex-start">
-                      <MarcadorVisual tipo="consulta" />
+                      <MarcadorTipoItem tipo="consulta" />
                       <Stack gap={2}>
                         <Text size="sm" c="dimmed">
                           Consulta
@@ -262,7 +265,7 @@ export default function PaginaRotinaCuidados() {
           {selecionado ? (
             <Stack gap="sm">
               <Group gap="sm" wrap="nowrap">
-                <MarcadorVisual tipo="medicamento" />
+                <MarcadorSituacaoDose situacao={selecionado.situacao} />
                 <Text>
                   <Text span fw={600}>
                     {selecionado.nome}
@@ -270,6 +273,9 @@ export default function PaginaRotinaCuidados() {
                   {` às ${selecionado.horario}`}
                 </Text>
               </Group>
+              <Text size="sm" c="dimmed">
+                Situação atual: {rotuloSituacao(selecionado.situacao)}
+              </Text>
               <Button
                 color="teal"
                 onClick={() => void confirmarRelato("tomou_conforme_informacao")}
@@ -327,13 +333,17 @@ function CartaoMedicamento({
       style={{ cursor: "pointer" }}
     >
       <Group gap="sm" wrap="nowrap" align="flex-start">
-        <MarcadorVisual tipo="medicamento" />
+        <MarcadorSituacaoDose situacao={cartao.situacao} />
         <Stack gap={2}>
           {destaque ? (
             <Text size="sm" c="dimmed">
               Próximo cuidado
             </Text>
-          ) : null}
+          ) : (
+            <Text size="sm" c="dimmed">
+              Medicamento
+            </Text>
+          )}
           <Text fw={600} size={destaque ? "lg" : "md"}>
             {cartao.nome}
           </Text>
@@ -349,26 +359,8 @@ function CartaoMedicamento({
   );
 }
 
-function MarcadorVisual({ tipo }: { tipo: "medicamento" | "consulta" }) {
-  const rotulo = tipo === "medicamento" ? "Med" : "Cons";
-  const cor = tipo === "medicamento" ? "teal" : "blue";
-  return (
-    <ThemeIcon
-      variant="light"
-      color={cor}
-      size={36}
-      radius="md"
-      aria-hidden
-    >
-      <Text size="xs" fw={700}>
-        {rotulo}
-      </Text>
-    </ThemeIcon>
-  );
-}
-
 function rotuloSituacao(situacao: string) {
-  if (situacao === "tomou_conforme_informacao") return "informou que tomou";
+  if (situacao === "tomou_conforme_informacao") return "tomou conforme o relato";
   if (situacao === "informou_nao_tomou") return "informou que não tomou";
   return "sem confirmação";
 }

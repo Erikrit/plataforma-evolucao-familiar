@@ -38,7 +38,6 @@ export function PainelFundacao() {
     cartoes,
     destaques,
     acessos,
-    filtradoPorAutorizacao,
     podeGerenciarFamilia,
     entrarNaSessao,
     erroSessao,
@@ -138,9 +137,6 @@ export function PainelFundacao() {
       {destaques.length > 0 ? (
         <Stack gap="sm">
           <Title order={2}>Para acompanhar</Title>
-          <Text c="dimmed" size="sm">
-            Poucos acontecimentos recentes ou próximos, só do que você pode ver.
-          </Text>
           <Stack gap="xs">
             {destaques.map((d) => (
               <Card
@@ -168,11 +164,6 @@ export function PainelFundacao() {
 
       <Stack gap="sm">
         <Title order={2}>Pessoas</Title>
-        <Text c="dimmed" size="sm">
-          {filtradoPorAutorizacao
-            ? "Mostramos apenas quem você pode acompanhar."
-            : "Toque em uma pessoa para ver o perfil e as áreas disponíveis."}
-        </Text>
 
         {cartoes.length === 0 ? (
           <EstadoVazio

@@ -2,7 +2,9 @@ import type { AutorizacaoResumo } from "@/lib/api";
 
 /** Rótulo de experiência (FUN-04); não altera enum/contrato da API. */
 export function rotuloPapelExperiencia(papel: string): string {
-  if (papel === "Colaborador") return "Integrante";
+  if (papel === "Colaborador" || papel.toLowerCase() === "colaborador") {
+    return "Integrante";
+  }
   return papel;
 }
 

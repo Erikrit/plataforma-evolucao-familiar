@@ -16,7 +16,6 @@ import {
   Stack,
   Text,
   TextInput,
-  ThemeIcon,
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -26,6 +25,7 @@ import {
   EstadoVazio,
   MensagemFeedback,
 } from "@/componentes/feedback";
+import { IconeMedicamento } from "@/componentes/icones-experiencia";
 import {
   cadastrarMedicamento,
   encerrarOuSuspenderMedicamento,
@@ -288,11 +288,7 @@ export default function PaginaMedicamentos() {
                     style={{ cursor: "pointer" }}
                   >
                     <Group gap="sm" wrap="nowrap" align="flex-start">
-                      <ThemeIcon variant="light" color="teal" size={36} radius="md" aria-hidden>
-                        <Text size="xs" fw={700}>
-                          Med
-                        </Text>
-                      </ThemeIcon>
+                      <IconeMedicamento />
                       <Stack gap={2}>
                         <Text fw={600}>{m.nome}</Text>
                         <Text size="sm" c="dimmed">

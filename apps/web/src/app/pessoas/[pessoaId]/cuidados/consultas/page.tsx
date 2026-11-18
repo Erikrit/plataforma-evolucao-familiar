@@ -13,7 +13,6 @@ import {
   Stack,
   Text,
   TextInput,
-  ThemeIcon,
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -23,6 +22,7 @@ import {
   EstadoVazio,
   MensagemFeedback,
 } from "@/componentes/feedback";
+import { IconeConsulta, IconeExame } from "@/componentes/icones-experiencia";
 import {
   atualizarConsulta,
   criarAnexo,
@@ -335,17 +335,7 @@ export default function PaginaConsultasExames() {
                       style={{ cursor: "pointer" }}
                     >
                       <Group gap="sm" wrap="nowrap" align="flex-start">
-                        <ThemeIcon
-                          variant="light"
-                          color="blue"
-                          size={36}
-                          radius="md"
-                          aria-hidden
-                        >
-                          <Text size="xs" fw={700}>
-                            Con
-                          </Text>
-                        </ThemeIcon>
+                        <IconeConsulta />
                         <Stack gap={2}>
                           <Text fw={600}>
                             {item.consulta.especialidadeOuDescricao}
@@ -383,17 +373,7 @@ export default function PaginaConsultasExames() {
                       style={{ cursor: "pointer" }}
                     >
                       <Group gap="sm" wrap="nowrap" align="flex-start">
-                        <ThemeIcon
-                          variant="light"
-                          color="violet"
-                          size={36}
-                          radius="md"
-                          aria-hidden
-                        >
-                          <Text size="xs" fw={700}>
-                            Ex
-                          </Text>
-                        </ThemeIcon>
+                        <IconeExame />
                         <Stack gap={2}>
                           <Text fw={600}>{item.exame.descricao}</Text>
                           <Text size="sm" c="dimmed">

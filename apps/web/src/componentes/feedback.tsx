@@ -1,10 +1,13 @@
 "use client";
 
-import { Alert, Loader, Stack, Text } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { Alert, CloseButton, Group, Loader, Stack, Text } from "@mantine/core";
 
 type PropsMensagem = {
   erro?: string | null;
   sucesso?: string | null;
+  /** Duração do sucesso transitório em ms (padrão 4s). Erros não expiram sozinhos. */
+  duracaoSucessoMs?: number;
 };
 
 const MSG_REDE =
@@ -39,20 +42,77 @@ function normalizarTextoErro(texto: string): string {
   return texto;
 }
 
-/** Feedback local após operação: erro explícito; sucesso só quando o chamador confirmar persistência. */
-export function MensagemFeedback({ erro, sucesso }: PropsMensagem) {
-  if (!erro && !sucesso) return null;
+/**
+ * Feedback local após operação (UX-HOM-04):
+ * sucesso transitório e dispensável; erro crítico permanece até resolução ou dispensa.
+ */
+export function MensagemFeedback({
+  erro,
+  sucesso,
+  duracaoSucessoMs = 4000,
+}: PropsMensagem) {
+  const [sucessoVisivel, setSucessoVisivel] = useState<string | null>(null);
+  const [erroDispensado, setErroDispensado] = useState(false);
+
+  useEffect(() => {
+    setErroDispensado(false);
+  }, [erro]);
+
+  useEffect(() => {
+    if (!sucesso) {
+      setSucessoVisivel(null);
+      return;
+    }
+    setSucessoVisivel(sucesso);
+    const timer = window.setTimeout(() => {
+      setSucessoVisivel(null);
+    }, duracaoSucessoMs);
+    return () => window.clearTimeout(timer);
+  }, [sucesso, duracaoSucessoMs]);
+
+  const erroAtivo = erro && !erroDispensado ? erro : null;
+  if (!erroAtivo && !sucessoVisivel) return null;
 
   return (
-    <Stack gap="xs" mt="sm" role="status" aria-live="polite">
-      {erro ? (
-        <Alert color="red" title="Não foi possível concluir" variant="light">
-          {normalizarTextoErro(erro)}
+    <Stack gap="xs" mt="sm">
+      {erroAtivo ? (
+        <Alert
+          color="red"
+          title="Não foi possível concluir"
+          variant="light"
+          role="alert"
+          aria-live="assertive"
+          withCloseButton={false}
+        >
+          <Group justify="space-between" align="flex-start" wrap="nowrap" gap="sm">
+            <Text size="sm" style={{ flex: 1 }}>
+              {normalizarTextoErro(erroAtivo)}
+            </Text>
+            <CloseButton
+              aria-label="Dispensar aviso de erro"
+              onClick={() => setErroDispensado(true)}
+            />
+          </Group>
         </Alert>
       ) : null}
-      {sucesso ? (
-        <Alert color="azul" title="Pronto" variant="light">
-          {sucesso}
+      {sucessoVisivel ? (
+        <Alert
+          color="azul"
+          title="Pronto"
+          variant="light"
+          role="status"
+          aria-live="polite"
+          withCloseButton={false}
+        >
+          <Group justify="space-between" align="flex-start" wrap="nowrap" gap="sm">
+            <Text size="sm" style={{ flex: 1 }}>
+              {sucessoVisivel}
+            </Text>
+            <CloseButton
+              aria-label="Dispensar confirmação"
+              onClick={() => setSucessoVisivel(null)}
+            />
+          </Group>
         </Alert>
       ) : null}
     </Stack>

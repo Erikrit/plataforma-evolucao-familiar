@@ -2,8 +2,8 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "41c22ef71788355e1e11118e250bd8595b6bc2d4",
-    "nota": "Código CUI-UX FUND+ROTINA+MED local sem commit"
+    "commit": "2d9b7ae3a3f0c071aab6fc8a0464e1a996a86d0c",
+    "nota": "DEM-UX-HOM-20261118 COMPLETED técnico local sem commit"
   },
   "moduloId": "04-evolucao-familiar",
   "incrementoId": "EF-06",
@@ -122,6 +122,75 @@
     }
   ],
   "demandasConcluidas": [
+    {
+      "id": "DEM-UX-HOM-20261118",
+      "tipo": "transversal",
+      "origem": "humano + PLANO-CORRETIVO-HOMOLOGACAO-20261118.md + REVISAO-MODULOS-01-02 UX-HOM-01..07",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "UX-HOM-01",
+        "UX-HOM-02",
+        "UX-HOM-03",
+        "UX-HOM-04",
+        "UX-HOM-05",
+        "UX-HOM-06",
+        "UX-HOM-07"
+      ],
+      "criteriosOk": [
+        "UX-HOM-01",
+        "UX-HOM-02",
+        "UX-HOM-03",
+        "UX-HOM-04",
+        "UX-HOM-05",
+        "UX-HOM-06",
+        "UX-HOM-07"
+      ],
+      "criteriosFalha": [],
+      "criteriosPendentes": [
+        {
+          "id": "UX-HOM-02-SELETOR",
+          "status": "NEEDS_DECISION",
+          "nota": "Lista de opções de vínculo e local administrativo de edição aguardam decisão de Produto"
+        }
+      ],
+      "fingerprint": "sha256:9f6ab4a42a59c149",
+      "fingerprintFull": "sha256:9f6ab4a42a59c149ac75435af327ac377466c437b1f24d2a61038937351dcfb6",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "qg3": "PASS",
+      "verifier": "PASS",
+      "verifierId": "e5ccff07-38c8-4231-ac68-7ff4d28d56fe",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "statusUxOficial": "REPROVADA",
+      "evidencias": [
+        "docs/esteira/estado/evidencia-ux-hom-20261118.json",
+        "docs/esteira/estado/qg1-typecheck-web-ux-hom-20261118.txt",
+        "docs/esteira/estado/qg2-build-web-ux-hom-20261118.txt",
+        "docs/esteira/estado/qg2-check-estatico-ux-hom-20261118.json",
+        "docs/esteira/estado/qg2-smoke-authz-ux-hom-20261118.txt",
+        "docs/esteira/estado/qg2-smoke-ct-acessos-ux-hom-20261118.txt",
+        "docs/esteira/estado/qg2-smoke-cv03-ux-hom-20261118.txt",
+        "docs/esteira/estado/qg2-smoke-url-direta-ux-hom-20261118.txt"
+      ],
+      "arquivos": [
+        "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
+        "apps/web/src/componentes/feedback.tsx",
+        "apps/web/src/componentes/icones-experiencia.tsx",
+        "apps/web/src/app/page.tsx",
+        "apps/web/src/componentes/painel-fundacao.tsx",
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+        "apps/web/src/lib/rotulos-experiencia.ts",
+        "apps/web/src/componentes/navegacao-app.tsx"
+      ],
+      "mensagemCommit": "fix(ux): corrigir achados da homologação humana UX-HOM-01..07\n\nOculta áreas não autorizadas, remove edição de vínculo no perfil cotidiano, melhora estados/ícones e feedback transitório, e reduz microcopy/rótulos legados. Homologação humana permanece pendente.",
+      "nota": "PASS técnico slices A/B/C + QG-3; humana PENDING_HUMAN / UX REPROVADA até aceite expresso.",
+      "concluidaEm": "2026-11-18T13:19:55.587Z"
+    },
     {
       "id": "DEM-HOMOL-CUI-20261117",
       "tipo": "homologacao",
@@ -542,10 +611,14 @@
       "concluidaEm": "2026-11-16T18:35:00.000Z"
     }
   ],
-  "proximaAcao": "Homologação humana/dispositivos (CUI-VAL-HUMANO). Plano §5 Cuidados concluído no técnico. Commit sob decisão humana. Próximas implementações: incluir mensagemCommit no resumo do implementation-workflow.",
-  "atualizadoEm": "2026-11-18T12:15:00.000Z",
-  "notas": "DEM-ESTEIRA-IW-COMMITMSG-20261118: skill implementation-workflow exige mensagemCommit em COMPLETED. DEM-HOMOL-CUI-20261117 técnico PASS; humana PENDING_HUMAN.",
-  "decisaoPendente": null,
+  "proximaAcao": "Homologação humana UX-HOM (PENDING_HUMAN). Commit sob decisão humana. Pendência UX-HOM-02-SELETOR.",
+  "atualizadoEm": "2026-11-18T13:19:55.589Z",
+  "notas": "DEM-UX-HOM-20261118 técnico PASS; humana PENDING_HUMAN / UX REPROVADA. Achado ambient smoke:authz nome Vovó≠Helena.",
+  "decisaoPendente": {
+    "id": "UX-HOM-02-SELETOR",
+    "status": "NEEDS_DECISION",
+    "nota": "Opções de vínculo e UI administrativa de edição"
+  },
   "moduloAnterior": {
     "id": "03-desenvolvimento-laurinha",
     "status": "COMPLETED",

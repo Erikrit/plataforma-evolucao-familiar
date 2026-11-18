@@ -9,6 +9,7 @@ import {
   Card,
   Container,
   Drawer,
+  Group,
   NumberInput,
   SegmentedControl,
   Stack,
@@ -39,6 +40,11 @@ import {
   EstadoVazio,
   MensagemFeedback,
 } from "@/componentes/feedback";
+import {
+  IconeBrincadeira,
+  IconeConcluiu,
+  IconeParticipou,
+} from "@/componentes/icones-experiencia";
 
 const ROTULOS_CATEGORIA: Record<string, string> = {
   memoria_atencao: "Memória e atenção",
@@ -322,10 +328,6 @@ export default function PaginaDesenvolvimento() {
           <Title order={1}>
             Desenvolvimento{nomePessoa ? ` · ${nomePessoa}` : ""}
           </Title>
-          <Text c="dimmed" size="sm">
-            Biblioteca e participação primeiro — sem cobrança, sem prazo, sem
-            ranking.
-          </Text>
         </Stack>
 
         {carregando ? (
@@ -386,23 +388,26 @@ export default function PaginaDesenvolvimento() {
                       background: "var(--mantine-color-body)",
                     }}
                   >
-                    <Stack gap={4}>
-                      <Text fw={600}>{desafio.nome}</Text>
-                      <Text size="sm" c="dimmed">
-                        {ROTULOS_DIFICULDADE[desafio.dificuldade] ??
-                          desafio.dificuldade}
-                        {desafio.categoria
-                          ? ` · ${ROTULOS_CATEGORIA[desafio.categoria] ?? desafio.categoria}`
-                          : ""}
-                        {desafio.guardado ? " · Guardada" : ""}
-                        {desafio.origem === "personalizada"
-                          ? " · Sua família"
-                          : ""}
-                      </Text>
-                      <Text size="sm" c="azul">
-                        Abrir
-                      </Text>
-                    </Stack>
+                    <Group gap="sm" wrap="nowrap" align="flex-start">
+                      <IconeBrincadeira />
+                      <Stack gap={4}>
+                        <Text fw={600}>{desafio.nome}</Text>
+                        <Text size="sm" c="dimmed">
+                          {ROTULOS_DIFICULDADE[desafio.dificuldade] ??
+                            desafio.dificuldade}
+                          {desafio.categoria
+                            ? ` · ${ROTULOS_CATEGORIA[desafio.categoria] ?? desafio.categoria}`
+                            : ""}
+                          {desafio.guardado ? " · Guardada" : ""}
+                          {desafio.origem === "personalizada"
+                            ? " · Sua família"
+                            : ""}
+                        </Text>
+                        <Text size="sm" c="azul">
+                          Abrir
+                        </Text>
+                      </Stack>
+                    </Group>
                   </Card>
                 ))
               )}
@@ -417,9 +422,6 @@ export default function PaginaDesenvolvimento() {
                 <Text size="sm" c="dimmed">
                   Disponíveis · conquistadas {estrelas?.totalConquistado ?? 0} ·
                   usadas {estrelas?.totalResgatado ?? 0}
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Sem ranking e sem aprovação — só um incentivo positivo.
                 </Text>
               </Stack>
             </Card>
@@ -598,12 +600,9 @@ export default function PaginaDesenvolvimento() {
               autosize
             />
 
-            <Text size="xs" c="dimmed">
-              Só Concluiu ou Participou. Estrelas entram sozinhas após salvar.
-            </Text>
-
             <Button
               loading={registrando}
+              leftSection={<IconeConcluiu compacto />}
               onClick={() => void aoRegistrar("concluiu")}
             >
               Concluiu
@@ -611,6 +610,7 @@ export default function PaginaDesenvolvimento() {
             <Button
               variant="light"
               loading={registrando}
+              leftSection={<IconeParticipou compacto />}
               onClick={() => void aoRegistrar("participou")}
             >
               Participou

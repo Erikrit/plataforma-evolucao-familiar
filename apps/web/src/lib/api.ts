@@ -762,7 +762,7 @@ export async function obterRelatorioPdf(
   if (!resposta.ok) {
     throw new Error(
       resposta.status === 403
-        ? "Colaboradora não exporta PDF completo por padrão."
+        ? "Sem permissão para exportar o PDF completo."
         : resposta.status === 401
           ? "Faça login na página inicial."
           : await lerErro(resposta),

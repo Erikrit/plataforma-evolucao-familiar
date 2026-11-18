@@ -167,6 +167,7 @@ function MenuNavegacao({
     };
   }, [usuario, pessoaId, cartaoAtual]);
 
+  // Só monta destinos após flags reais; sem auth ainda → só Perfil (sem vazamento).
   const areas = useMemo(
     () =>
       pessoaId
