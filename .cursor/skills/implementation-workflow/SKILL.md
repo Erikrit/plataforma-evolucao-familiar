@@ -44,8 +44,37 @@ Carregar apenas:
 6. Rodar QG-2 conforme aplicabilidade e risco.
 7. Se verifier = `PASS` e QG-2 ok: marcar `COMPLETED`, gravar **fingerprint hash**
    verificável dos arquivos afetados e evidências; arquivar em `demandasConcluidas`
-   ou `incrementosConcluidos` sem apagar histórico anterior.
+   ou `incrementosConcluidos` sem apagar histórico anterior; **incluir `mensagemCommit`
+   no resumo** (pronta para o humano colar — sem executar commit).
 8. Caso contrário: `FAIL` → correção localizada; `BLOCKED`/`NEEDS_DECISION` → parar e reportar.
+
+## Saída (resumo estruturado)
+
+Emitir ao fechar o ciclo (ou ao reportar bloqueio). Em `COMPLETED`, `mensagemCommit` é obrigatória.
+
+```markdown
+## Implementação
+- demandaId / incrementoId:
+- estado: IN_PROGRESS | IN_VALIDATION | COMPLETED | BLOCKED | NEEDS_DECISION
+- arquivos:
+- criteriosOk: []
+- fingerprint:
+- qg1 / qg2 / verifier:
+- evidencias: []
+- mensagemCommit: |
+    <assunto convencional: porquê em 1 linha>
+
+    <corpo opcional: 1–2 frases com o porquê / escopo fechado>
+- proximaAcao:
+```
+
+### `mensagemCommit` (obrigatória em `COMPLETED`)
+
+- Texto pronto para o humano usar no commit; **não** executar `git commit`.
+- Estilo alinhado ao histórico do repositório (ex.: `tipo(escopo): resumo`).
+- Foco no **porquê** e no valor entregue, não na lista de arquivos.
+- 1 linha de assunto (≤ ~72 chars); corpo curto só se precisar de contexto.
+- Em `BLOCKED` / `NEEDS_DECISION` / ciclo incompleto: omitir ou marcar `N/A`.
 
 ## Retomada
 

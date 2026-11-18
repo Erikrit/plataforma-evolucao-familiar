@@ -21,12 +21,14 @@ import {
   mensagemErroAmigavel,
 } from "@/componentes/feedback";
 import { entrar, type AcessoResumo } from "@/lib/api";
+import { rotuloPapelExperiencia } from "@/lib/rotulos-experiencia";
 
 function textoAcesso(a: AcessoResumo): string {
   const alvo = a.pessoaAcompanhadaNome
     ? a.pessoaAcompanhadaNome
     : "família (administração)";
-  return `${a.participanteNome} · ${a.papel} · acompanha ${alvo}${a.ativo ? "" : " · inativo"}`;
+  const papel = rotuloPapelExperiencia(a.papel);
+  return `${a.participanteNome} · ${papel} · acompanha ${alvo}${a.ativo ? "" : " · inativo"}`;
 }
 
 export function PainelFundacao() {

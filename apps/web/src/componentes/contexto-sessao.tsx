@@ -14,6 +14,7 @@ import {
   obterInicio,
   obterMe,
   type AcessosResposta,
+  type AutorizacaoResumo,
   type CartaoInicio,
   type DestaqueInicio,
   type UsuarioSessao,
@@ -26,6 +27,7 @@ type EstadoSessao = {
   cartoes: CartaoInicio[];
   destaques: DestaqueInicio[];
   acessos: AcessosResposta | null;
+  autorizacoes: AutorizacaoResumo[];
   filtradoPorAutorizacao: boolean;
   podeGerenciarFamilia: boolean;
   erroSessao: string | null;
@@ -42,6 +44,7 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
   const [cartoes, setCartoes] = useState<CartaoInicio[]>([]);
   const [destaques, setDestaques] = useState<DestaqueInicio[]>([]);
   const [acessos, setAcessos] = useState<AcessosResposta | null>(null);
+  const [autorizacoes, setAutorizacoes] = useState<AutorizacaoResumo[]>([]);
   const [filtradoPorAutorizacao, setFiltrado] = useState(false);
   const [erroSessao, setErroSessao] = useState<string | null>(null);
 
@@ -50,6 +53,7 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
     setCartoes([]);
     setDestaques([]);
     setAcessos(null);
+    setAutorizacoes([]);
     setFiltrado(false);
   }, []);
 
@@ -64,6 +68,7 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
         itens: [],
       },
     );
+    setAutorizacoes(inicio.autorizacoes ?? []);
     setFiltrado(inicio.filtradoPorAutorizacao);
   }, []);
 
@@ -110,6 +115,7 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
       cartoes,
       destaques,
       acessos,
+      autorizacoes,
       filtradoPorAutorizacao,
       podeGerenciarFamilia,
       erroSessao,
@@ -123,6 +129,7 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
       cartoes,
       destaques,
       acessos,
+      autorizacoes,
       filtradoPorAutorizacao,
       podeGerenciarFamilia,
       erroSessao,

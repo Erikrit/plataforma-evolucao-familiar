@@ -26,12 +26,14 @@ import {
   revogarAutorizacao,
   type AcessoResumo,
 } from "@/lib/api";
+import { rotuloPapelExperiencia } from "@/lib/rotulos-experiencia";
 
 function textoAcesso(a: AcessoResumo): string {
   const alvo = a.pessoaAcompanhadaNome
     ? a.pessoaAcompanhadaNome
     : "família (administração)";
-  return `${a.participanteNome} · ${a.papel} · acompanha ${alvo}${a.ativo ? "" : " · inativo"}`;
+  const papel = rotuloPapelExperiencia(a.papel);
+  return `${a.participanteNome} · ${papel} · acompanha ${alvo}${a.ativo ? "" : " · inativo"}`;
 }
 
 export function PainelGerenciarFamilia() {
@@ -267,7 +269,7 @@ export function PainelGerenciarFamilia() {
             <Stack gap="sm">
               <Title order={2}>Acessos desta família</Title>
               <Text size="sm" c="dimmed">
-                Papéis do MVP: Administrador, Responsável e Colaborador. Sem
+                Papéis do MVP: Administrador, Responsável e Integrante. Sem
                 matriz de permissões nem dados sensíveis.
               </Text>
               {!acessos || acessos.itens.length === 0 ? (

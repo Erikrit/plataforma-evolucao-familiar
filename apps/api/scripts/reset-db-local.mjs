@@ -1,5 +1,6 @@
 /**
- * Limpa o banco local e reexecuta o seed canônico (admin + Vovó + Laurinha).
+ * Limpa o banco local e reexecuta o seed canônico
+ * (3 perfis + Vovó/Laurinha + amostra de cuidados/desenvolvimento).
  * Uso: npm run db:reset -w @pef/api
  * Não usar em ambiente com dados reais.
  */

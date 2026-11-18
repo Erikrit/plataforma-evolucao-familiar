@@ -2,12 +2,115 @@
 
 Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
-## Estado atual (2026-11-16)
+## Estado atual (2026-11-18)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
-- **DEM-HOMOL-UX-20261116-R2:** COMPLETED — homologação técnica **PASS** · [verifier](b8945c64-bab2-4726-bac7-f58d3810ac1c); humana PENDING_HUMAN
+- **DEM-ESTEIRA-IW-COMMITMSG-20261118:** COMPLETED — `implementation-workflow` passa a exigir `mensagemCommit` no resumo em `COMPLETED`
+- **DEM-HOMOL-CUI-20261117:** COMPLETED — validação integrada §5.5 **técnica PASS** · [verifier](4ef6dcc6-051d-47d9-802e-2be0cd3fa459); humana PENDING_HUMAN
+- **DEM-CUI-UX-CONS-20261117:** COMPLETED — Consultas e exames (3 fatias) PASS · fingerprint `sha256:de1eade8ffd58638` · [verifier](5815ebc1-8b1a-4298-9116-b2d55aa5f175); humana PENDING_HUMAN
+- **DEM-CUI-UX-MED-20261117:** COMPLETED — Medicamentos PASS · fingerprint `sha256:c9a5c265a942a508` · [verifier](499257c4-d934-4188-8b08-59cf6ed32954); humana PENDING_HUMAN
+- **DEM-CUI-UX-ROTINA-20261117:** COMPLETED — Rotina por perfil PASS · fingerprint `sha256:cc37be8b77e8ee9c` · [verifier](3963e837-e912-42cd-8a15-c2faf3f7febb); humana PENDING_HUMAN
+- **DEM-CUI-UX-FUND-20261117:** COMPLETED — fundação UX Cuidados PASS · fingerprint `sha256:c6fd9b7f2e03b50d` · [verifier](d65ca03f-63db-4dcb-8ab5-c1cd195a080b); humana PENDING_HUMAN
+
+## 2026-11-18 — DEM-ESTEIRA-IW-COMMITMSG-20261118 COMPLETED
+
+- **Tipo:** melhoria esteira (L1) · skill `implementation-workflow`
+- **Entrega:** resumo estruturado com `mensagemCommit` obrigatória em `COMPLETED` (texto para o humano; sem auto-commit)
+- **Arquivo:** `.cursor/skills/implementation-workflow/SKILL.md`
+- **Commit/push:** não executados
+- **Próximo:** homologação humana Cuidados; uso da nova saída nas próximas implementações
+
+## 2026-11-17 — DEM-HOMOL-CUI-20261117 COMPLETED (técnico PASS)
+
+- **Perfil:** quality-gate `homologacao` · sem implementação
+- **CUI-VAL-01..06:** PASS (authz, Rotina limpa, Med/Cons separados, nav, msg rede, smokes)
+- **CUI-VAL-HUMANO:** PENDING_HUMAN (dispositivos / revisão Produto)
+- **Verifier:** PASS ([verifier](4ef6dcc6-051d-47d9-802e-2be0cd3fa459))
+- **Evidência:** `evidencia-homol-cui-20261117.json`
+- **Commit/push:** não executados
+- **Próximo:** homologação humana; commit das entregas UX sob decisão humana
+
+## 2026-11-17 — Triagem DEM-HOMOL-CUI-20261117 (READY→IN_PROGRESS)
+
+- **Tipo:** homologacao · **Origem:** REVISAO-INTEGRADA §5 item 5 pós CONS
+- **Fluxo:** quality-gate perfil homologação (sem implementação inicial)
+- **Critérios:** CUI-VAL-01..06 técnicos + CUI-VAL-HUMANO PENDING_HUMAN
+- **Commit/push:** não executados
+
+## 2026-11-17 — DEM-CUI-UX-CONS-20261117 COMPLETED
+
+- **Entrega (3 fatias/janela):** lista+ícones+detalhes/gestão status; agendamento horas cheias/exato; exame com anexo só autorizado; Integrante só lista
+- **QG-1/QG-2:** PASS · Verifier oficial Ask/shell BLOCKED; verificação independente PASS ([verifier](5815ebc1-8b1a-4298-9116-b2d55aa5f175))
+- **Fingerprint:** `sha256:de1eade8ffd58638` (algoritmo `simular-retomada`)
+- **Humana:** PENDING_HUMAN
+- **Commit/push:** não executados
+- **Próximo:** §5.5 validação integrada / homologação
+
+## 2026-11-17 — Triagem DEM-CUI-UX-CONS-20261117 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_ux · **Origem:** REVISAO-INTEGRADA §5 item 4 (3 fatias/janela)
+- **Aprovação:** L2 UX APROVADA (GUIA §4.5; CUI-F05/CUI-F06)
+- **Fatias:** CUI-UX-CONS-01 lista/detalhes · CUI-UX-CONS-02 agendamento · CUI-UX-CONS-03 exame+anexo
+- **Fluxo:** implementation-workflow → quality-gate
+- **Commit/push:** não executados
+
+## 2026-11-17 — DEM-CUI-UX-MED-20261117 COMPLETED
+
+- **Entrega:** lista→detalhes; suspender/encerrar no detalhe; cadastro horas cheias + horário exato; Integrante só lista
+- **QG-1/QG-2:** PASS · Verifier PASS após correção evidência QG-1 ([verifier](499257c4-d934-4188-8b08-59cf6ed32954))
+- **Fingerprint:** `sha256:c9a5c265a942a508`
+- **Humana:** PENDING_HUMAN
+- **Commit/push:** não executados
+- **Próximo:** Consultas e exames (§5.4)
+
+## 2026-11-17 — Triagem DEM-CUI-UX-MED-20261117 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_ux · **Origem:** REVISAO-INTEGRADA §5 item 3
+- **Aprovação:** L2 UX APROVADA (GUIA §4.3)
+- **Escopo:** lista→detalhes; suspender/encerrar só no detalhe; cadastro com horas cheias + horário exato
+- **Commit/push:** não executados
+
+## 2026-11-17 — DEM-CUI-UX-ROTINA-20261117 COMPLETED
+
+- **Entrega:** cartões medicamento/consulta na Rotina; observação opcional via `atividades-apoio`; histórico “Observação”; dedupe do próximo cuidado
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](3963e837-e912-42cd-8a15-c2faf3f7febb))
+- **Fingerprint:** `sha256:cc37be8b77e8ee9c`
+- **Evidência:** `evidencia-cui-ux-rotina-20261117.json`, typecheck, smokes cv03/authz, build web
+- **Humana:** PENDING_HUMAN
+- **Commit/push:** não executados
+- **Próximo:** Medicamentos (§5.3) ou Consultas/exames (§5.4)
+
+## 2026-11-17 — Triagem DEM-CUI-UX-ROTINA-20261117 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_ux · **Origem:** REVISAO-INTEGRADA §5 item 2 pós FUND
+- **Aprovação:** L2 UX APROVADA (GUIA §4.3/4.6; CUI-UX-02/04)
+- **Fluxo:** implementation-workflow → quality-gate
+- **Escopo:** cartões/compromissos na Rotina; observação livre opcional via `atividades-apoio` existente; sem categorias de apoio
+- **Commit/push:** não executados
+- **DEM-HOMOL-UX-20261116-R2:** COMPLETED — homologação técnica **PASS** · [verifier](b8945c64-bab2-4726-bac7-f58d3810ac1c); humana PENDING_HUMAN / UX uso reprovada até redesenho
 - **DEM-COR-UX-HOMOL-20261116:** COMPLETED — correção UX-ACC-01 + UX-CUI-01 PASS · fingerprint `sha256:46b2078e73b0c6d5` · [verifier](a6551ef3-2348-4942-a1aa-0e0e09a9684c); humana PENDING_HUMAN
 - **DEM-HOMOL-UX-20261116:** COMPLETED — homologação técnica **FAIL** (UX-ACC-01 + Drawer desktop); humana PENDING_HUMAN · [verifier](ac0570d9-36b6-4add-8740-805e52d735c4)
+
+## 2026-11-17 — DEM-CUI-UX-FUND-20261117 COMPLETED
+
+- **Entrega:** rótulo Integrante na UI; menu contextual Rotina / Medicamentos / Consultas e exames; Rotina sem gestão embutida; cadastro/agenda nas páginas secundárias (só `responsavel_cuidados`)
+- **QG-1/QG-2:** PASS · Verifier PASS ([verifier](d65ca03f-63db-4dcb-8ab5-c1cd195a080b))
+- **Fingerprint:** `sha256:c6fd9b7f2e03b50d`
+- **Evidência:** `evidencia-cui-ux-fund-20261117.json`, typecheck web, smokes cv03/ct-acessos/authz, build web
+- **Humana:** PENDING_HUMAN (UX permanece reprovada até novo teste de uso)
+- **Fora do slice:** CUI-UX-04 observação diária; polimento visual/ícones
+- **Commit/push:** não executados
+- **Próximo:** incremento Rotina/observação ou Medicamentos/Consultas polidos (§5 REVISAO-INTEGRADA); reiniciar `dev:web` se necessário
+
+## 2026-11-17 — Triagem DEM-CUI-UX-FUND-20261117 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_ux · **Origem:** humano + `docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md` §5 item 1
+- **Aprovação:** L2 UX APROVADA/DOCUMENTADA (GUIA §4.3–4.4; FUN-04 Integrante); sem mudança L3 de regra
+- **Fluxo:** task-routing → implementation-workflow → quality-gate
+- **Escopo:** CUI-UX-05 (rótulo Integrante) + CUI-UX-01 (nav contextual; gestão fora da Rotina)
+- **Fora deste slice:** observação diária (CUI-UX-04), cadastro horário polido, anexos/exame completo
+- **Risco:** médio (authz de visibilidade; sem ampliar permissões)
+- **Commit/push:** não executados
 
 ## 2026-11-16 — DEM-HOMOL-UX-20261116-R2 COMPLETED (técnico PASS)
 

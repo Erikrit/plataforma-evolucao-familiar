@@ -2,8 +2,8 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "bb73e8bf5b424f15003fb1d141433b0334403668",
-    "nota": "DEM-HOMOL-UX-R2 PASS; código UX local sem commit"
+    "commit": "41c22ef71788355e1e11118e250bd8595b6bc2d4",
+    "nota": "Código CUI-UX FUND+ROTINA+MED local sem commit"
   },
   "moduloId": "04-evolucao-familiar",
   "incrementoId": "EF-06",
@@ -104,7 +104,231 @@
   "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
   "tentativasCorrecao": {},
   "demanda": null,
+  "janelaIncrementos": [
+    {
+      "id": "CUI-UX-CONS-01",
+      "fatia": "lista/detalhes",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "CUI-UX-CONS-02",
+      "fatia": "agendamento mínimo",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "CUI-UX-CONS-03",
+      "fatia": "registro exame/anexo",
+      "status": "COMPLETED"
+    }
+  ],
   "demandasConcluidas": [
+    {
+      "id": "DEM-HOMOL-CUI-20261117",
+      "tipo": "homologacao",
+      "origem": "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 5 após CONS",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "CUI-VAL-01",
+        "CUI-VAL-02",
+        "CUI-VAL-03",
+        "CUI-VAL-04",
+        "CUI-VAL-05",
+        "CUI-VAL-06",
+        "CUI-VAL-HUMANO"
+      ],
+      "criteriosOk": [
+        "CUI-VAL-01",
+        "CUI-VAL-02",
+        "CUI-VAL-03",
+        "CUI-VAL-04",
+        "CUI-VAL-05",
+        "CUI-VAL-06"
+      ],
+      "criteriosFalha": [],
+      "criteriosPendentesHumanos": [
+        "CUI-VAL-HUMANO"
+      ],
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "4ef6dcc6-051d-47d9-802e-2be0cd3fa459",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/evidencia-homol-cui-20261117.json",
+        "docs/esteira/estado/homol-cui-typecheck-web.txt",
+        "docs/esteira/estado/homol-cui-smoke-authz.txt",
+        "docs/esteira/estado/homol-cui-smoke-cv03.txt",
+        "docs/esteira/estado/homol-cui-smoke-cv04.txt",
+        "docs/esteira/estado/homol-cui-smoke-ct-acessos.txt",
+        "docs/esteira/estado/homol-cui-check-msg-rede.txt",
+        "docs/esteira/estado/homol-cui-check-estatico.txt"
+      ],
+      "arquivos": [
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+        "apps/web/src/componentes/navegacao-app.tsx",
+        "apps/web/src/componentes/feedback.tsx",
+        "apps/web/src/lib/rotulos-experiencia.ts"
+      ],
+      "nota": "PASS técnico §5.5; não equivale a homologação UX humana.",
+      "concluidaEm": "2026-11-17T21:45:00.000Z"
+    },
+    {
+      "id": "DEM-CUI-UX-CONS-20261117",
+      "tipo": "melhoria_ux",
+      "origem": "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 4 (3 fatias na janela)",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "CUI-UX-CONS-01",
+        "CUI-UX-CONS-02",
+        "CUI-UX-CONS-03"
+      ],
+      "criteriosOk": [
+        "CUI-UX-CONS-01",
+        "CUI-UX-CONS-02",
+        "CUI-UX-CONS-03"
+      ],
+      "criteriosFalha": [],
+      "fingerprint": "sha256:de1eade8ffd58638",
+      "fingerprintFull": "sha256:de1eade8ffd586382b67c68056e5a15a3291e501c83eea1386a140f7696ac6f2",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "5815ebc1-8b1a-4298-9116-b2d55aa5f175",
+      "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente com shell PASS (fingerprint oficial + typecheck + smokes + build + critérios).",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/qg1-typecheck-web-cui-ux-cons.txt",
+        "docs/esteira/estado/qg2-smoke-cv04-cui-ux-cons.txt",
+        "docs/esteira/estado/qg2-smoke-authz-cui-ux-cons.txt",
+        "docs/esteira/estado/qg2-build-web-cui-ux-cons.txt",
+        "docs/esteira/estado/evidencia-cui-ux-cons-20261117.json"
+      ],
+      "arquivos": [
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/lib/rotulos-experiencia.ts"
+      ],
+      "concluidaEm": "2026-11-17T21:30:00.000Z"
+    },
+    {
+      "id": "DEM-CUI-UX-MED-20261117",
+      "tipo": "melhoria_ux",
+      "origem": "humano + REVISAO-INTEGRADA §5 item 3 após ROTINA",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "CUI-UX-MED-01",
+        "CUI-UX-MED-02"
+      ],
+      "criteriosOk": [
+        "CUI-UX-MED-01",
+        "CUI-UX-MED-02"
+      ],
+      "criteriosFalha": [],
+      "fingerprint": "sha256:c9a5c265a942a508",
+      "fingerprintFull": "sha256:c9a5c265a942a508e9a0886a3d21c4a9f4f4537ab31efa8d4c1a01ed7e07b0b4",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "499257c4-d934-4188-8b08-59cf6ed32954",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/qg1-typecheck-web-cui-ux-med.txt",
+        "docs/esteira/estado/qg2-smoke-cv03-cui-ux-med.txt",
+        "docs/esteira/estado/qg2-smoke-authz-cui-ux-med.txt",
+        "docs/esteira/estado/qg2-build-web-cui-ux-med.txt",
+        "docs/esteira/estado/evidencia-cui-ux-med-20261117.json"
+      ],
+      "arquivos": [
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx"
+      ],
+      "concluidaEm": "2026-11-17T21:11:40.971Z"
+    },
+    {
+      "id": "DEM-CUI-UX-ROTINA-20261117",
+      "tipo": "melhoria_ux",
+      "origem": "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 2 após FUND",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "CUI-UX-02",
+        "CUI-UX-04"
+      ],
+      "criteriosOk": [
+        "CUI-UX-02",
+        "CUI-UX-04"
+      ],
+      "criteriosFalha": [],
+      "fingerprint": "sha256:cc37be8b77e8ee9c",
+      "fingerprintFull": "sha256:cc37be8b77e8ee9c2e8bdeaf3efa6927ca67663506cdda348f019fac5967d619",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "3963e837-e912-42cd-8a15-c2faf3f7febb",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/qg1-typecheck-web-cui-ux-rotina.txt",
+        "docs/esteira/estado/qg2-smoke-cv03-cui-ux-rotina.txt",
+        "docs/esteira/estado/qg2-smoke-authz-cui-ux-rotina.txt",
+        "docs/esteira/estado/qg2-build-web-cui-ux-rotina.txt",
+        "docs/esteira/estado/evidencia-cui-ux-rotina-20261117.json"
+      ],
+      "arquivos": [
+        "apps/web/src/lib/rotulos-experiencia.ts",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx"
+      ],
+      "concluidaEm": "2026-11-17T20:03:32.316Z"
+    },
+    {
+      "id": "DEM-CUI-UX-FUND-20261117",
+      "tipo": "melhoria_ux",
+      "origem": "humano + docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md §5 item 1",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "CUI-UX-05",
+        "CUI-UX-01"
+      ],
+      "criteriosOk": [
+        "CUI-UX-05",
+        "CUI-UX-01"
+      ],
+      "criteriosFalha": [],
+      "fingerprint": "sha256:c6fd9b7f2e03b50d",
+      "fingerprintFull": "sha256:c6fd9b7f2e03b50d70532274956469d31c96757dcb5e08c1e596dff004fa4e45",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "verifier": "PASS",
+      "verifierId": "d65ca03f-63db-4dcb-8ab5-c1cd195a080b",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/qg1-typecheck-web-cui-ux-fund.txt",
+        "docs/esteira/estado/qg2-smoke-cv03-cui-ux-fund.txt",
+        "docs/esteira/estado/qg2-smoke-ct-acessos-cui-ux-fund.txt",
+        "docs/esteira/estado/qg2-smoke-authz-cui-ux-fund.txt",
+        "docs/esteira/estado/qg2-build-web-cui-ux-fund.txt",
+        "docs/esteira/estado/evidencia-cui-ux-fund-20261117.json"
+      ],
+      "arquivos": [
+        "apps/web/src/lib/rotulos-experiencia.ts",
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/componentes/contexto-sessao.tsx",
+        "apps/web/src/componentes/navegacao-app.tsx",
+        "apps/web/src/componentes/painel-fundacao.tsx",
+        "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
+        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx"
+      ],
+      "concluidaEm": "2026-11-17T19:37:13.377Z"
+    },
     {
       "id": "DEM-HOMOL-UX-20261116-R2",
       "tipo": "homologacao",
@@ -318,9 +542,9 @@
       "concluidaEm": "2026-11-16T18:35:00.000Z"
     }
   ],
-  "proximaAcao": "Homologação técnica R2 PASS. Humana PENDING_HUMAN em aparelhos reais. Correções UX ainda sem commit.",
-  "atualizadoEm": "2026-11-17T00:13:56.267Z",
-  "notas": "DEM-COR-UX-HOMOL-20261116 fechada tecnicamente. Homologação humana permanece PENDING_HUMAN. Build web sem EPERM (sem next:dev concorrente).",
+  "proximaAcao": "Homologação humana/dispositivos (CUI-VAL-HUMANO). Plano §5 Cuidados concluído no técnico. Commit sob decisão humana. Próximas implementações: incluir mensagemCommit no resumo do implementation-workflow.",
+  "atualizadoEm": "2026-11-18T12:15:00.000Z",
+  "notas": "DEM-ESTEIRA-IW-COMMITMSG-20261118: skill implementation-workflow exige mensagemCommit em COMPLETED. DEM-HOMOL-CUI-20261117 técnico PASS; humana PENDING_HUMAN.",
   "decisaoPendente": null,
   "moduloAnterior": {
     "id": "03-desenvolvimento-laurinha",

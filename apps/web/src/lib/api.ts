@@ -270,6 +270,73 @@ export async function obterCuidadosHoje(pessoaId: string) {
   return resposta.json();
 }
 
+export type MedicamentoLista = {
+  id: string;
+  nome: string;
+  status: string;
+  programacoes?: {
+    horarios: string[] | unknown;
+    duracaoTipo?: string | null;
+    duracaoDias?: number | null;
+    vigenciaInicio?: string;
+  }[];
+};
+
+export async function listarMedicamentos(pessoaId: string) {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/medicamentos`);
+  if (!resposta.ok) {
+    throw new Error(
+      resposta.status === 403
+        ? "Acesso negado aos medicamentos."
+        : `Erro ${resposta.status}`,
+    );
+  }
+  return resposta.json() as Promise<MedicamentoLista[]>;
+}
+
+export type ConsultaLista = {
+  id: string;
+  especialidadeOuDescricao: string;
+  dataHora: string;
+  status: string;
+  profissional?: string | null;
+  local?: string | null;
+  observacao?: string | null;
+};
+
+export async function listarConsultas(pessoaId: string) {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/consultas`);
+  if (!resposta.ok) {
+    throw new Error(
+      resposta.status === 403
+        ? "Acesso negado às consultas."
+        : `Erro ${resposta.status}`,
+    );
+  }
+  return resposta.json() as Promise<ConsultaLista[]>;
+}
+
+export type ExameLista = {
+  id: string;
+  descricao: string;
+  data: string | null;
+  consultaId?: string | null;
+  anexoId?: string | null;
+  criadoEm?: string;
+};
+
+export async function listarExames(pessoaId: string) {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/exames`);
+  if (!resposta.ok) {
+    throw new Error(
+      resposta.status === 403
+        ? "Acesso negado aos exames."
+        : `Erro ${resposta.status}`,
+    );
+  }
+  return resposta.json() as Promise<ExameLista[]>;
+}
+
 export type CadastroMedicamento = {
   nome: string;
   horarios: string[];
@@ -323,6 +390,22 @@ export async function alterarProgramacaoMedicamento(
   return resposta.json();
 }
 
+export async function encerrarOuSuspenderMedicamento(
+  medicamentoId: string,
+  acao: "suspender" | "encerrar",
+) {
+  const resposta = await fetchApi(
+    `/medicamentos/${medicamentoId}/encerramento`,
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ acao }),
+    },
+  );
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return resposta.json();
+}
+
 export async function registrarDose(
   medicamentoId: string,
   corpo: { data?: string; horario: string; situacao: string },
@@ -363,6 +446,59 @@ export async function criarConsulta(
   });
   if (!resposta.ok) throw new Error(await lerErro(resposta));
   return resposta.json();
+}
+
+export async function atualizarConsulta(
+  consultaId: string,
+  corpo: {
+    status?: "agendada" | "realizada" | "cancelada";
+    dataHora?: string;
+    especialidadeOuDescricao?: string;
+  },
+) {
+  const resposta = await fetchApi(`/consultas/${consultaId}`, {
+    method: "PATCH",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(corpo),
+  });
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return resposta.json();
+}
+
+export async function criarExame(
+  pessoaId: string,
+  corpo: {
+    descricao: string;
+    data?: string | null;
+    consultaId?: string | null;
+    anexoId?: string | null;
+  },
+) {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/exames`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(corpo),
+  });
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return resposta.json();
+}
+
+export async function criarAnexo(
+  familiaId: string,
+  corpo: {
+    pessoaId: string;
+    nomeArquivo: string;
+    mimeTipo: string;
+    conteudoBase64: string;
+  },
+) {
+  const resposta = await fetchApi(`/familias/${familiaId}/anexos`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(corpo),
+  });
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return resposta.json() as Promise<{ id: string; nomeArquivo: string }>;
 }
 
 export type EventoHistorico = {

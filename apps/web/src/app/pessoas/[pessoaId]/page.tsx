@@ -148,6 +148,8 @@ export default function PaginaPerfil() {
                             : area.id === "resumo"
                               ? `/pessoas/${perfil.id}/resumo`
                               : null;
+                    const rotuloArea =
+                      area.id === "cuidados" ? "Rotina" : area.rotulo;
 
                     if (disponivel && href) {
                       return (
@@ -160,7 +162,7 @@ export default function PaginaPerfil() {
                           radius="md"
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
-                          <Text fw={600}>{area.rotulo}</Text>
+                          <Text fw={600}>{rotuloArea}</Text>
                           <Text size="sm" c="azul">
                             Abrir
                           </Text>

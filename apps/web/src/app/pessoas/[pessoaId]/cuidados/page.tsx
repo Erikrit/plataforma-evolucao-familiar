@@ -1,38 +1,34 @@
 "use client";
 
-import Link from "next/link";
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
-  Accordion,
-  Anchor,
   Button,
   Card,
-  Checkbox,
   Container,
   Drawer,
-  NumberInput,
-  SegmentedControl,
+  Group,
   Stack,
   Text,
-  TextInput,
+  Textarea,
+  ThemeIcon,
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { useSessao } from "@/componentes/contexto-sessao";
 import {
-  cadastrarMedicamento,
-  criarConsulta,
+  EstadoCarregando,
+  EstadoVazio,
+  MensagemFeedback,
+} from "@/componentes/feedback";
+import {
   obterCuidadosHoje,
   obterMe,
   obterPessoa,
   registrarAtividadeApoio,
   registrarDose,
 } from "@/lib/api";
-import {
-  EstadoCarregando,
-  EstadoVazio,
-  MensagemFeedback,
-} from "@/componentes/feedback";
+import { podeRegistrarRelatoCuidados } from "@/lib/rotulos-experiencia";
 
 type CartaoDose = {
   medicamentoId: string;
@@ -43,58 +39,44 @@ type CartaoDose = {
   confirmaAoTocar: false;
 };
 
+type CompromissoDia = {
+  id: string;
+  especialidadeOuDescricao: string;
+  dataHora: string;
+};
+
 type Rotina = {
   data: string;
   proximoCuidado: CartaoDose | null;
   secoes: {
     medicamentos: CartaoDose[];
-    consultas: { id: string; especialidadeOuDescricao: string; dataHora: string }[];
+    consultas: CompromissoDia[];
     atividadesApoio: { id: string; descricao: string }[];
   };
   regra: string;
 };
 
-export default function PaginaCuidados() {
+export default function PaginaRotinaCuidados() {
   const params = useParams<{ pessoaId: string }>();
   const router = useRouter();
+  const { autorizacoes, usuario } = useSessao();
   const [autenticado, setAutenticado] = useState(false);
-  const [nomePessoa, setNomePessoa] = useState<string>("");
+  const [nomePessoa, setNomePessoa] = useState("");
   const [rotina, setRotina] = useState<Rotina | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(true);
-  const [nomeMed, setNomeMed] = useState("");
-  const [primeiroHorario, setPrimeiroHorario] = useState("08:00");
-  const [dosesPorDia, setDosesPorDia] = useState<number | string>(1);
-  const [duracaoTipo, setDuracaoTipo] = useState<"continua" | "dias">("continua");
-  const [duracaoDias, setDuracaoDias] = useState<number | string>(7);
-  const [horariosLista, setHorariosLista] = useState<string[]>(["08:00"]);
-  const [horariosConferidos, setHorariosConferidos] = useState(false);
-  const [intervaloHoras, setIntervaloHoras] = useState<number | string>("");
   const [selecionado, setSelecionado] = useState<CartaoDose | null>(null);
   const [registrando, setRegistrando] = useState(false);
-  const [atividade, setAtividade] = useState("");
-  const [consultaDesc, setConsultaDesc] = useState("");
-  const [consultaQuando, setConsultaQuando] = useState("");
-  const [enviandoForm, setEnviandoForm] = useState(false);
-  /** Alinhado ao breakpoint `sm` do AppShell: painel inferior no celular; lateral proporcional no desktop. */
+  const [observacao, setObservacao] = useState("");
+  const [salvandoObs, setSalvandoObs] = useState(false);
   const ehCelular = useMediaQuery("(max-width: 47.99em)", true);
 
-  const dosesNumericas = useMemo(() => {
-    const n = Number(dosesPorDia);
-    return Number.isInteger(n) && n >= 1 ? Math.min(n, 24) : 1;
-  }, [dosesPorDia]);
-
-  useEffect(() => {
-    setHorariosLista((atual) => {
-      const proximo = Array.from({ length: dosesNumericas }, (_, i) => {
-        if (i === 0) return primeiroHorario;
-        return atual[i] ?? "";
-      });
-      return proximo;
-    });
-    setHorariosConferidos(false);
-  }, [dosesNumericas, primeiroHorario]);
+  const podeRelatar = podeRegistrarRelatoCuidados(
+    params.pessoaId,
+    usuario?.pessoa.id,
+    autorizacoes,
+  );
 
   const carregar = useCallback(async (pessoaId: string) => {
     setRotina((await obterCuidadosHoje(pessoaId)) as Rotina);
@@ -108,7 +90,7 @@ export default function PaginaCuidados() {
         const me = await obterMe();
         if (!me) {
           setAutenticado(false);
-          setErro("Entre na página inicial para ver os cuidados.");
+          setErro("Entre na página inicial para ver a rotina.");
           return;
         }
         setAutenticado(true);
@@ -119,163 +101,73 @@ export default function PaginaCuidados() {
         setNomePessoa(perfil.nome);
         await carregar(params.pessoaId);
       } catch (e) {
-        setErro(e instanceof Error ? e.message : "Não foi possível carregar");
+        setErro(
+          e instanceof Error ? e.message : "Não foi possível carregar a rotina.",
+        );
       } finally {
         setCarregando(false);
       }
     })();
   }, [params.pessoaId, carregar]);
 
-  function aplicarSugestaoIntervalo() {
-    const intervalo = Number(intervaloHoras);
-    if (!Number.isInteger(intervalo) || intervalo < 1) {
-      setErro(
-        "Informe o intervalo em horas só quando a orientação trouxer um intervalo explícito (ex.: a cada 8 horas).",
-      );
-      return;
-    }
-    setHorariosLista(
-      sugerirHorariosPorIntervalo(primeiroHorario, dosesNumericas, intervalo),
-    );
-    setHorariosConferidos(false);
-    setErro(null);
-    setSucesso(
-      "Sugestão matemática aplicada para conferência. Ajuste se necessário antes de confirmar.",
-    );
-  }
-
-  async function aoCadastrarMedicamento(evento: FormEvent) {
-    evento.preventDefault();
-    if (!autenticado || enviandoForm) return;
-    if (!horariosConferidos) {
-      setErro("Confirme os horários com a orientação vigente antes de ativar.");
-      return;
-    }
-    const horarios = horariosLista.map((h) => h.trim());
-    if (horarios.some((h) => !/^\d{2}:\d{2}$/.test(h))) {
-      setErro("Preencha todos os horários no formato HH:MM.");
-      return;
-    }
-    setEnviandoForm(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      const intervalo = Number(intervaloHoras);
-      await cadastrarMedicamento(params.pessoaId, {
-        nome: nomeMed,
-        primeiroHorario,
-        dosesPorDia: dosesNumericas,
-        duracaoTipo,
-        duracaoDias: duracaoTipo === "dias" ? Number(duracaoDias) : null,
-        horarios,
-        horariosConferidos: true,
-        intervaloHoras:
-          Number.isInteger(intervalo) && intervalo >= 1 ? intervalo : null,
-        ativar: true,
-      });
-      setNomeMed("");
-      setPrimeiroHorario("08:00");
-      setDosesPorDia(1);
-      setDuracaoTipo("continua");
-      setDuracaoDias(7);
-      setHorariosLista(["08:00"]);
-      setHorariosConferidos(false);
-      setIntervaloHoras("");
-      await carregar(params.pessoaId);
-      setSucesso("Medicamento cadastrado e ativado.");
-    } catch (e) {
-      setErro(
-        e instanceof Error
-          ? e.message
-          : "Não foi possível cadastrar o medicamento. Os dados digitados foram mantidos.",
-      );
-    } finally {
-      setEnviandoForm(false);
-    }
-  }
-
   async function confirmarRelato(situacao: string) {
-    if (!selecionado || !autenticado || registrando) return;
+    if (!selecionado || registrando) return;
     setRegistrando(true);
     setErro(null);
     setSucesso(null);
     try {
       await registrarDose(selecionado.medicamentoId, {
-        data: rotina?.data,
         horario: selecionado.horario,
         situacao,
       });
-      setSelecionado(null);
       await carregar(params.pessoaId);
       setSucesso("Relato registrado.");
+      setSelecionado(null);
     } catch {
-      setErro("Não foi possível registrar o relato. Nada foi alterado.");
+      setErro("Não foi possível registrar o relato. Tente de novo.");
     } finally {
       setRegistrando(false);
     }
   }
 
-  async function aoRegistrarApoio(evento: FormEvent) {
+  async function aoSalvarObservacao(evento: FormEvent) {
     evento.preventDefault();
-    if (!autenticado || enviandoForm) return;
-    setEnviandoForm(true);
+    const texto = observacao.trim();
+    if (!texto || !podeRelatar || salvandoObs) return;
+    setSalvandoObs(true);
     setErro(null);
     setSucesso(null);
     try {
-      await registrarAtividadeApoio(params.pessoaId, atividade);
-      setAtividade("");
-      await carregar(params.pessoaId);
-      setSucesso("Atividade de apoio registrada.");
+      await registrarAtividadeApoio(params.pessoaId, texto);
+      setObservacao("");
+      setSucesso("Observação registrada.");
     } catch {
-      setErro("Não foi possível registrar a atividade.");
+      setErro("Não foi possível salvar a observação. Tente de novo.");
     } finally {
-      setEnviandoForm(false);
-    }
-  }
-
-  async function aoCriarConsulta(evento: FormEvent) {
-    evento.preventDefault();
-    if (!autenticado || enviandoForm) return;
-    setEnviandoForm(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      const dataHora = new Date(consultaQuando);
-      if (Number.isNaN(dataHora.getTime())) {
-        setErro("Informe data e hora válidas da consulta.");
-        return;
-      }
-      await criarConsulta(params.pessoaId, {
-        especialidadeOuDescricao: consultaDesc,
-        dataHora: dataHora.toISOString(),
-      });
-      setConsultaDesc("");
-      setConsultaQuando("");
-      await carregar(params.pessoaId);
-      setSucesso("Consulta agendada.");
-    } catch {
-      setErro("Não foi possível agendar a consulta.");
-    } finally {
-      setEnviandoForm(false);
+      setSalvandoObs(false);
     }
   }
 
   const podeVer = autenticado && !carregando && !erro?.startsWith("Acesso");
-  const medicamentos = rotina?.secoes.medicamentos ?? [];
+  const proximo = rotina?.proximoCuidado ?? null;
+  const medicamentos = (rotina?.secoes.medicamentos ?? []).filter(
+    (c) =>
+      !proximo ||
+      c.medicamentoId !== proximo.medicamentoId ||
+      c.horario !== proximo.horario,
+  );
   const consultas = rotina?.secoes.consultas ?? [];
-  const apoios = rotina?.secoes.atividadesApoio ?? [];
+  const saudacao = nomePessoa
+    ? `${nomePessoa}, olha o que temos para hoje!`
+    : "Olha o que temos para hoje!";
+  const obsPronta = observacao.trim().length > 0;
 
   return (
     <Container component="main" size="sm" px={0} className="cuidados-mobile">
       <Stack gap="lg">
-        <Stack gap={4}>
-          <Title order={1}>Cuidados{nomePessoa ? ` de ${nomePessoa}` : ""}</Title>
-          <Text c="dimmed" size="sm">
-            Rotina de hoje primeiro. Cadastros ficam em Gerenciar cuidados, sob demanda.
-          </Text>
-        </Stack>
+        <Title order={1}>{saudacao}</Title>
 
-        {carregando ? <EstadoCarregando rotulo="Carregando cuidados…" /> : null}
+        {carregando ? <EstadoCarregando rotulo="Carregando rotina…" /> : null}
         <MensagemFeedback erro={erro} sucesso={sucesso} />
 
         {!autenticado && !carregando ? (
@@ -285,287 +177,73 @@ export default function PaginaCuidados() {
         ) : null}
 
         {podeVer ? (
-          <>
-            <Stack gap="sm">
-              <Title order={2}>Rotina de hoje</Title>
-              {rotina?.proximoCuidado ? (
-                <Card
-                  withBorder
-                  padding="md"
-                  radius="md"
-                  className="destaque-proximo"
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setSelecionado(rotina.proximoCuidado)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setSelecionado(rotina.proximoCuidado);
-                    }
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  <Text size="sm" c="dimmed">
-                    Próximo cuidado
-                  </Text>
-                  <Text fw={600} size="lg">
-                    {rotina.proximoCuidado.nome}
-                  </Text>
-                  <Text size="sm">
-                    {rotina.proximoCuidado.horario} ·{" "}
-                    {rotuloSituacao(rotina.proximoCuidado.situacao)}
-                  </Text>
-                  <Text size="sm" c="azul" fw={500} mt={4}>
-                    Abrir opções
-                  </Text>
-                </Card>
-              ) : null}
+          <Stack gap="md">
+            {proximo ? (
+              <CartaoMedicamento
+                cartao={proximo}
+                destaque
+                onAbrir={() => setSelecionado(proximo)}
+              />
+            ) : null}
 
-              {medicamentos.length === 0 ? (
-                <EstadoVazio
-                  titulo="Nenhum medicamento para hoje"
-                  descricao="Quando houver programação, os cartões aparecem aqui."
-                />
-              ) : (
+            {medicamentos.length === 0 && consultas.length === 0 && !proximo ? (
+              <EstadoVazio
+                titulo="Nada previsto para hoje"
+                descricao="Quando houver medicamentos ou compromissos, eles aparecem aqui."
+              />
+            ) : (
+              <Stack gap="sm">
+                {medicamentos.map((c) => (
+                  <CartaoMedicamento
+                    key={`${c.medicamentoId}-${c.horario}`}
+                    cartao={c}
+                    onAbrir={() => setSelecionado(c)}
+                  />
+                ))}
+                {consultas.map((c) => (
+                  <Card key={c.id} withBorder padding="md" radius="md">
+                    <Group gap="sm" wrap="nowrap" align="flex-start">
+                      <MarcadorVisual tipo="consulta" />
+                      <Stack gap={2}>
+                        <Text size="sm" c="dimmed">
+                          Consulta
+                        </Text>
+                        <Text fw={600}>{c.especialidadeOuDescricao}</Text>
+                        <Text size="sm" c="dimmed">
+                          {formatarQuando(c.dataHora)}
+                        </Text>
+                      </Stack>
+                    </Group>
+                  </Card>
+                ))}
+              </Stack>
+            )}
+
+            {podeRelatar ? (
+              <form onSubmit={aoSalvarObservacao}>
                 <Stack gap="sm">
-                  {medicamentos.map((c) => (
-                    <Card
-                      key={`${c.medicamentoId}-${c.horario}`}
-                      withBorder
-                      padding="md"
-                      radius="md"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setSelecionado(c)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          setSelecionado(c);
-                        }
-                      }}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Text fw={600}>{c.nome}</Text>
-                      <Text size="sm" c="dimmed">
-                        {c.horario} · {rotuloSituacao(c.situacao)}
-                      </Text>
-                    </Card>
-                  ))}
+                  <Textarea
+                    label="Observação do dia"
+                    description="Opcional. Sem obrigação de preencher."
+                    value={observacao}
+                    onChange={(e) => setObservacao(e.currentTarget.value)}
+                    minRows={2}
+                    maxRows={5}
+                    autosize
+                    disabled={salvandoObs}
+                  />
+                  <Button
+                    type="submit"
+                    variant="light"
+                    loading={salvandoObs}
+                    disabled={!obsPronta || salvandoObs}
+                  >
+                    Salvar observação
+                  </Button>
                 </Stack>
-              )}
-              <Text size="sm" c="dimmed">
-                Sem confirmação significa que ainda não houve relato — não é um julgamento.
-              </Text>
-            </Stack>
-
-            <Stack gap="sm">
-              <Title order={2}>Outros cuidados</Title>
-              <Text fw={600} size="sm">
-                Consultas
-              </Text>
-              {consultas.length === 0 ? (
-                <Text size="sm" c="dimmed">
-                  Nenhuma consulta listada.
-                </Text>
-              ) : (
-                <Stack gap={6} component="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                  {consultas.map((c) => (
-                    <Text key={c.id} component="li" size="sm">
-                      {c.especialidadeOuDescricao}
-                      {c.dataHora ? ` · ${formatarQuando(c.dataHora)}` : ""}
-                    </Text>
-                  ))}
-                </Stack>
-              )}
-              <Text fw={600} size="sm">
-                Apoio
-              </Text>
-              {apoios.length === 0 ? (
-                <Text size="sm" c="dimmed">
-                  Nenhuma atividade de apoio registrada.
-                </Text>
-              ) : (
-                <Stack gap={6} component="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                  {apoios.map((a) => (
-                    <Text key={a.id} component="li" size="sm">
-                      {a.descricao}
-                    </Text>
-                  ))}
-                </Stack>
-              )}
-              <Anchor component={Link} href={`/pessoas/${params.pessoaId}/historico`} size="sm">
-                Ver histórico
-              </Anchor>
-            </Stack>
-
-            <Accordion variant="contained" radius="md">
-              <Accordion.Item value="gerenciar">
-                <Accordion.Control>
-                  <Text fw={600}>Gerenciar cuidados</Text>
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <Stack gap="lg">
-                    <form onSubmit={aoCadastrarMedicamento}>
-                      <Stack gap="sm">
-                        <Title order={3}>Novo medicamento</Title>
-                        <Text size="sm" c="dimmed">
-                          Cadastre com os horários da orientação vigente. O sistema não recomenda dose nem inventa intervalo clínico.
-                        </Text>
-                        <TextInput
-                          label="Nome"
-                          value={nomeMed}
-                          onChange={(e) => setNomeMed(e.currentTarget.value)}
-                          required
-                        />
-                        <TextInput
-                          label="Primeiro horário"
-                          type="time"
-                          value={primeiroHorario}
-                          onChange={(e) =>
-                            setPrimeiroHorario(normalizarHoraInput(e.currentTarget.value))
-                          }
-                          required
-                        />
-                        <NumberInput
-                          label="Doses ao dia"
-                          value={dosesPorDia}
-                          onChange={setDosesPorDia}
-                          min={1}
-                          max={24}
-                          required
-                        />
-                        <Text size="sm" fw={500}>
-                          Duração
-                        </Text>
-                        <SegmentedControl
-                          fullWidth
-                          value={duracaoTipo}
-                          onChange={(v) => setDuracaoTipo(v as "continua" | "dias")}
-                          data={[
-                            { label: "Uso contínuo", value: "continua" },
-                            { label: "Por dias", value: "dias" },
-                          ]}
-                        />
-                        {duracaoTipo === "dias" ? (
-                          <NumberInput
-                            label="Quantidade de dias"
-                            value={duracaoDias}
-                            onChange={setDuracaoDias}
-                            min={1}
-                            required
-                          />
-                        ) : null}
-
-                        <Text size="sm" fw={500}>
-                          Conferência dos horários
-                        </Text>
-                        <Text size="sm" c="dimmed">
-                          Preencha exatamente como na orientação. Não usamos “doses ao dia” para calcular horários automaticamente.
-                        </Text>
-                        {horariosLista.map((horario, indice) => (
-                          <TextInput
-                            key={`horario-${indice}`}
-                            label={indice === 0 ? "Horário 1 (primeiro)" : `Horário ${indice + 1}`}
-                            type="time"
-                            value={horario}
-                            disabled={indice === 0}
-                            onChange={(e) => {
-                              const valor = normalizarHoraInput(e.currentTarget.value);
-                              setHorariosLista((atual) =>
-                                atual.map((h, i) => (i === indice ? valor : h)),
-                              );
-                              setHorariosConferidos(false);
-                            }}
-                            required
-                          />
-                        ))}
-
-                        <Accordion variant="separated" radius="md">
-                          <Accordion.Item value="avancado">
-                            <Accordion.Control>
-                              Opções avançadas
-                            </Accordion.Control>
-                            <Accordion.Panel>
-                              <Stack gap="sm">
-                                <NumberInput
-                                  label="Intervalo em horas (opcional)"
-                                  description="Use só se a orientação disser algo como “a cada 8 horas”. Não equivale a doses por dia."
-                                  value={intervaloHoras}
-                                  onChange={setIntervaloHoras}
-                                  min={1}
-                                  max={24}
-                                  allowDecimal={false}
-                                />
-                                <Button
-                                  type="button"
-                                  variant="light"
-                                  onClick={aplicarSugestaoIntervalo}
-                                >
-                                  Sugerir horários para conferência
-                                </Button>
-                              </Stack>
-                            </Accordion.Panel>
-                          </Accordion.Item>
-                        </Accordion>
-
-                        <Checkbox
-                          checked={horariosConferidos}
-                          onChange={(e) =>
-                            setHorariosConferidos(e.currentTarget.checked)
-                          }
-                          label="Confirmei estes horários com a orientação vigente"
-                        />
-                        <Button
-                          type="submit"
-                          loading={enviandoForm}
-                          disabled={!horariosConferidos}
-                        >
-                          Cadastrar e ativar
-                        </Button>
-                      </Stack>
-                    </form>
-
-                    <form onSubmit={aoRegistrarApoio}>
-                      <Stack gap="sm">
-                        <Title order={3}>Registrar apoio</Title>
-                        <TextInput
-                          label="Descrição"
-                          value={atividade}
-                          onChange={(e) => setAtividade(e.currentTarget.value)}
-                          required
-                        />
-                        <Button type="submit" loading={enviandoForm}>
-                          Registrar
-                        </Button>
-                      </Stack>
-                    </form>
-
-                    <form onSubmit={aoCriarConsulta}>
-                      <Stack gap="sm">
-                        <Title order={3}>Agendar consulta</Title>
-                        <TextInput
-                          label="Especialidade ou descrição"
-                          value={consultaDesc}
-                          onChange={(e) => setConsultaDesc(e.currentTarget.value)}
-                          required
-                        />
-                        <TextInput
-                          label="Data e hora"
-                          type="datetime-local"
-                          value={consultaQuando}
-                          onChange={(e) => setConsultaQuando(e.currentTarget.value)}
-                          required
-                        />
-                        <Button type="submit" loading={enviandoForm}>
-                          Agendar
-                        </Button>
-                      </Stack>
-                    </form>
-                  </Stack>
-                </Accordion.Panel>
-              </Accordion.Item>
-            </Accordion>
-          </>
+              </form>
+            ) : null}
+          </Stack>
         ) : null}
 
         <Drawer
@@ -574,7 +252,7 @@ export default function PaginaCuidados() {
             if (!registrando) setSelecionado(null);
           }}
           position={ehCelular ? "bottom" : "right"}
-          title={`Relato${nomePessoa ? ` de ${nomePessoa}` : ""}`}
+          title="Relato de medicamento"
           padding="md"
           size={ehCelular ? "auto" : "md"}
           overlayProps={{ backgroundOpacity: 0.35 }}
@@ -583,11 +261,17 @@ export default function PaginaCuidados() {
         >
           {selecionado ? (
             <Stack gap="sm">
-              <Text>
-                <Text span fw={600}>{selecionado.nome}</Text>
-                {` às ${selecionado.horario}`}
-              </Text>
+              <Group gap="sm" wrap="nowrap">
+                <MarcadorVisual tipo="medicamento" />
+                <Text>
+                  <Text span fw={600}>
+                    {selecionado.nome}
+                  </Text>
+                  {` às ${selecionado.horario}`}
+                </Text>
+              </Group>
               <Button
+                color="teal"
                 onClick={() => void confirmarRelato("tomou_conforme_informacao")}
                 loading={registrando}
                 disabled={registrando}
@@ -616,6 +300,73 @@ export default function PaginaCuidados() {
   );
 }
 
+function CartaoMedicamento({
+  cartao,
+  destaque = false,
+  onAbrir,
+}: {
+  cartao: CartaoDose;
+  destaque?: boolean;
+  onAbrir: () => void;
+}) {
+  return (
+    <Card
+      withBorder
+      padding="md"
+      radius="md"
+      className={destaque ? "destaque-proximo" : undefined}
+      role="button"
+      tabIndex={0}
+      onClick={onAbrir}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onAbrir();
+        }
+      }}
+      style={{ cursor: "pointer" }}
+    >
+      <Group gap="sm" wrap="nowrap" align="flex-start">
+        <MarcadorVisual tipo="medicamento" />
+        <Stack gap={2}>
+          {destaque ? (
+            <Text size="sm" c="dimmed">
+              Próximo cuidado
+            </Text>
+          ) : null}
+          <Text fw={600} size={destaque ? "lg" : "md"}>
+            {cartao.nome}
+          </Text>
+          <Text size="sm" c="dimmed">
+            {cartao.horario} · {rotuloSituacao(cartao.situacao)}
+          </Text>
+          <Text size="sm" c="azul" fw={500}>
+            Abrir opções
+          </Text>
+        </Stack>
+      </Group>
+    </Card>
+  );
+}
+
+function MarcadorVisual({ tipo }: { tipo: "medicamento" | "consulta" }) {
+  const rotulo = tipo === "medicamento" ? "Med" : "Cons";
+  const cor = tipo === "medicamento" ? "teal" : "blue";
+  return (
+    <ThemeIcon
+      variant="light"
+      color={cor}
+      size={36}
+      radius="md"
+      aria-hidden
+    >
+      <Text size="xs" fw={700}>
+        {rotulo}
+      </Text>
+    </ThemeIcon>
+  );
+}
+
 function rotuloSituacao(situacao: string) {
   if (situacao === "tomou_conforme_informacao") return "informou que tomou";
   if (situacao === "informou_nao_tomou") return "informou que não tomou";
@@ -628,27 +379,5 @@ function formatarQuando(iso: string) {
   return data.toLocaleString("pt-BR", {
     dateStyle: "short",
     timeStyle: "short",
-  });
-}
-
-function normalizarHoraInput(valor: string): string {
-  const m = valor.trim().match(/^(\d{2}):(\d{2})/);
-  return m ? `${m[1]}:${m[2]}` : valor.trim();
-}
-
-/** Auxílio matemático apenas quando há intervalo explícito; não deriva de doses/dia. */
-function sugerirHorariosPorIntervalo(
-  primeiro: string,
-  doses: number,
-  intervaloHoras: number,
-): string[] {
-  const [hStr, mStr] = primeiro.split(":");
-  const baseMin = Number(hStr) * 60 + Number(mStr);
-  if (!Number.isFinite(baseMin)) return Array.from({ length: doses }, () => "");
-  return Array.from({ length: doses }, (_, i) => {
-    const total = (baseMin + i * intervaloHoras * 60) % (24 * 60);
-    const hh = String(Math.floor(total / 60)).padStart(2, "0");
-    const mm = String(total % 60).padStart(2, "0");
-    return `${hh}:${mm}`;
   });
 }

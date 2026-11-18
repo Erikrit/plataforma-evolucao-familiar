@@ -41,9 +41,19 @@ function areasDaPessoa(
   if (!auth) return areas;
   if (auth.cuidados) {
     areas.push({
-      id: "cuidados",
-      rotulo: "Cuidados",
+      id: "rotina",
+      rotulo: "Rotina",
       href: `/pessoas/${pessoaId}/cuidados`,
+    });
+    areas.push({
+      id: "medicamentos",
+      rotulo: "Medicamentos",
+      href: `/pessoas/${pessoaId}/cuidados/medicamentos`,
+    });
+    areas.push({
+      id: "consultas",
+      rotulo: "Consultas e exames",
+      href: `/pessoas/${pessoaId}/cuidados/consultas`,
     });
   }
   if (auth.desenvolvimento) {
@@ -72,6 +82,19 @@ function ativoPorHref(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   if (href === "/gerenciar-familia") return pathname.startsWith("/gerenciar-familia");
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function itemNavAtivo(pathname: string, area: AreaNav) {
+  if (area.id === "perfil") return pathname === area.href;
+  if (area.id === "rotina") {
+    return (
+      pathname === area.href ||
+      (pathname.startsWith(`${area.href}/`) &&
+        !pathname.includes("/cuidados/medicamentos") &&
+        !pathname.includes("/cuidados/consultas"))
+    );
+  }
+  return ativoPorHref(pathname, area.href);
 }
 
 function MenuNavegacao({
@@ -245,11 +268,7 @@ function MenuNavegacao({
               component={Link}
               href={area.href}
               label={area.rotulo}
-              active={
-                area.id === "perfil"
-                  ? pathname === area.href
-                  : ativoPorHref(pathname, area.href)
-              }
+              active={itemNavAtivo(pathname, area)}
               onClick={onNavegar}
             />
           ))}
