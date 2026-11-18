@@ -36,4 +36,25 @@ Inspeção estática de `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/pag
 
 ## Próxima decisão de UX
 
-**Validar apresentação de resultado da participação, saldo de estrelas e recompensas** num único conjunto, antes de encaminhar implementação. Não alterar regra de pontuação, escopo, autorização ou dados sem governança adequada.
+**VALIDADO em 2026-11-18 pelo responsável do produto.** Resultado alegre porém discreto, pontos somente após persistência, saldo compacto e recompensas opcionais em área secundária, com gerenciamento separado e sempre sujeito à autorização. Próximo encaminhamento recomendado: reconciliação com a implementação do Módulo 03 e execução incremental das diferenças via esteira existente, mantendo homologação humana posterior obrigatória.
+
+## Aprovação integrada — reconhecimento, estrelas e recompensas (2026-11-18)
+
+**Status: DIREÇÃO UX APROVADA E DOCUMENTADA**, complementando a experiência única já aprovada. **Não é homologação da interface implementada.**
+
+1. **Reconhecimento de uma brincadeira:** a pessoa adulta registra `Concluiu` ou `Participou` conforme DEV-F04; somente quando o servidor confirma a operação e o movimento de estrelas, mostrar retorno afetivo e breve com nome da brincadeira, resultado e estrelas **de fato concedidas**. O feedback não substitui a informação acessível por texto e não presume que `Participou` seja fracasso. Em caso de erro ou dúvida de gravação, não afirmar conquista; retry não pode creditar duplicado.
+2. **Saldo compacto:** mostrar as estrelas disponíveis de forma simples junto à área de atividades, evitando cartões/explicações excessivos, rankings, metas compulsórias ou incentivo a completar tarefas por cobrança. Quantidade exibida deriva de leitura autorizada e atualizada.
+3. **Recompensas opcionais:** acessar a lista de recompensas em contexto secundário; visualizar nome e custo de forma compreensível e distinguir **resgatar** de **gerenciar**. Nenhuma recompensa é condição para participar ou ganhar estrelas. Um resgate só é declarado concluído após resposta persistida, validação de saldo e confirmação proporcional, protegendo custo histórico e evitando duplicação.
+4. **Organização autorizada:** cadastrar brincadeiras e recompensas somente se a operação for permitida; não repetir formulários na área principal nem criar alternância Integrante/Responsável. O módulo tem **uma experiência** com ações conforme autorização. O Administrador não herda automaticamente acesso aos dados da criança, nem a colaboradora externa da Vovó.
+5. **Conferência na implementação:** preservar tabelas de DEV-F05, idempotência, observação opcional, acessibilidade, linguagem lúdica e simples, e histórico via Módulo 04. Para ações sem suporte de autorização granular visível no contrato, solicitar análise arquitetural, sem inventar permissões.
+
+**Critérios complementares de aceite UX:**
+
+- [ ] Um registro confirmado produz um único feedback de estrelas com pontuação retornada pelo servidor; um erro não produz conquista fictícia.
+- [ ] Resultado `Concluiu` e `Participou` têm identidade acessível e não confundem criança com avaliação/punição.
+- [ ] Saldo é pequeno, legível e atualizado após participar ou resgatar; nenhuma explicação redundante na tela principal.
+- [ ] Recompensas são opcionais, secundárias, com escolha/resgate distintos de cadastro/gestão; a autorização é validada no servidor.
+- [ ] Não há alternância de perfil, obrigatoriedade de resgate, cronômetro, ranking ou metas de produtividade.
+- [ ] A implementação é verificada em mobile, com rede lenta, duplo clique/reenvio e acessibilidade; **aceite humano posterior não pode ser inferido dos testes técnicos**.
+
+**Próxima etapa:** preparar correções incrementais do Módulo 03 a partir do código real, pela triagem `task-routing` e `implementation-workflow`, sem autorizar commit/push/deploy pela esteira. Outras pendências administrativas do Módulo 01 permanecem adiadas, conforme o aceite parcial anterior.

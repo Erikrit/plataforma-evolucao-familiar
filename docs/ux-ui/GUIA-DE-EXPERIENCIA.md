@@ -1,6 +1,6 @@
 # Guia de Experiência UX/UI — Plataforma de Evolução Familiar
 
-**Versão:** 2.3 — experiência única no Desenvolvimento da Laurinha aprovada em 2026-11-18  
+**Versão:** 2.4 — fluxo de reconhecimento, estrelas e recompensas do Desenvolvimento aprovado em 2026-11-18  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
 **Revisão integrada de Cuidados para entrega à esteira:** `docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md` (evidências, divergências e proposta incremental, sem alterar regras canônicas).  
@@ -165,7 +165,9 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - **Estrelas:** saldo pequeno e compreensível, sem ranking ou cobrança. Resultado confirmado apenas após persistência real da participação e movimento automático da tabela DEV-F05; não conceder pontos no cliente por efeito visual. Reenvio não duplica execuções/estrelas; uma nova execução legítima é permitida.
 - **Recompensas:** escolha e resgate, quando autorizados, devem ser distinguíveis do cadastro/gerência, sem impor catálogo ou resgate digital como requisito de participação. Respeitar custo histórico, saldo e confirmações pertinentes.
 - **Autorização e privacidade:** não exibir ações nem dados infantis não autorizados; o rótulo visual Integrante ou o papel Administrador não concede autorização. Colaboradora externa da Vovó não recebe acesso por presunção. A experiência única **não altera o contrato de perfis**, vínculos ou permissões.
-- **Limites de validação:** direção de UX aprovada; **não** é homologação da tela implementada, nem aprovação de eventual mudança funcional. Próxima validação visual: resultado da participação, estrelas e recompensas. Ver `docs/ux-ui/REVISAO-MODULO-03.md`.
+- **Resultado e reconhecimento aprovados em 2026-11-18:** depois da confirmação efetiva do registro de `Concluiu` ou `Participou`, apresentar feedback alegre e discreto com nome da brincadeira, resultado e quantidade **real** de estrelas concedidas pelo servidor. Não inventar pontos antes de persistir, não fazer a animação mascarar erro, não gerar confirmação extra para visualizar estrelas. Diferenciar iconografia de `Concluiu` e `Participou`, sem julgamento de desempenho.
+- **Saldo e recompensas aprovados em 2026-11-18:** saldo visível mas compacto, próximo à experiência de brincadeiras; recompensas acessadas em destino secundário simples, sem sugestão de resgate obrigatório nem bloqueio de brincadeiras. Distinguir **ver/escolher/resgatar** de **cadastrar/gerenciar**; só exibir cada ação se efetivamente autorizada. Resgate pede confirmação proporcional e atualiza saldo após persistência; nunca permitir saldo negativo nem cobrança sobre criança. Não expor matriz de permissões ou trocar perfil para organizar.
+- **Limites de validação:** esta direção de UX foi aprovada, mas **não** é homologação da tela implementada, nem mudança de pontuação, requisitos, autorização ou contrato. As regras funcionais de DEV-F04..F06 continuam prevalecendo. Ver `docs/ux-ui/REVISAO-MODULO-03.md`.
 
 ## 8. Governança de decisões
 
