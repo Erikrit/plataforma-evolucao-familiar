@@ -74,3 +74,13 @@ O repositório é público. Não incluir imagens de crianças, prescrições, ex
 
 **Encaminhamento:** corrigir primeiro visibilidade/autorização e edição administrativa, depois estados visuais/feedback e redução de conteúdo duplicado, finalmente comparar as três experiências Integrante/Responsável/Administrador em mobile e desktop e repetir **homologação humana**. Não utilizar dados reais sensíveis antes de segurança e homologação pertinentes. Critérios e backlog detalhados em `docs/ux-ui/REVISAO-MODULOS-01-02.md`.
 
+
+## Aceite humano da primeira rodada corretiva de UX — 2026-11-18
+
+**Resultado: HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO, COM ESCOPO DELIMITADO.** Após a implementação documentada da demanda `DEM-UX-HOM-20261118` (QG-1/QG-2/QG-3 e verifier com PASS técnico registrado), o responsável pelo produto avaliou a interface como significativamente melhor e **aprovou expressamente a primeira revisão corretiva de UX**. Este aceite cobre os ajustes de interação e apresentação identificados em `UX-HOM-01..07` como rodada, **sem declarar concluída toda a UX da plataforma** e sem apagar as reprovações históricas de rodadas anteriores.
+
+**Fora desse aceite, para etapa futura de Fundação Familiar:** (a) administrador não consegue remover pessoas cadastradas; distinguir retirada de acesso, desativação e possível exclusão de cadastro sem perda indevida de histórico; (b) gestão de responsabilidades/acessos ainda confusa e com opção limitada de concessão. Esses itens **não integravam o escopo de `DEM-UX-HOM-20261118`**, logo ficam **REGISTRADOS/PENDENTES**, não reprovam retroativamente esta primeira rodada. Também permanece `UX-HOM-02-SELETOR` (`NEEDS_DECISION`) para opções válidas de vínculo em contexto administrativo. Alterações de regras de pessoa/autorização exigem Produto e Arquitetura segundo governança; não presumir autorização para excluir pessoas nem introduzir matriz granular de permissões.
+
+**Escopo explícito do aceite:** apenas a primeira rodada de apresentação/interação validada humanamente; **não equivale a homologação integral dos Módulos 01–04, segurança de dados reais, autorizações auditadas em produção, notificações em dispositivos físicos ou implantação**. Evidências automatizadas documentadas continuam com seu próprio status; não reexecutadas neste registro. O status anterior `REPROVADA` permanece como **histórico da rodada anterior**, superado **somente para o escopo homologado** por este aceite de 2026-11-18.
+
+**Próxima etapa de UX:** aprofundar a experiência do **Módulo 03 — Desenvolvimento da Laurinha** (biblioteca/atividades, participação, estrelas e recompensas), seguida de homologação humana própria. Não retomar as melhorias administrativas antes de concluir a sequência de UX, salvo risco real de segurança.

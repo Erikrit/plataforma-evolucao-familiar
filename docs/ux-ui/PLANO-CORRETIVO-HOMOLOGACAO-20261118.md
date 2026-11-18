@@ -53,3 +53,7 @@ Manter a implementação atual no que já atende aos requisitos. Não criar nova
 - **Homologação humana permanece pendente** até novo aceite expresso.
 
 **Definição de pronto técnico:** critérios implementados e testados com evidência; não significa **homologação humana aprovada**.
+
+## Encerramento da primeira rodada corretiva — aceite humano em 2026-11-18
+
+**Status desta rodada: HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO (escopo `UX-HOM-01..07`).** A implementação já constava como `COMPLETED` técnico na esteira; o aceite humano foi declarado depois. Não confundir a aprovação desta rodada com homologação integral dos módulos, segurança ou produção. **Fora do escopo e adiados:** remoção/desativação de pessoas e reorganização da gestão de acessos/responsabilidades. **Pendente funcional:** opções de vínculo/edição administrativa (`UX-HOM-02-SELETOR`). Próxima etapa UX do produto: Módulo 03 — Desenvolvimento da Laurinha.
