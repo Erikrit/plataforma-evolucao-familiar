@@ -1,6 +1,6 @@
 # Guia de Experiência UX/UI — Plataforma de Evolução Familiar
 
-**Versão:** 2.2 — observação opcional na Rotina e experiências diferenciadas aprovadas em 2026-11-17  
+**Versão:** 2.3 — experiência única no Desenvolvimento da Laurinha aprovada em 2026-11-18  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
 **Revisão integrada de Cuidados para entrega à esteira:** `docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md` (evidências, divergências e proposta incremental, sem alterar regras canônicas).  
@@ -157,6 +157,15 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - [ ] Nenhum conteúdo sensível é exibido fora da autorização existente.
 - [ ] Não há alteração funcional não aprovada nem registro duplicado para histórico.
 - [ ] Revisão visual final com capturas reais + teste com familiares; proposta aprovada não equivale a homologação.
+
+### Desenvolvimento da Laurinha — experiência única aprovada em 2026-11-18
+
+- **Uma experiência de uso, sem alternância Integrante/Responsável no módulo 03.** Diferenciar apenas ações realmente autorizadas: todos os adultos com acesso pertinente encontram a mesma lista de brincadeiras e o mesmo fluxo de participação; quem pode organizar dispõe adicionalmente de **Criar brincadeira** e **Gerenciar recompensas** em contexto secundário, sem modo separado nem formulário competindo com atividades.
+- **Fluxo principal:** Explorar/Guardadas → abrir brincadeira → ler instrução curta, materiais se houver → após vivência presencial, registrar **Concluiu** ou **Participou**, mantendo observação opcional e registro rápido. Guardar nunca cria prazo ou pendência. Não solicitar foto, prova, justificativa ou preenchimento diário.
+- **Estrelas:** saldo pequeno e compreensível, sem ranking ou cobrança. Resultado confirmado apenas após persistência real da participação e movimento automático da tabela DEV-F05; não conceder pontos no cliente por efeito visual. Reenvio não duplica execuções/estrelas; uma nova execução legítima é permitida.
+- **Recompensas:** escolha e resgate, quando autorizados, devem ser distinguíveis do cadastro/gerência, sem impor catálogo ou resgate digital como requisito de participação. Respeitar custo histórico, saldo e confirmações pertinentes.
+- **Autorização e privacidade:** não exibir ações nem dados infantis não autorizados; o rótulo visual Integrante ou o papel Administrador não concede autorização. Colaboradora externa da Vovó não recebe acesso por presunção. A experiência única **não altera o contrato de perfis**, vínculos ou permissões.
+- **Limites de validação:** direção de UX aprovada; **não** é homologação da tela implementada, nem aprovação de eventual mudança funcional. Próxima validação visual: resultado da participação, estrelas e recompensas. Ver `docs/ux-ui/REVISAO-MODULO-03.md`.
 
 ## 8. Governança de decisões
 
