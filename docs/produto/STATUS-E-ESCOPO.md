@@ -96,3 +96,9 @@ O repositório é público. Não incluir imagens de crianças, prescrições, ex
 **Acompanhar em:** `docs/ux-ui/REVISAO-MODULO-03.md`, seção `Reprovação humana — 2026-11-19`. **Status de Módulo 03: UX REPROVADA**, mesmo com eventuais testes técnicos verdes. O aceite humano anterior continua válido **somente** para a primeira rodada corretiva transversal `UX-HOM-01..07`; não se estende ao Módulo 03.
 
 **Pendências administrativas do Módulo 01** (remoção de pessoas, gestão de acessos e seletor de vínculos) continuam adiadas para depois da sequência de UX, salvo risco de segurança.
+
+## Aprovação funcional L3 do Módulo 03 — 2026-11-19
+
+**Decisões `CT-20261119-001` e `CT-20261119-002`: APROVADAS PELO PRODUTO e DOCUMENTADAS** na especificação funcional `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md` v1.2. Brincadeiras migram de Explorar para Executadas após participação confirmada e voltam somente com disponibilização autorizada; recompensas migram de Disponíveis para Resgatadas após resgate confirmado e podem voltar para novo resgate **com novo débito**. Histórico, estrelas, custos efetivos e autoria anteriores são preservados. Tentativas repetidas e concorrência exigem idempotência, autorização e ausência de saldo negativo.
+
+**Não significa implementação concluída ou UX homologada.** A reprovação humana de 2026-11-19 segue vigente. Arquitetura deve reconciliar a branch com a última entrega real, avaliar migração/compatibilidade de Guardadas, mecanismo de estado e autorização para reativação, histórico e proteção contra reenvio; sem ampliar permissão implicitamente ou descartar dados. A primeira revisão corretiva transversal de UX continua homologada apenas no próprio escopo.

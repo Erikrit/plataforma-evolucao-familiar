@@ -138,3 +138,14 @@ Inspeção estática de `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/pag
 - **Homologação humana continua REPROVADA até novo aceite.**
 
 **Bloqueio:** não alterar `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md` DEV-F03/DEV-F04/DEV-F06 nem iniciar implementação das transições propostas enquanto a decisão L3 não for explicitamente aprovada.
+
+## Deliberação funcional recebida — 2026-11-19
+
+**Responsável pelo Produto aprovou expressamente:**
+
+- **CT-20261119-001 — APROVADA/DOCUMENTADA (L3):** após `Concluiu` ou `Participou` efetivamente persistido, a brincadeira sai de `Explorar` e entra em `Executadas`. Só retorna a `Explorar` após `Disponibilizar novamente` autorizado; histórico, estrelas e autoria não são apagados.
+- **CT-20261119-002 — APROVADA/DOCUMENTADA (L3):** `Recompensas > Disponíveis` e `Resgatadas` são estados separados. Reativar/disponibilizar permite outro resgate **cobrado novamente**, como nova ocorrência; nenhum resgate anterior é substituído, estornado ou deletado. Proteção contra débito duplicado e saldo negativo é obrigatória.
+
+**Fonte canônica atualizada:** `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md` v1.2 (DEV-F03/F04/F06, fluxos, estados e critérios). As notas anteriores neste documento indicadas como `NEEDS_DECISION` ou `PROPOSTA` são histórico **superado somente para as duas decisões expressamente aprovadas**. Permanecem dependências de Arquitetura para modelo de estado, dados legados de Guardadas, contratos de operações de reativação, API/histórico, concorrência e idempotência. Não confundir com autorização para modificar privilégios ou descartar dados.
+
+**Próxima etapa:** análise de Arquitetura proporcional às alterações funcionais, seguida de planejamento/correção delimitada na esteira existente e nova homologação humana. Status UX do Módulo 03 continua **REPROVADA**, mesmo com especificação aprovada.
