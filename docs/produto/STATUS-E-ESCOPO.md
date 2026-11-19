@@ -84,3 +84,15 @@ O repositório é público. Não incluir imagens de crianças, prescrições, ex
 **Escopo explícito do aceite:** apenas a primeira rodada de apresentação/interação validada humanamente; **não equivale a homologação integral dos Módulos 01–04, segurança de dados reais, autorizações auditadas em produção, notificações em dispositivos físicos ou implantação**. Evidências automatizadas documentadas continuam com seu próprio status; não reexecutadas neste registro. O status anterior `REPROVADA` permanece como **histórico da rodada anterior**, superado **somente para o escopo homologado** por este aceite de 2026-11-18.
 
 **Próxima etapa de UX:** aprofundar a experiência do **Módulo 03 — Desenvolvimento da Laurinha** (biblioteca/atividades, participação, estrelas e recompensas), seguida de homologação humana própria. Não retomar as melhorias administrativas antes de concluir a sequência de UX, salvo risco real de segurança.
+
+## Homologação humana reprovada — Módulo 03, rodada de 2026-11-19
+
+**Resultado comunicado pelo responsável do produto: REPROVADA.** A implementação mais recente foi avaliada humanamente, com quatro achados: (1) falta de organização/agrupamento de brincadeiras por categorias de desenvolvimento; (2) criação de brincadeiras e recompensas deveria ficar em área própria de cadastro; (3) substituir aba `Guardadas` por `Executadas`, movimentando atividade após registro e permitindo reativação pelo Responsável; (4) recompensas em submenu com `Disponíveis` e `Resgatadas`, com opção de repetir um resgate legítimo de recompensa já utilizada.
+
+**Referência documental consultada:** `develop` em `f498694a391f008f0d244caf2b892832d3c146d7`. Esta branch ainda não apresenta evidência inequívoca da última implementação informada; **não atribuir as lacunas ao código não sincronizado**. Inspeção documental nesta data identificou contratos antigos com `guardados`, categorias já enumeradas, participações registradas com histórico e resgates com custo histórico; reconciliar com o workspace e a entrega efetivamente homologada antes de planejar implementação.
+
+**Classificação:** organização por categorias e área de cadastro = UX, com validação da taxonomia/contratos; `Guardadas → Executadas` com transição automática e reativação = **mudança funcional DEV-F03/DEV-F04, L3**; repetição e visão de resgates = **revisão funcional DEV-F06, L3**. Não tratar como alteração de texto sem rever persistência, semântica e autorização.
+
+**Acompanhar em:** `docs/ux-ui/REVISAO-MODULO-03.md`, seção `Reprovação humana — 2026-11-19`. **Status de Módulo 03: UX REPROVADA**, mesmo com eventuais testes técnicos verdes. O aceite humano anterior continua válido **somente** para a primeira rodada corretiva transversal `UX-HOM-01..07`; não se estende ao Módulo 03.
+
+**Pendências administrativas do Módulo 01** (remoção de pessoas, gestão de acessos e seletor de vínculos) continuam adiadas para depois da sequência de UX, salvo risco de segurança.

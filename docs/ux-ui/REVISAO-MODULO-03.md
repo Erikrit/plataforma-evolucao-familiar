@@ -58,3 +58,39 @@ Inspeção estática de `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/pag
 - [ ] A implementação é verificada em mobile, com rede lenta, duplo clique/reenvio e acessibilidade; **aceite humano posterior não pode ser inferido dos testes técnicos**.
 
 **Próxima etapa:** preparar correções incrementais do Módulo 03 a partir do código real, pela triagem `task-routing` e `implementation-workflow`, sem autorizar commit/push/deploy pela esteira. Outras pendências administrativas do Módulo 01 permanecem adiadas, conforme o aceite parcial anterior.
+
+## Reprovação humana — 2026-11-19: categorias, cadastros, executadas e resgates
+
+**Status: REPROVADA / PROPOSTA CORRETIVA EM ANÁLISE.** O responsável do produto rejeitou a experiência implementada do Módulo 03 e relatou quatro mudanças desejadas. **A implementação mais recente deve ser reconciliada com o workspace da esteira**, pois a referência documental desta revisão é `develop` em `f498694a391f008f0d244caf2b892832d3c146d7`, sem evidência da entrega recém-avaliada.
+
+### Proposta de organização de UX
+
+**A. Brincadeiras:** oferecer categorias de desenvolvimento como agrupamento/filtro claro (não uma nova tela por categoria), com nomes compreensíveis: **Raciocínio lógico**, **Coordenação motora / movimento**, **Memória e atenção**, **Linguagem**, **Criatividade**, **Autonomia**. A lista existente de categorias técnicas é `memoria_atencao`, `raciocinio`, `linguagem`, `criatividade`, `coordenacao`, `autonomia` (`apps/api/src/desenvolvimento/constantes-desenvolvimento.ts`). **Priorizar rótulos compreensíveis e agrupamento reaproveitando essas categorias**, sem introduzir enum/“Mobilidade” como sétima categoria técnica por dedução. A pessoa pode explorar todas as atividades e filtrar por uma categoria, sem classificação clínica, telas extras nem exigência de preenchimento adicional para brincadeira personalizada (DEV-F02).
+
+**B. Cadastros:** deslocar **Nova brincadeira** e **Nova recompensa** para uma seção secundária de **Cadastros**, ligada ao contexto da Laurinha e exibida somente se a operação estiver autorizada. Na criação de brincadeira, disponibilizar seletor de categoria com as opções vigentes, preservando a opcionalidade funcional até decisão distinta; nome continua campo mínimo e dificuldade simples padrão. **Não transformar categoria em obrigação por decisão de UX.** Não duplicar formulário na lista principal nem criar novo módulo administrativo.
+
+**C. Executadas:** substituir a segunda aba **Guardadas** por **Executadas**, exibindo brincadeiras com participação confirmada. Após o registro real de `Concluiu` ou `Participou`, a atividade deve aparecer em Executadas. Propor opção contextual **Disponibilizar novamente / Reativar** para o Responsável autorizado, preservando todas as participações, pontos e autoria anteriores. **Não confundir um estado da lista com a ocorrência histórica:** a mesma brincadeira pode ser realizada novamente e gerar outra ocorrência legítima; a operação de reativar não pode cancelar histórico nem devolver estrelas. Definir com Produto e Arquitetura se a separação exige estado persistido por pessoa/atividade ou se pode ser projetada sem ambiguidade a partir de participações e um marcador de disponibilidade. A semântica atual de `Guardadas` como favoritos/planejamento opcional (DEV-F03) **não pode simplesmente ser sobrescrita sem reconciliação funcional e migração/compatibilidade de dados existentes**.
+
+**D. Recompensas e resgates:** apresentar no submenu contextual **Recompensas** duas abas **Disponíveis** e **Resgatadas**, distinguindo itens elegíveis de ocorrências já resgatadas. Uma recompensa já resgatada pode ser escolhida para **resgatar novamente** quando houver saldo e autorização, criando um **novo resgate**, nunca reutilizando/substituindo o registro antigo. A aba Resgatadas pode exibir **histórico de ocorrências** agrupado por recompensa para evitar duplicidade visual. Não inferir que o resgate antigo “devolve” a recompensa ao catálogo, nem que um novo resgate é grátis. Cadastro e manutenção de recompensas ficam em Cadastros, não na tela de resgate. O backend já possui `ResgateRecompensa` e custo histórico em `servico-recompensas.ts`, mas a API atual inspecionada não expõe listagem de resgates; **Arquitetura deve avaliar o menor contrato adicional ou reaproveitamento do Histórico do Módulo 04, sempre com autorização**.
+
+### Encaminhamentos entre especialidades — governança
+
+| ID | Natureza | Encaminhamento | Estado |
+|---|---|---|---|
+| `DEV-UX-HOM-01` | UX + taxonomia | Validar agrupamento e rótulos sem modificar categorias técnicas por suposição; avaliação de nomes mais amigáveis | Proposta para consolidação UX |
+| `DEV-UX-HOM-02` | UX | Separar cadastros das brincadeiras e das recompensas, respeitando autorizações existentes | Proposta para consolidação UX |
+| `CT-20261119-001` | **Produto + Arquitetura, L3** | Substituição funcional de `Guardadas` por `Executadas`, estado automático após participação, reativação e compatibilidade dos guardados existentes; atualizar DEV-F03/F04 apenas após aprovação funcional da semântica | **NEEDS_DECISION** |
+| `CT-20261119-002` | **Produto + Arquitetura, L3** | Disponíveis/Resgatadas, reutilização legítima, custo por novo resgate, fonte autorizada dos resgates e compatibilidade DEV-F06; especificar se “disponíveis” são catálogo ativo elegível ou recompensas nunca resgatadas | **NEEDS_DECISION** |
+
+### Critérios de validação humana propostos
+
+- [ ] Brincadeiras são localizáveis por categorias compreensíveis sem telas excessivas.
+- [ ] Criação de brincadeiras/recompensas está fora da navegação cotidiana; ações não autorizadas não aparecem.
+- [ ] Categoria da brincadeira oferece opções vigentes, sem inventar classificação clínica; obrigatoriedade somente se aprovada funcionalmente.
+- [ ] Executadas reflete registro realmente persistido; reativação não apaga histórico, não reverte pontos e respeita autorização.
+- [ ] Guardados existentes não são perdidos silenciosamente; migração/compatibilidade é explicitamente tratada.
+- [ ] Recompensas Disponíveis/Resgatadas mostram situações inteligíveis e custo de novo resgate; histórico permanece íntegro.
+- [ ] Sem resgate duplicado por duplo clique/rede lenta; saldo jamais negativo; autorização verificada no backend.
+- [ ] Uso confortável no celular, sem textos excessivos, sem cobrança à criança, com retorno de erro acessível.
+
+**Próximo passo recomendado:** Produto consolidar as duas decisões L3 (CTs), Arquitetura comparar estado/contratos reais com a implementação atual; então UX finalizar o fluxo e a esteira executar apenas os incrementos aprovados com verificação independente e nova homologação humana. **Não implementar imediatamente as mudanças L3 a partir desta revisão de UX.**
