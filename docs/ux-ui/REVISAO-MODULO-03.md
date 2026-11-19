@@ -94,3 +94,47 @@ Inspeção estática de `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/pag
 - [ ] Uso confortável no celular, sem textos excessivos, sem cobrança à criança, com retorno de erro acessível.
 
 **Próximo passo recomendado:** Produto consolidar as duas decisões L3 (CTs), Arquitetura comparar estado/contratos reais com a implementação atual; então UX finalizar o fluxo e a esteira executar apenas os incrementos aprovados com verificação independente e nova homologação humana. **Não implementar imediatamente as mudanças L3 a partir desta revisão de UX.**
+
+## Detalhamento de proposta — 2026-11-19 (ainda não aprovado como regra funcional)
+
+**Status: PROPOSTA PARA DELIBERAÇÃO; sem autorização para implementar as mudanças funcionais.** Consolida a discussão dos CTs `CT-20261119-001` e `CT-20261119-002` e separa UX de regras a serem aprovadas pelo Produto. Inspeção de `develop` em `64e175533711a6eaa38016115dd7bc292fc4e0bd`, que pode não conter a implementação humana mais recente.
+
+### Organização da navegação
+
+- **Brincadeiras**: abas `Explorar` e `Executadas`; filtro por categoria sobre a aba corrente. Categorias visuais existentes: Raciocínio lógico (`raciocinio`), Coordenação motora (`coordenacao`), Memória e atenção (`memoria_atencao`), Linguagem, Criatividade, Autonomia. Não criar categoria técnica extra para “mobilidade” sem necessidade demonstrada. Brincadeira sem categoria deve continuar encontrável em “Todas”.
+- **Recompensas**: abas `Disponíveis` e `Resgatadas`, saldo compacto e ações contextuais; sem cadastrar recompensas nesse fluxo.
+- **Cadastros**: `Nova brincadeira` e `Nova recompensa` como entradas secundárias, visíveis por operação autorizada. Categoria da brincadeira é escolha opcional até eventual decisão funcional em contrário; não adicionar CRUD de categorias.
+
+### CT-20261119-001 — comportamento de Executadas e reativação
+
+**Proposta de regra:**
+1. `Explorar` mostra atividades atualmente disponíveis para novas execuções; `Executadas` lista atividades com pelo menos uma participação salva e ainda não disponibilizadas novamente.
+2. Uma nova participação `Concluiu` ou `Participou`, **após confirmação do servidor**, coloca a atividade em `Executadas` e a retira de `Explorar` como disponível. Erro ou envio incerto não provoca transição fictícia.
+3. A ação autorizada **Disponibilizar novamente** marca a atividade disponível para outra execução. Não apaga a execução, não altera créditos nem elimina seu histórico. Uma nova participação legítima cria uma ocorrência distinta e volta a marcar a atividade como executada.
+4. No card executado, mostrar `última participação` e permitir consultar outras ocorrências via Histórico do Módulo 04. Não duplicar o banco de histórico nem listar a mesma brincadeira como N cards.
+5. **Migração/compatibilidade:** `DesafioGuardado` atual representa favoritos, e não execuções. **Não renomear `guardado` como `executado` nem descartar dados.** Arquitetura deve avaliar estado persistido por pessoa/desafio e destino compatível dos favoritos legados, inclusive como preservá-los fora da nova aba. Operação de reativação só deve aparecer quando houver autorização de gestão efetiva; não inventar papel novo.
+6. Exceções: mesma execução enviada duas vezes não duplica registros/estrelas; atividade realizada novamente após reativação pode gerar nova participação; alterações/correções de participações precisam recalcular disponibilidade de modo consistente, sem modificar histórico de forma destrutiva.
+
+**Decisão de Produto ainda necessária:** confirmar se executadas deixam de aparecer em `Explorar` até reativação e o que fazer com favoritos legados.
+
+### CT-20261119-002 — recompensas e reutilização
+
+**Proposta de regra:**
+1. `Disponíveis` apresenta recompensas ativas liberadas para o próximo resgate; `Resgatadas` mostra itens já utilizados e ainda não disponibilizados novamente, com último resgate, custo aplicado e contagem/histórico de ocorrências autorizadas.
+2. Após resgate válido e persistido, a recompensa passa para `Resgatadas`; mostrar saldo atualizado. Resgate anterior **não** é reversível por essa ação.
+3. **Disponibilizar novamente** é uma ação de organização, distinta de resgatar; move a recompensa para `Disponíveis` sem alterar saldo, créditos, registros ou custo de resgates passados. Novo resgate da mesma recompensa gera uma nova ocorrência e **novo débito** com custo vigente apresentado e confirmado. Não conceder resgate grátis.
+4. Histórico de resgates preserva `custoAplicado`, autor/data e vínculo com recompensa. Ao reutilizar, não substituir a ocorrência anterior; uma recompensa pode ter vários resgates legítimos.
+5. Validar saldo e autorização no servidor, com proteção contra envio duplicado e concorrência. A API atual expõe `GET /pessoas/:pessoaId/estrelas` com `resgatesRecentes` e `GET recompensas`, mas **não comprova** listagem completa nem semântica de disponibilidade pós-resgate; Arquitetura deve propor menor contrato compatível com Histórico do Módulo 04, sem expor dados infantis extras.
+6. Nenhuma recompensa é obrigatória; não associar afeto, descanso, alimentação ou cuidados básicos a pontos.
+
+**Decisão de Produto ainda necessária:** confirmar o significado das abas como estados mutuamente exclusivos do próximo resgate (proposta) versus histórico de todos os resgates independente de disponibilidade; definir quem pode disponibilizar novamente conforme autorização já existente.
+
+### Verificações para a futura esteira
+
+- Filtros por categoria, estado vazio e ausência de categoria; formulários de cadastro secundários e autorizados.
+- Transição de atividade apenas após persistência, reativação sem apagar histórico/pontos, compatibilidade com `guardados` legados, múltiplas participações legítimas e idempotência.
+- Transição de recompensa apenas após resgate persistido, novo resgate com novo débito, recuperação após falha/reenvio, concorrência e saldo não negativo.
+- Autorização/URL direta, privacidade infantil, telas 320/375/390/1280px, teclado e leitura acessível.
+- **Homologação humana continua REPROVADA até novo aceite.**
+
+**Bloqueio:** não alterar `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md` DEV-F03/DEV-F04/DEV-F06 nem iniciar implementação das transições propostas enquanto a decisão L3 não for explicitamente aprovada.
