@@ -149,3 +149,40 @@ Inspeção estática de `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/pag
 **Fonte canônica atualizada:** `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md` v1.2 (DEV-F03/F04/F06, fluxos, estados e critérios). As notas anteriores neste documento indicadas como `NEEDS_DECISION` ou `PROPOSTA` são histórico **superado somente para as duas decisões expressamente aprovadas**. Permanecem dependências de Arquitetura para modelo de estado, dados legados de Guardadas, contratos de operações de reativação, API/histórico, concorrência e idempotência. Não confundir com autorização para modificar privilégios ou descartar dados.
 
 **Arquitetura:** `ADR-013` registrada (`docs/arquitetura/DECISOES.md`) — disponibilidade separada do histórico; Guardadas retidas; reativação em `responsavel_desenvolvimento`; sem ampliar privilégio. **Próxima etapa:** `implementation-workflow` demanda `DEM-CT-20261119-001-002` e nova homologação humana. Status UX do Módulo 03 continua **REPROVADA**, mesmo com especificação e ADR aprovadas.
+
+## Nova reprovação humana — 2026-11-19: navegação estável, submenu Cadastros e categorias
+
+**Estado: REPROVADA / CORREÇÃO DE UX NECESSÁRIA.** O responsável pelo produto testou a implementação após CT-20261119-001/002 e relatou três problemas que impedem o aceite humano. **Referência do código inspecionado:** `develop` em `28c32fa4038a497fbcb74cf5ecf4047f465c5dee`. Os três ajustes abaixo são de interação/organização compatíveis com as regras funcionais v1.2 e ADR-013; não reabrir os CTs nem alterar estrelas, estado persistido ou permissões.
+
+### DEV-UX-HOM-R3-01 — Preservar aba do usuário
+
+- **Participação:** ao confirmar `Concluiu` ou `Participou` em Explorar, a atividade muda de disponibilidade e passa a Executadas **nos dados**, mas a aba **continua Explorar**. O item desaparece da lista atual, exibir feedback curto de sucesso e atualizar o saldo; não conduzir o usuário automaticamente a Executadas.
+- **Resgate:** ao confirmar resgate em Recompensas > Disponíveis, o item passa a Resgatadas **nos dados**, mas a aba continua **Disponíveis** e o saldo é atualizado; não navegar automaticamente.
+- **Disponibilização novamente:** após reativar em Executadas ou Resgatadas, manter a aba atual, removendo o item da lista atual e indicando sucesso. O usuário pode mudar de aba voluntariamente.
+- **Cadastro secundário:** ao criar uma brincadeira/recompensa, não alterar automaticamente o filtro/aba da página cotidiana; dar confirmação e preservar rota/modal de cadastro. Evitar navegação surpresa.
+- **Código verificado:** `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx` contém `setFiltro("executadas")` após registrar, `setFiltroRecompensa("resgatadas")` após resgate e mudanças análogas após reativar/criar. Corrigir a atualização da lista ativa (refetch ou atualização de cache) **sem** forçar `setFiltro`/`setFiltroRecompensa`. Tratar estado vazio sem mover o usuário.
+- **Aceite:** conservar aba, scroll/foco quando viável, sem item com estado anterior; sucesso só após persistência e sem duplicaçōes.
+
+### DEV-UX-HOM-R3-02 — Cadastros no menu lateral contextual
+
+- O destino **Cadastros** deve ser **submenu lateral sob Desenvolvimento**, usando o mesmo AppShell/Drawer global (inclusive em celular). Oferece `Nova brincadeira` e `Nova recompensa` e seus formulários em rotas/visões secundárias; **não** em accordions ou cartões na página de brincar/resgatar.
+- Não introduzir gestão familiar em Desenvolvimento, nem um segundo menu de navegação dentro da página. **Somente renderizar destino e ações com autorização real de organização**; a API deve validar as operações independentemente da navegação.
+- **Código verificado:** `navegacao-app.tsx` inclui apenas entrada simples Desenvolvimento; `desenvolvimento/page.tsx` ainda contém formulários `Cadastros · Nova brincadeira` e `Cadastros · Nova recompensa`.
+- **Aceite:** no desktop e Drawer mobile, submenu contextual coerente; usuário sem organização vê somente a experiência cotidiana; URL direta bloqueada em operação não autorizada; sem reintroduzir duplicação de formulários.
+
+### DEV-UX-HOM-R3-03 — Categorias operacionais na biblioteca e no cadastro
+
+- Expor **filtro/agrupamento visível** de categorias na tela Explorar, com opção **Todas**, sem páginas redundantes. Rótulos amigáveis reaproveitando os códigos atuais: `raciocinio` (Raciocínio lógico), `coordenacao` (Coordenação motora), `memoria_atencao` (Memória e atenção), `linguagem` (Linguagem), `criatividade` (Criatividade), `autonomia` (Autonomia).
+- No formulário **Nova brincadeira**, oferecer `Select` de categoria (opcional conforme DEV-F02), preservando categoria no envio e na leitura. A escolha não altera pontuação, só classificação. Brincadeiras sem categoria ficam visíveis em Todas. Não criar CRUD de categorias nem novo enum por especulação.
+- **Código verificado:** `desenvolvimento/page.tsx` apresenta categoria no cartão, mas não possui filtro visível; criação envia `nome`, `dificuldade`, `instrucao` sem `categoria`. O backend já oferece validação de categorias e parâmetro de filtro; reconciliar DTO/contrato real antes de alterar.
+- **Aceite:** filtrar realmente os itens, inclusive ao retornar às abas; categoria selecionada fica persistida e é exibida, vazio/erro coerentes; sem filtro clínico ou obrigação adicional.
+
+### Plano pequeno de execução
+
+1. Triar como **correção UX delimitada**, priorizando preservar abas e atualizações de estado sem regressão da ADR-013.
+2. Ajustar a navegação lateral e mover formulários existentes, sem criar funcionalidades novas.
+3. Conectar categoria existente ao filtro e à criação, reutilizando APIs/códigos vigentes.
+4. Verificar com `quality-gate` e `verifier`: sessão/URL direta, permissão de gestão, transição das listas, idempotência e saldo, mobile/desktop (320/375/390/1280), acessibilidade e retorno de rede; evidências reais.
+5. **Manter homologação humana do Módulo 03 REPROVADA até novo teste e aceite expresso.** A primeira revisão transversal de UX permanece homologada somente no escopo próprio.
+
+**Separação de autoridades:** não alterar DEV-F03/F04/F06, ADR-013 ou autorizações por estética. Se aparecer contrato ausente que exija alteração funcional, escalar pontualmente a Produto e Arquitetura, sem bloquear os demais ajustes.

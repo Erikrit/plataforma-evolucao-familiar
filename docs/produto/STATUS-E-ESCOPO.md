@@ -105,3 +105,9 @@ O repositório é público. Não incluir imagens de crianças, prescrições, ex
 
 **Arquitetura (2026-11-19):** `ADR-013` registrada em `docs/arquitetura/DECISOES.md` e refletida em `ARQUITETURA.md`.  
 **Implementação técnica (2026-11-19):** demanda `DEM-CT-20261119-001-002` **COMPLETED** na esteira (QG-1/2/3 + verifier PASS; evidência `docs/esteira/estado/evidencia-ct-dl-exec-rec-20261119.json`). Código local ainda **sem commit**. Homologação humana do Módulo 03 permanece **PENDING_HUMAN** / UX **REPROVADA** até novo aceite.
+
+## Nova reprovação humana — Módulo 03, revisão de UX R3 (2026-11-19)
+
+**Status: REPROVADA / NÃO HOMOLOGADA.** Após implementação de Executadas/Resgatadas, o responsável pelo produto identificou: (1) troca indevida de aba depois de marcar brincadeira ou resgatar recompensa — apenas o item deve mudar de lista; (2) Cadastros não foi convertido em submenu do menu lateral contextual; (3) categorias de desenvolvimento não foram disponibilizadas como filtro/campo de criação. **Inspeção de código:** `develop` no commit `28c32fa4038a497fbcb74cf5ecf4047f465c5dee` confirma seleções automáticas de abas, formulário de cadastros na página e ausência de filtro de categorias. Os mecanismos existentes de estados persistidos e dados funcionais não são revogados pela reprovação da UX.
+
+**Correção:** ver `docs/ux-ui/REVISAO-MODULO-03.md`, IDs `DEV-UX-HOM-R3-01..03`. São correções de interação e navegação, preservando DEV-F03/F04/F06 v1.2 e ADR-013. A tarefa técnica só poderá ser declarada pronta após testes; aceite humano exige nova avaliação. Primeira homologação transversal UX continua homologada no escopo próprio; pendências administrativas do Módulo 01 seguem adiadas.
