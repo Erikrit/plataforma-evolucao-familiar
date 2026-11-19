@@ -101,7 +101,10 @@ try {
   });
 
   const catalogo = await json(
-    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, { headers: h }),
+    await fetch(
+      `${base}/pessoas/${laurinha.id}/desafios?disponibilidade=explorar`,
+      { headers: h },
+    ),
   );
   const comCategoria = (catalogo.corpo?.desafios ?? []).find(
     (d) => typeof d.categoria === "string" && d.categoria.trim().length > 0,

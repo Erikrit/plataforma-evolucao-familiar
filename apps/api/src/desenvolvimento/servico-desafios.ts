@@ -40,12 +40,16 @@ export class ServicoDesafios {
 
   /**
    * Biblioteca curada + personalizadas da família (DEV-F01).
-   * Inclui flag `guardado` por pessoa (DEV-F03).
+   * Flags `guardado` (retenção) e disponibilidade Explorar/Executadas (ADR-013).
    */
   async listarParaPessoa(
     pessoaId: string,
     usuario: UsuarioAutenticado,
-    filtro?: { categoria?: string; apenasGuardados?: boolean },
+    filtro?: {
+      categoria?: string;
+      apenasGuardados?: boolean;
+      disponibilidade?: "explorar" | "executadas";
+    },
   ) {
     const pessoa = await this.exigirDesenvolvimento(pessoaId, usuario);
     const categoria = filtro?.categoria?.trim();
@@ -53,11 +57,45 @@ export class ServicoDesafios {
       return { pessoaId: pessoa.id, total: 0, desafios: [] as const };
     }
 
-    const guardados = await this.prisma.desafioGuardado.findMany({
-      where: { pessoaId: pessoa.id },
-      select: { desafioId: true },
-    });
+    const [guardados, disponibilidades, ultimasParticipacoes] =
+      await Promise.all([
+        this.prisma.desafioGuardado.findMany({
+          where: { pessoaId: pessoa.id },
+          select: { desafioId: true },
+        }),
+        this.prisma.disponibilidadeDesafio.findMany({
+          where: { pessoaId: pessoa.id },
+          select: {
+            desafioId: true,
+            disponivelParaNovaParticipacao: true,
+            atualizadoEm: true,
+          },
+        }),
+        this.prisma.participacaoDesafio.findMany({
+          where: { pessoaId: pessoa.id, versaoAtiva: true },
+          orderBy: [{ registradoEm: "desc" }, { id: "desc" }],
+          select: {
+            id: true,
+            desafioId: true,
+            resultado: true,
+            registradoEm: true,
+            estrelasConcedidas: true,
+          },
+        }),
+      ]);
     const idsGuardados = new Set(guardados.map((g) => g.desafioId));
+    const mapaDisponibilidade = new Map(
+      disponibilidades.map((d) => [d.desafioId, d]),
+    );
+    const mapaUltimaParticipacao = new Map<
+      string,
+      (typeof ultimasParticipacoes)[number]
+    >();
+    for (const p of ultimasParticipacoes) {
+      if (!mapaUltimaParticipacao.has(p.desafioId)) {
+        mapaUltimaParticipacao.set(p.desafioId, p);
+      }
+    }
 
     const desafios = await this.prisma.desafio.findMany({
       where: {
@@ -89,10 +127,39 @@ export class ServicoDesafios {
       },
     });
 
-    const lista = desafios.map((d) => ({
-      ...d,
-      guardado: idsGuardados.has(d.id),
-    }));
+    const lista = desafios
+      .map((d) => {
+        const row = mapaDisponibilidade.get(d.id);
+        const ultima = mapaUltimaParticipacao.get(d.id) ?? null;
+        const disponivelParaNovaParticipacao = row
+          ? row.disponivelParaNovaParticipacao
+          : !ultima;
+        return {
+          ...d,
+          guardado: idsGuardados.has(d.id),
+          disponivelParaNovaParticipacao,
+          estadoDisponibilidade: disponivelParaNovaParticipacao
+            ? ("explorar" as const)
+            : ("executadas" as const),
+          ultimaParticipacao: ultima
+            ? {
+                id: ultima.id,
+                resultado: ultima.resultado,
+                registradoEm: ultima.registradoEm,
+                estrelasConcedidas: ultima.estrelasConcedidas,
+              }
+            : null,
+        };
+      })
+      .filter((d) => {
+        if (filtro?.disponibilidade === "explorar") {
+          return d.disponivelParaNovaParticipacao;
+        }
+        if (filtro?.disponibilidade === "executadas") {
+          return !d.disponivelParaNovaParticipacao;
+        }
+        return true;
+      });
 
     return {
       pessoaId: pessoa.id,
@@ -108,6 +175,7 @@ export class ServicoDesafios {
       pessoaId?: string;
       categoria?: string;
       apenasGuardados?: boolean;
+      disponibilidade?: "explorar" | "executadas";
     },
   ) {
     const pessoaId = (filtro.pessoaId ?? "").trim();
@@ -119,6 +187,7 @@ export class ServicoDesafios {
     return this.listarParaPessoa(pessoaId, usuario, {
       categoria: filtro.categoria,
       apenasGuardados: filtro.apenasGuardados,
+      disponibilidade: filtro.disponibilidade,
     });
   }
 
@@ -265,7 +334,62 @@ export class ServicoDesafios {
     });
   }
 
-  /** DEV-F03 — marcar como guardada, sem prazo. */
+  /**
+   * CT-20261119-001 / ADR-013 — reabre Explorar sem criar participação/estrelas.
+   * Gate: responsavel_desenvolvimento (organização).
+   */
+  async disponibilizarNovamente(
+    pessoaId: string,
+    desafioId: string,
+    usuario: UsuarioAutenticado,
+  ) {
+    const pessoa = await this.exigirOrganizacaoDesenvolvimento(
+      pessoaId,
+      usuario,
+    );
+    await this.exigirDesafioVisivel(desafioId, pessoa.familiaId);
+
+    const disponivelAgora = await this.calcularDisponibilidade(
+      pessoa.id,
+      desafioId,
+    );
+    if (disponivelAgora) {
+      return {
+        pessoaId: pessoa.id,
+        desafioId,
+        disponivelParaNovaParticipacao: true,
+        estadoDisponibilidade: "explorar" as const,
+        jaEstavaDisponivel: true,
+      };
+    }
+
+    const atualizado = await this.prisma.disponibilidadeDesafio.upsert({
+      where: {
+        pessoaId_desafioId: { pessoaId: pessoa.id, desafioId },
+      },
+      create: {
+        pessoaId: pessoa.id,
+        desafioId,
+        disponivelParaNovaParticipacao: true,
+        atualizadoPorId: usuario.id,
+      },
+      update: {
+        disponivelParaNovaParticipacao: true,
+        atualizadoPorId: usuario.id,
+      },
+    });
+
+    return {
+      pessoaId: pessoa.id,
+      desafioId,
+      disponivelParaNovaParticipacao: true,
+      estadoDisponibilidade: "explorar" as const,
+      jaEstavaDisponivel: false,
+      atualizadoEm: atualizado.atualizadoEm,
+    };
+  }
+
+  /** Retenção/compatibilidade — marcar como guardada, sem prazo. */
   async guardar(
     pessoaId: string,
     desafioId: string,
@@ -316,6 +440,48 @@ export class ServicoDesafios {
       desafioId,
       guardado: false,
     };
+  }
+
+  async calcularDisponibilidade(
+    pessoaId: string,
+    desafioId: string,
+  ): Promise<boolean> {
+    const row = await this.prisma.disponibilidadeDesafio.findUnique({
+      where: {
+        pessoaId_desafioId: { pessoaId, desafioId },
+      },
+      select: { disponivelParaNovaParticipacao: true },
+    });
+    if (row) return row.disponivelParaNovaParticipacao;
+    const temParticipacaoAtiva = await this.prisma.participacaoDesafio.findFirst(
+      {
+        where: { pessoaId, desafioId, versaoAtiva: true },
+        select: { id: true },
+      },
+    );
+    return !temParticipacaoAtiva;
+  }
+
+  private async exigirOrganizacaoDesenvolvimento(
+    pessoaId: string,
+    usuario: UsuarioAutenticado,
+  ) {
+    const pessoa = await this.exigirDesenvolvimento(pessoaId, usuario);
+    const auth = await this.prisma.autorizacao.findFirst({
+      where: {
+        familiaId: pessoa.familiaId,
+        usuarioId: usuario.id,
+        ativa: true,
+        responsabilidade: "responsavel_desenvolvimento",
+        OR: [{ pessoaAlvoId: pessoa.id }, { pessoaAlvoId: null }],
+      },
+    });
+    if (!auth) {
+      throw new ForbiddenException(
+        "É necessário ser responsável de desenvolvimento para disponibilizar novamente.",
+      );
+    }
+    return pessoa;
   }
 
   private async exigirDesafioVisivel(desafioId: string, familiaId: string) {

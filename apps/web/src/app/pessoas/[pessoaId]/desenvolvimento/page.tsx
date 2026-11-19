@@ -5,6 +5,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Accordion,
+  Anchor,
   Button,
   Card,
   Container,
@@ -19,32 +20,34 @@ import {
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import {
-  criarDesafioPersonalizado,
-  criarRecompensa,
-  guardarDesafio,
-  listarDesafios,
-  listarRecompensas,
-  obterEstrelas,
-  obterMe,
-  obterPessoa,
-  registrarParticipacaoDesafio,
-  resgatarRecompensa,
-  retirarDesafioGuardado,
-  type DesafioResumo,
-  type EstrelasResumo,
-  type RecompensaResumo,
-} from "@/lib/api";
+import { useSessao } from "@/componentes/contexto-sessao";
 import {
   EstadoCarregando,
   EstadoVazio,
   MensagemFeedback,
+  mensagemErroAmigavel,
 } from "@/componentes/feedback";
 import {
   IconeBrincadeira,
   IconeConcluiu,
   IconeParticipou,
 } from "@/componentes/icones-experiencia";
+import {
+  criarDesafioPersonalizado,
+  criarRecompensa,
+  disponibilizarDesafio,
+  disponibilizarRecompensa,
+  listarDesafios,
+  listarRecompensas,
+  obterEstrelas,
+  obterPessoa,
+  registrarParticipacaoDesafio,
+  resgatarRecompensa,
+  type DesafioResumo,
+  type EstrelasResumo,
+  type RecompensaResumo,
+} from "@/lib/api";
+import { podeOrganizarDesenvolvimento } from "@/lib/rotulos-experiencia";
 
 const ROTULOS_CATEGORIA: Record<string, string> = {
   memoria_atencao: "Memória e atenção",
@@ -61,7 +64,8 @@ const ROTULOS_DIFICULDADE: Record<string, string> = {
   desafiadora: "Desafiadora",
 };
 
-type FiltroLista = "todas" | "guardadas";
+type FiltroBrincadeira = "explorar" | "executadas";
+type FiltroRecompensa = "disponiveis" | "resgatadas";
 
 function novaChaveExecucao() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -73,12 +77,14 @@ function novaChaveExecucao() {
 export default function PaginaDesenvolvimento() {
   const params = useParams<{ pessoaId: string }>();
   const router = useRouter();
-  const [autenticado, setAutenticado] = useState(false);
+  const { usuario, autorizacoes, pronto } = useSessao();
   const [nomePessoa, setNomePessoa] = useState("");
   const [desafios, setDesafios] = useState<DesafioResumo[]>([]);
   const [estrelas, setEstrelas] = useState<EstrelasResumo | null>(null);
   const [recompensas, setRecompensas] = useState<RecompensaResumo[]>([]);
-  const [filtro, setFiltro] = useState<FiltroLista>("todas");
+  const [filtro, setFiltro] = useState<FiltroBrincadeira>("explorar");
+  const [filtroRecompensa, setFiltroRecompensa] =
+    useState<FiltroRecompensa>("disponiveis");
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(true);
@@ -86,7 +92,7 @@ export default function PaginaDesenvolvimento() {
   const [observacao, setObservacao] = useState("");
   const [chaveExecucao, setChaveExecucao] = useState(novaChaveExecucao);
   const [registrando, setRegistrando] = useState(false);
-  const [alternandoGuardado, setAlternandoGuardado] = useState(false);
+  const [disponibilizando, setDisponibilizando] = useState(false);
   const [nomeNova, setNomeNova] = useState("");
   const [dificuldadeNova, setDificuldadeNova] = useState("simples");
   const [instrucaoNova, setInstrucaoNova] = useState("");
@@ -95,41 +101,54 @@ export default function PaginaDesenvolvimento() {
   const [custoRecompensa, setCustoRecompensa] = useState<number | string>(5);
   const [enviandoRecompensa, setEnviandoRecompensa] = useState(false);
   const [resgatandoId, setResgatandoId] = useState<string | null>(null);
+  const [disponibilizandoRecId, setDisponibilizandoRecId] = useState<
+    string | null
+  >(null);
+  const [confirmacaoResgate, setConfirmacaoResgate] =
+    useState<RecompensaResumo | null>(null);
   const ehCelular = useMediaQuery("(max-width: 47.99em)", true);
 
+  const podeOrganizar = podeOrganizarDesenvolvimento(
+    params.pessoaId,
+    usuario?.pessoa.id,
+    autorizacoes,
+  );
+
   const carregarDesafios = useCallback(
-    async (pessoaId: string, apenasGuardados: boolean) => {
-      const lista = await listarDesafios(pessoaId, {
-        guardados: apenasGuardados || undefined,
-      });
+    async (pessoaId: string, disponibilidade: FiltroBrincadeira) => {
+      const lista = await listarDesafios(pessoaId, { disponibilidade });
       setDesafios(lista.desafios);
     },
     [],
   );
 
-  const carregarSaldoERecompensas = useCallback(async (pessoaId: string) => {
-    const [saldo, lista] = await Promise.all([
-      obterEstrelas(pessoaId),
-      listarRecompensas(pessoaId),
-    ]);
-    setEstrelas(saldo);
-    setRecompensas(lista.filter((r) => r.ativa));
-  }, []);
+  const carregarSaldoERecompensas = useCallback(
+    async (pessoaId: string, disponibilidade: FiltroRecompensa) => {
+      const [saldo, lista] = await Promise.all([
+        obterEstrelas(pessoaId),
+        listarRecompensas(pessoaId, { disponibilidade }),
+      ]);
+      setEstrelas(saldo);
+      setRecompensas(lista.filter((r) => r.ativa !== false));
+    },
+    [],
+  );
 
   useEffect(() => {
+    if (!pronto) return;
     void (async () => {
       setCarregando(true);
       setErro(null);
       try {
-        const me = await obterMe();
-        if (!me) {
-          setAutenticado(false);
+        if (!usuario) {
           setErro("Entre na página inicial para ver o desenvolvimento.");
+          setDesafios([]);
+          setEstrelas(null);
+          setRecompensas([]);
           return;
         }
-        setAutenticado(true);
         const perfil = (await obterPessoa(
-          me.pessoa.familiaId,
+          usuario.pessoa.familiaId,
           params.pessoaId,
         )) as { nome: string; areas?: { id: string; disponivel: boolean }[] };
         setNomePessoa(perfil.nome);
@@ -142,12 +161,11 @@ export default function PaginaDesenvolvimento() {
           return;
         }
         await Promise.all([
-          carregarDesafios(params.pessoaId, filtro === "guardadas"),
-          carregarSaldoERecompensas(params.pessoaId),
+          carregarDesafios(params.pessoaId, filtro),
+          carregarSaldoERecompensas(params.pessoaId, filtroRecompensa),
         ]);
       } catch (e) {
-        const msg =
-          e instanceof Error ? e.message : "Não foi possível carregar";
+        const msg = mensagemErroAmigavel(e, "Não foi possível carregar");
         setErro(
           msg.toLowerCase().includes("acesso")
             ? msg.startsWith("Acesso")
@@ -163,25 +181,29 @@ export default function PaginaDesenvolvimento() {
       }
     })();
   }, [
+    pronto,
+    usuario,
     params.pessoaId,
     filtro,
+    filtroRecompensa,
     carregarDesafios,
     carregarSaldoERecompensas,
   ]);
 
   const podeVer =
-    autenticado && !carregando && !erro?.startsWith("Acesso");
+    Boolean(usuario) && !carregando && !erro?.startsWith("Acesso");
 
   const tituloLista = useMemo(
     () =>
-      filtro === "guardadas"
-        ? "Guardadas para depois"
-        : "Brincadeiras disponíveis",
+      filtro === "executadas"
+        ? "Brincadeiras executadas"
+        : "Brincadeiras para explorar",
     [filtro],
   );
 
   async function aoCriar(evento: FormEvent) {
     evento.preventDefault();
+    if (!podeOrganizar) return;
     if (!nomeNova.trim()) {
       setErro("Informe o nome da brincadeira.");
       return;
@@ -199,9 +221,10 @@ export default function PaginaDesenvolvimento() {
       setInstrucaoNova("");
       setDificuldadeNova("simples");
       setSucesso("Brincadeira salva.");
-      await carregarDesafios(params.pessoaId, filtro === "guardadas");
+      setFiltro("explorar");
+      await carregarDesafios(params.pessoaId, "explorar");
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível salvar");
+      setErro(mensagemErroAmigavel(e, "Não foi possível salvar"));
     } finally {
       setEnviandoCriacao(false);
     }
@@ -209,6 +232,7 @@ export default function PaginaDesenvolvimento() {
 
   async function aoCriarRecompensa(evento: FormEvent) {
     evento.preventDefault();
+    if (!podeOrganizar) return;
     const custo = Number(custoRecompensa);
     if (!nomeRecompensa.trim()) {
       setErro("Informe o nome da recompensa.");
@@ -229,56 +253,78 @@ export default function PaginaDesenvolvimento() {
       setNomeRecompensa("");
       setCustoRecompensa(5);
       setSucesso("Recompensa adicionada.");
-      await carregarSaldoERecompensas(params.pessoaId);
+      setFiltroRecompensa("disponiveis");
+      await carregarSaldoERecompensas(params.pessoaId, "disponiveis");
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível salvar");
+      setErro(mensagemErroAmigavel(e, "Não foi possível salvar"));
     } finally {
       setEnviandoRecompensa(false);
     }
   }
 
-  async function aoResgatar(recompensa: RecompensaResumo) {
+  async function confirmarResgate() {
+    if (!confirmacaoResgate || resgatandoId) return;
+    const recompensa = confirmacaoResgate;
     setResgatandoId(recompensa.id);
     setErro(null);
     setSucesso(null);
     try {
-      await resgatarRecompensa(params.pessoaId, recompensa.id);
+      await resgatarRecompensa(
+        params.pessoaId,
+        recompensa.id,
+        novaChaveExecucao(),
+      );
       setSucesso(
         `Resgate de “${recompensa.nome}” confirmado (−${recompensa.custo} estrelas).`,
       );
-      await carregarSaldoERecompensas(params.pessoaId);
+      setConfirmacaoResgate(null);
+      setFiltroRecompensa("resgatadas");
+      await carregarSaldoERecompensas(params.pessoaId, "resgatadas");
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível resgatar");
+      setErro(mensagemErroAmigavel(e, "Não foi possível resgatar"));
     } finally {
       setResgatandoId(null);
     }
   }
 
-  async function aoAlternarGuardado() {
-    if (!selecionado) return;
-    setAlternandoGuardado(true);
+  async function aoDisponibilizarRecompensa(recompensa: RecompensaResumo) {
+    if (!podeOrganizar || disponibilizandoRecId) return;
+    setDisponibilizandoRecId(recompensa.id);
     setErro(null);
     setSucesso(null);
     try {
-      if (selecionado.guardado) {
-        await retirarDesafioGuardado(params.pessoaId, selecionado.id);
-        setSucesso("Retirada das guardadas.");
-        setSelecionado({ ...selecionado, guardado: false });
-      } else {
-        await guardarDesafio(params.pessoaId, selecionado.id);
-        setSucesso("Guardada para depois — sem prazo.");
-        setSelecionado({ ...selecionado, guardado: true });
-      }
-      await carregarDesafios(params.pessoaId, filtro === "guardadas");
+      await disponibilizarRecompensa(params.pessoaId, recompensa.id);
+      setSucesso(`“${recompensa.nome}” disponível para novo resgate.`);
+      setFiltroRecompensa("disponiveis");
+      await carregarSaldoERecompensas(params.pessoaId, "disponiveis");
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "Não foi possível atualizar");
+      setErro(mensagemErroAmigavel(e, "Não foi possível disponibilizar"));
     } finally {
-      setAlternandoGuardado(false);
+      setDisponibilizandoRecId(null);
+    }
+  }
+
+  async function aoDisponibilizarDesafio() {
+    if (!selecionado || !podeOrganizar || disponibilizando) return;
+    setDisponibilizando(true);
+    setErro(null);
+    setSucesso(null);
+    try {
+      await disponibilizarDesafio(params.pessoaId, selecionado.id);
+      setSucesso(`“${selecionado.nome}” voltou para Explorar.`);
+      setSelecionado(null);
+      setFiltro("explorar");
+      await carregarDesafios(params.pessoaId, "explorar");
+    } catch (e) {
+      setErro(mensagemErroAmigavel(e, "Não foi possível disponibilizar"));
+    } finally {
+      setDisponibilizando(false);
     }
   }
 
   async function aoRegistrar(resultado: "concluiu" | "participou") {
-    if (!selecionado) return;
+    if (!selecionado || registrando) return;
+    const nomeBrincadeira = selecionado.nome;
     setRegistrando(true);
     setErro(null);
     setSucesso(null);
@@ -290,20 +336,26 @@ export default function PaginaDesenvolvimento() {
         execucaoChave: chaveExecucao,
       });
       const verbo = resultado === "concluiu" ? "Concluiu" : "Participou";
+      const estrelasTxt =
+        registro.estrelasConcedidas === 1
+          ? "1 estrela"
+          : `${registro.estrelasConcedidas} estrelas`;
       setSucesso(
         registro.idempotente
-          ? `${verbo}: já estava registrado (+${registro.estrelasConcedidas} estrelas).`
-          : `${verbo}: +${registro.estrelasConcedidas} estrelas. Saldo: ${registro.saldoAtual}.`,
+          ? `${verbo} “${nomeBrincadeira}”: já estava registrado (+${estrelasTxt}).`
+          : `${verbo} “${nomeBrincadeira}”: +${estrelasTxt}. Saldo: ${registro.saldoAtual}.`,
       );
       setObservacao("");
       setChaveExecucao(novaChaveExecucao());
       setSelecionado(null);
-      await carregarSaldoERecompensas(params.pessoaId);
+      setFiltro("executadas");
+      await Promise.all([
+        carregarDesafios(params.pessoaId, "executadas"),
+        carregarSaldoERecompensas(params.pessoaId, filtroRecompensa),
+      ]);
     } catch (e) {
       setErro(
-        e instanceof Error
-          ? e.message
-          : "Não foi possível registrar. Tente de novo.",
+        mensagemErroAmigavel(e, "Não foi possível registrar. Tente de novo."),
       );
     } finally {
       setRegistrando(false);
@@ -318,19 +370,30 @@ export default function PaginaDesenvolvimento() {
     setSucesso(null);
   }
 
-  const semSessao = !carregando && !autenticado;
+  const semSessao = pronto && !carregando && !usuario;
   const saldo = estrelas?.saldoDisponivel ?? 0;
 
   return (
     <Container component="main" size="sm" px={0}>
       <Stack gap="lg">
-        <Stack gap={4}>
-          <Title order={1}>
+        <Group justify="space-between" align="flex-end" wrap="nowrap" gap="sm">
+          <Title order={1} style={{ flex: 1 }}>
             Desenvolvimento{nomePessoa ? ` · ${nomePessoa}` : ""}
           </Title>
-        </Stack>
+          {podeVer && estrelas ? (
+            <Text
+              size="sm"
+              fw={600}
+              c="azul"
+              aria-live="polite"
+              style={{ whiteSpace: "nowrap" }}
+            >
+              ★ {saldo}
+            </Text>
+          ) : null}
+        </Group>
 
-        {carregando ? (
+        {!pronto || carregando ? (
           <EstadoCarregando rotulo="Carregando brincadeiras…" />
         ) : null}
 
@@ -347,10 +410,10 @@ export default function PaginaDesenvolvimento() {
             <SegmentedControl
               fullWidth
               value={filtro}
-              onChange={(v) => setFiltro(v as FiltroLista)}
+              onChange={(v) => setFiltro(v as FiltroBrincadeira)}
               data={[
-                { label: "Explorar", value: "todas" },
-                { label: "Guardadas", value: "guardadas" },
+                { label: "Explorar", value: "explorar" },
+                { label: "Executadas", value: "executadas" },
               ]}
             />
 
@@ -359,14 +422,16 @@ export default function PaginaDesenvolvimento() {
               {desafios.length === 0 ? (
                 <EstadoVazio
                   titulo={
-                    filtro === "guardadas"
-                      ? "Nenhuma guardada"
-                      : "Nenhuma brincadeira ainda"
+                    filtro === "executadas"
+                      ? "Nenhuma executada ainda"
+                      : "Nenhuma brincadeira disponível"
                   }
                   descricao={
-                    filtro === "guardadas"
-                      ? "Toque em Guardar numa brincadeira para vê-la aqui. Sem prazos."
-                      : "Crie uma ou aguarde a biblioteca da família."
+                    filtro === "executadas"
+                      ? "Depois de registrar uma participação, ela aparece aqui."
+                      : podeOrganizar
+                        ? "Crie uma ou aguarde a biblioteca da família."
+                        : "Quando houver brincadeiras disponíveis, elas aparecem aqui."
                   }
                 />
               ) : (
@@ -398,13 +463,13 @@ export default function PaginaDesenvolvimento() {
                           {desafio.categoria
                             ? ` · ${ROTULOS_CATEGORIA[desafio.categoria] ?? desafio.categoria}`
                             : ""}
-                          {desafio.guardado ? " · Guardada" : ""}
                           {desafio.origem === "personalizada"
                             ? " · Sua família"
                             : ""}
-                        </Text>
-                        <Text size="sm" c="azul">
-                          Abrir
+                          {filtro === "executadas" &&
+                          desafio.ultimaParticipacao
+                            ? ` · Última: ${desafio.ultimaParticipacao.resultado}`
+                            : ""}
                         </Text>
                       </Stack>
                     </Group>
@@ -413,153 +478,210 @@ export default function PaginaDesenvolvimento() {
               )}
             </Stack>
 
-            <Card withBorder padding="md" radius="md">
-              <Stack gap="xs">
-                <Text fw={600}>Estrelas</Text>
-                <Text size="xl" fw={700}>
-                  {saldo}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  Disponíveis · conquistadas {estrelas?.totalConquistado ?? 0} ·
-                  usadas {estrelas?.totalResgatado ?? 0}
-                </Text>
-              </Stack>
-            </Card>
-
-            <Card
-              component={Link}
-              href={`/pessoas/${params.pessoaId}/historico`}
-              withBorder
-              padding="md"
-              radius="md"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <Text fw={600}>Ver evolução no histórico</Text>
-              <Text size="sm" c="dimmed">
-                Linha do tempo familiar — sem segundo cadastro.
-              </Text>
-              <Text size="sm" c="azul">
-                Abrir histórico
-              </Text>
-            </Card>
-
             <Accordion variant="contained" radius="md">
-              <Accordion.Item value="criar">
-                <Accordion.Control>
-                  <Text fw={600}>Nova brincadeira</Text>
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <form onSubmit={aoCriar}>
-                    <Stack gap="sm">
-                      <TextInput
-                        label="Nome"
-                        description="Obrigatório"
-                        value={nomeNova}
-                        onChange={(e) => setNomeNova(e.currentTarget.value)}
-                        required
-                      />
-                      <SegmentedControl
-                        fullWidth
-                        value={dificuldadeNova}
-                        onChange={setDificuldadeNova}
-                        data={[
-                          { label: "Simples", value: "simples" },
-                          { label: "Média", value: "media" },
-                          { label: "Desafiadora", value: "desafiadora" },
-                        ]}
-                      />
-                      <Textarea
-                        label="Como brincar"
-                        description="Opcional"
-                        value={instrucaoNova}
-                        onChange={(e) =>
-                          setInstrucaoNova(e.currentTarget.value)
-                        }
-                        minRows={2}
-                        autosize
-                      />
-                      <Button type="submit" loading={enviandoCriacao}>
-                        Salvar brincadeira
-                      </Button>
-                    </Stack>
-                  </form>
-                </Accordion.Panel>
-              </Accordion.Item>
-
               <Accordion.Item value="recompensas">
                 <Accordion.Control>
                   <Text fw={600}>Recompensas</Text>
                 </Accordion.Control>
                 <Accordion.Panel>
                   <Stack gap="md">
-                    <form onSubmit={aoCriarRecompensa}>
-                      <Stack gap="sm">
-                        <TextInput
-                          label="Nome"
-                          description="Opcional criar — só nome e custo"
-                          value={nomeRecompensa}
-                          onChange={(e) =>
-                            setNomeRecompensa(e.currentTarget.value)
-                          }
-                        />
-                        <NumberInput
-                          label="Custo em estrelas"
-                          min={1}
-                          step={1}
-                          value={custoRecompensa}
-                          onChange={setCustoRecompensa}
-                        />
-                        <Button type="submit" loading={enviandoRecompensa}>
-                          Adicionar recompensa
-                        </Button>
-                      </Stack>
-                    </form>
-
+                    <SegmentedControl
+                      fullWidth
+                      value={filtroRecompensa}
+                      onChange={(v) =>
+                        setFiltroRecompensa(v as FiltroRecompensa)
+                      }
+                      data={[
+                        { label: "Disponíveis", value: "disponiveis" },
+                        { label: "Resgatadas", value: "resgatadas" },
+                      ]}
+                    />
                     {recompensas.length === 0 ? (
                       <EstadoVazio
-                        titulo="Nenhuma recompensa ainda"
-                        descricao="Quando quiser, crie uma com nome e custo. Não é obrigatório."
+                        titulo={
+                          filtroRecompensa === "resgatadas"
+                            ? "Nenhuma resgatada"
+                            : "Nenhuma disponível"
+                        }
+                        descricao={
+                          filtroRecompensa === "resgatadas"
+                            ? "Resgates confirmados aparecem aqui."
+                            : podeOrganizar
+                              ? "Opcional. Cadastre abaixo se a família quiser."
+                              : "Opcional — nada a resgatar por enquanto."
+                        }
                       />
                     ) : (
                       recompensas.map((r) => {
                         const insuficiente = saldo < r.custo;
+                        const confirmando = confirmacaoResgate?.id === r.id;
+                        const emDisponiveis = filtroRecompensa === "disponiveis";
                         return (
                           <Card key={r.id} withBorder padding="sm" radius="md">
                             <Stack gap="xs">
                               <Text fw={600}>{r.nome}</Text>
                               <Text size="sm" c="dimmed">
                                 {r.custo} estrelas
+                                {r.ultimoResgate
+                                  ? ` · Último: −${r.ultimoResgate.custoAplicado}`
+                                  : ""}
                               </Text>
-                              <Button
-                                size="sm"
-                                disabled={insuficiente}
-                                loading={resgatandoId === r.id}
-                                onClick={() => void aoResgatar(r)}
-                              >
-                                {insuficiente
-                                  ? "Saldo insuficiente"
-                                  : "Resgatar"}
-                              </Button>
+                              {emDisponiveis ? (
+                                confirmando ? (
+                                  <Stack gap="xs">
+                                    <Text size="sm">
+                                      Confirmar resgate de “{r.nome}” (−{r.custo}
+                                      )?
+                                    </Text>
+                                    <Group gap="xs">
+                                      <Button
+                                        size="sm"
+                                        loading={resgatandoId === r.id}
+                                        onClick={() => void confirmarResgate()}
+                                      >
+                                        Confirmar
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="subtle"
+                                        disabled={Boolean(resgatandoId)}
+                                        onClick={() =>
+                                          setConfirmacaoResgate(null)
+                                        }
+                                      >
+                                        Cancelar
+                                      </Button>
+                                    </Group>
+                                  </Stack>
+                                ) : (
+                                  <Button
+                                    size="sm"
+                                    disabled={insuficiente}
+                                    onClick={() => setConfirmacaoResgate(r)}
+                                  >
+                                    {insuficiente
+                                      ? "Saldo insuficiente"
+                                      : "Resgatar"}
+                                  </Button>
+                                )
+                              ) : podeOrganizar ? (
+                                <Button
+                                  size="sm"
+                                  variant="light"
+                                  loading={disponibilizandoRecId === r.id}
+                                  onClick={() =>
+                                    void aoDisponibilizarRecompensa(r)
+                                  }
+                                >
+                                  Disponibilizar novamente
+                                </Button>
+                              ) : null}
                             </Stack>
                           </Card>
                         );
                       })
                     )}
+
+                    {podeOrganizar ? (
+                      <form onSubmit={aoCriarRecompensa}>
+                        <Stack gap="sm">
+                          <Text size="sm" fw={600}>
+                            Cadastros · Nova recompensa
+                          </Text>
+                          <TextInput
+                            label="Nome"
+                            value={nomeRecompensa}
+                            onChange={(e) =>
+                              setNomeRecompensa(e.currentTarget.value)
+                            }
+                          />
+                          <NumberInput
+                            label="Custo em estrelas"
+                            min={1}
+                            step={1}
+                            value={custoRecompensa}
+                            onChange={setCustoRecompensa}
+                          />
+                          <Button type="submit" loading={enviandoRecompensa}>
+                            Adicionar recompensa
+                          </Button>
+                        </Stack>
+                      </form>
+                    ) : null}
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
+
+              {podeOrganizar ? (
+                <Accordion.Item value="criar">
+                  <Accordion.Control>
+                    <Text fw={600}>Cadastros · Nova brincadeira</Text>
+                  </Accordion.Control>
+                  <Accordion.Panel>
+                    <form onSubmit={aoCriar}>
+                      <Stack gap="sm">
+                        <TextInput
+                          label="Nome"
+                          value={nomeNova}
+                          onChange={(e) => setNomeNova(e.currentTarget.value)}
+                          required
+                        />
+                        <SegmentedControl
+                          fullWidth
+                          value={dificuldadeNova}
+                          onChange={setDificuldadeNova}
+                          data={[
+                            { label: "Simples", value: "simples" },
+                            { label: "Média", value: "media" },
+                            { label: "Desafiadora", value: "desafiadora" },
+                          ]}
+                        />
+                        <Textarea
+                          label="Como brincar"
+                          description="Opcional"
+                          value={instrucaoNova}
+                          onChange={(e) =>
+                            setInstrucaoNova(e.currentTarget.value)
+                          }
+                          minRows={2}
+                          autosize
+                        />
+                        <Button type="submit" loading={enviandoCriacao}>
+                          Salvar brincadeira
+                        </Button>
+                      </Stack>
+                    </form>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              ) : null}
             </Accordion>
+
+            <Text size="sm" c="dimmed">
+              Evolução no{" "}
+              <Anchor
+                component={Link}
+                href={`/pessoas/${params.pessoaId}/historico`}
+                size="sm"
+              >
+                histórico
+              </Anchor>
+              .
+            </Text>
           </Stack>
         ) : null}
       </Stack>
 
       <Drawer
         opened={Boolean(podeVer && selecionado)}
-        onClose={() => setSelecionado(null)}
+        onClose={() => {
+          if (!registrando) setSelecionado(null);
+        }}
         position={ehCelular ? "bottom" : "right"}
         size={ehCelular ? "auto" : "md"}
         title={selecionado?.nome ?? "Brincadeira"}
         padding="md"
+        closeOnEscape={!registrando}
+        closeOnClickOutside={!registrando}
       >
         {selecionado ? (
           <Stack gap="md" pb="md">
@@ -581,41 +703,63 @@ export default function PaginaDesenvolvimento() {
               <Text size="sm">Materiais: {selecionado.materiais}</Text>
             ) : null}
 
-            <Button
-              variant="light"
-              loading={alternandoGuardado}
-              onClick={() => void aoAlternarGuardado()}
-            >
-              {selecionado.guardado
-                ? "Retirar das guardadas"
-                : "Guardar para depois"}
-            </Button>
+            {filtro === "executadas" ||
+            selecionado.disponivelParaNovaParticipacao === false ? (
+              <>
+                {selecionado.ultimaParticipacao ? (
+                  <Text size="sm" c="dimmed">
+                    Última: {selecionado.ultimaParticipacao.resultado} ·{" "}
+                    {selecionado.ultimaParticipacao.estrelasConcedidas} estrelas
+                  </Text>
+                ) : null}
+                {podeOrganizar ? (
+                  <Button
+                    loading={disponibilizando}
+                    disabled={registrando}
+                    onClick={() => void aoDisponibilizarDesafio()}
+                  >
+                    Disponibilizar novamente
+                  </Button>
+                ) : (
+                  <Text size="sm" c="dimmed">
+                    Já registrada. Um responsável pode disponibilizar de novo.
+                  </Text>
+                )}
+              </>
+            ) : (
+              <>
+                <Textarea
+                  label="Observação"
+                  description="Opcional"
+                  value={observacao}
+                  onChange={(e) => setObservacao(e.currentTarget.value)}
+                  minRows={2}
+                  autosize
+                  disabled={registrando}
+                />
 
-            <Textarea
-              label="Observação"
-              description="Opcional"
-              value={observacao}
-              onChange={(e) => setObservacao(e.currentTarget.value)}
-              minRows={2}
-              autosize
-            />
-
+                <Button
+                  loading={registrando}
+                  leftSection={<IconeConcluiu compacto />}
+                  onClick={() => void aoRegistrar("concluiu")}
+                >
+                  Concluiu
+                </Button>
+                <Button
+                  variant="light"
+                  loading={registrando}
+                  leftSection={<IconeParticipou compacto />}
+                  onClick={() => void aoRegistrar("participou")}
+                >
+                  Participou
+                </Button>
+              </>
+            )}
             <Button
-              loading={registrando}
-              leftSection={<IconeConcluiu compacto />}
-              onClick={() => void aoRegistrar("concluiu")}
+              variant="subtle"
+              disabled={registrando || disponibilizando}
+              onClick={() => setSelecionado(null)}
             >
-              Concluiu
-            </Button>
-            <Button
-              variant="light"
-              loading={registrando}
-              leftSection={<IconeParticipou compacto />}
-              onClick={() => void aoRegistrar("participou")}
-            >
-              Participou
-            </Button>
-            <Button variant="subtle" onClick={() => setSelecionado(null)}>
               Fechar
             </Button>
           </Stack>

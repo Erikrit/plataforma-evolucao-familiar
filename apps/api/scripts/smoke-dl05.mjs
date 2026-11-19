@@ -72,7 +72,10 @@ try {
   );
 
   const desafios = await json(
-    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, { headers: h }),
+    await fetch(
+      `${base}/pessoas/${laurinha.id}/desafios?disponibilidade=explorar`,
+      { headers: h },
+    ),
   );
   reg(
     "lista-desafios-ok",
@@ -80,14 +83,27 @@ try {
     { status: desafios.status, total: desafios.corpo?.total },
   );
 
-  const primeiro = desafios.corpo?.desafios?.[0];
-  if (primeiro?.id) {
+  let desafioId = desafios.corpo?.desafios?.[0]?.id;
+  if (!desafioId) {
+    const criado = await json(
+      await fetch(`${base}/pessoas/${laurinha.id}/desafios`, {
+        method: "POST",
+        headers: h,
+        body: JSON.stringify({
+          nome: `DL05 ${Date.now()}`,
+          dificuldade: "simples",
+        }),
+      }),
+    );
+    desafioId = criado.corpo?.id;
+  }
+  if (desafioId) {
     const part = await json(
       await fetch(`${base}/pessoas/${laurinha.id}/participacoes`, {
         method: "POST",
         headers: h,
         body: JSON.stringify({
-          desafioId: primeiro.id,
+          desafioId,
           resultado: "participou",
           execucaoChave: `smoke-dl05-${randomUUID()}`,
         }),

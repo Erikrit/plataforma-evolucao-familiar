@@ -67,9 +67,25 @@ try {
   );
 
   const desafios = await json(
-    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, { headers: h }),
+    await fetch(
+      `${base}/pessoas/${laurinha.id}/desafios?disponibilidade=explorar`,
+      { headers: h },
+    ),
   );
-  const desafioId = desafios.corpo?.desafios?.[0]?.id;
+  let desafioId = desafios.corpo?.desafios?.[0]?.id;
+  if (!desafioId) {
+    const criado = await json(
+      await fetch(`${base}/pessoas/${laurinha.id}/desafios`, {
+        method: "POST",
+        headers: h,
+        body: JSON.stringify({
+          nome: `EF01 ${Date.now()}`,
+          dificuldade: "simples",
+        }),
+      }),
+    );
+    desafioId = criado.corpo?.id;
+  }
   if (!desafioId) throw new Error("sem desafio no catálogo");
 
   const part = await json(

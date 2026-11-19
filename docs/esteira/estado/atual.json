@@ -2,8 +2,8 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "2d9b7ae3a3f0c071aab6fc8a0464e1a996a86d0c",
-    "nota": "DEM-UX-HOM-20261118 COMPLETED técnico local sem commit"
+    "commit": "609829ea3a7e6a778722bd9978332879bd82470a",
+    "nota": "DEM-CT-20261119-001-002 COMPLETED técnico local sem commit"
   },
   "moduloId": "04-evolucao-familiar",
   "incrementoId": "EF-06",
@@ -122,6 +122,131 @@
     }
   ],
   "demandasConcluidas": [
+    {
+      "id": "DEM-CT-20261119-001-002",
+      "tipo": "melhoria_funcional",
+      "origem": "CT-20261119-001 + CT-20261119-002 + ESPECIFICACAO.md v1.2 + ADR-013",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "adr": "ADR-013",
+      "criteriosAceite": [
+        "DEV-F03",
+        "DEV-F04",
+        "DEV-F06",
+        "CT-20261119-001",
+        "CT-20261119-002"
+      ],
+      "criteriosOk": [
+        "DEV-F03",
+        "DEV-F04",
+        "DEV-F06",
+        "CT-20261119-001",
+        "CT-20261119-002"
+      ],
+      "criteriosFalha": [],
+      "fingerprint": "sha256:f458f5cdde9a50a4",
+      "fingerprintFull": "sha256:f458f5cdde9a50a40db8f91c397a1a34f6f2febc512e72761770da1ee3340cd3",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "qg3": "PASS",
+      "verifier": "PASS",
+      "verifierId": "422aae3f-f66c-4f49-9823-4746e0ed2739",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/evidencia-ct-dl-exec-rec-20261119.json"
+      ],
+      "arquivos": [
+        "apps/api/prisma/schema.prisma",
+        "apps/api/prisma/seed.mjs",
+        "apps/api/scripts/reset-db-local.mjs",
+        "apps/api/src/desenvolvimento/servico-desafios.ts",
+        "apps/api/src/desenvolvimento/servico-participacoes.ts",
+        "apps/api/src/desenvolvimento/servico-recompensas.ts",
+        "apps/api/src/desenvolvimento/controlador-desenvolvimento.ts",
+        "apps/api/scripts/smoke-dl-exec.mjs",
+        "apps/api/scripts/smoke-dl-rec.mjs",
+        "apps/api/scripts/smoke-dl03.mjs",
+        "apps/api/scripts/smoke-dl05.mjs",
+        "apps/api/scripts/smoke-modulo-03.mjs",
+        "apps/api/scripts/smoke-ef01.mjs",
+        "apps/api/scripts/smoke-ef02.mjs",
+        "apps/api/scripts/smoke-ef04.mjs",
+        "apps/api/scripts/smoke-ef05.mjs",
+        "apps/api/scripts/smoke-ef06.mjs",
+        "apps/api/package.json",
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+        "docs/arquitetura/DECISOES.md",
+        "docs/arquitetura/ARQUITETURA.md"
+      ],
+      "mensagemCommit": "feat(desenvolvimento): disponibilizar executadas e recompensas reativaveis\n\nImplementa ADR-013/CT-20261119-001-002: estado Explorar/Executadas e Disponíveis/Resgatadas com reativação autorizada, preservando histórico, Guardadas e idempotência de resgates.",
+      "nota": "PASS técnico INC-DL-EXEC-01..REG-04 + QG-3 modulo-03; humana PENDING_HUMAN. Authz residual seed Helena≠Vovó.",
+      "concluidaEm": "2026-11-19T17:00:03.521Z"
+    },
+    {
+      "id": "DEM-UX-DL-03-20261119",
+      "tipo": "melhoria_ux",
+      "origem": "humano + docs/ux-ui/REVISAO-MODULO-03.md + GUIA-DE-EXPERIENCIA.md § Desenvolvimento",
+      "estado": "COMPLETED",
+      "resultadoTecnico": "PASS",
+      "criteriosAceite": [
+        "UX-DL-01",
+        "UX-DL-02",
+        "UX-DL-03",
+        "UX-DL-04",
+        "UX-DL-05",
+        "UX-DL-06",
+        "DEV-F01",
+        "DEV-F02",
+        "DEV-F03",
+        "DEV-F04",
+        "DEV-F05",
+        "DEV-F06",
+        "DEV-F07"
+      ],
+      "criteriosOk": [
+        "UX-DL-01",
+        "UX-DL-02",
+        "UX-DL-03",
+        "UX-DL-04",
+        "UX-DL-05",
+        "UX-DL-06",
+        "DEV-F01",
+        "DEV-F02",
+        "DEV-F03",
+        "DEV-F04",
+        "DEV-F05",
+        "DEV-F06",
+        "DEV-F07"
+      ],
+      "criteriosFalha": [],
+      "fingerprint": "sha256:b284793cde1478f7",
+      "fingerprintFull": "sha256:b284793cde1478f711d916440b94c31740e2d140aaf7e9f1bdac5fa6c43f2567",
+      "qg1": "PASS",
+      "qg2": "PASS",
+      "qg3": "PASS",
+      "verifier": "PASS",
+      "verifierId": "5f0fd528-2614-49c0-ba3f-3edbf7564f9f",
+      "verifierNota": "generalPurpose + roteiro verifier.md (tipo verifier ausente do catálogo)",
+      "homologacaoHumana": "PENDING_HUMAN",
+      "evidencias": [
+        "docs/esteira/estado/evidencia-ux-dl03-20261119.json",
+        "docs/esteira/estado/qg1-typecheck-web-ux-dl03.txt",
+        "docs/esteira/estado/qg2-check-estatico-ux-dl03.json",
+        "docs/esteira/estado/qg2-smoke-dl02-ux-dl03.txt",
+        "docs/esteira/estado/qg2-smoke-dl03-ux-dl03.txt",
+        "docs/esteira/estado/qg2-smoke-dl04-ux-dl03.txt",
+        "docs/esteira/estado/qg2-smoke-authz-ux-dl03.txt",
+        "docs/esteira/estado/qg2-build-web-ux-dl03.txt"
+      ],
+      "arquivos": [
+        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+        "apps/web/src/lib/rotulos-experiencia.ts"
+      ],
+      "mensagemCommit": "fix(ux): alinhar Desenvolvimento à experiência única aprovada\n\nReorganiza saldo compacto, recompensas secundárias e ações de organização condicionadas à autorização, preservando DEV-F01..F07. Homologação humana permanece pendente.",
+      "nota": "PASS técnico INC1+INC2 + QG-3; humana PENDING_HUMAN.",
+      "concluidaEm": "2026-11-19T11:22:38.843Z"
+    },
     {
       "id": "DEM-UX-HOM-20261118",
       "tipo": "transversal",
@@ -611,9 +736,9 @@
       "concluidaEm": "2026-11-16T18:35:00.000Z"
     }
   ],
-  "proximaAcao": "Homologação humana UX-HOM (PENDING_HUMAN). Commit sob decisão humana. Pendência UX-HOM-02-SELETOR.",
-  "atualizadoEm": "2026-11-18T13:19:55.589Z",
-  "notas": "DEM-UX-HOM-20261118 técnico PASS; humana PENDING_HUMAN / UX REPROVADA. Achado ambient smoke:authz nome Vovó≠Helena.",
+  "proximaAcao": "Homologação humana Módulo 03 (PENDING_HUMAN). Commit sob decisão humana.",
+  "atualizadoEm": "2026-11-19T17:00:03.521Z",
+  "notas": "DEM-CT-20261119-001-002 técnico PASS (ADR-013); humana PENDING_HUMAN.",
   "decisaoPendente": {
     "id": "UX-HOM-02-SELETOR",
     "status": "NEEDS_DECISION",

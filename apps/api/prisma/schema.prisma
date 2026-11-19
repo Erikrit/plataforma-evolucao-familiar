@@ -37,6 +37,7 @@ model Pessoa {
   atividadesApoio      RegistroAtividade[]
   anexos               Anexo[]
   desafiosGuardados    DesafioGuardado[]
+  disponibilidadesDesafio DisponibilidadeDesafio[]
   participacoesDesafio ParticipacaoDesafio[]
   movimentosEstrelas   MovimentoEstrelas[]
   recompensas          Recompensa[]
@@ -58,6 +59,7 @@ model Usuario {
   convitesCriados Convite[]          @relation("ConviteCriador")
   anexosCriados   Anexo[]            @relation("AnexoCriador")
   desafiosCriados Desafio[]          @relation("DesafioCriador")
+  disponibilidadesDesafioAtualizadas DisponibilidadeDesafio[] @relation("DisponibilidadeDesafioAutor")
   participacoesRegistradas ParticipacaoDesafio[] @relation("ParticipacaoAutor")
   resgatesFeitos  ResgateRecompensa[] @relation("ResgateAutor")
 
@@ -276,8 +278,9 @@ model Desafio {
   criadoEm        DateTime            @default(now()) @map("criado_em")
   familia         Familia?            @relation(fields: [familiaId], references: [id])
   criadoPor       Usuario?            @relation("DesafioCriador", fields: [criadoPorId], references: [id])
-  guardados       DesafioGuardado[]
-  participacoes   ParticipacaoDesafio[]
+  guardados         DesafioGuardado[]
+  disponibilidades  DisponibilidadeDesafio[]
+  participacoes     ParticipacaoDesafio[]
 
   @@index([familiaId, ativo])
   @@index([origem, ativo])
@@ -285,7 +288,7 @@ model Desafio {
   @@map("desafio")
 }
 
-/// Guardar para depois, sem prazo (DEV-F03).
+/// Guardar para depois, sem prazo (retenção/compatibilidade; não é Executadas — ADR-013).
 model DesafioGuardado {
   id         String   @id @default(cuid())
   pessoaId   String   @map("pessoa_id")
@@ -297,6 +300,23 @@ model DesafioGuardado {
   @@unique([pessoaId, desafioId])
   @@index([pessoaId])
   @@map("desafio_guardado")
+}
+
+/// Estado atual Explorar/Executadas por pessoa+desafio (CT-20261119-001 / ADR-013).
+model DisponibilidadeDesafio {
+  id                              String   @id @default(cuid())
+  pessoaId                        String   @map("pessoa_id")
+  desafioId                       String   @map("desafio_id")
+  disponivelParaNovaParticipacao  Boolean  @map("disponivel_para_nova_participacao")
+  atualizadoEm                    DateTime @default(now()) @updatedAt @map("atualizado_em")
+  atualizadoPorId                 String?  @map("atualizado_por_id")
+  pessoa                          Pessoa   @relation(fields: [pessoaId], references: [id])
+  desafio                         Desafio  @relation(fields: [desafioId], references: [id])
+  atualizadoPor                   Usuario? @relation("DisponibilidadeDesafioAutor", fields: [atualizadoPorId], references: [id])
+
+  @@unique([pessoaId, desafioId])
+  @@index([pessoaId, disponivelParaNovaParticipacao])
+  @@map("disponibilidade_desafio")
 }
 
 /// Participação presencial; estrelas snapshot na própria linha (DEV-F04/F05).
@@ -344,31 +364,37 @@ model MovimentoEstrelas {
 }
 
 model Recompensa {
-  id        String              @id @default(cuid())
-  pessoaId  String              @map("pessoa_id")
-  nome      String
-  custo     Int
-  ativa     Boolean             @default(true)
-  criadoEm  DateTime            @default(now()) @map("criado_em")
-  pessoa    Pessoa              @relation(fields: [pessoaId], references: [id])
-  resgates  ResgateRecompensa[]
+  id                       String              @id @default(cuid())
+  pessoaId                 String              @map("pessoa_id")
+  nome                     String
+  custo                    Int
+  ativa                    Boolean             @default(true)
+  disponivelParaResgate    Boolean             @default(true) @map("disponivel_para_resgate")
+  geracaoDisponibilidade   Int                 @default(0) @map("geracao_disponibilidade")
+  criadoEm                 DateTime            @default(now()) @map("criado_em")
+  pessoa                   Pessoa              @relation(fields: [pessoaId], references: [id])
+  resgates                 ResgateRecompensa[]
 
   @@index([pessoaId, ativa])
+  @@index([pessoaId, disponivelParaResgate])
   @@map("recompensa")
 }
 
 model ResgateRecompensa {
-  id            String             @id @default(cuid())
-  recompensaId  String             @map("recompensa_id")
-  pessoaId      String             @map("pessoa_id")
-  custoAplicado Int                @map("custo_aplicado")
-  resgatadoPorId String            @map("resgatado_por_id")
-  resgatadoEm   DateTime           @default(now()) @map("resgatado_em")
-  recompensa    Recompensa         @relation(fields: [recompensaId], references: [id])
-  pessoa        Pessoa             @relation(fields: [pessoaId], references: [id])
-  resgatadoPor  Usuario            @relation("ResgateAutor", fields: [resgatadoPorId], references: [id])
-  movimentos    MovimentoEstrelas[]
+  id                     String             @id @default(cuid())
+  recompensaId           String             @map("recompensa_id")
+  pessoaId               String             @map("pessoa_id")
+  custoAplicado          Int                @map("custo_aplicado")
+  geracaoDisponibilidade Int                @default(0) @map("geracao_disponibilidade")
+  solicitacaoChave       String?            @unique @map("solicitacao_chave")
+  resgatadoPorId         String             @map("resgatado_por_id")
+  resgatadoEm            DateTime           @default(now()) @map("resgatado_em")
+  recompensa             Recompensa         @relation(fields: [recompensaId], references: [id])
+  pessoa                 Pessoa             @relation(fields: [pessoaId], references: [id])
+  resgatadoPor           Usuario            @relation("ResgateAutor", fields: [resgatadoPorId], references: [id])
+  movimentos             MovimentoEstrelas[]
 
+  @@unique([recompensaId, geracaoDisponibilidade])
   @@index([pessoaId, resgatadoEm])
   @@map("resgate_recompensa")
 }

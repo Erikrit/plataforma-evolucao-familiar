@@ -31,12 +31,14 @@ export class ControladorDesenvolvimento {
     @Query("pessoaId") pessoaId: string | undefined,
     @Query("categoria") categoria: string | undefined,
     @Query("guardados") guardados: string | undefined,
+    @Query("disponibilidade") disponibilidade: string | undefined,
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.desafios.listarCatalogo(requisicao.usuario!, {
       pessoaId,
       categoria,
       apenasGuardados: guardados === "1" || guardados === "true",
+      disponibilidade: this.resolverFiltroDisponibilidade(disponibilidade),
     });
   }
 
@@ -45,11 +47,13 @@ export class ControladorDesenvolvimento {
     @Param("pessoaId") pessoaId: string,
     @Query("categoria") categoria: string | undefined,
     @Query("guardados") guardados: string | undefined,
+    @Query("disponibilidade") disponibilidade: string | undefined,
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.desafios.listarParaPessoa(pessoaId, requisicao.usuario!, {
       categoria,
       apenasGuardados: guardados === "1" || guardados === "true",
+      disponibilidade: this.resolverFiltroDisponibilidade(disponibilidade),
     });
   }
 
@@ -112,6 +116,19 @@ export class ControladorDesenvolvimento {
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.desafios.alterar(desafioId, requisicao.usuario!, corpo);
+  }
+
+  @Post("pessoas/:pessoaId/desafios/:desafioId/disponibilizar")
+  disponibilizarDesafio(
+    @Param("pessoaId") pessoaId: string,
+    @Param("desafioId") desafioId: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.desafios.disponibilizarNovamente(
+      pessoaId,
+      desafioId,
+      requisicao.usuario!,
+    );
   }
 
   @Post("pessoas/:pessoaId/desafios/:desafioId/guardar")
@@ -183,9 +200,12 @@ export class ControladorDesenvolvimento {
   @Get("pessoas/:pessoaId/recompensas")
   listarRecompensas(
     @Param("pessoaId") pessoaId: string,
+    @Query("disponibilidade") disponibilidade: string | undefined,
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
-    return this.recompensas.listar(pessoaId, requisicao.usuario!);
+    return this.recompensas.listar(pessoaId, requisicao.usuario!, {
+      disponibilidade: this.resolverFiltroRecompensa(disponibilidade),
+    });
   }
 
   @Post("pessoas/:pessoaId/recompensas")
@@ -210,12 +230,46 @@ export class ControladorDesenvolvimento {
     );
   }
 
+  @Post("pessoas/:pessoaId/recompensas/:recompensaId/disponibilizar")
+  disponibilizarRecompensa(
+    @Param("pessoaId") pessoaId: string,
+    @Param("recompensaId") recompensaId: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.recompensas.disponibilizarNovamente(
+      pessoaId,
+      recompensaId,
+      requisicao.usuario!,
+    );
+  }
+
   @Post("pessoas/:pessoaId/resgates")
   resgatar(
     @Param("pessoaId") pessoaId: string,
-    @Body() corpo: { recompensaId?: string },
+    @Body()
+    corpo: { recompensaId?: string; solicitacaoChave?: string },
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.recompensas.resgatar(pessoaId, requisicao.usuario!, corpo);
+  }
+
+  private resolverFiltroDisponibilidade(
+    valor: string | undefined,
+  ): "explorar" | "executadas" | undefined {
+    const normalizado = (valor ?? "").trim().toLowerCase();
+    if (normalizado === "explorar" || normalizado === "executadas") {
+      return normalizado;
+    }
+    return undefined;
+  }
+
+  private resolverFiltroRecompensa(
+    valor: string | undefined,
+  ): "disponiveis" | "resgatadas" | undefined {
+    const normalizado = (valor ?? "").trim().toLowerCase();
+    if (normalizado === "disponiveis" || normalizado === "resgatadas") {
+      return normalizado;
+    }
+    return undefined;
   }
 }

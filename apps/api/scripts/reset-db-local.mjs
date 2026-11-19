@@ -16,6 +16,7 @@ const tabelas = [
   "movimento_estrelas",
   "resgate_recompensa",
   "participacao_desafio",
+  "disponibilidade_desafio",
   "desafio_guardado",
   "recompensa",
   "desafio",

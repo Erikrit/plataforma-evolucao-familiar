@@ -98,6 +98,16 @@ export class ServicoParticipacoes {
       });
     }
 
+    const disponivel = await this.estaDisponivelParaParticipar(
+      pessoa.id,
+      desafio.id,
+    );
+    if (!disponivel) {
+      throw new ConflictException(
+        "Brincadeira em Executadas. Disponibilize novamente antes de registrar nova participação.",
+      );
+    }
+
     try {
       const criado = await this.prisma.$transaction(async (tx) => {
         const ultimo = await tx.movimentoEstrelas.findFirst({
@@ -128,6 +138,25 @@ export class ServicoParticipacoes {
             quantidade: estrelas,
             saldoApos,
             participacaoId: participacao.id,
+          },
+        });
+
+        await tx.disponibilidadeDesafio.upsert({
+          where: {
+            pessoaId_desafioId: {
+              pessoaId: pessoa.id,
+              desafioId: desafio.id,
+            },
+          },
+          create: {
+            pessoaId: pessoa.id,
+            desafioId: desafio.id,
+            disponivelParaNovaParticipacao: false,
+            atualizadoPorId: usuario.id,
+          },
+          update: {
+            disponivelParaNovaParticipacao: false,
+            atualizadoPorId: usuario.id,
           },
         });
 
@@ -334,6 +363,26 @@ export class ServicoParticipacoes {
       idempotente: extra.idempotente,
       saldoAtual: extra.saldoAtual,
     };
+  }
+
+  private async estaDisponivelParaParticipar(
+    pessoaId: string,
+    desafioId: string,
+  ): Promise<boolean> {
+    const row = await this.prisma.disponibilidadeDesafio.findUnique({
+      where: {
+        pessoaId_desafioId: { pessoaId, desafioId },
+      },
+      select: { disponivelParaNovaParticipacao: true },
+    });
+    if (row) return row.disponivelParaNovaParticipacao;
+    const temParticipacaoAtiva = await this.prisma.participacaoDesafio.findFirst(
+      {
+        where: { pessoaId, desafioId, versaoAtiva: true },
+        select: { id: true },
+      },
+    );
+    return !temParticipacaoAtiva;
   }
 
   private async saldoAtual(pessoaId: string): Promise<number> {

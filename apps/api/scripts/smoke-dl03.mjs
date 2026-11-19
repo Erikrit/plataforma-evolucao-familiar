@@ -59,6 +59,13 @@ try {
   );
 
   const desafioId = "desafio_cat_contar_passos"; // simples
+  // Seed pode já ter deixado a brincadeira em Executadas (ADR-013).
+  await json(
+    await fetch(
+      `${base}/pessoas/${laurinha.id}/desafios/${desafioId}/disponibilizar`,
+      { method: "POST", headers: h },
+    ),
+  );
   const chave1 = `dl03-${randomUUID()}`;
 
   const p1 = await json(
@@ -99,6 +106,19 @@ try {
       reenvio.corpo?.id === p1.corpo?.id &&
       reenvio.corpo?.saldoAtual === p1.corpo?.saldoAtual,
     { id: reenvio.corpo?.id, saldo: reenvio.corpo?.saldoAtual },
+  );
+
+  const reabrir = await json(
+    await fetch(
+      `${base}/pessoas/${laurinha.id}/desafios/${desafioId}/disponibilizar`,
+      { method: "POST", headers: h },
+    ),
+  );
+  reg(
+    "disponibilizar-antes-nova-participacao",
+    reabrir.status < 300 &&
+      reabrir.corpo?.disponivelParaNovaParticipacao === true,
+    reabrir.corpo,
   );
 
   const p2 = await json(

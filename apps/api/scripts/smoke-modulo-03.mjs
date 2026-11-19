@@ -28,9 +28,11 @@ if (reset.status !== 0) {
 
 const passos = [
   { script: "smoke-dl01.mjs", label: "DEV-F01 + authz biblioteca" },
-  { script: "smoke-dl02.mjs", label: "DEV-F02/F03 personalizada+guardar" },
+  { script: "smoke-dl02.mjs", label: "DEV-F02 + guardar (retenção)" },
   { script: "smoke-dl03.mjs", label: "DEV-F04/F05 participação+estrelas" },
+  { script: "smoke-dl-exec.mjs", label: "CT-001 Explorar/Executadas" },
   { script: "smoke-dl04.mjs", label: "DEV-F06 recompensas+resgate" },
+  { script: "smoke-dl-rec.mjs", label: "CT-002 Disponíveis/Resgatadas" },
   { script: "smoke-dl05.mjs", label: "UI-contratos + histórico M04 + authz" },
 ];
 

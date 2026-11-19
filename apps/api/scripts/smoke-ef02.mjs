@@ -53,10 +53,17 @@ try {
     laurinha.id,
   );
 
-  const desafios = await json(
-    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, { headers: h }),
+  const criado = await json(
+    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, {
+      method: "POST",
+      headers: h,
+      body: JSON.stringify({
+        nome: `EF02 ${Date.now()}`,
+        dificuldade: "simples",
+      }),
+    }),
   );
-  const desafioId = desafios.corpo?.desafios?.[0]?.id;
+  const desafioId = criado.corpo?.id;
   await json(
     await fetch(`${base}/pessoas/${laurinha.id}/participacoes`, {
       method: "POST",

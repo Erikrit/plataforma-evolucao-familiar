@@ -41,13 +41,14 @@ Módulos lógicos:
 
 ### Desenvolvimento
 
-`desafio`, `desafio_guardado` (opcional), `participacao_desafio`, `movimento_estrelas`, `recompensa`, `resgate_recompensa` (a necessidade de tabela separada de resgate será revisada na modelagem final).
+`desafio`, `desafio_guardado` (retenção/compatibilidade; **não** é Executadas), `disponibilidade_desafio` (estado atual Explorar/Executadas por pessoa+desafio — **ADR-013**), `participacao_desafio`, `movimento_estrelas`, `recompensa` (com ciclo `disponivelParaResgate`/`geracaoDisponibilidade` — **ADR-013**), `resgate_recompensa` (uma ocorrência por geração + chave de solicitação idempotente).
 
-- Revisão funcional v1.1 **aprovada**: guardar atividade opcionalmente, sem planejamento semanal com prazo. Apenas Concluiu/Participou são registrados; não realizada não exige lançamento.
-- Participação e estrelas são uma transação lógica.
-- Reenvio da mesma participação não duplica pontos; execução nova legítima é permitida.
-- Resgates não podem gerar saldo negativo sob concorrência.
-- Histórico de movimentos explica saldo e preserva custos antigos.
+- Especificação funcional **v1.2** (CT-20261119-001/002): Explorar/Executadas e Disponíveis/Resgatadas são disponibilidade atual; histórico de participações/resgates permanece imutável para essa organização.
+- `desafio_guardado` preservado; não renomear nem derivar Executadas dele.
+- Participação e estrelas são uma transação lógica; participação bem-sucedida fecha disponibilidade; reativação autorizada reabre sem criar pontos.
+- Reenvio da mesma `execucaoChave` não duplica pontos; nova execução só após disponibilizar.
+- Resgates: Serializable + saldo; unique por `(recompensaId, geracaoDisponibilidade)` e `solicitacaoChave` evitam débito duplicado; disponibilizar não estorna.
+- Histórico de movimentos explica saldo e preserva custos antigos; Módulo 04 só lê origem (ADR-009).
 
 ### Acompanhamento
 

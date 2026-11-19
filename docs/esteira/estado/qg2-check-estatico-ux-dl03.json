@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "id": "UX-DL-01-sem-toggle-perfil",
+      "ok": true,
+      "detalhe": "sem seletor Integrante/Responsável"
+    },
+    {
+      "id": "UX-DL-02-organizar-com-authz",
+      "ok": true,
+      "detalhe": "criar/gerenciar condicionados a authz"
+    },
+    {
+      "id": "UX-DL-03-explorar-guardadas",
+      "ok": true,
+      "detalhe": "Explorar/Guardadas presentes"
+    },
+    {
+      "id": "UX-DL-04-concluiu-participou",
+      "ok": true,
+      "detalhe": "registro com ícones e observação opcional"
+    },
+    {
+      "id": "UX-DL-05-saldo-compacto-feedback",
+      "ok": true,
+      "detalhe": "saldo compacto + feedback pós-servidor"
+    },
+    {
+      "id": "UX-DL-06-recompensas-secundarias",
+      "ok": true,
+      "detalhe": "lista/resgate separados de cadastro; confirmação"
+    },
+    {
+      "id": "DEV-F-preservado-apis",
+      "ok": true,
+      "detalhe": "APIs e idempotência preservadas"
+    }
+  ]
+}

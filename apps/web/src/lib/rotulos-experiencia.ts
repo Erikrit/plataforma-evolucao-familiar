@@ -51,3 +51,34 @@ export function podeVerAnexosCuidados(
   if (usuarioPessoaId && usuarioPessoaId === pessoaId) return true;
   return podeGerenciarProgramacaoCuidados(pessoaId, autorizacoes);
 }
+
+/**
+ * Espelha `podeVerDesenvolvimento` do backend (própria pessoa ou
+ * responsavel_desenvolvimento). No contrato atual, ver e organizar usam a
+ * mesma responsabilidade — não inventar permissão granular.
+ */
+export function podeAcompanharDesenvolvimento(
+  pessoaId: string,
+  usuarioPessoaId: string | null | undefined,
+  autorizacoes: AutorizacaoResumo[],
+): boolean {
+  if (usuarioPessoaId && usuarioPessoaId === pessoaId) return true;
+  return autorizacoes.some(
+    (a) =>
+      a.responsabilidade === "responsavel_desenvolvimento" &&
+      (a.pessoaAlvoId === pessoaId || a.pessoaAlvoId == null),
+  );
+}
+
+/** Criar brincadeira / gerenciar recompensas — mesma authz do backend atual. */
+export function podeOrganizarDesenvolvimento(
+  pessoaId: string,
+  usuarioPessoaId: string | null | undefined,
+  autorizacoes: AutorizacaoResumo[],
+): boolean {
+  return podeAcompanharDesenvolvimento(
+    pessoaId,
+    usuarioPessoaId,
+    autorizacoes,
+  );
+}

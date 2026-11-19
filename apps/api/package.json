@@ -30,6 +30,8 @@
     "smoke:dl03": "node scripts/smoke-dl03.mjs",
     "smoke:dl04": "node scripts/smoke-dl04.mjs",
     "smoke:dl05": "node scripts/smoke-dl05.mjs",
+    "smoke:dl-exec": "node scripts/smoke-dl-exec.mjs",
+    "smoke:dl-rec": "node scripts/smoke-dl-rec.mjs",
     "smoke:modulo-03": "node scripts/smoke-modulo-03.mjs",
     "smoke:ef01": "node scripts/smoke-ef01.mjs",
     "smoke:ef02": "node scripts/smoke-ef02.mjs",

@@ -2,11 +2,55 @@
 
 Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
-## Estado atual (2026-11-18)
+## Estado atual (2026-11-19)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
+- **DEM-CT-20261119-001-002:** COMPLETED técnico PASS · ADR-013 · fingerprint em `evidencia-ct-dl-exec-rec-20261119.json` · [verifier](422aae3f-f66c-4f49-9823-4746e0ed2739); humana PENDING_HUMAN
+- **DEM-UX-DL-03-20261119:** COMPLETED técnico PASS · fingerprint `sha256:b284793cde1478f7` · [verifier](5f0fd528-2614-49c0-ba3f-3edbf7564f9f); humana PENDING_HUMAN
 - **DEM-UX-HOM-20261118:** COMPLETED técnico PASS · fingerprint `sha256:9f6ab4a42a59c149` · [verifier](e5ccff07-38c8-4231-ac68-7ff4d28d56fe); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-ESTEIRA-IW-COMMITMSG-20261118:** COMPLETED — `implementation-workflow` passa a exigir `mensagemCommit` no resumo em `COMPLETED`
+
+## 2026-11-19 — DEM-CT-20261119-001-002 COMPLETED (técnico PASS)
+
+- **Entrega:** ADR-013 — Explorar/Executadas + Disponíveis/Resgatadas; reativação `responsavel_desenvolvimento`; Guardadas retidas; idempotência/geração de resgates; UI alinhada; smokes ef01–ef06 ajustados
+- **QG-1/2/3:** PASS · Verifier PASS ([verifier](422aae3f-f66c-4f49-9823-4746e0ed2739))
+- **Evidência:** `evidencia-ct-dl-exec-rec-20261119.json`
+- **Humana:** PENDING_HUMAN (UX M03 permanece REPROVADA até novo aceite)
+- **Commit/push:** não executados
+- **Próximo:** homologação humana do Módulo 03
+
+## 2026-11-19 — Triagem + Arquitetura DEM-CT-20261119-001-002 (READY)
+
+- **Tipo:** melhoria_funcional (impacto M03; regressão leve M04)
+- **Origem:** CT-20261119-001/002 APROVADAS/DOCUMENTADAS · ESPECIFICACAO v1.2 · pedido Arquitetura
+- **Aprovação:** L3 Produto DOCUMENTADA; ADR-013 Arquitetura registrada
+- **Escopo arquitetural:** disponibilidade por pessoa/atividade e por recompensa; retenção Guardadas; reativação em `responsavel_desenvolvimento`; idempotência/concorrência; sem evento novo no M04
+- **Lacuna Produto:** nenhuma bloqueante
+- **HEAD inspecionado:** `609829e` develop
+- **Código de produto:** não alterado neste passo
+- **Fluxo:** `implementation-workflow` INC-DL-EXEC-01 → … → quality-gate + verifier; homologação humana após entrega
+- **Commit/push:** não executados
+
+## 2026-11-19 — DEM-UX-DL-03-20261119 COMPLETED (técnico PASS)
+
+- **Entrega:** experiência única Desenvolvimento; saldo compacto; recompensas secundárias com confirmação; organizar só com `responsavel_desenvolvimento`; feedback de estrelas pós-persistência
+- **QG-1/2/3:** PASS · Verifier PASS ([verifier](5f0fd528-2614-49c0-ba3f-3edbf7564f9f); generalPurpose + roteiro verifier.md)
+- **Fingerprint:** `sha256:b284793cde1478f7`
+- **Humana:** PENDING_HUMAN
+- **Evidência:** `evidencia-ux-dl03-20261119.json`
+- **Commit/push:** não executados
+- **Próximo:** homologação humana do Módulo 03
+
+## 2026-11-19 — Triagem DEM-UX-DL-03-20261119 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_ux · **Origem:** REVISAO-MODULO-03.md + GUIA § Desenvolvimento (APROVADA 2026-11-18)
+- **Aprovação:** L2 UX APROVADA; sem module-planning (decomposição já no plano de revisão)
+- **Escopo:** experiência única; saldo compacto; recompensas secundárias; organizar só com authz; preservar DEV-F01..F07
+- **Fora:** remoção de pessoas, permissões M01, seletor de vínculos
+- **HEAD:** `f498694` develop, working tree limpa
+- **Fluxo:** implementation-workflow (INC1→INC2) → quality-gate + verifier + QG-3
+- **Commit/push:** não executados
+- **Próximo:** UX-DL-INC1
 
 ## 2026-11-18 — DEM-UX-HOM-20261118 COMPLETED (técnico PASS)
 

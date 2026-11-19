@@ -679,6 +679,26 @@ try {
         criadoEm: diasAtras(part.dias, 16, 1),
       },
     });
+
+    await prisma.disponibilidadeDesafio.upsert({
+      where: {
+        pessoaId_desafioId: {
+          pessoaId: pessoaLaurinha.id,
+          desafioId: part.desafioId,
+        },
+      },
+      update: {
+        disponivelParaNovaParticipacao: false,
+        atualizadoPorId: usuarioResponsavel.id,
+      },
+      create: {
+        id: `disp_${part.id}`,
+        pessoaId: pessoaLaurinha.id,
+        desafioId: part.desafioId,
+        disponivelParaNovaParticipacao: false,
+        atualizadoPorId: usuarioResponsavel.id,
+      },
+    });
   }
 
   await prisma.recompensa.upsert({
@@ -688,6 +708,8 @@ try {
       nome: "Escolher o filme da noite",
       custo: 5,
       ativa: true,
+      disponivelParaResgate: true,
+      geracaoDisponibilidade: 0,
     },
     create: {
       id: "recompensa_laurinha_cinema_seed",
@@ -695,6 +717,8 @@ try {
       nome: "Escolher o filme da noite",
       custo: 5,
       ativa: true,
+      disponivelParaResgate: true,
+      geracaoDisponibilidade: 0,
     },
   });
 

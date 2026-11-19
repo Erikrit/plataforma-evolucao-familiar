@@ -67,10 +67,17 @@ try {
   );
 
   const hoje = new Date().toISOString().slice(0, 10);
-  const desafios = await json(
-    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, { headers: h }),
+  const criado = await json(
+    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, {
+      method: "POST",
+      headers: h,
+      body: JSON.stringify({
+        nome: `EF05 ${Date.now()}`,
+        dificuldade: "simples",
+      }),
+    }),
   );
-  const desafioId = desafios.corpo?.desafios?.[0]?.id;
+  const desafioId = criado.corpo?.id;
   if (!desafioId) throw new Error("sem desafio no catálogo");
   await json(
     await fetch(`${base}/pessoas/${laurinha.id}/participacoes`, {

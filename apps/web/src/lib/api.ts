@@ -553,6 +553,14 @@ export type DesafioResumo = {
   origem: string;
   familiaId: string | null;
   guardado: boolean;
+  disponivelParaNovaParticipacao?: boolean;
+  estadoDisponibilidade?: "explorar" | "executadas";
+  ultimaParticipacao?: {
+    id: string;
+    resultado: string;
+    registradoEm: string;
+    estrelasConcedidas: number;
+  } | null;
 };
 
 export type ListaDesafios = {
@@ -601,6 +609,16 @@ export type RecompensaResumo = {
   nome: string;
   custo: number;
   ativa: boolean;
+  disponivelParaResgate?: boolean;
+  geracaoDisponibilidade?: number;
+  estadoDisponibilidade?: "disponiveis" | "resgatadas";
+  totalResgates?: number;
+  ultimoResgate?: {
+    id: string;
+    custoAplicado: number;
+    resgatadoEm: string;
+    geracaoDisponibilidade: number;
+  } | null;
 };
 
 function erroDesenvolvimento(status: number, fallback: string) {
@@ -773,11 +791,18 @@ export async function obterRelatorioPdf(
 
 export async function listarDesafios(
   pessoaId: string,
-  filtro?: { categoria?: string; guardados?: boolean },
+  filtro?: {
+    categoria?: string;
+    guardados?: boolean;
+    disponibilidade?: "explorar" | "executadas";
+  },
 ): Promise<ListaDesafios> {
   const params = new URLSearchParams();
   if (filtro?.categoria) params.set("categoria", filtro.categoria);
   if (filtro?.guardados) params.set("guardados", "1");
+  if (filtro?.disponibilidade) {
+    params.set("disponibilidade", filtro.disponibilidade);
+  }
   const q = params.toString();
   const resposta = await fetchApi(
     `/pessoas/${pessoaId}/desafios${q ? `?${q}` : ""}`,
@@ -811,6 +836,22 @@ export async function criarDesafioPersonalizado(
     );
   }
   return (await resposta.json()) as DesafioResumo;
+}
+
+export async function disponibilizarDesafio(
+  pessoaId: string,
+  desafioId: string,
+) {
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/desafios/${desafioId}/disponibilizar`,
+    { method: "POST" },
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return resposta.json();
 }
 
 export async function guardarDesafio(pessoaId: string, desafioId: string) {
@@ -876,8 +917,16 @@ export async function obterEstrelas(pessoaId: string): Promise<EstrelasResumo> {
 
 export async function listarRecompensas(
   pessoaId: string,
+  filtro?: { disponibilidade?: "disponiveis" | "resgatadas" },
 ): Promise<RecompensaResumo[]> {
-  const resposta = await fetchApi(`/pessoas/${pessoaId}/recompensas`);
+  const params = new URLSearchParams();
+  if (filtro?.disponibilidade) {
+    params.set("disponibilidade", filtro.disponibilidade);
+  }
+  const q = params.toString();
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/recompensas${q ? `?${q}` : ""}`,
+  );
   if (!resposta.ok) {
     throw new Error(
       erroDesenvolvimento(resposta.status, await lerErro(resposta)),
@@ -887,6 +936,22 @@ export async function listarRecompensas(
     | RecompensaResumo[]
     | { recompensas: RecompensaResumo[] };
   return Array.isArray(corpo) ? corpo : corpo.recompensas;
+}
+
+export async function disponibilizarRecompensa(
+  pessoaId: string,
+  recompensaId: string,
+) {
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/recompensas/${recompensaId}/disponibilizar`,
+    { method: "POST" },
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return resposta.json();
 }
 
 export async function criarRecompensa(
@@ -909,11 +974,12 @@ export async function criarRecompensa(
 export async function resgatarRecompensa(
   pessoaId: string,
   recompensaId: string,
+  solicitacaoChave?: string,
 ) {
   const resposta = await fetchApi(`/pessoas/${pessoaId}/resgates`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ recompensaId }),
+    body: JSON.stringify({ recompensaId, solicitacaoChave }),
   });
   if (!resposta.ok) {
     throw new Error(
