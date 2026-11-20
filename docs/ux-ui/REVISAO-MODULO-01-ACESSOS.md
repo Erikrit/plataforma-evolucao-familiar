@@ -43,3 +43,38 @@ Revisar se a família consegue entender **quem tem acesso a quê**, conceder/rev
 - Exclusão/desativação de pessoa e vínculos pertencem a demandas de Produto próprias; só entram após decisão funcional explícita e proteção do histórico.
 
 **Próximos passos recomendados:** coletar relatos objetivos das falhas percebidas; realizar inspeção dirigida de UI e backend com testes negativos; classificar severidade/impacto; submeter somente mudanças funcionais e de segurança pertinentes à governança; preparar uma correção única e limitada para a esteira existente; executar testes e homologação humana. Sem alterar código nesta etapa.
+
+## Aprofundamento com Produto — organização e seleção de área (2026-11-19)
+
+**Necessidade explicitada pelo responsável do produto:** falta de organização na gestão familiar e **possibilidade de selecionar a área de acompanhamento**, mantendo a análise das quatro frentes (segurança, organização, concessão/revogação e pessoas/vínculos). **Status: direção UX proposta para validação funcional; nenhuma implementação autorizada por este registro.** Referência estática: `develop` em `348afb3f09419448560319ef72ac9a81891b88df`.
+
+### Organização recomendada
+
+- Na aba administrativa **Acessos**, priorizar consulta **por pessoa acompanhada**, mostrando agrupamentos com **participante (conta)**, **área** (`Cuidados` ou `Desenvolvimento`), **responsabilidade de apresentação** (`Responsável` ou `Integrante`) e estado ativo; preservar as informações de administrador da família em contexto administrativo próprio, sem tratá-lo como acesso automático a dados sensíveis.
+- **Conceder acesso:** fluxo curto `selecionar participante existente → pessoa acompanhada → área → responsabilidade compatível → revisão/confirmação`. Para quem ainda não tem conta, direcionar ao convite correspondente, sem criar usuário artificial nem confundir convite pendente com autorização ativa.
+- **Revogar acesso:** ação contextual sobre o vínculo correto, mostrando quem, qual pessoa e área serão afetados, com confirmação proporcional e atualização de lista após resposta persistida.
+- Não oferecer matriz granular de operações, permissões personalizadas ou rótulos técnicos crus. Área escolhida não significa acesso automático a todos os documentos, prescrições ou à outra área.
+
+### Correspondência técnica observada (não equivale a contrato aprovado para nova UI)
+
+- `painel-gerenciar-familia.tsx` concede diretamente somente `responsavel_desenvolvimento` para `usuario.id` e convida com `colaboradora_cuidados`; não oferece seleção de participante nem área. Confirma lacuna UX/funcional da interface de gestão.
+- `servico-autorizacoes.ts` exige administrador, verifica usuário e pessoa-alvo na família e aceita responsabilidades previstas; `responsabilidades.ts` contém `administrador`, `responsavel_cuidados`, `responsavel_desenvolvimento`, `colaboradora_cuidados`, `participante_limitado`. **Não expor `administrador` como opção genérica** por simples reutilização do enum; avaliar quem pode conceder/revogar privilégios administrativos e como proteger último administrador.
+- `listarAcessos` devolve papel de apresentação, participante, pessoa acompanhada e ativo, **mas não expõe a área de forma explícita**. Mapear área a partir do papel `Responsável` é incorreto: pode significar cuidados ou desenvolvimento. Arquitetura deve determinar menor ajuste seguro ao contrato de metadados; não vazar dados clínicos/infantis.
+- Convite atual com `responsabilidade` fixa `colaboradora_cuidados` difere do comportamento funcional FUN-03 (selecionar responsabilidade e pessoa-alvo), a reconciliar.
+
+### Quatro frentes e status
+
+| Frente | Prioridade | Resultado atual |
+|---|---|---|
+| 1 — Segurança | Bloqueadora se houver falha reproduzível | **NÃO VERIFICADA DINAMICAMENTE**. Testar API/URL direta, isolamento de família, sessão revogada, privilégios administrativos e dados sensíveis |
+| 2 — Organização | Alta UX | **LACUNA CONFIRMADA**: lista sem agrupamento por área/pessoa e concessionário sem contexto |
+| 3 — Conceder/revogar | Alta | **LACUNA DE CONCESSÃO CONFIRMADA** na UI; revogação existente, mas precisa de teste real e contexto claro |
+| 4 — Pessoas/vínculos | Importante, separado | **PENDENTE FUNCIONAL**: exclusão/desativação de pessoa, vínculos válidos e proteção de histórico; não acrescentar botão destrutivo sem regra aprovada |
+
+### Encaminhamento de governança
+
+**CT-20261119-003 — proposta de UX → Produto/Arquitetura, `NEEDS_DECISION`.** Decidir o conjunto **fechado** de combinações concedíveis pela administração (área e responsabilidades existentes, incluindo perfil Integrante em Desenvolvimento se realmente suportado; sem inventar capacidade), tratamento de convites, visibilidade do escopo na listagem e restrições especiais ao papel `administrador`. A operação de remoção de pessoa deve ser decidida separadamente para evitar risco de exclusão de histórico infantil/médico. Arquitetura deve auditar segurança antes de modificar contratos.
+
+**Critérios preliminares de aceite:** administrador identifica para cada pessoa quem possui acesso ativo, em qual área, com qual responsabilidade; seleciona apenas combinações aprovadas e confirma a concessão/revogação correta; usuários sem poder de administração não acessam formulários/APIs; admin sem autorização de conteúdo não recebe acesso clínico/infantil; convite pendente não consta como ativo; revogação retira acesso efetivamente, inclusive nas sessões; nenhuma exclusão de pessoa sem preservação de dados e decisão funcional.
+
+**Próxima etapa recomendada:** Produto define combinações e política administrativa de concessão; Arquitetura reconcilia os contratos e testes negativos; UX fecha layout agrupado em dispositivo móvel e desktop; esteira implementa mudança mínima e pede homologação humana. Não alterar especificação FUN-04 por suposição.
