@@ -1,6 +1,6 @@
 # Revisão UX do Módulo 04 — Histórico, Resumo e PDF
 
-**Data** 2026-11-20. **Estado** revisão estática concluída, proposta de experiência em validação com Produto.
+**Data** 2026-11-20. **Estado** direção de UX APROVADA pelo responsável do Produto em 2026-11-20; encaminhada para planejamento e implementação.
 **Referência** develop @ 64a4a0694d6d370267d8b7ff7d381aa484bec97b.
 **Fonte funcional** docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md v1.1.
 **Retomada** após aceite humano da simplificação do Módulo 01, registrado em STATUS-E-ESCOPO.md.
@@ -23,7 +23,7 @@ Preservar Histórico e Resumo no menu contextual da pessoa. PDF é uma ação do
 
 **PDF** — botão “Preparar PDF” somente com capacidade de exportação. Abrir prévia com pessoa, datas e os mesmos dados do arquivo. Exibir “Baixar PDF” após carregamento bem-sucedido. A prévia pode ser a própria tela quando sua seleção corresponder integralmente à exportação; reaproveitar o contrato de prévia existente. A implementação escolhe a composição mais simples após validar a proposta. Conteúdo completo deve continuar em páginas adicionais, sem corte silencioso.
 
-Esses detalhes são proposta de UX. O aceite do Módulo 01 não aprova automaticamente este desenho.
+A organização desta seção foi aprovada expressamente pelo responsável do Produto em 2026-11-20, após apresentação de Histórico, Resumo e fluxo Preparar PDF → conferência → Baixar PDF.
 
 ## 2. Achados verificáveis na inspeção
 
@@ -71,4 +71,26 @@ O cabeçalho do PDF usa pessoaId, estados técnicos e datas ISO. O nome compreen
 - apps/web/src/app/pessoas/[pessoaId]/resumo/page.tsx
 - apps/api/src/cuidados/servico-acompanhamento.ts
 
-**Próxima ação** validar a proposta de experiência e encaminhar as correções técnicas identificadas. Estado de UX do Módulo 04 nesta rodada é EM REVISÃO, com achados estáticos e proposta aguardando validação.
+**Próxima ação** planejar e implementar as correções com base na direção de UX aprovada e nos requisitos funcionais v1.1, depois executar testes e nova homologação humana.
+
+## 6. Aprovação de Produto e plano de execução — 2026-11-20
+
+**APROVADA expressamente pelo responsável do Produto**, em resposta à organização proposta na revisão. A aprovação cobre Histórico agrupado por dia com período compacto; Resumo contextual por pessoa e áreas autorizadas; PDF com preparação, conferência e download. O escopo técnico corrige os achados EVO-REV-01..08 em aderência à especificação funcional v1.1.
+
+**Situação** direção de UX aprovada e documentada, implementação e homologação humana da nova entrega pendentes. Base documental da aprovação develop @ c75800f0e14090434a71a5f038ec2cf09ac1f9d5. A revisão estática anterior permanece como evidência dos achados, sem nova execução de testes nesta atualização.
+
+### Ordem recomendada para a esteira
+
+| Etapa | Escopo | Resultado verificável |
+|---|---|---|
+| 1 — Contratos e completude | EVO-REV-03/04/05/06/08 | Mesma seleção autorizada na prévia e PDF; arquivo completo; totais corretos no período; cobertura dos registros previstos |
+| 2 — Experiência | EVO-REV-01/02/07 e integração com a etapa 1 | Histórico legível, filtros compactos, resumo contextual, exportação autorizada e troca segura de pessoa/período |
+| 3 — Validação integrada | Critérios da seção 4 | Evidências técnicas e visuais, regressão por impacto, verifier e entrega para aceite humano |
+
+Usar `task-routing` para reconciliar o workspace com a develop e registrar a demanda. O conjunto envolve API, web, geração de PDF e autorização; `module-planning` deve decompor os incrementos quando necessário, reaproveitando o módulo existente. Em seguida executar `implementation-workflow` e `quality-gate`.
+
+Confirmar os contratos e as capacidades existentes antes de editar. Priorizar a menor solução que satisfaça os requisitos aprovados. O contrato de prévia existente é ponto de partida; a apresentação deve permitir conferir a seleção inteira, inclusive itens de páginas posteriores. Totais do período devem refletir todos os registros pertinentes mesmo quando a listagem for paginada. A geração do PDF deve cobrir o conteúdo selecionado com paginação e quebras legíveis.
+
+Testes de regressão devem incluir limites anteriores de 55 linhas, 90 caracteres e 62 dias, dados além dos limites de listagem, vigências e correções, conteúdo de prévia/PDF, combinações de autorização, revogação e troca de contexto. Usar dados fictícios e registrar evidências de mobile/desktop e acessibilidade. As suítes existentes devem ser reaproveitadas e complementadas para regressões concretas.
+
+A aprovação desta direção permite avançar ao planejamento e à implementação compatível. Restrição funcional de períodos, retirada de conteúdo previsto ou ampliação de permissões exigem encaminhamento próprio. O aceite humano da tela implementada será solicitado após a entrega técnica.

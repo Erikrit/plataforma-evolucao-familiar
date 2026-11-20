@@ -165,3 +165,11 @@ O responsável pelo produto solicitou **priorizar a revisão de permissões e a 
 **Achados prioritários** seleção de prévia diferente do PDF, corte de linhas no gerador de página única, limites silenciosos de contagem/listagem, representação da capacidade de exportação e cobertura dos registros previstos no resumo. Troca rápida de contexto e combinação de permissões exigem testes. A aplicação, os testes e os PDFs não foram executados nesta revisão.
 
 **Próximo encaminhamento** Produto valida a composição de Histórico/Resumo/prévia. Arquitetura e Qualidade avaliam as correções de aderência à especificação v1.1; alterações funcionais adicionais seguem governança. Homologações anteriores mantêm seu escopo.
+
+## Direção UX do Módulo 04 APROVADA — 2026-11-20
+
+**APROVADA expressamente pelo responsável do Produto** a organização apresentada de Histórico, Resumo e PDF. Direção e plano de execução documentados em `docs/ux-ui/REVISAO-MODULO-04.md`, seções 1 e 6. Histórico por dia com filtros compactos; Resumo contextual por pessoa/período; preparar PDF, conferir e baixar o conteúdo completo autorizado.
+
+**Próximo passo** rotear e planejar correções EVO-REV-01..08 com a esteira existente, implementar, testar e encaminhar à homologação humana. A especificação funcional v1.1 permanece a fonte dos requisitos. Situação desta rodada é **DIREÇÃO UX APROVADA / IMPLEMENTAÇÃO PENDENTE / HOMOLOGAÇÃO HUMANA PENDENTE**.
+
+Este registro documenta a decisão de Produto, com base na develop @ c75800f0e14090434a71a5f038ec2cf09ac1f9d5. Código e testes não foram executados nesta atualização documental. Aceites anteriores mantêm seus próprios escopos.
