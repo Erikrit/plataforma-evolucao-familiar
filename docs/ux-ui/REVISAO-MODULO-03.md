@@ -186,3 +186,11 @@ Inspeção estática de `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/pag
 5. **Manter homologação humana do Módulo 03 REPROVADA até novo teste e aceite expresso.** A primeira revisão transversal de UX permanece homologada somente no escopo próprio.
 
 **Separação de autoridades:** não alterar DEV-F03/F04/F06, ADR-013 ou autorizações por estética. Se aparecer contrato ausente que exija alteração funcional, escalar pontualmente a Produto e Arquitetura, sem bloquear os demais ajustes.
+
+## Encerramento da revisão R3 — aceite humano em 2026-11-19
+
+**Status: HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO NO ESCOPO DA UX DO MÓDULO 03.** Após as correções de `DEV-UX-HOM-R3-01..03`, foi comunicada aprovação humana expressa. Inspeção documental da `develop` em `7dad200a85feb5b2534b941ad31581089f941812` confirma a presença de categorias/filtros, Cadastros em rota e menu lateral contextual, e ausência de troca automática de aba após operações principais. A esteira registra `DEM-UX-HOM-R3-20261119` concluída tecnicamente; testes não reexecutados nesta atualização.
+
+**Critérios da rodada aceitos:** (1) o item muda de disponibilidade, não a aba do usuário, tanto em participações quanto em resgates e disponibilizações; (2) cadastros de brincadeiras e recompensas têm destino secundário contextual; (3) categorias de desenvolvimento são filtros operacionais e opção de criação sem obrigatoriedade extra. Rótulos, categoria e autorização permanecem sujeitos às fontes funcionais e arquiteturais vigentes.
+
+**Preservação do histórico:** os registros anteriores de `REPROVADA` e `PENDING_HUMAN` descrevem rodadas anteriores e **não são o estado atual dessa homologação**. O aceite não certifica segurança, privacidade em produção, implantação, todos os dispositivos ou o Módulo 04. Próxima etapa de UX: avaliar Histórico, Resumo e relatórios do Módulo 04, sem reabrir os ajustes homologados do 03 salvo regressão comprovada.
