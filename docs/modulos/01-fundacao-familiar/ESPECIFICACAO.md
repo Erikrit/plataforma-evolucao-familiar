@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.3 — três experiências nomeadas Administrador, Responsável e Integrante; gestão simplificada de acessos (2026-11-16)  
-**Status funcional:** especificação aprovada. Estado do código, evidências e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.
+**Versão:** especificação funcional v1.4 — direção de participação e autoacompanhamento aprovada em 2026-11-20; detalhes de fluxo e contrato pendentes  
+**Status funcional:** requisitos anteriores mantidos; diretrizes adicionais v1.4 aprovadas pelo Produto, com decisões operacionais pendentes antes de implementação. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
 
@@ -131,3 +131,33 @@ Fornece identidade, família, pessoa, conta, autorizações e dados resumidos pa
 Árvore genealógica, chat, Kanban, agenda genérica, controle financeiro/trabalhista, configurador complexo de permissões, SaaS comercial.
 
 **Princípio de aceite:** cadastro e acesso devem exigir o mínimo de esforço, preservando segurança e autonomia.
+
+## 11. Direção funcional aprovada — pessoa, conta, acompanhamento e entrada (2026-11-20)
+
+**Origem:** nova homologação humana REPROVADA para a gestão administrativa do Módulo 01; análise do código e aceite explícito do Produto à recomendação de preservar distinção Pessoa/Conta/Autorização, permitir autoacompanhamento e múltiplos contextos e simplificar o fluxo. **Essa direção complementa FUN-01..FUN-07 sem substituir controles de acesso existentes.**
+
+### Conceitos e invariantes
+
+- **Pessoa acompanhada** é entidade de acompanhamento e histórico, **com ou sem** conta de login.
+- **Conta/usuário** é identidade autenticada vinculada de forma segura à pessoa. E-mail/senha dizem respeito à conta, não à ficha de acompanhamento; senha é segredo escolhido/mantido pelo titular no fluxo autorizado, não fornecida pelo administrador.
+- **Participação operacional** (acompanha a si, outros ou ambos) é derivada do conjunto de autorizações reais; **não** criar escolha exclusiva `Ator` vs `Integrante` como papel persistido, nem impedir acúmulo legítimo.
+- **Responsabilidade** e **área** são concessões contextuais; **vínculo** (familiar/colaborador externo) não é permissão. Preservar rótulos de experiência Administrador, Responsável, Integrante sem confundi-los com tipo exclusivo.
+- Nome permanece o único campo obrigatório no cadastro de uma pessoa; data de nascimento opcional é preferível a idade fixa. Criança ou pessoa acompanhada não precisa ter conta.
+
+### Jornadas a especificar e homologar
+
+1. **Criar pessoa sem conta:** informar nome; opcionalmente data de nascimento/vínculo; acompanhar via adulto legitimamente autorizado; sem senha ou e-mail obrigatórios.
+2. **Habilitar acesso com conta:** identificar se a pessoa já existe; vincular a conta de forma confiável em vez de criar cadastro duplicado; convidar/ativar quando necessário, com senha definida pelo próprio titular, convite com prazo/uso único e autorização adequada. Não presumir que só conhecer e-mail prova identidade. Identificar como a pessoa aceita sua associação e quem pode iniciar o vínculo.
+3. **Definir acompanhamento:** selecionar participante com conta, pessoa acompanhada, área e responsabilidade **dentre combinações efetivamente suportadas** (ADR-014). A mesma conta pode acompanhar a própria pessoa e outras pessoas, sem conceder acesso às demais por dedução; autorização efetiva validada no backend.
+4. **Autoacompanhamento:** pessoa com conta encontra os próprios contextos permitidos. **Ponto de decisão funcional:** leitura de dados próprios já prevista não implica automaticamente poder cadastrar/alterar medicamentos, acessar relatórios completos ou organizar atividades; detalhar a operação por área e alinhar com consentimento, privacidade e gates técnicos antes de implementar.
+5. **Pós-login:** se existir um único contexto operacional, abrir diretamente a área correspondente; se houver mais de uma pessoa/área, oferecer escolha contextual simples; administrador sem área operacional autorizada abre gestão. Sempre fornecer navegação para alternar contexto autorizado, sem cair em tela vazia ou vazamento de acesso.
+6. **Gestão e revogação:** deixar claro quem acompanha quem/área/função, não expor opções de operação granulares sem necessidade, revogar autorizações com invalidação de sessão e histórico preservado. A segurança da associação Pessoa↔Conta e do acesso direto a URL/API deve ser testada.
+
+### Limites e compatibilidade
+
+- A especificação v1.3 de cadastro progressivo permanece: **não** tornar e-mail, senha, data de nascimento ou tipo operacional obrigatórios para criar pessoa.
+- **Não** tornar Ator/Integrante funções exclusivas, não criar quarto papel, não converter checboxes de funcionalidades em autorizações livres, não liberar permissões do administrador a conteúdo clínico/infantil.
+- A decisão anterior de mostrar cartões por pessoa em FUN-05/FUN-06 passa a ser **fallback para múltiplos contextos**, não uma etapa obrigatória quando houver apenas um contexto; UX define a transição minimizando toques.
+- Não alterar Módulos 02/03/04 nem migrar usuários existentes sem plano e testes; não duplicar dados nem permitir tomada indevida de contas.
+
+**Pendente de Produto após análise de UX/Arquitetura:** validar desenho de ativação/vínculo de conta existente, poderes do autoacompanhamento além de leitura e regras finas de entrada/contexto. **Até isso, não implementar mudança de autorização/credencial por inferência.**

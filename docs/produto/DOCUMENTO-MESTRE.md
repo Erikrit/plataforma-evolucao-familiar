@@ -1,4 +1,4 @@
-# Documento Mestre do Produto — v1.2
+# Documento Mestre do Produto — v1.3
 
 **Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
@@ -62,7 +62,7 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 
 - Biblioteca curta de atividades presenciais e atividades personalizadas.
 - Cadastro próprio: **nome**; dificuldade predefinida como simples e alterável. Categoria e instruções opcionais.
-- Organização opcional **Guardar para depois**, sem planejamento com datas obrigatórias, atrasos ou cobrança.
+- Organização por **Explorar/Executadas**, com disponibilização novamente e preservação de participações; recompensas **Disponíveis/Resgatadas** podem ser disponibilizadas para novo resgate com novo débito, conforme especificação v1.2 do Módulo 03.
 - Adulto registra apenas **Concluiu** ou **Participou**. **Não realizada** não requer registro.
 - Estrelas automáticas e transparentes, sem aprovação da Mikaela, penalidades, ranking ou avaliação clínica.
 - Tabela de estrelas **aprovada**: simples 5/3; média 10/5; desafiadora 15/8 (concluiu/participou).
@@ -108,3 +108,17 @@ Agenda universal, Kanban, rankings de produtividade, gestão trabalhista/finance
 ## 11. Controle de mudanças
 
 Toda alteração deve registrar: problema resolvido, novo trabalho imposto à família, possibilidade de reutilizar dados existentes, risco de privacidade/segurança, alternativas mais simples, aprovação e impacto. **Não criar funcionalidade sem valor demonstrável.**
+
+## 12. Decisão de Produto — modelo de participação e acesso (2026-11-20)
+
+**APROVADO pelo responsável do Produto como direção funcional L3 para o Módulo 01** após reprovação humana da gestão de pessoas/contas/permissões. O objetivo é que o produto represente intuitivamente **quem é acompanhado, quem possui conta, quem acompanha e em quais áreas**, sem obrigar uma pessoa a desempenhar apenas uma função.
+
+- **Pessoa acompanhada** é qualquer pessoa com trajetória no sistema; pode existir sem conta e ser acompanhada por responsáveis autorizados. **Usuário/conta** é a credencial pessoal para entrar; não é sinônimo de pessoa acompanhada.
+- **Participante com conta** pode acompanhar **a si mesmo, outra(s) pessoa(s), ou ambas**, de acordo com direitos efetivos por pessoa, área e operação. Não introduzir `Ator`/`Integrante` como enum mutuamente exclusivo ou impedir responsabilidades acumuladas. São conceitos explicativos da experiência, não nova fonte de autorização.
+- **Responsável** continua uma responsabilidade contextual da área, não um tipo permanente de pessoa. Os três rótulos de experiência Administrador, Responsável e Integrante e a separação de vínculo familiar/externo permanecem, respeitando autorizações reais.
+- **Cadastro progressivo:** nome mínimo para pessoa; data de nascimento opcional em vez de idade estática. Conta é opcional. Se houver necessidade de conta, apresentar convite/ativação pessoal para definir e manter senha, sem exigir que administrador cadastre ou conheça senha do usuário. Reutilizar pessoa existente ao vincular conta quando apropriado, impedindo duplicação; os contratos, tratamento de identidade e consentimento serão validados pela Arquitetura.
+- **Acesso e organização:** selecionar participante, pessoa acompanhada, área e responsabilidade compatível. Apresentar capacidades permitidas de forma compreensível **sem** matriz livre de checkboxes por operação. Autoacompanhamento deve permitir experiência útil dos próprios dados; diferença entre visualização própria e operações de gestão exige especificação e autorização explícitas antes de ampliar gates.
+- **Entrada após autenticação:** com **um único contexto operacional autorizado**, abrir diretamente sua área principal (Cuidados/Rotina ou Desenvolvimento). Com múltiplos contextos, apresentar seleção simples de pessoa/área, preferencialmente respeitando uma escolha anterior segura se houver; com papel exclusivamente administrativo, abrir gestão familiar. Nunca redirecionar para área sem autorização.
+- **Proteção e continuidade:** não ampliar direitos por parentesco, papel administrativo ou login; revogações eficazes, sessões e isolamento entre pessoas/famílias; preservar histórico e autoria, não criar conta duplicada; não impor login a crianças ou idosos sem necessidade.
+
+**Limites do aceite:** esta é a direção de Produto, **não** autorização de implementação imediata de criação/vinculação de contas ou autoacompanhamento ampliado. **NEEDS_DECISION:** regras detalhadas de associação segura de pessoa existente↔conta, convite/consentimento e recuperação, operações permitidas no autoacompanhamento (especialmente alteração de medicação/relatórios), e tratamento da navegação com múltiplos contextos. UX e Arquitetura devem propor o mínimo necessário para fechar essas lacunas antes de mudar contratos. Não adotar login público nem criação de conta indiscriminada por interpretação. O status de homologação humana do Módulo 01 continua **REPROVADO**; Módulo 04 permanece pausado.
