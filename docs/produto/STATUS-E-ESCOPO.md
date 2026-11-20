@@ -157,3 +157,11 @@ O responsável pelo produto solicitou **priorizar a revisão de permissões e a 
 **Situação vigente desta rodada: HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO.** Este registro supera a reprovação e a espera de aceite humano para o escopo desta atualização, preservando os registros históricos. Os resultados técnicos permanecem os registrados pela esteira, inclusive a distinção entre verifier oficial bloqueado e verificação independente via shell registrada como PASS. Pendências de segurança/autenticação, produção e dispositivos mantêm seus próprios critérios.
 
 **Próxima etapa da sequência aprovada:** retomar a revisão UX do Módulo 04 — Evolução Familiar (Histórico, Resumo e PDF). Pendências próprias do Módulo 01, como exclusão/desativação de pessoa e seletor de vínculos, continuam sujeitas ao encaminhamento específico. Aceite R3 do Módulo 03 preservado.
+
+## Retomada da revisão UX do Módulo 04 — 2026-11-20
+
+**Estado desta rodada: EM REVISÃO; proposta de experiência aguardando validação.** Revisão estática na develop @ 64a4a0694d6d370267d8b7ff7d381aa484bec97b, após o aceite humano do Módulo 01. Achados e proposta registrados em docs/ux-ui/REVISAO-MODULO-04.md.
+
+**Achados prioritários** seleção de prévia diferente do PDF, corte de linhas no gerador de página única, limites silenciosos de contagem/listagem, representação da capacidade de exportação e cobertura dos registros previstos no resumo. Troca rápida de contexto e combinação de permissões exigem testes. A aplicação, os testes e os PDFs não foram executados nesta revisão.
+
+**Próximo encaminhamento** Produto valida a composição de Histórico/Resumo/prévia. Arquitetura e Qualidade avaliam as correções de aderência à especificação v1.1; alterações funcionais adicionais seguem governança. Homologações anteriores mantêm seu escopo.
