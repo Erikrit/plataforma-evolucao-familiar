@@ -36,6 +36,7 @@ export class ServicoPessoas {
         usuario: { select: { id: true, email: true } },
       },
     });
+    const adminFamilia = visao.adminFamilia;
     return pessoas.map((pessoa) => ({
       id: pessoa.id,
       nome: pessoa.nome,
@@ -44,6 +45,9 @@ export class ServicoPessoas {
       criadaEm: pessoa.criadaEm,
       possuiConta: Boolean(pessoa.usuario),
       emailConta: pessoa.usuario?.email ?? null,
+      ...(adminFamilia && pessoa.usuario
+        ? { usuarioId: pessoa.usuario.id }
+        : {}),
     }));
   }
 

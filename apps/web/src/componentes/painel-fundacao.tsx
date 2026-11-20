@@ -24,11 +24,12 @@ import { entrar, type AcessoResumo } from "@/lib/api";
 import { rotuloPapelExperiencia } from "@/lib/rotulos-experiencia";
 
 function textoAcesso(a: AcessoResumo): string {
-  const alvo = a.pessoaAcompanhadaNome
-    ? a.pessoaAcompanhadaNome
-    : "família (administração)";
   const papel = rotuloPapelExperiencia(a.papel);
-  return `${a.participanteNome} · ${papel} · acompanha ${alvo}${a.ativo ? "" : " · inativo"}`;
+  if (a.papel === "Administrador" || !a.pessoaAcompanhadaNome) {
+    return `${a.participanteNome} · ${papel} · família (administração)${a.ativo ? "" : " · inativo"}`;
+  }
+  const area = a.area ? `${a.area} · ` : "";
+  return `${a.participanteNome} · ${area}${papel}${a.ativo ? "" : " · inativo"}`;
 }
 
 export function PainelFundacao() {

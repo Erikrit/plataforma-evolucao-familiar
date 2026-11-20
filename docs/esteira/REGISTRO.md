@@ -5,12 +5,26 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-19)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
-- **DEM-CT-20261119-003:** parecer de Arquitetura DOCUMENTADO (ADR-014) · estado `READY` · código de produto não alterado · sem decisão funcional nova para o Produto
+- **DEM-ADR014-ACESSOS-20261119:** COMPLETED técnico PASS · fingerprint `sha256:5b3f46d7c53bbe9c` · verifier independente PASS; oficial BLOCKED ([verifier](a02013cb-2491-45c3-8a52-6ee4ac317850)) · humana PENDING_HUMAN
+- **DEM-CT-20261119-003:** parecer DOCUMENTADO (ADR-014) · sucedido pela implementação DEM-ADR014-ACESSOS
 - **DEM-UX-HOM-R3-20261119:** COMPLETED técnico PASS · fingerprint `sha256:f0114d296d15068a` · [verifier](6c71be97-490f-422a-adbd-06911be180d6); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-CT-20261119-001-002:** COMPLETED técnico PASS · ADR-013 · fingerprint em `evidencia-ct-dl-exec-rec-20261119.json` · [verifier](422aae3f-f66c-4f49-9823-4746e0ed2739); humana PENDING_HUMAN
 - **DEM-UX-DL-03-20261119:** COMPLETED técnico PASS · fingerprint `sha256:b284793cde1478f7` · [verifier](5f0fd528-2614-49c0-ba3f-3edbf7564f9f); humana PENDING_HUMAN
 - **DEM-UX-HOM-20261118:** COMPLETED técnico PASS · fingerprint `sha256:9f6ab4a42a59c149` · [verifier](e5ccff07-38c8-4231-ac68-7ff4d28d56fe); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-ESTEIRA-IW-COMMITMSG-20261118:** COMPLETED — `implementation-workflow` passa a exigir `mensagemCommit` no resumo em `COMPLETED`
+
+## 2026-11-19 — DEM-ADR014-ACESSOS-20261119 COMPLETED (técnico PASS)
+
+- **Tipo:** melhoria_funcional · **Risco:** alto (authz)
+- **Aprovação:** L2 ADR-014 DOCUMENTADA; FUN-03/FUN-04/FUN-07 v1.3; pedido humano de implementação
+- **Entrega:** catálogo fechado das 3 combinações; recusa `administrador`/`participante_limitado`; preservação transacional do último admin; `area` em `GET /acessos`; `usuarioId` para admin; UX Acessos por pessoa/área/responsabilidade com revisão/confirmação e convite alinhado
+- **Fora:** exclusão de pessoa, edição de vínculo, Integrante em Desenvolvimento, sucessão de admin
+- **QG-1/QG-2:** PASS · QG-3 NOT_APPLICABLE · Verifier independente PASS; oficial BLOCKED Ask ([verifier](a02013cb-2491-45c3-8a52-6ee4ac317850))
+- **Fingerprint:** `sha256:5b3f46d7c53bbe9c` (algoritmo esteira)
+- **Evidência:** `evidencia-adr014-acessos-20261119.json`
+- **Humana:** PENDING_HUMAN
+- **Commit/push:** não executados
+- **Próximo:** homologação humana expressa do Módulo 01 Acessos
 
 ## 2026-11-19 — Triagem + Arquitetura DEM-CT-20261119-003 (READY)
 

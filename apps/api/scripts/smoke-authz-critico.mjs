@@ -220,9 +220,9 @@ try {
   reg(
     "colab-cartoes-sem-laurinha",
     inicioColab.status < 300 &&
-      nomes.includes("Vovó") &&
-      !nomes.includes("Laurinha"),
-    { nomes },
+      nomes.includes(vovo.nome) &&
+      !nomes.includes(laurinha.nome),
+    { nomes, esperadoVovo: vovo.nome, esperadoAusente: laurinha.nome },
   );
 
   // --- Revogação invalida sessão ---

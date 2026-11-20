@@ -22,6 +22,8 @@ export type CartaoInicio = {
   nome: string;
   vinculo: string | null;
   possuiConta: boolean;
+  /** Presente só para administrador (ADR-014); nunca para não-admin. */
+  usuarioId?: string;
   resumo: string;
   areasAutorizadas?: AreasAutorizadasCartao;
 };
@@ -46,10 +48,31 @@ export type AcessoResumo = {
   participanteNome: string;
   participantePessoaId: string;
   papel: "Administrador" | "Responsável" | "Colaborador";
+  /** Cuidados | Desenvolvimento | null (administrador). ADR-014. */
+  area?: "Cuidados" | "Desenvolvimento" | null;
   pessoaAcompanhadaNome: string | null;
   pessoaAcompanhadaId: string | null;
   ativo: boolean;
 };
+
+/** Combinações contextuais concedíveis (ADR-014); espelha o catálogo da API. */
+export const COMBINACOES_ACESSO_CONCEDIVEIS = [
+  {
+    area: "Cuidados" as const,
+    rotulo: "Responsável" as const,
+    responsabilidade: "responsavel_cuidados" as const,
+  },
+  {
+    area: "Cuidados" as const,
+    rotulo: "Integrante" as const,
+    responsabilidade: "colaboradora_cuidados" as const,
+  },
+  {
+    area: "Desenvolvimento" as const,
+    rotulo: "Responsável" as const,
+    responsabilidade: "responsavel_desenvolvimento" as const,
+  },
+] as const;
 
 export type AcessosResposta = {
   modo: "administracao" | "proprios_dados";

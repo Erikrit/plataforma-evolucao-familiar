@@ -9,8 +9,9 @@ import { ServicoPrisma } from "../prisma/servico-prisma";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
 import { ServicoAutorizacoes } from "../autorizacoes/servico-autorizacoes";
 import {
-  ehResponsabilidade,
+  ehResponsabilidadeConcedivel,
   escopoFamilia,
+  type Responsabilidade,
 } from "../autorizacoes/responsabilidades";
 import { gerarHashSenha } from "../comum/senha";
 
@@ -36,11 +37,17 @@ export class ServicoConvites {
     await this.autorizacoes.exigirAdministrador(familiaId, admin);
 
     const email = (entrada.email ?? "").trim().toLowerCase();
-    const responsabilidade = (entrada.responsabilidade ?? "").trim();
-    if (!email || !ehResponsabilidade(responsabilidade)) {
+    const responsabilidadeBruta = (entrada.responsabilidade ?? "").trim();
+    if (!email) {
       throw new BadRequestException("E-mail e responsabilidade válidos são obrigatórios.");
     }
-    if (escopoFamilia(responsabilidade)) {
+    if (!ehResponsabilidadeConcedivel(responsabilidadeBruta)) {
+      throw new BadRequestException(
+        "Responsabilidade não concedível por convite (ADR-014). Use apenas as combinações contextuais previstas.",
+      );
+    }
+    const responsabilidade = responsabilidadeBruta;
+    if (escopoFamilia(responsabilidade as Responsabilidade)) {
       throw new BadRequestException(
         "Convite de administrador da família não é suportado no MVP.",
       );

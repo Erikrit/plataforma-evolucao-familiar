@@ -40,7 +40,8 @@
     "smoke:ef05": "node scripts/smoke-ef05.mjs",
     "smoke:ef06": "node scripts/smoke-ef06.mjs",
     "smoke:modulo-04": "node scripts/smoke-modulo-04.mjs",
-    "smoke:ct-acessos": "node scripts/smoke-ct-acessos.mjs"
+    "smoke:ct-acessos": "node scripts/smoke-ct-acessos.mjs",
+    "smoke:adr014-acessos": "node scripts/smoke-adr014-acessos.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.12",

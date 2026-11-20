@@ -8,7 +8,8 @@ import { ServicoPrisma } from "../prisma/servico-prisma";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
 import { ServicoSessao } from "../auth/servico-sessao";
 import {
-  ehResponsabilidade,
+  areaApresentacao,
+  ehResponsabilidadeConcedivel,
   escopoFamilia,
   papelApresentacao,
   type Responsabilidade,
@@ -79,6 +80,7 @@ export class ServicoAutorizacoes {
         participanteNome: linha.usuario.pessoa.nome,
         participantePessoaId: linha.usuario.pessoa.id,
         papel: papelApresentacao(linha.responsabilidade),
+        area: areaApresentacao(linha.responsabilidade),
         pessoaAcompanhadaNome: linha.pessoaAlvo?.nome ?? null,
         pessoaAcompanhadaId: linha.pessoaAlvoId,
         ativo: linha.ativa,
@@ -100,9 +102,12 @@ export class ServicoAutorizacoes {
 
     const usuarioId = (entrada.usuarioId ?? "").trim();
     const responsabilidadeBruta = (entrada.responsabilidade ?? "").trim();
-    if (!usuarioId || !ehResponsabilidade(responsabilidadeBruta)) {
+    if (!usuarioId) {
+      throw new BadRequestException("Usuário e responsabilidade válidos são obrigatórios.");
+    }
+    if (!ehResponsabilidadeConcedivel(responsabilidadeBruta)) {
       throw new BadRequestException(
-        "Usuário e responsabilidade válidos são obrigatórios.",
+        "Responsabilidade não concedível pelo fluxo genérico (ADR-014). Use apenas Cuidados/Desenvolvimento nas combinações previstas.",
       );
     }
     const responsabilidade = responsabilidadeBruta;
@@ -222,34 +227,74 @@ export class ServicoAutorizacoes {
     await this.garantirFamilia(familiaId, admin);
     await this.exigirAdministrador(familiaId, admin);
 
-    const autorizacao = await this.prisma.autorizacao.findFirst({
-      where: { id: autorizacaoId, familiaId },
-    });
-    if (!autorizacao) {
-      throw new NotFoundException("Autorização não encontrada.");
-    }
-    if (!autorizacao.ativa) {
+    const resultado = await this.prisma.$transaction(async (tx) => {
+      const autorizacao = await tx.autorizacao.findFirst({
+        where: { id: autorizacaoId, familiaId },
+      });
+      if (!autorizacao) {
+        throw new NotFoundException("Autorização não encontrada.");
+      }
+      if (!autorizacao.ativa) {
+        return {
+          id: autorizacao.id,
+          ativa: false,
+          revogadaEm: autorizacao.revogadaEm,
+          usuarioId: autorizacao.usuarioId,
+          jaInativa: true as const,
+        };
+      }
+
+      if (
+        autorizacao.responsabilidade === "administrador" &&
+        autorizacao.pessoaAlvoId == null
+      ) {
+        const outrosAdmins = await tx.autorizacao.count({
+          where: {
+            familiaId,
+            responsabilidade: "administrador",
+            pessoaAlvoId: null,
+            ativa: true,
+            id: { not: autorizacao.id },
+          },
+        });
+        if (outrosAdmins === 0) {
+          throw new BadRequestException(
+            "Não é possível remover o último administrador da família (ADR-014).",
+          );
+        }
+      }
+
+      const atualizada = await tx.autorizacao.update({
+        where: { id: autorizacao.id },
+        data: { ativa: false, revogadaEm: new Date() },
+      });
       return {
-        id: autorizacao.id,
+        id: atualizada.id,
+        ativa: atualizada.ativa,
+        revogadaEm: atualizada.revogadaEm,
+        usuarioId: autorizacao.usuarioId,
+        jaInativa: false as const,
+      };
+    });
+
+    if (resultado.jaInativa) {
+      return {
+        id: resultado.id,
         ativa: false,
-        revogadaEm: autorizacao.revogadaEm,
+        revogadaEm: resultado.revogadaEm,
         sessoesInvalidadas: 0,
         historicoPreservado: true,
       };
     }
 
-    const atualizada = await this.prisma.autorizacao.update({
-      where: { id: autorizacao.id },
-      data: { ativa: false, revogadaEm: new Date() },
-    });
     const sessoes = await this.sessoes.invalidarSessoesDoUsuario(
-      autorizacao.usuarioId,
+      resultado.usuarioId,
     );
 
     return {
-      id: atualizada.id,
-      ativa: atualizada.ativa,
-      revogadaEm: atualizada.revogadaEm,
+      id: resultado.id,
+      ativa: resultado.ativa,
+      revogadaEm: resultado.revogadaEm,
       sessoesInvalidadas: sessoes.invalidadas,
       historicoPreservado: true,
     };
@@ -425,6 +470,9 @@ export class ServicoAutorizacoes {
         nome: p.nome,
         vinculo: p.vinculo,
         possuiConta: Boolean(p.usuario),
+        ...(visao.adminFamilia && p.usuario
+          ? { usuarioId: p.usuario.id }
+          : {}),
         resumo: p.vinculo ? `Vínculo: ${p.vinculo}` : "Pessoa da família",
         areasAutorizadas: {
           cuidados,

@@ -93,6 +93,15 @@ try {
     papeis: [...new Set(itensAdmin.map((i) => i.papel))],
   });
 
+  const areasOk = itensAdmin.every((i) => {
+    if (!("area" in i)) return false;
+    if (i.papel === "Administrador") return i.area == null;
+    return i.area === "Cuidados" || i.area === "Desenvolvimento";
+  });
+  reg("area_presente_adr014", areasOk && itensAdmin.length > 0, {
+    areas: [...new Set(itensAdmin.map((i) => i.area))],
+  });
+
   const colabNoAdmin = itensAdmin.find(
     (i) =>
       i.participanteNome === "Colab CT Acessos" &&
