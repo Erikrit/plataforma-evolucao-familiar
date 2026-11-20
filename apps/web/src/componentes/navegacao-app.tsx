@@ -15,6 +15,7 @@ import {
   Title,
 } from "@mantine/core";
 import { useSessao } from "@/componentes/contexto-sessao";
+import { podeOrganizarDesenvolvimento } from "@/lib/rotulos-experiencia";
 import {
   obterPessoa,
   sair,
@@ -25,11 +26,13 @@ type AreaNav = {
   id: string;
   rotulo: string;
   href: string;
+  subitem?: boolean;
 };
 
 function areasDaPessoa(
   pessoaId: string,
   auth: AreasAutorizadasCartao | null | undefined,
+  podeOrganizarDesenvolvimento: boolean,
 ): AreaNav[] {
   const areas: AreaNav[] = [
     {
@@ -62,6 +65,14 @@ function areasDaPessoa(
       rotulo: "Desenvolvimento",
       href: `/pessoas/${pessoaId}/desenvolvimento`,
     });
+    if (podeOrganizarDesenvolvimento) {
+      areas.push({
+        id: "cadastros-desenvolvimento",
+        rotulo: "Cadastros",
+        href: `/pessoas/${pessoaId}/desenvolvimento/cadastros`,
+        subitem: true,
+      });
+    }
   }
   if (auth.historico) {
     areas.push({
@@ -85,7 +96,9 @@ function ativoPorHref(pathname: string, href: string) {
 }
 
 function itemNavAtivo(pathname: string, area: AreaNav) {
-  if (area.id === "perfil") return pathname === area.href;
+  if (area.id === "perfil" || area.id === "desenvolvimento") {
+    return pathname === area.href;
+  }
   if (area.id === "rotina") {
     return (
       pathname === area.href ||
@@ -107,6 +120,7 @@ function MenuNavegacao({
     pronto,
     usuario,
     cartoes,
+    autorizacoes,
     podeGerenciarFamilia,
     limparSessaoLocal,
   } = useSessao();
@@ -174,9 +188,14 @@ function MenuNavegacao({
         ? areasDaPessoa(
             pessoaId,
             cartaoAtual?.areasAutorizadas ?? areasFallback,
+            podeOrganizarDesenvolvimento(
+              pessoaId,
+              usuario?.pessoa.id,
+              autorizacoes,
+            ),
           )
         : [],
-    [pessoaId, cartaoAtual, areasFallback],
+    [pessoaId, cartaoAtual, areasFallback, usuario, autorizacoes],
   );
   const nomePessoaMenu = cartaoAtual?.nome ?? nomeFallback;
 
@@ -271,6 +290,7 @@ function MenuNavegacao({
               label={area.rotulo}
               active={itemNavAtivo(pathname, area)}
               onClick={onNavegar}
+              pl={area.subitem ? "xl" : undefined}
             />
           ))}
         </Stack>

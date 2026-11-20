@@ -1,797 +1,874 @@
 {
-  "schemaVersao": 2,
-  "revisao": {
-    "branch": "develop",
-    "commit": "609829ea3a7e6a778722bd9978332879bd82470a",
-    "nota": "DEM-CT-20261119-001-002 COMPLETED técnico local sem commit"
-  },
-  "moduloId": "04-evolucao-familiar",
-  "incrementoId": "EF-06",
-  "requisitos": [
-    "EVO-R04",
-    "EVO-R09",
-    "EVO-R12"
-  ],
-  "estado": "COMPLETED",
-  "dependencias": [
-    "Módulo 01–03 COMPLETED",
-    "EF-01..EF-05 COMPLETED",
-    "docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md v1.1"
-  ],
-  "arquivos": [
-    "apps/api/src/autorizacoes/servico-autorizacoes.ts",
-    "apps/web/src/lib/api.ts",
-    "apps/web/src/componentes/painel-fundacao.tsx",
-    "apps/api/scripts/smoke-ef06.mjs",
-    "apps/api/scripts/smoke-modulo-04.mjs",
-    "apps/api/package.json"
-  ],
-  "planejamento": {
-    "especificacao": {
-      "caminho": "docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md",
-      "versao": "v1.1",
-      "status": "aprovado"
-    },
-    "incrementos": [
-      {
-        "id": "EF-01",
-        "status": "COMPLETED",
-        "aceite": "Histórico unificado + authz por domínio"
-      },
-      {
-        "id": "EF-02",
-        "status": "COMPLETED",
-        "aceite": "Filtros período/domínio + UI histórico"
-      },
-      {
-        "id": "EF-03",
-        "status": "COMPLETED",
-        "aceite": "Resumo Vovó previstos/tomadas/não tomadas/sem confirmação + UI"
-      },
-      {
-        "id": "EF-04",
-        "status": "COMPLETED",
-        "aceite": "GET resumo Laurinha + UI /resumo; sem clínica/ranking; nao_classificada"
-      },
-      {
-        "id": "EF-05",
-        "status": "COMPLETED",
-        "aceite": "Prévia/PDF autorizados; sem anexos; colaboradora sem export"
-      },
-      {
-        "id": "EF-06",
-        "status": "COMPLETED",
-        "aceite": "Destaques discretos na home + QG-3 módulo 04"
-      }
-    ]
-  },
-  "verificacao": {
-    "qg1": {
-      "status": "PASS"
-    },
-    "qg2": {
-      "status": "PASS"
-    },
-    "qg3": {
-      "status": "PASS",
-      "evidencia": "docs/esteira/estado/evidencia-qg3-modulo-04.json"
-    },
-    "evidencias": [
-      "docs/esteira/estado/qg1-typecheck-ef06.txt",
-      "docs/esteira/estado/qg1-typecheck-web-ef06.txt",
-      "docs/esteira/estado/qg2-smoke-ef06.txt",
-      "docs/esteira/estado/qg2-build-ef06.txt",
-      "docs/esteira/estado/qg3-smoke-modulo-04.txt",
-      "docs/esteira/estado/evidencia-qg3-modulo-04.json"
-    ],
-    "ultimoIncremento": {
-      "id": "EF-06",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "qg3": "PASS",
-      "verifier": "PASS",
-      "verifierId": "b26db6d1-5a99-45cb-865b-b240239f53d9",
-      "evidencias": [
-        "docs/esteira/estado/qg1-typecheck-ef06.txt",
-        "docs/esteira/estado/qg1-typecheck-web-ef06.txt",
-        "docs/esteira/estado/qg2-smoke-ef06.txt",
-        "docs/esteira/estado/qg2-build-ef06.txt",
-        "docs/esteira/estado/qg3-smoke-modulo-04.txt"
-      ]
-    }
-  },
-  "fingerprint": "ef-modulo04-qg3-2026-11-16",
-  "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
-  "tentativasCorrecao": {},
-  "demanda": null,
-  "janelaIncrementos": [
-    {
-      "id": "CUI-UX-CONS-01",
-      "fatia": "lista/detalhes",
-      "status": "COMPLETED"
-    },
-    {
-      "id": "CUI-UX-CONS-02",
-      "fatia": "agendamento mínimo",
-      "status": "COMPLETED"
-    },
-    {
-      "id": "CUI-UX-CONS-03",
-      "fatia": "registro exame/anexo",
-      "status": "COMPLETED"
-    }
-  ],
-  "demandasConcluidas": [
-    {
-      "id": "DEM-CT-20261119-001-002",
-      "tipo": "melhoria_funcional",
-      "origem": "CT-20261119-001 + CT-20261119-002 + ESPECIFICACAO.md v1.2 + ADR-013",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "adr": "ADR-013",
-      "criteriosAceite": [
-        "DEV-F03",
-        "DEV-F04",
-        "DEV-F06",
-        "CT-20261119-001",
-        "CT-20261119-002"
-      ],
-      "criteriosOk": [
-        "DEV-F03",
-        "DEV-F04",
-        "DEV-F06",
-        "CT-20261119-001",
-        "CT-20261119-002"
-      ],
-      "criteriosFalha": [],
-      "fingerprint": "sha256:f458f5cdde9a50a4",
-      "fingerprintFull": "sha256:f458f5cdde9a50a40db8f91c397a1a34f6f2febc512e72761770da1ee3340cd3",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "qg3": "PASS",
-      "verifier": "PASS",
-      "verifierId": "422aae3f-f66c-4f49-9823-4746e0ed2739",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/evidencia-ct-dl-exec-rec-20261119.json"
-      ],
-      "arquivos": [
-        "apps/api/prisma/schema.prisma",
-        "apps/api/prisma/seed.mjs",
-        "apps/api/scripts/reset-db-local.mjs",
-        "apps/api/src/desenvolvimento/servico-desafios.ts",
-        "apps/api/src/desenvolvimento/servico-participacoes.ts",
-        "apps/api/src/desenvolvimento/servico-recompensas.ts",
-        "apps/api/src/desenvolvimento/controlador-desenvolvimento.ts",
-        "apps/api/scripts/smoke-dl-exec.mjs",
-        "apps/api/scripts/smoke-dl-rec.mjs",
-        "apps/api/scripts/smoke-dl03.mjs",
-        "apps/api/scripts/smoke-dl05.mjs",
-        "apps/api/scripts/smoke-modulo-03.mjs",
-        "apps/api/scripts/smoke-ef01.mjs",
-        "apps/api/scripts/smoke-ef02.mjs",
-        "apps/api/scripts/smoke-ef04.mjs",
-        "apps/api/scripts/smoke-ef05.mjs",
-        "apps/api/scripts/smoke-ef06.mjs",
-        "apps/api/package.json",
-        "apps/web/src/lib/api.ts",
-        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
-        "docs/arquitetura/DECISOES.md",
-        "docs/arquitetura/ARQUITETURA.md"
-      ],
-      "mensagemCommit": "feat(desenvolvimento): disponibilizar executadas e recompensas reativaveis\n\nImplementa ADR-013/CT-20261119-001-002: estado Explorar/Executadas e Disponíveis/Resgatadas com reativação autorizada, preservando histórico, Guardadas e idempotência de resgates.",
-      "nota": "PASS técnico INC-DL-EXEC-01..REG-04 + QG-3 modulo-03; humana PENDING_HUMAN. Authz residual seed Helena≠Vovó.",
-      "concluidaEm": "2026-11-19T17:00:03.521Z"
-    },
-    {
-      "id": "DEM-UX-DL-03-20261119",
-      "tipo": "melhoria_ux",
-      "origem": "humano + docs/ux-ui/REVISAO-MODULO-03.md + GUIA-DE-EXPERIENCIA.md § Desenvolvimento",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "UX-DL-01",
-        "UX-DL-02",
-        "UX-DL-03",
-        "UX-DL-04",
-        "UX-DL-05",
-        "UX-DL-06",
-        "DEV-F01",
-        "DEV-F02",
-        "DEV-F03",
-        "DEV-F04",
-        "DEV-F05",
-        "DEV-F06",
-        "DEV-F07"
-      ],
-      "criteriosOk": [
-        "UX-DL-01",
-        "UX-DL-02",
-        "UX-DL-03",
-        "UX-DL-04",
-        "UX-DL-05",
-        "UX-DL-06",
-        "DEV-F01",
-        "DEV-F02",
-        "DEV-F03",
-        "DEV-F04",
-        "DEV-F05",
-        "DEV-F06",
-        "DEV-F07"
-      ],
-      "criteriosFalha": [],
-      "fingerprint": "sha256:b284793cde1478f7",
-      "fingerprintFull": "sha256:b284793cde1478f711d916440b94c31740e2d140aaf7e9f1bdac5fa6c43f2567",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "qg3": "PASS",
-      "verifier": "PASS",
-      "verifierId": "5f0fd528-2614-49c0-ba3f-3edbf7564f9f",
-      "verifierNota": "generalPurpose + roteiro verifier.md (tipo verifier ausente do catálogo)",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/evidencia-ux-dl03-20261119.json",
-        "docs/esteira/estado/qg1-typecheck-web-ux-dl03.txt",
-        "docs/esteira/estado/qg2-check-estatico-ux-dl03.json",
-        "docs/esteira/estado/qg2-smoke-dl02-ux-dl03.txt",
-        "docs/esteira/estado/qg2-smoke-dl03-ux-dl03.txt",
-        "docs/esteira/estado/qg2-smoke-dl04-ux-dl03.txt",
-        "docs/esteira/estado/qg2-smoke-authz-ux-dl03.txt",
-        "docs/esteira/estado/qg2-build-web-ux-dl03.txt"
-      ],
-      "arquivos": [
-        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
-        "apps/web/src/lib/rotulos-experiencia.ts"
-      ],
-      "mensagemCommit": "fix(ux): alinhar Desenvolvimento à experiência única aprovada\n\nReorganiza saldo compacto, recompensas secundárias e ações de organização condicionadas à autorização, preservando DEV-F01..F07. Homologação humana permanece pendente.",
-      "nota": "PASS técnico INC1+INC2 + QG-3; humana PENDING_HUMAN.",
-      "concluidaEm": "2026-11-19T11:22:38.843Z"
-    },
-    {
-      "id": "DEM-UX-HOM-20261118",
-      "tipo": "transversal",
-      "origem": "humano + PLANO-CORRETIVO-HOMOLOGACAO-20261118.md + REVISAO-MODULOS-01-02 UX-HOM-01..07",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "UX-HOM-01",
-        "UX-HOM-02",
-        "UX-HOM-03",
-        "UX-HOM-04",
-        "UX-HOM-05",
-        "UX-HOM-06",
-        "UX-HOM-07"
-      ],
-      "criteriosOk": [
-        "UX-HOM-01",
-        "UX-HOM-02",
-        "UX-HOM-03",
-        "UX-HOM-04",
-        "UX-HOM-05",
-        "UX-HOM-06",
-        "UX-HOM-07"
-      ],
-      "criteriosFalha": [],
-      "criteriosPendentes": [
-        {
-          "id": "UX-HOM-02-SELETOR",
-          "status": "NEEDS_DECISION",
-          "nota": "Lista de opções de vínculo e local administrativo de edição aguardam decisão de Produto"
-        }
-      ],
-      "fingerprint": "sha256:9f6ab4a42a59c149",
-      "fingerprintFull": "sha256:9f6ab4a42a59c149ac75435af327ac377466c437b1f24d2a61038937351dcfb6",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "qg3": "PASS",
-      "verifier": "PASS",
-      "verifierId": "e5ccff07-38c8-4231-ac68-7ff4d28d56fe",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "statusUxOficial": "REPROVADA",
-      "evidencias": [
-        "docs/esteira/estado/evidencia-ux-hom-20261118.json",
-        "docs/esteira/estado/qg1-typecheck-web-ux-hom-20261118.txt",
-        "docs/esteira/estado/qg2-build-web-ux-hom-20261118.txt",
-        "docs/esteira/estado/qg2-check-estatico-ux-hom-20261118.json",
-        "docs/esteira/estado/qg2-smoke-authz-ux-hom-20261118.txt",
-        "docs/esteira/estado/qg2-smoke-ct-acessos-ux-hom-20261118.txt",
-        "docs/esteira/estado/qg2-smoke-cv03-ux-hom-20261118.txt",
-        "docs/esteira/estado/qg2-smoke-url-direta-ux-hom-20261118.txt"
-      ],
-      "arquivos": [
-        "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
-        "apps/web/src/componentes/feedback.tsx",
-        "apps/web/src/componentes/icones-experiencia.tsx",
-        "apps/web/src/app/page.tsx",
-        "apps/web/src/componentes/painel-fundacao.tsx",
-        "apps/web/src/lib/api.ts",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
-        "apps/web/src/lib/rotulos-experiencia.ts",
-        "apps/web/src/componentes/navegacao-app.tsx"
-      ],
-      "mensagemCommit": "fix(ux): corrigir achados da homologação humana UX-HOM-01..07\n\nOculta áreas não autorizadas, remove edição de vínculo no perfil cotidiano, melhora estados/ícones e feedback transitório, e reduz microcopy/rótulos legados. Homologação humana permanece pendente.",
-      "nota": "PASS técnico slices A/B/C + QG-3; humana PENDING_HUMAN / UX REPROVADA até aceite expresso.",
-      "concluidaEm": "2026-11-18T13:19:55.587Z"
-    },
-    {
-      "id": "DEM-HOMOL-CUI-20261117",
-      "tipo": "homologacao",
-      "origem": "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 5 após CONS",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "CUI-VAL-01",
-        "CUI-VAL-02",
-        "CUI-VAL-03",
-        "CUI-VAL-04",
-        "CUI-VAL-05",
-        "CUI-VAL-06",
-        "CUI-VAL-HUMANO"
-      ],
-      "criteriosOk": [
-        "CUI-VAL-01",
-        "CUI-VAL-02",
-        "CUI-VAL-03",
-        "CUI-VAL-04",
-        "CUI-VAL-05",
-        "CUI-VAL-06"
-      ],
-      "criteriosFalha": [],
-      "criteriosPendentesHumanos": [
-        "CUI-VAL-HUMANO"
-      ],
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "4ef6dcc6-051d-47d9-802e-2be0cd3fa459",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/evidencia-homol-cui-20261117.json",
-        "docs/esteira/estado/homol-cui-typecheck-web.txt",
-        "docs/esteira/estado/homol-cui-smoke-authz.txt",
-        "docs/esteira/estado/homol-cui-smoke-cv03.txt",
-        "docs/esteira/estado/homol-cui-smoke-cv04.txt",
-        "docs/esteira/estado/homol-cui-smoke-ct-acessos.txt",
-        "docs/esteira/estado/homol-cui-check-msg-rede.txt",
-        "docs/esteira/estado/homol-cui-check-estatico.txt"
-      ],
-      "arquivos": [
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
-        "apps/web/src/componentes/navegacao-app.tsx",
-        "apps/web/src/componentes/feedback.tsx",
-        "apps/web/src/lib/rotulos-experiencia.ts"
-      ],
-      "nota": "PASS técnico §5.5; não equivale a homologação UX humana.",
-      "concluidaEm": "2026-11-17T21:45:00.000Z"
-    },
-    {
-      "id": "DEM-CUI-UX-CONS-20261117",
-      "tipo": "melhoria_ux",
-      "origem": "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 4 (3 fatias na janela)",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "CUI-UX-CONS-01",
-        "CUI-UX-CONS-02",
-        "CUI-UX-CONS-03"
-      ],
-      "criteriosOk": [
-        "CUI-UX-CONS-01",
-        "CUI-UX-CONS-02",
-        "CUI-UX-CONS-03"
-      ],
-      "criteriosFalha": [],
-      "fingerprint": "sha256:de1eade8ffd58638",
-      "fingerprintFull": "sha256:de1eade8ffd586382b67c68056e5a15a3291e501c83eea1386a140f7696ac6f2",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "5815ebc1-8b1a-4298-9116-b2d55aa5f175",
-      "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente com shell PASS (fingerprint oficial + typecheck + smokes + build + critérios).",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/qg1-typecheck-web-cui-ux-cons.txt",
-        "docs/esteira/estado/qg2-smoke-cv04-cui-ux-cons.txt",
-        "docs/esteira/estado/qg2-smoke-authz-cui-ux-cons.txt",
-        "docs/esteira/estado/qg2-build-web-cui-ux-cons.txt",
-        "docs/esteira/estado/evidencia-cui-ux-cons-20261117.json"
-      ],
-      "arquivos": [
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
-        "apps/web/src/lib/api.ts",
-        "apps/web/src/lib/rotulos-experiencia.ts"
-      ],
-      "concluidaEm": "2026-11-17T21:30:00.000Z"
-    },
-    {
-      "id": "DEM-CUI-UX-MED-20261117",
-      "tipo": "melhoria_ux",
-      "origem": "humano + REVISAO-INTEGRADA §5 item 3 após ROTINA",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "CUI-UX-MED-01",
-        "CUI-UX-MED-02"
-      ],
-      "criteriosOk": [
-        "CUI-UX-MED-01",
-        "CUI-UX-MED-02"
-      ],
-      "criteriosFalha": [],
-      "fingerprint": "sha256:c9a5c265a942a508",
-      "fingerprintFull": "sha256:c9a5c265a942a508e9a0886a3d21c4a9f4f4537ab31efa8d4c1a01ed7e07b0b4",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "499257c4-d934-4188-8b08-59cf6ed32954",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/qg1-typecheck-web-cui-ux-med.txt",
-        "docs/esteira/estado/qg2-smoke-cv03-cui-ux-med.txt",
-        "docs/esteira/estado/qg2-smoke-authz-cui-ux-med.txt",
-        "docs/esteira/estado/qg2-build-web-cui-ux-med.txt",
-        "docs/esteira/estado/evidencia-cui-ux-med-20261117.json"
-      ],
-      "arquivos": [
-        "apps/web/src/lib/api.ts",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx"
-      ],
-      "concluidaEm": "2026-11-17T21:11:40.971Z"
-    },
-    {
-      "id": "DEM-CUI-UX-ROTINA-20261117",
-      "tipo": "melhoria_ux",
-      "origem": "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 2 após FUND",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "CUI-UX-02",
-        "CUI-UX-04"
-      ],
-      "criteriosOk": [
-        "CUI-UX-02",
-        "CUI-UX-04"
-      ],
-      "criteriosFalha": [],
-      "fingerprint": "sha256:cc37be8b77e8ee9c",
-      "fingerprintFull": "sha256:cc37be8b77e8ee9c2e8bdeaf3efa6927ca67663506cdda348f019fac5967d619",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "3963e837-e912-42cd-8a15-c2faf3f7febb",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/qg1-typecheck-web-cui-ux-rotina.txt",
-        "docs/esteira/estado/qg2-smoke-cv03-cui-ux-rotina.txt",
-        "docs/esteira/estado/qg2-smoke-authz-cui-ux-rotina.txt",
-        "docs/esteira/estado/qg2-build-web-cui-ux-rotina.txt",
-        "docs/esteira/estado/evidencia-cui-ux-rotina-20261117.json"
-      ],
-      "arquivos": [
-        "apps/web/src/lib/rotulos-experiencia.ts",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx"
-      ],
-      "concluidaEm": "2026-11-17T20:03:32.316Z"
-    },
-    {
-      "id": "DEM-CUI-UX-FUND-20261117",
-      "tipo": "melhoria_ux",
-      "origem": "humano + docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md §5 item 1",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "CUI-UX-05",
-        "CUI-UX-01"
-      ],
-      "criteriosOk": [
-        "CUI-UX-05",
-        "CUI-UX-01"
-      ],
-      "criteriosFalha": [],
-      "fingerprint": "sha256:c6fd9b7f2e03b50d",
-      "fingerprintFull": "sha256:c6fd9b7f2e03b50d70532274956469d31c96757dcb5e08c1e596dff004fa4e45",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "d65ca03f-63db-4dcb-8ab5-c1cd195a080b",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/qg1-typecheck-web-cui-ux-fund.txt",
-        "docs/esteira/estado/qg2-smoke-cv03-cui-ux-fund.txt",
-        "docs/esteira/estado/qg2-smoke-ct-acessos-cui-ux-fund.txt",
-        "docs/esteira/estado/qg2-smoke-authz-cui-ux-fund.txt",
-        "docs/esteira/estado/qg2-build-web-cui-ux-fund.txt",
-        "docs/esteira/estado/evidencia-cui-ux-fund-20261117.json"
-      ],
-      "arquivos": [
-        "apps/web/src/lib/rotulos-experiencia.ts",
-        "apps/web/src/lib/api.ts",
-        "apps/web/src/componentes/contexto-sessao.tsx",
-        "apps/web/src/componentes/navegacao-app.tsx",
-        "apps/web/src/componentes/painel-fundacao.tsx",
-        "apps/web/src/componentes/painel-gerenciar-familia.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx"
-      ],
-      "concluidaEm": "2026-11-17T19:37:13.377Z"
-    },
-    {
-      "id": "DEM-HOMOL-UX-20261116-R2",
-      "tipo": "homologacao",
-      "origem": "humano — nova tentativa pós DEM-COR-UX-HOMOL",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "UX-NAV-01",
-        "UX-NAV-02",
-        "UX-ADM-01",
-        "UX-ADM-02",
-        "UX-CUI-01",
-        "UX-DES-01",
-        "UX-EVO-01",
-        "UX-ACC-01"
-      ],
-      "criteriosOk": [
-        "UX-NAV-01",
-        "UX-NAV-02",
-        "UX-ADM-01",
-        "UX-ADM-02",
-        "UX-CUI-01",
-        "UX-DES-01",
-        "UX-EVO-01",
-        "UX-ACC-01"
-      ],
-      "criteriosFalha": [],
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "b8945c64-bab2-4726-bac7-f58d3810ac1c",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/evidencia-homol-ux-r2-20261116.json",
-        "docs/esteira/estado/homol-ux-r2-typecheck-web.txt",
-        "docs/esteira/estado/homol-ux-r2-smoke-authz.txt",
-        "docs/esteira/estado/homol-ux-r2-smoke-ct-acessos.txt",
-        "docs/esteira/estado/homol-ux-r2-smoke-cv03.txt",
-        "docs/esteira/estado/homol-ux-r2-check-msg-rede.txt"
-      ],
-      "concluidaEm": "2026-11-17T00:13:56.267Z"
-    },
-    {
-      "id": "DEM-COR-UX-HOMOL-20261116",
-      "tipo": "melhoria_ux",
-      "origem": "humano + achados DEM-HOMOL-UX-20261116 (UX-ACC-01, UX-CUI-01)",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "PASS",
-      "criteriosAceite": [
-        "UX-ACC-01",
-        "UX-CUI-01"
-      ],
-      "criteriosOk": [
-        "UX-ACC-01",
-        "UX-CUI-01"
-      ],
-      "criteriosFalha": [],
-      "fingerprint": "sha256:46b2078e73b0c6d5",
-      "fingerprintFull": "sha256:46b2078e73b0c6d559ee8aadccbdf286c527329cc160d14befc7f863cb32f5bf",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "a6551ef3-2348-4942-a1aa-0e0e09a9684c",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/evidencia-cor-ux-homol-20261116.json",
-        "docs/esteira/estado/qg1-typecheck-web-cor-ux.txt",
-        "docs/esteira/estado/qg2-build-web-cor-ux.txt",
-        "docs/esteira/estado/qg2-smoke-cv03-cor-ux.txt",
-        "docs/esteira/estado/qg2-smoke-authz-cor-ux.txt",
-        "docs/esteira/estado/qg2-check-msg-rede-cor-ux.txt"
-      ],
-      "arquivos": [
-        "apps/web/src/componentes/navegacao-app.tsx",
-        "apps/web/src/componentes/feedback.tsx",
-        "apps/web/src/componentes/contexto-sessao.tsx",
-        "apps/web/src/componentes/painel-fundacao.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx"
-      ],
-      "concluidaEm": "2026-11-16T23:53:23.631Z"
-    },
-    {
-      "id": "DEM-HOMOL-UX-20261116",
-      "tipo": "homologacao",
-      "origem": "humano + DEM-UX-NAV-ADM PENDING_HUMAN + GUIA §7",
-      "estado": "COMPLETED",
-      "resultadoTecnico": "FAIL",
-      "criteriosAceite": [
-        "UX-NAV-01",
-        "UX-NAV-02",
-        "UX-ADM-01",
-        "UX-ADM-02",
-        "UX-CUI-01",
-        "UX-DES-01",
-        "UX-EVO-01",
-        "UX-ACC-01"
-      ],
-      "criteriosOk": [
-        "UX-NAV-01",
-        "UX-NAV-02",
-        "UX-ADM-01",
-        "UX-ADM-02",
-        "UX-DES-01",
-        "UX-EVO-01"
-      ],
-      "criteriosFalha": [
-        "UX-ACC-01",
-        "UX-CUI-01 (parcial: drawer desktop)"
-      ],
-      "qg1": "PASS",
-      "qg2": "PASS_COM_ACHADOS",
-      "verifier": "FAIL",
-      "verifierId": "ac0570d9-36b6-4add-8740-805e52d735c4",
-      "homologacaoHumana": "PENDING_HUMAN",
-      "evidencias": [
-        "docs/esteira/estado/evidencia-homol-ux-20261116.json",
-        "docs/esteira/estado/homol-ux-typecheck-web.txt",
-        "docs/esteira/estado/homol-ux-smoke-authz.txt",
-        "docs/esteira/estado/homol-ux-smoke-ct-acessos.txt",
-        "docs/esteira/estado/homol-ux-smoke-cv03.txt",
-        "docs/esteira/estado/homol-ux-smoke-dl02.txt",
-        "docs/esteira/estado/homol-ux-smoke-ef05.txt",
-        "docs/esteira/estado/homol-ux-build-web.txt"
-      ],
-      "arquivos": [
-        "apps/web/src/componentes/navegacao-app.tsx",
-        "apps/web/src/componentes/painel-gerenciar-familia.tsx",
-        "apps/web/src/componentes/contexto-sessao.tsx",
-        "apps/web/src/app/pessoas"
-      ],
-      "notaAmbiente": "Build concorrente com next:dev causou EPERM e 500 em .next; reiniciar web local antes de nova inspeção UI.",
-      "concluidaEm": "2026-11-16T21:27:55.935Z"
-    },
-    {
-      "id": "DEM-UX-NAV-ADM-20261116",
-      "tipo": "melhoria_ux",
-      "origem": "humano + docs/ux-ui/REVISAO-MODULOS-01-02.md (revisão integrada 2026-11-16)",
-      "estado": "COMPLETED",
-      "criteriosAceite": [
-        "UX-NAV-01",
-        "UX-NAV-02",
-        "UX-ADM-01",
-        "UX-ADM-02",
-        "UX-CUI-01",
-        "UX-DES-01",
-        "UX-EVO-01",
-        "UX-ACC-01"
-      ],
-      "fingerprint": "sha256:db65d95aa716c68e",
-      "fingerprintFull": "sha256:db65d95aa716c68e3d18dc75bf56b651c29fe1b07004bfc835562a31582d43fe",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "25127f08-94fa-4193-9832-a0cfda7c2efa",
-      "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente com shell PASS (typecheck+smokes+critérios). Homologação humana PENDING_HUMAN.",
-      "evidencias": [
-        "docs/esteira/estado/qg1-typecheck-web-ux-nav.txt",
-        "docs/esteira/estado/qg2-build-web-ux-nav.txt",
-        "docs/esteira/estado/qg2-smoke-ct-acessos-ux-nav.txt",
-        "docs/esteira/estado/qg2-smoke-authz-ux-nav.txt"
-      ],
-      "arquivos": [
-        "apps/web/src/componentes/contexto-sessao.tsx",
-        "apps/web/src/componentes/navegacao-app.tsx",
-        "apps/web/src/componentes/provedores-app.tsx",
-        "apps/web/src/componentes/painel-fundacao.tsx",
-        "apps/web/src/componentes/painel-gerenciar-familia.tsx",
-        "apps/web/src/app/gerenciar-familia/page.tsx",
-        "apps/web/src/app/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx",
-        "apps/web/src/app/pessoas/[pessoaId]/resumo/page.tsx",
-        "apps/web/src/lib/api.ts"
-      ],
-      "homologacaoHumana": "PENDING_HUMAN",
-      "concluidaEm": "2026-11-16T19:42:59.309Z"
-    },
-    {
-      "id": "DEM-CT-20261116-001",
-      "tipo": "melhoria_funcional",
-      "origem": "CT-20261116-001",
-      "estado": "COMPLETED",
-      "criteriosAceite": [
-        "FUN-04",
-        "FUN-07",
-        "FAM-R11"
-      ],
-      "fingerprint": "sha256:2a04c89c9f1f00e7",
-      "qg1": "PASS",
-      "qg2": "PASS",
-      "verifier": "PASS",
-      "verifierId": "8fe0305e-48a2-4d23-bb62-08469cbf8e2d",
-      "evidencias": [
-        "docs/esteira/estado/qg1-typecheck-api-ct-acessos.txt",
-        "docs/esteira/estado/qg1-typecheck-web-ct-acessos.txt",
-        "docs/esteira/estado/qg2-smoke-ct-acessos.txt",
-        "docs/esteira/estado/qg2-smoke-authz-ct-acessos.txt"
-      ],
-      "arquivos": [
-        "apps/api/src/autorizacoes/responsabilidades.ts",
-        "apps/api/src/autorizacoes/servico-autorizacoes.ts",
-        "apps/api/src/autorizacoes/controlador-autorizacoes.ts",
-        "apps/web/src/lib/api.ts",
-        "apps/web/src/componentes/painel-fundacao.tsx",
-        "apps/api/scripts/smoke-ct-acessos.mjs",
-        "apps/api/package.json"
-      ],
-      "concluidaEm": "2026-11-16T18:35:00.000Z"
-    }
-  ],
-  "proximaAcao": "Homologação humana Módulo 03 (PENDING_HUMAN). Commit sob decisão humana.",
-  "atualizadoEm": "2026-11-19T17:00:03.521Z",
-  "notas": "DEM-CT-20261119-001-002 técnico PASS (ADR-013); humana PENDING_HUMAN.",
-  "decisaoPendente": {
-    "id": "UX-HOM-02-SELETOR",
-    "status": "NEEDS_DECISION",
-    "nota": "Opções de vínculo e UI administrativa de edição"
-  },
-  "moduloAnterior": {
-    "id": "03-desenvolvimento-laurinha",
-    "status": "COMPLETED",
-    "qg3": "PASS",
-    "fingerprint": "dl-modulo03-qg3-13844004b669409f"
-  },
-  "incrementosConcluidos": [
-    {
-      "id": "EF-01",
-      "status": "COMPLETED",
-      "fingerprint": "ef01-2026-11-15",
-      "verifierId": "22602b81-3adf-4bef-8e1f-101960402b5b"
-    },
-    {
-      "id": "EF-02",
-      "status": "COMPLETED",
-      "fingerprint": "ef02-2026-11-15",
-      "verifierId": "84711f1e-7823-48fb-8dae-1db0cb8297a5"
-    },
-    {
-      "id": "EF-03",
-      "status": "COMPLETED",
-      "fingerprint": "ef03-2026-11-15",
-      "verifierId": "06ee571f-88c6-44f6-bcac-8f4ff036404d"
-    },
-    {
-      "id": "EF-04",
-      "status": "COMPLETED",
-      "fingerprint": "ef04-2026-11-16",
-      "verifierId": "154e2cdf-934f-4fd0-b44d-e0a5ea3522fc"
-    },
-    {
-      "id": "EF-05",
-      "status": "COMPLETED",
-      "fingerprint": "ef05-2026-11-16",
-      "verifierId": "b8b12bac-0352-4d8f-970e-4e1b78ae3130"
-    },
-    {
-      "id": "EF-06",
-      "status": "COMPLETED",
-      "fingerprint": "ef06-2026-11-16",
-      "verifierId": "b26db6d1-5a99-45cb-865b-b240239f53d9"
-    }
-  ],
-  "modulo": {
-    "id": "04-evolucao-familiar",
-    "status": "COMPLETED",
-    "qg3": "PASS",
-    "fingerprint": "ef-modulo04-qg3-2026-11-16"
-  }
+    "schemaVersao":  2,
+    "revisao":  {
+                    "branch":  "develop",
+                    "nota":  "DEM-UX-HOM-R3 COMPLETED técnico local sem commit",
+                    "commit":  "7b8348ebbcac12fdc9822fc6d906bfc58bf346f9"
+                },
+    "moduloId":  "04-evolucao-familiar",
+    "incrementoId":  "EF-06",
+    "requisitos":  [
+                       "EVO-R04",
+                       "EVO-R09",
+                       "EVO-R12"
+                   ],
+    "estado":  "COMPLETED",
+    "dependencias":  [
+                         "Módulo 01–03 COMPLETED",
+                         "EF-01..EF-05 COMPLETED",
+                         "docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md v1.1"
+                     ],
+    "arquivos":  [
+                     "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+                     "apps/web/src/lib/api.ts",
+                     "apps/web/src/componentes/painel-fundacao.tsx",
+                     "apps/api/scripts/smoke-ef06.mjs",
+                     "apps/api/scripts/smoke-modulo-04.mjs",
+                     "apps/api/package.json"
+                 ],
+    "planejamento":  {
+                         "especificacao":  {
+                                               "caminho":  "docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md",
+                                               "versao":  "v1.1",
+                                               "status":  "aprovado"
+                                           },
+                         "incrementos":  [
+                                             {
+                                                 "id":  "EF-01",
+                                                 "status":  "COMPLETED",
+                                                 "aceite":  "Histórico unificado + authz por domínio"
+                                             },
+                                             {
+                                                 "id":  "EF-02",
+                                                 "status":  "COMPLETED",
+                                                 "aceite":  "Filtros período/domínio + UI histórico"
+                                             },
+                                             {
+                                                 "id":  "EF-03",
+                                                 "status":  "COMPLETED",
+                                                 "aceite":  "Resumo Vovó previstos/tomadas/não tomadas/sem confirmação + UI"
+                                             },
+                                             {
+                                                 "id":  "EF-04",
+                                                 "status":  "COMPLETED",
+                                                 "aceite":  "GET resumo Laurinha + UI /resumo; sem clínica/ranking; nao_classificada"
+                                             },
+                                             {
+                                                 "id":  "EF-05",
+                                                 "status":  "COMPLETED",
+                                                 "aceite":  "Prévia/PDF autorizados; sem anexos; colaboradora sem export"
+                                             },
+                                             {
+                                                 "id":  "EF-06",
+                                                 "status":  "COMPLETED",
+                                                 "aceite":  "Destaques discretos na home + QG-3 módulo 04"
+                                             }
+                                         ]
+                     },
+    "verificacao":  {
+                        "qg1":  {
+                                    "status":  "PASS"
+                                },
+                        "qg2":  {
+                                    "status":  "PASS"
+                                },
+                        "qg3":  {
+                                    "status":  "PASS",
+                                    "evidencia":  "docs/esteira/estado/evidencia-qg3-modulo-04.json"
+                                },
+                        "evidencias":  [
+                                           "docs/esteira/estado/qg1-typecheck-ef06.txt",
+                                           "docs/esteira/estado/qg1-typecheck-web-ef06.txt",
+                                           "docs/esteira/estado/qg2-smoke-ef06.txt",
+                                           "docs/esteira/estado/qg2-build-ef06.txt",
+                                           "docs/esteira/estado/qg3-smoke-modulo-04.txt",
+                                           "docs/esteira/estado/evidencia-qg3-modulo-04.json"
+                                       ],
+                        "ultimoIncremento":  {
+                                                 "id":  "EF-06",
+                                                 "qg1":  "PASS",
+                                                 "qg2":  "PASS",
+                                                 "qg3":  "PASS",
+                                                 "verifier":  "PASS",
+                                                 "verifierId":  "b26db6d1-5a99-45cb-865b-b240239f53d9",
+                                                 "evidencias":  [
+                                                                    "docs/esteira/estado/qg1-typecheck-ef06.txt",
+                                                                    "docs/esteira/estado/qg1-typecheck-web-ef06.txt",
+                                                                    "docs/esteira/estado/qg2-smoke-ef06.txt",
+                                                                    "docs/esteira/estado/qg2-build-ef06.txt",
+                                                                    "docs/esteira/estado/qg3-smoke-modulo-04.txt"
+                                                                ]
+                                             }
+                    },
+    "fingerprint":  "ef-modulo04-qg3-2026-11-16",
+    "fingerprintNota":  "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
+    "tentativasCorrecao":  {
+
+                           },
+    "demanda":  null,
+    "janelaIncrementos":  [
+                              {
+                                  "id":  "CUI-UX-CONS-01",
+                                  "fatia":  "lista/detalhes",
+                                  "status":  "COMPLETED"
+                              },
+                              {
+                                  "id":  "CUI-UX-CONS-02",
+                                  "fatia":  "agendamento mínimo",
+                                  "status":  "COMPLETED"
+                              },
+                              {
+                                  "id":  "CUI-UX-CONS-03",
+                                  "fatia":  "registro exame/anexo",
+                                  "status":  "COMPLETED"
+                              }
+                          ],
+    "demandasConcluidas":  [
+                               {
+                                   "id":  "DEM-UX-HOM-R3-20261119",
+                                   "tipo":  "melhoria_ux",
+                                   "origem":  "humano + docs/ux-ui/REVISAO-MODULO-03.md § Nova reprovação humana (DEV-UX-HOM-R3-01..03)",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "DEV-UX-HOM-R3-01",
+                                                           "DEV-UX-HOM-R3-02",
+                                                           "DEV-UX-HOM-R3-03"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "DEV-UX-HOM-R3-01",
+                                                       "DEV-UX-HOM-R3-02",
+                                                       "DEV-UX-HOM-R3-03"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "fingerprint":  "sha256:f0114d296d15068a",
+                                   "fingerprintFull":  "sha256:f0114d296d15068a8ea9d5747e420ed1893ac9cc16eace6d15c4751ff5c49dc8",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "qg3":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "6c71be97-490f-422a-adbd-06911be180d6",
+                                   "verifierNota":  "Verifier oficial BLOCKED (Ask/shell); verificação independente generalPurpose + roteiro verifier.md PASS (fingerprint + typecheck + smokes + critérios).",
+                                   "verifierOficial":  "BLOCKED",
+                                   "verifierOficialId":  "a5e4c37e-8d27-4636-90b7-23212504be44",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "statusUxOficial":  "REPROVADA",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/evidencia-ux-hom-r3-20261119.json",
+                                                      "docs/esteira/estado/qg1-typecheck-web-ux-hom-r3.txt",
+                                                      "docs/esteira/estado/qg2-check-estatico-ux-hom-r3.json",
+                                                      "docs/esteira/estado/qg2-check-a11y-ux-hom-r3.json",
+                                                      "docs/esteira/estado/qg2-check-categoria-authz-ux-hom-r3.txt",
+                                                      "docs/esteira/estado/qg2-smoke-dl02-ux-hom-r3.txt",
+                                                      "docs/esteira/estado/qg2-smoke-dl03-ux-hom-r3.txt",
+                                                      "docs/esteira/estado/qg2-smoke-dl-exec-ux-hom-r3.txt",
+                                                      "docs/esteira/estado/qg2-smoke-dl-rec-ux-hom-r3.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-ux-hom-r3.txt",
+                                                      "docs/esteira/estado/qg2-build-web-ux-hom-r3.txt",
+                                                      "docs/esteira/estado/qg3-smoke-modulo-03-ux-hom-r3.txt"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/cadastros/page.tsx",
+                                                    "apps/web/src/componentes/navegacao-app.tsx",
+                                                    "apps/web/src/lib/rotulos-experiencia.ts"
+                                                ],
+                                   "mensagemCommit":  "fix(ux): estabilizar abas e cadastros do desenvolvimento\n\nPreserva a aba atual após registrar/resgatar/reativar, move formulários para Cadastros no menu lateral e expõe filtro/seleção opcional de categorias sem alterar ADR-013. Homologação humana permanece pendente.",
+                                   "nota":  "PASS técnico R3-01..03 + QG-3 modulo-03; humana PENDING_HUMAN / UX REPROVADA. Authz residual seed Helena≠Vovó.",
+                                   "concluidaEm":  "2026-11-19T21:35:05.269Z"
+                               },
+                               {
+                                   "id":  "DEM-CT-20261119-001-002",
+                                   "tipo":  "melhoria_funcional",
+                                   "origem":  "CT-20261119-001 + CT-20261119-002 + ESPECIFICACAO.md v1.2 + ADR-013",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "adr":  "ADR-013",
+                                   "criteriosAceite":  [
+                                                           "DEV-F03",
+                                                           "DEV-F04",
+                                                           "DEV-F06",
+                                                           "CT-20261119-001",
+                                                           "CT-20261119-002"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "DEV-F03",
+                                                       "DEV-F04",
+                                                       "DEV-F06",
+                                                       "CT-20261119-001",
+                                                       "CT-20261119-002"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "fingerprint":  "sha256:f458f5cdde9a50a4",
+                                   "fingerprintFull":  "sha256:f458f5cdde9a50a40db8f91c397a1a34f6f2febc512e72761770da1ee3340cd3",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "qg3":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "422aae3f-f66c-4f49-9823-4746e0ed2739",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/evidencia-ct-dl-exec-rec-20261119.json"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/api/prisma/schema.prisma",
+                                                    "apps/api/prisma/seed.mjs",
+                                                    "apps/api/scripts/reset-db-local.mjs",
+                                                    "apps/api/src/desenvolvimento/servico-desafios.ts",
+                                                    "apps/api/src/desenvolvimento/servico-participacoes.ts",
+                                                    "apps/api/src/desenvolvimento/servico-recompensas.ts",
+                                                    "apps/api/src/desenvolvimento/controlador-desenvolvimento.ts",
+                                                    "apps/api/scripts/smoke-dl-exec.mjs",
+                                                    "apps/api/scripts/smoke-dl-rec.mjs",
+                                                    "apps/api/scripts/smoke-dl03.mjs",
+                                                    "apps/api/scripts/smoke-dl05.mjs",
+                                                    "apps/api/scripts/smoke-modulo-03.mjs",
+                                                    "apps/api/scripts/smoke-ef01.mjs",
+                                                    "apps/api/scripts/smoke-ef02.mjs",
+                                                    "apps/api/scripts/smoke-ef04.mjs",
+                                                    "apps/api/scripts/smoke-ef05.mjs",
+                                                    "apps/api/scripts/smoke-ef06.mjs",
+                                                    "apps/api/package.json",
+                                                    "apps/web/src/lib/api.ts",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+                                                    "docs/arquitetura/DECISOES.md",
+                                                    "docs/arquitetura/ARQUITETURA.md"
+                                                ],
+                                   "mensagemCommit":  "feat(desenvolvimento): disponibilizar executadas e recompensas reativaveis\n\nImplementa ADR-013/CT-20261119-001-002: estado Explorar/Executadas e Disponíveis/Resgatadas com reativação autorizada, preservando histórico, Guardadas e idempotência de resgates.",
+                                   "nota":  "PASS técnico INC-DL-EXEC-01..REG-04 + QG-3 modulo-03; humana PENDING_HUMAN. Authz residual seed Helena≠Vovó.",
+                                   "concluidaEm":  "2026-11-19T17:00:03.521Z"
+                               },
+                               {
+                                   "id":  "DEM-UX-DL-03-20261119",
+                                   "tipo":  "melhoria_ux",
+                                   "origem":  "humano + docs/ux-ui/REVISAO-MODULO-03.md + GUIA-DE-EXPERIENCIA.md § Desenvolvimento",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "UX-DL-01",
+                                                           "UX-DL-02",
+                                                           "UX-DL-03",
+                                                           "UX-DL-04",
+                                                           "UX-DL-05",
+                                                           "UX-DL-06",
+                                                           "DEV-F01",
+                                                           "DEV-F02",
+                                                           "DEV-F03",
+                                                           "DEV-F04",
+                                                           "DEV-F05",
+                                                           "DEV-F06",
+                                                           "DEV-F07"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "UX-DL-01",
+                                                       "UX-DL-02",
+                                                       "UX-DL-03",
+                                                       "UX-DL-04",
+                                                       "UX-DL-05",
+                                                       "UX-DL-06",
+                                                       "DEV-F01",
+                                                       "DEV-F02",
+                                                       "DEV-F03",
+                                                       "DEV-F04",
+                                                       "DEV-F05",
+                                                       "DEV-F06",
+                                                       "DEV-F07"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "fingerprint":  "sha256:b284793cde1478f7",
+                                   "fingerprintFull":  "sha256:b284793cde1478f711d916440b94c31740e2d140aaf7e9f1bdac5fa6c43f2567",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "qg3":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "5f0fd528-2614-49c0-ba3f-3edbf7564f9f",
+                                   "verifierNota":  "generalPurpose + roteiro verifier.md (tipo verifier ausente do catálogo)",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/evidencia-ux-dl03-20261119.json",
+                                                      "docs/esteira/estado/qg1-typecheck-web-ux-dl03.txt",
+                                                      "docs/esteira/estado/qg2-check-estatico-ux-dl03.json",
+                                                      "docs/esteira/estado/qg2-smoke-dl02-ux-dl03.txt",
+                                                      "docs/esteira/estado/qg2-smoke-dl03-ux-dl03.txt",
+                                                      "docs/esteira/estado/qg2-smoke-dl04-ux-dl03.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-ux-dl03.txt",
+                                                      "docs/esteira/estado/qg2-build-web-ux-dl03.txt"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+                                                    "apps/web/src/lib/rotulos-experiencia.ts"
+                                                ],
+                                   "mensagemCommit":  "fix(ux): alinhar Desenvolvimento à experiência única aprovada\n\nReorganiza saldo compacto, recompensas secundárias e ações de organização condicionadas à autorização, preservando DEV-F01..F07. Homologação humana permanece pendente.",
+                                   "nota":  "PASS técnico INC1+INC2 + QG-3; humana PENDING_HUMAN.",
+                                   "concluidaEm":  "2026-11-19T11:22:38.843Z"
+                               },
+                               {
+                                   "id":  "DEM-UX-HOM-20261118",
+                                   "tipo":  "transversal",
+                                   "origem":  "humano + PLANO-CORRETIVO-HOMOLOGACAO-20261118.md + REVISAO-MODULOS-01-02 UX-HOM-01..07",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "UX-HOM-01",
+                                                           "UX-HOM-02",
+                                                           "UX-HOM-03",
+                                                           "UX-HOM-04",
+                                                           "UX-HOM-05",
+                                                           "UX-HOM-06",
+                                                           "UX-HOM-07"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "UX-HOM-01",
+                                                       "UX-HOM-02",
+                                                       "UX-HOM-03",
+                                                       "UX-HOM-04",
+                                                       "UX-HOM-05",
+                                                       "UX-HOM-06",
+                                                       "UX-HOM-07"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "criteriosPendentes":  [
+                                                              {
+                                                                  "id":  "UX-HOM-02-SELETOR",
+                                                                  "status":  "NEEDS_DECISION",
+                                                                  "nota":  "Lista de opções de vínculo e local administrativo de edição aguardam decisão de Produto"
+                                                              }
+                                                          ],
+                                   "fingerprint":  "sha256:9f6ab4a42a59c149",
+                                   "fingerprintFull":  "sha256:9f6ab4a42a59c149ac75435af327ac377466c437b1f24d2a61038937351dcfb6",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "qg3":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "e5ccff07-38c8-4231-ac68-7ff4d28d56fe",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "statusUxOficial":  "REPROVADA",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/evidencia-ux-hom-20261118.json",
+                                                      "docs/esteira/estado/qg1-typecheck-web-ux-hom-20261118.txt",
+                                                      "docs/esteira/estado/qg2-build-web-ux-hom-20261118.txt",
+                                                      "docs/esteira/estado/qg2-check-estatico-ux-hom-20261118.json",
+                                                      "docs/esteira/estado/qg2-smoke-authz-ux-hom-20261118.txt",
+                                                      "docs/esteira/estado/qg2-smoke-ct-acessos-ux-hom-20261118.txt",
+                                                      "docs/esteira/estado/qg2-smoke-cv03-ux-hom-20261118.txt",
+                                                      "docs/esteira/estado/qg2-smoke-url-direta-ux-hom-20261118.txt"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
+                                                    "apps/web/src/componentes/feedback.tsx",
+                                                    "apps/web/src/componentes/icones-experiencia.tsx",
+                                                    "apps/web/src/app/page.tsx",
+                                                    "apps/web/src/componentes/painel-fundacao.tsx",
+                                                    "apps/web/src/lib/api.ts",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+                                                    "apps/web/src/lib/rotulos-experiencia.ts",
+                                                    "apps/web/src/componentes/navegacao-app.tsx"
+                                                ],
+                                   "mensagemCommit":  "fix(ux): corrigir achados da homologação humana UX-HOM-01..07\n\nOculta áreas não autorizadas, remove edição de vínculo no perfil cotidiano, melhora estados/ícones e feedback transitório, e reduz microcopy/rótulos legados. Homologação humana permanece pendente.",
+                                   "nota":  "PASS técnico slices A/B/C + QG-3; humana PENDING_HUMAN / UX REPROVADA até aceite expresso.",
+                                   "concluidaEm":  "2026-11-18T13:19:55.587Z"
+                               },
+                               {
+                                   "id":  "DEM-HOMOL-CUI-20261117",
+                                   "tipo":  "homologacao",
+                                   "origem":  "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 5 após CONS",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "CUI-VAL-01",
+                                                           "CUI-VAL-02",
+                                                           "CUI-VAL-03",
+                                                           "CUI-VAL-04",
+                                                           "CUI-VAL-05",
+                                                           "CUI-VAL-06",
+                                                           "CUI-VAL-HUMANO"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "CUI-VAL-01",
+                                                       "CUI-VAL-02",
+                                                       "CUI-VAL-03",
+                                                       "CUI-VAL-04",
+                                                       "CUI-VAL-05",
+                                                       "CUI-VAL-06"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "criteriosPendentesHumanos":  [
+                                                                     "CUI-VAL-HUMANO"
+                                                                 ],
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "4ef6dcc6-051d-47d9-802e-2be0cd3fa459",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/evidencia-homol-cui-20261117.json",
+                                                      "docs/esteira/estado/homol-cui-typecheck-web.txt",
+                                                      "docs/esteira/estado/homol-cui-smoke-authz.txt",
+                                                      "docs/esteira/estado/homol-cui-smoke-cv03.txt",
+                                                      "docs/esteira/estado/homol-cui-smoke-cv04.txt",
+                                                      "docs/esteira/estado/homol-cui-smoke-ct-acessos.txt",
+                                                      "docs/esteira/estado/homol-cui-check-msg-rede.txt",
+                                                      "docs/esteira/estado/homol-cui-check-estatico.txt"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+                                                    "apps/web/src/componentes/navegacao-app.tsx",
+                                                    "apps/web/src/componentes/feedback.tsx",
+                                                    "apps/web/src/lib/rotulos-experiencia.ts"
+                                                ],
+                                   "nota":  "PASS técnico §5.5; não equivale a homologação UX humana.",
+                                   "concluidaEm":  "2026-11-17T21:45:00.000Z"
+                               },
+                               {
+                                   "id":  "DEM-CUI-UX-CONS-20261117",
+                                   "tipo":  "melhoria_ux",
+                                   "origem":  "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 4 (3 fatias na janela)",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "CUI-UX-CONS-01",
+                                                           "CUI-UX-CONS-02",
+                                                           "CUI-UX-CONS-03"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "CUI-UX-CONS-01",
+                                                       "CUI-UX-CONS-02",
+                                                       "CUI-UX-CONS-03"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "fingerprint":  "sha256:de1eade8ffd58638",
+                                   "fingerprintFull":  "sha256:de1eade8ffd586382b67c68056e5a15a3291e501c83eea1386a140f7696ac6f2",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "5815ebc1-8b1a-4298-9116-b2d55aa5f175",
+                                   "verifierNota":  "Verifier oficial BLOCKED (Ask/shell); verificação independente com shell PASS (fingerprint oficial + typecheck + smokes + build + critérios).",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/qg1-typecheck-web-cui-ux-cons.txt",
+                                                      "docs/esteira/estado/qg2-smoke-cv04-cui-ux-cons.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-cui-ux-cons.txt",
+                                                      "docs/esteira/estado/qg2-build-web-cui-ux-cons.txt",
+                                                      "docs/esteira/estado/evidencia-cui-ux-cons-20261117.json"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+                                                    "apps/web/src/lib/api.ts",
+                                                    "apps/web/src/lib/rotulos-experiencia.ts"
+                                                ],
+                                   "concluidaEm":  "2026-11-17T21:30:00.000Z"
+                               },
+                               {
+                                   "id":  "DEM-CUI-UX-MED-20261117",
+                                   "tipo":  "melhoria_ux",
+                                   "origem":  "humano + REVISAO-INTEGRADA §5 item 3 após ROTINA",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "CUI-UX-MED-01",
+                                                           "CUI-UX-MED-02"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "CUI-UX-MED-01",
+                                                       "CUI-UX-MED-02"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "fingerprint":  "sha256:c9a5c265a942a508",
+                                   "fingerprintFull":  "sha256:c9a5c265a942a508e9a0886a3d21c4a9f4f4537ab31efa8d4c1a01ed7e07b0b4",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "499257c4-d934-4188-8b08-59cf6ed32954",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/qg1-typecheck-web-cui-ux-med.txt",
+                                                      "docs/esteira/estado/qg2-smoke-cv03-cui-ux-med.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-cui-ux-med.txt",
+                                                      "docs/esteira/estado/qg2-build-web-cui-ux-med.txt",
+                                                      "docs/esteira/estado/evidencia-cui-ux-med-20261117.json"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/lib/api.ts",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx"
+                                                ],
+                                   "concluidaEm":  "2026-11-17T21:11:40.971Z"
+                               },
+                               {
+                                   "id":  "DEM-CUI-UX-ROTINA-20261117",
+                                   "tipo":  "melhoria_ux",
+                                   "origem":  "humano + REVISAO-INTEGRADA-CUIDADOS.md §5 item 2 após FUND",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "CUI-UX-02",
+                                                           "CUI-UX-04"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "CUI-UX-02",
+                                                       "CUI-UX-04"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "fingerprint":  "sha256:cc37be8b77e8ee9c",
+                                   "fingerprintFull":  "sha256:cc37be8b77e8ee9c2e8bdeaf3efa6927ca67663506cdda348f019fac5967d619",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "3963e837-e912-42cd-8a15-c2faf3f7febb",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/qg1-typecheck-web-cui-ux-rotina.txt",
+                                                      "docs/esteira/estado/qg2-smoke-cv03-cui-ux-rotina.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-cui-ux-rotina.txt",
+                                                      "docs/esteira/estado/qg2-build-web-cui-ux-rotina.txt",
+                                                      "docs/esteira/estado/evidencia-cui-ux-rotina-20261117.json"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/lib/rotulos-experiencia.ts",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx"
+                                                ],
+                                   "concluidaEm":  "2026-11-17T20:03:32.316Z"
+                               },
+                               {
+                                   "id":  "DEM-CUI-UX-FUND-20261117",
+                                   "tipo":  "melhoria_ux",
+                                   "origem":  "humano + docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md §5 item 1",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "CUI-UX-05",
+                                                           "CUI-UX-01"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "CUI-UX-05",
+                                                       "CUI-UX-01"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "fingerprint":  "sha256:c6fd9b7f2e03b50d",
+                                   "fingerprintFull":  "sha256:c6fd9b7f2e03b50d70532274956469d31c96757dcb5e08c1e596dff004fa4e45",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "d65ca03f-63db-4dcb-8ab5-c1cd195a080b",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/qg1-typecheck-web-cui-ux-fund.txt",
+                                                      "docs/esteira/estado/qg2-smoke-cv03-cui-ux-fund.txt",
+                                                      "docs/esteira/estado/qg2-smoke-ct-acessos-cui-ux-fund.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-cui-ux-fund.txt",
+                                                      "docs/esteira/estado/qg2-build-web-cui-ux-fund.txt",
+                                                      "docs/esteira/estado/evidencia-cui-ux-fund-20261117.json"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/lib/rotulos-experiencia.ts",
+                                                    "apps/web/src/lib/api.ts",
+                                                    "apps/web/src/componentes/contexto-sessao.tsx",
+                                                    "apps/web/src/componentes/navegacao-app.tsx",
+                                                    "apps/web/src/componentes/painel-fundacao.tsx",
+                                                    "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx"
+                                                ],
+                                   "concluidaEm":  "2026-11-17T19:37:13.377Z"
+                               },
+                               {
+                                   "id":  "DEM-HOMOL-UX-20261116-R2",
+                                   "tipo":  "homologacao",
+                                   "origem":  "humano — nova tentativa pós DEM-COR-UX-HOMOL",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "UX-NAV-01",
+                                                           "UX-NAV-02",
+                                                           "UX-ADM-01",
+                                                           "UX-ADM-02",
+                                                           "UX-CUI-01",
+                                                           "UX-DES-01",
+                                                           "UX-EVO-01",
+                                                           "UX-ACC-01"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "UX-NAV-01",
+                                                       "UX-NAV-02",
+                                                       "UX-ADM-01",
+                                                       "UX-ADM-02",
+                                                       "UX-CUI-01",
+                                                       "UX-DES-01",
+                                                       "UX-EVO-01",
+                                                       "UX-ACC-01"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "b8945c64-bab2-4726-bac7-f58d3810ac1c",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/evidencia-homol-ux-r2-20261116.json",
+                                                      "docs/esteira/estado/homol-ux-r2-typecheck-web.txt",
+                                                      "docs/esteira/estado/homol-ux-r2-smoke-authz.txt",
+                                                      "docs/esteira/estado/homol-ux-r2-smoke-ct-acessos.txt",
+                                                      "docs/esteira/estado/homol-ux-r2-smoke-cv03.txt",
+                                                      "docs/esteira/estado/homol-ux-r2-check-msg-rede.txt"
+                                                  ],
+                                   "concluidaEm":  "2026-11-17T00:13:56.267Z"
+                               },
+                               {
+                                   "id":  "DEM-COR-UX-HOMOL-20261116",
+                                   "tipo":  "melhoria_ux",
+                                   "origem":  "humano + achados DEM-HOMOL-UX-20261116 (UX-ACC-01, UX-CUI-01)",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "PASS",
+                                   "criteriosAceite":  [
+                                                           "UX-ACC-01",
+                                                           "UX-CUI-01"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "UX-ACC-01",
+                                                       "UX-CUI-01"
+                                                   ],
+                                   "criteriosFalha":  [
+
+                                                      ],
+                                   "fingerprint":  "sha256:46b2078e73b0c6d5",
+                                   "fingerprintFull":  "sha256:46b2078e73b0c6d559ee8aadccbdf286c527329cc160d14befc7f863cb32f5bf",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "a6551ef3-2348-4942-a1aa-0e0e09a9684c",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/evidencia-cor-ux-homol-20261116.json",
+                                                      "docs/esteira/estado/qg1-typecheck-web-cor-ux.txt",
+                                                      "docs/esteira/estado/qg2-build-web-cor-ux.txt",
+                                                      "docs/esteira/estado/qg2-smoke-cv03-cor-ux.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-cor-ux.txt",
+                                                      "docs/esteira/estado/qg2-check-msg-rede-cor-ux.txt"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/componentes/navegacao-app.tsx",
+                                                    "apps/web/src/componentes/feedback.tsx",
+                                                    "apps/web/src/componentes/contexto-sessao.tsx",
+                                                    "apps/web/src/componentes/painel-fundacao.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx"
+                                                ],
+                                   "concluidaEm":  "2026-11-16T23:53:23.631Z"
+                               },
+                               {
+                                   "id":  "DEM-HOMOL-UX-20261116",
+                                   "tipo":  "homologacao",
+                                   "origem":  "humano + DEM-UX-NAV-ADM PENDING_HUMAN + GUIA §7",
+                                   "estado":  "COMPLETED",
+                                   "resultadoTecnico":  "FAIL",
+                                   "criteriosAceite":  [
+                                                           "UX-NAV-01",
+                                                           "UX-NAV-02",
+                                                           "UX-ADM-01",
+                                                           "UX-ADM-02",
+                                                           "UX-CUI-01",
+                                                           "UX-DES-01",
+                                                           "UX-EVO-01",
+                                                           "UX-ACC-01"
+                                                       ],
+                                   "criteriosOk":  [
+                                                       "UX-NAV-01",
+                                                       "UX-NAV-02",
+                                                       "UX-ADM-01",
+                                                       "UX-ADM-02",
+                                                       "UX-DES-01",
+                                                       "UX-EVO-01"
+                                                   ],
+                                   "criteriosFalha":  [
+                                                          "UX-ACC-01",
+                                                          "UX-CUI-01 (parcial: drawer desktop)"
+                                                      ],
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS_COM_ACHADOS",
+                                   "verifier":  "FAIL",
+                                   "verifierId":  "ac0570d9-36b6-4add-8740-805e52d735c4",
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/evidencia-homol-ux-20261116.json",
+                                                      "docs/esteira/estado/homol-ux-typecheck-web.txt",
+                                                      "docs/esteira/estado/homol-ux-smoke-authz.txt",
+                                                      "docs/esteira/estado/homol-ux-smoke-ct-acessos.txt",
+                                                      "docs/esteira/estado/homol-ux-smoke-cv03.txt",
+                                                      "docs/esteira/estado/homol-ux-smoke-dl02.txt",
+                                                      "docs/esteira/estado/homol-ux-smoke-ef05.txt",
+                                                      "docs/esteira/estado/homol-ux-build-web.txt"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/componentes/navegacao-app.tsx",
+                                                    "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+                                                    "apps/web/src/componentes/contexto-sessao.tsx",
+                                                    "apps/web/src/app/pessoas"
+                                                ],
+                                   "notaAmbiente":  "Build concorrente com next:dev causou EPERM e 500 em .next; reiniciar web local antes de nova inspeção UI.",
+                                   "concluidaEm":  "2026-11-16T21:27:55.935Z"
+                               },
+                               {
+                                   "id":  "DEM-UX-NAV-ADM-20261116",
+                                   "tipo":  "melhoria_ux",
+                                   "origem":  "humano + docs/ux-ui/REVISAO-MODULOS-01-02.md (revisão integrada 2026-11-16)",
+                                   "estado":  "COMPLETED",
+                                   "criteriosAceite":  [
+                                                           "UX-NAV-01",
+                                                           "UX-NAV-02",
+                                                           "UX-ADM-01",
+                                                           "UX-ADM-02",
+                                                           "UX-CUI-01",
+                                                           "UX-DES-01",
+                                                           "UX-EVO-01",
+                                                           "UX-ACC-01"
+                                                       ],
+                                   "fingerprint":  "sha256:db65d95aa716c68e",
+                                   "fingerprintFull":  "sha256:db65d95aa716c68e3d18dc75bf56b651c29fe1b07004bfc835562a31582d43fe",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "25127f08-94fa-4193-9832-a0cfda7c2efa",
+                                   "verifierNota":  "Verifier oficial BLOCKED (Ask/shell); verificação independente com shell PASS (typecheck+smokes+critérios). Homologação humana PENDING_HUMAN.",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/qg1-typecheck-web-ux-nav.txt",
+                                                      "docs/esteira/estado/qg2-build-web-ux-nav.txt",
+                                                      "docs/esteira/estado/qg2-smoke-ct-acessos-ux-nav.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-ux-nav.txt"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/web/src/componentes/contexto-sessao.tsx",
+                                                    "apps/web/src/componentes/navegacao-app.tsx",
+                                                    "apps/web/src/componentes/provedores-app.tsx",
+                                                    "apps/web/src/componentes/painel-fundacao.tsx",
+                                                    "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+                                                    "apps/web/src/app/gerenciar-familia/page.tsx",
+                                                    "apps/web/src/app/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx",
+                                                    "apps/web/src/app/pessoas/[pessoaId]/resumo/page.tsx",
+                                                    "apps/web/src/lib/api.ts"
+                                                ],
+                                   "homologacaoHumana":  "PENDING_HUMAN",
+                                   "concluidaEm":  "2026-11-16T19:42:59.309Z"
+                               },
+                               {
+                                   "id":  "DEM-CT-20261116-001",
+                                   "tipo":  "melhoria_funcional",
+                                   "origem":  "CT-20261116-001",
+                                   "estado":  "COMPLETED",
+                                   "criteriosAceite":  [
+                                                           "FUN-04",
+                                                           "FUN-07",
+                                                           "FAM-R11"
+                                                       ],
+                                   "fingerprint":  "sha256:2a04c89c9f1f00e7",
+                                   "qg1":  "PASS",
+                                   "qg2":  "PASS",
+                                   "verifier":  "PASS",
+                                   "verifierId":  "8fe0305e-48a2-4d23-bb62-08469cbf8e2d",
+                                   "evidencias":  [
+                                                      "docs/esteira/estado/qg1-typecheck-api-ct-acessos.txt",
+                                                      "docs/esteira/estado/qg1-typecheck-web-ct-acessos.txt",
+                                                      "docs/esteira/estado/qg2-smoke-ct-acessos.txt",
+                                                      "docs/esteira/estado/qg2-smoke-authz-ct-acessos.txt"
+                                                  ],
+                                   "arquivos":  [
+                                                    "apps/api/src/autorizacoes/responsabilidades.ts",
+                                                    "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+                                                    "apps/api/src/autorizacoes/controlador-autorizacoes.ts",
+                                                    "apps/web/src/lib/api.ts",
+                                                    "apps/web/src/componentes/painel-fundacao.tsx",
+                                                    "apps/api/scripts/smoke-ct-acessos.mjs",
+                                                    "apps/api/package.json"
+                                                ],
+                                   "concluidaEm":  "2026-11-16T18:35:00.000Z"
+                               }
+                           ],
+    "proximaAcao":  "Homologação humana Módulo 03 (PENDING_HUMAN / UX REPROVADA). Commit sob decisão humana.",
+    "atualizadoEm":  "2026-11-19T21:35:05.284Z",
+    "notas":  "DEM-UX-HOM-R3-20261119 técnico PASS; humana PENDING_HUMAN.",
+    "decisaoPendente":  {
+                            "id":  "UX-HOM-02-SELETOR",
+                            "status":  "NEEDS_DECISION",
+                            "nota":  "Opções de vínculo e UI administrativa de edição"
+                        },
+    "moduloAnterior":  {
+                           "id":  "03-desenvolvimento-laurinha",
+                           "status":  "COMPLETED",
+                           "qg3":  "PASS",
+                           "fingerprint":  "dl-modulo03-qg3-13844004b669409f"
+                       },
+    "incrementosConcluidos":  [
+                                  {
+                                      "id":  "EF-01",
+                                      "status":  "COMPLETED",
+                                      "fingerprint":  "ef01-2026-11-15",
+                                      "verifierId":  "22602b81-3adf-4bef-8e1f-101960402b5b"
+                                  },
+                                  {
+                                      "id":  "EF-02",
+                                      "status":  "COMPLETED",
+                                      "fingerprint":  "ef02-2026-11-15",
+                                      "verifierId":  "84711f1e-7823-48fb-8dae-1db0cb8297a5"
+                                  },
+                                  {
+                                      "id":  "EF-03",
+                                      "status":  "COMPLETED",
+                                      "fingerprint":  "ef03-2026-11-15",
+                                      "verifierId":  "06ee571f-88c6-44f6-bcac-8f4ff036404d"
+                                  },
+                                  {
+                                      "id":  "EF-04",
+                                      "status":  "COMPLETED",
+                                      "fingerprint":  "ef04-2026-11-16",
+                                      "verifierId":  "154e2cdf-934f-4fd0-b44d-e0a5ea3522fc"
+                                  },
+                                  {
+                                      "id":  "EF-05",
+                                      "status":  "COMPLETED",
+                                      "fingerprint":  "ef05-2026-11-16",
+                                      "verifierId":  "b8b12bac-0352-4d8f-970e-4e1b78ae3130"
+                                  },
+                                  {
+                                      "id":  "EF-06",
+                                      "status":  "COMPLETED",
+                                      "fingerprint":  "ef06-2026-11-16",
+                                      "verifierId":  "b26db6d1-5a99-45cb-865b-b240239f53d9"
+                                  }
+                              ],
+    "modulo":  {
+                   "id":  "04-evolucao-familiar",
+                   "status":  "COMPLETED",
+                   "qg3":  "PASS",
+                   "fingerprint":  "ef-modulo04-qg3-2026-11-16"
+               }
 }

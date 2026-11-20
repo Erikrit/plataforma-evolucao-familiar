@@ -5,10 +5,32 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-19)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
+- **DEM-UX-HOM-R3-20261119:** COMPLETED técnico PASS · fingerprint `sha256:f0114d296d15068a` · [verifier](6c71be97-490f-422a-adbd-06911be180d6); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-CT-20261119-001-002:** COMPLETED técnico PASS · ADR-013 · fingerprint em `evidencia-ct-dl-exec-rec-20261119.json` · [verifier](422aae3f-f66c-4f49-9823-4746e0ed2739); humana PENDING_HUMAN
 - **DEM-UX-DL-03-20261119:** COMPLETED técnico PASS · fingerprint `sha256:b284793cde1478f7` · [verifier](5f0fd528-2614-49c0-ba3f-3edbf7564f9f); humana PENDING_HUMAN
 - **DEM-UX-HOM-20261118:** COMPLETED técnico PASS · fingerprint `sha256:9f6ab4a42a59c149` · [verifier](e5ccff07-38c8-4231-ac68-7ff4d28d56fe); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-ESTEIRA-IW-COMMITMSG-20261118:** COMPLETED — `implementation-workflow` passa a exigir `mensagemCommit` no resumo em `COMPLETED`
+
+## 2026-11-19 — DEM-UX-HOM-R3-20261119 COMPLETED (técnico PASS)
+
+- **Entrega:** R3-01 preservar aba após registrar/resgatar/reativar; R3-02 Cadastros no submenu AppShell/Drawer; R3-03 filtro de categorias + categoria opcional no cadastro
+- **QG-1/2/3:** PASS · Verifier independente PASS ([verifier](6c71be97-490f-422a-adbd-06911be180d6)); oficial BLOCKED Ask ([verifier](a5e4c37e-8d27-4636-90b7-23212504be44))
+- **Fingerprint:** `sha256:f0114d296d15068a`
+- **Humana:** PENDING_HUMAN · status UX oficial permanece REPROVADA
+- **Evidência:** `evidencia-ux-hom-r3-20261119.json`
+- **Commit/push:** não executados
+- **Próximo:** nova homologação humana expressa do Módulo 03
+
+## 2026-11-19 — Triagem DEM-UX-HOM-R3-20261119 (READY→IN_PROGRESS)
+
+- **Tipo:** melhoria_ux · **Origem:** reprovação humana R3 em `docs/ux-ui/REVISAO-MODULO-03.md` (`DEV-UX-HOM-R3-01..03`)
+- **Aprovação:** L2 UX documentada; compatível com ESPECIFICACAO v1.2 e ADR-013; sem CT/L3 novo
+- **Escopo:** preservar aba após registrar/resgatar/disponibilizar; Cadastros como submenu lateral sob Desenvolvimento (AppShell/Drawer); filtro de categorias em Explorar/Executadas + categoria opcional no cadastro
+- **Fora:** regras de estrelas, histórico, reativação, resgates, permissões e API (contrato atual já aceita `categoria`)
+- **HEAD:** `7b8348e` develop = origin/develop, working tree limpa
+- **Fluxo:** implementation-workflow → quality-gate (QG-1/QG-2/QG-3 módulo 03) + verifier
+- **Humana:** REPROVADA / PENDING_HUMAN até novo aceite
+- **Commit/push:** não executados
 
 ## 2026-11-19 — DEM-CT-20261119-001-002 COMPLETED (técnico PASS)
 

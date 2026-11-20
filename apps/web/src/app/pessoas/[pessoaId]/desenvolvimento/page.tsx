@@ -1,22 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Accordion,
   Anchor,
   Button,
   Card,
+  Chip,
   Container,
   Drawer,
   Group,
-  NumberInput,
   SegmentedControl,
   Stack,
   Text,
   Textarea,
-  TextInput,
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -33,8 +32,6 @@ import {
   IconeParticipou,
 } from "@/componentes/icones-experiencia";
 import {
-  criarDesafioPersonalizado,
-  criarRecompensa,
   disponibilizarDesafio,
   disponibilizarRecompensa,
   listarDesafios,
@@ -47,22 +44,25 @@ import {
   type EstrelasResumo,
   type RecompensaResumo,
 } from "@/lib/api";
-import { podeOrganizarDesenvolvimento } from "@/lib/rotulos-experiencia";
-
-const ROTULOS_CATEGORIA: Record<string, string> = {
-  memoria_atencao: "Memória e atenção",
-  raciocinio: "Raciocínio",
-  linguagem: "Linguagem",
-  criatividade: "Criatividade",
-  coordenacao: "Coordenação",
-  autonomia: "Autonomia",
-};
+import {
+  podeOrganizarDesenvolvimento,
+  ROTULOS_CATEGORIA_DESENVOLVIMENTO,
+} from "@/lib/rotulos-experiencia";
 
 const ROTULOS_DIFICULDADE: Record<string, string> = {
   simples: "Simples",
   media: "Média",
   desafiadora: "Desafiadora",
 };
+
+const TODAS_CATEGORIAS = "todas";
+
+const OPCOES_CATEGORIA = [
+  { value: TODAS_CATEGORIAS, label: "Todas" },
+  ...Object.entries(ROTULOS_CATEGORIA_DESENVOLVIMENTO).map(
+    ([value, label]) => ({ value, label }),
+  ),
+];
 
 type FiltroBrincadeira = "explorar" | "executadas";
 type FiltroRecompensa = "disponiveis" | "resgatadas";
@@ -79,10 +79,14 @@ export default function PaginaDesenvolvimento() {
   const router = useRouter();
   const { usuario, autorizacoes, pronto } = useSessao();
   const [nomePessoa, setNomePessoa] = useState("");
-  const [desafios, setDesafios] = useState<DesafioResumo[]>([]);
+  const [acessoLiberado, setAcessoLiberado] = useState(false);
+  const [desafios, setDesafios] = useState<DesafioResumo[] | null>(null);
   const [estrelas, setEstrelas] = useState<EstrelasResumo | null>(null);
-  const [recompensas, setRecompensas] = useState<RecompensaResumo[]>([]);
+  const [recompensas, setRecompensas] = useState<RecompensaResumo[] | null>(
+    null,
+  );
   const [filtro, setFiltro] = useState<FiltroBrincadeira>("explorar");
+  const [categoria, setCategoria] = useState(TODAS_CATEGORIAS);
   const [filtroRecompensa, setFiltroRecompensa] =
     useState<FiltroRecompensa>("disponiveis");
   const [erro, setErro] = useState<string | null>(null);
@@ -93,19 +97,14 @@ export default function PaginaDesenvolvimento() {
   const [chaveExecucao, setChaveExecucao] = useState(novaChaveExecucao);
   const [registrando, setRegistrando] = useState(false);
   const [disponibilizando, setDisponibilizando] = useState(false);
-  const [nomeNova, setNomeNova] = useState("");
-  const [dificuldadeNova, setDificuldadeNova] = useState("simples");
-  const [instrucaoNova, setInstrucaoNova] = useState("");
-  const [enviandoCriacao, setEnviandoCriacao] = useState(false);
-  const [nomeRecompensa, setNomeRecompensa] = useState("");
-  const [custoRecompensa, setCustoRecompensa] = useState<number | string>(5);
-  const [enviandoRecompensa, setEnviandoRecompensa] = useState(false);
   const [resgatandoId, setResgatandoId] = useState<string | null>(null);
   const [disponibilizandoRecId, setDisponibilizandoRecId] = useState<
     string | null
   >(null);
   const [confirmacaoResgate, setConfirmacaoResgate] =
     useState<RecompensaResumo | null>(null);
+  const requisicaoDesafios = useRef(0);
+  const requisicaoRecompensas = useRef(0);
   const ehCelular = useMediaQuery("(max-width: 47.99em)", true);
 
   const podeOrganizar = podeOrganizarDesenvolvimento(
@@ -114,37 +113,41 @@ export default function PaginaDesenvolvimento() {
     autorizacoes,
   );
 
-  const carregarDesafios = useCallback(
-    async (pessoaId: string, disponibilidade: FiltroBrincadeira) => {
-      const lista = await listarDesafios(pessoaId, { disponibilidade });
+  // Respostas de uma aba/categoria anterior não podem sobrescrever a lista atual.
+  const carregarDesafios = useCallback(async () => {
+    const requisicao = ++requisicaoDesafios.current;
+    const lista = await listarDesafios(params.pessoaId, {
+      disponibilidade: filtro,
+      categoria: categoria === TODAS_CATEGORIAS ? undefined : categoria,
+    });
+    if (requisicao === requisicaoDesafios.current) {
       setDesafios(lista.desafios);
-    },
-    [],
-  );
+    }
+  }, [params.pessoaId, filtro, categoria]);
 
-  const carregarSaldoERecompensas = useCallback(
-    async (pessoaId: string, disponibilidade: FiltroRecompensa) => {
-      const [saldo, lista] = await Promise.all([
-        obterEstrelas(pessoaId),
-        listarRecompensas(pessoaId, { disponibilidade }),
-      ]);
-      setEstrelas(saldo);
-      setRecompensas(lista.filter((r) => r.ativa !== false));
-    },
-    [],
-  );
+  const carregarSaldoERecompensas = useCallback(async () => {
+    const requisicao = ++requisicaoRecompensas.current;
+    const [saldo, lista] = await Promise.all([
+      obterEstrelas(params.pessoaId),
+      listarRecompensas(params.pessoaId, { disponibilidade: filtroRecompensa }),
+    ]);
+    if (requisicao !== requisicaoRecompensas.current) return;
+    setEstrelas(saldo);
+    setRecompensas(lista.filter((r) => r.ativa !== false));
+  }, [params.pessoaId, filtroRecompensa]);
 
   useEffect(() => {
     if (!pronto) return;
     void (async () => {
       setCarregando(true);
       setErro(null);
+      setAcessoLiberado(false);
+      setDesafios(null);
+      setEstrelas(null);
+      setRecompensas(null);
       try {
         if (!usuario) {
           setErro("Entre na página inicial para ver o desenvolvimento.");
-          setDesafios([]);
-          setEstrelas(null);
-          setRecompensas([]);
           return;
         }
         const perfil = (await obterPessoa(
@@ -155,15 +158,9 @@ export default function PaginaDesenvolvimento() {
         const area = perfil.areas?.find((a) => a.id === "desenvolvimento");
         if (!area?.disponivel) {
           setErro("Acesso negado ao desenvolvimento desta pessoa.");
-          setDesafios([]);
-          setEstrelas(null);
-          setRecompensas([]);
           return;
         }
-        await Promise.all([
-          carregarDesafios(params.pessoaId, filtro),
-          carregarSaldoERecompensas(params.pessoaId, filtroRecompensa),
-        ]);
+        setAcessoLiberado(true);
       } catch (e) {
         const msg = mensagemErroAmigavel(e, "Não foi possível carregar");
         setErro(
@@ -173,25 +170,30 @@ export default function PaginaDesenvolvimento() {
               : `Acesso negado: ${msg}`
             : msg,
         );
-        setDesafios([]);
-        setEstrelas(null);
-        setRecompensas([]);
       } finally {
         setCarregando(false);
       }
     })();
-  }, [
-    pronto,
-    usuario,
-    params.pessoaId,
-    filtro,
-    filtroRecompensa,
-    carregarDesafios,
-    carregarSaldoERecompensas,
-  ]);
+  }, [pronto, usuario, params.pessoaId]);
 
-  const podeVer =
-    Boolean(usuario) && !carregando && !erro?.startsWith("Acesso");
+  useEffect(() => {
+    if (!acessoLiberado) return;
+    setDesafios(null);
+    carregarDesafios().catch((e) =>
+      setErro(mensagemErroAmigavel(e, "Não foi possível carregar")),
+    );
+  }, [acessoLiberado, carregarDesafios]);
+
+  useEffect(() => {
+    if (!acessoLiberado) return;
+    setRecompensas(null);
+    carregarSaldoERecompensas().catch((e) =>
+      setErro(mensagemErroAmigavel(e, "Não foi possível carregar")),
+    );
+  }, [acessoLiberado, carregarSaldoERecompensas]);
+
+  const podeVer = Boolean(usuario) && !carregando && acessoLiberado;
+  const filtrandoCategoria = categoria !== TODAS_CATEGORIAS;
 
   const tituloLista = useMemo(
     () =>
@@ -200,67 +202,6 @@ export default function PaginaDesenvolvimento() {
         : "Brincadeiras para explorar",
     [filtro],
   );
-
-  async function aoCriar(evento: FormEvent) {
-    evento.preventDefault();
-    if (!podeOrganizar) return;
-    if (!nomeNova.trim()) {
-      setErro("Informe o nome da brincadeira.");
-      return;
-    }
-    setEnviandoCriacao(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      await criarDesafioPersonalizado(params.pessoaId, {
-        nome: nomeNova.trim(),
-        dificuldade: dificuldadeNova,
-        instrucao: instrucaoNova.trim() || null,
-      });
-      setNomeNova("");
-      setInstrucaoNova("");
-      setDificuldadeNova("simples");
-      setSucesso("Brincadeira salva.");
-      setFiltro("explorar");
-      await carregarDesafios(params.pessoaId, "explorar");
-    } catch (e) {
-      setErro(mensagemErroAmigavel(e, "Não foi possível salvar"));
-    } finally {
-      setEnviandoCriacao(false);
-    }
-  }
-
-  async function aoCriarRecompensa(evento: FormEvent) {
-    evento.preventDefault();
-    if (!podeOrganizar) return;
-    const custo = Number(custoRecompensa);
-    if (!nomeRecompensa.trim()) {
-      setErro("Informe o nome da recompensa.");
-      return;
-    }
-    if (!Number.isInteger(custo) || custo <= 0) {
-      setErro("Informe um custo em estrelas (número inteiro positivo).");
-      return;
-    }
-    setEnviandoRecompensa(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      await criarRecompensa(params.pessoaId, {
-        nome: nomeRecompensa.trim(),
-        custo,
-      });
-      setNomeRecompensa("");
-      setCustoRecompensa(5);
-      setSucesso("Recompensa adicionada.");
-      setFiltroRecompensa("disponiveis");
-      await carregarSaldoERecompensas(params.pessoaId, "disponiveis");
-    } catch (e) {
-      setErro(mensagemErroAmigavel(e, "Não foi possível salvar"));
-    } finally {
-      setEnviandoRecompensa(false);
-    }
-  }
 
   async function confirmarResgate() {
     if (!confirmacaoResgate || resgatandoId) return;
@@ -278,8 +219,7 @@ export default function PaginaDesenvolvimento() {
         `Resgate de “${recompensa.nome}” confirmado (−${recompensa.custo} estrelas).`,
       );
       setConfirmacaoResgate(null);
-      setFiltroRecompensa("resgatadas");
-      await carregarSaldoERecompensas(params.pessoaId, "resgatadas");
+      await carregarSaldoERecompensas();
     } catch (e) {
       setErro(mensagemErroAmigavel(e, "Não foi possível resgatar"));
     } finally {
@@ -295,8 +235,7 @@ export default function PaginaDesenvolvimento() {
     try {
       await disponibilizarRecompensa(params.pessoaId, recompensa.id);
       setSucesso(`“${recompensa.nome}” disponível para novo resgate.`);
-      setFiltroRecompensa("disponiveis");
-      await carregarSaldoERecompensas(params.pessoaId, "disponiveis");
+      await carregarSaldoERecompensas();
     } catch (e) {
       setErro(mensagemErroAmigavel(e, "Não foi possível disponibilizar"));
     } finally {
@@ -313,8 +252,7 @@ export default function PaginaDesenvolvimento() {
       await disponibilizarDesafio(params.pessoaId, selecionado.id);
       setSucesso(`“${selecionado.nome}” voltou para Explorar.`);
       setSelecionado(null);
-      setFiltro("explorar");
-      await carregarDesafios(params.pessoaId, "explorar");
+      await carregarDesafios();
     } catch (e) {
       setErro(mensagemErroAmigavel(e, "Não foi possível disponibilizar"));
     } finally {
@@ -348,11 +286,7 @@ export default function PaginaDesenvolvimento() {
       setObservacao("");
       setChaveExecucao(novaChaveExecucao());
       setSelecionado(null);
-      setFiltro("executadas");
-      await Promise.all([
-        carregarDesafios(params.pessoaId, "executadas"),
-        carregarSaldoERecompensas(params.pessoaId, filtroRecompensa),
-      ]);
+      await Promise.all([carregarDesafios(), carregarSaldoERecompensas()]);
     } catch (e) {
       setErro(
         mensagemErroAmigavel(e, "Não foi possível registrar. Tente de novo."),
@@ -372,6 +306,7 @@ export default function PaginaDesenvolvimento() {
 
   const semSessao = pronto && !carregando && !usuario;
   const saldo = estrelas?.saldoDisponivel ?? 0;
+  const linkCadastros = `/pessoas/${params.pessoaId}/desenvolvimento/cadastros`;
 
   return (
     <Container component="main" size="sm" px={0}>
@@ -417,21 +352,41 @@ export default function PaginaDesenvolvimento() {
               ]}
             />
 
+            <Chip.Group
+              multiple={false}
+              value={categoria}
+              onChange={(v) => setCategoria(v || TODAS_CATEGORIAS)}
+            >
+              <Group gap="xs" role="radiogroup" aria-label="Categoria">
+                {OPCOES_CATEGORIA.map((opcao) => (
+                  <Chip key={opcao.value} value={opcao.value} size="sm">
+                    {opcao.label}
+                  </Chip>
+                ))}
+              </Group>
+            </Chip.Group>
+
             <Stack gap="sm">
               <Title order={2}>{tituloLista}</Title>
-              {desafios.length === 0 ? (
+              {desafios === null ? (
+                <EstadoCarregando rotulo="Carregando brincadeiras…" />
+              ) : desafios.length === 0 ? (
                 <EstadoVazio
                   titulo={
-                    filtro === "executadas"
-                      ? "Nenhuma executada ainda"
-                      : "Nenhuma brincadeira disponível"
+                    filtrandoCategoria
+                      ? "Nada nesta categoria"
+                      : filtro === "executadas"
+                        ? "Nenhuma executada ainda"
+                        : "Nenhuma brincadeira disponível"
                   }
                   descricao={
-                    filtro === "executadas"
-                      ? "Depois de registrar uma participação, ela aparece aqui."
-                      : podeOrganizar
-                        ? "Crie uma ou aguarde a biblioteca da família."
-                        : "Quando houver brincadeiras disponíveis, elas aparecem aqui."
+                    filtrandoCategoria
+                      ? "Escolha outra categoria ou Todas."
+                      : filtro === "executadas"
+                        ? "Depois de registrar uma participação, ela aparece aqui."
+                        : podeOrganizar
+                          ? "Crie uma em Cadastros ou aguarde a biblioteca da família."
+                          : "Quando houver brincadeiras disponíveis, elas aparecem aqui."
                   }
                 />
               ) : (
@@ -461,7 +416,7 @@ export default function PaginaDesenvolvimento() {
                           {ROTULOS_DIFICULDADE[desafio.dificuldade] ??
                             desafio.dificuldade}
                           {desafio.categoria
-                            ? ` · ${ROTULOS_CATEGORIA[desafio.categoria] ?? desafio.categoria}`
+                            ? ` · ${ROTULOS_CATEGORIA_DESENVOLVIMENTO[desafio.categoria] ?? desafio.categoria}`
                             : ""}
                           {desafio.origem === "personalizada"
                             ? " · Sua família"
@@ -496,7 +451,9 @@ export default function PaginaDesenvolvimento() {
                         { label: "Resgatadas", value: "resgatadas" },
                       ]}
                     />
-                    {recompensas.length === 0 ? (
+                    {recompensas === null ? (
+                      <EstadoCarregando rotulo="Carregando recompensas…" />
+                    ) : recompensas.length === 0 ? (
                       <EstadoVazio
                         titulo={
                           filtroRecompensa === "resgatadas"
@@ -507,7 +464,7 @@ export default function PaginaDesenvolvimento() {
                           filtroRecompensa === "resgatadas"
                             ? "Resgates confirmados aparecem aqui."
                             : podeOrganizar
-                              ? "Opcional. Cadastre abaixo se a família quiser."
+                              ? "Opcional. Cadastre em Cadastros se a família quiser."
                               : "Opcional — nada a resgatar por enquanto."
                         }
                       />
@@ -581,79 +538,9 @@ export default function PaginaDesenvolvimento() {
                         );
                       })
                     )}
-
-                    {podeOrganizar ? (
-                      <form onSubmit={aoCriarRecompensa}>
-                        <Stack gap="sm">
-                          <Text size="sm" fw={600}>
-                            Cadastros · Nova recompensa
-                          </Text>
-                          <TextInput
-                            label="Nome"
-                            value={nomeRecompensa}
-                            onChange={(e) =>
-                              setNomeRecompensa(e.currentTarget.value)
-                            }
-                          />
-                          <NumberInput
-                            label="Custo em estrelas"
-                            min={1}
-                            step={1}
-                            value={custoRecompensa}
-                            onChange={setCustoRecompensa}
-                          />
-                          <Button type="submit" loading={enviandoRecompensa}>
-                            Adicionar recompensa
-                          </Button>
-                        </Stack>
-                      </form>
-                    ) : null}
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
-
-              {podeOrganizar ? (
-                <Accordion.Item value="criar">
-                  <Accordion.Control>
-                    <Text fw={600}>Cadastros · Nova brincadeira</Text>
-                  </Accordion.Control>
-                  <Accordion.Panel>
-                    <form onSubmit={aoCriar}>
-                      <Stack gap="sm">
-                        <TextInput
-                          label="Nome"
-                          value={nomeNova}
-                          onChange={(e) => setNomeNova(e.currentTarget.value)}
-                          required
-                        />
-                        <SegmentedControl
-                          fullWidth
-                          value={dificuldadeNova}
-                          onChange={setDificuldadeNova}
-                          data={[
-                            { label: "Simples", value: "simples" },
-                            { label: "Média", value: "media" },
-                            { label: "Desafiadora", value: "desafiadora" },
-                          ]}
-                        />
-                        <Textarea
-                          label="Como brincar"
-                          description="Opcional"
-                          value={instrucaoNova}
-                          onChange={(e) =>
-                            setInstrucaoNova(e.currentTarget.value)
-                          }
-                          minRows={2}
-                          autosize
-                        />
-                        <Button type="submit" loading={enviandoCriacao}>
-                          Salvar brincadeira
-                        </Button>
-                      </Stack>
-                    </form>
-                  </Accordion.Panel>
-                </Accordion.Item>
-              ) : null}
             </Accordion>
 
             <Text size="sm" c="dimmed">
@@ -666,6 +553,16 @@ export default function PaginaDesenvolvimento() {
                 histórico
               </Anchor>
               .
+              {podeOrganizar ? (
+                <>
+                  {" "}
+                  Novas brincadeiras e recompensas em{" "}
+                  <Anchor component={Link} href={linkCadastros} size="sm">
+                    Cadastros
+                  </Anchor>
+                  .
+                </>
+              ) : null}
             </Text>
           </Stack>
         ) : null}
@@ -689,7 +586,7 @@ export default function PaginaDesenvolvimento() {
               {ROTULOS_DIFICULDADE[selecionado.dificuldade] ??
                 selecionado.dificuldade}
               {selecionado.categoria
-                ? ` · ${ROTULOS_CATEGORIA[selecionado.categoria] ?? selecionado.categoria}`
+                ? ` · ${ROTULOS_CATEGORIA_DESENVOLVIMENTO[selecionado.categoria] ?? selecionado.categoria}`
                 : ""}
             </Text>
             {selecionado.instrucao ? (

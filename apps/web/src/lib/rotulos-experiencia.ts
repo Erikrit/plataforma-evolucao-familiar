@@ -70,6 +70,16 @@ export function podeAcompanharDesenvolvimento(
   );
 }
 
+/** Códigos de `CATEGORIAS_BIBLIOTECA` da API com rótulos de experiência. */
+export const ROTULOS_CATEGORIA_DESENVOLVIMENTO: Record<string, string> = {
+  raciocinio: "Raciocínio lógico",
+  coordenacao: "Coordenação motora",
+  memoria_atencao: "Memória e atenção",
+  linguagem: "Linguagem",
+  criatividade: "Criatividade",
+  autonomia: "Autonomia",
+};
+
 /** Criar brincadeira / gerenciar recompensas — mesma authz do backend atual. */
 export function podeOrganizarDesenvolvimento(
   pessoaId: string,
