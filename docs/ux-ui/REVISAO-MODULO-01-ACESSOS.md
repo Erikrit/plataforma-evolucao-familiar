@@ -86,3 +86,9 @@ Revisar se a família consegue entender **quem tem acesso a quê**, conceder/rev
 **Limite explícito do aceite:** aprovação do desenho recomendado **não determina quais combinações de responsabilidades podem ser concedidas** e não autoriza conceder `administrador`, inventar `Integrante` em áreas sem contrato, mudar acesso a dados sensíveis ou eliminar pessoas. O `CT-20261119-003` permanece `NEEDS_DECISION` para Produto/Arquitetura quanto à matriz fechada de combinações, convites, escopos exibidos, proteção do último administrador e riscos de autorização. A auditoria dinâmica permanece pendente. O Módulo 01 não está homologado nesta rodada.
 
 **Encaminhamento imediato:** Arquitetura deve reconciliar os contratos vigentes, analisar a segurança e propor o menor ajuste técnico; Produto decide apenas lacunas funcionais materiais. Depois UX concretiza o fluxo e a esteira implementa com testes negativos e homologação humana. O Módulo 04 segue pausado.
+
+## Parecer de Arquitetura — 2026-11-19
+
+**CT-20261119-003: parte técnica DOCUMENTADA** em `docs/arquitetura/DECISOES.md` (ADR-014), inspeção `develop` @ `efee45267afcfb5f7312b12db268377a1e644dc2`. A direção de UX aprovada acima permanece. A Arquitetura fecha o conjunto com as combinações que os gates já sustentam: Cuidados + Responsável, Cuidados + Integrante e Desenvolvimento + Responsável. Administrador não entra no seletor. Integrante em Desenvolvimento não é oferecido. A lista passa a exibir a área derivada da responsabilidade, no formato já recomendado (pessoa, área, responsabilidade, estado).
+
+**Produto:** nenhuma decisão funcional nova. Sucessão de administrador, Integrante em Desenvolvimento e exclusão de pessoa continuam fora, até pedido L3 explícito. O Módulo 01 não fica homologado por este parecer. A interface ainda não foi implementada.

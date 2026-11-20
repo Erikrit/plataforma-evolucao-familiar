@@ -17,6 +17,7 @@ Decisões abaixo são direções preliminares aprovadas conceitualmente, não pr
 | ADR-011 | Sem push/esteira de agentes neste repositório inicial | Separação entre concepção de produto e automação (histórico; supersedido por ADR-012 quanto à localização da esteira) |
 | ADR-012 | Esteira de desenvolvimento permitida neste repositório | Mantém o mesmo checkout, com separação lógica da documentação funcional do produto; agentes/skills/hooks não alteram requisitos aprovados automaticamente |
 | ADR-013 | Disponibilidade atual de brincadeiras/recompensas separada do histórico | Atende CT-20261119-001/002 (DEV-F03/F04/F06 v1.2) com menor adaptação segura sobre o modelo vigente |
+| ADR-014 | Gestão de acessos reutiliza as três responsabilidades contextuais | Atende CT-20261119-003 sem matriz nova, sem papel inédito e com fechamento dos controles de administrador |
 
 ## ADR-013 — Disponibilidade atual ≠ histórico (Módulo 03)
 
@@ -58,9 +59,54 @@ Nenhuma lacuna **bloqueante** para iniciar implementação das regras já aprova
 
 Mudança de tabela de estrelas; novo módulo; remoção física de Guardadas; eventos de auditoria no Histórico do Módulo 04 para “disponibilizar”; redesign UX além do necessário aos critérios DEV-F03/F04/F06.
 
+## ADR-014 — Gestão de acessos sem matriz nova (Módulo 01)
+
+**Status:** DOCUMENTADA pela Arquitetura (2026-11-19), como reconciliação L2 do `CT-20261119-003` com FUN-03/FUN-04/FUN-07 já aprovados na especificação v1.3.  
+**Inspeção:** `develop` @ `efee45267afcfb5f7312b12db268377a1e644dc2`.  
+**Não substitui** ADR-006 (autorização por pessoa/contexto) nem a ADR-013 (não criar permissão de desenvolvimento só de leitura).  
+**Não altera** a especificação funcional. Remoção ou desativação de pessoa permanece fora. Código de produto não foi modificado neste registro.
+
+### Combinações que os gates já sustentam
+
+A interface continua com três rótulos (Administrador, Responsável, Integrante). Área e responsabilidade de apresentação são só a leitura das responsabilidades técnicas já usadas pelos módulos. Não há quarta opção.
+
+| Área | Responsabilidade na interface | Responsabilidade técnica | Efeito já implementado |
+|---|---|---|---|
+| Cuidados | Responsável | `responsavel_cuidados` | Ver rotina, registrar, programar, consultar anexo e exportar, só na pessoa-alvo |
+| Cuidados | Integrante | `colaboradora_cuidados` | Ver rotina e registrar apoio/dose na pessoa-alvo; sem programação, anexo clínico nem exportação |
+| Desenvolvimento | Responsável | `responsavel_desenvolvimento` | Ver, participar, organizar e exportar o desenvolvimento da pessoa-alvo |
+| — | Administrador | `administrador` | Metadados da família, pessoas, convites e acessos. Sem conteúdo clínico ou infantil por esse papel |
+
+`participante_limitado` está no enum e passa em `conceder`/`criar` convite, mas nenhum gate de cuidado ou desenvolvimento o consulta. A pessoa-alvo entra em `idsPessoasVisiveis` e pode aparecer no início sem área autorizada. Por isso sai da lista concedível. Integrante em Desenvolvimento não existe: a ADR-013 já manteve organização e reativação em `responsavel_desenvolvimento`. Acesso da própria conta aos próprios dados também não entra no seletor.
+
+A pessoa-alvo pode ser qualquer pessoa da mesma família. O exemplo da colaboradora com a Vovó é o fluxo aprovado, não uma trava extra por tipo de pessoa. Isolar a Laurinha continua sendo consequência de não conceder essa dupla.
+
+### Menor ajuste
+
+1. **Um catálogo, duas pontas.** Centralizar em `responsabilidades.ts` o mapa área + rótulo ↔ responsabilidade técnica e a lista concedível: as três linhas contextuais da tabela. `conceder` e `criar` convite aceitam só essa lista. `administrador` e `participante_limitado` recebem recusa. O corpo atual (`usuarioId`, `responsabilidade`, `pessoaAlvoId`) permanece.
+2. **Quem já tem conta** usa `POST /familias/:familiaId/autorizacoes`. **Quem não tem conta** usa o convite já existente, com a mesma lista e a mesma pessoa-alvo. Convite pendente, expirado ou usado continua fora de `GET /acessos`. A ativação segue criando pessoa nova com vínculo `colaboradora`; o rótulo exibido vem da autorização. Ajuste de vínculo continua na pendência já registrada do seletor, fora deste CT.
+3. **Escopo na listagem.** `GET /acessos` ganha `area`: `Cuidados`, `Desenvolvimento` ou `null` no administrador. O campo `papel` permanece (`Administrador`, `Responsável`, `Colaborador`); a interface continua traduzindo `Colaborador` para Integrante. A lista administrativa agrupa por pessoa acompanhada e lê “pessoa · área · responsabilidade · ativo”, sem enum cru e sem operação granular.
+4. **Participante no seletor.** Para o administrador, a listagem de pessoas passa a incluir `usuarioId` quando a pessoa tem conta. Sem conta, o fluxo segue para convite. Quem não administra não recebe `usuarioId`.
+5. **Administrador.** O fluxo genérico não concede esse papel, alinhado ao convite, que já recusa. `revogar` recusa a operação se ela deixasse a família sem administrador ativo; a contagem e a baixa ocorrem na mesma transação. Um administrador excedente, se já existir, pode ser revogado por outro administrador. Revogação de responsabilidade contextual continua como está: inativa a autorização, preserva histórico e apaga as sessões daquele usuário. No próximo login, as autorizações restantes valem porque os gates leem o banco, não a sessão.
+6. **O que não criar.** Sem tabela de permissão, sem papel novo, sem endpoint paralelo e sem checagem só na interface. URL direta e outra família continuam nos gates já existentes (`podeVerCuidados`, `podeVerDesenvolvimento` e `garantirFamilia`).
+
+### Classificação dos achados
+
+- **Lacuna de UX:** a aba Acessos concede desenvolvimento só à própria conta, o convite fixa `colaboradora_cuidados` e a lista não mostra a área. O rótulo Integrante já existe na interface.
+- **Limitação funcional:** o serviço aceita qualquer responsabilidade do enum, inclusive as que não abrem área; a ativação de convite não vincula pessoa já cadastrada.
+- **Falha de controle, confirmada por inspeção:** `conceder` aceita `administrador`; `revogar` aceita remover administrador, e o botão oculto na interface não impede o `DELETE`. A suíte `smoke-authz-critico` já cobre administrador sem acesso clínico, colaboradora isolada na pessoa autorizada e sessão invalidada na revogação dela. Essa suíte não cobre concessão nem preservação do último administrador. Nesta etapa a API não foi chamada de novo.
+
+### Lacuna para Produto
+
+Nenhuma decisão funcional nova. As três combinações e a separação do administrador já estão na especificação v1.3 e nos gates. Sucessão de administrador e Integrante em Desenvolvimento ficam fora até uma decisão L3 explícita. Exclusão de pessoa não entra neste CT.
+
+### Fora desta ADR
+
+Layout móvel/desktop da aba, texto final da confirmação, seletor de vínculo, remoção de pessoa e revisão de autenticação para produção.
+
 ## A validar
 
-- Mecanismo de autenticação e invalidação de sessões.
+- Revisão de autenticação para produção e dispositivos reais. No MVP, a invalidação de sessão na revogação e o catálogo fechado de concessão ficam definidos na ADR-014; a suíte existente ainda não cobre o último administrador.
 - Casos-limite e validação técnica da programação de medicamentos: **comportamento funcional do MVP já aprovado na especificação v1.3 do Módulo 02**; não reabrir a regra nem inventar horários clínicos.
 - Confiabilidade e canais dos lembretes em dispositivos reais.
 - Contratos exatos da API, restrições e política de dados — **parcialmente endereçado por ADR-013 para disponibilidade/reativação; detalhe de payloads na implementação**.

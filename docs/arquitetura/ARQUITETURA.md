@@ -23,7 +23,7 @@ Módulos lógicos:
 `familia`, `pessoa`, `usuario`, `participacao_familiar`, `autorizacao`, `convite`.
 
 - Pessoa não exige login.
-- Papel contextual vincula usuário/família/pessoa-alvo e operação autorizada.
+- Papel contextual vincula usuário/família/pessoa-alvo e operação autorizada. A gestão administrativa reutiliza as três responsabilidades contextuais já vigentes (ADR-014); o administrador não é opção desse fluxo e não herda conteúdo sensível.
 - Revogação impede novas operações, preservando autoria histórica.
 - Vínculo de parentesco não implica autorização.
 - Isolamento entre famílias desde a modelagem, sem implementar SaaS comercial.

@@ -105,7 +105,25 @@
     "tentativasCorrecao":  {
 
                            },
-    "demanda":  null,
+    "demanda":  {
+                    "id":  "DEM-CT-20261119-003",
+                    "tipo":  "melhoria_funcional",
+                    "origem":  "CT-20261119-003 + docs/ux-ui/REVISAO-MODULO-01-ACESSOS.md",
+                    "estado":  "READY",
+                    "aprovacao":  {
+                                      "nivel":  "L2",
+                                      "status":  "DOCUMENTADA",
+                                      "referencia":  "ADR-014; especificacao modulo 01 v1.3 FUN-03/FUN-04/FUN-07"
+                                  },
+                    "risco":  "alto",
+                    "adr":  "ADR-014",
+                    "branch":  "develop",
+                    "commit":  "efee45267afcfb5f7312b12db268377a1e644dc2",
+                    "escopo":  "Parecer arquitetural da gestao de acessos. Codigo de produto nao alterado.",
+                    "bloqueios":  [],
+                    "proximaAcao":  "Nao implementar nesta etapa. Quando houver pedido, seguir ADR-014 pelo implementation-workflow.",
+                    "nota":  "Sem decisao funcional nova para o Produto. Remocao de pessoa permanece fora."
+                },
     "janelaIncrementos":  [
                               {
                                   "id":  "CUI-UX-CONS-01",

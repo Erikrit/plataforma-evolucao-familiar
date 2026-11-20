@@ -5,11 +5,24 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-19)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
+- **DEM-CT-20261119-003:** parecer de Arquitetura DOCUMENTADO (ADR-014) · estado `READY` · código de produto não alterado · sem decisão funcional nova para o Produto
 - **DEM-UX-HOM-R3-20261119:** COMPLETED técnico PASS · fingerprint `sha256:f0114d296d15068a` · [verifier](6c71be97-490f-422a-adbd-06911be180d6); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-CT-20261119-001-002:** COMPLETED técnico PASS · ADR-013 · fingerprint em `evidencia-ct-dl-exec-rec-20261119.json` · [verifier](422aae3f-f66c-4f49-9823-4746e0ed2739); humana PENDING_HUMAN
 - **DEM-UX-DL-03-20261119:** COMPLETED técnico PASS · fingerprint `sha256:b284793cde1478f7` · [verifier](5f0fd528-2614-49c0-ba3f-3edbf7564f9f); humana PENDING_HUMAN
 - **DEM-UX-HOM-20261118:** COMPLETED técnico PASS · fingerprint `sha256:9f6ab4a42a59c149` · [verifier](e5ccff07-38c8-4231-ac68-7ff4d28d56fe); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-ESTEIRA-IW-COMMITMSG-20261118:** COMPLETED — `implementation-workflow` passa a exigir `mensagemCommit` no resumo em `COMPLETED`
+
+## 2026-11-19 — Triagem + Arquitetura DEM-CT-20261119-003 (READY)
+
+- **Tipo:** melhoria_funcional · **Origem:** CT-20261119-003 + `docs/ux-ui/REVISAO-MODULO-01-ACESSOS.md`
+- **Aprovação:** L2 Arquitetura DOCUMENTADA (ADR-014); FUN-03/FUN-04/FUN-07 v1.3 permanecem a fonte funcional; sem L3 novo
+- **Escopo:** catálogo fechado das três responsabilidades contextuais, área na listagem, recusa de `administrador`/`participante_limitado` e preservação do último administrador no servidor
+- **Fora:** exclusão de pessoa, seletor de vínculo, Integrante em Desenvolvimento, sucessão de administrador, layout
+- **HEAD inspecionado:** `efee452` develop
+- **Código de produto:** não alterado
+- **Produto:** nenhuma decisão funcional bloqueante
+- **Fluxo seguinte, quando pedido:** `implementation-workflow` → `quality-gate` + verifier; homologação humana depois
+- **Commit/push:** não executados
 
 ## 2026-11-19 — DEM-UX-HOM-R3-20261119 COMPLETED (técnico PASS)
 
