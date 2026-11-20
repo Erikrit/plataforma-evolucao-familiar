@@ -110,3 +110,9 @@ Revisar se a família consegue entender **quem tem acesso a quê**, conceder/rev
 **Autoacompanhamento e áreas:** aplicar as regras da especificação v1.5, inclusive a diferença entre consulta/relato próprio e gestão/exportação. Calcular destinos com base nas capacidades reais do servidor. Com duas áreas próprias permitidas, apresentar escolha simples. Omitir áreas sem acesso e manter contexto visível durante a troca de pessoa.
 
 **Execução:** task-routing → module-planning se houver decomposição necessária → implementation-workflow → quality-gate. Usar a especificação como fonte de aceite; validar cadastro com/sem conta, acesso próprio e de terceiros, contexto único/múltiplo, URL/API direta e revogação. Dados fictícios, mobile e desktop, nova avaliação humana ao fim. O Módulo 01 continua com homologação humana REPROVADA até novo aceite.
+
+## Aceite humano da simplificação v1.5 — 2026-11-20
+
+**HOMOLOGAÇÃO HUMANA APROVADA**, comunicada expressamente pelo responsável do Produto após a atualização tratada nesta conversa. Escopo da demanda `DEM-M01-SIMP-CAD-20261120`, critério `M01-SIMP-HOM`, cadastro/conta/acessos e entrada contextual conforme especificação v1.5. Referência disponível na `develop` @ `5260fc672f3b207e659c888ac78e436e0548f8ae`.
+
+O estado vigente desta rodada passa a homologado no escopo acima. A fonte consolidada do aceite, limites e próximo encaminhamento é `docs/produto/STATUS-E-ESCOPO.md`, seção “Homologação humana APROVADA — simplificação do Módulo 01, 2026-11-20”. Os registros anteriores permanecem históricos. Próxima revisão UX da sequência é Módulo 04 — Histórico, Resumo e PDF.

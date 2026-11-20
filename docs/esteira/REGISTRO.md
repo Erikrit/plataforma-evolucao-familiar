@@ -1,5 +1,15 @@
 # Registro da esteira
 
+## 2026-11-20 — Aceite humano DEM-M01-SIMP-CAD-20261120
+
+- **Resultado humano** APROVADA, informado expressamente pelo responsável do Produto nesta conversa após a atualização.
+- **Critério humano** M01-SIMP-HOM aprovado para cadastro/conta/acessos e entrada contextual v1.5.
+- **Referência disponível** develop @ 5260fc672f3b207e659c888ac78e436e0548f8ae.
+- **Resultados técnicos** preservados conforme registro da demanda. Testes não reexecutados nesta atualização documental.
+- **Fonte consolidada** docs/produto/STATUS-E-ESCOPO.md, seção de homologação humana da simplificação do Módulo 01 em 2026-11-20.
+- **Próximo encaminhamento** revisão UX do Módulo 04 conforme sequência aprovada.
+
+
 Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
 ## Estado atual (2026-11-20)

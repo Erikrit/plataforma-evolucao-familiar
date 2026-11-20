@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "nota": "DEM-M01-SIMP-CAD-20261120 COMPLETED tecnico local sem commit",
-        "commit": "c46ed61bce4816f561a634290d5b4fa6ab5373b3"
+        "nota": "Entrega DEM-M01-SIMP-CAD-20261120 incorporada na develop; homologação humana comunicada como APROVADA em 2026-11-20.",
+        "commit": "5260fc672f3b207e659c888ac78e436e0548f8ae"
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -188,12 +188,11 @@
                 "M01-SIMP-AUTO",
                 "M01-SIMP-ENTRADA",
                 "M01-SIMP-ISOL",
-                "M01-SIMP-REV"
-            ],
-            "criteriosFalha": [],
-            "criteriosPendentesHumanos": [
+                "M01-SIMP-REV",
                 "M01-SIMP-HOM"
             ],
+            "criteriosFalha": [],
+            "criteriosPendentesHumanos": [],
             "fingerprint": "sha256:c9ba9051d7d0cca4",
             "fingerprintFull": "sha256:c9ba9051d7d0cca4d8b14ed47d7008f4c36e525be3d31dc791613c1e4871f347",
             "qg1": "PASS",
@@ -204,7 +203,7 @@
             "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente shell PASS (fingerprint + check + smoke m01-simp-cad).",
             "verifierOficial": "BLOCKED",
             "verifierOficialId": "8e779dd7-9d7b-4e2b-b4c5-b32fe26c7b20",
-            "homologacaoHumana": "PENDING_HUMAN",
+            "homologacaoHumana": "APROVADA",
             "evidencias": [
                 "docs/esteira/estado/qg1-typecheck-api-m01-simp-cad.txt",
                 "docs/esteira/estado/qg1-typecheck-web-m01-simp-cad.txt",
@@ -241,8 +240,14 @@
                 "apps/web/src/app/convites/ativar/page.tsx"
             ],
             "mensagemCommit": "feat(fundacao): simplificar cadastro, conta e entrada contextual do M01\n\nAplica a v1.5 §11: ativação reutiliza pessoaId, preserva autoacompanhamento atual e deriva destino pós-login das capacidades efetivas, sem migração de contas legadas.",
-            "nota": "PASS tecnico CAD/CONTA/AUTO/ENTRADA/ISOL/REV; HOM PENDING_HUMAN. Verifier oficial BLOCKED Ask; indep. shell PASS.",
-            "concluidaEm": "2026-11-20T18:20:00.000Z"
+            "nota": "PASS técnico CAD/CONTA/AUTO/ENTRADA/ISOL/REV registrado; HOM APROVADA pelo responsável do Produto em 2026-11-20. Verifier oficial BLOCKED Ask; verificação independente shell PASS registrada.",
+            "concluidaEm": "2026-11-20T18:20:00.000Z",
+            "homologacaoHumanaRegistro": {
+                "data": "2026-11-20",
+                "origem": "comunicacao expressa do responsavel do Produto nesta conversa",
+                "referenciaDisponivel": "5260fc672f3b207e659c888ac78e436e0548f8ae",
+                "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+            }
         },
         {
             "id": "DEM-M01-ACESSOS-CORR-20261120",
@@ -1057,8 +1062,8 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologacao humana M01-SIMP-HOM (PENDING_HUMAN). Seed local renovado.",
-    "atualizadoEm": "2026-11-20T18:26:06.018Z",
+    "proximaAcao": "Retomar revisão UX do Módulo 04 — Evolução Familiar, conforme sequência aprovada. M01-SIMP-HOM APROVADA pelo responsável do Produto.",
+    "atualizadoEm": "2026-11-20T22:36:59.434Z",
     "notas": "DEM-SEED-LOCAL-20261120 COMPLETED: banco limpo, seed ≤6 pessoas, fingerprint sha256:a7b705e631d032e4",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",

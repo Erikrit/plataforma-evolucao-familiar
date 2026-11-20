@@ -147,3 +147,13 @@ O responsável pelo produto solicitou **priorizar a revisão de permissões e a 
 **Evidência desta atualização:** decisão expressa do responsável nesta conversa, com autorização explícita de commit documental no GitHub. Base da revisão estática develop @ 89f47d38a5b6e5d05f8145545bfc6b2327f98db8. Esta atualização altera documentação; código e testes não foram executados neste fechamento.
 
 **Próximo passo:** task-routing para executar a simplificação aprovada do Módulo 01, testes pertinentes e nova homologação humana. Estado humano permanece REPROVADA nesta rodada. Módulo 03 conserva o aceite R3 e Módulo 04 permanece pausado.
+
+## Homologação humana APROVADA — simplificação do Módulo 01, 2026-11-20
+
+**Resultado comunicado expressamente pelo responsável do Produto: APROVADA.** O responsável informou nesta conversa “Foi feito a atualização e a homologação foi aprovada.” O aceite corresponde à atualização de cadastro, conta, acessos/autoacompanhamento e entrada contextual do Módulo 01 v1.5, demanda `DEM-M01-SIMP-CAD-20261120`, critério humano `M01-SIMP-HOM`.
+
+**Referência disponível no repositório:** `develop` @ `5260fc672f3b207e659c888ac78e436e0548f8ae`, commit da simplificação do Módulo 01. A vinculação desta comunicação à demanda considera a continuidade da atualização tratada nesta conversa. O aceite foi informado pelo responsável; esta atualização documental não reproduziu a avaliação nem reexecutou testes.
+
+**Situação vigente desta rodada: HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO.** Este registro supera a reprovação e a espera de aceite humano para o escopo desta atualização, preservando os registros históricos. Os resultados técnicos permanecem os registrados pela esteira, inclusive a distinção entre verifier oficial bloqueado e verificação independente via shell registrada como PASS. Pendências de segurança/autenticação, produção e dispositivos mantêm seus próprios critérios.
+
+**Próxima etapa da sequência aprovada:** retomar a revisão UX do Módulo 04 — Evolução Familiar (Histórico, Resumo e PDF). Pendências próprias do Módulo 01, como exclusão/desativação de pessoa e seletor de vínculos, continuam sujeitas ao encaminhamento específico. Aceite R3 do Módulo 03 preservado.
