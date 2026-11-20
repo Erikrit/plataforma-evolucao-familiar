@@ -78,3 +78,11 @@ Revisar se a família consegue entender **quem tem acesso a quê**, conceder/rev
 **Critérios preliminares de aceite:** administrador identifica para cada pessoa quem possui acesso ativo, em qual área, com qual responsabilidade; seleciona apenas combinações aprovadas e confirma a concessão/revogação correta; usuários sem poder de administração não acessam formulários/APIs; admin sem autorização de conteúdo não recebe acesso clínico/infantil; convite pendente não consta como ativo; revogação retira acesso efetivamente, inclusive nas sessões; nenhuma exclusão de pessoa sem preservação de dados e decisão funcional.
 
 **Próxima etapa recomendada:** Produto define combinações e política administrativa de concessão; Arquitetura reconcilia os contratos e testes negativos; UX fecha layout agrupado em dispositivo móvel e desktop; esteira implementa mudança mínima e pede homologação humana. Não alterar especificação FUN-04 por suposição.
+
+## Aceite da direção de UX — 2026-11-19
+
+**APROVADA PELO RESPONSÁVEL DO PRODUTO COMO DIREÇÃO DE UX**, após apresentação da proposta administrativa. A organização dos acessos será centrada em **pessoa acompanhada, área (Cuidados ou Desenvolvimento), participante e responsabilidade compatível**, com concessão curta, visão legível e revogação contextual. Preservar os três rótulos simples do MVP e não mostrar enum técnico como permissão configurável.
+
+**Limite explícito do aceite:** aprovação do desenho recomendado **não determina quais combinações de responsabilidades podem ser concedidas** e não autoriza conceder `administrador`, inventar `Integrante` em áreas sem contrato, mudar acesso a dados sensíveis ou eliminar pessoas. O `CT-20261119-003` permanece `NEEDS_DECISION` para Produto/Arquitetura quanto à matriz fechada de combinações, convites, escopos exibidos, proteção do último administrador e riscos de autorização. A auditoria dinâmica permanece pendente. O Módulo 01 não está homologado nesta rodada.
+
+**Encaminhamento imediato:** Arquitetura deve reconciliar os contratos vigentes, analisar a segurança e propor o menor ajuste técnico; Produto decide apenas lacunas funcionais materiais. Depois UX concretiza o fluxo e a esteira implementa com testes negativos e homologação humana. O Módulo 04 segue pausado.
