@@ -137,3 +137,13 @@ O responsável pelo produto solicitou **priorizar a revisão de permissões e a 
 **Decisão funcional de Produto:** APROVADA a **direção conceitual** de pessoa acompanhada com/sem conta, conta podendo acompanhar a si/outros/ambos, responsabilidade contextual não exclusiva, cadastro mínimo com eventual convite/ativação de conta e navegação pós-login contextual. Registrada no Documento Mestre v1.3 e Especificação do Módulo 01 v1.4. **Não** foram aprovados novos gates/checkboxes granulares, tipo Ator exclusivo ou exigência de senha/e-mail para toda pessoa. **Ainda pendem** análise de segurança da associação conta↔pessoa existente, poderes de autoacompanhamento além da leitura e detalhamento de navegação para múltiplas áreas. Encaminhar a Arquitetura e UX antes de implementação, sem violar ADR-014.
 
 **Prioridade:** Módulo 01; Módulo 04 permanece pausado. Aceite humano UX do Módulo 03 preservado no escopo já aprovado.
+
+## Fechamento de Produto — cadastro e autoacompanhamento, 2026-11-20
+
+**Decisões APROVADAS e DOCUMENTADAS** no Documento Mestre v1.4 e na especificação do Módulo 01 v1.5, seção 11. O responsável informou que o sistema ainda não foi lançado e não possui usuários em utilização. Tratamento de contas legadas fica dispensado nesta entrega; o fluxo ordinário de cadastro/ativação mantém a identidade Pessoa/Usuario consistente.
+
+**Autoacompanhamento:** manter as capacidades efetivas atuais, inclusive programação e exportação dependentes de responsabilidade contextual. As duas pendências do alinhamento anterior estão encerradas para esta entrega. A entrada pós-login deriva de pessoa/área realmente autorizadas, incluindo acesso próprio. O detalhamento de UX e implementação segue pela esteira, com referência à especificação v1.5 e ao esclarecimento da ADR-014.
+
+**Evidência desta atualização:** decisão expressa do responsável nesta conversa, com autorização explícita de commit documental no GitHub. Base da revisão estática develop @ 89f47d38a5b6e5d05f8145545bfc6b2327f98db8. Esta atualização altera documentação; código e testes não foram executados neste fechamento.
+
+**Próximo passo:** task-routing para executar a simplificação aprovada do Módulo 01, testes pertinentes e nova homologação humana. Estado humano permanece REPROVADA nesta rodada. Módulo 03 conserva o aceite R3 e Módulo 04 permanece pausado.

@@ -111,3 +111,15 @@ Layout móvel/desktop da aba, texto final da confirmação, seletor de vínculo,
 - Confiabilidade e canais dos lembretes em dispositivos reais.
 - Contratos exatos da API, restrições e política de dados — **parcialmente endereçado por ADR-013 para disponibilidade/reativação; detalhe de payloads na implementação**.
 - Necessidade de PWA ou alternativa móvel adicional.
+
+## Esclarecimento da ADR-014 após decisão de Produto — 2026-11-20
+
+**Referência funcional:** Módulo 01 v1.5, seção 11. **Base estática:** develop @ 89f47d38a5b6e5d05f8145545bfc6b2327f98db8.
+
+Produto informou que o sistema ainda não possui usuários em utilização e dispensou o tratamento de contas legadas nesta entrega. Preservar o modelo Pessoa/Usuario e o catálogo fechado da ADR-014 no fluxo ordinário de novos cadastros e eventual ativação. Ao habilitar conta da pessoa cadastrada na jornada, manter o mesmo pessoaId e distinguir essa identidade da pessoa-alvo do acompanhamento. Não criar procedimento de migração ou reconciliação de contas como pré-condição desta demanda.
+
+Produto decidiu manter o autoacompanhamento exatamente conforme as capacidades atuais. Consulta própria e relato próprio já possuem controles específicos; programação/organização de consultas e exportação de Cuidados dependem de responsabilidade contextual. Preservar os controles das demais operações. O mapa funcional de referência fica na especificação v1.5.
+
+A navegação deve obter contextos a partir de capacidades efetivas do servidor, incluindo acessos próprios, e usar uma única representação para menu, ações e entrada pós-login. Reutilizar os contratos atuais quando suficientes. Se faltar capacidade de representação, aplicar o menor ajuste contratual mantendo a autorização no servidor.
+
+Esta atualização documenta o fechamento funcional e a orientação técnica para execução. A implementação e a validação dinâmica pertencem à próxima demanda da esteira.

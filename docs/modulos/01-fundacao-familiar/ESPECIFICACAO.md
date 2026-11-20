@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.4 — direção de participação e autoacompanhamento aprovada em 2026-11-20; detalhes de fluxo e contrato pendentes  
-**Status funcional:** requisitos anteriores mantidos; diretrizes adicionais v1.4 aprovadas pelo Produto, com decisões operacionais pendentes antes de implementação. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
+**Versão:** especificação funcional v1.5 — decisões de alinhamento encerradas pelo Produto em 2026-11-20  
+**Status funcional:** direção v1.4 e fechamento v1.5 aprovados pelo Produto; implementação da simplificação de cadastro/acessos e entrada contextual encaminhada à esteira. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
 
@@ -149,7 +149,7 @@ Fornece identidade, família, pessoa, conta, autorizações e dados resumidos pa
 1. **Criar pessoa sem conta:** informar nome; opcionalmente data de nascimento/vínculo; acompanhar via adulto legitimamente autorizado; sem senha ou e-mail obrigatórios.
 2. **Habilitar acesso com conta:** identificar se a pessoa já existe; vincular a conta de forma confiável em vez de criar cadastro duplicado; convidar/ativar quando necessário, com senha definida pelo próprio titular, convite com prazo/uso único e autorização adequada. Não presumir que só conhecer e-mail prova identidade. Identificar como a pessoa aceita sua associação e quem pode iniciar o vínculo.
 3. **Definir acompanhamento:** selecionar participante com conta, pessoa acompanhada, área e responsabilidade **dentre combinações efetivamente suportadas** (ADR-014). A mesma conta pode acompanhar a própria pessoa e outras pessoas, sem conceder acesso às demais por dedução; autorização efetiva validada no backend.
-4. **Autoacompanhamento:** pessoa com conta encontra os próprios contextos permitidos. **Ponto de decisão funcional:** leitura de dados próprios já prevista não implica automaticamente poder cadastrar/alterar medicamentos, acessar relatórios completos ou organizar atividades; detalhar a operação por área e alinhar com consentimento, privacidade e gates técnicos antes de implementar.
+4. **Autoacompanhamento:** pessoa com conta encontra os próprios contextos permitidos, preservando as capacidades atuais do servidor conforme fechamento v1.5 abaixo. Programação e exportação seguem as responsabilidades contextuais existentes.
 5. **Pós-login:** se existir um único contexto operacional, abrir diretamente a área correspondente; se houver mais de uma pessoa/área, oferecer escolha contextual simples; administrador sem área operacional autorizada abre gestão. Sempre fornecer navegação para alternar contexto autorizado, sem cair em tela vazia ou vazamento de acesso.
 6. **Gestão e revogação:** deixar claro quem acompanha quem/área/função, não expor opções de operação granulares sem necessidade, revogar autorizações com invalidação de sessão e histórico preservado. A segurança da associação Pessoa↔Conta e do acesso direto a URL/API deve ser testada.
 
@@ -160,4 +160,24 @@ Fornece identidade, família, pessoa, conta, autorizações e dados resumidos pa
 - A decisão anterior de mostrar cartões por pessoa em FUN-05/FUN-06 passa a ser **fallback para múltiplos contextos**, não uma etapa obrigatória quando houver apenas um contexto; UX define a transição minimizando toques.
 - Não alterar Módulos 02/03/04 nem migrar usuários existentes sem plano e testes; não duplicar dados nem permitir tomada indevida de contas.
 
-**Pendente de Produto após análise de UX/Arquitetura:** validar desenho de ativação/vínculo de conta existente, poderes do autoacompanhamento além de leitura e regras finas de entrada/contexto. **Até isso, não implementar mudança de autorização/credencial por inferência.**
+### Fechamento de Produto v1.5 — 2026-11-20
+
+**APROVADO expressamente pelo responsável do Produto.** O sistema ainda não foi lançado e não possui usuários em utilização. A implementação desta demanda dispensa fluxo de migração, reconciliação ou associação de contas legadas. O fluxo ordinário de cadastrar pessoa e eventualmente habilitar sua conta deve manter a relação Pessoa/Usuario consistente e preservar o histórico, sem criar uma segunda pessoa para representar a mesma identidade. O vínculo de conta em novos cadastros pode reutilizar a pessoa criada nessa jornada. Contas e dados fictícios de teste devem ser tratados como dados de desenvolvimento; esta decisão não autoriza limpeza destrutiva automática.
+
+**Autoacompanhamento mantém o comportamento efetivo atual.** A referência é `apps/api/src/autorizacoes/servico-autorizacoes.ts` em `develop` @ `89f47d38a5b6e5d05f8145545bfc6b2327f98db8`.
+
+| Capacidade própria em Cuidados | Regra aprovada para esta entrega |
+|---|---|
+| Consultar cuidados e anexos próprios | Preservar os controles atuais de acesso próprio |
+| Registrar relatos próprios | Preservar o controle atual |
+| Cadastrar/alterar programação, organizar consultas/exames e exportar Cuidados | Exigir a responsabilidade contextual existente, como no servidor atual |
+| Consultar Desenvolvimento próprio | Preservar o controle atual |
+| Organizar Desenvolvimento, registrar participações/resgates e exportar | Preservar as verificações de cada operação existente |
+
+A expressão “manter como está” confirma essas capacidades efetivas. Não tomar ausência de responsável selecionado como concessão automática de `responsavel_cuidados` ou `responsavel_desenvolvimento`. Uma responsabilidade legítima pode ter a própria pessoa como alvo, conforme catálogo ADR-014.
+
+**Entrada contextual:** calcular contextos por pessoa e área usando capacidades efetivas do servidor, incluindo acesso próprio. Um contexto abre diretamente a área principal; vários contextos são apresentados em escolha simples agrupada por pessoa, com as áreas autorizadas. Administração permanece acessível para quem a possui; administrador sem contexto operacional abre gestão. Histórico/resumo continuam disponíveis conforme autorização no menu da pessoa e não precisam gerar uma escolha adicional obrigatória no login. Caso o próprio cadastro dê acesso às duas áreas pelos controles atuais, aplicar a escolha de múltiplos contextos. Evitar redirecionamentos por rótulo de perfil ou apenas pelo número de concessões explícitas.
+
+**Critérios para a entrega:** cadastro mínimo sem conta obrigatória; ativação ordinária com relação consistente Pessoa/Usuario; conta que acompanha a si e/ou terceiros; entrada com um ou múltiplos contextos; isolamento por pessoa/família; diferenças entre leitura, registro e gestão; revogação e sessão; testes com dados fictícios e nova homologação humana.
+
+**Encaminhamento funcional fechado:** as duas pendências levantadas no alinhamento (contas legadas e poderes de autoacompanhamento) estão resolvidas para este escopo. UX e Arquitetura podem detalhar e implementar a menor solução compatível pela esteira existente. Novas capacidades exigem decisão própria.

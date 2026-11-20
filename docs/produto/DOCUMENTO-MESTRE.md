@@ -1,4 +1,4 @@
-# Documento Mestre do Produto — v1.3
+# Documento Mestre do Produto — v1.4
 
 **Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
@@ -121,4 +121,10 @@ Toda alteração deve registrar: problema resolvido, novo trabalho imposto à fa
 - **Entrada após autenticação:** com **um único contexto operacional autorizado**, abrir diretamente sua área principal (Cuidados/Rotina ou Desenvolvimento). Com múltiplos contextos, apresentar seleção simples de pessoa/área, preferencialmente respeitando uma escolha anterior segura se houver; com papel exclusivamente administrativo, abrir gestão familiar. Nunca redirecionar para área sem autorização.
 - **Proteção e continuidade:** não ampliar direitos por parentesco, papel administrativo ou login; revogações eficazes, sessões e isolamento entre pessoas/famílias; preservar histórico e autoria, não criar conta duplicada; não impor login a crianças ou idosos sem necessidade.
 
-**Limites do aceite:** esta é a direção de Produto, **não** autorização de implementação imediata de criação/vinculação de contas ou autoacompanhamento ampliado. **NEEDS_DECISION:** regras detalhadas de associação segura de pessoa existente↔conta, convite/consentimento e recuperação, operações permitidas no autoacompanhamento (especialmente alteração de medicação/relatórios), e tratamento da navegação com múltiplos contextos. UX e Arquitetura devem propor o mínimo necessário para fechar essas lacunas antes de mudar contratos. Não adotar login público nem criação de conta indiscriminada por interpretação. O status de homologação humana do Módulo 01 continua **REPROVADO**; Módulo 04 permanece pausado.
+**Fechamento pelo Produto em 2026-11-20:** o sistema ainda está em desenvolvimento e não possui usuários em utilização, conforme informado pelo responsável. Associação, reconciliação ou migração de contas legadas ficam fora desta entrega. O cadastro e a ativação ordinários devem manter a relação consistente entre pessoa e conta, conforme FUN-03 e seção 11 do Módulo 01.
+
+**Autoacompanhamento aprovado com o comportamento atual:** preservar as capacidades efetivas do servidor, inclusive a distinção entre leitura/relato próprio e gestão/exportação dependentes de responsabilidade contextual. A decisão encerra a pendência sobre novos poderes de autoacompanhamento. A fonte detalhada é a especificação do Módulo 01 v1.5.
+
+**Encaminhamento:** implementar a simplificação de cadastro, apresentação de acessos e entrada contextual usando os contratos e autorizações vigentes; UX detalha a escolha de pessoa/área dentro da direção aprovada. O status de homologação humana do Módulo 01 segue REPROVADO até nova avaliação. Módulo 04 permanece pausado.
+
+**Publicação documental:** o responsável autorizou expressamente o commit deste alinhamento no GitHub em 2026-11-20. Essa autorização aplica-se a esta atualização documental.
