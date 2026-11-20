@@ -2,16 +2,38 @@
 
 Separado da especificação funcional do produto. Atualizar com entradas curtas.
 
-## Estado atual (2026-11-19)
+## Estado atual (2026-11-20)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
-- **DEM-ADR014-ACESSOS-20261119:** COMPLETED técnico PASS · fingerprint `sha256:5b3f46d7c53bbe9c` · verifier independente PASS; oficial BLOCKED ([verifier](a02013cb-2491-45c3-8a52-6ee4ac317850)) · humana PENDING_HUMAN
+- **DEM-M01-ACESSOS-CORR-20261120:** COMPLETED técnico PASS · fingerprint `sha256:f8ed38e0032e040a` · verifier indep. PASS; oficial BLOCKED ([verifier](bce6f2ac-2e08-429f-aa06-26f85b45935f)) · humana PENDING_HUMAN (AC-09)
+- **DEM-ADR014-ACESSOS-20261119:** COMPLETED técnico PASS · fingerprint `sha256:5b3f46d7c53bbe9c` · humana PENDING_HUMAN (reprovada na rodada; sucedida pela correção)
 - **DEM-CT-20261119-003:** parecer DOCUMENTADO (ADR-014) · sucedido pela implementação DEM-ADR014-ACESSOS
 - **DEM-UX-HOM-R3-20261119:** COMPLETED técnico PASS · fingerprint `sha256:f0114d296d15068a` · [verifier](6c71be97-490f-422a-adbd-06911be180d6); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-CT-20261119-001-002:** COMPLETED técnico PASS · ADR-013 · fingerprint em `evidencia-ct-dl-exec-rec-20261119.json` · [verifier](422aae3f-f66c-4f49-9823-4746e0ed2739); humana PENDING_HUMAN
 - **DEM-UX-DL-03-20261119:** COMPLETED técnico PASS · fingerprint `sha256:b284793cde1478f7` · [verifier](5f0fd528-2614-49c0-ba3f-3edbf7564f9f); humana PENDING_HUMAN
 - **DEM-UX-HOM-20261118:** COMPLETED técnico PASS · fingerprint `sha256:9f6ab4a42a59c149` · [verifier](e5ccff07-38c8-4231-ac68-7ff4d28d56fe); humana PENDING_HUMAN / UX REPROVADA
 - **DEM-ESTEIRA-IW-COMMITMSG-20261118:** COMPLETED — `implementation-workflow` passa a exigir `mensagemCommit` no resumo em `COMPLETED`
+
+## 2026-11-20 — DEM-M01-ACESSOS-CORR-20261120 COMPLETED (técnico PASS)
+
+- **Tipo:** correcao · **Risco:** alto (authz/UX)
+- **Entrega:** visão Por participante; bloco Administração; escolha explícita Responsável/Integrante em Cuidados; revisão com efeito das ações; `participanteUsuarioId` em GET /acessos; smokes AC-05/06
+- **QG-1/QG-2:** PASS · QG-3 NOT_APPLICABLE · Verifier indep. PASS; oficial BLOCKED Ask ([verifier](bce6f2ac-2e08-429f-aa06-26f85b45935f))
+- **Fingerprint:** `sha256:f8ed38e0032e040a`
+- **Humana:** PENDING_HUMAN (AC-09) — roteiro em `roteiro-ac09-m01-acessos-corr.md`
+- **Evidência:** `evidencia-m01-acessos-corr-20261120.json`
+- **Commit/push:** não executados
+- **Próximo:** homologação humana expressa AC-09 (celular + desktop)
+
+## 2026-11-20 — Triagem DEM-M01-ACESSOS-CORR-20261120 (IN_PROGRESS)
+
+- **Tipo:** correcao · **Origem:** humano + `docs/especificacao-modulo-01-acessos.md` + reprovação homologação humana
+- **Aprovação:** L2 ADR-014 DOCUMENTADA; especificação de correção no pedido; sem L3 novo
+- **Escopo:** consulta por pessoa e por participante; bloco administração; escolha explícita Cuidados; revisão com efeito; alinhamento sessão/menu; AC-01..09
+- **Fora:** exclusão de pessoa, seletor de vínculo, Integrante em Desenvolvimento, sucessão de admin
+- **HEAD:** `1c3ab8d` develop · module-planning N/A (correção delimitada)
+- **Fluxo:** implementation-workflow → quality-gate + verifier; humana PENDING_HUMAN
+- **Commit/push:** não executados
 
 ## 2026-11-19 — DEM-ADR014-ACESSOS-20261119 COMPLETED (técnico PASS)
 

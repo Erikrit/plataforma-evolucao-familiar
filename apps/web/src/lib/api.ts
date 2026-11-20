@@ -47,6 +47,8 @@ export type AcessoResumo = {
   id: string;
   participanteNome: string;
   participantePessoaId: string;
+  /** Conta do participante; distingue homônimos (ADR-014 / consulta por participante). */
+  participanteUsuarioId?: string;
   papel: "Administrador" | "Responsável" | "Colaborador";
   /** Cuidados | Desenvolvimento | null (administrador). ADR-014. */
   area?: "Cuidados" | "Desenvolvimento" | null;
@@ -73,6 +75,48 @@ export const COMBINACOES_ACESSO_CONCEDIVEIS = [
     responsabilidade: "responsavel_desenvolvimento" as const,
   },
 ] as const;
+
+export type CombinacaoAcessoConcedivel =
+  (typeof COMBINACOES_ACESSO_CONCEDIVEIS)[number];
+
+/** Textos de referência da especificação de correção M01 (ações prometidas). */
+export function resumoAcoesCombinacao(
+  responsabilidade: CombinacaoAcessoConcedivel["responsabilidade"],
+  nomePessoa: string,
+): string {
+  const pessoa = nomePessoa.trim() || "a pessoa selecionada";
+  if (responsabilidade === "responsavel_cuidados") {
+    return `Pode ver a rotina, registrar cuidados, programar, consultar anexos e exportar informações de Cuidados de ${pessoa}.`;
+  }
+  if (responsabilidade === "colaboradora_cuidados") {
+    return `Pode ver a rotina e registrar apoio e doses de ${pessoa}. Programação, anexos clínicos e exportação ficam disponíveis ao Responsável.`;
+  }
+  return `Pode acompanhar, participar, organizar e exportar informações de Desenvolvimento de ${pessoa}.`;
+}
+
+export function textoRevisaoAcesso(entrada: {
+  participanteNome: string;
+  area: CombinacaoAcessoConcedivel["area"];
+  responsabilidade: CombinacaoAcessoConcedivel["responsabilidade"];
+  nomePessoa: string;
+  convite?: boolean;
+}): string {
+  const participante =
+    entrada.participanteNome.trim() ||
+    (entrada.convite ? "a pessoa convidada" : "o participante");
+  const pessoa = entrada.nomePessoa.trim() || "a pessoa selecionada";
+  const prefixo = entrada.convite
+    ? `Após a ativação, ${participante} verá ${entrada.area} de ${pessoa}.`
+    : `Quando entrar, ${participante} verá ${entrada.area} de ${pessoa}.`;
+  const resumo = resumoAcoesCombinacao(
+    entrada.responsabilidade,
+    pessoa,
+  ).replace(/^Pode /, "Poderá ");
+  return `${prefixo} ${resumo}`;
+}
+
+export const TEXTO_ADMINISTRACAO_FAMILIA =
+  "Gerencia pessoas, convites e acessos da família. O acesso a Cuidados e Desenvolvimento depende das responsabilidades de cada pessoa.";
 
 export type AcessosResposta = {
   modo: "administracao" | "proprios_dados";

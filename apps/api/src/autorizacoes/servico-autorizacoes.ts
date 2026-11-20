@@ -79,6 +79,7 @@ export class ServicoAutorizacoes {
         id: linha.id,
         participanteNome: linha.usuario.pessoa.nome,
         participantePessoaId: linha.usuario.pessoa.id,
+        participanteUsuarioId: linha.usuario.id,
         papel: papelApresentacao(linha.responsabilidade),
         area: areaApresentacao(linha.responsabilidade),
         pessoaAcompanhadaNome: linha.pessoaAlvo?.nome ?? null,

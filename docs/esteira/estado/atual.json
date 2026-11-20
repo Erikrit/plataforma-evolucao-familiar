@@ -104,66 +104,68 @@
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
     "demanda": {
-        "id": "DEM-ADR014-ACESSOS-20261119",
-        "tipo": "melhoria_funcional",
-        "origem": "humano + CT-20261119-003 + ADR-014 + REVISAO-MODULO-01-ACESSOS",
+        "id": "DEM-M01-ACESSOS-CORR-20261120",
+        "tipo": "correcao",
+        "origem": "humano + docs/especificacao-modulo-01-acessos.md + reprovacao homologacao humana + ADR-014",
         "estado": "COMPLETED",
         "aprovacao": {
             "nivel": "L2",
             "status": "DOCUMENTADA",
-            "referencia": "ADR-014; especificacao modulo 01 v1.3 FUN-03/FUN-04/FUN-07; pedido humano de implementacao"
+            "referencia": "ADR-014 DOCUMENTADA; especificação de correção anexada; FUN-03/FUN-04/FUN-07 v1.3; pedido humano de implementação pós-reprovação"
         },
         "risco": "alto",
         "adr": "ADR-014",
         "branch": "develop",
-        "commit": "331476ca9355970200a3cd22f21ef8be1435f075",
-        "escopo": "Catalogo fechado ADR-014, area na listagem, UX Acessos por pessoa/area/responsabilidade, protecao ultimo admin; sem exclusao de pessoa nem edicao de vinculo.",
+        "commit": "1c3ab8de652b598a54d827650d3e9a7f47164aeb",
+        "escopo": "Correção UX/consulta de acessos: visão por participante, bloco administração, escolha explícita Cuidados Responsável/Integrante, revisão com efeito das ações, alinhamento sessão pós-concessão/revogação; reutilizar catálogo ADR-014.",
         "criteriosAceite": [
-            "FUN-03",
-            "FUN-04",
-            "FUN-07",
-            "ADR-014-CATALOGO",
-            "ADR-014-ULTIMO-ADMIN",
-            "ADR-014-AREA-LISTAGEM",
-            "ADR-014-UX-CONCESSAO"
+            "AC-01",
+            "AC-02",
+            "AC-03",
+            "AC-04",
+            "AC-05",
+            "AC-06",
+            "AC-07",
+            "AC-08",
+            "AC-09"
         ],
-        "fingerprint": "sha256:5b3f46d7c53bbe9c",
-        "fingerprintFull": "sha256:5b3f46d7c53bbe9cbaf9c24d0f538c298a572d16f495bf62647de10eec9f86e2",
+        "fingerprint": "sha256:f8ed38e0032e040a",
+        "fingerprintFull": "sha256:f8ed38e0032e040ad585c22d5450318a9d18e870c26850428b5356e2e49d9abc",
         "arquivos": [
-            "apps/api/src/autorizacoes/responsabilidades.ts",
             "apps/api/src/autorizacoes/servico-autorizacoes.ts",
-            "apps/api/src/convites/servico-convites.ts",
-            "apps/api/src/pessoas/servico-pessoas.ts",
-            "apps/api/scripts/smoke-adr014-acessos.mjs",
-            "apps/api/scripts/smoke-ct-acessos.mjs",
-            "apps/api/scripts/smoke-authz-critico.mjs",
-            "apps/api/package.json",
             "apps/web/src/lib/api.ts",
             "apps/web/src/componentes/painel-gerenciar-familia.tsx",
-            "apps/web/src/componentes/painel-fundacao.tsx"
+            "apps/api/scripts/smoke-adr014-acessos.mjs",
+            "apps/api/scripts/check-m01-acessos-corr.mjs",
+            "apps/api/package.json"
         ],
         "verificacao": {
             "qg1": "PASS",
             "qg2": "PASS",
             "qg3": "NOT_APPLICABLE",
             "verifier": "PASS",
-            "verifierId": "indep-shell-adr014-20261119",
+            "verifierId": "indep-shell-m01-acessos-corr-20261120",
+            "verifierOficial": "BLOCKED",
+            "verifierOficialId": "bce6f2ac-2e08-429f-aa06-26f85b45935f",
+            "homologacaoHumana": "PENDING_HUMAN",
             "evidencias": [
-                "docs/esteira/estado/evidencia-adr014-acessos-20261119.json",
-                "docs/esteira/estado/qg1-typecheck-api-adr014.txt",
-                "docs/esteira/estado/qg1-typecheck-web-adr014.txt",
-                "docs/esteira/estado/qg2-smoke-adr014-acessos.txt",
-                "docs/esteira/estado/qg2-smoke-ct-acessos-adr014.txt",
-                "docs/esteira/estado/qg2-smoke-authz-adr014.txt",
-                "docs/esteira/estado/qg2-smoke-ff05-adr014.txt",
-                "docs/esteira/estado/qg2-build-web-adr014.txt",
-                "docs/esteira/estado/qg2-check-a11y-mobile-adr014.json",
-                "docs/esteira/estado/verifier-rerun-adr014-authz.txt"
+                "docs/esteira/estado/evidencia-m01-acessos-corr-20261120.json",
+                "docs/esteira/estado/qg1-typecheck-api-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg1-typecheck-web-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg1-check-estatico-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg2-smoke-adr014-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg2-smoke-ct-acessos-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg2-smoke-authz-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg2-build-web-m01-acessos-corr.txt",
+                "docs/esteira/estado/verifier-rerun-check-m01-acessos-corr.txt",
+                "docs/esteira/estado/verifier-rerun-smoke-adr014-m01-acessos-corr.txt",
+                "docs/esteira/estado/roteiro-ac09-m01-acessos-corr.md"
             ]
         },
         "bloqueios": [],
-        "proximaAcao": "Homologacao humana M01 Acessos (PENDING_HUMAN). Commit sob decisao humana.",
-        "nota": "PASS técnico ADR-014; QG-3 N/A (demanda delimitada); humana PENDING_HUMAN."
+        "proximaAcao": "Homologacao humana AC-09 (PENDING_HUMAN). Commit sob decisao humana.",
+        "mensagemCommit": "fix(acessos): alinhar consulta e revisão à homologação M01\n\nCorrige a aba Acessos após reprovação humana: visão por participante, escolha explícita em Cuidados e revisão que descreve a área e as ações prometidas.",
+        "nota": "PASS técnico AC-01..08; AC-09 PENDING_HUMAN. Verifier oficial BLOCKED Ask; independente shell PASS."
     },
     "janelaIncrementos": [
         {
@@ -183,6 +185,74 @@
         }
     ],
     "demandasConcluidas": [
+        {
+            "id": "DEM-M01-ACESSOS-CORR-20261120",
+            "tipo": "correcao",
+            "origem": "humano + docs/especificacao-modulo-01-acessos.md + reprovacao homologacao humana + ADR-014",
+            "estado": "COMPLETED",
+            "resultadoTecnico": "PASS",
+            "adr": "ADR-014",
+            "criteriosAceite": [
+                "AC-01",
+                "AC-02",
+                "AC-03",
+                "AC-04",
+                "AC-05",
+                "AC-06",
+                "AC-07",
+                "AC-08",
+                "AC-09"
+            ],
+            "criteriosOk": [
+                "AC-01",
+                "AC-02",
+                "AC-03",
+                "AC-04",
+                "AC-05",
+                "AC-06",
+                "AC-07",
+                "AC-08"
+            ],
+            "criteriosFalha": [],
+            "criteriosPendentesHumanos": [
+                "AC-09"
+            ],
+            "fingerprint": "sha256:f8ed38e0032e040a",
+            "fingerprintFull": "sha256:f8ed38e0032e040ad585c22d5450318a9d18e870c26850428b5356e2e49d9abc",
+            "qg1": "PASS",
+            "qg2": "PASS",
+            "qg3": "NOT_APPLICABLE",
+            "verifier": "PASS",
+            "verifierId": "indep-shell-m01-acessos-corr-20261120",
+            "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente com shell PASS (fingerprint + check + smoke adr014).",
+            "verifierOficial": "BLOCKED",
+            "verifierOficialId": "bce6f2ac-2e08-429f-aa06-26f85b45935f",
+            "homologacaoHumana": "PENDING_HUMAN",
+            "evidencias": [
+                "docs/esteira/estado/evidencia-m01-acessos-corr-20261120.json",
+                "docs/esteira/estado/qg1-typecheck-api-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg1-typecheck-web-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg1-check-estatico-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg2-smoke-adr014-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg2-smoke-ct-acessos-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg2-smoke-authz-m01-acessos-corr.txt",
+                "docs/esteira/estado/qg2-build-web-m01-acessos-corr.txt",
+                "docs/esteira/estado/verifier-rerun-check-m01-acessos-corr.txt",
+                "docs/esteira/estado/verifier-rerun-smoke-adr014-m01-acessos-corr.txt",
+                "docs/esteira/estado/roteiro-ac09-m01-acessos-corr.md"
+            ],
+            "arquivos": [
+                "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+                "apps/web/src/lib/api.ts",
+                "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+                "apps/api/scripts/smoke-adr014-acessos.mjs",
+                "apps/api/scripts/check-m01-acessos-corr.mjs",
+                "apps/api/package.json"
+            ],
+            "mensagemCommit": "fix(acessos): alinhar consulta e revisão à homologação M01\n\nCorrige a aba Acessos após reprovação humana: visão por participante, escolha explícita em Cuidados e revisão que descreve a área e as ações prometidas.",
+            "nota": "PASS técnico AC-01..08; AC-09 PENDING_HUMAN. Sem divergência material vs ADR-014.",
+            "concluidaEm": "2026-11-20T13:45:00.000Z"
+        },
         {
             "id": "DEM-ADR014-ACESSOS-20261119",
             "tipo": "melhoria_funcional",
@@ -928,9 +998,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologação humana DEM-ADR014-ACESSOS (PENDING_HUMAN). Commit sob decisão humana.",
-    "atualizadoEm": "2026-11-20T02:00:07.103Z",
-    "notas": "DEM-ADR014-ACESSOS-20261119 técnico PASS; humana PENDING_HUMAN. Fingerprint oficial sha256:5b3f46d7c53bbe9c.",
+    "proximaAcao": "Homologação humana DEM-M01-ACESSOS-CORR AC-09 (PENDING_HUMAN). Commit sob decisão humana.",
+    "atualizadoEm": "2026-11-20T13:45:00.000Z",
+    "notas": "DEM-M01-ACESSOS-CORR-20261120 técnico PASS; humana PENDING_HUMAN. Fingerprint sha256:f8ed38e0032e040a.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

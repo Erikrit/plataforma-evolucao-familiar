@@ -188,6 +188,115 @@ try {
   );
   reg("listagem_admin_area_null", itemAdmin?.area == null, itemAdmin?.area);
   reg("listagem_integrante_area_cuidados", itemColab?.area === "Cuidados", itemColab);
+  reg(
+    "listagem_tem_participanteUsuarioId",
+    typeof itemRespCuid?.participanteUsuarioId === "string" &&
+      itemRespCuid.participanteUsuarioId.length > 0,
+    itemRespCuid?.participanteUsuarioId,
+  );
+
+  // AC-05/AC-06: dois vínculos; retirar só Cuidados; após novo login mantém Desenvolvimento.
+  const hAlvoAntesRevoga = {
+    "content-type": "application/json",
+    "x-sessao-token": alvo.token,
+  };
+  const rotinaAntes = await json(
+    await fetch(`${base}/pessoas/${vovo.id}/cuidados/hoje`, {
+      headers: hAlvoAntesRevoga,
+    }),
+  );
+  const desenvAntes = await json(
+    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, {
+      headers: hAlvoAntesRevoga,
+    }),
+  );
+  reg(
+    "ac05_alvo_acessa_cuidados_e_desenvolvimento",
+    rotinaAntes.status < 300 && desenvAntes.status < 300,
+    { rotina: rotinaAntes.status, desenv: desenvAntes.status },
+  );
+
+  const cuidadosDoAlvoNaVovo = itens.filter(
+    (i) =>
+      i.participanteUsuarioId === alvo.usuario.id &&
+      i.area === "Cuidados" &&
+      i.pessoaAcompanhadaId === vovo.id &&
+      i.ativo,
+  );
+  let revogasOk = cuidadosDoAlvoNaVovo.length > 0;
+  for (const item of cuidadosDoAlvoNaVovo) {
+    const rev = await json(
+      await fetch(`${base}/familias/${familiaId}/autorizacoes/${item.id}`, {
+        method: "DELETE",
+        headers: hAdmin,
+      }),
+    );
+    if (!(rev.status < 300 && rev.corpo?.ativa === false)) revogasOk = false;
+  }
+  reg("ac06_revoga_apenas_cuidados_da_vovo", revogasOk, {
+    qtd: cuidadosDoAlvoNaVovo.length,
+  });
+
+  const sessaoAposRevoga = await json(
+    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, {
+      headers: hAlvoAntesRevoga,
+    }),
+  );
+  reg(
+    "ac06_sessao_invalidada_apos_revoga",
+    sessaoAposRevoga.status === 401,
+    { status: sessaoAposRevoga.status },
+  );
+
+  const alvoNovo = await login(emailAlvo, "temp-local");
+  const hAlvoNovo = {
+    "content-type": "application/json",
+    "x-sessao-token": alvoNovo.token,
+  };
+  const desenvDepois = await json(
+    await fetch(`${base}/pessoas/${laurinha.id}/desafios`, {
+      headers: hAlvoNovo,
+    }),
+  );
+  const rotinaDepois = await json(
+    await fetch(`${base}/pessoas/${vovo.id}/cuidados/hoje`, {
+      headers: hAlvoNovo,
+    }),
+  );
+  const acessosApos = await json(
+    await fetch(`${base}/familias/${familiaId}/acessos`, { headers: hAdmin }),
+  );
+  const itensApos = Array.isArray(acessosApos.corpo?.itens)
+    ? acessosApos.corpo.itens
+    : [];
+  const aindaTemDesenv = itensApos.some(
+    (i) =>
+      i.participanteUsuarioId === alvo.usuario.id &&
+      i.area === "Desenvolvimento" &&
+      i.pessoaAcompanhadaId === laurinha.id &&
+      i.ativo,
+  );
+  const aindaTemCuidadosVovo = itensApos.some(
+    (i) =>
+      i.participanteUsuarioId === alvo.usuario.id &&
+      i.area === "Cuidados" &&
+      i.pessoaAcompanhadaId === vovo.id &&
+      i.ativo,
+  );
+  reg(
+    "ac06_desenvolvimento_permanece_apos_novo_login",
+    desenvDepois.status < 300 && aindaTemDesenv,
+    { status: desenvDepois.status, aindaTemDesenv },
+  );
+  reg(
+    "ac06_cuidados_negado_apos_revoga",
+    (rotinaDepois.status === 403 || rotinaDepois.status === 401) &&
+      !aindaTemCuidadosVovo,
+    { status: rotinaDepois.status, aindaTemCuidadosVovo },
+  );
+
+  // Atualiza token do alvo para checagens seguintes de cartões.
+  alvo.token = alvoNovo.token;
 
   const inicio = await json(
     await fetch(`${base}/familias/${familiaId}/inicio`, { headers: hAdmin }),
