@@ -96,15 +96,17 @@ try {
 
   const lista = await fetch(`${base}/familias/${familiaId}/pessoas`, { headers });
   const listaJson = await json(lista);
-  const nomes = (listaJson.corpo ?? []).map((p) => p.nome);
+  const pessoas = listaJson.corpo ?? [];
+  const nomes = pessoas.map((p) => p.nome);
+  const ids = pessoas.map((p) => p.id);
   registrar(
     "listar-pessoas",
     lista.status < 300 &&
       nomes.includes(nomeA) &&
       nomes.includes(nomeB) &&
-      nomes.includes("Vovó") &&
-      nomes.includes("Laurinha"),
-    { nomes },
+      ids.includes(vovoCanon.id) &&
+      ids.includes(laurinhaCanon.id),
+    { nomes, ids },
   );
 
   const ok = resultados.every((r) => r.ok);

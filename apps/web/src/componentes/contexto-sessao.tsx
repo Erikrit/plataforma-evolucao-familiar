@@ -16,7 +16,9 @@ import {
   type AcessosResposta,
   type AutorizacaoResumo,
   type CartaoInicio,
+  type ContextoOperacional,
   type DestaqueInicio,
+  type InicioResposta,
   type UsuarioSessao,
 } from "@/lib/api";
 import { mensagemErroAmigavel } from "@/componentes/feedback";
@@ -28,10 +30,12 @@ type EstadoSessao = {
   destaques: DestaqueInicio[];
   acessos: AcessosResposta | null;
   autorizacoes: AutorizacaoResumo[];
+  contextos: ContextoOperacional[];
+  destinoEntrada: string | null;
   filtradoPorAutorizacao: boolean;
   podeGerenciarFamilia: boolean;
   erroSessao: string | null;
-  entrarNaSessao: (usuario: UsuarioSessao) => Promise<void>;
+  entrarNaSessao: (usuario: UsuarioSessao) => Promise<InicioResposta>;
   recarregarInicio: () => Promise<void>;
   limparSessaoLocal: () => void;
 };
@@ -45,6 +49,8 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
   const [destaques, setDestaques] = useState<DestaqueInicio[]>([]);
   const [acessos, setAcessos] = useState<AcessosResposta | null>(null);
   const [autorizacoes, setAutorizacoes] = useState<AutorizacaoResumo[]>([]);
+  const [contextos, setContextos] = useState<ContextoOperacional[]>([]);
+  const [destinoEntrada, setDestinoEntrada] = useState<string | null>(null);
   const [filtradoPorAutorizacao, setFiltrado] = useState(false);
   const [erroSessao, setErroSessao] = useState<string | null>(null);
 
@@ -54,6 +60,8 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
     setDestaques([]);
     setAcessos(null);
     setAutorizacoes([]);
+    setContextos([]);
+    setDestinoEntrada(null);
     setFiltrado(false);
   }, []);
 
@@ -69,13 +77,16 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
       },
     );
     setAutorizacoes(inicio.autorizacoes ?? []);
+    setContextos(inicio.contextos ?? []);
+    setDestinoEntrada(inicio.destinoEntrada ?? null);
     setFiltrado(inicio.filtradoPorAutorizacao);
+    return inicio;
   }, []);
 
   const entrarNaSessao = useCallback(
     async (atual: UsuarioSessao) => {
       setUsuario(atual);
-      await aplicarInicio(atual);
+      return aplicarInicio(atual);
     },
     [aplicarInicio],
   );
@@ -116,6 +127,8 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
       destaques,
       acessos,
       autorizacoes,
+      contextos,
+      destinoEntrada,
       filtradoPorAutorizacao,
       podeGerenciarFamilia,
       erroSessao,
@@ -130,6 +143,8 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
       destaques,
       acessos,
       autorizacoes,
+      contextos,
+      destinoEntrada,
       filtradoPorAutorizacao,
       podeGerenciarFamilia,
       erroSessao,

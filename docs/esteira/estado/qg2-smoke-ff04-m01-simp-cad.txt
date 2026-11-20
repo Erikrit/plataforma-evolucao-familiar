@@ -1,0 +1,58 @@
+﻿
+> @pef/api@0.1.0 smoke:ff04
+> node scripts/smoke-ff04.mjs
+
+{
+  "ok": true,
+  "resultados": [
+    {
+      "nome": "criar-convite",
+      "ok": true,
+      "detalhe": {
+        "id": "cmwpao5uo002cssbkf8f9lbww",
+        "token": "49a11f93136f705f9e567adb13a112e4c7ec2cda2755db54",
+        "email": "colab.ff04.1795198222726@pef.local",
+        "responsabilidade": "colaboradora_cuidados",
+        "pessoaAlvoId": "pessoa_vovo_seed",
+        "pessoaContaId": null,
+        "expiraEm": "2026-11-27T18:10:22.751Z",
+        "usadoEm": null
+      }
+    },
+    {
+      "nome": "ACE-03-ativar",
+      "ok": true,
+      "detalhe": {
+        "ok": true,
+        "email": "colab.ff04.1795198222726@pef.local",
+        "pessoaId": "cmwpao5vi002essbk7gsl8hgz",
+        "familiaId": "familia_seed_local",
+        "pessoaAlvoId": "pessoa_vovo_seed",
+        "pessoaContaId": null,
+        "responsabilidade": "colaboradora_cuidados",
+        "reutilizouPessoa": false
+      }
+    },
+    {
+      "nome": "ACE-03-escopo",
+      "ok": true,
+      "detalhe": {
+        "ids": [
+          "pessoa_vovo_seed",
+          "cmwpao5vi002essbk7gsl8hgz"
+        ],
+        "nomes": [
+          "Helena Oliveira",
+          "Colaboradora FF04"
+        ]
+      }
+    },
+    {
+      "nome": "ACE-04",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    }
+  ]
+}

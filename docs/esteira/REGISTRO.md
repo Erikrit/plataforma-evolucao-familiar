@@ -5,7 +5,43 @@ Separado da especificação funcional do produto. Atualizar com entradas curtas.
 ## Estado atual (2026-11-20)
 
 - **Esteira v2 (desenvolvimento contínuo):** ACTIVE — entrada via `task-routing`; schema `atual.json` v2 (`demanda` / `demandasConcluidas`)
-- **DEM-M01-ACESSOS-CORR-20261120:** COMPLETED técnico PASS · fingerprint `sha256:f8ed38e0032e040a` · verifier indep. PASS; oficial BLOCKED ([verifier](bce6f2ac-2e08-429f-aa06-26f85b45935f)) · humana PENDING_HUMAN (AC-09)
+- **DEM-SEED-LOCAL-20261120:** COMPLETED — banco limpo + seed ≤6 pessoas · fingerprint `sha256:a7b705e631d032e4`
+- **DEM-M01-SIMP-CAD-20261120:** COMPLETED técnico PASS · fingerprint `sha256:c9ba9051d7d0cca4` · verifier indep. PASS; oficial BLOCKED ([verifier](8e779dd7-9d7b-4e2b-b4c5-b32fe26c7b20)) · humana PENDING_HUMAN (M01-SIMP-HOM)
+- **DEM-M01-ACESSOS-CORR-20261120:** COMPLETED técnico PASS · fingerprint `sha256:f8ed38e0032e040a` · verifier indep. PASS; oficial BLOCKED ([verifier](bce6f2ac-2e08-429f-aa06-26f85b45935f)) · humana REPROVADA (sucedida pela simplificação §11)
+
+## 2026-11-20 — DEM-SEED-LOCAL-20261120 COMPLETED
+
+- **Tipo:** refatoracao (dados locais) · **Risco:** baixo
+- **Escopo:** TRUNCATE local + seed Família Oliveira com 6 pessoas; amostra cuidados/desenvolvimento mais crível
+- **Pessoas:** Carlos, Mikaela, Ana Paula (contas); Helena, Laurinha, Ricardo (sem conta)
+- **Fora:** remoção dos smokes da esteira (permanecem; poluem o banco se rodados de novo)
+- **Verificação:** 1 família / 6 pessoas / 3 usuários após `npm run db:reset -w @pef/api`
+- **Fingerprint:** `sha256:a7b705e631d032e4`
+- **Commit/push:** não executados
+
+## 2026-11-20 — DEM-M01-SIMP-CAD-20261120 COMPLETED (técnico PASS)
+
+- **Tipo:** melhoria_funcional · **Risco:** alto (authz/conta/sessão)
+- **Aprovação:** L3 Produto APROVADA (M01 v1.5 §11 / c46ed61); ADR-014 esclarecimento; UX jornada APROVADA
+- **Entrega:** `pessoaContaId` no convite/ativação; cadastro + “precisa entrar?” / Habilitar conta; `contextos`+`destinoEntrada` no início; home com escolha/redirecionamento; smokes `m01-simp-cad` + regressão M01; smokes ff02/03/04 alinhados ao nome seed Helena
+- **Fora:** contas legadas, novos poderes, exclusão de pessoa
+- **QG-1/2/3:** PASS · Verifier indep. PASS; oficial BLOCKED Ask ([verifier](8e779dd7-9d7b-4e2b-b4c5-b32fe26c7b20))
+- **Fingerprint:** `sha256:c9ba9051d7d0cca4`
+- **Humana:** PENDING_HUMAN — `roteiro-homologacao-m01-simp-cad.md`
+- **Evidência:** `evidencia-m01-simp-cad-20261120.json`
+- **Commit/push:** não executados
+- **Próximo:** homologação humana expressa M01-SIMP-HOM
+
+## 2026-11-20 — Triagem + planejamento DEM-M01-SIMP-CAD-20261120
+
+- **Tipo:** melhoria_funcional (complexa) · **Risco:** alto (authz/conta/sessão)
+- **Aprovação:** L3 Produto APROVADA (M01 v1.5 §11); ADR-014 esclarecimento DOCUMENTADA; UX jornada APROVADA em REVISAO-MODULO-01-ACESSOS
+- **Escopo:** cadastro mínimo; ativação ordinária reutilizando pessoaId; entrada contextual; sem migração legada; capacidades próprias atuais
+- **Fora:** contas legadas, novos poderes, exclusão de pessoa, seletor vínculo, Integrante em Desenvolvimento
+- **HEAD:** `c46ed61` develop
+- **Fluxo:** module-planning (3 incrementos) → implementation-workflow → quality-gate + verifier → PENDING_HUMAN
+- **Commit/push:** não executados
+
 - **DEM-ADR014-ACESSOS-20261119:** COMPLETED técnico PASS · fingerprint `sha256:5b3f46d7c53bbe9c` · humana PENDING_HUMAN (reprovada na rodada; sucedida pela correção)
 - **DEM-CT-20261119-003:** parecer DOCUMENTADO (ADR-014) · sucedido pela implementação DEM-ADR014-ACESSOS
 - **DEM-UX-HOM-R3-20261119:** COMPLETED técnico PASS · fingerprint `sha256:f0114d296d15068a` · [verifier](6c71be97-490f-422a-adbd-06911be180d6); humana PENDING_HUMAN / UX REPROVADA

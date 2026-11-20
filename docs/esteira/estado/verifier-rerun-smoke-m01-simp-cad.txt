@@ -1,0 +1,141 @@
+﻿
+> @pef/api@0.1.0 smoke:m01-simp-cad
+> node scripts/smoke-m01-simp-cad.mjs
+
+{
+  "ok": true,
+  "resultados": [
+    {
+      "nome": "M01-SIMP-CAD-criar-pessoa",
+      "ok": true,
+      "detalhe": {
+        "id": "cmwpatf23006cssbkagf17vnd",
+        "nome": "Pessoa SIMP 1795198467917",
+        "vinculo": null,
+        "dataNascimento": null,
+        "criadaEm": "2026-11-20T18:14:27.963Z",
+        "usuario": null,
+        "possuiConta": false
+      }
+    },
+    {
+      "nome": "M01-SIMP-CONTA-convite",
+      "ok": true,
+      "detalhe": {
+        "id": "cmwpatf3k006essbkbjr3w0dt",
+        "token": "9f5ff0ed50b103e3b96153475d84a4f493cba1f5f9fc9e3b",
+        "email": "simp.conta.1795198467917@pef.local",
+        "responsabilidade": null,
+        "pessoaAlvoId": null,
+        "pessoaContaId": "cmwpatf23006cssbkagf17vnd",
+        "expiraEm": "2026-11-27T18:14:28.014Z",
+        "usadoEm": null
+      }
+    },
+    {
+      "nome": "M01-SIMP-CONTA-ativar-mesmo-id",
+      "ok": true,
+      "detalhe": {
+        "ok": true,
+        "email": "simp.conta.1795198467917@pef.local",
+        "pessoaId": "cmwpatf23006cssbkagf17vnd",
+        "familiaId": "familia_seed_local",
+        "pessoaAlvoId": null,
+        "pessoaContaId": "cmwpatf23006cssbkagf17vnd",
+        "responsabilidade": null,
+        "reutilizouPessoa": true
+      }
+    },
+    {
+      "nome": "M01-SIMP-AUTO-ver-proprio",
+      "ok": true,
+      "detalhe": {
+        "status": 200,
+        "areas": [
+          {
+            "id": "cuidados",
+            "rotulo": "Cuidados",
+            "disponivel": true
+          },
+          {
+            "id": "desenvolvimento",
+            "rotulo": "Desenvolvimento",
+            "disponivel": true
+          },
+          {
+            "id": "historico",
+            "rotulo": "Histórico",
+            "disponivel": true
+          },
+          {
+            "id": "resumo",
+            "rotulo": "Resumo",
+            "disponivel": true
+          }
+        ]
+      }
+    },
+    {
+      "nome": "M01-SIMP-AUTO-consultar-cuidados",
+      "ok": true,
+      "detalhe": {
+        "status": 200
+      }
+    },
+    {
+      "nome": "M01-SIMP-AUTO-sem-programacao-automatica",
+      "ok": true,
+      "detalhe": {
+        "status": 403,
+        "corpo": {
+          "message": "Colaboradora não altera prescrição por padrão (CUI-F04/ACE-C07).",
+          "error": "Forbidden",
+          "statusCode": 403
+        }
+      }
+    },
+    {
+      "nome": "M01-SIMP-ENTRADA-contextos-proprios",
+      "ok": true,
+      "detalhe": {
+        "contextos": [
+          {
+            "pessoaId": "cmwpatf23006cssbkagf17vnd",
+            "nome": "Pessoa SIMP 1795198467917",
+            "area": "cuidados",
+            "href": "/pessoas/cmwpatf23006cssbkagf17vnd/cuidados"
+          },
+          {
+            "pessoaId": "cmwpatf23006cssbkagf17vnd",
+            "nome": "Pessoa SIMP 1795198467917",
+            "area": "desenvolvimento",
+            "href": "/pessoas/cmwpatf23006cssbkagf17vnd/desenvolvimento"
+          }
+        ],
+        "destinoEntrada": null
+      }
+    },
+    {
+      "nome": "M01-SIMP-CONTA-externo-cria-pessoa",
+      "ok": true,
+      "detalhe": {
+        "ok": true,
+        "email": "simp.ext.1795198467917@pef.local",
+        "pessoaId": "cmwpatfji006mssbk1cm5q1cl",
+        "familiaId": "familia_seed_local",
+        "pessoaAlvoId": "pessoa_vovo_seed",
+        "pessoaContaId": null,
+        "responsabilidade": "colaboradora_cuidados",
+        "reutilizouPessoa": false
+      }
+    },
+    {
+      "nome": "M01-SIMP-ENTRADA-admin-campos",
+      "ok": true,
+      "detalhe": {
+        "nContextos": 5,
+        "destinoEntrada": null
+      }
+    }
+  ]
+}

@@ -75,11 +75,13 @@ try {
       headers: { "x-sessao-token": colab.token },
     }),
   );
-  const nomes = (inicio.corpo?.cartoes ?? []).map((c) => c.nome);
+  const cartoes = inicio.corpo?.cartoes ?? [];
+  const ids = cartoes.map((c) => c.pessoaId);
+  const nomes = cartoes.map((c) => c.nome);
   reg(
     "ACE-03-escopo",
-    nomes.includes("Vovó") && !nomes.includes("Laurinha"),
-    { nomes },
+    ids.includes(vovo.id) && !ids.includes(laurinha.id),
+    { ids, nomes },
   );
 
   const negado = await json(

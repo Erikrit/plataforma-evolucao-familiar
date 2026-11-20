@@ -1,0 +1,154 @@
+﻿
+> @pef/api@0.1.0 smoke:authz
+> node scripts/smoke-authz-critico.mjs
+
+{
+  "ok": true,
+  "resultados": [
+    {
+      "nome": "admin-puro-negado-rotina-vovo",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "admin-puro-negado-rotina-laurinha",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "admin-puro-negado-pdf",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "admin-puro-area-cuidados-indisponivel",
+      "ok": true,
+      "detalhe": {
+        "id": "cuidados",
+        "rotulo": "Cuidados",
+        "disponivel": false
+      }
+    },
+    {
+      "nome": "admin-com-cuidados-ok-vovo",
+      "ok": true,
+      "detalhe": {
+        "status": 200
+      }
+    },
+    {
+      "nome": "admin-com-cuidados-vovo-ainda-negado-laurinha",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "admin-com-cuidados-cria-med",
+      "ok": true,
+      "detalhe": {
+        "id": "cmwpao270001vssbkg69ei5du"
+      }
+    },
+    {
+      "nome": "anexo-criado",
+      "ok": true,
+      "detalhe": {
+        "id": "cmwpao2gg001yssbkpwlm1ul1"
+      }
+    },
+    {
+      "nome": "colab-ok-rotina-vovo",
+      "ok": true,
+      "detalhe": {
+        "status": 200
+      }
+    },
+    {
+      "nome": "colab-negado-laurinha",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "colab-negado-anexo",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "colab-negado-programacao",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "colab-negado-pdf",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "colab-cartoes-sem-laurinha",
+      "ok": true,
+      "detalhe": {
+        "nomes": [
+          "Helena Oliveira",
+          "Colaboradora Authz"
+        ],
+        "esperadoVovo": "Helena Oliveira",
+        "esperadoAusente": "Laurinha"
+      }
+    },
+    {
+      "nome": "revogacao-invalida-sessoes",
+      "ok": true,
+      "detalhe": {
+        "id": "cmwpao2mx0026ssbk94lodcpi",
+        "ativa": false,
+        "revogadaEm": "2026-11-20T18:10:19.546Z",
+        "sessoesInvalidadas": 1,
+        "historicoPreservado": true
+      }
+    },
+    {
+      "nome": "sessao-revogada-401",
+      "ok": true,
+      "detalhe": {
+        "status": 401
+      }
+    },
+    {
+      "nome": "token-armazenado-como-hash",
+      "ok": true,
+      "detalhe": {
+        "hashEncontrado": true,
+        "plainAusente": true
+      }
+    },
+    {
+      "nome": "autenticacao-sessao-mvp",
+      "ok": true,
+      "detalhe": {
+        "id": "usuario_admin_seed",
+        "email": "admin@pef.local",
+        "pessoa": {
+          "id": "pessoa_admin_seed",
+          "nome": "Carlos Oliveira",
+          "familiaId": "familia_seed_local"
+        },
+        "autenticacao": "sessao_mvp"
+      }
+    }
+  ]
+}

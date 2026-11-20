@@ -124,12 +124,23 @@ export type AcessosResposta = {
   itens: AcessoResumo[];
 };
 
+export type ContextoOperacional = {
+  pessoaId: string;
+  nome: string;
+  area: "cuidados" | "desenvolvimento";
+  href: string;
+};
+
 export type InicioResposta = {
   familiaId: string;
   cartoes: CartaoInicio[];
   destaques?: DestaqueInicio[];
   autorizacoes: AutorizacaoResumo[];
   acessos?: AcessosResposta;
+  /** Capacidades efetivas por pessoa/área (M01 v1.5 §11). */
+  contextos?: ContextoOperacional[];
+  /** Destino único pós-login; null quando há escolha ou nenhum. */
+  destinoEntrada?: string | null;
   filtradoPorAutorizacao: boolean;
 };
 
@@ -262,8 +273,10 @@ export async function criarConvite(
   corpo: {
     email: string;
     nomeConvidado?: string;
-    responsabilidade: string;
-    pessoaAlvoId: string;
+    responsabilidade?: string;
+    pessoaAlvoId?: string;
+    /** Habilita conta na pessoa já cadastrada (sem criar segunda pessoa). */
+    pessoaContaId?: string;
   },
 ) {
   const resposta = await fetchApi(`/familias/${familiaId}/convites`, {
@@ -272,13 +285,21 @@ export async function criarConvite(
     body: JSON.stringify(corpo),
   });
   if (!resposta.ok) throw new Error(await lerErro(resposta));
-  return (await resposta.json()) as { token: string; email: string };
+  return (await resposta.json()) as {
+    token: string;
+    email: string;
+    pessoaContaId?: string | null;
+  };
 }
 
 export async function ativarConvite(
   token: string,
   corpo: { senha: string; nome?: string },
-) {
+): Promise<{
+  ok?: boolean;
+  pessoaId?: string;
+  reutilizouPessoa?: boolean;
+}> {
   const resposta = await fetchApi(`/convites/${encodeURIComponent(token)}/ativar`, {
     method: "POST",
     headers: { "content-type": "application/json" },

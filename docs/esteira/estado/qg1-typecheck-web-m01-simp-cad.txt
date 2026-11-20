@@ -1,0 +1,4 @@
+﻿
+> @pef/web@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit
+

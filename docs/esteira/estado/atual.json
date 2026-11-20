@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "nota": "DEM-UX-HOM-R3 COMPLETED técnico local sem commit",
-        "commit": "7b8348ebbcac12fdc9822fc6d906bfc58bf346f9"
+        "nota": "DEM-M01-SIMP-CAD-20261120 COMPLETED tecnico local sem commit",
+        "commit": "c46ed61bce4816f561a634290d5b4fa6ab5373b3"
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -104,68 +104,42 @@
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
     "demanda": {
-        "id": "DEM-M01-ACESSOS-CORR-20261120",
-        "tipo": "correcao",
-        "origem": "humano + docs/especificacao-modulo-01-acessos.md + reprovacao homologacao humana + ADR-014",
+        "id": "DEM-SEED-LOCAL-20261120",
+        "tipo": "refatoracao",
+        "origem": "humano",
         "estado": "COMPLETED",
         "aprovacao": {
-            "nivel": "L2",
-            "status": "DOCUMENTADA",
-            "referencia": "ADR-014 DOCUMENTADA; especificação de correção anexada; FUN-03/FUN-04/FUN-07 v1.3; pedido humano de implementação pós-reprovação"
+            "nivel": "L1",
+            "status": "APROVADA",
+            "referencia": "dados locais de desenvolvimento; sem mudança de requisito"
         },
-        "risco": "alto",
-        "adr": "ADR-014",
-        "branch": "develop",
-        "commit": "1c3ab8de652b598a54d827650d3e9a7f47164aeb",
-        "escopo": "Correção UX/consulta de acessos: visão por participante, bloco administração, escolha explícita Cuidados Responsável/Integrante, revisão com efeito das ações, alinhamento sessão pós-concessão/revogação; reutilizar catálogo ADR-014.",
-        "criteriosAceite": [
-            "AC-01",
-            "AC-02",
-            "AC-03",
-            "AC-04",
-            "AC-05",
-            "AC-06",
-            "AC-07",
-            "AC-08",
-            "AC-09"
+        "risco": "baixo",
+        "escopo": "Limpar banco local; renovar seed fictício com no máximo 6 pessoas e amostra mais realista; preservar IDs canônicos dos smokes",
+        "fora": [
+            "alterar requisitos de produto",
+            "apagar smokes da esteira"
         ],
-        "fingerprint": "sha256:f8ed38e0032e040a",
-        "fingerprintFull": "sha256:f8ed38e0032e040ad585c22d5450318a9d18e870c26850428b5356e2e49d9abc",
+        "criteriosAceite": [
+            "banco limpo após reset",
+            "≤6 pessoas na família seed",
+            "3 contas locais preservadas",
+            "IDs pessoa_vovo_seed e pessoa_laurinha_seed estáveis"
+        ],
         "arquivos": [
-            "apps/api/src/autorizacoes/servico-autorizacoes.ts",
-            "apps/web/src/lib/api.ts",
-            "apps/web/src/componentes/painel-gerenciar-familia.tsx",
-            "apps/api/scripts/smoke-adr014-acessos.mjs",
-            "apps/api/scripts/check-m01-acessos-corr.mjs",
-            "apps/api/package.json"
+            "apps/api/prisma/seed.mjs",
+            "apps/api/scripts/reset-db-local.mjs",
+            "docs/esteira/estado/atual.json",
+            "docs/esteira/REGISTRO.md"
         ],
         "verificacao": {
             "qg1": "PASS",
             "qg2": "PASS",
-            "qg3": "NOT_APPLICABLE",
-            "verifier": "PASS",
-            "verifierId": "indep-shell-m01-acessos-corr-20261120",
-            "verifierOficial": "BLOCKED",
-            "verifierOficialId": "bce6f2ac-2e08-429f-aa06-26f85b45935f",
-            "homologacaoHumana": "PENDING_HUMAN",
-            "evidencias": [
-                "docs/esteira/estado/evidencia-m01-acessos-corr-20261120.json",
-                "docs/esteira/estado/qg1-typecheck-api-m01-acessos-corr.txt",
-                "docs/esteira/estado/qg1-typecheck-web-m01-acessos-corr.txt",
-                "docs/esteira/estado/qg1-check-estatico-m01-acessos-corr.txt",
-                "docs/esteira/estado/qg2-smoke-adr014-m01-acessos-corr.txt",
-                "docs/esteira/estado/qg2-smoke-ct-acessos-m01-acessos-corr.txt",
-                "docs/esteira/estado/qg2-smoke-authz-m01-acessos-corr.txt",
-                "docs/esteira/estado/qg2-build-web-m01-acessos-corr.txt",
-                "docs/esteira/estado/verifier-rerun-check-m01-acessos-corr.txt",
-                "docs/esteira/estado/verifier-rerun-smoke-adr014-m01-acessos-corr.txt",
-                "docs/esteira/estado/roteiro-ac09-m01-acessos-corr.md"
-            ]
+            "nota": "Contagem pós-reset: 1 família, 6 pessoas, 3 usuários; IDs canônicos preservados"
         },
-        "bloqueios": [],
-        "proximaAcao": "Homologacao humana AC-09 (PENDING_HUMAN). Commit sob decisao humana.",
-        "mensagemCommit": "fix(acessos): alinhar consulta e revisão à homologação M01\n\nCorrige a aba Acessos após reprovação humana: visão por participante, escolha explícita em Cuidados e revisão que descreve a área e as ações prometidas.",
-        "nota": "PASS técnico AC-01..08; AC-09 PENDING_HUMAN. Verifier oficial BLOCKED Ask; independente shell PASS."
+        "proximaAcao": "reescrever seed e executar db:reset",
+        "fingerprint": "sha256:a7b705e631d032e4",
+        "fingerprintFull": "sha256:a7b705e631d032e432c8a9ef29b8d89b93477f1f6a17701eadbcdf5ecabdec1b",
+        "mensagemCommit": "chore(seed): limpar banco local e renovar família fictícia com 6 pessoas"
     },
     "janelaIncrementos": [
         {
@@ -185,6 +159,91 @@
         }
     ],
     "demandasConcluidas": [
+        {
+            "id": "DEM-SEED-LOCAL-20261120",
+            "tipo": "refatoracao",
+            "estado": "COMPLETED",
+            "fingerprint": "sha256:a7b705e631d032e4",
+            "concluidaEm": "2026-11-20T18:26:06.017Z"
+        },
+        {
+            "id": "DEM-M01-SIMP-CAD-20261120",
+            "tipo": "melhoria_funcional",
+            "origem": "humano + ESPECIFICACAO.md v1.5 §11 + ADR-014 esclarecimento + REVISAO-MODULO-01-ACESSOS + commit c46ed61",
+            "estado": "COMPLETED",
+            "resultadoTecnico": "PASS",
+            "adr": "ADR-014",
+            "criteriosAceite": [
+                "M01-SIMP-CAD",
+                "M01-SIMP-CONTA",
+                "M01-SIMP-AUTO",
+                "M01-SIMP-ENTRADA",
+                "M01-SIMP-ISOL",
+                "M01-SIMP-REV",
+                "M01-SIMP-HOM"
+            ],
+            "criteriosOk": [
+                "M01-SIMP-CAD",
+                "M01-SIMP-CONTA",
+                "M01-SIMP-AUTO",
+                "M01-SIMP-ENTRADA",
+                "M01-SIMP-ISOL",
+                "M01-SIMP-REV"
+            ],
+            "criteriosFalha": [],
+            "criteriosPendentesHumanos": [
+                "M01-SIMP-HOM"
+            ],
+            "fingerprint": "sha256:c9ba9051d7d0cca4",
+            "fingerprintFull": "sha256:c9ba9051d7d0cca4d8b14ed47d7008f4c36e525be3d31dc791613c1e4871f347",
+            "qg1": "PASS",
+            "qg2": "PASS",
+            "qg3": "PASS",
+            "verifier": "PASS",
+            "verifierId": "indep-shell-m01-simp-cad-20261120",
+            "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente shell PASS (fingerprint + check + smoke m01-simp-cad).",
+            "verifierOficial": "BLOCKED",
+            "verifierOficialId": "8e779dd7-9d7b-4e2b-b4c5-b32fe26c7b20",
+            "homologacaoHumana": "PENDING_HUMAN",
+            "evidencias": [
+                "docs/esteira/estado/qg1-typecheck-api-m01-simp-cad.txt",
+                "docs/esteira/estado/qg1-typecheck-web-m01-simp-cad.txt",
+                "docs/esteira/estado/qg1-check-estatico-m01-simp-cad.txt",
+                "docs/esteira/estado/qg2-smoke-m01-simp-cad.txt",
+                "docs/esteira/estado/qg2-smoke-adr014-m01-simp-cad.txt",
+                "docs/esteira/estado/qg2-smoke-authz-m01-simp-cad.txt",
+                "docs/esteira/estado/qg2-smoke-ff04-m01-simp-cad.txt",
+                "docs/esteira/estado/qg2-smoke-ct-acessos-m01-simp-cad.txt",
+                "docs/esteira/estado/qg2-build-web-m01-simp-cad.txt",
+                "docs/esteira/estado/qg3-smoke-modulo-01-m01-simp-cad.txt",
+                "docs/esteira/estado/qg3-smoke-ff03-m01-simp-cad.txt",
+                "docs/esteira/estado/verifier-rerun-fingerprint-m01-simp-cad.txt",
+                "docs/esteira/estado/verifier-rerun-check-m01-simp-cad.txt",
+                "docs/esteira/estado/verifier-rerun-smoke-m01-simp-cad.txt",
+                "docs/esteira/estado/roteiro-homologacao-m01-simp-cad.md",
+                "docs/esteira/estado/evidencia-m01-simp-cad-20261120.json"
+            ],
+            "arquivos": [
+                "apps/api/prisma/schema.prisma",
+                "apps/api/src/convites/servico-convites.ts",
+                "apps/api/src/convites/controlador-convites.ts",
+                "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+                "apps/api/scripts/smoke-m01-simp-cad.mjs",
+                "apps/api/scripts/check-m01-simp-cad.mjs",
+                "apps/api/scripts/smoke-ff02.mjs",
+                "apps/api/scripts/smoke-ff03.mjs",
+                "apps/api/scripts/smoke-ff04.mjs",
+                "apps/api/package.json",
+                "apps/web/src/lib/api.ts",
+                "apps/web/src/componentes/contexto-sessao.tsx",
+                "apps/web/src/componentes/painel-fundacao.tsx",
+                "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+                "apps/web/src/app/convites/ativar/page.tsx"
+            ],
+            "mensagemCommit": "feat(fundacao): simplificar cadastro, conta e entrada contextual do M01\n\nAplica a v1.5 §11: ativação reutiliza pessoaId, preserva autoacompanhamento atual e deriva destino pós-login das capacidades efetivas, sem migração de contas legadas.",
+            "nota": "PASS tecnico CAD/CONTA/AUTO/ENTRADA/ISOL/REV; HOM PENDING_HUMAN. Verifier oficial BLOCKED Ask; indep. shell PASS.",
+            "concluidaEm": "2026-11-20T18:20:00.000Z"
+        },
         {
             "id": "DEM-M01-ACESSOS-CORR-20261120",
             "tipo": "correcao",
@@ -998,9 +1057,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologação humana DEM-M01-ACESSOS-CORR AC-09 (PENDING_HUMAN). Commit sob decisão humana.",
-    "atualizadoEm": "2026-11-20T13:45:00.000Z",
-    "notas": "DEM-M01-ACESSOS-CORR-20261120 técnico PASS; humana PENDING_HUMAN. Fingerprint sha256:f8ed38e0032e040a.",
+    "proximaAcao": "Homologacao humana M01-SIMP-HOM (PENDING_HUMAN). Seed local renovado.",
+    "atualizadoEm": "2026-11-20T18:26:06.018Z",
+    "notas": "DEM-SEED-LOCAL-20261120 COMPLETED: banco limpo, seed ≤6 pessoas, fingerprint sha256:a7b705e631d032e4",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

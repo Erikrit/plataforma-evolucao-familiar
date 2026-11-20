@@ -42,6 +42,8 @@
     "smoke:modulo-04": "node scripts/smoke-modulo-04.mjs",
     "smoke:ct-acessos": "node scripts/smoke-ct-acessos.mjs",
     "smoke:adr014-acessos": "node scripts/smoke-adr014-acessos.mjs",
+    "smoke:m01-simp-cad": "node scripts/smoke-m01-simp-cad.mjs",
+    "check:m01-simp-cad": "node scripts/check-m01-simp-cad.mjs",
     "check:m01-acessos-corr": "node scripts/check-m01-acessos-corr.mjs"
   },
   "dependencies": {

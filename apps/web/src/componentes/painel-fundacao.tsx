@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Anchor,
   Button,
@@ -20,7 +21,7 @@ import {
   MensagemFeedback,
   mensagemErroAmigavel,
 } from "@/componentes/feedback";
-import { entrar, type AcessoResumo } from "@/lib/api";
+import { entrar, type AcessoResumo, type ContextoOperacional } from "@/lib/api";
 import { rotuloPapelExperiencia } from "@/lib/rotulos-experiencia";
 
 function textoAcesso(a: AcessoResumo): string {
@@ -32,13 +33,20 @@ function textoAcesso(a: AcessoResumo): string {
   return `${a.participanteNome} · ${area}${papel}${a.ativo ? "" : " · inativo"}`;
 }
 
+function rotuloArea(area: ContextoOperacional["area"]): string {
+  return area === "cuidados" ? "Cuidados" : "Desenvolvimento";
+}
+
 export function PainelFundacao() {
+  const router = useRouter();
   const {
     pronto,
     usuario,
     cartoes,
     destaques,
     acessos,
+    contextos,
+    destinoEntrada,
     podeGerenciarFamilia,
     entrarNaSessao,
     erroSessao,
@@ -49,6 +57,26 @@ export function PainelFundacao() {
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
 
+  const contextosPorPessoa = useMemo(() => {
+    const mapa = new Map<
+      string,
+      { nome: string; areas: ContextoOperacional[] }
+    >();
+    for (const ctx of contextos) {
+      const atual = mapa.get(ctx.pessoaId);
+      if (atual) {
+        atual.areas.push(ctx);
+      } else {
+        mapa.set(ctx.pessoaId, { nome: ctx.nome, areas: [ctx] });
+      }
+    }
+    return [...mapa.entries()].map(([pessoaId, valor]) => ({
+      pessoaId,
+      nome: valor.nome,
+      areas: valor.areas,
+    }));
+  }, [contextos]);
+
   async function aoEntrar(evento: FormEvent) {
     evento.preventDefault();
     setCarregando(true);
@@ -56,8 +84,11 @@ export function PainelFundacao() {
     setSucesso(null);
     try {
       const nova = await entrar(email, senha);
-      await entrarNaSessao(nova.usuario);
+      const inicio = await entrarNaSessao(nova.usuario);
       setSucesso("Você entrou.");
+      if (inicio.destinoEntrada) {
+        router.replace(inicio.destinoEntrada);
+      }
     } catch (e) {
       setErro(mensagemErroAmigavel(e, "Não foi possível entrar"));
     } finally {
@@ -111,6 +142,9 @@ export function PainelFundacao() {
     );
   }
 
+  const escolhaMultipla = contextos.length > 1;
+  const contextoUnico = contextos.length === 1 ? contextos[0] : null;
+
   return (
     <Stack gap="lg">
       <Text>
@@ -163,48 +197,86 @@ export function PainelFundacao() {
         </Stack>
       ) : null}
 
-      <Stack gap="sm">
-        <Title order={2}>Pessoas</Title>
-
-        {cartoes.length === 0 ? (
-          <EstadoVazio
-            titulo="Nenhuma pessoa por aqui ainda"
-            descricao={
-              podeGerenciarFamilia
-                ? "Abra Gerenciar família no menu para adicionar a primeira pessoa."
-                : "Quando alguém te autorizar, a pessoa aparecerá nesta lista."
-            }
-          />
-        ) : (
-          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-            {cartoes.map((cartao) => (
-              <Card
-                key={cartao.pessoaId}
-                component={Link}
-                href={`/pessoas/${cartao.pessoaId}`}
-                withBorder
-                padding="md"
-                radius="md"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <Stack gap={4}>
-                  <Text fw={600} size="lg">
-                    {cartao.nome}
-                  </Text>
-                  {cartao.resumo ? (
-                    <Text size="sm" c="dimmed">
-                      {cartao.resumo}
-                    </Text>
-                  ) : null}
-                  <Text size="sm" c="azul" fw={500}>
-                    Abrir perfil
-                  </Text>
+      {escolhaMultipla ? (
+        <Stack gap="sm">
+          <Title order={2}>Escolha o acompanhamento</Title>
+          <Text c="dimmed" size="sm">
+            Você tem mais de um contexto autorizado. Abra a área desejada.
+          </Text>
+          <Stack gap="sm">
+            {contextosPorPessoa.map((grupo) => (
+              <Card key={grupo.pessoaId} withBorder padding="md" radius="md">
+                <Stack gap="xs">
+                  <Text fw={600}>{grupo.nome}</Text>
+                  <GroupAreas areas={grupo.areas} />
                 </Stack>
               </Card>
             ))}
-          </SimpleGrid>
-        )}
-      </Stack>
+          </Stack>
+        </Stack>
+      ) : null}
+
+      {contextoUnico ? (
+        <Card
+          component={Link}
+          href={contextoUnico.href}
+          withBorder
+          padding="md"
+          radius="md"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Text fw={600}>
+            Continuar em {rotuloArea(contextoUnico.area)} de {contextoUnico.nome}
+          </Text>
+          <Text size="sm" c="dimmed">
+            Único contexto operacional autorizado nesta sessão.
+          </Text>
+        </Card>
+      ) : null}
+
+      {!escolhaMultipla && !contextoUnico ? (
+        <Stack gap="sm">
+          <Title order={2}>Pessoas</Title>
+          {cartoes.length === 0 ? (
+            <EstadoVazio
+              titulo="Nenhuma pessoa por aqui ainda"
+              descricao={
+                podeGerenciarFamilia
+                  ? "Abra Gerenciar família no menu para adicionar a primeira pessoa."
+                  : "Quando alguém te autorizar, a pessoa aparecerá nesta lista."
+              }
+            />
+          ) : (
+            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
+              {cartoes.map((cartao) => (
+                <Card
+                  key={cartao.pessoaId}
+                  component={Link}
+                  href={`/pessoas/${cartao.pessoaId}`}
+                  withBorder
+                  padding="md"
+                  radius="md"
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <Stack gap={4}>
+                    <Text fw={600} size="lg">
+                      {cartao.nome}
+                    </Text>
+                    {cartao.resumo ? (
+                      <Text size="sm" c="dimmed">
+                        {cartao.resumo}
+                      </Text>
+                    ) : null}
+                    <Text size="sm" c="azul" fw={500}>
+                      Abrir perfil
+                    </Text>
+                  </Stack>
+                </Card>
+              ))}
+            </SimpleGrid>
+          )}
+        </Stack>
+      ) : null}
 
       {podeGerenciarFamilia ? (
         <Card
@@ -217,13 +289,32 @@ export function PainelFundacao() {
         >
           <Text fw={600}>Gerenciar família</Text>
           <Text size="sm" c="dimmed">
-            Pessoas, acessos e convites — área administrativa separada do
-            acompanhamento.
+            {destinoEntrada === "/gerenciar-familia" && contextos.length === 0
+              ? "Nenhum contexto operacional — abra a gestão da família."
+              : "Pessoas, acessos e convites — área administrativa separada do acompanhamento."}
           </Text>
         </Card>
       ) : null}
 
       <MensagemFeedback erro={erro ?? erroSessao} sucesso={sucesso} />
+    </Stack>
+  );
+}
+
+function GroupAreas({ areas }: { areas: ContextoOperacional[] }) {
+  return (
+    <Stack gap={6}>
+      {areas.map((area) => (
+        <Button
+          key={`${area.pessoaId}-${area.area}`}
+          component={Link}
+          href={area.href}
+          variant="light"
+          fullWidth
+        >
+          {rotuloArea(area.area)}
+        </Button>
+      ))}
     </Stack>
   );
 }

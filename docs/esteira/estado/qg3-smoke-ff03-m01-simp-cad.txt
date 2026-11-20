@@ -1,0 +1,202 @@
+﻿
+> @pef/api@0.1.0 smoke:ff03
+> node scripts/smoke-ff03.mjs
+
+{
+  "ok": true,
+  "resultados": [
+    {
+      "nome": "ACE-05",
+      "ok": true,
+      "detalhe": {
+        "responsabilidades": [
+          "administrador",
+          "responsavel_desenvolvimento",
+          "responsavel_desenvolvimento",
+          "responsavel_cuidados"
+        ],
+        "acumulada": {
+          "id": "cmwo1y4xh00dxss18aeqfio8n",
+          "responsabilidade": "responsavel_desenvolvimento",
+          "pessoaAlvoId": "pessoa_laurinha_seed",
+          "ativa": true,
+          "concedidaEm": "2026-11-19T21:18:25.398Z",
+          "pessoaAlvo": {
+            "id": "pessoa_laurinha_seed",
+            "nome": "Laurinha"
+          },
+          "usuario": {
+            "id": "usuario_admin_seed",
+            "email": "admin@pef.local"
+          }
+        }
+      }
+    },
+    {
+      "nome": "concessao-colaboradora",
+      "ok": true,
+      "detalhe": {
+        "status": 201
+      }
+    },
+    {
+      "nome": "ACE-07",
+      "ok": true,
+      "detalhe": {
+        "idsColab": [
+          "pessoa_vovo_seed",
+          "pessoa_colab_seed"
+        ],
+        "nomesColab": [
+          "Helena Oliveira",
+          "Colaboradora Externa"
+        ],
+        "filtrado": true
+      }
+    },
+    {
+      "nome": "admin-ve-todos",
+      "ok": true,
+      "detalhe": {
+        "idsAdmin": [
+          "pessoa_admin_seed",
+          "pessoa_mikaela_seed",
+          "pessoa_integrante_seed",
+          "pessoa_vovo_seed",
+          "pessoa_laurinha_seed",
+          "cmwo1y57h00e1ss18a705v8b4",
+          "cmwo1y62w00ejss18h2lr61tz",
+          "cmwo1y7a200fnss18jcto29pb",
+          "cmwo1y8n800g7ss18sehkypuj",
+          "cmwo1y9zp00hfss18g7aep2tw",
+          "cmwo1yb5r00i9ss18e6w8pi4w",
+          "cmwo1ycpo00ixss18ustq8nqs",
+          "cmwo1zrhh00jdss18ako4wgxx",
+          "cmwo2cvrf00jxss185e665utv",
+          "cmwo2f9d100kpss18covgt768",
+          "cmwo2fb2g00lrss18arv9yt3i",
+          "cmwo2gq6b00m9ss18r5c6qsy8",
+          "cmwo9puff0015sskw6dh63q0l",
+          "cmwobqpn50005ssbwkdzw2ixs",
+          "cmwobqqfh0001sssseywpa2vz",
+          "cmwobqypz000lssbw9fvol9pa",
+          "cmwobr1g50016ssbw75fc06d5",
+          "cmwobrtbn001pssbwh4gjiad6",
+          "cmwobrvcq0021ssbwyynqzfpp",
+          "cmwobzrmx002fssbwsmfzaub6",
+          "cmwobzs8x0001ssygy9l4gn8z",
+          "cmwobztsr0032ssbw93il4b3y",
+          "cmwoc0ao3003essbwmf4nm043",
+          "cmwoc0bl30001ssq46o8rknek",
+          "cmwoc0dsu0041ssbw9dhu7ueb",
+          "cmwp0ptbo0005sso8xgmm3spo",
+          "cmwp0pu490001ssjg5vlq4f8q",
+          "cmwp0pvjk000lsso8k5tv0zpm",
+          "cmwp0pylo0016sso8u2bq7xj8",
+          "cmwp0ubdb001isso8kr4yuxjm",
+          "cmwp0ucji0001ssvwleq43nss",
+          "cmwp0xtsv0020sso8utdbc9lb",
+          "cmwp0xv1d0001ssiwxax5lle1",
+          "cmwp6z3wc000fsss078rddyrm",
+          "cmwp73a27000lsss0vlfxnd2s",
+          "cmwpamqpo0003ssbkejtbwu8b",
+          "cmwpamr6y000dssbkvl1gzvza",
+          "cmwpan1kt000nssbkn4r7gfjd",
+          "cmwpan3310001sssg211minl3",
+          "cmwpan6lq0015ssbknato30t7",
+          "cmwpan8lo001hssbkzcx7jtzc",
+          "cmwpao2jp0022ssbkygguojb1",
+          "cmwpao5vi002essbk7gsl8hgz",
+          "cmwpaqgjd002ossbk43yuglxb",
+          "cmwpaqgke002qssbkgstdakia",
+          "pessoa_colab_seed",
+          "cmwpaqjv80032ssbkplmni1gd",
+          "cmwpaqlbt003essbk1qc921e0",
+          "cmwparco9003wssbkpbj6irlx",
+          "cmwparcpn003yssbkv2r3q30x",
+          "cmwparg5c004assbknnf9shjw",
+          "cmwparhd9004mssbkm0uswuee",
+          "cmwparqyn004yssbktssfdmaq",
+          "cmwparqzj0050ssbk4qxpk9hg",
+          "cmwparyw90054ssbkk1t9t317",
+          "cmwparyxa0056ssbkj7wq9biy",
+          "cmwpasd39005assbktbfuqckq",
+          "cmwpasd65005cssbk4idk9by2",
+          "cmwpasgjd005ossbk63suycw7",
+          "cmwpasidw0060ssbkzvs72s9j",
+          "cmwpatf23006cssbkagf17vnd",
+          "cmwpatfji006mssbk1cm5q1cl"
+        ],
+        "nomesAdmin": [
+          "Carlos Oliveira",
+          "Mikaela Oliveira",
+          "Ana Paula Santos",
+          "Helena Oliveira",
+          "Laurinha",
+          "Colaboradora DL01",
+          "Colaboradora DL02",
+          "Colaboradora DL03",
+          "Colaboradora DL Exec",
+          "Colaboradora DL04",
+          "Colaboradora DL Rec",
+          "Colab DL05",
+          "Colaboradora R3",
+          "Colaboradora DL Exec",
+          "Colaboradora DL Exec",
+          "Colaboradora DL Rec",
+          "Colaboradora DL02",
+          "teste",
+          "Alvo ADR014",
+          "Segundo Admin ADR014",
+          "Colab CT Acessos",
+          "Colaboradora Authz",
+          "Colaboradora Authz",
+          "Temp Revogar",
+          "Alvo ADR014",
+          "Segundo Admin ADR014",
+          "Colaboradora Authz",
+          "Alvo ADR014",
+          "Segundo Admin ADR014",
+          "Colaboradora Authz",
+          "Alvo ADR014",
+          "Segundo Admin ADR014",
+          "Colab CT Acessos",
+          "Colaboradora Authz",
+          "Alvo ADR014",
+          "Segundo Admin ADR014",
+          "Alvo ADR014",
+          "Segundo Admin ADR014",
+          "teste",
+          "teste erik",
+          "Pessoa SIMP 1795198156417",
+          "Externo SIMP",
+          "Alvo ADR014",
+          "Segundo Admin ADR014",
+          "Colaboradora FF04",
+          "Colab CT Acessos",
+          "Colaboradora Authz",
+          "Colaboradora FF04",
+          "FF02-A-1795198329893",
+          "FF02-B-1795198329893",
+          "Colaboradora Externa",
+          "Colaboradora FF04",
+          "Temp Revogar",
+          "FF02-A-1795198371526",
+          "FF02-B-1795198371526",
+          "Colaboradora FF04",
+          "Temp Revogar",
+          "FF02-A-1795198390055",
+          "FF02-B-1795198390055",
+          "FF02-A-1795198400334",
+          "FF02-B-1795198400334",
+          "FF02-A-1795198418677",
+          "FF02-B-1795198418677",
+          "Colaboradora FF04",
+          "Temp Revogar",
+          "Pessoa SIMP 1795198467917",
+          "Externo SIMP"
+        ]
+      }
+    }
+  ]
+}

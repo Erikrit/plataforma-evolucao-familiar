@@ -1,6 +1,6 @@
 /**
  * Limpa o banco local e reexecuta o seed canônico
- * (3 perfis + Vovó/Laurinha + amostra de cuidados/desenvolvimento).
+ * (Família Oliveira, ≤6 pessoas, 3 contas + amostra cuidados/desenvolvimento).
  * Uso: npm run db:reset -w @pef/api
  * Não usar em ambiente com dados reais.
  */

@@ -133,25 +133,32 @@ try {
     { headers: { "x-sessao-token": sessaoColab.token } },
   );
   const inicioColabJson = await json(inicioColab);
-  const nomesColab = (inicioColabJson.corpo?.cartoes ?? []).map((c) => c.nome);
+  const cartoesColab = inicioColabJson.corpo?.cartoes ?? [];
+  const idsColab = cartoesColab.map((c) => c.pessoaId);
+  const nomesColab = cartoesColab.map((c) => c.nome);
   registrar(
     "ACE-07",
     inicioColab.status < 300 &&
       inicioColabJson.corpo?.filtradoPorAutorizacao === true &&
-      nomesColab.includes("Vovó") &&
-      !nomesColab.includes("Laurinha"),
-    { nomesColab, filtrado: inicioColabJson.corpo?.filtradoPorAutorizacao },
+      idsColab.includes(vovo.id) &&
+      !idsColab.includes(laurinha.id),
+    {
+      idsColab,
+      nomesColab,
+      filtrado: inicioColabJson.corpo?.filtradoPorAutorizacao,
+    },
   );
 
   const inicioAdmin = await fetch(`${base}/familias/${familiaId}/inicio`, {
     headers: headersAdmin,
   });
   const inicioAdminJson = await json(inicioAdmin);
+  const idsAdmin = (inicioAdminJson.corpo?.cartoes ?? []).map((c) => c.pessoaId);
   const nomesAdmin = (inicioAdminJson.corpo?.cartoes ?? []).map((c) => c.nome);
   registrar(
     "admin-ve-todos",
-    nomesAdmin.includes("Vovó") && nomesAdmin.includes("Laurinha"),
-    { nomesAdmin },
+    idsAdmin.includes(vovo.id) && idsAdmin.includes(laurinha.id),
+    { idsAdmin, nomesAdmin },
   );
 
   const ok = resultados.every((r) => r.ok);

@@ -9,6 +9,8 @@ type CorpoConvite = {
   nomeConvidado?: string;
   responsabilidade?: string;
   pessoaAlvoId?: string;
+  /** Pessoa já cadastrada que receberá a conta (M01 v1.5 §11). */
+  pessoaContaId?: string;
 };
 
 type CorpoAtivacao = {

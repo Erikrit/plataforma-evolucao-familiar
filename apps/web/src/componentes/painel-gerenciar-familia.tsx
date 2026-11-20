@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   Anchor,
   Button,
+  Checkbox,
   Group,
   Radio,
   SegmentedControl,
@@ -99,6 +100,12 @@ export function PainelGerenciarFamilia() {
     recarregarInicio,
   } = useSessao();
   const [nome, setNome] = useState("");
+  const [precisaEntrar, setPrecisaEntrar] = useState(false);
+  const [emailContaNova, setEmailContaNova] = useState("");
+  const [pessoaHabilitarId, setPessoaHabilitarId] = useState<string | null>(
+    null,
+  );
+  const [emailHabilitar, setEmailHabilitar] = useState("");
   const [emailConvite, setEmailConvite] = useState("");
   const [pessoaAlvoConviteId, setPessoaAlvoConviteId] = useState<string | null>(
     null,
@@ -343,16 +350,65 @@ export function PainelGerenciarFamilia() {
   async function aoCadastrar(evento: FormEvent) {
     evento.preventDefault();
     if (!usuario) return;
+    if (precisaEntrar && !emailContaNova.trim()) {
+      setErro("Informe o e-mail para habilitar a conta desta pessoa.");
+      return;
+    }
     setCarregando(true);
     setErro(null);
     setSucesso(null);
     try {
       const criada = await criarPessoa(usuario.pessoa.familiaId, nome);
       setNome("");
+      let mensagem = `${criada.nome} foi adicionada à família.`;
+      if (precisaEntrar) {
+        const convite = await criarConvite(usuario.pessoa.familiaId, {
+          email: emailContaNova.trim(),
+          nomeConvidado: criada.nome,
+          pessoaContaId: criada.id,
+        });
+        const caminho = `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
+        setLinkAtivacao(caminho);
+        setEmailContaNova("");
+        setPrecisaEntrar(false);
+        mensagem = `${criada.nome} cadastrada. Conta pronta para ativação no mesmo cadastro (sem nova pessoa).`;
+      }
       await recarregarInicio();
-      setSucesso(`${criada.nome} foi adicionada à família.`);
+      setSucesso(mensagem);
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Não foi possível cadastrar");
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  async function aoHabilitarConta(pessoaId: string, nomePessoa: string) {
+    if (!usuario) return;
+    if (!emailHabilitar.trim()) {
+      setErro("Informe o e-mail da conta a habilitar.");
+      return;
+    }
+    setCarregando(true);
+    setErro(null);
+    setSucesso(null);
+    try {
+      const convite = await criarConvite(usuario.pessoa.familiaId, {
+        email: emailHabilitar.trim(),
+        nomeConvidado: nomePessoa,
+        pessoaContaId: pessoaId,
+      });
+      const caminho = `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
+      setLinkAtivacao(caminho);
+      setPessoaHabilitarId(null);
+      setEmailHabilitar("");
+      setSucesso(
+        `Convite de conta para ${nomePessoa}. A ativação reutiliza esta pessoa; o acompanhamento contextual continua em Acessos.`,
+      );
+      await recarregarInicio();
+    } catch (e) {
+      setErro(
+        e instanceof Error ? e.message : "Não foi possível habilitar a conta",
+      );
     } finally {
       setCarregando(false);
     }
@@ -595,13 +651,41 @@ export function PainelGerenciarFamilia() {
                   required
                   autoComplete="off"
                 />
+                <Checkbox
+                  label="Essa pessoa também precisa entrar?"
+                  description="Opcional. Gera convite de conta na mesma pessoa, sem senha definida por você."
+                  checked={precisaEntrar}
+                  onChange={(e) => setPrecisaEntrar(e.currentTarget.checked)}
+                />
+                {precisaEntrar ? (
+                  <TextInput
+                    label="E-mail da conta"
+                    value={emailContaNova}
+                    onChange={(e) => setEmailContaNova(e.currentTarget.value)}
+                    type="email"
+                    required
+                    placeholder="email@exemplo.com"
+                    autoComplete="off"
+                  />
+                ) : null}
                 <Button
                   type="submit"
                   loading={carregando}
-                  disabled={!nome.trim()}
+                  disabled={
+                    !nome.trim() ||
+                    (precisaEntrar && !emailContaNova.trim())
+                  }
                 >
                   Salvar
                 </Button>
+                {linkAtivacao && abaAtiva === "pessoas" ? (
+                  <Text size="sm">
+                    Link de ativação:{" "}
+                    <Anchor component={Link} href={linkAtivacao}>
+                      abrir página de ativação
+                    </Anchor>
+                  </Text>
+                ) : null}
               </Stack>
             </form>
 
@@ -614,28 +698,90 @@ export function PainelGerenciarFamilia() {
                 />
               ) : (
                 <Stack
-                  gap={6}
+                  gap="sm"
                   component="ul"
                   style={{ listStyle: "none", margin: 0, padding: 0 }}
                 >
                   {pessoasUnicas.map((p) => (
-                    <Group
+                    <Stack
                       key={p.pessoaId}
                       component="li"
-                      justify="space-between"
+                      gap={6}
+                      style={{
+                        borderBottom: "1px solid var(--mantine-color-gray-3)",
+                        paddingBottom: 8,
+                      }}
                     >
-                      <Text size="sm">
-                        {p.nome}
-                        {p.possuiConta ? " · com conta" : " · sem conta"}
-                      </Text>
-                      <Anchor
-                        component={Link}
-                        href={`/pessoas/${p.pessoaId}`}
-                        size="sm"
-                      >
-                        Abrir perfil
-                      </Anchor>
-                    </Group>
+                      <Group justify="space-between" align="flex-start">
+                        <Text size="sm">
+                          {p.nome}
+                          {p.possuiConta ? " · com conta" : " · sem conta"}
+                        </Text>
+                        <Group gap="xs">
+                          {!p.possuiConta ? (
+                            <Button
+                              size="compact-sm"
+                              variant="light"
+                              onClick={() => {
+                                setPessoaHabilitarId(
+                                  pessoaHabilitarId === p.pessoaId
+                                    ? null
+                                    : p.pessoaId,
+                                );
+                                setEmailHabilitar("");
+                                setErro(null);
+                              }}
+                            >
+                              Habilitar conta
+                            </Button>
+                          ) : null}
+                          <Anchor
+                            component={Link}
+                            href={`/pessoas/${p.pessoaId}`}
+                            size="sm"
+                          >
+                            Abrir perfil
+                          </Anchor>
+                        </Group>
+                      </Group>
+                      {pessoaHabilitarId === p.pessoaId ? (
+                        <Stack gap="xs">
+                          <TextInput
+                            label="E-mail da conta"
+                            value={emailHabilitar}
+                            onChange={(e) =>
+                              setEmailHabilitar(e.currentTarget.value)
+                            }
+                            type="email"
+                            required
+                            placeholder="email@exemplo.com"
+                            autoComplete="off"
+                          />
+                          <Group gap="sm">
+                            <Button
+                              variant="default"
+                              size="compact-sm"
+                              onClick={() => {
+                                setPessoaHabilitarId(null);
+                                setEmailHabilitar("");
+                              }}
+                            >
+                              Cancelar
+                            </Button>
+                            <Button
+                              size="compact-sm"
+                              loading={carregando}
+                              disabled={!emailHabilitar.trim()}
+                              onClick={() =>
+                                void aoHabilitarConta(p.pessoaId, p.nome)
+                              }
+                            >
+                              Gerar convite de conta
+                            </Button>
+                          </Group>
+                        </Stack>
+                      ) : null}
+                    </Stack>
                   ))}
                 </Stack>
               )}

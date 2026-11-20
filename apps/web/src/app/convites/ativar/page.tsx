@@ -40,12 +40,16 @@ export default function PaginaAtivarConvite() {
     setErro(null);
     setSucesso(null);
     try {
-      await ativarConvite(token.trim(), {
+      const resultado = await ativarConvite(token.trim(), {
         senha,
         nome: nome.trim() || undefined,
       });
       setSenha("");
-      setSucesso("Conta criada. Você já pode entrar na página inicial.");
+      setSucesso(
+        resultado?.reutilizouPessoa
+          ? "Conta ativada na pessoa já cadastrada. Você já pode entrar."
+          : "Conta criada. Você já pode entrar na página inicial.",
+      );
     } catch (e) {
       const mensagem =
         e instanceof Error ? e.message : "Não foi possível ativar o convite";

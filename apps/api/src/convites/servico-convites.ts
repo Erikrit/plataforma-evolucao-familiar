@@ -32,34 +32,60 @@ export class ServicoConvites {
       nomeConvidado?: string;
       responsabilidade?: string;
       pessoaAlvoId?: string;
+      pessoaContaId?: string;
     },
   ) {
     await this.autorizacoes.exigirAdministrador(familiaId, admin);
 
     const email = (entrada.email ?? "").trim().toLowerCase();
-    const responsabilidadeBruta = (entrada.responsabilidade ?? "").trim();
     if (!email) {
-      throw new BadRequestException("E-mail e responsabilidade válidos são obrigatórios.");
+      throw new BadRequestException("E-mail é obrigatório para o convite.");
     }
-    if (!ehResponsabilidadeConcedivel(responsabilidadeBruta)) {
+
+    const pessoaContaId = (entrada.pessoaContaId ?? "").trim() || null;
+    const responsabilidadeBruta = (entrada.responsabilidade ?? "").trim();
+    const pessoaAlvoId = (entrada.pessoaAlvoId ?? "").trim() || null;
+
+    if (pessoaContaId) {
+      const pessoaConta = await this.prisma.pessoa.findFirst({
+        where: { id: pessoaContaId, familiaId },
+        include: { usuario: { select: { id: true } } },
+      });
+      if (!pessoaConta) {
+        throw new NotFoundException("Pessoa da conta não encontrada.");
+      }
+      if (pessoaConta.usuario) {
+        throw new BadRequestException(
+          "Esta pessoa já possui conta. Use concessão de acesso para quem já entra.",
+        );
+      }
+    }
+
+    let responsabilidade: string | null = null;
+    if (responsabilidadeBruta) {
+      if (!ehResponsabilidadeConcedivel(responsabilidadeBruta)) {
+        throw new BadRequestException(
+          "Responsabilidade não concedível por convite (ADR-014). Use apenas as combinações contextuais previstas.",
+        );
+      }
+      if (escopoFamilia(responsabilidadeBruta as Responsabilidade)) {
+        throw new BadRequestException(
+          "Convite de administrador da família não é suportado no MVP.",
+        );
+      }
+      if (!pessoaAlvoId) {
+        throw new BadRequestException("Convite contextual exige pessoa-alvo.");
+      }
+      const alvo = await this.prisma.pessoa.findFirst({
+        where: { id: pessoaAlvoId, familiaId },
+      });
+      if (!alvo) throw new NotFoundException("Pessoa-alvo não encontrada.");
+      responsabilidade = responsabilidadeBruta;
+    } else if (!pessoaContaId) {
       throw new BadRequestException(
-        "Responsabilidade não concedível por convite (ADR-014). Use apenas as combinações contextuais previstas.",
+        "Informe a responsabilidade contextual ou a pessoa cuja conta será habilitada.",
       );
     }
-    const responsabilidade = responsabilidadeBruta;
-    if (escopoFamilia(responsabilidade as Responsabilidade)) {
-      throw new BadRequestException(
-        "Convite de administrador da família não é suportado no MVP.",
-      );
-    }
-    const pessoaAlvoId = (entrada.pessoaAlvoId ?? "").trim();
-    if (!pessoaAlvoId) {
-      throw new BadRequestException("Convite contextual exige pessoa-alvo.");
-    }
-    const alvo = await this.prisma.pessoa.findFirst({
-      where: { id: pessoaAlvoId, familiaId },
-    });
-    if (!alvo) throw new NotFoundException("Pessoa-alvo não encontrada.");
 
     const token = randomBytes(24).toString("hex");
     const convite = await this.prisma.convite.create({
@@ -70,6 +96,7 @@ export class ServicoConvites {
         nomeConvidado: entrada.nomeConvidado?.trim() || null,
         responsabilidade,
         pessoaAlvoId,
+        pessoaContaId,
         criadoPorId: admin.id,
         expiraEm: new Date(Date.now() + DURACAO_CONVITE_MS),
       },
@@ -81,6 +108,7 @@ export class ServicoConvites {
       email: convite.email,
       responsabilidade: convite.responsabilidade,
       pessoaAlvoId: convite.pessoaAlvoId,
+      pessoaContaId: convite.pessoaContaId,
       expiraEm: convite.expiraEm.toISOString(),
       usadoEm: null,
     };
@@ -92,7 +120,10 @@ export class ServicoConvites {
   ) {
     const convite = await this.prisma.convite.findUnique({
       where: { token },
-      include: { pessoaAlvo: true },
+      include: {
+        pessoaAlvo: true,
+        pessoaConta: { include: { usuario: { select: { id: true } } } },
+      },
     });
     if (!convite) throw new NotFoundException("Convite não encontrado.");
     if (convite.usadoEm) {
@@ -114,48 +145,74 @@ export class ServicoConvites {
       throw new BadRequestException("E-mail já possui conta.");
     }
 
+    if (convite.pessoaContaId) {
+      if (!convite.pessoaConta) {
+        throw new NotFoundException("Pessoa da conta não encontrada.");
+      }
+      if (convite.pessoaConta.usuario) {
+        throw new BadRequestException(
+          "A pessoa indicada no convite já possui conta.",
+        );
+      }
+    }
+
     const nome =
       (entrada.nome ?? "").trim() ||
       convite.nomeConvidado?.trim() ||
+      convite.pessoaConta?.nome ||
       convite.email.split("@")[0];
 
     const resultado = await this.prisma.$transaction(async (tx) => {
-      const pessoa = await tx.pessoa.create({
-        data: {
-          familiaId: convite.familiaId,
-          nome,
-          vinculo: "colaboradora",
-        },
-      });
+      let pessoaId: string;
+      if (convite.pessoaContaId) {
+        pessoaId = convite.pessoaContaId;
+      } else {
+        const pessoa = await tx.pessoa.create({
+          data: {
+            familiaId: convite.familiaId,
+            nome,
+            vinculo: "colaboradora",
+          },
+        });
+        pessoaId = pessoa.id;
+      }
+
       const usuario = await tx.usuario.create({
         data: {
-          pessoaId: pessoa.id,
+          pessoaId,
           email: convite.email,
           senhaHash: gerarHashSenha(senha),
         },
       });
-      await tx.autorizacao.create({
-        data: {
-          familiaId: convite.familiaId,
-          usuarioId: usuario.id,
-          responsabilidade: convite.responsabilidade,
-          pessoaAlvoId: convite.pessoaAlvoId,
-        },
-      });
+
+      if (convite.responsabilidade && convite.pessoaAlvoId) {
+        await tx.autorizacao.create({
+          data: {
+            familiaId: convite.familiaId,
+            usuarioId: usuario.id,
+            responsabilidade: convite.responsabilidade,
+            pessoaAlvoId: convite.pessoaAlvoId,
+          },
+        });
+      }
+
       await tx.convite.update({
         where: { id: convite.id },
         data: { usadoEm: new Date() },
       });
-      return { pessoa, usuario };
+
+      return { pessoaId, usuario };
     });
 
     return {
       ok: true,
       email: resultado.usuario.email,
-      pessoaId: resultado.pessoa.id,
+      pessoaId: resultado.pessoaId,
       familiaId: convite.familiaId,
       pessoaAlvoId: convite.pessoaAlvoId,
+      pessoaContaId: convite.pessoaContaId,
       responsabilidade: convite.responsabilidade,
+      reutilizouPessoa: Boolean(convite.pessoaContaId),
     };
   }
 }

@@ -489,12 +489,46 @@ export class ServicoAutorizacoes {
       idsDesenvolvimento,
     );
 
+    const contextos: {
+      pessoaId: string;
+      nome: string;
+      area: "cuidados" | "desenvolvimento";
+      href: string;
+    }[] = [];
+    for (const cartao of cartoes) {
+      if (cartao.areasAutorizadas.cuidados) {
+        contextos.push({
+          pessoaId: cartao.pessoaId,
+          nome: cartao.nome,
+          area: "cuidados",
+          href: `/pessoas/${cartao.pessoaId}/cuidados`,
+        });
+      }
+      if (cartao.areasAutorizadas.desenvolvimento) {
+        contextos.push({
+          pessoaId: cartao.pessoaId,
+          nome: cartao.nome,
+          area: "desenvolvimento",
+          href: `/pessoas/${cartao.pessoaId}/desenvolvimento`,
+        });
+      }
+    }
+
+    let destinoEntrada: string | null = null;
+    if (contextos.length === 1) {
+      destinoEntrada = contextos[0].href;
+    } else if (contextos.length === 0 && visao.adminFamilia) {
+      destinoEntrada = "/gerenciar-familia";
+    }
+
     return {
       familiaId,
       cartoes,
       destaques,
       autorizacoes,
       acessos,
+      contextos,
+      destinoEntrada,
       filtradoPorAutorizacao: visao.ids !== "todas",
       adminSemAcessoClinicoAutomatico: true,
     };
