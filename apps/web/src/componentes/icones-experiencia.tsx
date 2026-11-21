@@ -192,6 +192,36 @@ export function MarcadorTipoItem({
   return <IconeBrincadeira />;
 }
 
+export function MarcadorEventoHistorico({ tipo }: { tipo: string }) {
+  if (
+    tipo === "dose" ||
+    tipo === "registro_dose" ||
+    tipo === "correcao_dose" ||
+    tipo === "medicamento" ||
+    tipo === "programacao" ||
+    tipo === "encerramento" ||
+    tipo === "suspensao"
+  ) {
+    return <IconeMedicamento />;
+  }
+  if (tipo === "consulta") return <IconeConsulta />;
+  if (tipo === "exame" || tipo === "anexo") return <IconeExame />;
+  if (
+    tipo === "participacao" ||
+    tipo === "correcao_participacao" ||
+    tipo === "resgate_recompensa"
+  ) {
+    return <IconeBrincadeira />;
+  }
+  return (
+    <MolduraIcone rotulo="Observação" cor="gray">
+      <SvgBase>
+        <path d="M5 5h14v10H9l-4 4V5Z" />
+      </SvgBase>
+    </MolduraIcone>
+  );
+}
+
 export function MarcadorSituacaoDose({ situacao }: { situacao: string }) {
   if (situacao === "tomou_conforme_informacao") return <IconeDoseTomou />;
   if (situacao === "informou_nao_tomou") return <IconeDoseNaoTomou />;

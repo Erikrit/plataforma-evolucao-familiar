@@ -79,16 +79,11 @@ export class ServicoPessoas {
       },
     });
     if (!pessoa) throw new NotFoundException("Pessoa não encontrada.");
-    const cuidados = await this.autorizacoes.podeVerCuidados(
-      familiaId,
-      pessoaId,
-      usuario,
-    );
-    const desenvolvimento = await this.autorizacoes.podeVerDesenvolvimento(
-      familiaId,
-      pessoaId,
-      usuario,
-    );
+    const [cuidados, desenvolvimento, podeExportar] = await Promise.all([
+      this.autorizacoes.podeVerCuidados(familiaId, pessoaId, usuario),
+      this.autorizacoes.podeVerDesenvolvimento(familiaId, pessoaId, usuario),
+      this.autorizacoes.podeExportarRelatorio(familiaId, pessoaId, usuario),
+    ]);
     return {
       id: pessoa.id,
       nome: pessoa.nome,
@@ -97,6 +92,7 @@ export class ServicoPessoas {
       criadaEm: pessoa.criadaEm,
       possuiConta: Boolean(pessoa.usuario),
       emailConta: pessoa.usuario?.email ?? null,
+      podeExportar,
       areas: [
         { id: "cuidados", rotulo: "Cuidados", disponivel: cuidados },
         {

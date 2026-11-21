@@ -563,7 +563,8 @@ export class ServicoAutorizacoes {
           dataHora: { gte: agora },
         },
         orderBy: { dataHora: "asc" },
-        take: limite,
+        // Reserva espaço para experiência recente (EVO-R04: poucos e mistos).
+        take: Math.max(1, limite - 1),
         select: {
           pessoaId: true,
           especialidadeOuDescricao: true,
@@ -591,7 +592,7 @@ export class ServicoAutorizacoes {
           registradoEm: { gte: desde, lte: agora },
         },
         orderBy: { registradoEm: "desc" },
-        take: limite,
+        take: Math.max(1, limite - 1),
         include: { desafio: { select: { nome: true } } },
       });
       for (const p of participacoes) {

@@ -596,6 +596,8 @@ export type EventoHistorico = {
   resumo: string;
   origemId: string;
   categoria?: string | null;
+  versaoAtiva?: boolean;
+  detalhe?: string;
 };
 
 export type HistoricoResposta = {
@@ -715,10 +717,18 @@ function erroDesenvolvimento(status: number, fallback: string) {
   return fallback;
 }
 
+export type ListagemMeta = {
+  totalNoPeriodo: number;
+  exibidos: number;
+  limitada: boolean;
+};
+
 export type ResumoCuidados = {
   pessoaId: string;
+  pessoaNome?: string;
   tipo: string;
   periodo: { de: string; ate: string };
+  diasNoPeriodo?: number;
   doses: {
     previstos: number;
     tomadasInformadas: number;
@@ -733,6 +743,27 @@ export type ResumoCuidados = {
     status: string;
   }[];
   exames: { id: string; descricao: string; criadoEm: string }[];
+  observacoes?: {
+    id: string;
+    descricao: string;
+    observacao: string | null;
+    concluidaEm: string;
+  }[];
+  mudancasProgramacao?: {
+    id: string;
+    medicamento: string;
+    horarios: string;
+    vigenciaInicio: string;
+    vigenciaFim: string | null;
+    criadoEm: string;
+  }[];
+  listagens?: {
+    registros: ListagemMeta;
+    consultas: ListagemMeta;
+    exames: ListagemMeta;
+    observacoes: ListagemMeta;
+    mudancasProgramacao: ListagemMeta;
+  };
   inferenciaClinica: boolean;
 };
 
@@ -761,6 +792,7 @@ export async function obterResumoCuidados(
 
 export type ResumoDesenvolvimento = {
   pessoaId: string;
+  pessoaNome?: string;
   tipo: string;
   periodo: { de: string; ate: string };
   experiencias: {
@@ -784,6 +816,10 @@ export type ResumoDesenvolvimento = {
     texto: string;
     registradoEm: string;
   }[];
+  listagens?: {
+    experiencias: ListagemMeta;
+    observacoes: ListagemMeta;
+  };
   inferenciaClinica: boolean;
   ranking: boolean;
 };
@@ -813,9 +849,11 @@ export async function obterResumoDesenvolvimento(
 
 export type ResumoPrevia = {
   pessoaId: string;
+  pessoaNome?: string;
   periodo: { de: string; ate: string };
   geradoEm: string;
   dominios: { cuidados: boolean; desenvolvimento: boolean };
+  podeExportar?: boolean;
   cuidados: ResumoCuidados | null;
   desenvolvimento: ResumoDesenvolvimento | null;
   anexosIncluidos: boolean;
@@ -829,6 +867,7 @@ export type RelatorioPdf = {
   pdfBase64: string;
   mimeTipo: string;
   anexosIncluidos: boolean;
+  paginas?: number;
 };
 
 export async function obterResumoPrevia(

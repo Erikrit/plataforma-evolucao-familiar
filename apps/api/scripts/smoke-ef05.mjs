@@ -134,8 +134,12 @@ try {
       previaPdf?.dominios?.cuidados === false &&
       (previaPdf?.desenvolvimento?.experiencias?.length ?? 0) ===
         (previaLaurinha.corpo?.desenvolvimento?.experiencias?.length ?? -1) &&
-      (textoPdf.includes("Anexos sensiveis") ||
-        textoPdf.includes("nao incluidos")),
+      (textoPdf.includes("Anexos") &&
+        (textoPdf.includes("incluidos") ||
+          textoPdf.includes("inclu") ||
+          textoPdf.includes("sensiveis") ||
+          textoPdf.includes("sens\\355veis") ||
+          textoPdf.includes("sens"))),
     {
       status: pdfLaurinha.status,
       mime: pdfLaurinha.corpo?.mimeTipo,

@@ -1,5 +1,27 @@
 # Registro da esteira
 
+## 2026-11-21 — DEM-M04-EVO-REV-20261121 COMPLETED (técnico PASS)
+
+- **Tipo:** transversal · **Risco:** alto (authz/privacidade/PDF)
+- **Entrega:** Histórico (período compacto, ícones, detalhes); Resumo contextual; Preparar PDF → conferência → Baixar; PDF multipágina; totais integros; `podeExportar`; observações/programações
+- **QG-1/2/3:** PASS · Verifier indep. shell PASS; oficial BLOCKED Ask ([verifier](d04a7109-c499-4d1d-b2d1-5e2ff144cba2))
+- **Fingerprint:** `sha256:fa68687616df8905`
+- **Humana:** PENDING_HUMAN — `roteiro-homologacao-m04-evo-rev.md`
+- **Evidência:** `evidencia-m04-evo-rev-20261121.json`
+- **Commit/push:** não executados
+- **Próximo:** homologação humana expressa Histórico/Resumo/PDF
+
+## 2026-11-21 — Triagem + planejamento DEM-M04-EVO-REV-20261121
+
+- **Tipo:** transversal (correções UX+funcionais M04) · **Risco:** alto (authz/privacidade/PDF)
+- **Aprovação:** L2 — direção UX APROVADA em `REVISAO-MODULO-04.md` §1/§6 (Produto 2026-11-20); requisitos EVO-R05/R07/R10/R12 já em especificação v1.1
+- **Escopo:** EVO-REV-01..08 — prévia fiel, PDF completo, totais do período, exportação autorizada, Histórico/Resumo aprovados
+- **Fora:** restringir período sem Produto; ampliar permissões; anexos no PDF; novos requisitos
+- **HEAD:** `1ddde98` develop (= origin/develop)
+- **Fluxo:** module-planning (EF-REV-01..03) → implementation-workflow → quality-gate + verifier → PENDING_HUMAN
+- **Incrementos:** EF-REV-01 contratos/completude → EF-REV-02 experiência → EF-REV-03 validação integrada
+- **Commit/push:** não executados
+
 ## 2026-11-20 — Aceite humano DEM-M01-SIMP-CAD-20261120
 
 - **Resultado humano** APROVADA, informado expressamente pelo responsável do Produto nesta conversa após a atualização.

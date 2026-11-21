@@ -53,6 +53,7 @@ export class ServicoAcompanhamento {
       versaoAtiva?: boolean;
       anexoId?: string;
       categoria?: string | null;
+      detalhe?: string;
     };
 
     const eventos: EventoHistorico[] = [];
@@ -107,6 +108,9 @@ export class ServicoAcompanhamento {
           resumo: `${d.medicamento.nome}: ${this.rotuloSituacaoDose(d.situacao)}`,
           origemId: d.id,
           versaoAtiva: d.versaoAtiva,
+          detalhe: d.substituiId
+            ? "Este relato substitui uma informação anterior."
+            : undefined,
         })),
         ...programacoes.map((p) => ({
           tipo: "programacao",
@@ -114,6 +118,11 @@ export class ServicoAcompanhamento {
           quando: p.criadoEm,
           resumo: `${p.medicamento.nome}: horários ${this.formatarHorarios(p.horarios)}`,
           origemId: p.id,
+          detalhe: `Vigência a partir de ${this.formatarQuandoLocal(p.vigenciaInicio)}${
+            p.vigenciaFim
+              ? ` até ${this.formatarQuandoLocal(p.vigenciaFim)}`
+              : ""
+          }.`,
         })),
         ...consultas.map((c) => ({
           tipo: "consulta",
@@ -121,6 +130,12 @@ export class ServicoAcompanhamento {
           quando: c.dataHora,
           resumo: `${c.especialidadeOuDescricao} (${this.rotuloStatusConsulta(c.status)})`,
           origemId: c.id,
+          detalhe: [
+            c.profissional ? `Profissional: ${c.profissional}` : null,
+            c.local ? `Local: ${c.local}` : null,
+          ]
+            .filter(Boolean)
+            .join(" · ") || undefined,
         })),
         ...exames.map((e) => ({
           tipo: "exame",
@@ -129,6 +144,10 @@ export class ServicoAcompanhamento {
           resumo: e.descricao,
           origemId: e.id,
           ...(podeAnexos && e.anexoId ? { anexoId: e.anexoId } : {}),
+          detalhe:
+            podeAnexos && e.anexoId
+              ? "Há documento anexado (visível só com permissão)."
+              : undefined,
         })),
         ...atividades.map((a) => ({
           tipo: "atividade_apoio",
@@ -136,6 +155,7 @@ export class ServicoAcompanhamento {
           quando: a.concluidaEm,
           resumo: a.descricao,
           origemId: a.id,
+          detalhe: (a.observacao ?? "").trim() || undefined,
         })),
         ...medicamentos.map((m) => ({
           tipo: m.encerradoEm ? "encerramento" : "suspensao",
@@ -187,6 +207,9 @@ export class ServicoAcompanhamento {
             origemId: p.id,
             versaoAtiva: p.versaoAtiva,
             categoria: p.desafio.categoria,
+            detalhe: p.substituiId
+              ? "Correção de registro anterior de brincadeira."
+              : undefined,
           };
         }),
         ...resgates.map((r) => ({
@@ -330,7 +353,8 @@ export class ServicoAcompanhamento {
       throw new BadRequestException("Período inválido para o resumo.");
     }
 
-    const dias = this.listarDiasIso(de, ate, 62);
+    // Totais cobrem o período inteiro (EVO-REV-05); listagens podem ser limitadas com sinalização.
+    const dias = this.listarDiasIso(de, ate);
     const medicamentos = await this.prisma.medicamento.findMany({
       where: { pessoaId: pessoa.id },
       include: {
@@ -343,6 +367,17 @@ export class ServicoAcompanhamento {
         },
       },
     });
+
+    const registrosAtivos = await this.prisma.registroDose.findMany({
+      where: {
+        medicamento: { pessoaId: pessoa.id },
+        versaoAtiva: true,
+      },
+      select: { ocorrenciaChave: true, situacao: true },
+    });
+    const situacaoPorChave = new Map(
+      registrosAtivos.map((r) => [r.ocorrenciaChave, r.situacao]),
+    );
 
     let previstos = 0;
     let tomadas = 0;
@@ -365,14 +400,12 @@ export class ServicoAcompanhamento {
         for (const horario of horarios) {
           previstos += 1;
           const chave = chaveOcorrencia(med.id, dia, horario);
-          const registro = await this.prisma.registroDose.findFirst({
-            where: { ocorrenciaChave: chave, versaoAtiva: true },
-          });
-          if (!registro) {
+          const situacao = situacaoPorChave.get(chave);
+          if (!situacao) {
             semConfirmacao += 1;
-          } else if (registro.situacao === "tomou_conforme_informacao") {
+          } else if (situacao === "tomou_conforme_informacao") {
             tomadas += 1;
-          } else if (registro.situacao === "informou_nao_tomou") {
+          } else if (situacao === "informou_nao_tomou") {
             naoTomadas += 1;
           } else {
             semConfirmacao += 1;
@@ -381,32 +414,54 @@ export class ServicoAcompanhamento {
       }
     }
 
-    const doses = await this.prisma.registroDose.findMany({
-      where: {
-        medicamento: { pessoaId: pessoa.id },
-        versaoAtiva: true,
-        registradoEm: { gte: de, lte: ate },
-      },
-      include: { medicamento: { select: { nome: true } } },
-      orderBy: { registradoEm: "desc" },
-      take: 50,
-    });
-
-    const consultas = await this.prisma.consulta.findMany({
-      where: { pessoaId: pessoa.id, dataHora: { gte: de, lte: ate } },
-      orderBy: { dataHora: "desc" },
-      take: 20,
-    });
-    const exames = await this.prisma.exame.findMany({
-      where: { pessoaId: pessoa.id, criadoEm: { gte: de, lte: ate } },
-      orderBy: { criadoEm: "desc" },
-      take: 20,
-    });
+    // Listagens completas no contrato de prévia/PDF (EVO-REV-03/04/05); sem corte silencioso.
+    const [doses, consultas, exames, atividades, programacoesPeriodo] =
+      await Promise.all([
+        this.prisma.registroDose.findMany({
+          where: {
+            medicamento: { pessoaId: pessoa.id },
+            versaoAtiva: true,
+            registradoEm: { gte: de, lte: ate },
+          },
+          include: { medicamento: { select: { nome: true } } },
+          orderBy: { registradoEm: "desc" },
+        }),
+        this.prisma.consulta.findMany({
+          where: { pessoaId: pessoa.id, dataHora: { gte: de, lte: ate } },
+          orderBy: { dataHora: "desc" },
+        }),
+        this.prisma.exame.findMany({
+          where: { pessoaId: pessoa.id, criadoEm: { gte: de, lte: ate } },
+          orderBy: { criadoEm: "desc" },
+        }),
+        this.prisma.registroAtividade.findMany({
+          where: {
+            pessoaId: pessoa.id,
+            concluidaEm: { gte: de, lte: ate },
+          },
+          orderBy: { concluidaEm: "desc" },
+        }),
+        this.prisma.programacaoMedicamento.findMany({
+          where: {
+            medicamento: { pessoaId: pessoa.id },
+            criadoEm: { gte: de, lte: ate },
+          },
+          include: { medicamento: { select: { nome: true } } },
+          orderBy: { criadoEm: "desc" },
+        }),
+      ]);
+    const totalRegistros = doses.length;
+    const totalConsultas = consultas.length;
+    const totalExames = exames.length;
+    const totalAtividades = atividades.length;
+    const totalProgramacoes = programacoesPeriodo.length;
 
     return {
       pessoaId: pessoa.id,
+      pessoaNome: pessoa.nome,
       tipo: "cuidados",
       periodo: { de: periodo.de, ate: periodo.ate },
+      diasNoPeriodo: dias.length,
       doses: {
         previstos,
         tomadasInformadas: tomadas,
@@ -424,6 +479,33 @@ export class ServicoAcompanhamento {
         situacao: d.situacao,
         quando: d.registradoEm,
       })),
+      listagens: {
+        registros: {
+          totalNoPeriodo: totalRegistros,
+          exibidos: doses.length,
+          limitada: totalRegistros > doses.length,
+        },
+        consultas: {
+          totalNoPeriodo: totalConsultas,
+          exibidos: consultas.length,
+          limitada: totalConsultas > consultas.length,
+        },
+        exames: {
+          totalNoPeriodo: totalExames,
+          exibidos: exames.length,
+          limitada: totalExames > exames.length,
+        },
+        observacoes: {
+          totalNoPeriodo: totalAtividades,
+          exibidos: atividades.length,
+          limitada: totalAtividades > atividades.length,
+        },
+        mudancasProgramacao: {
+          totalNoPeriodo: totalProgramacoes,
+          exibidos: programacoesPeriodo.length,
+          limitada: totalProgramacoes > programacoesPeriodo.length,
+        },
+      },
       consultas: consultas.map((c) => ({
         id: c.id,
         especialidadeOuDescricao: c.especialidadeOuDescricao,
@@ -434,6 +516,20 @@ export class ServicoAcompanhamento {
         id: e.id,
         descricao: e.descricao,
         criadoEm: e.criadoEm,
+      })),
+      observacoes: atividades.map((a) => ({
+        id: a.id,
+        descricao: a.descricao,
+        observacao: a.observacao,
+        concluidaEm: a.concluidaEm,
+      })),
+      mudancasProgramacao: programacoesPeriodo.map((p) => ({
+        id: p.id,
+        medicamento: p.medicamento.nome,
+        horarios: this.formatarHorarios(p.horarios),
+        vigenciaInicio: p.vigenciaInicio,
+        vigenciaFim: p.vigenciaFim,
+        criadoEm: p.criadoEm,
       })),
       inferenciaClinica: false,
       previa: true,
@@ -463,14 +559,15 @@ export class ServicoAcompanhamento {
       throw new BadRequestException("Período inválido para o resumo.");
     }
 
-    const participacoes = await this.prisma.participacaoDesafio.findMany({
-      where: {
-        pessoaId: pessoa.id,
-        versaoAtiva: true,
-        registradoEm: { gte: de, lte: ate },
-      },
+    const filtroParticipacao = {
+      pessoaId: pessoa.id,
+      versaoAtiva: true,
+      registradoEm: { gte: de, lte: ate },
+    } as const;
+
+    const todasParticipacoes = await this.prisma.participacaoDesafio.findMany({
+      where: filtroParticipacao,
       orderBy: { registradoEm: "desc" },
-      take: 40,
       include: {
         desafio: {
           select: { nome: true, categoria: true, origem: true },
@@ -478,7 +575,9 @@ export class ServicoAcompanhamento {
       },
     });
 
-    const experiencias = participacoes.map((p) => {
+    const mapear = (
+      p: (typeof todasParticipacoes)[number],
+    ) => {
       const categoriaBruta = (p.desafio.categoria ?? "").trim();
       const categoria =
         categoriaBruta.length > 0 ? categoriaBruta : "nao_classificada";
@@ -492,10 +591,13 @@ export class ServicoAcompanhamento {
         observacao: p.observacao,
         registradoEm: p.registradoEm,
       };
-    });
+    };
+
+    const experienciasTotais = todasParticipacoes.map(mapear);
+    const experiencias = experienciasTotais;
 
     const contagemCategorias = new Map<string, number>();
-    for (const e of experiencias) {
+    for (const e of experienciasTotais) {
       contagemCategorias.set(
         e.categoria,
         (contagemCategorias.get(e.categoria) ?? 0) + 1,
@@ -505,12 +607,12 @@ export class ServicoAcompanhamento {
       .map(([categoria, quantidade]) => ({ categoria, quantidade }))
       .sort((a, b) => b.quantidade - a.quantidade || a.categoria.localeCompare(b.categoria));
 
-    const estrelasConcedidasNoPeriodo = experiencias.reduce(
+    const estrelasConcedidasNoPeriodo = experienciasTotais.reduce(
       (acc, e) => acc + e.estrelasConcedidas,
       0,
     );
 
-    const observacoes = experiencias
+    const observacoesTotais = experienciasTotais
       .filter((e) => (e.observacao ?? "").trim().length > 0)
       .map((e) => ({
         experienciaId: e.id,
@@ -518,9 +620,11 @@ export class ServicoAcompanhamento {
         texto: e.observacao as string,
         registradoEm: e.registradoEm,
       }));
+    const observacoes = observacoesTotais;
 
     return {
       pessoaId: pessoa.id,
+      pessoaNome: pessoa.nome,
       tipo: "desenvolvimento",
       periodo: { de: periodo.de, ate: periodo.ate },
       experiencias,
@@ -531,6 +635,18 @@ export class ServicoAcompanhamento {
           "Estrelas são um incentivo lúdico da família — não medem inteligência, nível clínico nem comparam crianças.",
       },
       observacoes,
+      listagens: {
+        experiencias: {
+          totalNoPeriodo: experienciasTotais.length,
+          exibidos: experiencias.length,
+          limitada: experienciasTotais.length > experiencias.length,
+        },
+        observacoes: {
+          totalNoPeriodo: observacoesTotais.length,
+          exibidos: observacoes.length,
+          limitada: observacoesTotais.length > observacoes.length,
+        },
+      },
       inferenciaClinica: false,
       ranking: false,
       previa: true,
@@ -547,13 +663,18 @@ export class ServicoAcompanhamento {
     periodo: { de: string; ate: string },
   ) {
     const pessoa = await this.exigirVisao(pessoaId, usuario);
-    const [podeCuidados, podeDesenvolvimento] = await Promise.all([
+    const [podeCuidados, podeDesenvolvimento, podeExportar] = await Promise.all([
       this.autorizacoes.podeVerCuidados(
         pessoa.familiaId,
         pessoa.id,
         usuario,
       ),
       this.autorizacoes.podeVerDesenvolvimento(
+        pessoa.familiaId,
+        pessoa.id,
+        usuario,
+      ),
+      this.autorizacoes.podeExportarRelatorio(
         pessoa.familiaId,
         pessoa.id,
         usuario,
@@ -569,12 +690,14 @@ export class ServicoAcompanhamento {
 
     return {
       pessoaId: pessoa.id,
+      pessoaNome: pessoa.nome,
       periodo: { de: periodo.de, ate: periodo.ate },
       geradoEm: new Date().toISOString(),
       dominios: {
         cuidados: podeCuidados,
         desenvolvimento: podeDesenvolvimento,
       },
+      podeExportar,
       cuidados,
       desenvolvimento,
       anexosIncluidos: false,
@@ -593,17 +716,18 @@ export class ServicoAcompanhamento {
     await this.exigirExportacao(pessoaId, usuario);
     const previa = await this.previaResumo(pessoaId, usuario, periodo);
     const linhas = this.linhasRelatorio(previa);
-    const texto = linhas.join("\n");
     return {
       previa,
-      pdfBase64: Buffer.from(this.montarPdfMinimo(texto)).toString("base64"),
+      pdfBase64: Buffer.from(this.montarPdfCompleto(linhas)).toString("base64"),
       mimeTipo: "application/pdf",
       anexosIncluidos: false,
+      paginas: Math.max(1, Math.ceil(this.quebrarLinhasPdf(linhas).length / 50)),
     };
   }
 
   private linhasRelatorio(previa: {
     pessoaId: string;
+    pessoaNome?: string;
     periodo: { de: string; ate: string };
     geradoEm: string;
     cuidados: Awaited<ReturnType<ServicoAcompanhamento["resumo"]>> | null;
@@ -612,12 +736,13 @@ export class ServicoAcompanhamento {
     > | null;
     avisoPrivacidade: string;
   }): string[] {
+    const nome = previa.pessoaNome?.trim() || previa.pessoaId;
     const linhas: string[] = [
-      "Resumo familiar (sem inferencia clinica)",
-      `Pessoa: ${previa.pessoaId}`,
-      `Periodo: ${previa.periodo.de} a ${previa.periodo.ate}`,
-      `Gerado em: ${previa.geradoEm}`,
-      "Anexos sensiveis: nao incluidos",
+      "Resumo familiar (sem inferência clínica)",
+      `Pessoa: ${nome}`,
+      `Período: ${this.formatarDataLocal(previa.periodo.de)} a ${this.formatarDataLocal(previa.periodo.ate)}`,
+      `Gerado em: ${this.formatarQuandoLocal(previa.geradoEm)}`,
+      "Anexos sensíveis: não incluídos",
       previa.avisoPrivacidade,
       "",
     ];
@@ -626,50 +751,121 @@ export class ServicoAcompanhamento {
       const c = previa.cuidados;
       linhas.push(
         "--- Cuidados ---",
-        `Previstos: ${c.doses.previstos}`,
-        `Tomadas informadas: ${c.doses.tomadasInformadas}`,
-        `Nao tomadas informadas: ${c.doses.naoTomadasInformadas}`,
-        `Sem confirmacao: ${c.doses.semConfirmacao}`,
+        `${c.doses.previstos} doses previstas`,
+        `${c.doses.tomadasInformadas} tomadas informadas`,
+        `${c.doses.naoTomadasInformadas} não tomadas informadas`,
+        `${c.doses.semConfirmacao} sem confirmação`,
         c.esclarecimento,
         "",
-        "Registros:",
-        ...c.registros.map(
-          (r) =>
-            `- ${r.medicamento}: ${r.situacao} @ ${new Date(r.quando).toISOString()}`,
-        ),
+        "Registros informados:",
+        ...(c.registros.length === 0
+          ? ["- Nenhum neste período."]
+          : c.registros.map(
+              (r) =>
+                `- ${r.medicamento}: ${this.rotuloSituacaoDose(r.situacao)} · ${this.formatarQuandoLocal(r.quando)}`,
+            )),
+      );
+      if (c.listagens.registros.limitada) {
+        linhas.push(
+          `(Listagem: ${c.listagens.registros.exibidos} de ${c.listagens.registros.totalNoPeriodo} no período; totais acima cobrem o período inteiro.)`,
+        );
+      }
+      linhas.push(
         "",
         "Consultas:",
-        ...c.consultas.map(
-          (x) =>
-            `- ${x.especialidadeOuDescricao} ${new Date(x.dataHora).toISOString()} (${x.status})`,
-        ),
+        ...(c.consultas.length === 0
+          ? ["- Nenhuma neste período."]
+          : c.consultas.map(
+              (x) =>
+                `- ${x.especialidadeOuDescricao} · ${this.formatarQuandoLocal(x.dataHora)} (${this.rotuloStatusConsulta(x.status)})`,
+            )),
+      );
+      if (c.listagens.consultas.limitada) {
+        linhas.push(
+          `(Listagem: ${c.listagens.consultas.exibidos} de ${c.listagens.consultas.totalNoPeriodo}.)`,
+        );
+      }
+      linhas.push(
         "",
         "Exames (sem anexos):",
-        ...c.exames.map((e) => `- ${e.descricao}`),
-        "",
+        ...(c.exames.length === 0
+          ? ["- Nenhum neste período."]
+          : c.exames.map(
+              (e) =>
+                `- ${e.descricao} · ${this.formatarQuandoLocal(e.criadoEm)}`,
+            )),
       );
+      if (c.listagens.exames.limitada) {
+        linhas.push(
+          `(Listagem: ${c.listagens.exames.exibidos} de ${c.listagens.exames.totalNoPeriodo}.)`,
+        );
+      }
+      linhas.push(
+        "",
+        "Observações de apoio:",
+        ...(c.observacoes.length === 0
+          ? ["- Nenhuma neste período."]
+          : c.observacoes.map((o) => {
+              const extra = (o.observacao ?? "").trim();
+              return `- ${o.descricao}${extra ? ` — ${extra}` : ""} · ${this.formatarQuandoLocal(o.concluidaEm)}`;
+            })),
+      );
+      if (c.listagens.observacoes.limitada) {
+        linhas.push(
+          `(Listagem: ${c.listagens.observacoes.exibidos} de ${c.listagens.observacoes.totalNoPeriodo}.)`,
+        );
+      }
+      linhas.push(
+        "",
+        "Mudanças de programação:",
+        ...(c.mudancasProgramacao.length === 0
+          ? ["- Nenhuma neste período."]
+          : c.mudancasProgramacao.map(
+              (p) =>
+                `- ${p.medicamento}: horários ${p.horarios} · ${this.formatarQuandoLocal(p.criadoEm)}`,
+            )),
+      );
+      if (c.listagens.mudancasProgramacao.limitada) {
+        linhas.push(
+          `(Listagem: ${c.listagens.mudancasProgramacao.exibidos} de ${c.listagens.mudancasProgramacao.totalNoPeriodo}.)`,
+        );
+      }
+      linhas.push("");
     }
 
     if (previa.desenvolvimento) {
       const d = previa.desenvolvimento;
       linhas.push(
         "--- Desenvolvimento ---",
-        `Estrelas no periodo: ${d.estrelas.concedidasNoPeriodo}`,
+        `Estrelas no período: ${d.estrelas.concedidasNoPeriodo}`,
         d.estrelas.esclarecimento,
         "",
-        "Experiencias:",
-        ...d.experiencias.map(
-          (e) =>
-            `- ${e.resultado}: ${e.nome} [${e.categoria}] (+${e.estrelasConcedidas})`,
-        ),
+        "Experiências:",
+        ...(d.experiencias.length === 0
+          ? ["- Nenhuma neste período."]
+          : d.experiencias.map(
+              (e) =>
+                `- ${e.resultado}: ${e.nome} [${e.categoria}] (+${e.estrelasConcedidas}) · ${this.formatarQuandoLocal(e.registradoEm)}`,
+            )),
+      );
+      if (d.listagens.experiencias.limitada) {
+        linhas.push(
+          `(Listagem: ${d.listagens.experiencias.exibidos} de ${d.listagens.experiencias.totalNoPeriodo}; totais de estrelas/categorias cobrem o período.)`,
+        );
+      }
+      linhas.push(
         "",
         "Categorias:",
-        ...d.categoriasExploradas.map(
-          (c) => `- ${c.categoria}: ${c.quantidade}`,
-        ),
+        ...(d.categoriasExploradas.length === 0
+          ? ["- Nenhuma neste período."]
+          : d.categoriasExploradas.map(
+              (c) => `- ${c.categoria}: ${c.quantidade}`,
+            )),
         "",
-        "Observacoes:",
-        ...d.observacoes.map((o) => `- ${o.nome}: ${o.texto}`),
+        "Observações:",
+        ...(d.observacoes.length === 0
+          ? ["- Nenhuma neste período."]
+          : d.observacoes.map((o) => `- ${o.nome}: ${o.texto}`)),
         "",
       );
     }
@@ -677,38 +873,175 @@ export class ServicoAcompanhamento {
     return linhas;
   }
 
-  private montarPdfMinimo(texto: string): Buffer {
-    const escapado = texto
-      .replace(/\\/g, "\\\\")
-      .replace(/\(/g, "\\(")
-      .replace(/\)/g, "\\)")
-      .split("\n")
-      .slice(0, 55)
-      .map((linha, i) => `BT /F1 10 Tf 40 ${750 - i * 14} Td (${linha.slice(0, 90)}) Tj ET`)
-      .join("\n");
-    const stream = escapado;
-    const objs = [
-      "1 0 obj<< /Type /Catalog /Pages 2 0 R >>endobj",
-      "2 0 obj<< /Type /Pages /Kids [3 0 R] /Count 1 >>endobj",
-      "3 0 obj<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources<< /Font<< /F1 5 0 R >> >> >>endobj",
-      `4 0 obj<< /Length ${stream.length} >>stream\n${stream}\nendstream endobj`,
-      "5 0 obj<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>endobj",
+  /** Quebra linhas longas sem truncar conteúdo (EVO-REV-04). */
+  private quebrarLinhasPdf(linhas: string[], maxChars = 90): string[] {
+    const saida: string[] = [];
+    for (const linha of linhas) {
+      const texto = linha.length === 0 ? " " : linha;
+      if (texto.length <= maxChars) {
+        saida.push(texto);
+        continue;
+      }
+      let resto = texto;
+      while (resto.length > maxChars) {
+        let corte = resto.lastIndexOf(" ", maxChars);
+        if (corte < Math.floor(maxChars * 0.5)) corte = maxChars;
+        saida.push(resto.slice(0, corte).trimEnd());
+        resto = resto.slice(corte).trimStart();
+      }
+      if (resto.length > 0) saida.push(resto);
+    }
+    return saida;
+  }
+
+  private escaparTextoPdf(texto: string): string {
+    const mapa: Record<string, string> = {
+      "\\": "\\\\",
+      "(": "\\(",
+      ")": "\\)",
+      á: "\\341",
+      à: "\\340",
+      â: "\\342",
+      ã: "\\343",
+      ä: "\\344",
+      Á: "\\301",
+      À: "\\300",
+      Â: "\\302",
+      Ã: "\\303",
+      é: "\\351",
+      è: "\\350",
+      ê: "\\352",
+      ë: "\\353",
+      É: "\\311",
+      È: "\\310",
+      Ê: "\\312",
+      í: "\\355",
+      ì: "\\354",
+      î: "\\356",
+      ï: "\\357",
+      Í: "\\315",
+      ó: "\\363",
+      ò: "\\362",
+      ô: "\\364",
+      õ: "\\365",
+      ö: "\\366",
+      Ó: "\\323",
+      Ô: "\\324",
+      Õ: "\\325",
+      ú: "\\372",
+      ù: "\\371",
+      û: "\\373",
+      ü: "\\374",
+      Ú: "\\332",
+      ç: "\\347",
+      Ç: "\\307",
+      ñ: "\\361",
+      Ñ: "\\321",
+      "—": "-",
+      "–": "-",
+      "“": '"',
+      "”": '"',
+      "‘": "'",
+      "’": "'",
+      "…": "...",
+    };
+    let out = "";
+    for (const ch of texto) {
+      out += mapa[ch] ?? (/^[\x20-\x7E]$/.test(ch) ? ch : "?");
+    }
+    return out;
+  }
+
+  private montarPdfCompleto(linhasFonte: string[]): Buffer {
+    const linhas = this.quebrarLinhasPdf(linhasFonte);
+    const linhasPorPagina = 50;
+    const paginas: string[][] = [];
+    for (let i = 0; i < linhas.length; i += linhasPorPagina) {
+      paginas.push(linhas.slice(i, i + linhasPorPagina));
+    }
+    if (paginas.length === 0) paginas.push([" "]);
+
+    const fontObjNum = 3;
+    const pagesObjNum = 2;
+    const catalogObjNum = 1;
+    const contentObjNums: number[] = [];
+    const pageObjNums: number[] = [];
+    let nextObj = 4;
+    for (let p = 0; p < paginas.length; p++) {
+      contentObjNums.push(nextObj++);
+      pageObjNums.push(nextObj++);
+    }
+
+    const objetos = new Map<number, string>();
+    objetos.set(
+      catalogObjNum,
+      `<< /Type /Catalog /Pages ${pagesObjNum} 0 R >>`,
+    );
+    objetos.set(
+      pagesObjNum,
+      `<< /Type /Pages /Kids [${pageObjNums.map((n) => `${n} 0 R`).join(" ")}] /Count ${paginas.length} >>`,
+    );
+    objetos.set(
+      fontObjNum,
+      "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>",
+    );
+
+    for (let p = 0; p < paginas.length; p++) {
+      const comandos = paginas[p]
+        .map((linha, i) => {
+          const y = 750 - i * 14;
+          return `BT /F1 10 Tf 40 ${y} Td (${this.escaparTextoPdf(linha)}) Tj ET`;
+        })
+        .join("\n");
+      const stream = `${comandos}\n`;
+      objetos.set(
+        contentObjNums[p],
+        `<< /Length ${Buffer.byteLength(stream, "utf8")} >>\nstream\n${stream}endstream`,
+      );
+      objetos.set(
+        pageObjNums[p],
+        `<< /Type /Page /Parent ${pagesObjNum} 0 R /MediaBox [0 0 612 792] /Contents ${contentObjNums[p]} 0 R /Resources<< /Font<< /F1 ${fontObjNum} 0 R >> >> >>`,
+      );
+    }
+
+    const ordem = [
+      catalogObjNum,
+      pagesObjNum,
+      fontObjNum,
+      ...paginas.flatMap((_, i) => [contentObjNums[i], pageObjNums[i]]),
     ];
+
     let corpo = "%PDF-1.4\n";
     const offsets = [0];
-    for (const o of objs) {
-      offsets.push(Buffer.byteLength(corpo, "utf8"));
-      corpo += o + "\n";
+    for (const num of ordem) {
+      offsets[num] = Buffer.byteLength(corpo, "utf8");
+      corpo += `${num} 0 obj\n${objetos.get(num)}\nendobj\n`;
     }
-    const xref = offsets.length - 1;
     const startxref = Buffer.byteLength(corpo, "utf8");
-    corpo += `xref\n0 ${xref + 1}\n`;
+    const maxObj = Math.max(...ordem);
+    corpo += `xref\n0 ${maxObj + 1}\n`;
     corpo += "0000000000 65535 f \n";
-    for (let i = 1; i <= xref; i++) {
-      corpo += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
+    for (let i = 1; i <= maxObj; i++) {
+      const off = offsets[i] ?? 0;
+      corpo += `${String(off).padStart(10, "0")} 00000 n \n`;
     }
-    corpo += `trailer<< /Size ${xref + 1} /Root 1 0 R >>\nstartxref\n${startxref}\n%%EOF`;
+    corpo += `trailer<< /Size ${maxObj + 1} /Root ${catalogObjNum} 0 R >>\nstartxref\n${startxref}\n%%EOF`;
     return Buffer.from(corpo, "utf8");
+  }
+
+  private formatarDataLocal(valor: string) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(valor.trim());
+    if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+    return this.formatarQuandoLocal(valor);
+  }
+
+  private formatarQuandoLocal(valor: string | Date) {
+    const data = valor instanceof Date ? valor : new Date(valor);
+    if (Number.isNaN(data.getTime())) return String(valor);
+    return data.toLocaleString("pt-BR", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
   }
 
   private rotuloSituacaoDose(situacao: string) {
@@ -770,7 +1103,7 @@ export class ServicoAcompanhamento {
     return new Date(bruto);
   }
 
-  private listarDiasIso(de: Date, ate: Date, maxDias: number): string[] {
+  private listarDiasIso(de: Date, ate: Date): string[] {
     const dias: string[] = [];
     const y = de.getFullYear();
     const m = de.getMonth();
@@ -780,7 +1113,7 @@ export class ServicoAcompanhamento {
     const dF = ate.getDate();
     let cursor = new Date(y, m, d0);
     const limite = new Date(yF, mF, dF);
-    while (cursor <= limite && dias.length < maxDias) {
+    while (cursor <= limite) {
       const yy = cursor.getFullYear();
       const mm = String(cursor.getMonth() + 1).padStart(2, "0");
       const dd = String(cursor.getDate()).padStart(2, "0");
@@ -823,7 +1156,7 @@ export class ServicoAcompanhamento {
     );
     if (!pode) {
       throw new ForbiddenException(
-        "Colaboradora não exporta PDF completo por padrão.",
+        "Sem permissão para exportar o PDF completo desta pessoa.",
       );
     }
     return pessoa;
