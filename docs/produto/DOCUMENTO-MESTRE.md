@@ -1,4 +1,4 @@
-# Documento Mestre do Produto — v1.4
+# Documento Mestre do Produto — v1.5
 
 **Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
@@ -128,3 +128,15 @@ Toda alteração deve registrar: problema resolvido, novo trabalho imposto à fa
 **Encaminhamento:** implementar a simplificação de cadastro, apresentação de acessos e entrada contextual usando os contratos e autorizações vigentes; UX detalha a escolha de pessoa/área dentro da direção aprovada. O status de homologação humana do Módulo 01 segue REPROVADO até nova avaliação. Módulo 04 permanece pausado.
 
 **Publicação documental:** o responsável autorizou expressamente o commit deste alinhamento no GitHub em 2026-11-20. Essa autorização aplica-se a esta atualização documental.
+
+## 13. Evolução pós-V1 e dados de desenvolvimento — decisão de Produto, 2026-11-21
+
+**APROVADO expressamente pelo responsável do Produto.** A V1 foi homologada humanamente após as atualizações do Módulo 04. A situação da versão, baseline, evidências e lacunas é mantida em `docs/produto/STATUS-E-ESCOPO.md`.
+
+O produto permanece em desenvolvimento, com disponibilização para uso adiada. A próxima fase evolui a baseline V1 e fecha lacunas já identificadas, preservando os princípios de evolução familiar, esforço mínimo, organização sem cobrança, privacidade e simplicidade.
+
+**Dados pré-uso:** nas próximas alterações, os cadastros e registros atuais de desenvolvimento podem ser descartados ou recriados quando necessário. A equipe pode evoluir schema e contratos sem implementar migração, conversão, compatibilidade retroativa ou associação de contas apenas para preservar esses dados. Pode ajustar/recriar seeds e aplicar reset no banco de desenvolvimento pertinente à demanda. Mudanças devem continuar executáveis de forma consistente em ambiente novo.
+
+A dispensa vale para os dados de desenvolvimento desta fase pré-uso. Os requisitos funcionais de autorização, histórico, autoria, correções e revogação continuam valendo para o comportamento do sistema em execução. A decisão não resolve por si a regra de remoção de pessoa nem implica conceder acesso adicional.
+
+Usar demandas delimitadas e as fontes oficiais vigentes para implementar evoluções. Aceites posteriores devem identificar o escopo alterado e as regressões verificadas em relação à baseline V1. A futura disponibilização para uso depende de decisão própria do responsável.

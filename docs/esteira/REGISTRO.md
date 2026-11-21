@@ -1,5 +1,14 @@
 # Registro da esteira
 
+## 2026-11-21 — Homologação humana Módulo 04 e baseline V1
+
+- **Aceite humano** APROVADA a entrega DEM-M04-EVO-REV-20261121, critério EVO-REV-HOM, por comunicação expressa do responsável do Produto.
+- **V1** homologada pelo responsável, disponibilização para uso adiada. Código de referência develop @ 2bafbc560cfedc9483151b4dfaaef12b443c0a94.
+- **Próxima fase** evolução pós-V1 para fechar lacunas, conforme STATUS-E-ESCOPO.md.
+- **Dados pré-uso** política aprovada no Documento Mestre §13, com dispensa de preservação dos dados atuais de desenvolvimento.
+- **Verificação deste registro** consulta documental da branch e das evidências existentes. Resultados técnicos preservados, sem reexecução nesta atualização.
+
+
 ## 2026-11-21 — DEM-M04-EVO-REV-20261121 COMPLETED (técnico PASS)
 
 - **Tipo:** transversal · **Risco:** alto (authz/privacidade/PDF)

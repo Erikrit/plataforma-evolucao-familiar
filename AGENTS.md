@@ -44,6 +44,10 @@ Acionar sob demanda, via leitura das fontes oficiais + resumo estruturado:
 
 Não copiar o Documento Mestre para prompts. Referenciar o caminho e ler só o necessário.
 
+## Fase vigente e dados de desenvolvimento
+
+Consultar `docs/produto/STATUS-E-ESCOPO.md` para a baseline V1 homologada e a fase de evolução pré-uso. Aplicar `docs/produto/DOCUMENTO-MESTRE.md` §13 nas próximas demandas: cadastros atuais de desenvolvimento podem ser recriados, com dispensa de migrações de preservação/compatibilidade desses dados. Regras funcionais, testes e autorização continuam regidos pelas especificações.
+
 ## Fluxo de entrada
 
 1. `task-routing` — classificar, verificar aprovação, escolher fluxo mínimo.

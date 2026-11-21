@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "nota": "Workspace reconciliado com origin/develop; demanda M04 EVO-REV-01..08 aberta apos aprovacao UX.",
-        "commit": "1ddde9841b5df8dfc9b41f99dac7dca75d292e31"
+        "nota": "Baseline V1 homologada pelo responsável do Produto em 2026-11-21; evolução pré-uso.",
+        "commit": "2bafbc560cfedc9483151b4dfaaef12b443c0a94"
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -191,7 +191,7 @@
                 "docs/esteira/estado/verifier-rerun-smoke-ef05.txt"
             ]
         },
-        "proximaAcao": "Homologacao humana PENDING_HUMAN — roteiro-homologacao-m04-evo-rev.md",
+        "proximaAcao": "Evolução pós-V1 conforme STATUS-E-ESCOPO.md e Documento Mestre §13.",
         "fingerprint": "sha256:fa68687616df8905",
         "fingerprintFull": "sha256:fa68687616df89050998cb2aa246392f55051b0e54f94de860c3775f6abde24c",
         "resultadoTecnico": "PASS",
@@ -207,12 +207,11 @@
             "EVO-R05",
             "EVO-R07",
             "EVO-R10",
-            "EVO-R12"
-        ],
-        "criteriosFalha": [],
-        "criteriosPendentesHumanos": [
+            "EVO-R12",
             "EVO-REV-HOM"
         ],
+        "criteriosFalha": [],
+        "criteriosPendentesHumanos": [],
         "qg1": "PASS",
         "qg2": "PASS",
         "qg3": "PASS",
@@ -221,10 +220,16 @@
         "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente shell PASS.",
         "verifierOficial": "BLOCKED",
         "verifierOficialId": "d04a7109-c499-4d1d-b2d1-5e2ff144cba2",
-        "homologacaoHumana": "PENDING_HUMAN",
+        "homologacaoHumana": "APROVADA",
         "mensagemCommit": "fix(evolucao): alinhar historico, resumo e PDF a revisao UX do modulo 04\n\nCorrige previa fiel, paginacao completa, totais do periodo, exportacao autorizada e experiencia aprovada de Historico/Resumo (EVO-REV-01..08).",
         "concluidaEm": "2026-11-21T11:31:58.262Z",
-        "nota": "PASS tecnico EVO-REV-01..08 + QG-3; humana PENDING_HUMAN."
+        "nota": "PASS técnico registrado; homologação humana APROVADA pelo responsável do Produto em 2026-11-21.",
+        "homologacaoHumanaRegistro": {
+            "data": "2026-11-21",
+            "origem": "comunicacao expressa do responsavel do Produto nesta conversa",
+            "referenciaDisponivel": "2bafbc560cfedc9483151b4dfaaef12b443c0a94",
+            "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+        }
     },
     "janelaIncrementos": [
         {
@@ -276,12 +281,11 @@
                 "EVO-R05",
                 "EVO-R07",
                 "EVO-R10",
-                "EVO-R12"
-            ],
-            "criteriosFalha": [],
-            "criteriosPendentesHumanos": [
+                "EVO-R12",
                 "EVO-REV-HOM"
             ],
+            "criteriosFalha": [],
+            "criteriosPendentesHumanos": [],
             "fingerprint": "sha256:fa68687616df8905",
             "fingerprintFull": "sha256:fa68687616df89050998cb2aa246392f55051b0e54f94de860c3775f6abde24c",
             "qg1": "PASS",
@@ -292,7 +296,7 @@
             "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente shell PASS.",
             "verifierOficial": "BLOCKED",
             "verifierOficialId": "d04a7109-c499-4d1d-b2d1-5e2ff144cba2",
-            "homologacaoHumana": "PENDING_HUMAN",
+            "homologacaoHumana": "APROVADA",
             "evidencias": [
                 "docs/esteira/estado/qg1-typecheck-api-m04-evo-rev.txt",
                 "docs/esteira/estado/qg1-typecheck-web-m04-evo-rev.txt",
@@ -323,8 +327,14 @@
                 "apps/web/src/componentes/icones-experiencia.tsx"
             ],
             "mensagemCommit": "fix(evolucao): alinhar historico, resumo e PDF a revisao UX do modulo 04\n\nCorrige previa fiel, paginacao completa, totais do periodo, exportacao autorizada e experiencia aprovada de Historico/Resumo (EVO-REV-01..08).",
-            "nota": "PASS tecnico EVO-REV-01..08 + QG-3; humana PENDING_HUMAN.",
-            "concluidaEm": "2026-11-21T11:31:58.262Z"
+            "nota": "PASS técnico registrado; homologação humana APROVADA pelo responsável do Produto em 2026-11-21.",
+            "concluidaEm": "2026-11-21T11:31:58.262Z",
+            "homologacaoHumanaRegistro": {
+                "data": "2026-11-21",
+                "origem": "comunicacao expressa do responsavel do Produto nesta conversa",
+                "referenciaDisponivel": "2bafbc560cfedc9483151b4dfaaef12b443c0a94",
+                "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+            }
         },
         {
             "id": "DEM-SEED-LOCAL-20261120",
@@ -1229,8 +1239,8 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Aguardando homologacao humana do Módulo 04 (Histórico/Resumo/PDF).",
-    "atualizadoEm": "2026-11-21T11:31:58.264Z",
+    "proximaAcao": "V1 homologada humanamente, disponibilização para uso adiada. Triar lacunas para evolução pós-V1 conforme STATUS-E-ESCOPO.md e Documento Mestre §13.",
+    "atualizadoEm": "2026-11-21T11:51:11.186Z",
     "notas": "DEM-M04-EVO-REV-20261121 COMPLETED tecnico PASS; fingerprint sha256:fa68687616df8905; humana PENDING_HUMAN.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",

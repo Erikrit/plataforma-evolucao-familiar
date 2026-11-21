@@ -1,5 +1,34 @@
 # Estado das decisões e escopo
 
+## Situação vigente — V1 homologada em 2026-11-21
+
+**V1 HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO. Publicação para uso adiada por decisão expressa.**
+**Baseline do código:** develop @ `2bafbc560cfedc9483151b4dfaaef12b443c0a94`.
+**Fonte do aceite:** comunicação humana nesta conversa, após atualização e homologação do Módulo 04.
+
+O aceite abrange a V1 existente dos módulos 01–04. A demanda `DEM-M04-EVO-REV-20261121` recebe homologação humana APROVADA nesta data. Os aceites anteriores integram esta baseline, e as lacunas conhecidas seguem na evolução pós-V1. A V1 é referência histórica para comparar mudanças futuras.
+
+**Próxima fase:** evolução pós-V1, com demandas delimitadas para fechar lacunas. A política para os dados de desenvolvimento está no Documento Mestre §13 e dispensa preservação dos cadastros atuais e compatibilidade com esses dados enquanto o sistema permanecer nesta fase pré-uso.
+
+**Evidências:** estado da esteira e `evidencia-m04-evo-rev-20261121.json` registram QG-1/2/3 PASS e verificação independente shell PASS; verifier oficial BLOCKED por ambiente Ask/shell. Esta atualização registra a homologação comunicada pelo responsável. Testes, aplicação, PDF e segurança não foram reexecutados ou auditados nesta atualização.
+
+### Lacunas para evolução
+
+| Frente já registrada | Área responsável | Encaminhamento |
+|---|---|---|
+| Remoção/desativação de pessoas e tratamento do histórico funcional | Produto + Arquitetura + UX | Definir comportamento e jornada antes de implementar |
+| Opções válidas de vínculo e edição administrativa (UX-HOM-02-SELETOR) | Produto + UX | Fechar opções e apresentação no contexto administrativo |
+| Autenticação definitiva, sessões e revisão de segurança | Arquitetura + Qualidade | Reconciliar solução e testes para futura disponibilização |
+| Lembretes reais ACE-C12 e canais/dispositivos | Arquitetura + UX + Qualidade | Validar entrega e comportamento em aparelhos previstos |
+| Contratos, retenção de dados e PWA/alternativa móvel | Arquitetura | Resolver conforme necessidade efetiva de uso e decisões existentes |
+
+A lista consolida pendências registradas. A ordem de execução será definida por demanda. A dispensa de compatibilidade de dados de teste reduz trabalho de migração e não decide automaticamente regras de exclusão de registros durante o uso.
+
+## Histórico das revisões
+
+Os registros abaixo descrevem as respectivas datas e versões. A situação vigente é a baseline V1 indicada acima.
+
+
 **Revisão documental:** 2026-11-16. **Branch de referência:** `develop` (`6772243862085ea82acfd4596bdba6288377f842`). **Governança:** `docs/produto/GOVERNANCA.md`. O código e as evidências foram inspecionados documentalmente; os testes não foram reexecutados nesta revisão. Se a `develop` evoluir, reconciliar novamente.
 
 ## Separação obrigatória de estados
@@ -7,7 +36,7 @@
 - **Especificado/aprovado:** decisão oficial na especificação funcional; não implica código.
 - **Implementado localmente:** código e rotas identificados no commit de referência; não implica prontidão para uso real.
 - **QG-3 PASS registrado:** evidência produzida pelo desenvolvimento, sem reexecução ou auditoria independente nesta reconciliação.
-- **Homologado:** validação pertinente com usuários/dispositivos, segurança e critérios exigidos; **não foi demonstrada para o MVP**.
+- **Homologado:** aceite humano no escopo e versão identificados. O aceite vigente da V1 está na abertura deste documento; validações de segurança, produção e dispositivos têm evidências e critérios próprios.
 
 ## Estado por módulo
 

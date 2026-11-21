@@ -94,3 +94,11 @@ Confirmar os contratos e as capacidades existentes antes de editar. Priorizar a 
 Testes de regressão devem incluir limites anteriores de 55 linhas, 90 caracteres e 62 dias, dados além dos limites de listagem, vigências e correções, conteúdo de prévia/PDF, combinações de autorização, revogação e troca de contexto. Usar dados fictícios e registrar evidências de mobile/desktop e acessibilidade. As suítes existentes devem ser reaproveitadas e complementadas para regressões concretas.
 
 A aprovação desta direção permite avançar ao planejamento e à implementação compatível. Restrição funcional de períodos, retirada de conteúdo previsto ou ampliação de permissões exigem encaminhamento próprio. O aceite humano da tela implementada será solicitado após a entrega técnica.
+
+## 7. Homologação humana APROVADA — 2026-11-21
+
+O responsável pelo Produto informou expressamente que as atualizações foram feitas e a homologação humana foi aprovada. Aceite da entrega `DEM-M04-EVO-REV-20261121`, abrangendo as correções EVO-REV-01..08 e a experiência de Histórico, Resumo e PDF. Critério humano `EVO-REV-HOM` APROVADO.
+
+Referência disponível develop @ `2bafbc560cfedc9483151b4dfaaef12b443c0a94`. O aceite foi comunicado pelo responsável nesta conversa. Esta atualização não reexecutou a aplicação nem testes. Os resultados técnicos permanecem conforme a esteira, inclusive a distinção de verifier oficial bloqueado e verificação independente via shell.
+
+O responsável também declarou a V1 homologada, com disponibilização para uso adiada e continuidade na evolução das lacunas. Fonte consolidada da baseline e do próximo encaminhamento em `docs/produto/STATUS-E-ESCOPO.md`; política de dados de desenvolvimento no Documento Mestre §13.
