@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.6 — conta pessoal vinculada a uma única família, aprovada pelo Produto em 2026-11-21  
-**Status funcional:** base v1.5 e direção pós-V1 de contas por família v1.6 aprovadas pelo Produto. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
+**Versão:** especificação funcional v1.7 — recorte E1 da evolução familiar, direção aprovada em 2026-11-21  
+**Status funcional:** base v1.5, conta por família v1.6 e recorte E1 v1.7 aprovados pelo Produto. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
 
@@ -198,4 +198,38 @@ A expressão “manter como está” confirma essas capacidades efetivas. Não t
 
 FUN-08 e FAM-R13 incorporam a correção expressa do responsável de que existe um login por família. A regra mantém contas pessoais com uma única família por conta e substitui a proposta de conta global apresentada no planejamento de evolução. Múltiplos contextos da seção 11 significam pessoas/áreas dentro da mesma família.
 
-A base V1 homologada continua identificada em STATUS-E-ESCOPO.md. A operação com URLs de família e seus testes depende da entrega E1. As demais propostas de biblioteca, jogos digitais, IA e revisões de acesso seguem seus próprios estados de aprovação. Aplicar os princípios do Documento Mestre e a política pré-uso do §13.
+A base V1 homologada continua identificada em STATUS-E-ESCOPO.md. A operação com URLs de família e seus testes depende da entrega E1. A direção integrada das demais frentes foi posteriormente aprovada no Documento Mestre §15; os requisitos particulares de cada entrega continuam sujeitos ao seu fechamento. Aplicar os princípios do Documento Mestre e a política pré-uso do §13.
+
+## 13. Recorte E1 — contexto familiar e isolamento
+
+**Aprovação:** direção de Produto e sequência E1–E7 aprovadas em 2026-11-21 sobre o plano integrado v2.0, commit `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`. Esta seção detalha FUN-08/FAM-R12/FAM-R13 para a primeira entrega, preservando FUN-01..07, o acesso próprio da seção 11 e a ADR-014.
+
+### Escopo funcional
+
+- Permitir provisionar famílias distintas em operação privada controlada pela equipe da plataforma, com identificação legível estável para a URL e primeira conta administradora pessoal. O titular define sua senha pelo fluxo seguro escolhido na implementação. O administrador familiar comum não cria outras famílias nem concede administração pelo seletor de responsabilidades.
+- Acessar a família por `/f/{slug}/entrar` e manter esse contexto na navegação protegida. Renomear a família não muda automaticamente seu endereço; edição de slug não integra a UI desta entrega.
+- Autenticar credenciais somente quando a conta pertencer à família solicitada. A sessão conserva uma única família. A unicidade global de e-mail existente é preservada.
+- Após autenticação, aplicar a entrada já aprovada: um contexto operacional abre diretamente; múltiplos contextos permitem escolher pessoas/áreas; administrador sem contexto operacional abre gestão.
+- Criar e ativar convites somente para a família de origem. Trocar contexto, token ou identificadores não permite vincular conta, pessoa, autorização ou documento a outra família.
+- Todas as operações privadas preservam limites de família, pessoa e capacidade, inclusive acessos diretos à API, resumos, contagens, anexos e PDFs. Revogação continua invalidando as sessões afetadas.
+
+### Critérios de aceitação E1
+
+| ID | Comportamento verificável |
+|---|---|
+| E1-ACE-01 | Provisionar duas famílias fictícias com contas administradoras distintas; colisão de endereço/e-mail é rejeitada sem estado parcial. O fluxo comum de acesso não pode criar famílias ou administradores extras. |
+| E1-ACE-02 | Credenciais válidas da família A entram na URL A e são recusadas na URL B; autenticação inválida não identifica se outra conta existe. |
+| E1-ACE-03 | Sessão A em URL B não mostra dados de A nem B; o usuário recebe orientação de acesso. Recarregar, voltar no navegador e trocar de conta não exibe conteúdo retido do contexto anterior. |
+| E1-ACE-04 | A navegação e a entrada pós-login conservam a família em links, pessoas e áreas; administrador, responsável, integrante e autoacompanhamento mantêm seus limites vigentes. |
+| E1-ACE-05 | Troca de familiaId/pessoaId/IDs de recurso nega leitura, escrita e vínculos entre famílias; inclui convites, contas e autorizações e não deixa alterações parciais. |
+| E1-ACE-06 | Anexos, prévias, histórico, resumo, totais e PDF não revelam conteúdo ou existência de recursos de outra família, inclusive por URL direta. |
+| E1-ACE-07 | Convite válido ativa somente na família de origem; token usado/expirado ou contexto trocado é recusado. Revogação bloqueia novas operações mantendo autoria e histórico. |
+| E1-ACE-08 | Jornadas dos módulos 01–04 funcionam nas duas famílias após adaptação das rotas, com regressão técnica e homologação humana específicas da E1. |
+
+### Fora da E1
+
+Cadastro público, planos/cobrança, troca de família na mesma conta, papéis novos, Integrante em Desenvolvimento, poderes adicionais de autoacompanhamento, reestruturação visual de acessos da E2, desativação de pessoas, visualizador novo de exames, jogos e IA.
+
+### Execução
+
+Plano e incrementos em `docs/esteira/planejamento/e1-contexto-familiar.md`. Esta aprovação define comportamento, não comprova implementação. Aplicar a política pré-uso do Documento Mestre §13, sem alterar invariantes de histórico, autorização e rastreabilidade durante a execução.

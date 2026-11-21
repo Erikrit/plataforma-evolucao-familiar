@@ -1,4 +1,4 @@
-# Documento Mestre do Produto — v1.6
+# Documento Mestre do Produto — v1.7
 
 **Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Público da baseline V1:** família única. **Direção pós-V1 aprovada:** famílias isoladas no mesmo sistema/banco, com conta pessoal vinculada a uma única família, conforme §14.
@@ -147,4 +147,14 @@ Usar demandas delimitadas e as fontes oficiais vigentes para implementar evoluç
 
 A regra funcional pertence a `docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md` v1.6, FUN-08/FAM-R13. Ela substitui a proposta de conta global com participação em várias famílias do documento de evolução. A autorização continua sendo contextual por pessoa, área e operação.
 
-A arquitetura e a experiência da entrega E1 devem partir dessa delimitação. Demais ideias pós-V1 continuam descritas como propostas em `docs/produto/EVOLUCAO-POS-V1.md`. Os princípios de esforço mínimo, organização sem cobrança e valor de cada informação solicitada permanecem critérios obrigatórios de produto.
+A arquitetura e a experiência da entrega E1 devem partir dessa delimitação. A direção das demais frentes foi aprovada posteriormente, conforme §15 e `docs/produto/EVOLUCAO-POS-V1.md` v2.1; seus detalhamentos mantêm os estados específicos. Os princípios de esforço mínimo, organização sem cobrança e valor de cada informação solicitada permanecem critérios obrigatórios de produto.
+
+## 15. Direção integrada pós-V1 — aprovação de Produto, 2026-11-21
+
+O responsável do Produto aprovou a recomendação apresentada sobre o plano integrado v2.0, registrado no commit `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`. A direção e a sequência E1–E7 ficam **APROVADAS e DOCUMENTADAS** em `docs/produto/EVOLUCAO-POS-V1.md` v2.1.
+
+A evolução abrange contexto familiar isolado, gestão compreensível de acessos, exames/resumo factual, catálogo real curado, piloto digital, sugestões assistidas de desenvolvimento e resumo assistido de cuidados. A implementação será incremental, com aceite humano por entrega e respeito aos princípios da seção 2.
+
+Esta aprovação fixa visão, limites e ordem de trabalho. Pontuação digital e seu uso em recompensas, envio de dados pessoais à IA e regras clínicas exigem decisão específica nas respectivas entregas. Números propostos de catálogo/jogos e contratos candidatos não se tornam obrigações aprovadas automaticamente.
+
+O primeiro recorte funcional pertence ao Módulo 01 v1.7, seção 13. Seu planejamento pode seguir para execução na esteira. As fontes dos módulos 02–04 serão atualizadas quando cada entrega tiver regras fechadas. A disponibilização do produto para uso continua dependendo de decisão própria, conforme §13.

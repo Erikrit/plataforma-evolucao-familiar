@@ -35,7 +35,7 @@ Módulos lógicos:
 
 Reutilizar a relação vigente Usuario → Pessoa → Familia para a solução mínima, conforme necessário à entrega E1. O detalhamento de rotas, criação de família, convites e sessão deve atender essa cardinalidade. A associação a uma pessoa acompanhada e as autorizações de acompanhamento são resolvidas dentro da mesma família.
 
-A proposta de identidade global com múltiplas participações familiares foi substituída pela decisão explícita do Produto. Validar troca de URL/identificadores, anexos, exportações e rotinas com duas famílias fictícias. Esta nota documenta direção técnica derivada da regra aprovada; implementação e testes da entrega E1 continuam pendentes.
+A proposta de identidade global com múltiplas participações familiares foi substituída pela decisão explícita do Produto. Validar troca de URL/identificadores, anexos, exportações e rotinas com duas famílias fictícias. Esta nota documenta direção técnica derivada da regra aprovada. Planejamento E1 em `docs/esteira/planejamento/e1-contexto-familiar.md`; implementação e testes continuam pendentes.
 
 ### Cuidados
 
@@ -65,7 +65,7 @@ A experiência funcional v1.1 **aprovada** possui **Histórico individual** e **
 
 ## Direção técnica pós-V1 — proposta para E1–E7
 
-**Estado:** PROPOSTA arquitetural derivada de `docs/produto/EVOLUCAO-POS-V1.md` v2.0. Não substitui contratos existentes nem autoriza implementação sem fechamento da entrega.
+**Estado:** direção de Produto aprovada em `docs/produto/EVOLUCAO-POS-V1.md` v2.1; desenho técnico abaixo continua candidato por entrega. O recorte E1 está no Módulo 01 v1.7 §13 e em `docs/esteira/planejamento/e1-contexto-familiar.md`. A aprovação da visão não aprova automaticamente todos os modelos propostos.
 
 ### Fronteiras no monólito modular
 
@@ -153,3 +153,9 @@ Esta lista é um **rascunho conceitual histórico**, não um inventário confiá
 - Tratamento consistente de fuso horário em agendas e doses.
 - PWA e notificações de medicamentos precisam de teste em dispositivos reais; não depender delas como único mecanismo de segurança.
 - Sem segredos ou dados reais de saúde no repositório.
+
+## Evidência estática para E1 — 2026-11-21
+
+Inspeção de `develop` @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`: Familia ainda não possui slug; login recebe e-mail/senha sem família; rotas web ainda não têm /f/[slug]. Anexos implementados usam `conteudoBase64` no banco e retorno autenticado. Armazenamento S3 é direção arquitetural, não integração demonstrada por essa inspeção. A E1 deve proteger o caminho de arquivo existente sem exigir migração de armazenamento para cumprir o isolamento.
+
+Preservar as combinações da ADR-014: Cuidados Responsável/Integrante e Desenvolvimento Responsável. Integrante em Desenvolvimento e concessão genérica de Administrador continuam fora do escopo. O bootstrap privado da primeira administração não amplia o catálogo de concessão familiar.

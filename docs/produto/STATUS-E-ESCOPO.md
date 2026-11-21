@@ -28,11 +28,15 @@ A lista consolida pendências registradas. A ordem de execução será definida 
 
 O responsável solicitou tratar estas frentes antes da proposta de desativação de pessoas/vínculos. Aquela proposta fica **ADIADA**, com retomada futura. O foco passa à definição da evolução para outras famílias, exames e resumos por área, biblioteca real/digital por categoria e idade, sugestões assistidas e gestão de acessos.
 
-**Plano integrado:** `docs/produto/EVOLUCAO-POS-V1.md` v2.0. Consolida as ideias solicitadas, base existente, regras de proteção, jornadas, fronteiras arquiteturais, critérios de qualidade e sequência proposta E1..E7. A proposta visual detalhada está em `docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md`. **Estado dos detalhamentos: PROPOSTA/NEEDS_DECISION**, para fechamento funcional por entrega. O pedido de explorar a evolução não aprova automaticamente decisões novas de IA, saúde, jogos, estrelas ou permissões.
+**Direção APROVADA pelo responsável do Produto em 2026-11-21:** `docs/produto/EVOLUCAO-POS-V1.md` v2.1, conforme concordância expressa com a recomendação apresentada sobre a v2.0 (commit `9193f16`). Registro de visão no Documento Mestre v1.7 §15.
 
-**Recomendação atual:** E1 Contexto familiar e isolamento → E2 Gestão compreensível de acessos → E3 Exames e Resumo factual → E4 Catálogo real → E5 Jogos digitais → E6 IA de desenvolvimento → E7 IA de cuidados. A base consultada é `develop` @ `40001ec919604c1665f8a26b75a4d5ea89dc4650`. Conta pessoal em uma única família permanece a única regra nova já aprovada deste pacote.
+**Sequência aprovada:** E1 Contexto familiar e isolamento → E2 Gestão compreensível de acessos → E3 Exames e Resumo factual → E4 Catálogo real → E5 Jogos digitais → E6 IA de desenvolvimento → E7 IA de cuidados.
 
-**Próxima ação:** executar `module-planning` da E1 após fechar seu pequeno pacote de decisões; manter E2 em desenho documental. A baseline V1 permanece homologada e com disponibilização adiada. A política pré-uso do Documento Mestre §13 continua aplicável.
+**Limite do aceite:** direção, limites e ordem de trabalho. Pontuação digital, uso em recompensas, envio de dados pessoais à IA e regras clínicas continuam dependentes de decisão específica. Parâmetros quantitativos, modelos técnicos e protótipos não foram homologados por este aceite.
+
+**E1 planejada:** fonte funcional no Módulo 01 v1.7 §13; plano em `docs/esteira/planejamento/e1-contexto-familiar.md`, demanda `DEM-E1-FAMILIAS-20261121`. Quatro incrementos verticais e E1-ACE-01..08. Próxima ação: retomar no checkout e executar E1-01 pela implementation-workflow, após reconciliar alterações locais e fingerprint. Situação READY para implementação; gates e homologação da E1 pendentes.
+
+**Evidência desta rodada:** consulta estática de `develop` @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`; sem execução local. O estado histórico da V1 e seus aceites foram preservados. A política pré-uso do Documento Mestre §13 continua aplicável.
 
 ## Consolidação multidisciplinar da evolução — 2026-11-21
 
@@ -49,7 +53,7 @@ Principais alinhamentos:
 - IA editorial, IA de desenvolvimento e IA de cuidados são casos separados e entram em fases diferentes.
 - Arquitetura mantém monólito modular e evita infraestrutura nova sem necessidade comprovada.
 
-**Estado:** DOCUMENTAÇÃO DE PROPOSTA CONCLUÍDA / IMPLEMENTAÇÃO NÃO INICIADA / HOMOLOGAÇÃO NÃO APLICÁVEL nesta etapa.
+**Estado da consolidação:** DIREÇÃO DE PRODUTO APROVADA E DOCUMENTADA. E1 planejada, implementação ainda não iniciada nesta rodada; evidências técnicas e homologação devem ser produzidas durante a execução.
 
 ## Conta por família — decisão de Produto documentada em 2026-11-21
 
@@ -57,7 +61,7 @@ Principais alinhamentos:
 
 A proposta anterior de login global com participação em várias famílias foi substituída. A seleção de contextos após autenticação envolve apenas pessoas e áreas da família da conta. Documento EVOLUCAO-POS-V1.md reconciliado com essa decisão.
 
-**Situação E1:** regra de delimitação aprovada, detalhamento e implementação pendentes. Base documental consultada develop @ 30f1140531254f1fe269eccef420ac94f51f7175. Código e testes não foram alterados nesta reconciliação.
+**Situação E1 atualizada:** planejamento registrado em `docs/esteira/planejamento/e1-contexto-familiar.md` e demanda ativa READY. A conta em uma família já estava aprovada na v1.6; o recorte executável está na v1.7 §13. Código e testes permanecem pendentes nesta rodada.
 
 ## Primeira frente de evolução pós-V1 — 2026-11-21
 

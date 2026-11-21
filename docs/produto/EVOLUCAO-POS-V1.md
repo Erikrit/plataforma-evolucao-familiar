@@ -1,16 +1,16 @@
 # Plano integrado de evolução pós-V1
 
-**Versão:** 2.0 — consolidação multidisciplinar de Produto, Arquitetura, UX/UI e Qualidade  
+**Versão:** 2.1 — direção de Produto aprovada; planejamento E1  
 **Data de referência:** 2026-11-21  
-**Base consultada:** `develop` @ `40001ec919604c1665f8a26b75a4d5ea89dc4650`  
-**Estado:** visão e prioridade solicitadas pelo responsável do Produto; detalhamentos em **PROPOSTA/NEEDS_DECISION**, exceto a conta pessoal vinculada a uma única família, **APROVADA e DOCUMENTADA** no Módulo 01 v1.6.  
+**Base desta aprovação e planejamento:** `develop` @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`  
+**Estado:** direção integrada e sequência E1–E7 **APROVADAS pelo responsável do Produto em 2026-11-21**, por concordância expressa com a recomendação apresentada sobre a v2.0. Regras particulares de cada entrega ainda precisam de especificação; envio de dados pessoais à IA, regras clínicas e pontuação digital continuam **NEEDS_DECISION**. E1 possui recorte funcional no Módulo 01 v1.7 e planejamento na esteira.  
 **Baseline:** a V1 homologada permanece preservada em `STATUS-E-ESCOPO.md`; este plano não declara implementação nem homologação das evoluções.
 
 ## 1. Objetivo e condução
 
 Ampliar a plataforma para apoiar rotinas de cuidado e experiências de desenvolvimento de crianças, adultos e idosos, com acompanhamento individual e familiar, preparando uso por outras famílias.
 
-O responsável solicitou apoio consultivo ativo para organizar a visão, sugerir soluções e conduzir a evolução. A abordagem combina Produto, Arquitetura, UX, qualidade e referências de saúde/educação. Decisões funcionais novas devem receber status e fonte próprios. Os detalhamentos deste documento são propostas, sujeitos ao fechamento de escopo por entrega.
+O responsável solicitou apoio consultivo ativo para organizar a visão, sugerir soluções e conduzir a evolução. A abordagem combina Produto, Arquitetura, UX, qualidade e referências de saúde/educação. Decisões funcionais novas devem receber status e fonte próprios. A aprovação abrange a direção, os limites e a ordem de trabalho deste plano. Números sugeridos de catálogo, quantidade final de jogos, payloads, tecnologias candidatas e regras específicas ainda são detalhamentos sujeitos ao fechamento de cada entrega. Ela autoriza preparar a E1 e não declara as evoluções implementadas.
 
 **Repriorização confirmada pelo responsável:** tratar estas novas frentes antes das propostas de desativação/reativação e seletor de vínculos registradas em REVISAO-MODULO-01-ACESSOS.md. Essas propostas ficam adiadas. A visão anterior da V1 e suas limitações pertencem àquela baseline; o presente documento trata das mudanças pós-V1.
 
@@ -94,9 +94,9 @@ A proposta anterior de conta global com múltiplas participações foi substitu�
 
 A primeira versão multifamília deve ser privada e administrada pela equipe da plataforma. A família é provisionada com nome, slug estável e primeira conta administradora; cadastro público, planos, cobrança e autoatendimento comercial ficam fora dessa etapa. Essa escolha reduz superfície de fraude e permite validar isolamento e uso real antes de abrir aquisição.
 
-Recomendações em estado **NEEDS_DECISION**:
+Detalhamento de E1 a aplicar à direção aprovada, preservando o catálogo de acessos atual:
 
-- manter o e-mail globalmente único no piloto para evitar ambiguidade de autenticação;
+- preservar a unicidade global de e-mail já existente no schema; esta entrega não introduz contas homônimas em outras famílias;
 - tratar o slug como endereço estável e não como identificador de autorização;
 - não oferecer seletor de famílias, pois a conta possui um único contexto familiar;
 - impedir que renomear a família altere automaticamente o slug;
@@ -352,7 +352,7 @@ A sequência separa fundação, valor sem IA e usos assistidos. Cada entrega é 
 5. Qualidade verifica regra, isolamento, acessibilidade e regressão.
 6. Homologação humana confirma valor e esforço antes de declarar a entrega concluída.
 
-A próxima atividade executável é o planejamento detalhado da E1. A E2 pode ser desenhada em paralelo documental, mas sua implementação depende do contexto familiar estar consistente. E3–E5 podem ser refinadas sem enviar dados pessoais a IA. E6 e E7 exigem aprovações próprias.
+O planejamento detalhado da E1 está em `docs/esteira/planejamento/e1-contexto-familiar.md`, demanda `DEM-E1-FAMILIAS-20261121`. A próxima atividade é retomar esse plano no checkout de desenvolvimento e executar seu primeiro incremento. A E2 pode ser desenhada em paralelo documental, mas sua implementação depende do contexto familiar estar consistente. E3–E5 podem ser refinadas sem enviar dados pessoais a IA. E6 e E7 exigem aprovações próprias.
 
 ## 13. Consolidação por especialidade
 
@@ -378,22 +378,24 @@ A próxima atividade executável é o planejamento detalhado da E1. A E2 pode se
 - **Privacidade:** ações administrativas não revelam conteúdo sensível; prévias e agregações obedecem à mesma autorização do detalhe.
 - **Homologação:** criança, adulto responsável, pessoa idosa e integrante são avaliados apenas nas jornadas que lhes dizem respeito.
 
-### Decisões já fechadas e pacote ainda pendente
+### Direção aprovada e decisões específicas pendentes
 
 | Item | Estado |
 |---|---|
 | Conta pessoal vinculada a uma única família | APROVADA/DOCUMENTADA |
-| Banco compartilhado com isolamento lógico por família e URL contextual | Direção solicitada; detalhamento E1 NEEDS_DECISION |
-| Provisionamento privado antes de cadastro público | RECOMENDAÇÃO |
-| Gestão por responsabilidades predefinidas, sem papéis personalizados | RECOMENDAÇÃO |
-| Resumo por área como evolução do Módulo 04 | RECOMENDAÇÃO |
-| Catálogo global curado e seleção privada renovável | RECOMENDAÇÃO |
-| Atividades reais e jogos juntos na UX, separados no ciclo técnico | RECOMENDAÇÃO |
-| Estrelas com origem preservada; economia combinada adiada | RECOMENDAÇÃO |
-| IA de desenvolvimento antes da IA de cuidados | RECOMENDAÇÃO |
+| Banco compartilhado com isolamento lógico por família e URL contextual | DIREÇÃO APROVADA; recorte E1 em Módulo 01 v1.7 |
+| Provisionamento privado antes de cadastro público | DIREÇÃO APROVADA |
+| Gestão por responsabilidades predefinidas, sem papéis personalizados | DIREÇÃO APROVADA; manter combinações da ADR-014 |
+| Resumo por área como evolução do Módulo 04 | DIREÇÃO APROVADA |
+| Catálogo global curado e seleção privada renovável | DIREÇÃO APROVADA; limites quantitativos a fechar |
+| Atividades reais e jogos juntos na UX, separados no ciclo técnico | DIREÇÃO APROVADA |
+| Estrelas com origem preservada; economia combinada adiada | DIREÇÃO APROVADA; valor/crédito/resgate digital NEEDS_DECISION |
+| IA de desenvolvimento antes da IA de cuidados | DIREÇÃO APROVADA |
 | Regras clínicas, envio de dados pessoais e estrelas digitais | NEEDS_DECISION por entrega |
 
-Este plano incorpora as ideias ao projeto como direção rastreável. Ele não altera silenciosamente os requisitos aprovados dos módulos 02–04. Quando uma entrega for aprovada, suas regras devem migrar para a especificação funcional proprietária e receber plano técnico/UX próprio.
+**Fonte do aceite:** resposta humana “Concordo com sua recomendação”, após a apresentação do commit `9193f16` e da recomendação de aprovar a direção integrada, reservando pontuação digital, envio de dados pessoais à IA e regras clínicas às respectivas entregas.
+
+O Documento Mestre §15 registra a visão aprovada. A especificação do Módulo 01 v1.7 recebe apenas o recorte E1. As especificações dos módulos 02–04 mantêm suas regras operacionais até o fechamento de cada entrega. Desenhos UX e modelos técnicos ainda candidatos não ganham aprovação detalhada por consequência deste aceite.
 
 ## 14. Referências pesquisadas em 2026-11-21
 

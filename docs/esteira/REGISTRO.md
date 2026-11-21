@@ -1,5 +1,17 @@
 # Registro da esteira
 
+## 2026-11-21 — Direção pós-V1 aprovada e planejamento E1
+
+- **Fonte do aceite:** responsável do Produto concordou com a recomendação de aprovar a direção E1–E7 apresentada sobre o commit `9193f16`. Reservadas decisões particulares de pontuação digital, dados pessoais/IA e clínica.
+- **Documentação:** Documento Mestre v1.7 §15; EVOLUCAO-POS-V1.md v2.1; Módulo 01 v1.7 §13.
+- **Triagem:** DEM-E1-FAMILIAS-20261121, transversal, risco alto, L3 documentada.
+- **Plano:** `docs/esteira/planejamento/e1-contexto-familiar.md`, incrementos E1-01..04 e E1-ACE-01..08.
+- **Estado:** READY para retomada local; próximo E1-01 por implementation-workflow.
+- **Base inspecionada:** develop @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`. Consulta remota; workspace/fingerprint devem ser reconciliados pelo executor antes de editar.
+- **Evidência:** revisão estática/documental. Código de aplicação, QG-1/2/3, verifier e homologação da E1 não executados. Histórico e aceites V1 preservados.
+- **Integração documental:** commit no GitHub autorizado expressamente pelo responsável nesta conversa; autorização restrita à documentação desta rodada.
+
+
 ## 2026-11-21 — Homologação humana Módulo 04 e baseline V1
 
 - **Aceite humano** APROVADA a entrega DEM-M04-EVO-REV-20261121, critério EVO-REV-HOM, por comunicação expressa do responsável do Produto.

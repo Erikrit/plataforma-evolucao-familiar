@@ -2,8 +2,8 @@
 
 **Data:** 2026-11-21  
 **Base:** `develop` @ `40001ec919604c1665f8a26b75a4d5ea89dc4650`  
-**Estado:** PROPOSTA para E1–E7. Não altera as diretrizes aprovadas da V1 nem comprova implementação, acessibilidade ou homologação.  
-**Fonte de visão:** `docs/produto/EVOLUCAO-POS-V1.md` v2.0.
+**Estado:** direção de Produto E1–E7 APROVADA em 2026-11-21; desenho detalhado de UX/UI permanece PROPOSTA para validação por entrega. A aprovação não comprova implementação, acessibilidade ou homologação.  
+**Fonte de visão:** `docs/produto/EVOLUCAO-POS-V1.md` v2.1.
 
 ## 1. Objetivo da experiência
 
@@ -144,7 +144,7 @@ Fluxo em passos curtos:
 1. escolher participante/conta da família;
 2. escolher pessoa acompanhada;
 3. escolher Cuidados e/ou Desenvolvimento;
-4. escolher Responsável ou Integrante dentre opções permitidas;
+4. escolher somente combinações já suportadas pela ADR-014: Cuidados com Responsável/Integrante e Desenvolvimento com Responsável;
 5. revisar em linguagem natural e confirmar.
 
 Administrador é responsabilidade de organização da família e não uma opção equivalente dentro de Cuidados/Desenvolvimento. Acesso próprio aparece como relação da conta com a própria pessoa, sem conceder administração.
@@ -184,7 +184,8 @@ Homologar jornadas específicas:
 
 | Participante | Jornada |
 |---|---|
-| Administrador | provisionar/entrar, compreender acessos e convidar |
+| Equipe da plataforma + titular inicial | provisionamento privado e definição da primeira conta pessoal |
+| Administrador familiar | entrar, compreender acessos e convidar dentro da própria família |
 | Responsável | ver exame, organizar área e escolher experiência |
 | Integrante | entrar direto na rotina e registrar sem ver configurações |
 | Pessoa idosa | abrir rotina/resumo e compreender estados |
