@@ -1,7 +1,7 @@
 # Evolução pós-V1 — proposta de produto e sequência de entregas
 
 Data de referência 2026-11-21. Branch develop @ f0a6ca0699cb2f39a8b5b5a59c0d0ab36b6d1e1e.
-Estado PROPOSTA de evolução estrutural, com repriorização solicitada pelo responsável do Produto.
+Estado PROPOSTA de evolução estrutural, com repriorização solicitada pelo responsável do Produto. Conta vinculada a uma única família APROVADA expressamente em 2026-11-21, conforme Módulo 01 v1.6.
 A V1 homologada permanece como baseline histórica em STATUS-E-ESCOPO.md.
 
 ## 1. Objetivo e condução
@@ -19,7 +19,7 @@ Princípios continuam sendo registro mínimo, organização sem cobrança, pesso
 | Base inspecionada | Uso na evolução | Mudança necessária |
 |---|---|---|
 | Familia, Pessoa e familiaId em autorizações/convites/anexos | Estrutura inicial de isolamento | Completar operação de múltiplas famílias e seus testes |
-| Usuario tem pessoaId único; Pessoa tem uma familiaId; sessão retorna essa família | Login atual funciona no contexto da família da pessoa | Separar identidade autenticada de participação em família caso se aprove múltipla participação |
+| Usuario tem pessoaId único; Pessoa tem uma familiaId; sessão retorna essa família | Conta pessoal vinculada a uma única família, conforme decisão de Produto | Reutilizar essa relação e fechar URL, autenticação e isolamento por família |
 | Cuidados com consultas, exames, anexos e histórico | Organizar visualização dos documentos e contexto | Conferir contratos, prévia, datas e resumo por área |
 | Biblioteca de atividades reais, categorias, participações e estrelas | Base para variedade de atividades e histórico | Idade sugerida, curadoria e origem dos itens |
 | Resumo e PDF do Módulo 04 homologados na V1 | Base comum de acompanhamento | Evoluir leitura por área e sugestões opcionais |
@@ -43,19 +43,21 @@ URL sugerida na web:
 
 O slug legível resolve a família por identificador interno estável. Ele seleciona contexto; o servidor verifica participação atual e autorização para a operação. Trocar slug, pessoaId, anexoId ou relatório na requisição deve passar pelas mesmas verificações.
 
-Para permitir uma cuidadora em duas famílias, ou um adulto que participa de seu núcleo e acompanha um parente em outro, propor conta global e participação contextual:
+**Decisão de Produto aprovada em 2026-11-21:** cada conta pessoal pertence a uma única família. A fonte funcional é `docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md` v1.6, FUN-08. A credencial permanece pessoal e sua sessão atua exclusivamente naquele espaço.
 
 | Conceito | Responsabilidade |
 |---|---|
-| Conta | Identidade de login |
-| Participação na família | Entrada autorizada naquele espaço e situação da participação |
-| Pessoa acompanhada | Registros e histórico sob o contexto de uma família |
-| Autorização contextual | Pessoa-alvo, área e operações permitidas |
-| Associação para acesso próprio | Relação explícita entre participante e pessoa naquele espaço |
+| Conta pessoal | Identidade autenticada vinculada a uma família |
+| Pessoa acompanhada | Registros e histórico no contexto dessa família |
+| Vínculo familiar/externo | Relação da pessoa com o núcleo |
+| Autorização contextual | Pessoa-alvo, área e operações permitidas dentro da mesma família |
+| Acesso próprio | Associação da conta à pessoa acompanhada na mesma família |
 
-Uma conta pode ter participações independentes. O compartilhamento de identidade não compartilha automaticamente exames ou histórico entre famílias. A opção de uso individual pode começar como espaço com uma pessoa e o mesmo modelo de família, evitando um segundo sistema de acesso.
+**Fluxo de entrada** URL da família → autenticar conta daquela família → pessoa/área autorizada. URL de referência `/f/{slug}/entrar`. Após autenticação, conservar a entrada direta no contexto único ou a escolha de pessoas/áreas daquela família, conforme regras já aprovadas.
 
-**Fluxo proposto** login → família única abre diretamente → várias famílias oferecem seleção → pessoa/área conforme permissões. Preservar alternância de contexto e limpar dados em trânsito da família anterior.
+A conta tem um único contexto familiar. O acesso a outra URL familiar exige autenticação válida para aquela família e não reutiliza os direitos da conta anterior. A seleção de pessoas/áreas ocorre dentro da família da sessão.
+
+A proposta anterior de conta global com múltiplas participações foi substituída por esta decisão explícita. O modelo vigente Usuario → Pessoa → Familia é o ponto de partida para a solução mínima. Uso individual pode começar com espaço de uma pessoa e o mesmo modelo de família.
 
 **Primeiro piloto** duas famílias fictícias, convites administrados e ingresso controlado. Cadastro público, cobrança e planos comerciais podem receber decisão própria em outra entrega.
 
@@ -199,7 +201,7 @@ Conteúdos recuperados da internet e dos documentos devem ser tratados como dado
 
 A IA pode ajudar a preparar candidatos de catálogo na E3 com dados genéricos. O envio de histórico pessoal ocorre na entrega específica. As entregas mantêm o sistema útil enquanto integrações futuras são construídas.
 
-**Primeiro trabalho executável de planejamento** especificar E1 e a tabela de capacidades, incluindo criação de família, conta global/participação, associação de pessoa para acesso próprio, escolha por URL e convites. Fechar modelo e critérios antes de implementar rotas. Verificar cada consulta, anexo, exportação e rotina de origem com duas famílias fictícias.
+**Primeiro trabalho executável de planejamento** especificar E1 e a tabela de capacidades, incluindo criação de família, conta pessoal vinculada a uma única família, acesso próprio, autenticação contextual por URL e convites. Fechar modelo e critérios antes de implementar rotas. Verificar cada consulta, anexo, exportação e rotina de origem com duas famílias fictícias.
 
 A autonomia solicitada orienta pesquisa, análise, propostas e decomposição. Novas regras estruturais L3, clínica/IA, estrelas digitais e participação de menores devem ser aprovadas explicitamente antes de modificar as especificações vigentes.
 

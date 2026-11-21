@@ -28,6 +28,14 @@ Módulos lógicos:
 - Vínculo de parentesco não implica autorização.
 - Isolamento entre famílias desde a modelagem, sem implementar SaaS comercial.
 
+### Direção pós-V1 — autenticação por família, 2026-11-21
+
+**Fonte funcional aprovada:** Módulo 01 v1.6, FUN-08/FAM-R13. Cada conta pessoal pertence a uma única família. O servidor estabelece e verifica o contexto da família da conta em todas as operações protegidas. A URL legível seleciona o espaço que deve concordar com esse contexto.
+
+Reutilizar a relação vigente Usuario → Pessoa → Familia para a solução mínima, conforme necessário à entrega E1. O detalhamento de rotas, criação de família, convites e sessão deve atender essa cardinalidade. A associação a uma pessoa acompanhada e as autorizações de acompanhamento são resolvidas dentro da mesma família.
+
+A proposta de identidade global com múltiplas participações familiares foi substituída pela decisão explícita do Produto. Validar troca de URL/identificadores, anexos, exportações e rotinas com duas famílias fictícias. Esta nota documenta direção técnica derivada da regra aprovada; implementação e testes da entrega E1 continuam pendentes.
+
 ### Cuidados
 
 `medicamento`, `programacao_medicamento`, `registro_dose`, `consulta`, `exame`, `registro_atividade` e `anexo` compartilhado.

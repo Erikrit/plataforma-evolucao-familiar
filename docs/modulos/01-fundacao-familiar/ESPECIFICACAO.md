@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.5 — decisões de alinhamento encerradas pelo Produto em 2026-11-20  
-**Status funcional:** direção v1.4 e fechamento v1.5 aprovados pelo Produto; implementação da simplificação de cadastro/acessos e entrada contextual encaminhada à esteira. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
+**Versão:** especificação funcional v1.6 — conta pessoal vinculada a uma única família, aprovada pelo Produto em 2026-11-21  
+**Status funcional:** base v1.5 e direção pós-V1 de contas por família v1.6 aprovadas pelo Produto. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
 
@@ -9,9 +9,9 @@ Cadastrar pessoas, organizar vínculos e responsabilidades, conceder acessos seg
 
 ## 2. Conceitos
 
-- **Família:** espaço organizador; inicialmente apenas uma família.
+- **Família:** espaço organizador e limite dos dados de seus participantes; evolução pós-V1 admite várias famílias isoladas no mesmo sistema e banco.
 - **Pessoa:** integrante ou colaborador externo, com ou sem login.
-- **Conta:** credencial para acessar a plataforma.
+- **Conta:** credencial pessoal vinculada a uma única família, conforme FUN-08.
 - **Participação/vínculo:** relação com a família; não é permissão.
 - **Autorização:** alcance permitido para usuário, pessoa acompanhada e módulo.
 
@@ -65,6 +65,14 @@ A estrutura básica de navegação permanece consistente para todos; **conteúdo
 - Notificações **discretas por padrão**; apresentação detalhada somente quando expressamente escolhida e permitida. Não pressupor que o bloqueio de tela impedirá toda exposição em dispositivos compartilhados.
 - Retirada de autorização bloqueia novas operações protegidas e preserva rastreabilidade legítima. A interface explica a alteração sem telas desnecessárias.
 
+### FUN-08 — Acesso por família
+
+**Decisão L3 APROVADA pelo responsável do Produto em 2026-11-21.** O sistema atende famílias distintas no mesmo banco. Cada conta pertence a uma única família e cada participante com acesso mantém credencial pessoal. A entrada acontece pela URL da família, usando sua identificação legível para selecionar o contexto.
+
+O servidor valida que a conta autenticada pertence à família selecionada antes de responder às operações daquele espaço. Pessoa-alvo, convites, autorizações, anexos, registros, relatórios e futuras solicitações de IA devem respeitar esse mesmo limite. Uma alteração de URL ou identificador de recurso não transfere a sessão nem concede acesso a outra família.
+
+Após o login, a navegação segue os contextos de pessoas e áreas autorizadas dentro da família da conta. A proposta anterior de conta global compartilhada entre famílias está substituída. O detalhamento técnico da URL e dos contratos deve reutilizar a relação existente Usuario/Pessoa/Familia quando suficiente.
+
 ## 4. Fluxos
 
 1. **Cadastro:** administrador → adicionar pessoa → nome → vínculo opcional → salvar → cartão de pessoa.
@@ -88,6 +96,7 @@ A estrutura básica de navegação permanece consistente para todos; **conteúdo
 | FAM-R10 | Cartões e conteúdos são filtrados por autorização |
 | FAM-R11 | Backend valida todas as operações protegidas |
 | FAM-R12 | Dados de famílias diferentes permanecem isolados |
+| FAM-R13 | Cada conta pessoal pertence a uma única família; sessão e URL devem concordar com essa família |
 
 ## 6. Permissões de referência
 
@@ -121,6 +130,9 @@ Convite expirado ou já utilizado; nomes parecidos; conta revogada durante sess�
 - [ ] Em falha de conexão, informar que a operação não foi salva; não confirmar falsamente.
 - [ ] Não solicitar dados sem necessidade funcional.
 - [ ] Impedir vazamento de dados entre famílias.
+- [ ] Autenticar pela URL da família e recusar conta/sessão pertencente a outra família.
+- [ ] Trocar slug, pessoaId, anexoId ou relatório na requisição mantém a validação de família e autorização.
+- [ ] Seleção pós-login apresenta somente pessoas e áreas da família da conta.
 
 ## 9. Integrações
 
@@ -181,3 +193,9 @@ A expressão “manter como está” confirma essas capacidades efetivas. Não t
 **Critérios para a entrega:** cadastro mínimo sem conta obrigatória; ativação ordinária com relação consistente Pessoa/Usuario; conta que acompanha a si e/ou terceiros; entrada com um ou múltiplos contextos; isolamento por pessoa/família; diferenças entre leitura, registro e gestão; revogação e sessão; testes com dados fictícios e nova homologação humana.
 
 **Encaminhamento funcional fechado:** as duas pendências levantadas no alinhamento (contas legadas e poderes de autoacompanhamento) estão resolvidas para este escopo. UX e Arquitetura podem detalhar e implementar a menor solução compatível pela esteira existente. Novas capacidades exigem decisão própria.
+
+## 12. Delimitação pós-V1 aprovada — 2026-11-21
+
+FUN-08 e FAM-R13 incorporam a correção expressa do responsável de que existe um login por família. A regra mantém contas pessoais com uma única família por conta e substitui a proposta de conta global apresentada no planejamento de evolução. Múltiplos contextos da seção 11 significam pessoas/áreas dentro da mesma família.
+
+A base V1 homologada continua identificada em STATUS-E-ESCOPO.md. A operação com URLs de família e seus testes depende da entrega E1. As demais propostas de biblioteca, jogos digitais, IA e revisões de acesso seguem seus próprios estados de aprovação. Aplicar os princípios do Documento Mestre e a política pré-uso do §13.

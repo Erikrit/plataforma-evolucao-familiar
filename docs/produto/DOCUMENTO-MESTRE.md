@@ -1,7 +1,7 @@
-# Documento Mestre do Produto — v1.5
+# Documento Mestre do Produto — v1.6
 
 **Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
-**Público inicial:** família única, com possível expansão futura sem construir SaaS no MVP.
+**Público da baseline V1:** família única. **Direção pós-V1 aprovada:** famílias isoladas no mesmo sistema/banco, com conta pessoal vinculada a uma única família, conforme §14.
 
 ## 1. Visão
 
@@ -140,3 +140,11 @@ O produto permanece em desenvolvimento, com disponibilização para uso adiada. 
 A dispensa vale para os dados de desenvolvimento desta fase pré-uso. Os requisitos funcionais de autorização, histórico, autoria, correções e revogação continuam valendo para o comportamento do sistema em execução. A decisão não resolve por si a regra de remoção de pessoa nem implica conceder acesso adicional.
 
 Usar demandas delimitadas e as fontes oficiais vigentes para implementar evoluções. Aceites posteriores devem identificar o escopo alterado e as regressões verificadas em relação à baseline V1. A futura disponibilização para uso depende de decisão própria do responsável.
+
+## 14. Conta pessoal por família — decisão de Produto, 2026-11-21
+
+**APROVADO expressamente pelo responsável do Produto.** A expansão atende várias famílias no mesmo sistema e banco, com entrada contextual pela URL de cada família. Cada conta pessoal está vinculada a uma única família. Pessoas com acesso mantêm suas credenciais pessoais e direitos dentro desse núcleo.
+
+A regra funcional pertence a `docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md` v1.6, FUN-08/FAM-R13. Ela substitui a proposta de conta global com participação em várias famílias do documento de evolução. A autorização continua sendo contextual por pessoa, área e operação.
+
+A arquitetura e a experiência da entrega E1 devem partir dessa delimitação. Demais ideias pós-V1 continuam descritas como propostas em `docs/produto/EVOLUCAO-POS-V1.md`. Os princípios de esforço mínimo, organização sem cobrança e valor de cada informação solicitada permanecem critérios obrigatórios de produto.

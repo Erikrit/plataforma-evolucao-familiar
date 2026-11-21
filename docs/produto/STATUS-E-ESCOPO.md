@@ -30,9 +30,17 @@ O responsável solicitou tratar estas frentes antes da proposta de desativação
 
 **Documento de trabalho:** `docs/produto/EVOLUCAO-POS-V1.md`. Reúne as ideias solicitadas, evidência estática da base, recomendações, alternativas pesquisadas e sequência proposta E1..E6. **Estado dos detalhamentos: PROPOSTA**, para fechamento funcional por entrega. O pedido de explorar a evolução não aprova automaticamente as decisões técnicas e regras novas de IA/saúde/jogos/estrelas.
 
-**Recomendação inicial:** famílias/identidade/acessos, seguida de exames e resumo por área. A base de código consultada é develop @ f0a6ca0699cb2f39a8b5b5a59c0d0ab36b6d1e1e. A conta atual pertence a uma pessoa de uma família; permitir participação em múltiplas famílias exige revisão dessa relação. Isolamento é validado no servidor além da URL.
+**Recomendação inicial:** famílias/identidade/acessos, seguida de exames e resumo por área. A base de código consultada é develop @ f0a6ca0699cb2f39a8b5b5a59c0d0ab36b6d1e1e. A decisão de Produto fixa conta pessoal vinculada a uma única família. A relação atual Usuario/Pessoa/Familia é o ponto de partida para a entrada contextual por URL. Isolamento é validado no servidor além da URL.
 
 **Próxima ação:** fechar o escopo E1 e suas decisões estruturais. A baseline V1 permanece homologada e com disponibilização adiada. A política pré-uso do Documento Mestre §13 continua aplicável.
+
+## Conta por família — decisão de Produto documentada em 2026-11-21
+
+**APROVADA e DOCUMENTADA** a regra de uma única família por conta pessoal, com entrada pela URL da família e validação contextual no servidor. Fonte funcional no Módulo 01 v1.6, FUN-08/FAM-R13; visão no Documento Mestre v1.6 §14; diretriz técnica em ARQUITETURA.md.
+
+A proposta anterior de login global com participação em várias famílias foi substituída. A seleção de contextos após autenticação envolve apenas pessoas e áreas da família da conta. Documento EVOLUCAO-POS-V1.md reconciliado com essa decisão.
+
+**Situação E1:** regra de delimitação aprovada, detalhamento e implementação pendentes. Base documental consultada develop @ 30f1140531254f1fe269eccef420ac94f51f7175. Código e testes não foram alterados nesta reconciliação.
 
 ## Primeira frente de evolução pós-V1 — 2026-11-21
 
