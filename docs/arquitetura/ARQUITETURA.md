@@ -20,9 +20,10 @@ Módulos lógicos:
 
 ### Família
 
-`familia`, `pessoa`, `usuario`, `participacao_familiar`, `autorizacao`, `convite`.
+`familia`, `pessoa`, `usuario`, `autorizacao`, `convite`.
 
 - Pessoa não exige login.
+- `Usuario → Pessoa → Familia` determina a única família da conta; a E1 não introduz `participacao_familiar` nem conta global.
 - Papel contextual vincula usuário/família/pessoa-alvo e operação autorizada. A gestão administrativa reutiliza as três responsabilidades contextuais já vigentes (ADR-014); o administrador não é opção desse fluxo e não herda conteúdo sensível.
 - Revogação impede novas operações, preservando autoria histórica.
 - Vínculo de parentesco não implica autorização.
@@ -61,6 +62,66 @@ A proposta de identidade global com múltiplas participações familiares foi su
 ### Acompanhamento
 
 A experiência funcional v1.1 **aprovada** possui **Histórico individual** e **Resumo da pessoa**, com PDF acionado no resumo; o resumo familiar são apenas poucos destaques na home. O histórico consulta registros de origem com autorização por pessoa e período. Estrutura auxiliar de eventos só se houver necessidade comprovada. PDFs gerados sob demanda, sem armazenar cópias por padrão.
+
+## Direção técnica pós-V1 — proposta para E1–E7
+
+**Estado:** PROPOSTA arquitetural derivada de `docs/produto/EVOLUCAO-POS-V1.md` v2.0. Não substitui contratos existentes nem autoriza implementação sem fechamento da entrega.
+
+### Fronteiras no monólito modular
+
+| Fronteira | Fonte própria | Consome |
+|---|---|---|
+| Fundação familiar | família, pessoa, usuário, convite e autorização | nenhuma regra clínica ou de desenvolvimento |
+| Cuidados | medicamentos, programações, relatos, consultas, exames e anexos | identidade/autorização |
+| Desenvolvimento | atividades reais, participações, recompensas e catálogo privado | identidade/autorização |
+| Catálogo editorial | modelos globais, versões, origem, licença e estado de publicação | nenhum histórico pessoal |
+| Jogos | metadados/versionamento do jogo e sessões/resultados mínimos | pessoa autorizada, catálogo e razão de estrelas |
+| Evolução | projeções de histórico e resumo a partir das fontes | Cuidados e Desenvolvimento em modo leitura |
+| Assistência por IA | solicitações, pacote de fontes, versão da instrução, resposta e estado | somente dados explicitamente selecionados e autorizados |
+
+Continuar no monólito modular. Microserviços, barramento de eventos, banco vetorial e plataforma externa de jogos ficam fora até existir volume ou requisito que justifique operação adicional.
+
+### Isolamento por família
+
+A família da conta é estabelecida pela sessão e comparada ao contexto resolvido pela URL. Toda consulta privada precisa restringir a família na própria operação de banco e validar relações entre IDs. Um helper comum pode padronizar o contexto, mas cada módulo continua responsável por testar suas consultas e mutações.
+
+O isolamento também cobre:
+
+- chave/prefixo e autorização de objetos no armazenamento;
+- prévias, downloads e PDFs;
+- tarefas agendadas e reprocessamentos;
+- caches e chaves de idempotência;
+- registros operacionais e notificações;
+- solicitações, pacotes e respostas de IA.
+
+O slug é um localizador legível. IDs internos e autorização no servidor continuam sendo a base. Negativas não revelam a existência de recursos de outra família.
+
+### Modelos candidatos, não contratos aprovados
+
+- `familia.slug`: único e estável para navegação.
+- `modelo_atividade` + `versao_modelo_atividade`: conteúdo global publicado, origem/licença e versão.
+- seleção/disponibilidade por pessoa: referência privada ao modelo ou atividade personalizada.
+- `jogo` + `versao_jogo` + `sessao_jogo`: executável avaliado, regra versionada e resultado mínimo.
+- movimento de estrelas com origem, regra/versão e chave idempotente.
+- `solicitacao_assistida`: caso de uso, pessoa, família, período, hash/referências das fontes, consentimento/aviso aplicável, estado e resposta versionada.
+
+A modelagem final deve primeiro verificar extensões seguras das entidades existentes. Não duplicar participação, histórico ou razão de estrelas apenas para acomodar a nova interface.
+
+### Processamento assistido
+
+Usar chamada no backend e estado persistido. A primeira opção é fila lógica no próprio banco com trabalhador da aplicação e retry limitado. Resposta estruturada passa por validação de esquema, tamanho e referências antes de ficar visível. Falha, timeout ou limite de custo mantém os fluxos determinísticos disponíveis.
+
+Separar três políticas: geração editorial genérica, sugestões pessoais de desenvolvimento e resumo de saúde. Elas possuem minimização, instruções, autorização, retenção e limites independentes. Resposta anterior pode ser contexto de comparação, mas não fonte factual recursiva.
+
+### Quality gates adicionais
+
+- matriz de isolamento com duas famílias para cada endpoint, arquivo, PDF, job e geração;
+- teste de contrato entre fonte e projeção do Resumo;
+- teste de idempotência/concorrência em sessão digital e estrelas;
+- inventário e verificação de licença/dependência de cada jogo e recurso;
+- testes de arquivo malformado, tamanho, tipo, autorização e expiração;
+- logs sem conteúdo clínico ou infantil desnecessário;
+- revisão de acessibilidade e homologação por jornada além dos testes automatizados.
 
 ## Contratos de API — rascunho
 

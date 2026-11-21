@@ -1,8 +1,10 @@
-# Evolução pós-V1 — proposta de produto e sequência de entregas
+# Plano integrado de evolução pós-V1
 
-Data de referência 2026-11-21. Branch develop @ f0a6ca0699cb2f39a8b5b5a59c0d0ab36b6d1e1e.
-Estado PROPOSTA de evolução estrutural, com repriorização solicitada pelo responsável do Produto. Conta vinculada a uma única família APROVADA expressamente em 2026-11-21, conforme Módulo 01 v1.6.
-A V1 homologada permanece como baseline histórica em STATUS-E-ESCOPO.md.
+**Versão:** 2.0 — consolidação multidisciplinar de Produto, Arquitetura, UX/UI e Qualidade  
+**Data de referência:** 2026-11-21  
+**Base consultada:** `develop` @ `40001ec919604c1665f8a26b75a4d5ea89dc4650`  
+**Estado:** visão e prioridade solicitadas pelo responsável do Produto; detalhamentos em **PROPOSTA/NEEDS_DECISION**, exceto a conta pessoal vinculada a uma única família, **APROVADA e DOCUMENTADA** no Módulo 01 v1.6.  
+**Baseline:** a V1 homologada permanece preservada em `STATUS-E-ESCOPO.md`; este plano não declara implementação nem homologação das evoluções.
 
 ## 1. Objetivo e condução
 
@@ -26,6 +28,30 @@ Princípios continuam sendo registro mínimo, organização sem cobrança, pesso
 | Autorizações contextuais e três experiências do MVP | Reutilizar operações e limites existentes | Separar participação na família, pessoa-alvo, área e capacidade |
 
 A inspeção foi documental e estática. A presença de familiaId e de verificações existentes não demonstra uma operação multitenant completa ou uma auditoria dinâmica de isolamento.
+
+
+### 2.1 Leitura integrada da evolução desejada
+
+As ideias formam uma evolução coerente quando tratadas como cinco capacidades relacionadas, e não como telas independentes:
+
+| Capacidade | Resultado para a família | Decisão de desenho |
+|---|---|---|
+| Espaço familiar | Cada família usa seu próprio contexto no mesmo sistema | Conta pessoal pertence a uma única família; URL e servidor concordam sobre a família |
+| Cuidado compreensível | Exames ficam fáceis de abrir e o histórico gera uma visão factual | Visualizador e resumo funcionam antes de qualquer IA |
+| Desenvolvimento variado | A pessoa recebe opções reais e digitais adequadas ao contexto | Catálogo finito, curado e renovável, sem busca aberta durante o uso cotidiano |
+| Resumo da pessoa | A família entende o que ocorreu e pode escolher próximos passos | Evoluir o Módulo 04, sem criar uma segunda base de histórico |
+| Gestão simples | Fica claro quem acompanha quem e em qual área | Papéis compreensíveis na interface; capacidades continuam validadas no servidor |
+
+A arquitetura de informação permanece centrada na pessoa. “Cuidados”, “Desenvolvimento” e “Resumo” são áreas da pessoa selecionada; “Gerenciar família” é uma área administrativa separada. Conteúdo global reutilizável, como modelos de atividades e jogos, não contém dados pessoais. Execuções, documentos, análises e escolhas permanecem privadas na família.
+
+### 2.2 Limites que protegem a proposta
+
+- O produto apoia cuidado e desenvolvimento; não se apresenta como prontuário, diagnóstico, teste de inteligência ou substituto de profissional.
+- Resumo por área significa inicialmente **área do produto utilizada pela pessoa** — Cuidados e/ou Desenvolvimento. Especialidade médica pode existir como metadado de consulta/exame, sem virar uma nova hierarquia obrigatória.
+- O sistema não exige registros extras apenas para alimentar gráficos ou IA.
+- Internet e IA ajudam na preparação de candidatos de catálogo; o aplicativo cotidiano consome conteúdo previamente validado.
+- A IA acrescenta uma camada opcional. Registros, resumos factuais, biblioteca aprovada e jogos continuam úteis quando ela estiver indisponível.
+- Evolução não é sinônimo de aumento de uso. O sucesso é a família compreender e agir com menos esforço, sem sequência diária, ranking ou cobrança.
 
 ## 3. Famílias, contas e navegação
 
@@ -63,6 +89,22 @@ A proposta anterior de conta global com múltiplas participações foi substitu�
 
 **Critérios técnicos iniciais** isolamento de banco, anexos, prévias/PDF, busca, cache se houver, rotinas agendadas e solicitações de IA. A API deve verificar família em todas as operações e relações entre entidades. A escolha de RLS ou outro reforço pertence à análise arquitetural, conforme riscos e capacidade operacional.
 
+
+### Fechamento recomendado para a primeira entrega
+
+A primeira versão multifamília deve ser privada e administrada pela equipe da plataforma. A família é provisionada com nome, slug estável e primeira conta administradora; cadastro público, planos, cobrança e autoatendimento comercial ficam fora dessa etapa. Essa escolha reduz superfície de fraude e permite validar isolamento e uso real antes de abrir aquisição.
+
+Recomendações em estado **NEEDS_DECISION**:
+
+- manter o e-mail globalmente único no piloto para evitar ambiguidade de autenticação;
+- tratar o slug como endereço estável e não como identificador de autorização;
+- não oferecer seletor de famílias, pois a conta possui um único contexto familiar;
+- impedir que renomear a família altere automaticamente o slug;
+- apresentar mensagem de acesso inválido sem revelar se outra família, pessoa ou documento existe;
+- criar a família por operação administrativa controlada até existir decisão específica sobre cadastro público.
+
+A URL melhora orientação e identidade do espaço. Ela nunca é a única barreira de isolamento. Família precisa acompanhar banco, armazenamento de arquivos, geração de PDF, rotinas agendadas, logs operacionais, cache, exportações e solicitações de IA.
+
 ## 4. Organização da experiência
 
 A entrada cotidiana continua centrada em pessoa e áreas utilizadas. O Resumo passa a responder “o que foi registrado e o que merece acompanhar neste período”, com fatos e datas.
@@ -78,6 +120,18 @@ Cada destino exige conteúdo e capacidade efetiva. A mesma fonte de resumo pode 
 
 Interface para criança/idoso deve usar linguagem adequada à pessoa, botões confortáveis, contraste, instruções curtas e ritmo ajustável. Adultos e idosos recebem tratamento visual respeitoso. Na criança sem conta, o responsável pode abrir uma sessão de jogo supervisionada; a política de acesso e os controles dessa sessão precisam de especificação.
 
+
+### Jornadas principais propostas
+
+1. **Entrada pela família:** abrir `/f/{slug}/entrar`, autenticar uma conta daquela família e seguir para a única pessoa/área útil ou para “Nossa família” quando houver mais de uma opção.
+2. **Rotina de cuidado:** selecionar a pessoa, abrir Rotina e registrar o acontecimento em poucos toques; configurações continuam fora da rotina.
+3. **Consulta de exame:** abrir Consultas e exames, selecionar um item e visualizar PDF/imagem no contexto, com data, descrição, origem e ação de baixar quando autorizada.
+4. **Escolha de experiência:** abrir Desenvolvimento, alternar entre Atividades reais e Jogos digitais, receber poucas opções relevantes e renovar apenas as sugestões disponíveis.
+5. **Compreensão do período:** abrir Resumo, escolher período e ver fatos por área. Uma ação separada pode gerar sugestões ou resumo assistido quando a funcionalidade estiver habilitada e autorizada.
+6. **Gestão:** abrir Gerenciar família, entender participantes, pessoas acompanhadas, área e responsabilidade sem editar uma matriz técnica de operações.
+
+O desenho detalhado de estados, componentes, acessibilidade e homologação humana está proposto em `docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md`.
+
 ## 5. Cuidados, exames e IA
 
 ### Primeira entrega útil
@@ -85,6 +139,19 @@ Interface para criança/idoso deve usar linguagem adequada à pessoa, botões co
 Lista de exames com descrição, data quando conhecida, vínculo opcional a consulta e ação autorizada de abrir arquivo privado. Visualizar PDF/imagem em contexto, com retorno à lista e tratamento de arquivo indisponível. Não exigir que a família transcreva resultados para obter a função de visualização.
 
 Resumo de Cuidados deriva de medicamentos/programações, relatos, consultas, exames e observações. A interface identifica a data das informações. A existência de exame sem valor estruturado indica documento disponível, e não resultado laboratorial interpretado.
+
+
+### Experiência do visualizador e resumo factual
+
+O visualizador deve priorizar celular, suportar PDF e imagem, oferecer zoom e troca de página quando aplicável, indicar carregamento/erro e permitir voltar ao item sem perder o contexto. Download é uma ação distinta e autorizada. O arquivo permanece privado, com acesso temporário ou resposta autenticada; a interface não expõe endereço permanente.
+
+O primeiro resumo de Cuidados é determinístico e deriva dos registros existentes. Ele organiza acontecimentos por período, mostra datas e estados informados e aponta documentos disponíveis. OCR, extração de valores e interpretação automática ficam fora da primeira entrega. Assim, a família obtém valor sem transcrever laudos e sem depender da qualidade de leitura de imagem.
+
+A apresentação separa:
+
+- **Registros do período:** fatos provenientes dos módulos, com fonte e data.
+- **Para conferir:** dados incompletos, documento indisponível ou informação ainda não confirmada.
+- **Resumo assistido:** conteúdo gerado sob demanda, visualmente identificado, nunca misturado aos fatos como se tivesse a mesma origem.
 
 ### Evolução futura com IA
 
@@ -125,6 +192,23 @@ O botão recomendado é “Renovar sugestões”. Atualizar troca alternativas d
 
 Versionar conteúdo e aplicar limites de geração/solicitação. Reutilizar o catálogo global reduz chamadas de IA por família. Reprodução de materiais de terceiros deve respeitar licença e direitos de uso.
 
+
+### Modelo editorial recomendado
+
+O catálogo global passa por estados simples: **Rascunho → Em revisão → Publicado → Arquivado**. Somente Publicado aparece às famílias. Arquivar impede novas sugestões, preservando versões já escolhidas e participações históricas. A função editorial da plataforma é separada da administração de uma família.
+
+O conteúdo pode nascer de autoria própria, fonte aberta compatível ou geração assistida. Antes de publicar, revisar linguagem, segurança, adequação de materiais, acessibilidade, faixa sugerida e licença. Não copiar descrições ou recursos de terceiros sem autorização.
+
+Na experiência da família:
+
+- “Sugestões para esta pessoa” mostra uma seleção pequena.
+- “Ver biblioteca” permite explorar o catálogo aprovado.
+- “Renovar sugestões” substitui apenas alternativas ainda não escolhidas.
+- Atividade escolhida ou personalizada permanece disponível conforme as regras vigentes.
+- Histórico referencia a versão executada, mesmo se o modelo global mudar.
+
+Faixa etária orienta a curadoria e a linguagem. Ela não bloqueia automaticamente uma atividade segura quando o responsável entende que há interesse, adaptação ou necessidade diferente. Para idosos, evitar estética infantilizada; para crianças, informar supervisão e materiais quando necessários.
+
 ## 7. Jogos digitais e integração
 
 Primeiro piloto sugerido com até três jogos simples, escolhidos entre memória, sequência e labirinto. Validar uso com Laurinha e um adulto antes de estender a idosos e outras faixas. Adultos e idosos precisam de opções apropriadas e acessíveis, sem classificação apenas pela idade.
@@ -139,6 +223,15 @@ A proposta prefere hospedar a versão avaliada dos jogos dentro da plataforma. S
 
 Licença gratuita reduz custo de licenciamento. Desenvolvimento, acessibilidade, manutenção e infraestrutura continuam compondo o custo.
 
+
+### Fronteira do jogo digital
+
+Produto e UX apresentam atividades reais e jogos digitais na mesma Biblioteca de Desenvolvimento. Arquitetura mantém seus ciclos diferentes: uma atividade real recebe participação informada por adulto; um jogo possui versão executável, sessão, eventos mínimos e resultado validado.
+
+O piloto deve hospedar a versão aprovada dentro da plataforma, sem anúncios, rastreadores de terceiros ou navegação para fora do contexto familiar. Cada jogo precisa declarar objetivo lúdico, categoria sugerida, faixa orientativa, recursos de acessibilidade, regra de conclusão e regra de estrelas. O sistema registra somente o necessário para continuidade e crédito; movimentos detalhados, padrões de toque e tempo de reação não são coletados sem finalidade aprovada.
+
+Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pessoa e o jogo não oferece acesso a outras áreas. A saída retorna à Biblioteca ou ao Resumo da pessoa. Pausar, abandonar ou perder conexão não gera punição e não é tratado como fracasso de desenvolvimento.
+
 ## 8. Participação, estrelas e evolução
 
 A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
@@ -148,6 +241,13 @@ A participação presencial continua com registro rápido do adulto e tabela vig
 Recomendação inicial é distinguir estrelas reais e digitais por origem na apresentação. Definir explicitamente como cada origem poderá financiar recompensas antes de criar saldo combinado. A tabela atual do presencial permanece na baseline até mudança funcional aprovada. Créditos digitais devem ser decididos pelo servidor, com sessão identificada, validação do evento e idempotência. A política de repetição legítima deve permitir brincar novamente sem transformar reenvio técnico em crédito novo.
 
 Registrar desempenho em jogo como observação contextual. Mesmo progresso no mesmo jogo depende de dificuldade, ajuda, familiaridade e condições de uso. O resumo deve permitir comparar a própria pessoa em experiências semelhantes, sem inferir inteligência, atraso ou saúde cognitiva a partir do placar.
+
+
+### Recomendação de consistência
+
+Usar um único razão de movimentos de estrelas, preservando em cada crédito a origem `atividade_real` ou `jogo_digital`, a regra aplicada e a versão. A interface pode mostrar a origem separadamente e um total explicável. A possibilidade de gastar estrelas digitais e reais no mesmo catálogo de recompensas permanece **NEEDS_DECISION**; não somar economias silenciosamente.
+
+A tabela presencial já aprovada não muda. Cada jogo digital recebe uma regra curta e versionada. O exemplo de 3 estrelas por fase de labirinto pode ser usado no protótipo, mas vira regra somente após calibrar repetição, dificuldade e equilíbrio com experiências reais. Repetir para se divertir é permitido; conceder novo crédito depende da política explícita do jogo e nunca de reenvio técnico.
 
 ## 9. Resumo por área e sugestões assistidas
 
@@ -167,6 +267,20 @@ Uma geração deve salvar período, referências/versões dos registros-fonte, d
 
 A IA pode propor atividades aprovadas e adaptações. O responsável escolhe o que oferecer. A atualização do catálogo não altera automaticamente metas pessoais, permissões ou rotina. Nenhuma ausência de participação gera obrigação de preenchimento.
 
+
+### Estrutura visual recomendada
+
+O Resumo individual evolui em camadas, na mesma tela e sem criar uma fonte paralela:
+
+1. **Agora:** poucos acontecimentos recentes que ajudam a pessoa/família a se orientar.
+2. **No período:** síntese factual por área utilizada, com estados neutros e links para a origem.
+3. **Próximos passos escolhidos:** atividades, consultas ou acompanhamentos que a família decidiu manter.
+4. **Análise assistida opcional:** sugestões geradas sob demanda, identificadas por data e dados utilizados.
+
+Evitar semáforo geral “bom/ruim”. Em Cuidados, a linguagem pode distinguir “registrado”, “para conferir” e “conversar com profissional”. Em Desenvolvimento, usar “experiências recentes”, “categorias exploradas” e “ideias para experimentar”, sem medir uma pessoa pela quantidade de registros.
+
+Ao salvar uma análise assistida, a família pode marcar uma sugestão como útil, descartada ou escolhida. Esse feedback organiza a continuidade e não treina automaticamente modelos nem altera diagnósticos. Se os dados-fonte relevantes mudarem, a análise aparece como “gerada antes das últimas alterações”.
+
 ## 10. Gestão de papéis
 
 Propor gestão em duas perguntas complementares, mantendo autorização no servidor.
@@ -178,6 +292,20 @@ Administração da família, organização de Cuidados/Desenvolvimento e registr
 
 Antes de novos seletores, fechar uma tabela pequena de capacidades existentes e das novas operações realmente necessárias. Jogos supervisionados, curadoria global e envio de dados à IA precisam de decisões específicas. Evitar reconstruir um configurador livre de permissões. Quem administra catálogo global é função editorial da plataforma, distinta de quem administra uma família.
 
+
+### Organização recomendada para a interface
+
+| Experiência | O que a pessoa entende e faz | O que não recebe por presunção |
+|---|---|---|
+| Administrador | Organiza pessoas, contas, convites e responsabilidades da família | Conteúdo de saúde, desenvolvimento ou relatórios |
+| Responsável | Planeja e acompanha uma pessoa em Cuidados e/ou Desenvolvimento | Administração da família fora da autorização concedida |
+| Integrante | Participa da rotina e registra operações permitidas | Configuração, programação e documentos sensíveis não autorizados |
+| Acesso próprio | Acompanha a si mesmo nas áreas habilitadas | Poder administrativo sobre outras pessoas |
+
+A tela “Acessos e responsabilidades” deve apresentar frases compreensíveis, por exemplo: “Mikaela acompanha Laurinha em Desenvolvimento como Responsável”. Para conceder acesso, o administrador escolhe participante, pessoa, área e uma responsabilidade predefinida. Não expor checkboxes de endpoints nem permitir papel personalizado na primeira evolução.
+
+Uma pessoa pode acumular responsabilidades dentro da sua família. A composição mostra a união das ações concedidas, sem duplicar telas. O backend continua verificando capacidade, pessoa-alvo, área e família em cada operação. Alterar papel ou revogar acesso invalida o uso futuro e preserva autoria/histórico.
+
 ## 11. IA, privacidade e custos
 
 Integração automática deve ocorrer na API da plataforma, com chave protegida no servidor e solicitações autenticadas/autorizadas. A cobrança da API OpenAI é separada da assinatura ChatGPT. Planejar orçamento e quota por família, geração sob demanda e reaproveitamento de sínteses quando a base não mudou.
@@ -188,24 +316,86 @@ Propor autorização transparente para envio ao provedor, com finalidade, dados 
 
 Conteúdos recuperados da internet e dos documentos devem ser tratados como dados, com extração validada e sem autorizar o modelo a executar comandos ou mudar regras. Para sugestões estruturadas, validar esquema e limites no servidor. Adotar alternativa útil quando IA recusar, falhar ou devolver dados insuficientes.
 
+
+### Três usos distintos de IA
+
+| Uso | Dados enviados | Risco e ordem recomendada |
+|---|---|---|
+| Candidatos de catálogo | Tema, faixa orientativa, materiais e critérios genéricos | Menor risco; ainda exige revisão editorial e de licença |
+| Sugestões de desenvolvimento | Histórico mínimo autorizado da pessoa e catálogo aprovado | Risco moderado; não diagnosticar nem rotular capacidade |
+| Resumo de cuidados | Registros e trechos de documentos de saúde selecionados | Maior risco; exige etapa específica de privacidade, precisão e segurança |
+
+Esses usos não compartilham automaticamente instruções, histórico ou autorização. Cada solicitação mostra finalidade e período; o servidor monta um pacote mínimo, registra fontes/versões e valida uma resposta estruturada. Conteúdo gerado nunca altera medicamentos, agenda, pontos, permissões ou catálogo publicado sem ação humana autorizada.
+
+A primeira implementação pode usar processamento assíncrono persistido no próprio banco/aplicação, com estados solicitado, processando, concluído, falhou e cancelado. Não introduzir microserviço, barramento, banco vetorial ou busca sem evidência de necessidade. Limites de custo e frequência são aplicados por família e caso de uso, com mensagem útil quando indisponível.
+
 ## 12. Sequência recomendada
 
-| Entrega | Resultado | Critério para avançar |
+A sequência separa fundação, valor sem IA e usos assistidos. Cada entrega é vertical, homologável e mantém a V1 utilizável.
+
+| Entrega | Escopo principal | Fora da entrega | Evidência para avançar |
+|---|---|---|---|
+| E1 — Contexto familiar e isolamento | Provisionar família, slug, login contextual, conta em uma única família e proteção de banco/arquivos/PDF/rotinas | Cadastro público, cobrança, seletor de famílias | Duas famílias fictícias; tentativas cruzadas por URL e IDs negadas; jornadas válidas preservadas |
+| E2 — Gestão compreensível de acessos | Pessoas, contas, convites e responsabilidades predefinidas por pessoa/área | Papéis personalizados e matriz técnica na UI | Administrador entende quem acompanha quem; três experiências não expõem ações indevidas |
+| E3 — Exames e Resumo factual | Visualizador privado PDF/imagem e evolução do Módulo 04 por área utilizada | OCR, interpretação clínica e IA | Uso móvel homologado; prévia, download e resumo respeitam autorização e fonte |
+| E4 — Catálogo real curado | Modelos globais versionados, faixa orientativa, curadoria, seleção pequena e renovar sugestões | Busca aberta em tempo real e publicação automática por IA | Responsável encontra/renova opções sem perder escolhas ou histórico |
+| E5 — Piloto de jogos digitais | Até três jogos, sessão supervisionada, eventos mínimos e estrelas com origem | Plataforma de jogos ampla, multiplayer e inferência cognitiva | Celular homologado; conclusão, retry e crédito são consistentes; nenhuma publicidade/telemetria indevida |
+| E6 — Sugestões assistidas de desenvolvimento | Geração sob demanda usando catálogo aprovado e histórico mínimo, com escolha humana | Diagnóstico, plano automático ou alteração de pontuação | Fontes/período visíveis; recomendações úteis e descartáveis; falha mantém fluxo manual |
+| E7 — Resumo assistido de cuidados | Síntese rastreável para preparar acompanhamento e perguntas ao profissional | Diagnóstico, prescrição e automação de conduta | Revisão específica de privacidade/segurança e homologação com documentos controlados |
+
+### Ordem de trabalho dentro de cada entrega
+
+1. Produto fecha objetivo, regras e itens fora do escopo.
+2. Arquitetura confirma contratos, dados, autorização, privacidade e estratégia mínima.
+3. UX/UI desenha jornadas e estados com as personas afetadas.
+4. Desenvolvimento executa a esteira já existente.
+5. Qualidade verifica regra, isolamento, acessibilidade e regressão.
+6. Homologação humana confirma valor e esforço antes de declarar a entrega concluída.
+
+A próxima atividade executável é o planejamento detalhado da E1. A E2 pode ser desenhada em paralelo documental, mas sua implementação depende do contexto familiar estar consistente. E3–E5 podem ser refinadas sem enviar dados pessoais a IA. E6 e E7 exigem aprovações próprias.
+
+## 13. Consolidação por especialidade
+
+| Perspectiva | Contribuição incorporada | Risco bloqueador |
 |---|---|---|
-| E1 — Famílias, identidade e acessos | Duas famílias isoladas no banco compartilhado, URL contextual, convites e participação | Testes de isolamento e jornadas com contas conhecidas |
-| E2 — Cuidados e Resumo | Exames legíveis e resumo por áreas efetivamente utilizadas | Homologação dos fluxos cotidianos |
-| E3 — Biblioteca real limitada | Catálogo curado com idade sugerida, categorias e renovação controlada | Responsável escolhe sem excesso de opções |
-| E4 — Piloto digital | Até três jogos integrados com sessões e estrelas por origem | Jogo acessível, conclusão e crédito consistentes |
-| E5 — Sugestões assistidas de desenvolvimento | Geração sob demanda com registros-fonte, revisão e histórico | Recomendações compreensíveis e dados minimizados |
-| E6 — Resumo assistido de cuidados | Síntese rastreável para acompanhamento profissional | Avaliação específica de privacidade, precisão e segurança |
+| Produto | Resultado por pessoa, catálogo finito, IA opcional e sequência E1–E7 | Transformar visão em muitos recursos sem validar utilidade cotidiana |
+| Análise de negócio | Regras por origem, versão, período, autorização e estados explícitos | Termos vagos como “evolução”, “área” ou “bom” produzirem comportamentos diferentes |
+| Arquitetura | Monólito modular, isolamento transversal, fontes preservadas e integrações assíncronas simples | Confiar no slug/cliente ou duplicar histórico e permissões |
+| UX/UI | Navegação por pessoa, poucas opções, fatos antes de sugestões e papéis em linguagem humana | Painéis densos, formulários extras e mistura entre administração e rotina |
+| Cuidados/saúde | Documento original, incerteza, perguntas para profissional e nenhuma conduta automática | Resumo convincente porém incorreto, desatualizado ou sem fonte |
+| Desenvolvimento/pedagogia | Atividades lúdicas variadas, idade como orientação e observação contextual | Infantilizar adultos/idosos ou transformar jogo em teste de capacidade |
+| Psicologia/bem-estar | Incentivo sem comparação, punição ou obrigação de uso | Estrelas, alertas ou IA virarem cobrança familiar |
+| Segurança/privacidade | Mínimo de dados, autorização contextual e separação por família | Vazamento por anexo, PDF, cache, rotina ou geração assistida |
+| Qualidade | Matriz por família/persona/área, contratos e homologação humana | Considerar teste técnico verde como prova de utilidade ou segurança clínica |
 
-A IA pode ajudar a preparar candidatos de catálogo na E3 com dados genéricos. O envio de histórico pessoal ocorre na entrega específica. As entregas mantêm o sistema útil enquanto integrações futuras são construídas.
+### Critérios transversais de qualidade
 
-**Primeiro trabalho executável de planejamento** especificar E1 e a tabela de capacidades, incluindo criação de família, conta pessoal vinculada a uma única família, acesso próprio, autenticação contextual por URL e convites. Fechar modelo e critérios antes de implementar rotas. Verificar cada consulta, anexo, exportação e rotina de origem com duas famílias fictícias.
+- **Isolamento:** nenhum dado, contagem, arquivo, exportação, evento ou análise cruza famílias.
+- **Esforço:** nenhuma evolução obriga recadastro de informação já existente; fluxos cotidianos continuam curtos.
+- **Explicabilidade:** estrelas, resumos e sugestões informam origem e regra de maneira compreensível.
+- **Acessibilidade:** jornadas principais funcionam por toque, teclado, leitor de tela e ampliação compatíveis com a tecnologia usada.
+- **Resiliência:** erro de rede, arquivo inválido ou IA indisponível não produz sucesso falso nem perda silenciosa.
+- **Privacidade:** ações administrativas não revelam conteúdo sensível; prévias e agregações obedecem à mesma autorização do detalhe.
+- **Homologação:** criança, adulto responsável, pessoa idosa e integrante são avaliados apenas nas jornadas que lhes dizem respeito.
 
-A autonomia solicitada orienta pesquisa, análise, propostas e decomposição. Novas regras estruturais L3, clínica/IA, estrelas digitais e participação de menores devem ser aprovadas explicitamente antes de modificar as especificações vigentes.
+### Decisões já fechadas e pacote ainda pendente
 
-## 13. Referências pesquisadas em 2026-11-21
+| Item | Estado |
+|---|---|
+| Conta pessoal vinculada a uma única família | APROVADA/DOCUMENTADA |
+| Banco compartilhado com isolamento lógico por família e URL contextual | Direção solicitada; detalhamento E1 NEEDS_DECISION |
+| Provisionamento privado antes de cadastro público | RECOMENDAÇÃO |
+| Gestão por responsabilidades predefinidas, sem papéis personalizados | RECOMENDAÇÃO |
+| Resumo por área como evolução do Módulo 04 | RECOMENDAÇÃO |
+| Catálogo global curado e seleção privada renovável | RECOMENDAÇÃO |
+| Atividades reais e jogos juntos na UX, separados no ciclo técnico | RECOMENDAÇÃO |
+| Estrelas com origem preservada; economia combinada adiada | RECOMENDAÇÃO |
+| IA de desenvolvimento antes da IA de cuidados | RECOMENDAÇÃO |
+| Regras clínicas, envio de dados pessoais e estrelas digitais | NEEDS_DECISION por entrega |
+
+Este plano incorpora as ideias ao projeto como direção rastreável. Ele não altera silenciosamente os requisitos aprovados dos módulos 02–04. Quando uma entrega for aprovada, suas regras devem migrar para a especificação funcional proprietária e receber plano técnico/UX próprio.
+
+## 14. Referências pesquisadas em 2026-11-21
 
 - [Isolamento multitenant — OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Multi_Tenant_Security_Cheat_Sheet.html)
 - [Simon Tatham — coleção de puzzles e licença](https://www.chiark.greenend.org.uk/~sgtatham/puzzles/)

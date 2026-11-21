@@ -28,11 +28,28 @@ A lista consolida pendências registradas. A ordem de execução será definida 
 
 O responsável solicitou tratar estas frentes antes da proposta de desativação de pessoas/vínculos. Aquela proposta fica **ADIADA**, com retomada futura. O foco passa à definição da evolução para outras famílias, exames e resumos por área, biblioteca real/digital por categoria e idade, sugestões assistidas e gestão de acessos.
 
-**Documento de trabalho:** `docs/produto/EVOLUCAO-POS-V1.md`. Reúne as ideias solicitadas, evidência estática da base, recomendações, alternativas pesquisadas e sequência proposta E1..E6. **Estado dos detalhamentos: PROPOSTA**, para fechamento funcional por entrega. O pedido de explorar a evolução não aprova automaticamente as decisões técnicas e regras novas de IA/saúde/jogos/estrelas.
+**Plano integrado:** `docs/produto/EVOLUCAO-POS-V1.md` v2.0. Consolida as ideias solicitadas, base existente, regras de proteção, jornadas, fronteiras arquiteturais, critérios de qualidade e sequência proposta E1..E7. A proposta visual detalhada está em `docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md`. **Estado dos detalhamentos: PROPOSTA/NEEDS_DECISION**, para fechamento funcional por entrega. O pedido de explorar a evolução não aprova automaticamente decisões novas de IA, saúde, jogos, estrelas ou permissões.
 
-**Recomendação inicial:** famílias/identidade/acessos, seguida de exames e resumo por área. A base de código consultada é develop @ f0a6ca0699cb2f39a8b5b5a59c0d0ab36b6d1e1e. A decisão de Produto fixa conta pessoal vinculada a uma única família. A relação atual Usuario/Pessoa/Familia é o ponto de partida para a entrada contextual por URL. Isolamento é validado no servidor além da URL.
+**Recomendação atual:** E1 Contexto familiar e isolamento → E2 Gestão compreensível de acessos → E3 Exames e Resumo factual → E4 Catálogo real → E5 Jogos digitais → E6 IA de desenvolvimento → E7 IA de cuidados. A base consultada é `develop` @ `40001ec919604c1665f8a26b75a4d5ea89dc4650`. Conta pessoal em uma única família permanece a única regra nova já aprovada deste pacote.
 
-**Próxima ação:** fechar o escopo E1 e suas decisões estruturais. A baseline V1 permanece homologada e com disponibilização adiada. A política pré-uso do Documento Mestre §13 continua aplicável.
+**Próxima ação:** executar `module-planning` da E1 após fechar seu pequeno pacote de decisões; manter E2 em desenho documental. A baseline V1 permanece homologada e com disponibilização adiada. A política pré-uso do Documento Mestre §13 continua aplicável.
+
+## Consolidação multidisciplinar da evolução — 2026-11-21
+
+Produto, Análise, Arquitetura, UX/UI, cuidados, desenvolvimento, privacidade e Qualidade foram reconciliados em um plano único. O plano preserva fontes da V1 e explicita a diferença entre visão solicitada, recomendação e decisão aprovada.
+
+Principais alinhamentos:
+
+- Resumo por área evolui o Módulo 04 e não cria histórico paralelo.
+- Visualização de exame e resumo factual entregam valor antes da IA.
+- Catálogo global é finito, versionado e curado; seleção e histórico permanecem privados.
+- Atividades reais e jogos digitais aparecem juntos para a pessoa, com ciclos técnicos distintos.
+- Estrelas preservam origem; economia combinada ainda depende de decisão.
+- Gestão mostra quem acompanha quem, área e responsabilidade, sem matriz técnica na interface.
+- IA editorial, IA de desenvolvimento e IA de cuidados são casos separados e entram em fases diferentes.
+- Arquitetura mantém monólito modular e evita infraestrutura nova sem necessidade comprovada.
+
+**Estado:** DOCUMENTAÇÃO DE PROPOSTA CONCLUÍDA / IMPLEMENTAÇÃO NÃO INICIADA / HOMOLOGAÇÃO NÃO APLICÁVEL nesta etapa.
 
 ## Conta por família — decisão de Produto documentada em 2026-11-21
 
