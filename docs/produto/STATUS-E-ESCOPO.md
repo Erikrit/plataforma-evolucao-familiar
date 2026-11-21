@@ -24,9 +24,19 @@ O aceite abrange a V1 existente dos módulos 01–04. A demanda `DEM-M04-EVO-REV
 
 A lista consolida pendências registradas. A ordem de execução será definida por demanda. A dispensa de compatibilidade de dados de teste reduz trabalho de migração e não decide automaticamente regras de exclusão de registros durante o uso.
 
+## Nova prioridade de evolução — famílias, áreas, biblioteca e IA, 2026-11-21
+
+O responsável solicitou tratar estas frentes antes da proposta de desativação de pessoas/vínculos. Aquela proposta fica **ADIADA**, com retomada futura. O foco passa à definição da evolução para outras famílias, exames e resumos por área, biblioteca real/digital por categoria e idade, sugestões assistidas e gestão de acessos.
+
+**Documento de trabalho:** `docs/produto/EVOLUCAO-POS-V1.md`. Reúne as ideias solicitadas, evidência estática da base, recomendações, alternativas pesquisadas e sequência proposta E1..E6. **Estado dos detalhamentos: PROPOSTA**, para fechamento funcional por entrega. O pedido de explorar a evolução não aprova automaticamente as decisões técnicas e regras novas de IA/saúde/jogos/estrelas.
+
+**Recomendação inicial:** famílias/identidade/acessos, seguida de exames e resumo por área. A base de código consultada é develop @ f0a6ca0699cb2f39a8b5b5a59c0d0ab36b6d1e1e. A conta atual pertence a uma pessoa de uma família; permitir participação em múltiplas famílias exige revisão dessa relação. Isolamento é validado no servidor além da URL.
+
+**Próxima ação:** fechar o escopo E1 e suas decisões estruturais. A baseline V1 permanece homologada e com disponibilização adiada. A política pré-uso do Documento Mestre §13 continua aplicável.
+
 ## Primeira frente de evolução pós-V1 — 2026-11-21
 
-**Prioridade aprovada pelo Produto:** pessoas (remoção/desativação) e organização de vínculos. A inspeção da develop @ 2481f38a9fd259571bd93211ddc5bf5e4475af25 confirma ausência de estado de pessoa e de operação de remoção/desativação; vínculo aceita texto livre e atualização pela própria pessoa ou administrador.
+**Prioridade anterior, agora adiada pelo Produto:** pessoas (remoção/desativação) e organização de vínculos. A inspeção da develop @ 2481f38a9fd259571bd93211ddc5bf5e4475af25 confirma ausência de estado de pessoa e de operação de remoção/desativação; vínculo aceita texto livre e atualização pela própria pessoa ou administrador.
 
 **Proposta em avaliação L3:** desativação reversível, tratamento de conta/sessões e histórico, proteção do último administrador, reativação explícita e vínculo opcional Familiar/Colaborador externo gerido pela administração. Comportamentos, jornada e critérios PES-EVO-01..09 em `docs/ux-ui/REVISAO-MODULO-01-ACESSOS.md`, seção “Evolução pós-V1 — pessoas e vínculos, 2026-11-21”.
 
