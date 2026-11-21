@@ -116,3 +116,62 @@ Revisar se a família consegue entender **quem tem acesso a quê**, conceder/rev
 **HOMOLOGAÇÃO HUMANA APROVADA**, comunicada expressamente pelo responsável do Produto após a atualização tratada nesta conversa. Escopo da demanda `DEM-M01-SIMP-CAD-20261120`, critério `M01-SIMP-HOM`, cadastro/conta/acessos e entrada contextual conforme especificação v1.5. Referência disponível na `develop` @ `5260fc672f3b207e659c888ac78e436e0548f8ae`.
 
 O estado vigente desta rodada passa a homologado no escopo acima. A fonte consolidada do aceite, limites e próximo encaminhamento é `docs/produto/STATUS-E-ESCOPO.md`, seção “Homologação humana APROVADA — simplificação do Módulo 01, 2026-11-20”. Os registros anteriores permanecem históricos. Próxima revisão UX da sequência é Módulo 04 — Histórico, Resumo e PDF.
+
+## Evolução pós-V1 — pessoas e vínculos, 2026-11-21
+
+**Prioridade aprovada pelo Produto:** iniciar análise de remoção/desativação de pessoas e organização de vínculos, em resposta à recomendação após homologação da V1.
+**Estado das regras abaixo:** PROPOSTA L3, aguardando decisão funcional. O aceite da prioridade autoriza esta análise e não confirma automaticamente os novos comportamentos.
+**Inspeção estática:** develop @ 2481f38a9fd259571bd93211ddc5bf5e4475af25. Sem execução de testes nesta análise.
+
+### Situação observada
+
+- Pessoa não possui estado ativo/inativo no schema Prisma.
+- ControladorPessoas oferece listagem, consulta, criação e atualização de perfil. Não possui operação de desativação, reativação ou exclusão.
+- ServicoPessoas.criar aceita vínculo como texto livre opcional.
+- atualizarPerfil aceita vínculo como texto livre e permite alteração pelo administrador ou pela própria pessoa.
+- As especificações distinguem vínculo familiar/externo de autorização. Remover acesso já preserva histórico. A decisão de dados pré-uso do Documento Mestre §13 permite recriar cadastros de desenvolvimento, mas não define a regra funcional de desligamento.
+
+### Proposta de Produto para validação
+
+| Operação | Comportamento proposto |
+|---|---|
+| Desativar pessoa | Administrador retira a pessoa da rotina ativa, dos seletores de novos acompanhamentos e das novas operações operacionais |
+| Conta da pessoa desativada | Suspender entrada e invalidar sessões, inclusive quando acompanhava terceiros |
+| Histórico | Conservar registros e autoria. Consulta histórica por outros responsáveis permanece sujeita às autorizações legítimas existentes |
+| Reativar pessoa | Administrador retorna o cadastro à situação ativa. Retomada de acesso da própria conta e de responsabilidades operacionais exige confirmação explícita na jornada |
+| Alterar vínculo | Somente administrador, no cadastro/edição administrativa, com seleção controlada |
+| Vínculos disponíveis | Familiar ou Colaborador externo, campo opcional com possibilidade de não informar |
+
+A experiência continua usando Administrador, Responsável e Integrante. O vínculo descreve a relação com a família. Alterar vínculo não altera automaticamente autorização.
+
+**Desativação e histórico:** preservar o histórico autorizado não exige manter poderes de registrar ou programar sobre a pessoa inativa. Arquitetura deverá detalhar os controles de leitura histórica e suspensão operacional, incluindo acesso próprio, sem ampliar o acesso clínico do administrador.
+
+**Cuidados e convites:** ao desativar, bloquear novos registros/programações e ativação de convites operacionais envolvendo a pessoa. Interromper os avisos futuros referentes à rotina desativada, mantendo programações e ocorrências passadas com seus estados originais. Reativar deve permitir revisar acessos e programações antes de retomar o uso. Desativação no aplicativo é ação administrativa sobre a rotina do sistema e não orientação para interromper tratamento.
+
+A exclusão definitiva pode ser tratada em demanda própria caso o Produto necessite dessa operação. A proposta desta entrega é desativar/reativar como ação administrativa cotidiana.
+
+### Jornada proposta
+
+Gerenciar família → Pessoas → selecionar pessoa → Desativar → confirmar nome e efeitos sobre conta/rotina → salvar → atualizar lista após persistência.
+
+Na administração, oferecer filtro simples Ativas/Inativas e ação Reativar nos detalhes de uma pessoa inativa. Manter a consulta ao histórico em contexto autorizado. No celular, ações secundárias ficam nos detalhes e não competem com a rotina.
+
+Confirmação sugerida: “Desativar [nome]? A pessoa sairá da rotina ativa e sua conta ficará suspensa. Os registros anteriores serão preservados.”
+
+O último administrador ativo deve permanecer protegido. A implementação precisa verificar desativação simultânea e reativação sem concessão implícita. Nenhuma autorização baseada apenas em nome, vínculo ou ausência de responsável.
+
+### Critérios propostos de aceite
+
+| ID | Resultado esperado |
+|---|---|
+| PES-EVO-01 | Administrador desativa/reativa pessoa da própria família; demais contas recebem recusa também na API |
+| PES-EVO-02 | Pessoa inativa sai da rotina e dos seletores operacionais; conta/sessões deixam de operar |
+| PES-EVO-03 | Registros e autoria anteriores preservados; consulta histórica mantém escopo autorizado |
+| PES-EVO-04 | Último administrador protegido, inclusive em concorrência |
+| PES-EVO-05 | Reativação permite revisar e confirmar acesso/retomada sem restauração operacional silenciosa |
+| PES-EVO-06 | Vínculo opcional usa seleção Familiar/Colaborador externo no cadastro e edição administrativos; API valida valores e autoridade |
+| PES-EVO-07 | Mudar vínculo preserva as responsabilidades e não concede acesso adicional |
+| PES-EVO-08 | Convites e avisos futuros respeitam a inativação; nenhuma alteração retroativa de relato ou programação |
+| PES-EVO-09 | UX validada em mobile/desktop, com confirmação proporcional e falha de persistência compreensível |
+
+**Encaminhamento:** Produto valida os comportamentos propostos. Depois atualizar FUN-01/FUN-02/FUN-03/FUN-04 e critérios pertinentes no Módulo 01, detalhar a solução arquitetural mínima e encaminhar à esteira. Aplicar a política de dados pré-uso do Documento Mestre §13 para dispensar migração dos cadastros de desenvolvimento. A V1 permanece como baseline homologada.
