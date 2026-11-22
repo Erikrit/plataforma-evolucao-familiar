@@ -17,6 +17,12 @@ export type AreasAutorizadasCartao = {
   historico: boolean;
 };
 
+export type EstadoContaPessoa =
+  | "sem_conta"
+  | "convite_pendente"
+  | "convite_expirado"
+  | "conta_ativa";
+
 export type CartaoInicio = {
   pessoaId: string;
   nome: string;
@@ -24,8 +30,36 @@ export type CartaoInicio = {
   possuiConta: boolean;
   /** Presente só para administrador (ADR-014); nunca para não-admin. */
   usuarioId?: string;
+  /** Metadado administrativo de conta/convite (E2-ACE-05). */
+  estadoConta?: EstadoContaPessoa;
   resumo: string;
   areasAutorizadas?: AreasAutorizadasCartao;
+};
+
+export type EstadoConvite = "pendente" | "expirado" | "ativado";
+
+export type ConviteResumo = {
+  id: string;
+  email: string;
+  nomeConvidado?: string | null;
+  responsabilidade?: string | null;
+  pessoaAlvoId?: string | null;
+  pessoaAlvoNome?: string | null;
+  pessoaContaId?: string | null;
+  pessoaContaNome?: string | null;
+  expiraEm: string;
+  usadoEm?: string | null;
+  criadoEm: string;
+  estado: EstadoConvite;
+};
+
+export type ConviteCriado = {
+  id?: string;
+  token: string;
+  email: string;
+  pessoaContaId?: string | null;
+  expiraEm?: string;
+  estado?: EstadoConvite;
 };
 
 export type DestaqueInicio = {
@@ -105,14 +139,55 @@ export function textoRevisaoAcesso(entrada: {
     entrada.participanteNome.trim() ||
     (entrada.convite ? "a pessoa convidada" : "o participante");
   const pessoa = entrada.nomePessoa.trim() || "a pessoa selecionada";
-  const prefixo = entrada.convite
-    ? `Após a ativação, ${participante} verá ${entrada.area} de ${pessoa}.`
-    : `Quando entrar, ${participante} verá ${entrada.area} de ${pessoa}.`;
+  const combinacao = COMBINACOES_ACESSO_CONCEDIVEIS.find(
+    (c) => c.responsabilidade === entrada.responsabilidade,
+  );
+  const papel = combinacao?.rotulo ?? "Responsável";
+  const frase = `${participante} acompanhará ${pessoa} em ${entrada.area} como ${papel}.`;
+  const prefixo = entrada.convite ? `Após a ativação: ${frase}` : frase;
   const resumo = resumoAcoesCombinacao(
     entrada.responsabilidade,
     pessoa,
   ).replace(/^Pode /, "Poderá ");
   return `${prefixo} ${resumo}`;
+}
+
+export function rotuloEstadoConta(estado?: EstadoContaPessoa): string {
+  switch (estado) {
+    case "conta_ativa":
+      return "conta ativa";
+    case "convite_pendente":
+      return "convite pendente";
+    case "convite_expirado":
+      return "convite expirado";
+    case "sem_conta":
+      return "sem conta";
+    default:
+      return "";
+  }
+}
+
+export function rotuloEstadoConvite(estado: EstadoConvite): string {
+  switch (estado) {
+    case "pendente":
+      return "pendente";
+    case "expirado":
+      return "expirado";
+    case "ativado":
+      return "ativado";
+    default:
+      return estado;
+  }
+}
+
+export function formatarValidadeConvite(expiraEm?: string | null): string {
+  if (!expiraEm) return "";
+  const data = new Date(expiraEm);
+  if (Number.isNaN(data.getTime())) return "";
+  return data.toLocaleString("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+  });
 }
 
 export const TEXTO_ADMINISTRACAO_FAMILIA =
@@ -375,6 +450,12 @@ export async function atualizarPessoa(
   return resposta.json();
 }
 
+export async function listarConvites(familiaId: string): Promise<ConviteResumo[]> {
+  const resposta = await fetchApi(`/familias/${familiaId}/convites`);
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return (await resposta.json()) as ConviteResumo[];
+}
+
 export async function criarConvite(
   familiaId: string,
   corpo: {
@@ -385,18 +466,14 @@ export async function criarConvite(
     /** Habilita conta na pessoa já cadastrada (sem criar segunda pessoa). */
     pessoaContaId?: string;
   },
-) {
+): Promise<ConviteCriado> {
   const resposta = await fetchApi(`/familias/${familiaId}/convites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(corpo),
   });
   if (!resposta.ok) throw new Error(await lerErro(resposta));
-  return (await resposta.json()) as {
-    token: string;
-    email: string;
-    pessoaContaId?: string | null;
-  };
+  return (await resposta.json()) as ConviteCriado;
 }
 
 export async function ativarConvite(

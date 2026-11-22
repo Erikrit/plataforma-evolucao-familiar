@@ -1,10 +1,12 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   GoneException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { randomBytes } from "node:crypto";
 import { ServicoPrisma } from "../prisma/servico-prisma";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
@@ -19,12 +21,60 @@ import { normalizarSlugFamilia } from "../comum/slug-familia";
 
 const DURACAO_CONVITE_MS = 7 * 24 * 60 * 60 * 1000;
 
+export type EstadoConvite = "pendente" | "expirado" | "ativado";
+
+function estadoDoConvite(convite: {
+  usadoEm: Date | null;
+  expiraEm: Date;
+}): EstadoConvite {
+  if (convite.usadoEm) return "ativado";
+  if (convite.expiraEm.getTime() < Date.now()) return "expirado";
+  return "pendente";
+}
+
 @Injectable()
 export class ServicoConvites {
   constructor(
     private readonly prisma: ServicoPrisma,
     private readonly autorizacoes: ServicoAutorizacoes,
   ) {}
+
+  async listar(familiaId: string, admin: UsuarioAutenticado) {
+    await this.autorizacoes.exigirAdministrador(familiaId, admin);
+
+    const convites = await this.prisma.convite.findMany({
+      where: { familiaId },
+      orderBy: { criadoEm: "desc" },
+      select: {
+        id: true,
+        email: true,
+        nomeConvidado: true,
+        responsabilidade: true,
+        pessoaAlvoId: true,
+        pessoaContaId: true,
+        expiraEm: true,
+        usadoEm: true,
+        criadoEm: true,
+        pessoaAlvo: { select: { id: true, nome: true } },
+        pessoaConta: { select: { id: true, nome: true } },
+      },
+    });
+
+    return convites.map((convite) => ({
+      id: convite.id,
+      email: convite.email,
+      nomeConvidado: convite.nomeConvidado,
+      responsabilidade: convite.responsabilidade,
+      pessoaAlvoId: convite.pessoaAlvoId,
+      pessoaAlvoNome: convite.pessoaAlvo?.nome ?? null,
+      pessoaContaId: convite.pessoaContaId,
+      pessoaContaNome: convite.pessoaConta?.nome ?? null,
+      expiraEm: convite.expiraEm.toISOString(),
+      usadoEm: convite.usadoEm?.toISOString() ?? null,
+      criadoEm: convite.criadoEm.toISOString(),
+      estado: estadoDoConvite(convite),
+    }));
+  }
 
   async criar(
     familiaId: string,
@@ -113,6 +163,7 @@ export class ServicoConvites {
       pessoaContaId: convite.pessoaContaId,
       expiraEm: convite.expiraEm.toISOString(),
       usadoEm: null,
+      estado: "pendente" as const,
     };
   }
 
@@ -178,59 +229,97 @@ export class ServicoConvites {
       convite.pessoaConta?.nome ||
       convite.email.split("@")[0];
 
-    const resultado = await this.prisma.$transaction(async (tx) => {
-      let pessoaId: string;
-      if (convite.pessoaContaId) {
-        pessoaId = convite.pessoaContaId;
-      } else {
-        const pessoa = await tx.pessoa.create({
+    try {
+      const resultado = await this.prisma.$transaction(async (tx) => {
+        const atual = await tx.convite.findUnique({
+          where: { id: convite.id },
+          select: { usadoEm: true, expiraEm: true },
+        });
+        if (!atual || atual.usadoEm) {
+          throw new GoneException("Convite já utilizado.");
+        }
+        if (atual.expiraEm.getTime() < Date.now()) {
+          throw new GoneException("Convite expirado.");
+        }
+
+        let pessoaId: string;
+        if (convite.pessoaContaId) {
+          const pessoaConta = await tx.pessoa.findFirst({
+            where: { id: convite.pessoaContaId, familiaId: convite.familiaId },
+            include: { usuario: { select: { id: true } } },
+          });
+          if (!pessoaConta) {
+            throw new NotFoundException("Pessoa da conta não encontrada.");
+          }
+          if (pessoaConta.usuario) {
+            throw new BadRequestException(
+              "A pessoa indicada no convite já possui conta.",
+            );
+          }
+          pessoaId = pessoaConta.id;
+        } else {
+          const pessoa = await tx.pessoa.create({
+            data: {
+              familiaId: convite.familiaId,
+              nome,
+              vinculo: "colaboradora",
+            },
+          });
+          pessoaId = pessoa.id;
+        }
+
+        const usuario = await tx.usuario.create({
           data: {
-            familiaId: convite.familiaId,
-            nome,
-            vinculo: "colaboradora",
+            pessoaId,
+            email: convite.email,
+            senhaHash: gerarHashSenha(senha),
           },
         });
-        pessoaId = pessoa.id;
-      }
 
-      const usuario = await tx.usuario.create({
-        data: {
-          pessoaId,
-          email: convite.email,
-          senhaHash: gerarHashSenha(senha),
-        },
-      });
+        if (convite.responsabilidade && convite.pessoaAlvoId) {
+          await tx.autorizacao.create({
+            data: {
+              familiaId: convite.familiaId,
+              usuarioId: usuario.id,
+              responsabilidade: convite.responsabilidade,
+              pessoaAlvoId: convite.pessoaAlvoId,
+            },
+          });
+        }
 
-      if (convite.responsabilidade && convite.pessoaAlvoId) {
-        await tx.autorizacao.create({
-          data: {
-            familiaId: convite.familiaId,
-            usuarioId: usuario.id,
-            responsabilidade: convite.responsabilidade,
-            pessoaAlvoId: convite.pessoaAlvoId,
-          },
+        const marcado = await tx.convite.updateMany({
+          where: { id: convite.id, usadoEm: null },
+          data: { usadoEm: new Date() },
         });
-      }
+        if (marcado.count !== 1) {
+          throw new GoneException("Convite já utilizado.");
+        }
 
-      await tx.convite.update({
-        where: { id: convite.id },
-        data: { usadoEm: new Date() },
+        return { pessoaId, usuario };
       });
 
-      return { pessoaId, usuario };
-    });
-
-    return {
-      ok: true,
-      email: resultado.usuario.email,
-      pessoaId: resultado.pessoaId,
-      familiaId: convite.familiaId,
-      familiaSlug: convite.familia.slug,
-      pessoaAlvoId: convite.pessoaAlvoId,
-      pessoaContaId: convite.pessoaContaId,
-      responsabilidade: convite.responsabilidade,
-      reutilizouPessoa: Boolean(convite.pessoaContaId),
-      destinoEntrada: `/f/${convite.familia.slug}/entrar`,
-    };
+      return {
+        ok: true,
+        email: resultado.usuario.email,
+        pessoaId: resultado.pessoaId,
+        familiaId: convite.familiaId,
+        familiaSlug: convite.familia.slug,
+        pessoaAlvoId: convite.pessoaAlvoId,
+        pessoaContaId: convite.pessoaContaId,
+        responsabilidade: convite.responsabilidade,
+        reutilizouPessoa: Boolean(convite.pessoaContaId),
+        destinoEntrada: `/f/${convite.familia.slug}/entrar`,
+      };
+    } catch (erro) {
+      if (
+        erro instanceof Prisma.PrismaClientKnownRequestError &&
+        erro.code === "P2002"
+      ) {
+        throw new ConflictException(
+          "Não foi possível ativar: conta ou e-mail já existentes.",
+        );
+      }
+      throw erro;
+    }
   }
 }

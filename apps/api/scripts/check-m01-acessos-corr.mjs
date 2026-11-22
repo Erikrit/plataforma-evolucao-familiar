@@ -58,15 +58,16 @@ reg(
   "ui_revisao_efeito",
   api.includes("textoRevisaoAcesso") &&
     painel.includes("textoRevisaoAcesso") &&
-    api.includes("Quando entrar,"),
+    (api.includes("Quando entrar,") || api.includes("acompanhará")),
   "Revisão descreve efeito",
 );
 reg(
   "ui_convite_revisao",
   painel.includes("etapaConfirmacaoConvite") &&
-    painel.includes("Enviar convite") &&
+    painel.includes("Gerar convite") &&
+    !painel.includes("Enviar convite") &&
     api.includes("Após a ativação"),
-  "Convite com revisão",
+  "Convite com revisão (gerar, sem envio)",
 );
 reg(
   "api_participanteUsuarioId",

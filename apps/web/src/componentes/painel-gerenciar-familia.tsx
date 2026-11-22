@@ -28,14 +28,33 @@ import {
   concederAutorizacao,
   criarConvite,
   criarPessoa,
+  formatarValidadeConvite,
+  listarConvites,
   resumoAcoesCombinacao,
   revogarAutorizacao,
+  rotuloEstadoConta,
+  rotuloEstadoConvite,
   textoRevisaoAcesso,
   type AcessoResumo,
   type CombinacaoAcessoConcedivel,
+  type ConviteCriado,
+  type ConviteResumo,
 } from "@/lib/api";
-import { rotaFamilia } from "@/lib/rotas-familia";
+import {
+  caminhoAtivacaoConvite,
+  rotaFamilia,
+  urlAbsolutaDoApp,
+} from "@/lib/rotas-familia";
 import { rotuloPapelExperiencia } from "@/lib/rotulos-experiencia";
+
+const MENSAGEM_CONVITE_CRIADO =
+  "Convite criado — compartilhe o link para ativar o acesso";
+
+type ConviteGeradoUi = {
+  linkAbsoluto: string;
+  caminho: string;
+  expiraEm?: string | null;
+};
 
 type AreaConcessao = CombinacaoAcessoConcedivel["area"];
 type VisaoConsulta = "pessoa" | "participante";
@@ -139,7 +158,13 @@ export function PainelGerenciarFamilia() {
   >(null);
 
   const [abaAtiva, setAbaAtiva] = useState<string | null>("pessoas");
-  const [linkAtivacao, setLinkAtivacao] = useState<string | null>(null);
+  const [conviteGerado, setConviteGerado] = useState<ConviteGeradoUi | null>(
+    null,
+  );
+  const [copiaOk, setCopiaOk] = useState(false);
+  const [copiaManual, setCopiaManual] = useState(false);
+  const [listaConvites, setListaConvites] = useState<ConviteResumo[]>([]);
+  const [carregandoConvites, setCarregandoConvites] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
@@ -328,6 +353,98 @@ export function PainelGerenciarFamilia() {
     }
   }, [visaoConsulta, participanteConsultaId, opcoesConsultaParticipante]);
 
+  function registrarConviteGerado(convite: ConviteCriado) {
+    const caminho = caminhoAtivacaoConvite(
+      usuario?.familia?.slug,
+      convite.token,
+    );
+    setConviteGerado({
+      caminho,
+      linkAbsoluto: urlAbsolutaDoApp(caminho),
+      expiraEm: convite.expiraEm,
+    });
+    setCopiaOk(false);
+    setCopiaManual(false);
+  }
+
+  async function recarregarConvites() {
+    if (!usuario?.pessoa.familiaId) return;
+    setCarregandoConvites(true);
+    try {
+      setListaConvites(await listarConvites(usuario.pessoa.familiaId));
+    } catch (e) {
+      setErro(
+        e instanceof Error ? e.message : "Não foi possível listar os convites",
+      );
+    } finally {
+      setCarregandoConvites(false);
+    }
+  }
+
+  useEffect(() => {
+    if (abaAtiva === "convites" && usuario?.pessoa.familiaId) {
+      void recarregarConvites();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- só ao abrir a aba
+  }, [abaAtiva, usuario?.pessoa.familiaId]);
+
+  async function copiarLinkAtivacao() {
+    if (!conviteGerado) return;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(conviteGerado.linkAbsoluto);
+        setCopiaOk(true);
+        setCopiaManual(false);
+        return;
+      }
+    } catch {
+      /* modo manual */
+    }
+    setCopiaManual(true);
+    setCopiaOk(false);
+  }
+
+  function blocoLinkAtivacao() {
+    if (!conviteGerado) return null;
+    const validade = formatarValidadeConvite(conviteGerado.expiraEm);
+    return (
+      <Stack gap="xs">
+        <Text size="sm" fw={600}>
+          {MENSAGEM_CONVITE_CRIADO}
+        </Text>
+        <Text size="sm" style={{ wordBreak: "break-all" }}>
+          {conviteGerado.linkAbsoluto}
+        </Text>
+        {validade ? (
+          <Text size="sm" c="dimmed">
+            Válido até {validade}
+          </Text>
+        ) : null}
+        <Group gap="sm">
+          <Button size="compact-sm" onClick={() => void copiarLinkAtivacao()}>
+            Copiar link de ativação
+          </Button>
+          <Anchor component={Link} href={conviteGerado.caminho} size="sm">
+            abrir página de ativação
+          </Anchor>
+        </Group>
+        {copiaOk ? (
+          <Text size="sm" c="teal">
+            Link copiado.
+          </Text>
+        ) : null}
+        {copiaManual ? (
+          <TextInput
+            label="Selecione e copie o link"
+            value={conviteGerado.linkAbsoluto}
+            readOnly
+            onFocus={(e) => e.currentTarget.select()}
+          />
+        ) : null}
+      </Stack>
+    );
+  }
+
   function aoTrocarAreaConcessao(proxima: AreaConcessao | null) {
     setAreaConcessao(proxima);
     setEtapaConfirmacao(false);
@@ -368,17 +485,10 @@ export function PainelGerenciarFamilia() {
           nomeConvidado: criada.nome,
           pessoaContaId: criada.id,
         });
-        const slug = usuario.familia?.slug;
-        const caminho = slug
-          ? rotaFamilia(
-              slug,
-              `/convites/ativar?token=${encodeURIComponent(convite.token)}`,
-            )
-          : `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
-        setLinkAtivacao(caminho);
+        registrarConviteGerado(convite);
         setEmailContaNova("");
         setPrecisaEntrar(false);
-        mensagem = `${criada.nome} cadastrada. Conta pronta para ativação no mesmo cadastro (sem nova pessoa).`;
+        mensagem = `${criada.nome} cadastrada. ${MENSAGEM_CONVITE_CRIADO}.`;
       }
       await recarregarInicio();
       setSucesso(mensagem);
@@ -404,20 +514,14 @@ export function PainelGerenciarFamilia() {
         nomeConvidado: nomePessoa,
         pessoaContaId: pessoaId,
       });
-      const slug = usuario.familia?.slug;
-      const caminho = slug
-        ? rotaFamilia(
-            slug,
-            `/convites/ativar?token=${encodeURIComponent(convite.token)}`,
-          )
-        : `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
-      setLinkAtivacao(caminho);
+      registrarConviteGerado(convite);
       setPessoaHabilitarId(null);
       setEmailHabilitar("");
       setSucesso(
-        `Convite de conta para ${nomePessoa}. A ativação reutiliza esta pessoa; o acompanhamento contextual continua em Acessos.`,
+        `${MENSAGEM_CONVITE_CRIADO}. A ativação reutiliza ${nomePessoa}; o acompanhamento contextual continua em Acessos.`,
       );
       await recarregarInicio();
+      if (abaAtiva === "convites") await recarregarConvites();
     } catch (e) {
       setErro(
         e instanceof Error ? e.message : "Não foi possível habilitar a conta",
@@ -442,28 +546,20 @@ export function PainelGerenciarFamilia() {
         responsabilidade: responsabilidadeConvite,
         pessoaAlvoId: pessoaAlvoConviteId,
       });
-      const slug = usuario.familia?.slug;
-      const caminho = slug
-        ? rotaFamilia(
-            slug,
-            `/convites/ativar?token=${encodeURIComponent(convite.token)}`,
-          )
-        : `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
-      setLinkAtivacao(caminho);
+      registrarConviteGerado(convite);
       setEtapaConfirmacaoConvite(false);
       setSucesso(
-        `Convite pronto. Antes da ativação ele aparece só em Convites. ${textoRevisaoAcesso(
-          {
-            participanteNome: emailConvite.trim() || "a pessoa convidada",
-            area: combinacaoConvite?.area ?? "Cuidados",
-            responsabilidade:
-              (responsabilidadeConvite as CombinacaoAcessoConcedivel["responsabilidade"]) ??
-              "colaboradora_cuidados",
-            nomePessoa: pessoaAlvoConvite?.nome ?? "",
-            convite: true,
-          },
-        )}`,
+        `${MENSAGEM_CONVITE_CRIADO}. ${textoRevisaoAcesso({
+          participanteNome: emailConvite.trim() || "a pessoa convidada",
+          area: combinacaoConvite?.area ?? "Cuidados",
+          responsabilidade:
+            (responsabilidadeConvite as CombinacaoAcessoConcedivel["responsabilidade"]) ??
+            "colaboradora_cuidados",
+          nomePessoa: pessoaAlvoConvite?.nome ?? "",
+          convite: true,
+        })}`,
       );
+      await recarregarConvites();
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Não foi possível gerar o convite");
     } finally {
@@ -650,7 +746,7 @@ export function PainelGerenciarFamilia() {
       <Tabs value={abaAtiva} onChange={setAbaAtiva} keepMounted={false}>
         <Tabs.List>
           <Tabs.Tab value="pessoas">Pessoas</Tabs.Tab>
-          <Tabs.Tab value="acessos">Acessos</Tabs.Tab>
+          <Tabs.Tab value="acessos">Acessos e responsabilidades</Tabs.Tab>
           <Tabs.Tab value="convites">Convites</Tabs.Tab>
         </Tabs.List>
 
@@ -697,14 +793,7 @@ export function PainelGerenciarFamilia() {
                 >
                   Salvar
                 </Button>
-                {linkAtivacao && abaAtiva === "pessoas" ? (
-                  <Text size="sm">
-                    Link de ativação:{" "}
-                    <Anchor component={Link} href={linkAtivacao}>
-                      abrir página de ativação
-                    </Anchor>
-                  </Text>
-                ) : null}
+                {abaAtiva === "pessoas" ? blocoLinkAtivacao() : null}
               </Stack>
             </form>
 
@@ -734,7 +823,11 @@ export function PainelGerenciarFamilia() {
                       <Group justify="space-between" align="flex-start">
                         <Text size="sm">
                           {p.nome}
-                          {p.possuiConta ? " · com conta" : " · sem conta"}
+                          {" · "}
+                          {rotuloEstadoConta(
+                            p.estadoConta ??
+                              (p.possuiConta ? "conta_ativa" : "sem_conta"),
+                          )}
                         </Text>
                         <Group gap="xs">
                           {!p.possuiConta ? (
@@ -1041,132 +1134,176 @@ export function PainelGerenciarFamilia() {
         </Tabs.Panel>
 
         <Tabs.Panel value="convites" pt="md">
-          {!etapaConfirmacaoConvite ? (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (
-                  !emailConvite.trim() ||
-                  !pessoaAlvoConviteId ||
-                  !areaConvite ||
-                  !responsabilidadeConvite
-                ) {
-                  setErro(
-                    "Preencha e-mail, pessoa acompanhada, área e responsabilidade.",
-                  );
-                  return;
-                }
-                setErro(null);
-                setEtapaConfirmacaoConvite(true);
-              }}
-            >
-              <Stack gap="sm">
-                <Title order={2}>Convidar participante</Title>
-                <Text size="sm" c="dimmed">
-                  Para quem ainda não tem conta. Mesmas combinações da concessão
-                  direta (sem Administrador). O acesso só começa após a
-                  ativação.
-                </Text>
-                <TextInput
-                  label="E-mail"
-                  value={emailConvite}
-                  onChange={(e) => {
-                    setEmailConvite(e.currentTarget.value);
-                    setEtapaConfirmacaoConvite(false);
-                  }}
-                  type="email"
-                  required
-                  placeholder="email@exemplo.com"
-                />
-                <Select
-                  label="Pessoa acompanhada"
-                  data={opcoesPessoas}
-                  value={pessoaAlvoConviteId}
-                  onChange={(v) => {
-                    setPessoaAlvoConviteId(v);
-                    setEtapaConfirmacaoConvite(false);
-                  }}
-                  required
-                  searchable
-                />
-                <Select
-                  label="Área"
-                  data={[
-                    { value: "Cuidados", label: "Cuidados" },
-                    {
-                      value: "Desenvolvimento",
-                      label: "Desenvolvimento",
-                    },
-                  ]}
-                  value={areaConvite}
-                  onChange={(v) =>
-                    aoTrocarAreaConvite((v as AreaConcessao | null) ?? null)
-                  }
-                  required
-                />
-                {areaConvite
-                  ? renderOpcoesResponsabilidade(
-                      combinacoesAreaConvite,
-                      responsabilidadeConvite,
-                      (v) => {
-                        setResponsabilidadeConvite(v);
-                        setEtapaConfirmacaoConvite(false);
-                      },
-                      pessoaAlvoConvite?.nome ?? "",
-                    )
-                  : null}
-                <Button
-                  type="submit"
-                  variant="light"
-                  disabled={
+          <Stack gap="lg">
+            {!etapaConfirmacaoConvite ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (
                     !emailConvite.trim() ||
                     !pessoaAlvoConviteId ||
+                    !areaConvite ||
                     !responsabilidadeConvite
+                  ) {
+                    setErro(
+                      "Preencha e-mail, pessoa acompanhada, área e responsabilidade.",
+                    );
+                    return;
                   }
-                >
-                  Revisar
-                </Button>
-                {linkAtivacao ? (
-                  <Text size="sm">
-                    Link de ativação:{" "}
-                    <Anchor component={Link} href={linkAtivacao}>
-                      abrir página de ativação
-                    </Anchor>
+                  setErro(null);
+                  setEtapaConfirmacaoConvite(true);
+                }}
+              >
+                <Stack gap="sm">
+                  <Title order={2}>Convidar participante</Title>
+                  <Text size="sm" c="dimmed">
+                    Para quem ainda não tem conta. Mesmas combinações da
+                    concessão direta (sem Administrador). Gerar o convite não
+                    envia mensagem; compartilhe o link manualmente. O acesso só
+                    começa após a ativação.
                   </Text>
-                ) : null}
+                  <TextInput
+                    label="E-mail"
+                    value={emailConvite}
+                    onChange={(e) => {
+                      setEmailConvite(e.currentTarget.value);
+                      setEtapaConfirmacaoConvite(false);
+                    }}
+                    type="email"
+                    required
+                    placeholder="email@exemplo.com"
+                  />
+                  <Select
+                    label="Pessoa acompanhada"
+                    data={opcoesPessoas}
+                    value={pessoaAlvoConviteId}
+                    onChange={(v) => {
+                      setPessoaAlvoConviteId(v);
+                      setEtapaConfirmacaoConvite(false);
+                    }}
+                    required
+                    searchable
+                  />
+                  <Select
+                    label="Área"
+                    data={[
+                      { value: "Cuidados", label: "Cuidados" },
+                      {
+                        value: "Desenvolvimento",
+                        label: "Desenvolvimento",
+                      },
+                    ]}
+                    value={areaConvite}
+                    onChange={(v) =>
+                      aoTrocarAreaConvite((v as AreaConcessao | null) ?? null)
+                    }
+                    required
+                  />
+                  {areaConvite
+                    ? renderOpcoesResponsabilidade(
+                        combinacoesAreaConvite,
+                        responsabilidadeConvite,
+                        (v) => {
+                          setResponsabilidadeConvite(v);
+                          setEtapaConfirmacaoConvite(false);
+                        },
+                        pessoaAlvoConvite?.nome ?? "",
+                      )
+                    : null}
+                  <Button
+                    type="submit"
+                    variant="light"
+                    disabled={
+                      !emailConvite.trim() ||
+                      !pessoaAlvoConviteId ||
+                      !responsabilidadeConvite
+                    }
+                  >
+                    Revisar
+                  </Button>
+                  {blocoLinkAtivacao()}
+                </Stack>
+              </form>
+            ) : (
+              <Stack gap="sm">
+                <Title order={2}>Revisar convite</Title>
+                <Text size="sm">
+                  {textoRevisaoAcesso({
+                    participanteNome:
+                      emailConvite.trim() || "a pessoa convidada",
+                    area: combinacaoConvite?.area ?? "Cuidados",
+                    responsabilidade:
+                      (responsabilidadeConvite as CombinacaoAcessoConcedivel["responsabilidade"]) ??
+                      "colaboradora_cuidados",
+                    nomePessoa: pessoaAlvoConvite?.nome ?? "",
+                    convite: true,
+                  })}
+                </Text>
+                <Group gap="sm">
+                  <Button
+                    variant="default"
+                    onClick={() => setEtapaConfirmacaoConvite(false)}
+                    disabled={carregando}
+                  >
+                    Voltar
+                  </Button>
+                  <Button
+                    loading={carregando}
+                    onClick={() => void aoConfirmarConvite()}
+                  >
+                    Gerar convite
+                  </Button>
+                </Group>
               </Stack>
-            </form>
-          ) : (
+            )}
+
             <Stack gap="sm">
-              <Title order={2}>Revisar convite</Title>
-              <Text size="sm">
-                {textoRevisaoAcesso({
-                  participanteNome: emailConvite.trim() || "a pessoa convidada",
-                  area: combinacaoConvite?.area ?? "Cuidados",
-                  responsabilidade:
-                    (responsabilidadeConvite as CombinacaoAcessoConcedivel["responsabilidade"]) ??
-                    "colaboradora_cuidados",
-                  nomePessoa: pessoaAlvoConvite?.nome ?? "",
-                  convite: true,
-                })}
+              <Title order={2}>Convites da família</Title>
+              <Text size="sm" c="dimmed">
+                Estados reais da própria família. O token não é listado aqui.
               </Text>
-              <Group gap="sm">
-                <Button
-                  variant="default"
-                  onClick={() => setEtapaConfirmacaoConvite(false)}
-                  disabled={carregando}
+              {carregandoConvites ? (
+                <EstadoCarregando rotulo="Carregando convites…" />
+              ) : listaConvites.length === 0 ? (
+                <EstadoVazio
+                  titulo="Nenhum convite ainda"
+                  descricao="Gere um convite de conta ou de acompanhamento para aparecer aqui."
+                />
+              ) : (
+                <Stack
+                  gap="sm"
+                  component="ul"
+                  style={{ listStyle: "none", margin: 0, padding: 0 }}
                 >
-                  Voltar
-                </Button>
-                <Button
-                  loading={carregando}
-                  onClick={() => void aoConfirmarConvite()}
-                >
-                  Enviar convite
-                </Button>
-              </Group>
+                  {listaConvites.map((c) => (
+                    <Stack
+                      key={c.id}
+                      component="li"
+                      gap={2}
+                      style={{
+                        borderBottom: "1px solid var(--mantine-color-gray-3)",
+                        paddingBottom: 8,
+                      }}
+                    >
+                      <Text size="sm">
+                        {c.email} · {rotuloEstadoConvite(c.estado)}
+                      </Text>
+                      <Text size="sm" c="dimmed">
+                        {c.pessoaContaNome
+                          ? `Conta de ${c.pessoaContaNome}`
+                          : c.pessoaAlvoNome
+                            ? `Acompanhar ${c.pessoaAlvoNome}`
+                            : "Convite contextual"}
+                        {c.expiraEm
+                          ? ` · válido até ${formatarValidadeConvite(c.expiraEm)}`
+                          : ""}
+                      </Text>
+                    </Stack>
+                  ))}
+                </Stack>
+              )}
             </Stack>
-          )}
+          </Stack>
         </Tabs.Panel>
       </Tabs>
     </Stack>

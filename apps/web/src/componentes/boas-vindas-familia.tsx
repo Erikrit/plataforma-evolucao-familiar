@@ -68,7 +68,7 @@ export function BoasVindasFamilia() {
           </form>
           <MensagemFeedback erro={erroAcesso} />
           <Text size="sm">
-            Recebeu um convite? Use o link enviado pela família em{" "}
+            Recebeu um convite? Use o link compartilhado pela família em{" "}
             <Anchor component="span">/f/…/convites/ativar</Anchor>.
           </Text>
         </Stack>

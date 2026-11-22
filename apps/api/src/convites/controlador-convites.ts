@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Post, Req, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
 import type { Request } from "express";
 import { GuardaSessao } from "../auth/guarda-sessao";
 import type { RequisicaoComUsuario } from "../comum/tipos-requisicao";
@@ -22,6 +30,15 @@ type CorpoAtivacao = {
 @Controller()
 export class ControladorConvites {
   constructor(private readonly convites: ServicoConvites) {}
+
+  @Get("familias/:familiaId/convites")
+  @UseGuards(GuardaSessao)
+  listar(
+    @Param("familiaId") familiaId: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.convites.listar(familiaId, requisicao.usuario!);
+  }
 
   @Post("familias/:familiaId/convites")
   @UseGuards(GuardaSessao)

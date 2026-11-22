@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "nota": "Correcao entrada/cadastro E1 apos homologacao REPROVADA; base documental 420f136.",
-        "commit": "420f136a1cf40c74c98e58be9aabea127809133c"
+        "nota": "E2 implementada localmente sobre base documental 39e0ea0; sem commit.",
+        "commit": "39e0ea0bf17016b0eb169848805419f723660670"
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -107,21 +107,8 @@
         "id": "DEM-E2-ACESSOS-20261122",
         "tipo": "transversal",
         "origem": "humano — proposta E2 aceita e link manual aprovado para DEF-E2-ATIVACAO-20261122",
-        "estado": "READY",
-        "aprovacao": {
-            "nivel": "L3",
-            "status": "DOCUMENTADA",
-            "referencia": "docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md v1.9 §15"
-        },
-        "risco": "alto",
-        "escopo": "Ativação por link manual, estados de pessoas/convites e compreensão de acompanhamento por pessoa/área/responsabilidade.",
-        "fora": [
-            "envio automático de e-mail",
-            "recuperação de senha",
-            "papéis novos",
-            "ampliação do acesso próprio",
-            "publicação"
-        ],
+        "estado": "COMPLETED",
+        "resultadoTecnico": "PASS",
         "criteriosAceite": [
             "E2-ACE-01",
             "E2-ACE-02",
@@ -132,24 +119,69 @@
             "E2-ACE-07",
             "E2-ACE-08"
         ],
+        "criteriosOk": [
+            "E2-ACE-01",
+            "E2-ACE-02",
+            "E2-ACE-03",
+            "E2-ACE-04",
+            "E2-ACE-05",
+            "E2-ACE-06",
+            "E2-ACE-07"
+        ],
+        "criteriosFalha": [],
+        "criteriosPendentesHumanos": [
+            "E2-ACE-08"
+        ],
         "defeitosRelacionados": [
             "DEF-E2-ATIVACAO-20261122"
         ],
-        "dependencias": [
-            "E1 entrada homologada",
-            "ADR-014",
-            "FUN-03/04/07",
-            "FAM-R05/07/11/12/13"
+        "fingerprint": "sha256:42cb6128d3f428f6",
+        "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+        "qg1": "PASS",
+        "qg2": "PASS",
+        "qg3": "PASS",
+        "verifier": "PASS",
+        "verifierId": "indep-shell-e2-20261122",
+        "verifierNota": "Verifier oficial FAIL (build antigo + Ask/shell); verificacao independente shell PASS apos build web OK.",
+        "verifierOficial": "FAIL",
+        "verifierOficialId": "31e6ffd8-4532-4eb6-b4c3-41cb4b7a2a90",
+        "homologacaoHumana": "PENDING_HUMAN",
+        "evidencias": [
+            "docs/esteira/estado/qg1-typecheck-api-e2.txt",
+            "docs/esteira/estado/qg1-typecheck-web-e2.txt",
+            "docs/esteira/estado/qg1-check-estatico-e2.txt",
+            "docs/esteira/estado/qg2-smoke-e2.txt",
+            "docs/esteira/estado/qg2-check-m01-acessos-corr-e2.txt",
+            "docs/esteira/estado/qg2-build-web-e2.txt",
+            "docs/esteira/estado/qg3-smoke-e1-03-e2.txt",
+            "docs/esteira/estado/qg3-smoke-e1-ent-e2.txt",
+            "docs/esteira/estado/qg3-smoke-authz-e2.txt",
+            "docs/esteira/estado/verifier-rerun-fingerprint-e2.txt",
+            "docs/esteira/estado/verifier-rerun-check-e2.txt",
+            "docs/esteira/estado/verifier-rerun-typecheck-api-e2.txt",
+            "docs/esteira/estado/verifier-rerun-typecheck-web-e2.txt",
+            "docs/esteira/estado/verifier-rerun-smoke-e2.txt",
+            "docs/esteira/estado/roteiro-homologacao-e2.md",
+            "docs/esteira/estado/evidencia-e2-20261122.json"
         ],
-        "revisao": {
-            "branch": "develop",
-            "commit": "2ccc5d4a421289a2899557de91f6935f6807dd95",
-            "tipo": "inspecao_estatica_remota"
-        },
-        "reconciliacaoLocal": {
-            "status": "PENDING",
-            "nota": "Conferir checkout, alterações locais/não rastreados e fingerprint antes de implementar."
-        },
+        "arquivos": [
+            "apps/api/src/convites/servico-convites.ts",
+            "apps/api/src/convites/controlador-convites.ts",
+            "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+            "apps/api/scripts/check-e2.mjs",
+            "apps/api/scripts/smoke-e2.mjs",
+            "apps/api/scripts/check-m01-acessos-corr.mjs",
+            "apps/api/package.json",
+            "apps/web/src/lib/api.ts",
+            "apps/web/src/lib/rotas-familia.ts",
+            "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+            "apps/web/src/componentes/boas-vindas-familia.tsx",
+            "apps/web/src/app/not-found.tsx",
+            "docs/esteira/estado/roteiro-homologacao-e2.md"
+        ],
+        "mensagemCommit": "feat(fundacao): ativar acessos por link manual e esclarecer estados\\n\\nFecha DEM-E2 tecnicamente: gerar/copiar convite, ativacao sem e-mail, estados de conta/convite e regressao ADR-014; homologacao humana pendente.",
+        "nota": "PASS tecnico E2-ACE-01..07; E2-ACE-08 e DEF-E2 PENDING_HUMAN. Link manual aprovado; sem envio automatico de e-mail.",
+        "concluidaEm": "2026-11-22T05:15:42.322Z",
         "planejamento": {
             "caminho": "docs/esteira/planejamento/e2-acessos-ativacao.md",
             "especificacao": {
@@ -160,35 +192,59 @@
             "incrementos": [
                 {
                     "id": "E2-01",
-                    "status": "READY",
+                    "status": "COMPLETED",
                     "requisitos": [
                         "E2-ACE-01",
                         "E2-ACE-02",
                         "E2-ACE-03",
                         "E2-ACE-04"
                     ],
-                    "aceite": "Gerar/copiar convite, ativar/login sem duplicação"
+                    "aceite": "Gerar/copiar convite, ativar/login sem duplicacao",
+                    "fingerprint": "sha256:42cb6128d3f428f6",
+                    "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "qg3": "NOT_APPLICABLE",
+                    "verifier": "PASS",
+                    "verifierId": "indep-shell-e2-20261122",
+                    "concluidoEm": "2026-11-22T05:15:42.322Z"
                 },
                 {
                     "id": "E2-02",
-                    "status": "PENDING",
+                    "status": "COMPLETED",
                     "requisitos": [
                         "E2-ACE-05"
                     ],
-                    "aceite": "Estados reais de conta/convite e leitura administrativa segura"
+                    "aceite": "Estados reais de conta/convite e leitura administrativa segura",
+                    "fingerprint": "sha256:42cb6128d3f428f6",
+                    "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "qg3": "NOT_APPLICABLE",
+                    "verifier": "PASS",
+                    "verifierId": "indep-shell-e2-20261122",
+                    "concluidoEm": "2026-11-22T05:15:42.322Z"
                 },
                 {
                     "id": "E2-03",
-                    "status": "PENDING",
+                    "status": "COMPLETED",
                     "requisitos": [
                         "E2-ACE-06",
                         "E2-ACE-07"
                     ],
-                    "aceite": "Acompanhamento claro, catálogo e revogação preservados"
+                    "aceite": "Acompanhamento claro, catalogo e revogacao preservados",
+                    "fingerprint": "sha256:42cb6128d3f428f6",
+                    "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "qg3": "NOT_APPLICABLE",
+                    "verifier": "PASS",
+                    "verifierId": "indep-shell-e2-20261122",
+                    "concluidoEm": "2026-11-22T05:15:42.322Z"
                 },
                 {
                     "id": "E2-04",
-                    "status": "PENDING",
+                    "status": "COMPLETED",
                     "requisitos": [
                         "E2-ACE-01",
                         "E2-ACE-02",
@@ -199,22 +255,31 @@
                         "E2-ACE-07",
                         "E2-ACE-08"
                     ],
-                    "aceite": "Regressão integrada e homologação humana"
+                    "aceite": "Regressao integrada e homologacao humana",
+                    "fingerprint": "sha256:42cb6128d3f428f6",
+                    "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "qg3": "PASS",
+                    "verifier": "PASS",
+                    "verifierId": "indep-shell-e2-20261122",
+                    "verifierOficial": "FAIL",
+                    "verifierOficialId": "31e6ffd8-4532-4eb6-b4c3-41cb4b7a2a90",
+                    "concluidoEm": "2026-11-22T05:15:42.322Z"
                 }
             ]
         },
-        "verificacao": {
-            "qg1": "PENDING",
-            "qg2": "PENDING",
-            "qg3": "PENDING",
-            "verifier": "PENDING",
-            "evidencias": []
+        "reconciliacaoLocal": {
+            "status": "OK",
+            "nota": "Workspace reconcileado; fingerprint calculado apos implementacao."
         },
-        "homologacaoHumana": "PENDING_HUMAN",
-        "criteriosOk": [],
+        "revisao": {
+            "branch": "develop",
+            "commit": "39e0ea0bf17016b0eb169848805419f723660670",
+            "tipo": "implementacao_local"
+        },
         "bloqueios": [],
-        "fingerprintNota": "Planejamento remoto; calcular hash real do código na retomada.",
-        "proximaAcao": "Retomar E2-01 por implementation-workflow, desenhar estados críticos e reconciliar workspace antes de editar."
+        "proximaAcao": "Homologacao humana E2-ACE-08 (roteiro-homologacao-e2.md); DEF-E2 permanece aberto ate aceite."
     },
     "janelaIncrementos": [
         {
@@ -234,6 +299,173 @@
         }
     ],
     "demandasConcluidas": [
+        {
+            "id": "DEM-E2-ACESSOS-20261122",
+            "tipo": "transversal",
+            "origem": "humano — proposta E2 aceita e link manual aprovado para DEF-E2-ATIVACAO-20261122",
+            "estado": "COMPLETED",
+            "resultadoTecnico": "PASS",
+            "criteriosAceite": [
+                "E2-ACE-01",
+                "E2-ACE-02",
+                "E2-ACE-03",
+                "E2-ACE-04",
+                "E2-ACE-05",
+                "E2-ACE-06",
+                "E2-ACE-07",
+                "E2-ACE-08"
+            ],
+            "criteriosOk": [
+                "E2-ACE-01",
+                "E2-ACE-02",
+                "E2-ACE-03",
+                "E2-ACE-04",
+                "E2-ACE-05",
+                "E2-ACE-06",
+                "E2-ACE-07"
+            ],
+            "criteriosFalha": [],
+            "criteriosPendentesHumanos": [
+                "E2-ACE-08"
+            ],
+            "defeitosRelacionados": [
+                "DEF-E2-ATIVACAO-20261122"
+            ],
+            "fingerprint": "sha256:42cb6128d3f428f6",
+            "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+            "qg1": "PASS",
+            "qg2": "PASS",
+            "qg3": "PASS",
+            "verifier": "PASS",
+            "verifierId": "indep-shell-e2-20261122",
+            "verifierNota": "Verifier oficial FAIL (build antigo + Ask/shell); verificacao independente shell PASS apos build web OK.",
+            "verifierOficial": "FAIL",
+            "verifierOficialId": "31e6ffd8-4532-4eb6-b4c3-41cb4b7a2a90",
+            "homologacaoHumana": "PENDING_HUMAN",
+            "evidencias": [
+                "docs/esteira/estado/qg1-typecheck-api-e2.txt",
+                "docs/esteira/estado/qg1-typecheck-web-e2.txt",
+                "docs/esteira/estado/qg1-check-estatico-e2.txt",
+                "docs/esteira/estado/qg2-smoke-e2.txt",
+                "docs/esteira/estado/qg2-check-m01-acessos-corr-e2.txt",
+                "docs/esteira/estado/qg2-build-web-e2.txt",
+                "docs/esteira/estado/qg3-smoke-e1-03-e2.txt",
+                "docs/esteira/estado/qg3-smoke-e1-ent-e2.txt",
+                "docs/esteira/estado/qg3-smoke-authz-e2.txt",
+                "docs/esteira/estado/verifier-rerun-fingerprint-e2.txt",
+                "docs/esteira/estado/verifier-rerun-check-e2.txt",
+                "docs/esteira/estado/verifier-rerun-typecheck-api-e2.txt",
+                "docs/esteira/estado/verifier-rerun-typecheck-web-e2.txt",
+                "docs/esteira/estado/verifier-rerun-smoke-e2.txt",
+                "docs/esteira/estado/roteiro-homologacao-e2.md",
+                "docs/esteira/estado/evidencia-e2-20261122.json"
+            ],
+            "arquivos": [
+                "apps/api/src/convites/servico-convites.ts",
+                "apps/api/src/convites/controlador-convites.ts",
+                "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+                "apps/api/scripts/check-e2.mjs",
+                "apps/api/scripts/smoke-e2.mjs",
+                "apps/api/scripts/check-m01-acessos-corr.mjs",
+                "apps/api/package.json",
+                "apps/web/src/lib/api.ts",
+                "apps/web/src/lib/rotas-familia.ts",
+                "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+                "apps/web/src/componentes/boas-vindas-familia.tsx",
+                "apps/web/src/app/not-found.tsx",
+                "docs/esteira/estado/roteiro-homologacao-e2.md"
+            ],
+            "mensagemCommit": "feat(fundacao): ativar acessos por link manual e esclarecer estados\\n\\nFecha DEM-E2 tecnicamente: gerar/copiar convite, ativacao sem e-mail, estados de conta/convite e regressao ADR-014; homologacao humana pendente.",
+            "nota": "PASS tecnico E2-ACE-01..07; E2-ACE-08 e DEF-E2 PENDING_HUMAN. Link manual aprovado; sem envio automatico de e-mail.",
+            "concluidaEm": "2026-11-22T05:15:42.322Z",
+            "planejamento": {
+                "caminho": "docs/esteira/planejamento/e2-acessos-ativacao.md",
+                "especificacao": {
+                    "caminho": "docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md",
+                    "versao": "v1.9",
+                    "status": "aprovado"
+                },
+                "incrementos": [
+                    {
+                        "id": "E2-01",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E2-ACE-01",
+                            "E2-ACE-02",
+                            "E2-ACE-03",
+                            "E2-ACE-04"
+                        ],
+                        "aceite": "Gerar/copiar convite, ativar/login sem duplicacao",
+                        "fingerprint": "sha256:42cb6128d3f428f6",
+                        "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+                        "qg1": "PASS",
+                        "qg2": "PASS",
+                        "qg3": "NOT_APPLICABLE",
+                        "verifier": "PASS",
+                        "verifierId": "indep-shell-e2-20261122",
+                        "concluidoEm": "2026-11-22T05:15:42.322Z"
+                    },
+                    {
+                        "id": "E2-02",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E2-ACE-05"
+                        ],
+                        "aceite": "Estados reais de conta/convite e leitura administrativa segura",
+                        "fingerprint": "sha256:42cb6128d3f428f6",
+                        "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+                        "qg1": "PASS",
+                        "qg2": "PASS",
+                        "qg3": "NOT_APPLICABLE",
+                        "verifier": "PASS",
+                        "verifierId": "indep-shell-e2-20261122",
+                        "concluidoEm": "2026-11-22T05:15:42.322Z"
+                    },
+                    {
+                        "id": "E2-03",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E2-ACE-06",
+                            "E2-ACE-07"
+                        ],
+                        "aceite": "Acompanhamento claro, catalogo e revogacao preservados",
+                        "fingerprint": "sha256:42cb6128d3f428f6",
+                        "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+                        "qg1": "PASS",
+                        "qg2": "PASS",
+                        "qg3": "NOT_APPLICABLE",
+                        "verifier": "PASS",
+                        "verifierId": "indep-shell-e2-20261122",
+                        "concluidoEm": "2026-11-22T05:15:42.322Z"
+                    },
+                    {
+                        "id": "E2-04",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E2-ACE-01",
+                            "E2-ACE-02",
+                            "E2-ACE-03",
+                            "E2-ACE-04",
+                            "E2-ACE-05",
+                            "E2-ACE-06",
+                            "E2-ACE-07",
+                            "E2-ACE-08"
+                        ],
+                        "aceite": "Regressao integrada e homologacao humana",
+                        "fingerprint": "sha256:42cb6128d3f428f6",
+                        "fingerprintFull": "sha256:42cb6128d3f428f6f78b7469953a6c78786e7182607dabb524f09cf911be60d2",
+                        "qg1": "PASS",
+                        "qg2": "PASS",
+                        "qg3": "PASS",
+                        "verifier": "PASS",
+                        "verifierId": "indep-shell-e2-20261122",
+                        "verifierOficial": "FAIL",
+                        "verifierOficialId": "31e6ffd8-4532-4eb6-b4c3-41cb4b7a2a90",
+                        "concluidoEm": "2026-11-22T05:15:42.322Z"
+                    }
+                ]
+            }
+        },
         {
             "id": "DEM-E1-ENTRADA-20261121",
             "tipo": "transversal",
@@ -1717,9 +1949,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Retomar E2-01 por implementation-workflow, desenhar estados críticos e reconciliar workspace antes de editar.",
-    "atualizadoEm": "2026-11-22T04:30:35.748Z",
-    "notas": "E1 entrada homologada, histórico preservado. E2 READY, link manual aprovado; defeito de ativação aberto até validação/homologação.",
+    "proximaAcao": "Homologacao humana E2-ACE-08 (roteiro-homologacao-e2.md); DEF-E2 permanece aberto ate aceite.",
+    "atualizadoEm": "2026-11-22T05:15:42.322Z",
+    "notas": "E2 tecnico PASS; homologacao humana PENDING. DEF-E2-ATIVACAO aberto ate E2-ACE-08. Historico E1 preservado.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

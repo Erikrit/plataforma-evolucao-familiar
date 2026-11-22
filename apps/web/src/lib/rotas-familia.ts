@@ -48,6 +48,27 @@ export function rotaFamilia(slug: string, caminho = ""): string {
   return `${base}${relativo}`;
 }
 
+/** Origem confiável do ambiente (browser); sem fixar localhost em código. */
+export function origemDoApp(): string {
+  if (typeof window === "undefined") return "";
+  return window.location.origin;
+}
+
+export function urlAbsolutaDoApp(caminho: string): string {
+  const origem = origemDoApp();
+  if (!origem) return caminho;
+  return `${origem}${caminho.startsWith("/") ? caminho : `/${caminho}`}`;
+}
+
+export function caminhoAtivacaoConvite(
+  slug: string | null | undefined,
+  token: string,
+): string {
+  const consulta = `token=${encodeURIComponent(token)}`;
+  if (slug) return rotaFamilia(slug, `/convites/ativar?${consulta}`);
+  return `/convites/ativar?${consulta}`;
+}
+
 export function extrairSlugDaUrl(pathname: string): string | null {
   const m = pathname.match(/^\/f\/([^/]+)/);
   return m?.[1] ? decodeURIComponent(m[1]) : null;

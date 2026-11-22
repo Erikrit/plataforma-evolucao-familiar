@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-22 — DEM-E2 COMPLETED técnico (humana PENDING)
+
+- **Demanda:** DEM-E2-ACESSOS-20261122 COMPLETED técnico; homologação humana PENDING_HUMAN (E2-ACE-08); DEF-E2-ATIVACAO-20261122 permanece aberto.
+- **Entrega:** Gerar/copiar link de ativação (sem envio de e-mail), claim atômico na ativação, listagem/estados de convite e conta, revisão ADR-014, regressão E1/authz, roteiro humano.
+- **QG-1/2/3:** PASS · Verifier indep. shell PASS; oficial FAIL (build antigo + Ask) — reexecução shell prevalece.
+- **Critérios:** E2-ACE-01..07 PASS; E2-ACE-08 PENDING_HUMAN
+- **Fingerprint:** `sha256:42cb6128d3f428f6`
+- **Evidência:** `evidencia-e2-20261122.json` · `roteiro-homologacao-e2.md`
+- **Commit/push/deploy:** não executados
+- **mensagemCommit sugerida:** `feat(fundacao): ativar acessos por link manual e esclarecer estados`
+
 ## 2026-11-22 — E2 aprovada e planejada: ativação por link e gestão de acessos
 
 - **Aprovação humana:** link compartilhado manualmente; envio automático adiado. Recorte Módulo 01 v1.9 §15, E2-ACE-01..08.

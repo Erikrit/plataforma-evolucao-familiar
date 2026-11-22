@@ -459,6 +459,34 @@ export class ServicoAutorizacoes {
       },
     });
 
+    const estadoContaPorPessoa = new Map<
+      string,
+      "sem_conta" | "convite_pendente" | "convite_expirado" | "conta_ativa"
+    >();
+    if (visao.adminFamilia) {
+      const convitesConta = await this.prisma.convite.findMany({
+        where: { familiaId, pessoaContaId: { not: null } },
+        orderBy: { criadoEm: "desc" },
+        select: {
+          pessoaContaId: true,
+          usadoEm: true,
+          expiraEm: true,
+        },
+      });
+      const agora = Date.now();
+      for (const convite of convitesConta) {
+        if (!convite.pessoaContaId) continue;
+        if (estadoContaPorPessoa.has(convite.pessoaContaId)) continue;
+        if (convite.usadoEm) continue;
+        estadoContaPorPessoa.set(
+          convite.pessoaContaId,
+          convite.expiraEm.getTime() < agora
+            ? "convite_expirado"
+            : "convite_pendente",
+        );
+      }
+    }
+
     const autorizacoes = await this.listarDoUsuario(familiaId, usuario);
     const acessos = await this.listarAcessos(familiaId, usuario);
 
@@ -474,6 +502,11 @@ export class ServicoAutorizacoes {
       );
       if (cuidados) idsCuidados.push(p.id);
       if (desenvolvimento) idsDesenvolvimento.push(p.id);
+      const estadoConta = visao.adminFamilia
+        ? p.usuario
+          ? ("conta_ativa" as const)
+          : (estadoContaPorPessoa.get(p.id) ?? ("sem_conta" as const))
+        : undefined;
       cartoes.push({
         pessoaId: p.id,
         nome: p.nome,
@@ -482,6 +515,7 @@ export class ServicoAutorizacoes {
         ...(visao.adminFamilia && p.usuario
           ? { usuarioId: p.usuario.id }
           : {}),
+        ...(estadoConta ? { estadoConta } : {}),
         resumo: p.vinculo ? `Vínculo: ${p.vinculo}` : "Pessoa da família",
         areasAutorizadas: {
           cuidados,

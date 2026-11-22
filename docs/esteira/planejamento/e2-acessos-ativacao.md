@@ -1,7 +1,7 @@
 # E2 — Gestão de acessos e ativação por link
 
 **Demanda:** DEM-E2-ACESSOS-20261122  
-**Estado:** READY para execução; sem implementação ou testes nesta rodada.  
+**Estado:** COMPLETED técnico (E2-01..04); homologação humana PENDING (E2-ACE-08).  
 **Tipo:** transversal · **Risco:** alto (contas, saúde/criança, autorização).  
 **Aprovação:** Módulo 01 v1.9 §15, E2-ACE-01..08.  
 **Base inspecionada:** develop @ 2ccc5d4a421289a2899557de91f6935f6807dd95.
