@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -58,8 +59,12 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
   const [filtradoPorAutorizacao, setFiltrado] = useState(false);
   const [erroSessao, setErroSessao] = useState<string | null>(null);
   const [slugUrl, setSlugUrl] = useState<string | null>(null);
+  const loginEmCurso = useRef<UsuarioSessao | null>(null);
+  const versaoInicio = useRef(0);
 
   const limparDadosContexto = useCallback(() => {
+    versaoInicio.current++;
+    loginEmCurso.current = null;
     setCartoes([]);
     setDestaques([]);
     setAcessos(null);
@@ -79,7 +84,17 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
   }, []);
 
   const aplicarInicio = useCallback(async (atual: UsuarioSessao) => {
-    const inicio = await obterInicio(atual.pessoa.familiaId);
+    const versao = ++versaoInicio.current;
+    const verificarVersao = () => {
+      if (versao !== versaoInicio.current) {
+        throw new DOMException("Sessão alterada", "AbortError");
+      }
+    };
+    const inicio = await obterInicio(atual.pessoa.familiaId).catch((erro: unknown) => {
+      verificarVersao();
+      throw erro;
+    });
+    verificarVersao();
     setCartoes(inicio.cartoes);
     setDestaques(inicio.destaques ?? []);
     setAcessos(
@@ -93,7 +108,7 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
     setContextos(inicio.contextos ?? []);
     setDestinoEntrada(inicio.destinoEntrada ?? null);
     setFiltrado(inicio.filtradoPorAutorizacao);
-    if (inicio.familiaSlug) {
+    if (inicio.familiaSlug && inicio.familiaSlug !== atual.familia?.slug) {
       setUsuario({
         ...atual,
         familia: {
@@ -108,6 +123,7 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
 
   const entrarNaSessao = useCallback(
     async (atual: UsuarioSessao) => {
+      loginEmCurso.current = atual;
       setUsuario(atual);
       return aplicarInicio(atual);
     },
@@ -154,12 +170,16 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
       limparDadosContexto();
       return;
     }
+    if (loginEmCurso.current === usuario && usuario.familia?.slug === slugUrl) {
+      loginEmCurso.current = null;
+      return;
+    }
     let cancelado = false;
     void (async () => {
       try {
         await aplicarInicio(usuario);
       } catch (e) {
-        if (!cancelado) {
+        if (!cancelado && !(e instanceof DOMException && e.name === "AbortError")) {
           limparDadosContexto();
           setErroSessao(
             mensagemErroAmigavel(e, "Não foi possível carregar o início"),

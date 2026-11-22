@@ -64,3 +64,30 @@ Antes de qualquer retirada, registrar a etapa de origem de cada candidato. Conte
 ### Frontend
 
 O build de produção passou. O ensaio automatizado de login no Chrome isolado expirou antes de concluir a jornada. A hipótese de duplicação entre a chamada explícita e o efeito continua sustentada pela leitura do código, sem contagem observada de requisições duplicadas ou de renders. A sessão foi preservada para evitar uma alteração de sincronização sem linha de base.
+
+## Conclusão sobre `de4bb09`
+
+Checkout inicial limpo. O trabalho de UX registrado na esteira foi preservado. Uma alternativa ao ensaio que expirou executou o formulário de produção no Chrome com respostas fictícias de API e atraso controlado em `/inicio`. O login disparou duas leituras de início. O provedor passou a aproveitar a leitura explícita do login e a descartar respostas e erros superados por outra leitura ou pelo logout. A recarga explícita continua disponível após mutações.
+
+### Backend
+
+Tempos em milissegundos no serviço Nest com PostgreSQL local. Cada célula mostra p50 e p95 de 30 chamadas após aquecimento. A referência anterior às otimizações de resumo e histórico foi `534e020`. A massa tinha 101 doses ativas. A comparação integral dos resultados passou nos quatro cenários.
+
+| Serviço e janela | Referência p50 / p95 | Atual p50 / p95 | SQL antes → depois | Linhas de doses antes → depois |
+|---|---:|---:|---:|---:|
+| Resumo, 1 dia | 27,51 / 45,34 | 38,03 / 98,01 | 11 → 11 | 102 → 2 |
+| Histórico de Desenvolvimento, 1 dia | 23,05 / 35,86 | 7,95 / 10,15 | 12 → 4 | 1 → 0 |
+| Resumo, 326 dias | 40,29 / 87,83 | 38,52 / 74,53 | 11 → 11 | 202 → 202 |
+| Histórico de Desenvolvimento, 326 dias | 30,80 / 45,19 | 16,97 / 45,05 | 12 → 4 | 101 → 0 |
+
+O resumo curto reduziu volume, mas teve maior latência nesta rodada. As versões foram medidas em sequência numa máquina compartilhada. Os números caracterizam esta massa e incluem o tempo do serviço e do banco. PDF e transporte HTTP ficaram fora do cronômetro.
+
+### Retenção e manutenção
+
+Uma cópia dos arquivos rastreados omitiu os seis candidatos inventariados acima. O bootstrap passou nas 42 verificações. `git check-ignore` confirmou a cobertura de `tmp/` e das saídas locais de texto e imagem. Os seis logs foram removidos após autorização humana e nova conferência de conteúdo e referências. A cópia temporária de validação também foi removida. Nenhum novo padrão foi necessário.
+
+A duplicação no login teve prioridade alta, risco médio e esforço baixo. As medições não justificaram decompor o painel administrativo, alterar o cliente HTTP ou adicionar cache de permissões. A janela extensa continua com memória proporcional ao número de ocorrências previstas.
+
+**PERF-04.** No desktop e em 375 × 812 emulados, o login passou de 3 para 2 chamadas à API simulada: uma criação de sessão e uma leitura da home. Os commits da raiz React durante a jornada foram 15 → 14 no desktop e 15 → 15 no móvel, uma execução por versão e viewport. São atualizações da árvore, não contagens de renderização de cada componente. O teste controlado de concorrência passou para falha antiga, sucesso da leitura mais recente e logout durante uma leitura. Build com verificação de tipos, lint do provedor, regressões E1 de autorização e jornadas, E2, E4, E5, lote de lembretes e revisão independente passaram. A aplicação continua usando a API real nas regressões de backend. A medição de frontend usou respostas simuladas.
+
+**Estado final.** Auditoria técnica concluída. A retirada autorizada dos seis logs está registrada no inventário acima. O ensaio com autenticação integrada que expirou continua registrado como limitação da medição de frontend.

@@ -2748,7 +2748,7 @@
     },
     "auditoriaTecnica": {
         "id": "AUDITORIA-TECNICA-20261122",
-        "estado": "IN_PROGRESS",
+        "estado": "COMPLETED",
         "base": "95cb9de",
         "arquivos": [
             ".gitignore",
@@ -2768,7 +2768,7 @@
             "qg2": "PASS nos recortes implementados",
             "qg3": "Regressões selecionadas passaram, auditoria ainda aberta"
         },
-        "proximaAcao": "Medir login e renderizações no frontend e revisar a retenção dos candidatos com o responsável.",
+        "proximaAcao": "Limpeza autorizada realizada.",
         "evidencia": "docs/esteira/planejamento/auditoria-tecnica-20261122.md",
         "retomada": {
             "base": "534e020",
@@ -2786,6 +2786,20 @@
             ],
             "frontend": "TIMEOUT",
             "candidatosRemocao": 6
+        },
+        "encerramento": {
+            "base": "de4bb09",
+            "frontend": "PERF-04: /inicio 2 → 1 no Chrome com API simulada",
+            "fingerprintProvedor": "git:df835f61464471e9bd9ec0f9b54d5e89d92e3e53",
+            "verificador": "PASS",
+            "repo": "6 candidatos preservados, bootstrap 42 na cópia sem os candidatos",
+            "evidencia": "docs/esteira/planejamento/auditoria-tecnica-20261122.md"
+        },
+        "mensagemCommit": "perf(web): evitar leitura duplicada da home no login",
+        "limpeza": {
+            "logsRemovidos": 6,
+            "retencaoPreventiva": 29,
+            "inventario": "docs/esteira/planejamento/auditoria-tecnica-20261122.md"
         }
     }
 }
