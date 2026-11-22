@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "commit": "95cb9defb38d08d40d49c7351a93de4455932fb6",
-        "nota": "Correções COR-UX locais não commitadas; base origin/develop alinhada."
+        "commit": "5e23c7a7c6e854c33051586581103a228c17c760",
+        "nota": "EVO-CATALOGO-JOGOS planejamento L3; checkout alinhado origin/develop; sem implementação."
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -301,6 +301,36 @@
         }
     ],
     "demandasConcluidas": [
+        {
+            "id": "COR-UX-EST-HOM-20261122",
+            "tipo": "melhoria_ux",
+            "origem": "Homologação humana APROVADA PARCIALMENTE da ESTABILIZACAO-PRE-USO-20261122 — correções UX autorizadas; expansão de catálogos só planejamento",
+            "estado": "COMPLETED",
+            "homologacaoHumana": "PENDING_HUMAN",
+            "estadoExibicao": "AGUARDANDO_HOMOLOGACAO_HUMANA",
+            "demandaPrecedente": "ESTABILIZACAO-PRE-USO-20261122",
+            "aprovacao": {
+                "nivel": "L1",
+                "status": "APROVADA",
+                "referencia": "Pedido humano COR-UX-EST-HOM-20261122; GUIA-DE-EXPERIENCIA; E4-ACE/E5-F02/F04; GOVERNANCA L1 UX",
+                "nota": "Correções UX autorizadas. Expansão de catálogos é L3 e NÃO implementar nesta demanda."
+            },
+            "risco": "medio",
+            "escopo": "Loading/skeleton contextual; reposicionar sugestões após catálogo; diagnosticar/corrigir Renovar; diálogo Mantine pós-fase digital. Preservar escolha livre de fases, 1 dica/partida, progresso, auth, idempotência e estrelas presenciais.",
+            "fingerprint": "sha256:7ba70a28dc7944d0",
+            "fingerprintFull": "sha256:7ba70a28dc7944d07315cac1ed67e17b28095db9cef912fb6d55d715241824dd",
+            "verifier": "PASS_COM_ACHADOS",
+            "verifierId": "b0211783-8510-4df7-b0fa-537c65e9b8ec",
+            "mensagemCommit": "fix(ux): loading, sugestões, renovar e celebração de fase\\n\\nCorrige apontamentos da homologação parcial: skeleton contextual, sugestões após o catálogo, feedback de renovar junto à seção e diálogo Mantine pós-fase.",
+            "planejamentoEtapaB": {
+                "status": "PLANEJAMENTO_SOMENTE",
+                "caminho": "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
+                "aprovacaoNecessaria": "L3 Produto — NÃO implementar sem aprovação expressa"
+            },
+            "sucedidaPor": "EVO-CATALOGO-JOGOS-20261122",
+            "concluidoEm": "2026-11-22T22:02:39.185Z",
+            "arquivadoEm": "2026-11-22T22:49:19.883Z"
+        },
         {
             "id": "COR-E5-UX-HOM-R2-20261122",
             "tipo": "melhoria_ux",
@@ -2628,123 +2658,111 @@
         "fingerprint": "ef-modulo04-qg3-2026-11-16"
     },
     "demanda": {
-        "id": "COR-UX-EST-HOM-20261122",
-        "tipo": "melhoria_ux",
-        "origem": "Homologação humana APROVADA PARCIALMENTE da ESTABILIZACAO-PRE-USO-20261122 — correções UX autorizadas; expansão de catálogos só planejamento",
-        "estado": "COMPLETED",
-        "homologacaoHumanaAnterior": "APROVADA_PARCIALMENTE",
-        "demandaPrecedente": "ESTABILIZACAO-PRE-USO-20261122",
+        "id": "EVO-CATALOGO-JOGOS-20261122",
+        "tipo": "transversal",
+        "origem": "Pedido humano — arquitetura extensível do catálogo digital (aprovação L3)",
+        "estado": "NEEDS_DECISION",
+        "demandaPrecedente": "COR-UX-EST-HOM-20261122",
         "aprovacao": {
-            "nivel": "L1",
-            "status": "APROVADA",
-            "referencia": "Pedido humano COR-UX-EST-HOM-20261122; GUIA-DE-EXPERIENCIA; E4-ACE/E5-F02/F04; GOVERNANCA L1 UX",
-            "nota": "Correções UX autorizadas. Expansão de catálogos é L3 e NÃO implementar nesta demanda."
+            "nivel": "L3",
+            "status": "PENDENTE",
+            "referencia": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md; GOVERNANCA L3; Módulo 03 §13",
+            "nota": "Planejamento consolidado. NÃO implementar CAT-01..05 sem aprovação explícita do Produto."
         },
-        "risco": "medio",
-        "escopo": "Loading/skeleton contextual; reposicionar sugestões após catálogo; diagnosticar/corrigir Renovar; diálogo Mantine pós-fase digital. Preservar escolha livre de fases, 1 dica/partida, progresso, auth, idempotência e estrelas presenciais.",
+        "risco": "alto",
+        "escopo": "Arquitetura 4 camadas (editorial/motor/renderizador/progresso); modelo Prisma aditivo; contratos; migração compatível dos 3 jogos; plano CAT-01..05. Somente documentação/estado nesta etapa.",
         "fora": [
-            "Implementar expansão de catálogos",
-            "120 jogos automáticos",
-            "IA",
-            "novas permissões",
-            "gamificação extra",
-            "alterar estrelas de atividades reais",
+            "Implementar novos jogos",
+            "Motor gráfico pesado",
+            "Object storage",
+            "Novas permissões",
+            "Alterar autenticação",
+            "Estrelas digitais",
+            "Rankings",
+            "Avaliações cognitivas",
             "commit/push/deploy"
         ],
-        "impacto": "UI web Desenvolvimento (biblioteca real + partida digital); possível ajuste pontual backend só se causa de Renovar for comprovada",
-        "bloqueios": [],
+        "impacto": "Documentação da esteira e produto (STATUS); preparação para evolução do domínio Desenvolvimento/jogos após L3",
+        "bloqueios": [
+            "Aprovação L3 do Produto pendente"
+        ],
         "fluxo": [
             "task-routing",
-            "implementation-workflow",
-            "quality-gate"
+            "module-planning"
         ],
         "criteriosAceite": [
-            "COR-UX-LOAD",
-            "COR-UX-SUG-POS",
-            "COR-UX-RENOVAR",
-            "COR-UX-FASE-DIALOG",
-            "COR-UX-HOM"
+            "CAT-ACE-01",
+            "CAT-ACE-02",
+            "CAT-ACE-03",
+            "CAT-ACE-04",
+            "CAT-ACE-05"
         ],
         "testesPertinentes": [
-            "typecheck web",
-            "check:e4",
-            "check:e5",
-            "smoke:e4",
-            "smoke:e5",
-            "smoke:authz",
-            "build web",
-            "roteiro homologação humana"
+            "N/A nesta etapa (somente planejamento)",
+            "Após L3: check/smoke e5, smoke:authz, typecheck, builds"
+        ],
+        "dependencias": [
+            "E5 homologada R2",
+            "ADR-006/013/014/015",
+            "ProgressoFaseJogo vigente",
+            "CATEGORIAS_BIBLIOTECA"
         ],
         "planejamento": {
-            "etapaB": {
-                "status": "PLANEJAMENTO_SOMENTE",
-                "caminho": "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
-                "aprovacaoNecessaria": "L3 Produto — NÃO implementar sem aprovação expressa"
-            }
+            "caminho": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
+            "expansaoE4Relacionada": "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
+            "incrementos": [
+                {
+                    "id": "CAT-01",
+                    "status": "PENDING_L3",
+                    "aceite": "Schema + seed 3 jogos; progresso legível"
+                },
+                {
+                    "id": "CAT-02",
+                    "status": "PENDING_L3",
+                    "aceite": "ServicoJogos + motores; API motor/renderizador"
+                },
+                {
+                    "id": "CAT-03",
+                    "status": "PENDING_L3",
+                    "aceite": "Metadados biblioteca; capaRef sem storage"
+                },
+                {
+                    "id": "CAT-04",
+                    "status": "PENDING_L3",
+                    "aceite": "Pipeline editorial; capacidade ~20/cat sem jogos novos"
+                },
+                {
+                    "id": "CAT-05",
+                    "status": "PENDING_L3",
+                    "aceite": "QG-3 + docs canônicas; CAT-HOM PENDING_HUMAN"
+                }
+            ]
         },
         "reconciliacaoLocal": {
             "status": "OK",
             "branch": "develop",
-            "commit": "95cb9de",
-            "workingTree": "clean",
+            "commit": "5e23c7a",
+            "workingTree": "docs_only_pending",
             "originDevelop": "up_to_date",
             "divergencias": [
-                "ESTABILIZACAO pausada (APROVADA_PARCIALMENTE) — EST-03/04 pendentes",
+                "ESTABILIZACAO pausada — EST-03/04 pendentes",
                 "E3-HOM PENDING_HUMAN",
+                "COR-UX-HOM PENDING_HUMAN (técnico COMPLETED)",
                 "Sem autorização de publicação"
             ],
-            "em": "2026-11-22T21:40:28.249Z"
+            "em": "2026-11-22T22:49:19.883Z"
         },
-        "incrementoAtivo": "COR-UX-01",
-        "verificacao": {
-            "qg1": "PASS",
-            "qg2": "PASS_COM_ACHADOS",
-            "verifier": "PASS_COM_ACHADOS",
-            "verifierId": "b0211783-8510-4df7-b0fa-537c65e9b8ec",
-            "homologacao": "PENDING_HUMAN",
-            "nota": "Build web BLOCKED por EPERM em .next/trace (ambiente). Typecheck + check/smoke e4/e5/authz PASS. Causa Renovar=UX feedback."
-        },
-        "proximaAcao": "Homologação humana COR-UX-HOM (roteiro-homologacao-cor-ux-est-hom.md). Depois retomar EST-03. Etapa B aguarda L3.",
-        "atualizadoEm": "2026-11-22T22:02:39.185Z",
         "arquivos": [
-            "apps/web/src/componentes/feedback.tsx",
-            "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx",
-            "apps/web/src/componentes/desenvolvimento/jogos/catalogo-jogos.tsx",
-            "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
-            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/recompensas/page.tsx",
-            "apps/api/scripts/diag-renovar-sugestoes.mjs",
+            "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
             "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
-            "docs/esteira/estado/roteiro-homologacao-cor-ux-est-hom.md",
-            "docs/produto/STATUS-E-ESCOPO.md",
-            "docs/esteira/REGISTRO.md"
+            "docs/esteira/estado/atual.json",
+            "docs/esteira/REGISTRO.md",
+            "docs/produto/STATUS-E-ESCOPO.md"
         ],
-        "estadoExibicao": "AGUARDANDO_HOMOLOGACAO_HUMANA",
-        "homologacaoHumana": "PENDING_HUMAN",
-        "fingerprint": "sha256:7ba70a28dc7944d0",
-        "fingerprintFull": "sha256:7ba70a28dc7944d07315cac1ed67e17b28095db9cef912fb6d55d715241824dd",
-        "diagnosticoRenovar": {
-            "causaComprovada": "UX — feedback de renovação no topo, longe do botão após reposicionar sugestões",
-            "backend": "OK (diag + smoke e4)",
-            "autorizacao": "403 sem responsavel_desenvolvimento (esperado)",
-            "elegibilidadeEsgotamento": "comportamento especificado E4; mensagem neutra",
-            "evidencia": "docs/esteira/estado/diag-renovar-sugestoes-cor-ux.txt"
-        },
-        "mensagemCommit": "fix(ux): loading, sugestões, renovar e celebração de fase\\n\\nCorrige apontamentos da homologação parcial: skeleton contextual, sugestões após o catálogo, feedback de renovar junto à seção e diálogo Mantine pós-fase.",
-        "ultimoIncremento": {
-            "id": "COR-UX-01",
-            "status": "COMPLETED",
-            "fingerprint": "sha256:7ba70a28dc7944d0",
-            "verifier": "PASS_COM_ACHADOS"
-        },
-        "incrementosConcluidos": [
-            {
-                "id": "COR-UX-01",
-                "status": "COMPLETED",
-                "fingerprint": "sha256:7ba70a28dc7944d0",
-                "em": "2026-11-22T22:02:39.185Z",
-                "verifier": "PASS_COM_ACHADOS"
-            }
-        ]
+        "proximaAcao": "Aguardar decisão L3 do Produto sobre evo-catalogo-jogos-20261122.md. Sem implementação até aprovação.",
+        "atualizadoEm": "2026-11-22T22:49:19.883Z",
+        "estadoExibicao": "AGUARDANDO_APROVACAO_L3",
+        "incrementosConcluidos": []
     },
     "auditoriaTecnica": {
         "id": "AUDITORIA-TECNICA-20261122",

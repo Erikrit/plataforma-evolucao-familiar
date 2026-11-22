@@ -1,5 +1,14 @@
 # Registro da esteira
 
+## EVO-CATALOGO-JOGOS-20261122 — planejamento L3 (NEEDS_DECISION)
+
+- **Tipo:** transversal · **Origem:** pedido humano de arquitetura extensível do catálogo digital.
+- **Checkout:** `develop` @ `5e23c7a` (= `origin/develop`).
+- **Entrega:** especificação consolidada — 4 camadas (editorial/motor/renderizador/progresso), Prisma aditivo, contratos, compatibilidade dos 3 jogos, CAT-01..05. [Plano](planejamento/evo-catalogo-jogos-20261122.md).
+- **Cruzamento:** frente digital referenciada a partir de [expansao-catalogos-e4-e5.md](planejamento/expansao-catalogos-e4-e5.md).
+- **Aprovação:** L3 **PENDENTE**. Sem implementação, sem novos jogos, sem commit/push/deploy automático.
+- **Próximo:** decisão do Produto; se aprovado, abrir CAT-01.
+
 ## 2026-11-22 — Auditoria técnica de consultas e artefatos
 
 - Lembretes passaram a consultar doses em lote e exigem permissão de leitura de Cuidados, conforme M02. A home reutiliza as concessões ativas da própria requisição.

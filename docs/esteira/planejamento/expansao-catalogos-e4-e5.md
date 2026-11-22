@@ -4,6 +4,8 @@
 **Demanda de origem:** `COR-UX-EST-HOM-20261122` Etapa B  
 **Não implementar** até aprovação expressa do responsável pelo Produto.
 
+> **Frente digital (arquitetura extensível):** consolidada em [`evo-catalogo-jogos-20261122.md`](evo-catalogo-jogos-20261122.md) (`EVO-CATALOGO-JOGOS-20261122`, L3 **PENDENTE**). Este arquivo mantém a expansão de **atividades reais (E4)** e o vínculo histórico; modelo Prisma, motores/renderizadores e CAT-01..05 do catálogo digital deferem ao documento novo.
+
 ## Objetivo
 
 Avaliar e especificar a ampliação do catálogo de atividades reais além do limite E4 (24) e o dimensionamento do catálogo digital (~20 entradas por categoria), sem misturar com as correções UX da Etapa A.
@@ -34,13 +36,14 @@ Avaliar e especificar a ampliação do catálogo de atividades reais além do li
 
 ### 2. Catálogo digital ~20 por categoria
 
-- Meta de planejamento: ~20 entradas publicadas por categoria de desenvolvimento, reutilizando as **três mecânicas** existentes (memória, sequência, labirinto) com parâmetros/conteúdo distintos.
-- Não inventar mecânica nova nesta expansão.
-- Cada entrada: título, categoria, faixa orientativa, dificuldade por fase, estado de publicação, versão editorial.
+- **Especificação consolidada:** [`evo-catalogo-jogos-20261122.md`](evo-catalogo-jogos-20261122.md) (arquitetura em 4 camadas, Prisma, contratos, CAT-01..05, compatibilidade dos 3 jogos).
+- Meta de planejamento: ~20 entradas publicadas por categoria de desenvolvimento, com curadoria progressiva e motores/renderizadores registrados em código.
+- Não inventar mecânica nova na primeira expansão de conteúdo; novos motores só via incremento futuro aprovado.
+- Cada entrada: título, categoria, faixa orientativa, dificuldade por fase, estado de publicação, versão editorial, refs visuais externas (sem object storage nesta etapa).
 
 ### 3. Persistência de metadados editoriais
 
-- Propor tabela(s) aditivas (ex.: `jogo_digital_catalogo` / extensão de modelo) para metadados editoriais versionados, mantendo progresso atual ligado a `jogoId`/`fase` estáveis.
+- Modelo aditivo detalhado no plano EVO (`JogoDigital`, `FaseJogoDigital`, `RecursoVisualJogo`), mantendo `ProgressoFaseJogo` e IDs estáveis.
 - Seed e curadoria por scripts revisáveis; publicação controlada (`ativo` / `publicadoEm`).
 - Histórico de progresso e descobertas permanece por pessoa; republicação não apaga progresso.
 
@@ -53,10 +56,10 @@ Avaliar e especificar a ampliação do catálogo de atividades reais além do li
 
 | Fase | Escopo sugerido | Aceite |
 |---|---|---|
-| B1 | Decisão L3 de tetos e metadados | Documento aprovado |
+| B1 | Decisão L3 de tetos E4 e arquitetura digital (EVO) | Documento(s) aprovado(s) |
 | B2 | +N atividades reais curadas (lote 1) | Smoke E4 + homologação parcial |
-| B3 | Modelo editorial digital + 1 categoria piloto (~20) | Smoke E5 + homologação |
-| B4 | Demais categorias em lotes | Homologação por categoria |
+| B3 | CAT-01..05 do plano EVO (fundação editorial digital) | Smoke E5 + regressão progresso |
+| B4 | Lotes de conteúdo digital (~20/categoria) após CAT | Homologação por categoria |
 
 ## Impacto / riscos
 
@@ -66,8 +69,8 @@ Avaliar e especificar a ampliação do catálogo de atividades reais além do li
 
 ## Encaminhamento
 
-1. Responsável pelo Produto aprova ou ajusta tetos, lotes e metadados (L3).
-2. Só então: `module-planning` / incremento de implementação separado.
+1. Responsável pelo Produto aprova ou ajusta tetos E4 (este doc) e/ou arquitetura digital ([evo-catalogo-jogos-20261122.md](evo-catalogo-jogos-20261122.md)) — L3.
+2. Só então: incrementos de implementação separados (reais vs. CAT-*).
 3. Etapa A (COR-UX) permanece independente e não bloqueada por esta expansão.
 
 ## Fora de escopo explícito

@@ -2,11 +2,15 @@
 
 ## Estabilização pré-uso — 2026-11-22
 
-**Demanda ativa:** `COR-UX-EST-HOM-20261122` (IN_PROGRESS) — correções UX da homologação parcial. `ESTABILIZACAO-PRE-USO-20261122` permanece **PAUSED** (EST-00..02 COMPLETED técnico; EST-03/04 a retomar). Expansão de catálogos: só planejamento L3 em `docs/esteira/planejamento/expansao-catalogos-e4-e5.md` (sem implementação).
+**Demanda ativa:** `EVO-CATALOGO-JOGOS-20261122` (**NEEDS_DECISION** / L3 Produto **PENDENTE**) — arquitetura extensível do catálogo digital; especificação em [`docs/esteira/planejamento/evo-catalogo-jogos-20261122.md`](../esteira/planejamento/evo-catalogo-jogos-20261122.md). **Sem implementação** até aprovação explícita. `COR-UX-EST-HOM-20261122` permanece COMPLETED técnico (homologação humana ainda PENDING). `ESTABILIZACAO-PRE-USO-20261122` permanece **PAUSED** (EST-00..02 COMPLETED técnico; EST-03/04 a retomar). Expansão de atividades reais (E4): planejamento L3 em [`expansao-catalogos-e4-e5.md`](../esteira/planejamento/expansao-catalogos-e4-e5.md).
 
 **EST-02 (auth enxuta):** COMPLETED técnico — ADR-015 (sessão/cookie; sem JWT); regressões auth PASS (`qg*-est-02*`); verifier PASS_COM_ACHADOS; gaps residuais (rate-limit de login; HTTPS/`COOKIE_SECURE` no alvo) bloqueiam uso real. Evidência `docs/esteira/estado/evidencia-est-02-20261122.json`. Próximo: EST-03.
 
 **Publicação para uso real:** ainda **não autorizada**. Critérios de bloqueio no plano EST.
+
+## Catálogo digital extensível — planejamento L3, 2026-11-22
+
+**`EVO-CATALOGO-JOGOS-20261122` em NEEDS_DECISION.** Proposta arquitetural (editorial PostgreSQL + motores/renderizadores em código + `ProgressoFaseJogo` preservado) e plano CAT-01..05 aguardam aprovação explícita L3 do Produto. Documento: [`evo-catalogo-jogos-20261122.md`](../esteira/planejamento/evo-catalogo-jogos-20261122.md). Não altera o Módulo 03 canônico nesta etapa; não implementa jogos novos nem object storage.
 
 ## E5 — Jogos digitais e organização da Biblioteca, 2026-11-22
 
