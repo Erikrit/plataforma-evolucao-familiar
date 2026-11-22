@@ -22,24 +22,9 @@ export class ServicoAcompanhamento {
     usuario: UsuarioAutenticado,
     periodo?: { de?: string; ate?: string; dominio?: string },
   ) {
-    const pessoa = await this.exigirVisao(pessoaId, usuario);
-    const [podeCuidados, podeDesenvolvimento, podeAnexos] = await Promise.all([
-      this.autorizacoes.podeVerCuidados(
-        pessoa.familiaId,
-        pessoa.id,
-        usuario,
-      ),
-      this.autorizacoes.podeVerDesenvolvimento(
-        pessoa.familiaId,
-        pessoa.id,
-        usuario,
-      ),
-      this.autorizacoes.podeConsultarAnexosCuidados(
-        pessoa.familiaId,
-        pessoa.id,
-        usuario,
-      ),
-    ]);
+    const { pessoa, cuidados: podeCuidados, desenvolvimento: podeDesenvolvimento } =
+      await this.obterVisao(pessoaId, usuario);
+    const filtroDominio = (periodo?.dominio ?? "").trim().toLowerCase();
     const de = periodo?.de ? this.inicioDoPeriodo(periodo.de) : new Date(0);
     const ate = periodo?.ate
       ? this.fimDoPeriodo(periodo.ate)
@@ -59,7 +44,10 @@ export class ServicoAcompanhamento {
 
     const eventos: EventoHistorico[] = [];
 
-    if (podeCuidados) {
+    if (podeCuidados && filtroDominio !== "desenvolvimento") {
+      const podeAnexos = await this.autorizacoes.podeConsultarAnexosCuidados(
+        pessoa.familiaId, pessoa.id, usuario,
+      );
       const [doses, programacoes, consultas, exames, atividades, medicamentos] =
         await Promise.all([
           this.prisma.registroDose.findMany({
@@ -168,7 +156,7 @@ export class ServicoAcompanhamento {
       );
     }
 
-    if (podeDesenvolvimento) {
+    if (podeDesenvolvimento && filtroDominio !== "cuidados") {
       const [participacoes, resgates, conclusoesJogos] = await Promise.all([
         this.prisma.participacaoDesafio.findMany({
           where: {
@@ -248,13 +236,7 @@ export class ServicoAcompanhamento {
       }
     }
 
-    const filtroDominio = (periodo?.dominio ?? "").trim().toLowerCase();
-    const eventosFiltrados =
-      filtroDominio === "cuidados" || filtroDominio === "desenvolvimento"
-        ? eventos.filter((e) => e.dominio === filtroDominio)
-        : eventos;
-
-    eventosFiltrados.sort((a, b) => b.quando.getTime() - a.quando.getTime());
+    eventos.sort((a, b) => b.quando.getTime() - a.quando.getTime());
 
     return {
       pessoaId: pessoa.id,
@@ -268,7 +250,7 @@ export class ServicoAcompanhamento {
         ate: periodo?.ate ?? null,
         dominio: filtroDominio || null,
       },
-      eventos: eventosFiltrados,
+      eventos,
     };
   }
 
@@ -415,22 +397,7 @@ export class ServicoAcompanhamento {
       },
     });
 
-    const registrosAtivos = await this.prisma.registroDose.findMany({
-      where: {
-        medicamento: { pessoaId: pessoa.id },
-        versaoAtiva: true,
-      },
-      select: { ocorrenciaChave: true, situacao: true },
-    });
-    const situacaoPorChave = new Map(
-      registrosAtivos.map((r) => [r.ocorrenciaChave, r.situacao]),
-    );
-
-    let previstos = 0;
-    let tomadas = 0;
-    let naoTomadas = 0;
-    let semConfirmacao = 0;
-
+    const chavesPrevistas: string[] = [];
     for (const med of medicamentos) {
       for (const dia of dias) {
         const inicioDia = this.inicioDoPeriodo(dia);
@@ -445,21 +412,42 @@ export class ServicoAcompanhamento {
           ? (prog.horarios as string[])
           : [];
         for (const horario of horarios) {
-          previstos += 1;
-          const chave = chaveOcorrencia(med.id, dia, horario);
-          const situacao = situacaoPorChave.get(chave);
-          if (!situacao) {
-            semConfirmacao += 1;
-          } else if (situacao === "tomou_conforme_informacao") {
-            tomadas += 1;
-          } else if (situacao === "informou_nao_tomou") {
-            naoTomadas += 1;
-          } else {
-            semConfirmacao += 1;
-          }
+          chavesPrevistas.push(chaveOcorrencia(med.id, dia, horario));
         }
       }
     }
+
+    const filtroAtivo = { medicamento: { pessoaId: pessoa.id }, versaoAtiva: true };
+    const selecaoDose = { ocorrenciaChave: true, situacao: true } as const;
+    const chavesUnicas = [...new Set(chavesPrevistas)];
+    const situacaoPorChave = new Map<string, string>();
+    let encontrouDuplicata = false;
+    for (let inicio = 0; inicio < chavesUnicas.length; inicio += 1000) {
+      const registros = await this.prisma.registroDose.findMany({
+        where: { ...filtroAtivo, ocorrenciaChave: { in: chavesUnicas.slice(inicio, inicio + 1000) } },
+        select: selecaoDose,
+      });
+      for (const registro of registros) {
+        if (situacaoPorChave.has(registro.ocorrenciaChave)) encontrouDuplicata = true;
+        situacaoPorChave.set(registro.ocorrenciaChave, registro.situacao);
+      }
+    }
+    if (encontrouDuplicata) {
+      // Preserve a seleção legada para ocorrências com mais de uma versão ativa.
+      const registros = await this.prisma.registroDose.findMany({ where: filtroAtivo, select: selecaoDose });
+      situacaoPorChave.clear();
+      for (const registro of registros) situacaoPorChave.set(registro.ocorrenciaChave, registro.situacao);
+    }
+
+    const previstos = chavesPrevistas.length;
+    let tomadas = 0;
+    let naoTomadas = 0;
+    for (const chave of chavesPrevistas) {
+      const situacao = situacaoPorChave.get(chave);
+      if (situacao === "tomou_conforme_informacao") tomadas += 1;
+      else if (situacao === "informou_nao_tomou") naoTomadas += 1;
+    }
+    const semConfirmacao = previstos - tomadas - naoTomadas;
 
     // Listagens completas no contrato de prévia/PDF (EVO-REV-03/04/05); sem corte silencioso.
     const [doses, consultas, exames, atividades, programacoesPeriodo] =
@@ -1226,6 +1214,10 @@ export class ServicoAcompanhamento {
   }
 
   private async exigirVisao(pessoaId: string, usuario: UsuarioAutenticado) {
+    return (await this.obterVisao(pessoaId, usuario)).pessoa;
+  }
+
+  private async obterVisao(pessoaId: string, usuario: UsuarioAutenticado) {
     const pessoa = await this.prisma.pessoa.findUnique({ where: { id: pessoaId } });
     if (!pessoa || pessoa.familiaId !== usuario.pessoa.familiaId) {
       throw new NotFoundException("Pessoa não encontrada.");
@@ -1245,7 +1237,7 @@ export class ServicoAcompanhamento {
     if (!cuidados && !desenvolvimento) {
       throw new ForbiddenException("Acesso negado ao histórico.");
     }
-    return pessoa;
+    return { pessoa, cuidados, desenvolvimento };
   }
 
   private async exigirExportacao(pessoaId: string, usuario: UsuarioAutenticado) {

@@ -34,3 +34,33 @@ O checkout contém 590 arquivos rastreados. Inventário de remoção confirmado 
 ## Estado
 
 Mudanças locais. A correção de UX existente continua registrada na demanda original. A auditoria técnica permanece aberta para os itens de desempenho sem medição integrada e a revisão individual de retenção.
+
+## Retomada sobre `534e020`
+
+Checkout inicial limpo na `develop`. Build web concluído em `.next-qg-audit-r2`, com restauração dos arquivos de configuração que o Next ajustou durante a compilação. Build da API, bootstrap com 42 verificações, smokes E1 de autorização e jornadas, E2, E4 e E5 e revisão independente passaram.
+
+| Cenário fictício | Antes | Depois |
+|---|---:|---:|
+| Resumo de um dia, pessoa com 101 doses ativas, uma no dia | 11 consultas SQL e 102 linhas de doses retornadas ao Prisma | 11 consultas SQL e 2 linhas |
+| Histórico filtrado para Desenvolvimento, titular autorizado nas duas áreas | 12 consultas SQL e 1 linha de dose | 4 consultas SQL e 0 linhas de doses |
+
+Contagens obtidas por eventos SQL e instrumentação do retorno Prisma no mesmo PostgreSQL. A comparação integral das respostas passou. A listagem de doses continua vinculada à data de registro. A contagem de doses previstas usa as chaves geradas pelas vigências existentes. Chaves duplicadas preservam o caminho anterior. Intervalos grandes podem exigir múltiplos lotes e memória proporcional a ocorrências. Latência e intervalos extensos seguem sem medição.
+
+### Classificação das saídas de quality gate
+
+Dos 243 arquivos `qg*.txt`, 208 têm referência direta e ficam preservados. Outros 29 ficam em retenção preventiva porque a ausência de referência por nome não demonstra ausência de dependências indiretas. Seis podem ser avaliados para retirada após autorização humana. Cada um tem conteúdo byte a byte igual ao de um arquivo referenciado.
+
+| Candidato em `docs/esteira/estado/` | Conteúdo igual em arquivo preservado |
+|---|---|
+| `qg1-typecheck-ef01.txt` | `qg1-typecheck-api-adr014.txt` |
+| `qg1-typecheck-ef02.txt` | `qg1-typecheck-api-adr014.txt` |
+| `qg1-typecheck-ef03.txt` | `qg1-typecheck-api-adr014.txt` |
+| `qg1-typecheck-web-ef02.txt` | `qg1-typecheck-dl05.txt` |
+| `qg1-typecheck-web-ef03.txt` | `qg1-typecheck-dl05.txt` |
+| `qg2-build-ef01.txt` | `qg2-build-api-dl06.txt` |
+
+Antes de qualquer retirada, registrar a etapa de origem de cada candidato. Conteúdo idêntico não prova que as execuções foram a mesma. Nenhum arquivo rastreado foi removido.
+
+### Frontend
+
+O build de produção passou. O ensaio automatizado de login no Chrome isolado expirou antes de concluir a jornada. A hipótese de duplicação entre a chamada explícita e o efeito continua sustentada pela leitura do código, sem contagem observada de requisições duplicadas ou de renders. A sessão foi preservada para evitar uma alteração de sincronização sem linha de base.
