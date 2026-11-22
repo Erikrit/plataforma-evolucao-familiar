@@ -1,5 +1,20 @@
 # Estado das decisões e escopo
 
+## Defeito conhecido — ativação de acesso de pessoas, 2026-11-22
+
+**ID:** DEF-E2-ATIVACAO-20261122. **Estado:** ABERTO; tratamento encaminhado à E2 por decisão expressa do responsável.
+
+**Relato humano:** após a melhoria da entrada familiar, ao criar pessoas não ocorre o envio de e-mail esperado; isso impede validar a ativação e o acesso dessas novas contas. O acesso inicial ficou mais claro. A causa técnica ainda não foi diagnosticada nem reproduzida nesta atualização.
+
+**Delimitação:** o envio de mensagem dispensado no cadastro inicial de família/primeiro administrador não deve ser confundido com o fluxo de convite/habilitação da conta de outra pessoa. Pessoa acompanhada sem conta continua podendo ser cadastrada apenas com nome. A correção deve conferir como o convite é entregue hoje e oferecer um caminho efetivamente utilizável de ativação; necessidade de integração de envio e seu escopo devem ser fechados na E2, sem pressupor serviço de e-mail já implementado.
+
+**Decisão de seguimento:** avançar no planejamento da E2 incluindo este defeito, sem exigir sua correção prévia para discutir a evolução. O defeito continua impedindo o aceite da jornada afetada; não constitui aprovação do acesso de novas pessoas. Aceite anterior das correções de entrada preservado no seu escopo.
+
+**Saída esperada para correção:** administrador habilita/convida pessoa; titular recebe ou obtém o link pelo canal definido, ativa a conta sem cadastro duplicado, define sua senha e acessa apenas sua família/pessoas/áreas autorizadas. Verificar convite expirado/usado, e-mail ausente/indisponível e mensagem de sucesso coerente com a entrega real. Não enviar senhas.
+
+**Fonte:** relato do responsável nesta conversa; referência disponível develop @ 0d8ced6957734123a4afc9b8043c55cb042ea2b9. Sem testes ou alteração de código nesta anotação.
+
+
 ## E1 — correções de entrada homologadas em 2026-11-22
 
 **Homologação humana APROVADA** pelo responsável do Produto para as correções da demanda `DEM-E1-ENTRADA-20261121`, encerrando a pendência E1-ENT-08. Fonte: comunicação expressa nesta conversa, após informar que as correções foram feitas.
