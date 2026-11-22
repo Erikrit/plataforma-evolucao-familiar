@@ -775,6 +775,56 @@ export async function criarAnexo(
   return resposta.json() as Promise<{ id: string; nomeArquivo: string }>;
 }
 
+export type AnexoPrivado = {
+  id: string;
+  nomeArquivo: string;
+  mimeTipo: string;
+  tamanhoBytes: number;
+  conteudoBase64: string | null;
+  acesso: string;
+};
+
+export async function obterAnexoPrivado(anexoId: string): Promise<AnexoPrivado> {
+  const resposta = await fetchApi(`/anexos/${anexoId}`);
+  if (!resposta.ok) {
+    if (resposta.status === 401) {
+      throw new Error("Faça login na página inicial para baixar o arquivo.");
+    }
+    if (resposta.status === 403) {
+      throw new Error("Sem permissão para baixar este documento.");
+    }
+    if (resposta.status === 404) {
+      throw new Error("Arquivo indisponível.");
+    }
+    throw new Error(await lerErro(resposta));
+  }
+  return (await resposta.json()) as AnexoPrivado;
+}
+
+/** Dispara download local e libera a URL temporária; não persiste o conteúdo. */
+export function baixarBytesBase64(
+  base64: string,
+  mimeTipo: string,
+  nomeArquivo: string,
+) {
+  const binario = atob(base64);
+  const bytes = new Uint8Array(binario.length);
+  for (let i = 0; i < binario.length; i += 1) {
+    bytes[i] = binario.charCodeAt(i);
+  }
+  const blob = new Blob([bytes], { type: mimeTipo || "application/octet-stream" });
+  const url = URL.createObjectURL(blob);
+  try {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = nomeArquivo || "documento";
+    link.rel = "noopener";
+    link.click();
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
 export type EventoHistorico = {
   tipo: string;
   dominio?: "cuidados" | "desenvolvimento";
@@ -928,7 +978,13 @@ export type ResumoCuidados = {
     dataHora: string;
     status: string;
   }[];
-  exames: { id: string; descricao: string; criadoEm: string }[];
+  exames: {
+    id: string;
+    descricao: string;
+    data?: string | null;
+    criadoEm: string;
+    temDocumento?: boolean;
+  }[];
   observacoes?: {
     id: string;
     descricao: string;

@@ -1,9 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { rotaFamilia } from "@/lib/rotas-familia";
 import {
+  Anchor,
   Button,
   Container,
   Group,
@@ -14,6 +16,7 @@ import {
   Title,
 } from "@mantine/core";
 import {
+  baixarBytesBase64,
   obterMe,
   obterPessoa,
   obterRelatorioPdf,
@@ -67,23 +70,11 @@ function rotuloResultado(resultado: string) {
   return resultado;
 }
 
-function baixarPdfBase64(
-  base64: string,
-  mimeTipo: string,
-  nomeArquivo: string,
-) {
-  const binario = atob(base64);
-  const bytes = new Uint8Array(binario.length);
-  for (let i = 0; i < binario.length; i += 1) {
-    bytes[i] = binario.charCodeAt(i);
-  }
-  const blob = new Blob([bytes], { type: mimeTipo });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = nomeArquivo;
-  link.click();
-  URL.revokeObjectURL(url);
+function formatarDataCurta(iso: string | null | undefined) {
+  if (!iso) return null;
+  const data = new Date(iso);
+  if (Number.isNaN(data.getTime())) return null;
+  return data.toLocaleDateString("pt-BR");
 }
 
 export default function PaginaResumo() {
@@ -135,14 +126,14 @@ export default function PaginaResumo() {
     setErroExport(null);
     setAcessoNegado(false);
     setPdfPronto(null);
+    setResumoCuidados(null);
+    setResumoDev(null);
     try {
       const me = await obterMe();
       if (pedido !== pedidoRef.current) return;
       if (!me) {
         setAutenticado(false);
         setErro("Entre na página inicial para ver o resumo.");
-        setResumoCuidados(null);
-        setResumoDev(null);
         return;
       }
       setAutenticado(true);
@@ -167,8 +158,6 @@ export default function PaginaResumo() {
       if (!temCuidados && !temDev) {
         setAcessoNegado(true);
         setErro("Acesso negado ao resumo desta pessoa.");
-        setResumoCuidados(null);
-        setResumoDev(null);
         return;
       }
 
@@ -233,21 +222,40 @@ export default function PaginaResumo() {
 
   const baixarPdf = useCallback(() => {
     if (!pdfPronto) return;
-    baixarPdfBase64(
+    baixarBytesBase64(
       pdfPronto.base64,
       pdfPronto.mimeTipo,
       `resumo-${nomePessoa || params.pessoaId}-${de}-${ate}.pdf`,
     );
   }, [pdfPronto, nomePessoa, params.pessoaId, de, ate]);
 
-  const temConteudo =
-    (resumoCuidados != null &&
-      (resumoCuidados.doses.previstos > 0 ||
-        resumoCuidados.consultas.length > 0 ||
-        resumoCuidados.exames.length > 0 ||
-        (resumoCuidados.observacoes?.length ?? 0) > 0 ||
-        (resumoCuidados.mudancasProgramacao?.length ?? 0) > 0)) ||
-    (resumoDev != null && resumoDev.experiencias.length > 0);
+  const slug = String(params.slug ?? "");
+  const hrefConsultas = rotaFamilia(
+    slug,
+    `/pessoas/${params.pessoaId}/cuidados/consultas`,
+  );
+  const hrefCuidados = rotaFamilia(
+    slug,
+    `/pessoas/${params.pessoaId}/cuidados`,
+  );
+  const hrefDesenvolvimento = rotaFamilia(
+    slug,
+    `/pessoas/${params.pessoaId}/desenvolvimento`,
+  );
+
+  const cuidadosVazio =
+    resumoCuidados != null &&
+    resumoCuidados.doses.previstos === 0 &&
+    resumoCuidados.consultas.length === 0 &&
+    resumoCuidados.exames.length === 0 &&
+    (resumoCuidados.observacoes?.length ?? 0) === 0 &&
+    (resumoCuidados.mudancasProgramacao?.length ?? 0) === 0;
+  const desenvolvimentoVazio =
+    resumoDev != null && resumoDev.experiencias.length === 0;
+  const tudoVazio =
+    (podeCuidados ? cuidadosVazio || resumoCuidados == null : true) &&
+    (podeDesenvolvimento ? desenvolvimentoVazio || resumoDev == null : true) &&
+    (podeCuidados || podeDesenvolvimento);
 
   const podeVer =
     autenticado && !carregando && !acessoNegado && erro == null;
@@ -316,18 +324,32 @@ export default function PaginaResumo() {
               </Text>
             )}
 
-            {podeVer && !temConteudo ? (
-              <EstadoVazio
-                titulo="Sem dados neste período"
-                descricao="Quando houver relatos, o resumo aparece aqui."
-              />
-            ) : null}
-
-            {podeVer && temConteudo ? (
+            {podeVer ? (
               <Stack gap="md">
+                {tudoVazio ? (
+                  <EstadoVazio
+                    titulo="Sem dados neste período"
+                    descricao="Quando houver relatos autorizados, o resumo aparece aqui. Isso não indica falta de cuidado ou desenvolvimento."
+                  />
+                ) : null}
+
                 {podeCuidados && resumoCuidados ? (
                   <Stack gap="sm">
-                    <Text fw={700}>Cuidados</Text>
+                    <Group justify="space-between" align="baseline" wrap="wrap">
+                      <Text fw={700}>Cuidados</Text>
+                      <Anchor
+                        component={Link}
+                        href={hrefCuidados}
+                        size="xs"
+                      >
+                        Ver origem em Cuidados
+                      </Anchor>
+                    </Group>
+                    {cuidadosVazio ? (
+                      <Text size="sm" c="dimmed">
+                        Nenhum registro de Cuidados neste período.
+                      </Text>
+                    ) : null}
                     <Stack gap={4}>
                       <Text size="sm">
                         {resumoCuidados.doses.previstos} doses previstas
@@ -349,12 +371,21 @@ export default function PaginaResumo() {
                     </Stack>
 
                     <Stack gap={4}>
-                      <Text fw={600} size="sm">
-                        Consultas
-                      </Text>
+                      <Group justify="space-between" align="baseline" wrap="wrap">
+                        <Text fw={600} size="sm">
+                          Consultas e exames
+                        </Text>
+                        <Anchor
+                          component={Link}
+                          href={hrefConsultas}
+                          size="xs"
+                        >
+                          Abrir Consultas e exames
+                        </Anchor>
+                      </Group>
                       {resumoCuidados.consultas.length === 0 ? (
                         <Text size="sm" c="dimmed">
-                          Nenhuma neste período.
+                          Nenhuma consulta neste período.
                         </Text>
                       ) : (
                         resumoCuidados.consultas.map((c) => (
@@ -364,22 +395,25 @@ export default function PaginaResumo() {
                           </Text>
                         ))
                       )}
-                    </Stack>
-
-                    <Stack gap={4}>
-                      <Text fw={600} size="sm">
-                        Exames
-                      </Text>
                       {resumoCuidados.exames.length === 0 ? (
                         <Text size="sm" c="dimmed">
-                          Nenhum neste período.
+                          Nenhum exame neste período.
                         </Text>
                       ) : (
-                        resumoCuidados.exames.map((e) => (
-                          <Text key={e.id} size="sm">
-                            {e.descricao} · {formatarQuando(e.criadoEm)}
-                          </Text>
-                        ))
+                        resumoCuidados.exames.map((e) => {
+                          const dataConhecida = formatarDataCurta(e.data);
+                          return (
+                            <Text key={e.id} size="sm">
+                              {e.descricao}
+                              {dataConhecida
+                                ? ` · ${dataConhecida}`
+                                : ` · registrado em ${formatarQuando(e.criadoEm)}`}
+                              {e.temDocumento
+                                ? " · documento disponível no app"
+                                : ""}
+                            </Text>
+                          );
+                        })
                       )}
                     </Stack>
 
@@ -425,7 +459,21 @@ export default function PaginaResumo() {
 
                 {podeDesenvolvimento && resumoDev ? (
                   <Stack gap="sm">
-                    <Text fw={700}>Desenvolvimento</Text>
+                    <Group justify="space-between" align="baseline" wrap="wrap">
+                      <Text fw={700}>Desenvolvimento</Text>
+                      <Anchor
+                        component={Link}
+                        href={hrefDesenvolvimento}
+                        size="xs"
+                      >
+                        Ver origem em Desenvolvimento
+                      </Anchor>
+                    </Group>
+                    {desenvolvimentoVazio ? (
+                      <Text size="sm" c="dimmed">
+                        Nenhum registro de Desenvolvimento neste período.
+                      </Text>
+                    ) : null}
                     <Stack gap={4}>
                       <Text fw={600} size="sm">
                         Experiências
@@ -439,7 +487,8 @@ export default function PaginaResumo() {
                           <Text key={e.id} size="sm">
                             {rotuloResultado(e.resultado)}: {e.nome} ·{" "}
                             {rotuloCategoria(e.categoria)} (+
-                            {e.estrelasConcedidas} estrelas)
+                            {e.estrelasConcedidas} estrelas) ·{" "}
+                            {formatarQuando(e.registradoEm)}
                           </Text>
                         ))
                       )}

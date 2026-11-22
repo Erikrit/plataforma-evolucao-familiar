@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-22 — DEM-E3 COMPLETED técnico (humana PENDING)
+
+- **Demanda:** DEM-E3-EXAMES-RESUMO-20261122 COMPLETED técnico; homologação humana PENDING_HUMAN (E3-HOM).
+- **Entrega:** Baixar arquivo no detalhe do exame (sem viewer); Resumo por área/período com fontes e vazios; prévia/PDF sem anexos embutidos; check/smoke e3; roteiro humano.
+- **QG-1/2/3:** PASS · Verifier indep. shell PASS; oficial BLOCKED (Ask/shell).
+- **Critérios:** E3-EX-01..05 e E3-RES-01..05 PASS; E3-HOM PENDING_HUMAN.
+- **Fingerprint:** `sha256:2dead837b08ac808` (full `…b0edb14c`); base develop @ `8a51752`.
+- **Próximo:** homologação humana no roteiro-homologacao-e3.md; sem commit/push/deploy.
+- **Integração documental:** autorizada pelo fluxo da esteira nesta conversa.
+
+
 ## 2026-11-22 — E3-UX-00 aprovado com download externo
 
 - **Decisão humana:** baixar anexo e abrir no aplicativo do dispositivo; restante do desenho E3 aprovado.

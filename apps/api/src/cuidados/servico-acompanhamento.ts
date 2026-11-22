@@ -515,7 +515,9 @@ export class ServicoAcompanhamento {
       exames: exames.map((e) => ({
         id: e.id,
         descricao: e.descricao,
+        data: e.data,
         criadoEm: e.criadoEm,
+        temDocumento: Boolean(e.anexoId),
       })),
       observacoes: atividades.map((a) => ({
         id: a.id,
@@ -787,13 +789,19 @@ export class ServicoAcompanhamento {
       }
       linhas.push(
         "",
-        "Exames (sem anexos):",
+        "Exames (sem anexos embutidos):",
         ...(c.exames.length === 0
           ? ["- Nenhum neste período."]
-          : c.exames.map(
-              (e) =>
-                `- ${e.descricao} · ${this.formatarQuandoLocal(e.criadoEm)}`,
-            )),
+          : c.exames.map((e) => {
+              const quando =
+                e.data != null
+                  ? this.formatarQuandoLocal(e.data)
+                  : this.formatarQuandoLocal(e.criadoEm);
+              const doc = e.temDocumento
+                ? " · documento disponível no app (não incluído)"
+                : "";
+              return `- ${e.descricao} · ${quando}${doc}`;
+            })),
       );
       if (c.listagens.exames.limitada) {
         linhas.push(

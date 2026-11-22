@@ -3,8 +3,8 @@
 **Demanda:** DEM-E3-EXAMES-RESUMO-20261122  
 **Tipo:** transversal · **Risco:** alto (documentos de saúde, crianças, autorização/PDF).  
 **Aprovação funcional:** Produto em 2026-11-22, Módulo 02 v1.7 §10 e Módulo 04 v1.2 §12.  
-**Estado:** READY para implementação; E3-UX-00 aprovado em 2026-11-22 com simplificação para download externo. Sem código/testes nesta atualização.  
-**Base inspecionada:** develop @ 133eec53089fc9cbd98bfd1dfd4f1987af783f2a.
+**Estado:** COMPLETED técnico em 2026-11-22; E3-HOM PENDING_HUMAN. Download externo sem viewer.  
+**Base:** develop @ 8a517523319a76740f21ad51da5a6e02cb29f6c1 (implementação local sem commit).
 
 ## Fontes e evidência inicial
 
@@ -16,10 +16,10 @@ Fontes: especificações acima; ADR-004/006/009/010/014; arquitetura vigente; GU
 
 | ID | Aceite/requisitos | Escopo e arquivos previstos | Gate |
 |---|---|---|---|
-| E3-00 | E3-UX-00 | Desenho aprovado: detalhe com Baixar arquivo, Resumo por área e prévia/PDF; sem visualizador embutido | Validação de UX pelo responsável |
-| E3-01 | E3-EX-01..05 | Download pelo detalhe e tratamento de falhas; página Consultas e exames, lib/api.ts, anexos/serviço/controlador conforme necessidade; sem componente viewer | QG-1, verifier, QG-2 |
-| E3-02 | E3-RES-01..04 | Resumo único com blocos por área/período, fontes e vazios; página resumo, lib/api.ts e servico-acompanhamento.ts conforme necessidade | QG-1, verifier, QG-2 |
-| E3-03 | E3-RES-05 e E3-HOM; regressão completa | Prévia/PDF consistente, testes de isolamento, roteiro móvel/desktop e evidências próprias | QG-1, verifier, QG-2/3 e PENDING_HUMAN |
+| E3-00 | E3-UX-00 | Desenho aprovado: detalhe com Baixar arquivo, Resumo por área e prévia/PDF; sem visualizador embutido | COMPLETED (desenho) |
+| E3-01 | E3-EX-01..05 | Download pelo detalhe e tratamento de falhas; página Consultas e exames, lib/api.ts; sem componente viewer | COMPLETED técnico |
+| E3-02 | E3-RES-01..04 | Resumo único com blocos por área/período, fontes e vazios; página resumo + servico-acompanhamento.ts | COMPLETED técnico |
+| E3-03 | E3-RES-05 e E3-HOM; regressão completa | Prévia/PDF consistente, testes de isolamento, roteiro móvel/desktop e evidências próprias | COMPLETED técnico; E3-HOM PENDING_HUMAN |
 
 ## Arquitetura e contratos a conferir
 
@@ -41,4 +41,4 @@ Resumo: cuidados, desenvolvimento, ambas as áreas, período vazio, categorias a
 
 Não reutilizar PASS de E1/E2 como prova desta alteração. Antes de editar, reconciliar checkout, branch, alterações locais/não rastreados e fingerprint real. Esta rodada é documental remota.
 
-**Bloqueios:** nenhum funcional identificado após o aceite do desenho simplificado. **Próxima ação:** implementation-workflow E3-01. Fora: visualizador embutido, IA, OCR, interpretação clínica, campos extras obrigatórios, nova permissão e publicação.
+**Bloqueios:** nenhum. **Próxima ação:** homologação humana E3-HOM. Fora: visualizador embutido, IA, OCR, interpretação clínica, campos extras obrigatórios, nova permissão e publicação.

@@ -26,11 +26,13 @@ import {
 import { IconeConsulta, IconeExame } from "@/componentes/icones-experiencia";
 import {
   atualizarConsulta,
+  baixarBytesBase64,
   criarAnexo,
   criarConsulta,
   criarExame,
   listarConsultas,
   listarExames,
+  obterAnexoPrivado,
   obterMe,
   obterPessoa,
   type ConsultaLista,
@@ -71,6 +73,12 @@ export default function PaginaConsultasExames() {
   const [confirmacaoStatus, setConfirmacaoStatus] = useState<
     "realizada" | "cancelada" | null
   >(null);
+  const [baixandoAnexo, setBaixandoAnexo] = useState(false);
+  const [erroAnexo, setErroAnexo] = useState<string | null>(null);
+  const [metaAnexo, setMetaAnexo] = useState<{
+    nomeArquivo: string;
+    mimeTipo: string;
+  } | null>(null);
 
   const [mostrarAgenda, setMostrarAgenda] = useState(false);
   const [consultaDesc, setConsultaDesc] = useState("");
@@ -324,12 +332,16 @@ export default function PaginaConsultasExames() {
                       tabIndex={0}
                       onClick={() => {
                         setConfirmacaoStatus(null);
+                        setErroAnexo(null);
+                        setMetaAnexo(null);
                         setSelecionado(item);
                       }}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
                           setConfirmacaoStatus(null);
+                          setErroAnexo(null);
+                          setMetaAnexo(null);
                           setSelecionado(item);
                         }
                       }}
@@ -362,12 +374,16 @@ export default function PaginaConsultasExames() {
                       tabIndex={0}
                       onClick={() => {
                         setConfirmacaoStatus(null);
+                        setErroAnexo(null);
+                        setMetaAnexo(null);
                         setSelecionado(item);
                       }}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
                           setConfirmacaoStatus(null);
+                          setErroAnexo(null);
+                          setMetaAnexo(null);
                           setSelecionado(item);
                         }
                       }}
@@ -539,9 +555,11 @@ export default function PaginaConsultasExames() {
         <Drawer
           opened={Boolean(selecionado)}
           onClose={() => {
-            if (!acaoGestao) {
+            if (!acaoGestao && !baixandoAnexo) {
               setSelecionado(null);
               setConfirmacaoStatus(null);
+              setErroAnexo(null);
+              setMetaAnexo(null);
             }
           }}
           position={ehCelular ? "bottom" : "right"}
@@ -552,8 +570,8 @@ export default function PaginaConsultasExames() {
           }
           padding="md"
           size={ehCelular ? "auto" : "md"}
-          closeOnEscape={!acaoGestao}
-          closeOnClickOutside={!acaoGestao}
+          closeOnEscape={!acaoGestao && !baixandoAnexo}
+          closeOnClickOutside={!acaoGestao && !baixandoAnexo}
         >
           {selecionado?.kind === "consulta" ? (
             <Stack gap="sm">
@@ -622,6 +640,11 @@ export default function PaginaConsultasExames() {
 
           {selecionado?.kind === "exame" ? (
             <Stack gap="sm">
+              {nomePessoa ? (
+                <Text size="sm" c="dimmed">
+                  {nomePessoa}
+                </Text>
+              ) : null}
               <Text fw={600} size="lg">
                 {selecionado.exame.descricao}
               </Text>
@@ -636,11 +659,66 @@ export default function PaginaConsultasExames() {
                 </Text>
               )}
               {selecionado.exame.anexoId ? (
-                <Text size="sm">
-                  {podeAnexos
-                    ? "Documento anexado (acesso privado conforme autorização)."
-                    : "Documento presente — sem permissão para abrir."}
-                </Text>
+                podeAnexos ? (
+                  <Stack gap="xs">
+                    <Text size="sm">
+                      {metaAnexo
+                        ? `${metaAnexo.nomeArquivo} · ${rotuloMime(metaAnexo.mimeTipo)}`
+                        : "Documento anexado"}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      O arquivo pode ser aberto no aplicativo do seu dispositivo
+                      após o download. A abertura automática não é garantida.
+                    </Text>
+                    {erroAnexo ? (
+                      <Text size="sm" c="red">
+                        {erroAnexo}
+                      </Text>
+                    ) : null}
+                    <Button
+                      variant="light"
+                      loading={baixandoAnexo}
+                      onClick={() => {
+                        const anexoId = selecionado.exame.anexoId;
+                        if (!anexoId) return;
+                        void (async () => {
+                          setBaixandoAnexo(true);
+                          setErroAnexo(null);
+                          try {
+                            const anexo = await obterAnexoPrivado(anexoId);
+                            const conteudo = (anexo.conteudoBase64 ?? "").trim();
+                            if (!conteudo) {
+                              throw new Error("Arquivo indisponível.");
+                            }
+                            setMetaAnexo({
+                              nomeArquivo: anexo.nomeArquivo,
+                              mimeTipo: anexo.mimeTipo,
+                            });
+                            baixarBytesBase64(
+                              conteudo,
+                              anexo.mimeTipo,
+                              anexo.nomeArquivo,
+                            );
+                          } catch (e) {
+                            setErroAnexo(
+                              e instanceof Error
+                                ? e.message
+                                : "Não foi possível baixar o arquivo.",
+                            );
+                          } finally {
+                            setBaixandoAnexo(false);
+                          }
+                        })();
+                      }}
+                    >
+                      {erroAnexo ? "Tentar novamente" : "Baixar arquivo"}
+                    </Button>
+                  </Stack>
+                ) : (
+                  <Text size="sm" c="dimmed">
+                    Documento presente — sem permissão para baixar.
+                  </Text>
+                )
               ) : (
                 <Text size="sm" c="dimmed">
                   Sem documento anexado
@@ -673,6 +751,14 @@ function formatarData(iso: string) {
   const data = new Date(iso);
   if (Number.isNaN(data.getTime())) return iso;
   return data.toLocaleDateString("pt-BR");
+}
+
+function rotuloMime(mime: string) {
+  const m = (mime || "").toLowerCase();
+  if (m.includes("pdf")) return "PDF";
+  if (m.startsWith("image/")) return "Imagem";
+  if (m) return m;
+  return "Arquivo";
 }
 
 function normalizarHora(valor: string) {

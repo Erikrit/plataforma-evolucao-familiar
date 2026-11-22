@@ -1,14 +1,14 @@
 # Estado das decisões e escopo
 
-## E3 — desenho simplificado aprovado, 2026-11-22
+## E3 — implementação técnica concluída; homologação humana pendente, 2026-11-22
 
-**Decisão APROVADA:** oferecer **Baixar arquivo** no exame; navegador/aplicativo do dispositivo faz a abertura. Retirados visualizador interno, zoom e paginação. O responsável aprovou o restante do desenho: Resumo único por área/período e fluxo de prévia/PDF do relatório.
+**Decisão APROVADA (desenho):** oferecer **Baixar arquivo** no exame; navegador/aplicativo do dispositivo faz a abertura. Retirados visualizador interno, zoom e paginação. Resumo único por área/período e fluxo de prévia/PDF do relatório.
 
-**Fontes:** Módulo 02 v1.7 §10, Módulo 04 v1.2 §12 e UX PROPOSTA-EVOLUCAO-POS-V1.md §11. A prévia do relatório permanece; ela é distinta da leitura de anexos de exames.
+**Fontes:** Módulo 02 v1.7 §10, Módulo 04 v1.2 §12 e UX PROPOSTA-EVOLUCAO-POS-V1.md §11.
 
-**Esteira:** DEM-E3-EXAMES-RESUMO-20261122 READY, E3-UX-00 aprovado e E3-01 liberado. Plano em `docs/esteira/planejamento/e3-exames-resumo.md`. Próximo: implementation-workflow E3-01 após reconciliação do workspace.
+**Esteira:** DEM-E3-EXAMES-RESUMO-20261122 COMPLETED técnico (E3-01..03); E3-HOM PENDING_HUMAN. Fingerprint `sha256:2dead837b08ac808`. Plano em `docs/esteira/planejamento/e3-exames-resumo.md`; roteiro em `docs/esteira/estado/roteiro-homologacao-e3.md`.
 
-**Referência:** develop @ 382a90e4eb44b9c0cdaffa70c88bba813a450149. Atualização documental; implementação/testes/homologação E3 pendentes. Histórico E2 e publicação adiada preservados.
+**Referência de base documental:** develop @ `8a517523319a76740f21ad51da5a6e02cb29f6c1` (implementação local sem commit). Publicação permanece adiada.
 
 ## E2 — homologação humana aprovada, 2026-11-22
 
@@ -18,7 +18,7 @@
 
 **Referência disponível:** develop @ `e3a75a9fca41c6bd0125ae39af3aa50f1f11d350`. Evidência técnica `docs/esteira/estado/evidencia-e2-20261122.json`: QG-1/2/3 PASS e verificação independente shell PASS. Verifier oficial FAIL (build antigo + Ask/shell), conforme nota de reexecução independente após build OK. Esta anotação não reclassifica o resultado oficial nem equivale a reexecução de testes.
 
-**Próxima etapa:** detalhar E3 — visualização privada de exames e resumo factual por área. Publicação para uso segue adiada.
+**Próxima etapa (histórico E2):** E3 já implementada tecnicamente; aguarda homologação humana E3-HOM. Publicação para uso segue adiada.
 
 ## Defeito conhecido — ativação de acesso de pessoas, 2026-11-22
 

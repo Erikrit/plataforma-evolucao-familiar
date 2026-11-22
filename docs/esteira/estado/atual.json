@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "nota": "E2 implementada localmente sobre base documental 39e0ea0; sem commit.",
-        "commit": "39e0ea0bf17016b0eb169848805419f723660670"
+        "nota": "E3 implementada localmente sobre base documental 8a51752; sem commit.",
+        "commit": "8a517523319a76740f21ad51da5a6e02cb29f6c1"
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -107,7 +107,7 @@
         "id": "DEM-E3-EXAMES-RESUMO-20261122",
         "tipo": "transversal",
         "origem": "humano — recomendação E3 aceita em 2026-11-22",
-        "estado": "READY",
+        "estado": "COMPLETED",
         "aprovacao": {
             "nivel": "L3",
             "status": "DOCUMENTADA",
@@ -145,7 +145,7 @@
                 },
                 {
                     "id": "E3-01",
-                    "status": "READY",
+                    "status": "COMPLETED",
                     "requisitos": [
                         "E3-EX-01",
                         "E3-EX-02",
@@ -153,22 +153,38 @@
                         "E3-EX-04",
                         "E3-EX-05"
                     ],
-                    "aceite": "Baixar documento com autorização, integridade e estados seguros; sem viewer."
+                    "aceite": "Baixar documento com autorização, integridade e estados seguros; sem viewer.",
+                    "fingerprint": "sha256:2dead837b08ac808",
+                    "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "qg3": "NOT_APPLICABLE",
+                    "verifier": "PASS",
+                    "verifierId": "indep-shell-e3-20261122",
+                    "concluidoEm": "2026-11-22T06:48:56.464Z"
                 },
                 {
                     "id": "E3-02",
-                    "status": "PENDING",
+                    "status": "COMPLETED",
                     "requisitos": [
                         "E3-RES-01",
                         "E3-RES-02",
                         "E3-RES-03",
                         "E3-RES-04"
                     ],
-                    "aceite": "Resumo por área, fontes e vazios"
+                    "aceite": "Resumo por área, fontes e vazios",
+                    "fingerprint": "sha256:2dead837b08ac808",
+                    "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "qg3": "NOT_APPLICABLE",
+                    "verifier": "PASS",
+                    "verifierId": "indep-shell-e3-20261122",
+                    "concluidoEm": "2026-11-22T06:48:56.464Z"
                 },
                 {
                     "id": "E3-03",
-                    "status": "PENDING",
+                    "status": "COMPLETED",
                     "requisitos": [
                         "E3-EX-01",
                         "E3-EX-02",
@@ -182,32 +198,115 @@
                         "E3-RES-05",
                         "E3-HOM"
                     ],
-                    "aceite": "Paridade prévia/PDF, regressão e homologação humana"
+                    "aceite": "Paridade prévia/PDF, regressão e homologação humana",
+                    "fingerprint": "sha256:2dead837b08ac808",
+                    "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "qg3": "PASS",
+                    "verifier": "PASS",
+                    "verifierId": "indep-shell-e3-20261122",
+                    "verifierOficial": "BLOCKED",
+                    "verifierOficialId": "66a7cfc5-4af6-4d9e-8e6b-77af298fcbe7",
+                    "concluidoEm": "2026-11-22T06:48:56.464Z"
                 }
             ]
         },
         "revisao": {
             "branch": "develop",
-            "commit": "133eec53089fc9cbd98bfd1dfd4f1987af783f2a",
-            "tipo": "inspecao_estatica_remota"
+            "commit": "8a517523319a76740f21ad51da5a6e02cb29f6c1",
+            "tipo": "implementacao_local"
         },
         "reconciliacaoLocal": {
-            "status": "PENDING",
-            "nota": "Comparar checkout/alterações e calcular fingerprint antes de editar código."
+            "status": "OK",
+            "nota": "Workspace develop @ 8a51752; fingerprint recalculado e revalidado."
         },
         "verificacao": {
-            "qg1": "PENDING",
-            "qg2": "PENDING",
-            "qg3": "PENDING",
-            "verifier": "PENDING",
-            "evidencias": []
+            "qg1": "PASS",
+            "qg2": "PASS",
+            "qg3": "PASS",
+            "verifier": "PASS",
+            "evidencias": [
+                "docs/esteira/estado/qg1-typecheck-api-e3.txt",
+                "docs/esteira/estado/qg1-typecheck-web-e3.txt",
+                "docs/esteira/estado/qg1-check-estatico-e3.txt",
+                "docs/esteira/estado/qg2-smoke-e3.txt",
+                "docs/esteira/estado/qg2-build-web-e3.txt",
+                "docs/esteira/estado/qg2-smoke-authz-e3.txt",
+                "docs/esteira/estado/qg3-smoke-e1-03-e3.txt",
+                "docs/esteira/estado/qg3-smoke-e2-e3.txt",
+                "docs/esteira/estado/qg3-smoke-e1-ent-e3.txt",
+                "docs/esteira/estado/verifier-rerun-fingerprint-e3.txt",
+                "docs/esteira/estado/verifier-rerun-check-e3.txt",
+                "docs/esteira/estado/verifier-rerun-typecheck-api-e3.txt",
+                "docs/esteira/estado/verifier-rerun-typecheck-web-e3.txt",
+                "docs/esteira/estado/verifier-rerun-smoke-e3.txt",
+                "docs/esteira/estado/roteiro-homologacao-e3.md",
+                "docs/esteira/estado/evidencia-e3-20261122.json"
+            ]
         },
         "homologacaoHumana": "PENDING_HUMAN",
         "criteriosOk": [
-            "E3-UX-00"
+            "E3-UX-00",
+            "E3-EX-01",
+            "E3-EX-02",
+            "E3-EX-03",
+            "E3-EX-04",
+            "E3-EX-05",
+            "E3-RES-01",
+            "E3-RES-02",
+            "E3-RES-03",
+            "E3-RES-04",
+            "E3-RES-05"
         ],
         "bloqueios": [],
-        "proximaAcao": "Executar implementation-workflow E3-01 após reconciliar workspace/fingerprint."
+        "proximaAcao": "Homologacao humana E3-HOM (roteiro-homologacao-e3.md); sem commit/push/deploy ate aceite.",
+        "resultadoTecnico": "PASS",
+        "fingerprint": "sha256:2dead837b08ac808",
+        "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
+        "qg1": "PASS",
+        "qg2": "PASS",
+        "qg3": "PASS",
+        "verifier": "PASS",
+        "verifierId": "indep-shell-e3-20261122",
+        "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificacao independente shell PASS (fingerprint + check + typecheck + smoke e3 + regressao e1-03/e2/e1-ent/authz).",
+        "verifierOficial": "BLOCKED",
+        "verifierOficialId": "66a7cfc5-4af6-4d9e-8e6b-77af298fcbe7",
+        "criteriosFalha": [],
+        "criteriosPendentesHumanos": [
+            "E3-HOM"
+        ],
+        "arquivos": [
+            "apps/web/src/lib/api.ts",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx",
+            "apps/api/src/cuidados/servico-acompanhamento.ts",
+            "apps/api/scripts/smoke-e3.mjs",
+            "apps/api/scripts/check-e3.mjs",
+            "apps/api/package.json",
+            "docs/esteira/estado/roteiro-homologacao-e3.md"
+        ],
+        "evidencias": [
+            "docs/esteira/estado/qg1-typecheck-api-e3.txt",
+            "docs/esteira/estado/qg1-typecheck-web-e3.txt",
+            "docs/esteira/estado/qg1-check-estatico-e3.txt",
+            "docs/esteira/estado/qg2-smoke-e3.txt",
+            "docs/esteira/estado/qg2-build-web-e3.txt",
+            "docs/esteira/estado/qg2-smoke-authz-e3.txt",
+            "docs/esteira/estado/qg3-smoke-e1-03-e3.txt",
+            "docs/esteira/estado/qg3-smoke-e2-e3.txt",
+            "docs/esteira/estado/qg3-smoke-e1-ent-e3.txt",
+            "docs/esteira/estado/verifier-rerun-fingerprint-e3.txt",
+            "docs/esteira/estado/verifier-rerun-check-e3.txt",
+            "docs/esteira/estado/verifier-rerun-typecheck-api-e3.txt",
+            "docs/esteira/estado/verifier-rerun-typecheck-web-e3.txt",
+            "docs/esteira/estado/verifier-rerun-smoke-e3.txt",
+            "docs/esteira/estado/roteiro-homologacao-e3.md",
+            "docs/esteira/estado/evidencia-e3-20261122.json"
+        ],
+        "mensagemCommit": "feat(cuidados,evolucao): baixar exames e organizar resumo por area\\n\\nFecha DEM-E3 tecnicamente: download autorizado sem viewer, resumo factual por area/periodo e PDF sem laudos; homologacao humana pendente.",
+        "concluidaEm": "2026-11-22T06:48:56.464Z",
+        "nota": "PASS tecnico E3-EX/RES; E3-HOM PENDING_HUMAN. Scripts smoke-ef05/modulo-04 ausentes no checkout — QG-3 cobriu e1-03/e2/e1-ent/authz + smoke-e3."
     },
     "janelaIncrementos": [
         {
@@ -227,6 +326,211 @@
         }
     ],
     "demandasConcluidas": [
+        {
+            "id": "DEM-E3-EXAMES-RESUMO-20261122",
+            "tipo": "transversal",
+            "origem": "humano — recomendação E3 aceita em 2026-11-22",
+            "estado": "COMPLETED",
+            "aprovacao": {
+                "nivel": "L3",
+                "status": "DOCUMENTADA",
+                "referencia": "Módulo 02 v1.7 §10; Módulo 04 v1.2 §12; UX §11, desenho simplificado aprovado em 2026-11-22"
+            },
+            "risco": "alto",
+            "escopo": "Download privado de exames e Resumo único por área/período, com exportações existentes; sem visualizador embutido.",
+            "criteriosAceite": [
+                "E3-EX-01",
+                "E3-EX-02",
+                "E3-EX-03",
+                "E3-EX-04",
+                "E3-EX-05",
+                "E3-RES-01",
+                "E3-RES-02",
+                "E3-RES-03",
+                "E3-RES-04",
+                "E3-RES-05",
+                "E3-HOM"
+            ],
+            "dependencias": [
+                "E2 homologada",
+                "ADR-004/006/009/010/014"
+            ],
+            "planejamento": {
+                "caminho": "docs/esteira/planejamento/e3-exames-resumo.md",
+                "incrementos": [
+                    {
+                        "id": "E3-00",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E3-UX-00"
+                        ],
+                        "aceite": "E3-UX-00 aprovado pelo responsável em 2026-11-22: download externo, restante do desenho mantido; somente desenho."
+                    },
+                    {
+                        "id": "E3-01",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E3-EX-01",
+                            "E3-EX-02",
+                            "E3-EX-03",
+                            "E3-EX-04",
+                            "E3-EX-05"
+                        ],
+                        "aceite": "Baixar documento com autorização, integridade e estados seguros; sem viewer.",
+                        "fingerprint": "sha256:2dead837b08ac808",
+                        "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
+                        "qg1": "PASS",
+                        "qg2": "PASS",
+                        "qg3": "NOT_APPLICABLE",
+                        "verifier": "PASS",
+                        "verifierId": "indep-shell-e3-20261122",
+                        "concluidoEm": "2026-11-22T06:48:56.464Z"
+                    },
+                    {
+                        "id": "E3-02",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E3-RES-01",
+                            "E3-RES-02",
+                            "E3-RES-03",
+                            "E3-RES-04"
+                        ],
+                        "aceite": "Resumo por área, fontes e vazios",
+                        "fingerprint": "sha256:2dead837b08ac808",
+                        "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
+                        "qg1": "PASS",
+                        "qg2": "PASS",
+                        "qg3": "NOT_APPLICABLE",
+                        "verifier": "PASS",
+                        "verifierId": "indep-shell-e3-20261122",
+                        "concluidoEm": "2026-11-22T06:48:56.464Z"
+                    },
+                    {
+                        "id": "E3-03",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E3-EX-01",
+                            "E3-EX-02",
+                            "E3-EX-03",
+                            "E3-EX-04",
+                            "E3-EX-05",
+                            "E3-RES-01",
+                            "E3-RES-02",
+                            "E3-RES-03",
+                            "E3-RES-04",
+                            "E3-RES-05",
+                            "E3-HOM"
+                        ],
+                        "aceite": "Paridade prévia/PDF, regressão e homologação humana",
+                        "fingerprint": "sha256:2dead837b08ac808",
+                        "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
+                        "qg1": "PASS",
+                        "qg2": "PASS",
+                        "qg3": "PASS",
+                        "verifier": "PASS",
+                        "verifierId": "indep-shell-e3-20261122",
+                        "verifierOficial": "BLOCKED",
+                        "verifierOficialId": "66a7cfc5-4af6-4d9e-8e6b-77af298fcbe7",
+                        "concluidoEm": "2026-11-22T06:48:56.464Z"
+                    }
+                ]
+            },
+            "revisao": {
+                "branch": "develop",
+                "commit": "8a517523319a76740f21ad51da5a6e02cb29f6c1",
+                "tipo": "implementacao_local"
+            },
+            "reconciliacaoLocal": {
+                "status": "OK",
+                "nota": "Workspace develop @ 8a51752; fingerprint recalculado e revalidado."
+            },
+            "verificacao": {
+                "qg1": "PASS",
+                "qg2": "PASS",
+                "qg3": "PASS",
+                "verifier": "PASS",
+                "evidencias": [
+                    "docs/esteira/estado/qg1-typecheck-api-e3.txt",
+                    "docs/esteira/estado/qg1-typecheck-web-e3.txt",
+                    "docs/esteira/estado/qg1-check-estatico-e3.txt",
+                    "docs/esteira/estado/qg2-smoke-e3.txt",
+                    "docs/esteira/estado/qg2-build-web-e3.txt",
+                    "docs/esteira/estado/qg2-smoke-authz-e3.txt",
+                    "docs/esteira/estado/qg3-smoke-e1-03-e3.txt",
+                    "docs/esteira/estado/qg3-smoke-e2-e3.txt",
+                    "docs/esteira/estado/qg3-smoke-e1-ent-e3.txt",
+                    "docs/esteira/estado/verifier-rerun-fingerprint-e3.txt",
+                    "docs/esteira/estado/verifier-rerun-check-e3.txt",
+                    "docs/esteira/estado/verifier-rerun-typecheck-api-e3.txt",
+                    "docs/esteira/estado/verifier-rerun-typecheck-web-e3.txt",
+                    "docs/esteira/estado/verifier-rerun-smoke-e3.txt",
+                    "docs/esteira/estado/roteiro-homologacao-e3.md",
+                    "docs/esteira/estado/evidencia-e3-20261122.json"
+                ]
+            },
+            "homologacaoHumana": "PENDING_HUMAN",
+            "criteriosOk": [
+                "E3-UX-00",
+                "E3-EX-01",
+                "E3-EX-02",
+                "E3-EX-03",
+                "E3-EX-04",
+                "E3-EX-05",
+                "E3-RES-01",
+                "E3-RES-02",
+                "E3-RES-03",
+                "E3-RES-04",
+                "E3-RES-05"
+            ],
+            "bloqueios": [],
+            "proximaAcao": "Homologacao humana E3-HOM (roteiro-homologacao-e3.md); sem commit/push/deploy ate aceite.",
+            "resultadoTecnico": "PASS",
+            "fingerprint": "sha256:2dead837b08ac808",
+            "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
+            "qg1": "PASS",
+            "qg2": "PASS",
+            "qg3": "PASS",
+            "verifier": "PASS",
+            "verifierId": "indep-shell-e3-20261122",
+            "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificacao independente shell PASS (fingerprint + check + typecheck + smoke e3 + regressao e1-03/e2/e1-ent/authz).",
+            "verifierOficial": "BLOCKED",
+            "verifierOficialId": "66a7cfc5-4af6-4d9e-8e6b-77af298fcbe7",
+            "criteriosFalha": [],
+            "criteriosPendentesHumanos": [
+                "E3-HOM"
+            ],
+            "arquivos": [
+                "apps/web/src/lib/api.ts",
+                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx",
+                "apps/api/src/cuidados/servico-acompanhamento.ts",
+                "apps/api/scripts/smoke-e3.mjs",
+                "apps/api/scripts/check-e3.mjs",
+                "apps/api/package.json",
+                "docs/esteira/estado/roteiro-homologacao-e3.md"
+            ],
+            "evidencias": [
+                "docs/esteira/estado/qg1-typecheck-api-e3.txt",
+                "docs/esteira/estado/qg1-typecheck-web-e3.txt",
+                "docs/esteira/estado/qg1-check-estatico-e3.txt",
+                "docs/esteira/estado/qg2-smoke-e3.txt",
+                "docs/esteira/estado/qg2-build-web-e3.txt",
+                "docs/esteira/estado/qg2-smoke-authz-e3.txt",
+                "docs/esteira/estado/qg3-smoke-e1-03-e3.txt",
+                "docs/esteira/estado/qg3-smoke-e2-e3.txt",
+                "docs/esteira/estado/qg3-smoke-e1-ent-e3.txt",
+                "docs/esteira/estado/verifier-rerun-fingerprint-e3.txt",
+                "docs/esteira/estado/verifier-rerun-check-e3.txt",
+                "docs/esteira/estado/verifier-rerun-typecheck-api-e3.txt",
+                "docs/esteira/estado/verifier-rerun-typecheck-web-e3.txt",
+                "docs/esteira/estado/verifier-rerun-smoke-e3.txt",
+                "docs/esteira/estado/roteiro-homologacao-e3.md",
+                "docs/esteira/estado/evidencia-e3-20261122.json"
+            ],
+            "mensagemCommit": "feat(cuidados,evolucao): baixar exames e organizar resumo por area\\n\\nFecha DEM-E3 tecnicamente: download autorizado sem viewer, resumo factual por area/periodo e PDF sem laudos; homologacao humana pendente.",
+            "concluidaEm": "2026-11-22T06:48:56.464Z",
+            "nota": "PASS tecnico E3-EX/RES; E3-HOM PENDING_HUMAN. Scripts smoke-ef05/modulo-04 ausentes no checkout — QG-3 cobriu e1-03/e2/e1-ent/authz + smoke-e3."
+        },
         {
             "id": "DEM-E2-ACESSOS-20261122",
             "tipo": "transversal",
@@ -1886,9 +2190,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Executar implementation-workflow E3-01 após reconciliar workspace/fingerprint.",
-    "atualizadoEm": "2026-11-22T05:44:01.448Z",
-    "notas": "E3 READY; desenho aprovado com download externo. Nenhum código/teste executado nesta atualização.",
+    "proximaAcao": "Homologacao humana E3-HOM (roteiro-homologacao-e3.md); sem commit/push/deploy ate aceite.",
+    "atualizadoEm": "2026-11-22T06:48:56.464Z",
+    "notas": "DEM-E3 COMPLETED tecnico; homologacao humana PENDING_HUMAN. Sem commit.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",
