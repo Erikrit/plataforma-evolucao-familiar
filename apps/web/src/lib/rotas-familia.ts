@@ -85,7 +85,10 @@ export function pessoaIdDaUrl(pathname: string): string | null {
   return m?.[1] ?? null;
 }
 
+/** Retorno da partida vai ao catálogo (tela final de escolha), não à URL legada do jogo. */
 export function rotaRetornoPartida(pathname: string): string | null {
-  const partida = pathname.match(/^(\/f\/[^/]+\/pessoas\/[^/]+\/desenvolvimento\/biblioteca\/jogos\/[^/]+)\/fases\/[^/]+\/jogar\/?$/);
+  const partida = pathname.match(
+    /^(\/f\/[^/]+\/pessoas\/[^/]+\/desenvolvimento\/biblioteca\/jogos)\/[^/]+\/fases\/[^/]+\/jogar\/?$/,
+  );
   return partida?.[1] ?? null;
 }

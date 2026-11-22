@@ -114,11 +114,11 @@ export default function PaginaEntrarFamilia() {
           <Title order={1}>Entrar</Title>
           {familia ? (
             <Text c="dimmed" size="sm">
-              {familia.nome} · /f/{familia.slug}
+              {familia.nome}
             </Text>
           ) : (
             <Text c="dimmed" size="sm">
-              Endereço /f/{slug} indisponível.
+              Família indisponível.
             </Text>
           )}
           {familia ? (

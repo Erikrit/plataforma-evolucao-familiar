@@ -180,3 +180,89 @@
     animation: none;
   }
 }
+
+.seletorFases {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.opcaoFase {
+  display: flex;
+  min-height: 3.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12rem;
+  padding: 0.35rem 0.2rem;
+  border: 1.5px solid #c9d4e6;
+  border-radius: var(--mantine-radius-md);
+  background: #fff;
+  color: #23344f;
+  cursor: pointer;
+}
+
+.opcaoFase:hover {
+  border-color: #7da4e6;
+  background: #f8fbff;
+}
+
+.opcaoFase:focus-visible {
+  outline: 3px solid #244e95;
+  outline-offset: 2px;
+}
+
+.opcaoFase[data-selecionada="true"] {
+  border-color: #3569c8;
+  background: #e8effc;
+  color: #2b56a6;
+  font-weight: 600;
+}
+
+.opcaoFase[data-estado="concluida"] {
+  border-color: #8ec9a3;
+}
+
+.opcaoFase[data-estado="experimentada"] {
+  border-color: #e5a66a;
+}
+
+.iconeEstadoFase {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.numeroFase {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.rotuloEstadoFase {
+  max-width: 100%;
+  padding: 0 0.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.62rem;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #6b7a90;
+}
+
+.opcaoFase[data-selecionada="true"] .rotuloEstadoFase {
+  color: #2b56a6;
+}
+
+.barraProgressoJogo {
+  --barra-fundo: #e6f6ea;
+  --barra-preenchimento: #8fd6a0;
+}
+
+.barraProgressoJogo :global(.mantine-Progress-root) {
+  background: var(--barra-fundo);
+}
+
+.barraProgressoJogo :global(.mantine-Progress-section) {
+  background: var(--barra-preenchimento);
+}

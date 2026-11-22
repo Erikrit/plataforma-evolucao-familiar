@@ -112,8 +112,8 @@ reg(
 );
 reg(
   "E4-ACE-07-ui",
-  entradaDesenvolvimento.includes("Ver biblioteca") &&
-    entradaDesenvolvimento.includes('caminho + "/biblioteca"') &&
+  entradaDesenvolvimento.includes("redirect(rotaFamilia") &&
+    entradaDesenvolvimento.includes("/desenvolvimento/biblioteca") &&
     biblioteca.includes("Sugestões para esta pessoa") &&
     biblioteca.includes("Renovar sugestões") &&
     biblioteca.includes("Escolher para experimentar") &&

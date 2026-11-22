@@ -77,8 +77,7 @@ export function PainelFundacao() {
         <Stack gap="md">
           <Title order={2}>Sessão necessária</Title>
           <Text c="dimmed" size="sm">
-            Entre pelo endereço da sua família para continuar. Não há login global
-            nesta etapa.
+            Entre pelo endereço da sua família para continuar.
           </Text>
           <Text size="sm">
             <Anchor component={Link} href="/f">
@@ -103,7 +102,7 @@ export function PainelFundacao() {
           <Title order={2}>Contexto incompleto</Title>
           <Text c="dimmed" size="sm">
             Não foi possível identificar o endereço da família nesta sessão.
-            Entre novamente pelo endereço /f/…/entrar.
+            Entre novamente na sua família.
           </Text>
           <MensagemFeedback erro={erroSessao} />
         </Stack>
@@ -147,7 +146,7 @@ export function PainelFundacao() {
               <Card
                 key={`${d.tipo}-${d.pessoaId}-${d.quando}`}
                 component={Link}
-                href={rotaFamilia(slug, `/pessoas/${d.pessoaId}`)}
+                href={rotaFamilia(slug, `/pessoas/${d.pessoaId}/${d.tipo === "consulta_proxima" ? "cuidados/consultas" : "historico"}`)}
                 withBorder
                 padding="sm"
                 radius="md"
@@ -189,7 +188,7 @@ export function PainelFundacao() {
       {contextoUnico ? (
         <Card
           component={Link}
-          href={contextoUnico.href}
+          href={destinoOperacional(contextoUnico)}
           withBorder
           padding="md"
           radius="md"
@@ -222,7 +221,7 @@ export function PainelFundacao() {
                 <Card
                   key={cartao.pessoaId}
                   component={Link}
-                  href={rotaFamilia(slug, `/pessoas/${cartao.pessoaId}`)}
+                  href={rotaFamilia(slug, `/pessoas/${cartao.pessoaId}` + (cartao.areasAutorizadas?.cuidados ? "/cuidados" : cartao.areasAutorizadas?.desenvolvimento ? "/desenvolvimento/biblioteca" : cartao.areasAutorizadas?.historico ? "/historico" : ""))}
                   withBorder
                   padding="md"
                   radius="md"
@@ -238,7 +237,7 @@ export function PainelFundacao() {
                       </Text>
                     ) : null}
                     <Text size="sm" c="azul" fw={500}>
-                      Abrir perfil
+                      {cartao.areasAutorizadas?.cuidados ? "Abrir rotina" : cartao.areasAutorizadas?.desenvolvimento ? "Abrir biblioteca" : cartao.areasAutorizadas?.historico ? "Abrir histórico" : "Abrir ficha"}
                     </Text>
                   </Stack>
                 </Card>
@@ -271,6 +270,10 @@ export function PainelFundacao() {
   );
 }
 
+function destinoOperacional(contexto: ContextoOperacional) {
+  return contexto.href.replace(/\/desenvolvimento$/, "/desenvolvimento/biblioteca");
+}
+
 function GroupAreas({ areas }: { areas: ContextoOperacional[] }) {
   return (
     <Stack gap={6}>
@@ -278,7 +281,7 @@ function GroupAreas({ areas }: { areas: ContextoOperacional[] }) {
         <Button
           key={`${area.pessoaId}-${area.area}`}
           component={Link}
-          href={area.href}
+          href={destinoOperacional(area)}
           variant="light"
           fullWidth
         >

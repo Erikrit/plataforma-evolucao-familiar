@@ -2,6 +2,8 @@
 
 ## E5 — Jogos digitais e organização da Biblioteca, 2026-11-22
 
+**Homologação humana REPROVADA em 2026-11-22.** Correção UX em `COR-E5-UX-HOM-20261122`: implementação técnica local concluída; **aguardando nova homologação humana** (roteiro `docs/esteira/estado/roteiro-ux-navegacao-e5.md`).
+
 **Implementada localmente.** A Biblioteca fica no menu contextual de Desenvolvimento, com Atividades reais e Jogos digitais. O piloto entrega Memória de figuras, Complete a sequência e Caminhos e labirintos, com cinco fases de escolha livre por jogo. Histórico e Resumo leem as descobertas da fonte E5 com autorização da pessoa. As estrelas pertencem às participações presenciais.
 
 **Esteira.** E5-01 a E5-05 de `DEM-E5-JOGOS-DIGITAIS-20261122` concluídos tecnicamente. E5-06 concentra a validação integrada e a homologação humana. [Evidências](../esteira/estado/evidencia-e5-20261122.json) · [Roteiro de homologação](../esteira/estado/roteiro-homologacao-e5.md) · [Módulo 03 v1.4 §13](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento)

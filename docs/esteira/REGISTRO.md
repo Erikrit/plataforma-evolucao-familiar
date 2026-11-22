@@ -1,5 +1,34 @@
 # Registro da esteira
 
+## COR-E5-UX-HOM-R2-20261122
+
+- **Tipo:** melhoria_ux · **Origem:** homologação humana REPROVADA da R1; correções complementares aprovadas (dica Modal, seletor, barra, ícone).
+- **Preservado:** protótipo R1, catálogo com partida direta, menu/agrupamento, permissões/persistência/histórico/estrelas presenciais.
+- **Entrega:** Modal Dica (como jogar + 1 dica/partida); seletor compacto de fases com estados; barra verde-clara; ícone Desenvolvimento trending-up.
+- **QG:** typecheck, check-e4/e5, smoke-e4/e5/authz e build web PASS. Verifier PASS (após correção de cache da dica e rótulos). Fingerprint `sha256:9e70ea931ca2ff30…`.
+- **Estado:** COMPLETED técnico · **homologação humana REPROVADA** até novo aceite. Sem commit/push/deploy.
+- **Evidência:** [JSON](estado/evidencia-cor-e5-ux-hom-r2-20261122.json) · [Roteiro](estado/roteiro-ux-navegacao-e5-r2.md)
+
+## COR-E5-UX-HOM-20261122
+
+- **Tipo:** melhoria_ux · **Origem:** homologação humana REPROVADA (funcional aceito; visual/navegação não).
+- **Protótipo:** APROVADO pelo Produto · [HTML](estado/prototipo-cor-e5-ux-hom-20261122.html).
+- **Implementação:** catálogo = tela final (fase + progresso + Jogar); filtros Todas/Concluídas/Não concluídas; partida direta com Como jogar; URL legada redireciona; menu AppShell/Drawer com grupos expansíveis e ícones; tema PEF.
+- **QG:** typecheck, check-e4/e5, smoke-e4/e5/authz e build web PASS. Verifier PASS_COM_ACHADOS (objetivo só na ajuda). Fingerprint `sha256:307f5dcfcce6045b…`.
+- **Estado:** COMPLETED técnico · **AGUARDANDO HOMOLOGAÇÃO HUMANA** (`PENDING_HUMAN`). Sem commit/push/deploy.
+- **Evidência:** [JSON](estado/evidencia-cor-e5-ux-hom-20261122.json) · [Roteiro](estado/roteiro-ux-navegacao-e5.md)
+
+## COR-E5-UX-HOM-20261122 — triagem e protótipo
+
+- **Checkout:** `develop` @ `4cb8cf0` + alterações locais; inspecionado antes de GitHub.
+- **Triagem:** L1 UX; catálogo como tela final; menu redesenhado; tema PEF.
+- **Estado na triagem:** `NEEDS_DECISION` até aprovação do desenho (obtida em seguida).
+- **Precedente:** DEM-E5-UX-NAVEGACAO-CORR-20261122 (REPROVADO).
+
+## DEM-E5-UX-NAVEGACAO-CORR-20261122
+
+Resultado humano REPROVADO. Correção transversal aprovada em develop. Sequência técnica: corrigir entrada e navegação compartilhada, ajustar partida e filtros, testar por perfil e retornar à homologação. [Roteiro](estado/roteiro-ux-navegacao-e5.md)
+
 ## 2026-11-22 — Catálogo de Jogos digitais recuperado no ambiente local
 
 - **E5-06-COR-02.** O catálogo falhava com Prisma `P2021` porque o PostgreSQL de desenvolvimento ainda não tinha a tabela de progresso da E5. Atualização aditiva aplicada e procedimento registrado no README.

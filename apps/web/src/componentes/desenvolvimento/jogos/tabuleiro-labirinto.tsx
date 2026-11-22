@@ -1,15 +1,43 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { Button, Group, Stack, Text } from "@mantine/core";
+import { Button, Stack, Text } from "@mantine/core";
 import type { ConteudoLabirinto, PosicaoLabirinto } from "@/lib/api";
 import estilos from "./jogos.module.css";
 
 const DIRECOES = [
-  { id: "cima", tecla: "ArrowUp", nome: "cima", icone: "↑", linha: -1, coluna: 0 },
-  { id: "esquerda", tecla: "ArrowLeft", nome: "a esquerda", icone: "←", linha: 0, coluna: -1 },
-  { id: "baixo", tecla: "ArrowDown", nome: "baixo", icone: "↓", linha: 1, coluna: 0 },
-  { id: "direita", tecla: "ArrowRight", nome: "a direita", icone: "→", linha: 0, coluna: 1 },
+  {
+    id: "cima",
+    tecla: "ArrowUp",
+    nome: "cima",
+    icone: "↑",
+    linha: -1,
+    coluna: 0,
+  },
+  {
+    id: "esquerda",
+    tecla: "ArrowLeft",
+    nome: "a esquerda",
+    icone: "←",
+    linha: 0,
+    coluna: -1,
+  },
+  {
+    id: "baixo",
+    tecla: "ArrowDown",
+    nome: "baixo",
+    icone: "↓",
+    linha: 1,
+    coluna: 0,
+  },
+  {
+    id: "direita",
+    tecla: "ArrowRight",
+    nome: "a direita",
+    icone: "→",
+    linha: 0,
+    coluna: 1,
+  },
 ] as const;
 type Direcao = (typeof DIRECOES)[number];
 
@@ -18,7 +46,10 @@ function mesmaPosicao(a: PosicaoLabirinto, b: PosicaoLabirinto) {
 }
 
 function proximaPosicao(posicao: PosicaoLabirinto, direcao: Direcao) {
-  return { linha: posicao.linha + direcao.linha, coluna: posicao.coluna + direcao.coluna };
+  return {
+    linha: posicao.linha + direcao.linha,
+    coluna: posicao.coluna + direcao.coluna,
+  };
 }
 
 function podeAndar(mapa: readonly string[], posicao: PosicaoLabirinto) {
@@ -27,7 +58,9 @@ function podeAndar(mapa: readonly string[], posicao: PosicaoLabirinto) {
 }
 
 function caminhoSugerido(conteudo: ConteudoLabirinto, origem: PosicaoLabirinto) {
-  const fila: { posicao: PosicaoLabirinto; primeira?: Direcao }[] = [{ posicao: origem }];
+  const fila: { posicao: PosicaoLabirinto; primeira?: Direcao }[] = [
+    { posicao: origem },
+  ];
   const visitadas = new Set([`${origem.linha}/${origem.coluna}`]);
   for (let i = 0; i < fila.length; i += 1) {
     const { posicao, primeira } = fila[i];
@@ -45,18 +78,34 @@ function caminhoSugerido(conteudo: ConteudoLabirinto, origem: PosicaoLabirinto) 
 export function TabuleiroLabirinto({
   conteudo,
   aoConcluir,
+  registrarObterDica,
 }: {
   conteudo: ConteudoLabirinto;
   aoConcluir: () => void;
+  registrarObterDica: (obter: (() => string | null) | null) => void;
 }) {
   const [posicao, setPosicao] = useState(conteudo.inicio);
   const [mensagem, setMensagem] = useState("");
   const [dica, setDica] = useState<Direcao["id"] | null>(null);
   const foco = useRef<HTMLDivElement>(null);
+  const posicaoAtual = useRef(posicao);
+  posicaoAtual.current = posicao;
 
   useEffect(() => {
     foco.current?.focus();
   }, []);
+
+  useEffect(() => {
+    registrarObterDica(() => {
+      const proxima = caminhoSugerido(conteudo, posicaoAtual.current);
+      if (!proxima) return null;
+      setDica(proxima.id);
+      const texto = `Tente ir para ${proxima.nome}.`;
+      setMensagem(texto);
+      return texto;
+    });
+    return () => registrarObterDica(null);
+  }, [conteudo, registrarObterDica]);
 
   function mover(direcao: Direcao) {
     const destino = proximaPosicao(posicao, direcao);
@@ -71,34 +120,52 @@ export function TabuleiroLabirinto({
   }
 
   function peloTeclado(evento: KeyboardEvent<HTMLDivElement>) {
-    if (evento.altKey || evento.ctrlKey || evento.metaKey || evento.shiftKey) return;
+    if (evento.altKey || evento.ctrlKey || evento.metaKey || evento.shiftKey)
+      return;
     const direcao = DIRECOES.find((item) => item.tecla === evento.key);
     if (!direcao) return;
     evento.preventDefault();
     mover(direcao);
   }
 
-  function mostrarDica() {
-    const proxima = caminhoSugerido(conteudo, posicao);
-    if (!proxima) return;
-    setDica(proxima.id);
-    setMensagem(`Tente ir para ${proxima.nome}.`);
-  }
-
-  const abertas = DIRECOES.filter((direcao) => podeAndar(conteudo.mapa, proximaPosicao(posicao, direcao)));
+  const abertas = DIRECOES.filter((direcao) =>
+    podeAndar(conteudo.mapa, proximaPosicao(posicao, direcao)),
+  );
 
   return (
-    <Stack gap="md" ref={foco} tabIndex={0} role="group" aria-label="Labirinto. Use as setas para mover." onKeyDown={peloTeclado}>
-      <Group justify="space-between">
-        <Text fw={600}>Encontre a chegada</Text>
-        <Button variant="light" onClick={mostrarDica}>Dica</Button>
-      </Group>
-      <div className={estilos.mapa} style={{ gridTemplateColumns: `repeat(${conteudo.mapa[0].length}, minmax(0, 1fr))` }} aria-hidden="true">
-        {conteudo.mapa.flatMap((linha, i) => [...linha].map((celula, j) => {
-          const aqui = posicao.linha === i && posicao.coluna === j;
-          const tipo = aqui ? "jogador" : celula === "#" ? "parede" : celula === "F" ? "chegada" : "caminho";
-          return <span className={estilos.celula} key={`${i}/${j}`} data-tipo={tipo}>{aqui ? "●" : celula === "F" ? "⚑" : ""}</span>;
-        }))}
+    <Stack
+      gap="md"
+      ref={foco}
+      tabIndex={0}
+      role="group"
+      aria-label="Labirinto. Use as setas para mover."
+      onKeyDown={peloTeclado}
+    >
+      <Text fw={600}>Encontre a chegada</Text>
+      <div
+        className={estilos.mapa}
+        style={{
+          gridTemplateColumns: `repeat(${conteudo.mapa[0].length}, minmax(0, 1fr))`,
+        }}
+        aria-hidden="true"
+      >
+        {conteudo.mapa.flatMap((linha, i) =>
+          [...linha].map((celula, j) => {
+            const aqui = posicao.linha === i && posicao.coluna === j;
+            const tipo = aqui
+              ? "jogador"
+              : celula === "#"
+                ? "parede"
+                : celula === "F"
+                  ? "chegada"
+                  : "caminho";
+            return (
+              <span className={estilos.celula} key={`${i}/${j}`} data-tipo={tipo}>
+                {aqui ? "●" : celula === "F" ? "⚑" : ""}
+              </span>
+            );
+          }),
+        )}
       </div>
       <div className={estilos.direcoes} role="group" aria-label="Mover a peça">
         {DIRECOES.map((direcao) => (
@@ -115,8 +182,9 @@ export function TabuleiroLabirinto({
         ))}
       </div>
       <Text size="sm" role="status">
-        Linha {posicao.linha + 1}, coluna {posicao.coluna + 1}. Chegada na linha {conteudo.chegada.linha + 1}, coluna {conteudo.chegada.coluna + 1}.
-        {" "}Passagens: {abertas.map((direcao) => direcao.nome).join(", ")}.
+        Linha {posicao.linha + 1}, coluna {posicao.coluna + 1}. Chegada na linha{" "}
+        {conteudo.chegada.linha + 1}, coluna {conteudo.chegada.coluna + 1}.{" "}
+        Passagens: {abertas.map((direcao) => direcao.nome).join(", ")}.
         {mensagem ? " " + mensagem : ""}
       </Text>
     </Stack>

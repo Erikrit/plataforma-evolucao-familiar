@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Anchor,
   Button,
   Card,
   Stack,
@@ -50,7 +49,7 @@ export function BoasVindasFamilia() {
         <Stack gap="md">
           <Title order={2}>Acessar minha família</Title>
           <Text c="dimmed" size="sm">
-            Digite o identificador do endereço (a parte depois de /f/).
+            Digite o identificador da sua família.
           </Text>
           <form onSubmit={aoAcessar}>
             <Stack gap="sm">
@@ -68,8 +67,7 @@ export function BoasVindasFamilia() {
           </form>
           <MensagemFeedback erro={erroAcesso} />
           <Text size="sm">
-            Recebeu um convite? Use o link compartilhado pela família em{" "}
-            <Anchor component="span">/f/…/convites/ativar</Anchor>.
+            Recebeu um convite? Abra o link que a família compartilhou com você.
           </Text>
         </Stack>
       </Card>

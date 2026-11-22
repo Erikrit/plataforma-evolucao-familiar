@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Protótipo UX — COR-E5-UX-HOM-20261122</title>
+  <style>
+    :root {
+      --azul: #3569C8;
+      --azul-suave: #E8EFFC;
+      --azul-escuro: #2B56A6;
+      --apoio: #E5A66A;
+      --fundo: #F6F8FC;
+      --texto: #23344F;
+      --superficie: #FFFFFF;
+      --borda: #D7E0EF;
+      --dim: #6B7A90;
+      --raio: 10px;
+      --fonte: Inter, "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--fonte);
+      color: var(--texto);
+      background: #E4EAF3;
+      line-height: 1.4;
+    }
+    .pagina { max-width: 1280px; margin: 0 auto; padding: 24px 16px 64px; }
+    h1 { font-size: 1.35rem; margin: 0 0 8px; }
+    .intro { color: var(--dim); margin-bottom: 24px; max-width: 70ch; }
+    .grade { display: grid; gap: 24px; }
+    @media (min-width: 1100px) {
+      .grade { grid-template-columns: 1fr 1fr; }
+    }
+    .bloco {
+      background: var(--superficie);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .bloco h2 { font-size: 1rem; margin: 0 0 4px; }
+    .bloco .meta { font-size: 0.8rem; color: var(--dim); margin-bottom: 12px; }
+    .viewport {
+      margin: 0 auto;
+      background: var(--fundo);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    .v375 { width: 375px; max-width: 100%; min-height: 720px; }
+    .v1280 { width: 100%; min-height: 640px; display: grid; grid-template-columns: 280px 1fr; }
+    .topo {
+      height: 56px;
+      background: var(--superficie);
+      border-bottom: 1px solid var(--borda);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+    }
+    .burger {
+      width: 36px; height: 36px; border-radius: 8px;
+      border: 1px solid var(--borda); background: var(--superficie);
+      display: grid; place-items: center; color: var(--texto);
+    }
+    .titulo-topo { font-weight: 600; font-size: 0.95rem; }
+    .sub-topo { font-size: 0.7rem; color: var(--dim); }
+    .side {
+      background: var(--superficie);
+      border-right: 1px solid var(--borda);
+      padding: 16px 12px;
+      font-size: 0.9rem;
+    }
+    .ola { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--dim); font-weight: 600; }
+    .nome { font-weight: 600; margin-bottom: 12px; }
+    .nav-item, .nav-sub {
+      display: flex; align-items: center; gap: 10px;
+      min-height: 44px; padding: 0 10px; border-radius: 8px;
+      color: var(--texto); text-decoration: none;
+    }
+    .nav-item.ativo, .nav-sub.ativo {
+      background: var(--azul-suave);
+      color: var(--azul-escuro);
+      font-weight: 600;
+    }
+    .nav-grupo { margin-top: 8px; }
+    .nav-grupo summary {
+      list-style: none; cursor: pointer; min-height: 44px;
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 10px; border-radius: 8px; font-weight: 600;
+    }
+    .nav-grupo summary::-webkit-details-marker { display: none; }
+    .nav-grupo[open] > summary { color: var(--azul-escuro); }
+    .icone {
+      width: 18px; height: 18px; border-radius: 4px;
+      border: 1.5px solid currentColor; flex: 0 0 auto;
+      opacity: 0.85;
+    }
+    .conteudo { padding: 16px; }
+    .h1 { font-size: 1.35rem; font-weight: 700; margin: 0 0 4px; }
+    .lead { color: var(--dim); font-size: 0.9rem; margin-bottom: 16px; }
+    .segmentos {
+      display: flex; gap: 4px; background: #EEF2F8; padding: 4px;
+      border-radius: 10px; margin-bottom: 16px;
+    }
+    .seg {
+      flex: 1; min-height: 40px; border: 0; border-radius: 8px;
+      background: transparent; color: var(--texto); font: inherit; cursor: pointer;
+    }
+    .seg.ativo { background: var(--superficie); color: var(--azul-escuro); font-weight: 600; box-shadow: 0 1px solid rgba(35,52,79,.06); }
+    .destaque {
+      background: linear-gradient(180deg, var(--azul-suave), #F8FBFF);
+      border: 1px solid #C9D8F2; border-radius: var(--raio);
+      padding: 12px 14px; margin-bottom: 16px;
+    }
+    .destaque strong { display: block; margin-bottom: 4px; }
+    .chip {
+      display: inline-block; font-size: 0.75rem; padding: 2px 8px;
+      border-radius: 999px; background: var(--azul-suave); color: var(--azul-escuro);
+    }
+    .card {
+      background: var(--superficie); border: 1px solid var(--borda);
+      border-radius: var(--raio); padding: 14px; margin-bottom: 12px;
+    }
+    .card h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    .prog { font-size: 0.85rem; color: var(--dim); margin: 6px 0 10px; }
+    label.fase { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; }
+    select.fase {
+      width: 100%; min-height: 44px; border-radius: 8px;
+      border: 1px solid var(--borda); padding: 0 10px; font: inherit; margin-bottom: 10px;
+      background: var(--superficie);
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; padding: 0 16px; border-radius: 8px; border: 0;
+      background: var(--azul); color: #fff; font: inherit; font-weight: 600; cursor: pointer;
+      width: 100%;
+    }
+    .btn.sec { background: var(--superficie); color: var(--texto); border: 1px solid var(--borda); width: auto; }
+    .partida-topo {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 8px; padding: 12px 16px; background: var(--superficie);
+      border-bottom: 1px solid var(--borda);
+    }
+    .tabuleiro {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      padding: 16px; max-width: 360px; margin: 0 auto;
+    }
+    .carta {
+      aspect-ratio: 1; border-radius: 8px; background: var(--azul-suave);
+      border: 1px solid #C9D8F2;
+    }
+    .carta.virada { background: var(--superficie); }
+    .ajuda {
+      margin: 0 16px 16px; padding: 12px; border-radius: 8px;
+      background: var(--superficie); border: 1px solid var(--borda); font-size: 0.9rem;
+    }
+    .comparacao { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { border: 1px solid var(--borda); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: var(--azul-suave); }
+    .aprovar {
+      margin-top: 24px; padding: 16px; border-radius: 12px;
+      background: #FFF8F0; border: 1px solid #EBC7A3;
+    }
+  </style>
+</head>
+<body>
+  <div class="pagina">
+    <h1>Protótipo visual — COR-E5-UX-HOM-20261122</h1>
+    <p class="intro">
+      Direção UX para catálogo final de jogos e menu compartilhado, alinhada ao tema Azul Contemporâneo
+      (<code>apps/web/src/tema/mantine.ts</code>) e ao Guia de Experiência. Sem implementação de produto até aprovação humana.
+    </p>
+
+    <div class="bloco" style="margin-bottom:24px">
+      <h2>Diferenças: fluxo atual × proposto</h2>
+      <div class="comparacao">
+        <table>
+          <thead>
+            <tr><th>Ponto</th><th>Atual (checkout local)</th><th>Proposto</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Escolha de fase</td>
+              <td>Catálogo → tela do jogo → lista de fases → Jogar</td>
+              <td>Catálogo é a tela final: seletor de fase + progresso + Jogar no cartão</td>
+            </tr>
+            <tr>
+              <td>Filtros de progresso</td>
+              <td>Na tela intermediária de fases (Todas / Concluídas / Não concluídas)</td>
+              <td>No catálogo, acima dos cartões</td>
+            </tr>
+            <tr>
+              <td>Instruções</td>
+              <td>Texto longo na tela do jogo; risco de etapa obrigatória</td>
+              <td>Partida abre direto; “Como jogar” sob demanda na partida</td>
+            </tr>
+            <tr>
+              <td>Menu</td>
+              <td><code>details</code> cru, ícone pontual, hierarquia irregular, Configurações aninhada</td>
+              <td>Início · Cuidados/Desenvolvimento expansíveis · Histórico · Resumo · Configurações; ícones e ativo claros</td>
+            </tr>
+            <tr>
+              <td>Visual E5</td>
+              <td>Cartões densos, select nativo solto, aparência administrativa</td>
+              <td>Tema PEF (azul/apoio/fundo), SegmentedControl, tipografia e densidades do Guia</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grade">
+      <section class="bloco">
+        <h2>Catálogo + partida — 375px</h2>
+        <p class="meta">Viewport móvel · escolha final no cartão</p>
+        <div class="viewport v375" id="m375">
+          <div class="topo">
+            <div class="burger" aria-hidden="true">☰</div>
+            <div>
+              <div class="titulo-topo">Laurinha</div>
+              <div class="sub-topo">Acompanhamento por pessoa</div>
+            </div>
+          </div>
+          <div class="conteudo">
+            <div class="h1">Jogos digitais</div>
+            <p class="lead">Escolha a fase e jogue. Ajuda fica na partida.</p>
+            <div class="segmentos" role="tablist" aria-label="Filtro de fases">
+              <button type="button" class="seg ativo">Todas</button>
+              <button type="button" class="seg">Concluídas</button>
+              <button type="button" class="seg">Não concluídas</button>
+            </div>
+            <div class="destaque">
+              <strong>Em destaque</strong>
+              <span>Memória de figuras · 2 de 5 fases</span>
+            </div>
+            <article class="card">
+              <h3>Memória de figuras</h3>
+              <span class="chip">Memória e atenção</span>
+              <p class="prog">Progresso: 2 de 5 concluídas</p>
+              <label class="fase" for="fase-m">Fase</label>
+              <select class="fase" id="fase-m">
+                <option>1 · Figuras próximas — Concluída</option>
+                <option selected>2 · Pares coloridos — Experimentada</option>
+                <option>3 · Mais cartas — Não explorada</option>
+                <option>4 · Atenção plena — Não explorada</option>
+                <option>5 · Desafio final — Não explorada</option>
+              </select>
+              <button type="button" class="btn">Jogar</button>
+            </article>
+            <article class="card">
+              <h3>Complete a sequência</h3>
+              <span class="chip">Raciocínio lógico</span>
+              <p class="prog">Progresso: 0 de 5 concluídas</p>
+              <label class="fase" for="fase-s">Fase</label>
+              <select class="fase" id="fase-s">
+                <option selected>1 · Sequência curta — Não explorada</option>
+                <option>2 · Um passo a mais — Não explorada</option>
+              </select>
+              <button type="button" class="btn">Jogar</button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="bloco">
+        <h2>Menu compartilhado — 375px</h2>
+        <p class="meta">Drawer · somente destinos autorizados</p>
+        <div class="viewport v375">
+          <div class="side" style="border-right:0; min-height:720px">
+            <div class="ola">Olá</div>
+            <div class="nome">Ana</div>
+            <a class="nav-item" href="#"><span class="icone"></span>Início</a>
+            <div class="ola" style="margin-top:14px">Laurinha</div>
+            <details class="nav-grupo" open>
+              <summary><span class="icone"></span>Cuidados</summary>
+              <a class="nav-sub" href="#"><span class="icone"></span>Rotina</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Medicamentos</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Consultas e exames</a>
+            </details>
+            <details class="nav-grupo" open>
+              <summary><span class="icone"></span>Desenvolvimento</summary>
+              <a class="nav-sub ativo" href="#"><span class="icone"></span>Biblioteca</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Recompensas</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Cadastros</a>
+            </details>
+            <a class="nav-item" href="#"><span class="icone"></span>Histórico</a>
+            <a class="nav-item" href="#"><span class="icone"></span>Resumo</a>
+            <details class="nav-grupo">
+              <summary><span class="icone"></span>Configurações</summary>
+              <a class="nav-sub" href="#"><span class="icone"></span>Meu perfil</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Gestão da família</a>
+            </details>
+            <button type="button" class="btn sec" style="margin-top:16px; width:100%">Sair</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="bloco" style="grid-column: 1 / -1">
+        <h2>Catálogo + menu — 1280px</h2>
+        <p class="meta">Desktop · navbar lateral 280px + conteúdo</p>
+        <div class="viewport v1280">
+          <aside class="side">
+            <div class="ola">Olá</div>
+            <div class="nome">Ana</div>
+            <a class="nav-item" href="#"><span class="icone"></span>Início</a>
+            <div class="ola" style="margin-top:14px">Laurinha</div>
+            <details class="nav-grupo">
+              <summary><span class="icone"></span>Cuidados</summary>
+              <a class="nav-sub" href="#"><span class="icone"></span>Rotina</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Medicamentos</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Consultas e exames</a>
+            </details>
+            <details class="nav-grupo" open>
+              <summary><span class="icone"></span>Desenvolvimento</summary>
+              <a class="nav-sub ativo" href="#"><span class="icone"></span>Biblioteca</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Recompensas</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Cadastros</a>
+            </details>
+            <a class="nav-item" href="#"><span class="icone"></span>Histórico</a>
+            <a class="nav-item" href="#"><span class="icone"></span>Resumo</a>
+            <details class="nav-grupo">
+              <summary><span class="icone"></span>Configurações</summary>
+              <a class="nav-sub" href="#"><span class="icone"></span>Meu perfil</a>
+              <a class="nav-sub" href="#"><span class="icone"></span>Gestão da família</a>
+            </details>
+            <button type="button" class="btn sec" style="margin-top:16px; width:100%">Sair</button>
+          </aside>
+          <div>
+            <div class="topo">
+              <div>
+                <div class="titulo-topo">Laurinha</div>
+                <div class="sub-topo">Acompanhamento por pessoa</div>
+              </div>
+            </div>
+            <div class="conteudo" style="max-width:720px">
+              <div class="h1">Jogos digitais</div>
+              <p class="lead">Categoria e destaques permanecem. A fase é escolhida aqui.</p>
+              <div class="segmentos">
+                <button type="button" class="seg ativo">Todas</button>
+                <button type="button" class="seg">Concluídas</button>
+                <button type="button" class="seg">Não concluídas</button>
+              </div>
+              <div class="destaque"><strong>Em destaque</strong> Memória de figuras · Complete a sequência</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+                <article class="card" style="margin:0">
+                  <h3>Memória de figuras</h3>
+                  <span class="chip">Memória e atenção</span>
+                  <p class="prog">2 de 5 concluídas</p>
+                  <label class="fase">Fase</label>
+                  <select class="fase"><option selected>2 · Pares coloridos</option></select>
+                  <button type="button" class="btn">Jogar</button>
+                </article>
+                <article class="card" style="margin:0">
+                  <h3>Caminhos e labirintos</h3>
+                  <span class="chip">Raciocínio lógico</span>
+                  <p class="prog">1 de 5 concluídas</p>
+                  <label class="fase">Fase</label>
+                  <select class="fase"><option selected>3 · Bifurcações</option></select>
+                  <button type="button" class="btn">Jogar</button>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bloco">
+        <h2>Partida com ajuda — 375px</h2>
+        <p class="meta">Abertura direta · Como jogar sob demanda</p>
+        <div class="viewport v375">
+          <div class="partida-topo">
+            <div>
+              <strong>Memória · Fase 2</strong>
+              <div class="sub-topo">Progresso salvo ao concluir</div>
+            </div>
+            <div style="display:flex; gap:8px">
+              <button type="button" class="btn sec">Como jogar</button>
+              <button type="button" class="btn sec">Sair</button>
+            </div>
+          </div>
+          <div class="ajuda">Vire duas cartas. Encontre os pares. Use a dica se precisar.</div>
+          <div class="tabuleiro">
+            <div class="carta"></div><div class="carta virada"></div><div class="carta"></div><div class="carta"></div>
+            <div class="carta"></div><div class="carta"></div><div class="carta virada"></div><div class="carta"></div>
+            <div class="carta"></div><div class="carta"></div><div class="carta"></div><div class="carta"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bloco">
+        <h2>Partida — 1280px</h2>
+        <p class="meta">Sem menu lateral durante o jogo</p>
+        <div class="viewport" style="min-height:420px">
+          <div class="partida-topo">
+            <strong>Memória de figuras · Fase 2</strong>
+            <div style="display:flex; gap:8px">
+              <button type="button" class="btn sec">Como jogar</button>
+              <button type="button" class="btn sec">Sair do jogo</button>
+            </div>
+          </div>
+          <div class="tabuleiro" style="max-width:480px; padding:24px">
+            <div class="carta"></div><div class="carta"></div><div class="carta virada"></div><div class="carta"></div>
+            <div class="carta"></div><div class="carta virada"></div><div class="carta"></div><div class="carta"></div>
+            <div class="carta"></div><div class="carta"></div><div class="carta"></div><div class="carta"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="aprovar">
+      <strong>Aprovação necessária</strong>
+      <p style="margin:8px 0 0">
+        Responda nesta conversa se o desenho está <strong>APROVADO</strong>, <strong>APROVADO COM AJUSTES</strong> (liste os ajustes)
+        ou <strong>REPROVADO</strong>. A implementação só começa após aprovação explícita do protótipo.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

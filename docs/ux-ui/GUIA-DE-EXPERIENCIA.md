@@ -176,3 +176,7 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - **Produto obrigatório:** nova regra, mudança de permissões ou visibilidade sensível, lógica clínica, frequências, histórico, novas obrigações e funcionalidades.
 - Divergência documental/código: especificação funcional prevalece para o comportamento; registrar dependência, não completar regra por suposição.
 - Evitar aprovações por detalhe; revisar um conjunto coeso. Preservar esta fonte única, sem duplicá-la integralmente nos documentos de módulo.
+
+## Navegação por pessoa e conta
+
+Início abre a família. No contexto da pessoa, Cuidados reúne Rotina, Medicamentos e Consultas e exames. Desenvolvimento abre a Biblioteca e reúne Recompensas e Cadastros conforme autorização. Histórico e Resumo são destinos diretos. Desktop e celular usam o mesmo menu. Configurações reúne a identidade da conta em Meu perfil e a gestão familiar para quem tem permissão. Cards abrem o acompanhamento autorizado. Links anteriores preservam pessoa e filtros. O login identifica a família pelo nome.

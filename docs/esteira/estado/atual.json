@@ -103,7 +103,7 @@
     "fingerprint": "ef-modulo04-qg3-2026-11-16",
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
-    "demanda": {
+    "demandaAnterior": {
         "id": "DEM-E5-JOGOS-DIGITAIS-20261122",
         "tipo": "transversal",
         "origem": "Relato humano de homologação parcial da E4, especificação E5 fornecida pelo responsável e decisões no Git.",
@@ -816,6 +816,38 @@
         }
     ],
     "demandasConcluidas": [
+        {
+            "id": "COR-E5-UX-HOM-20261122",
+            "tipo": "melhoria_ux",
+            "estado": "COMPLETED",
+            "fingerprint": "sha256:307f5dcfcce6045b",
+            "fingerprintFull": "sha256:307f5dcfcce6045b7af34438c7ee3112b7467d3491193b2bbad1ecd5398faddf",
+            "homologacaoHumana": "REPROVADA",
+            "mensagemCommit": "fix(ux): alinhar catálogo de jogos e menu ao protótipo E5 aprovado\n\nCatálogo passa a ser a tela final de escolha; partida abre direto com ajuda contextual; menu compartilhado segue o tema PEF.",
+            "evidencias": [
+                "docs/esteira/estado/evidencia-cor-e5-ux-hom-20261122.json",
+                "docs/esteira/estado/prototipo-cor-e5-ux-hom-20261122.html",
+                "docs/esteira/estado/roteiro-ux-navegacao-e5.md",
+                "docs/esteira/estado/qg1-typecheck-web-cor-e5-ux-hom.txt",
+                "docs/esteira/estado/qg1-check-e4-cor-e5-ux-hom.txt",
+                "docs/esteira/estado/qg1-check-e5-cor-e5-ux-hom.txt",
+                "docs/esteira/estado/qg2-smoke-e5-cor-e5-ux-hom.txt",
+                "docs/esteira/estado/qg2-smoke-e4-cor-e5-ux-hom.txt",
+                "docs/esteira/estado/qg2-smoke-authz-cor-e5-ux-hom.txt",
+                "docs/esteira/estado/qg2-build-web-cor-e5-ux-hom.txt"
+            ],
+            "arquivos": [
+                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/page.tsx",
+                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/page.tsx",
+                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/fases/[fase]/jogar/page.tsx",
+                "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
+                "apps/web/src/componentes/navegacao-app.tsx",
+                "apps/web/src/lib/filtros-jogos.ts",
+                "apps/web/src/lib/rotas-familia.ts"
+            ],
+            "concluidaEm": "2026-11-22T17:00:00.000Z",
+            "sucedidaPor": "COR-E5-UX-HOM-R2-20261122"
+        },
         {
             "id": "DEM-E4-BIBLIOTECA-20261122",
             "tipo": "transversal",
@@ -2857,9 +2889,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Revalidar E4-HOM e concluir E5-HOM com o responsável e a criança em dispositivo real.",
-    "atualizadoEm": "2026-11-22T16:36:34.059Z",
-    "notas": "E5-06-COR-02 concluído tecnicamente. Banco local sincronizado para Jogos digitais. E5-06 segue em validação humana E4-HOM e E5-HOM.",
+    "proximaAcao": "Homologação humana no roteiro-ux-navegacao-e5-r2.md (375px e 1280px). Sem commit/push/deploy automático.",
+    "atualizadoEm": "2026-11-22T18:52:29.542Z",
+    "notas": "COR-E5-UX-HOM-R2 COMPLETED técnico; homologação humana REPROVADA até novo aceite.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",
@@ -2984,5 +3016,91 @@
         "status": "COMPLETED",
         "qg3": "PASS",
         "fingerprint": "ef-modulo04-qg3-2026-11-16"
+    },
+    "demanda": {
+        "id": "COR-E5-UX-HOM-R2-20261122",
+        "tipo": "melhoria_ux",
+        "origem": "Homologação humana REPROVADA da COR-E5-UX-HOM-20261122 — correções complementares aprovadas (dica Modal, seletor, barra, ícone)",
+        "estado": "COMPLETED",
+        "homologacaoHumana": "REPROVADA",
+        "estadoExibicao": "AGUARDANDO NOVA HOMOLOGAÇÃO HUMANA",
+        "resultadoHumanoAnterior": "REPROVADA",
+        "demandaPrecedente": "COR-E5-UX-HOM-20261122",
+        "aprovacao": {
+            "nivel": "L1",
+            "status": "APROVADA",
+            "referencia": "demanda humana COR-E5-UX-HOM-R2-20261122; docs/ux-ui/GUIA-DE-EXPERIENCIA.md; E5-F02/F04",
+            "nota": "Correções UX complementares aprovadas explicitamente nesta conversa."
+        },
+        "risco": "medio",
+        "escopo": "Ajuda Modal com dica única por partida; seletor visual de fases; barra de progresso verde-clara; ícone Desenvolvimento trending-up. Preservar protótipo, catálogo direto, menu, permissões e estrelas presenciais.",
+        "impacto": "UI web E5 (partida + catálogo + ícone menu); sem contratos API",
+        "bloqueios": [],
+        "fluxo": [
+            "task-routing",
+            "implementation-workflow",
+            "quality-gate"
+        ],
+        "criteriosAceite": [
+            "R2-AJUDA-DICA",
+            "R2-SELETOR-FASES",
+            "R2-BARRA-PROGRESSO",
+            "R2-ICONE-DESENVOLVIMENTO"
+        ],
+        "testesPertinentes": [
+            "typecheck web",
+            "check:e4",
+            "check:e5",
+            "smoke:e5",
+            "smoke:e4",
+            "smoke:authz",
+            "build web",
+            "capturas 375/1280"
+        ],
+        "verificacao": {
+            "qg1": "PASS",
+            "verifier": "PASS",
+            "verifierId": "7c31c957-c9cf-4ac1-83ce-91d8d956a904",
+            "qg2": "PASS",
+            "homologacao": "REPROVADA"
+        },
+        "fingerprint": "sha256:9e70ea931ca2ff30",
+        "fingerprintFull": "sha256:9e70ea931ca2ff30fb9095589c753057b6de3cef4e639857e5f1fad2f3573cbf",
+        "prototipo": {
+            "html": "docs/esteira/estado/prototipo-cor-e5-ux-hom-20261122.html",
+            "statusAprovacao": "PRESERVADO",
+            "nota": "Protótipo R1 preservado; R2 aplica refinamentos aprovados na homologação."
+        },
+        "checkoutLocal": {
+            "branch": "develop",
+            "commitBase": "4cb8cf01e29527d624dbce270f0997d87a12754e",
+            "alteracoesNaoCommitadas": true
+        },
+        "evidencias": [
+            "docs/esteira/estado/evidencia-cor-e5-ux-hom-r2-20261122.json",
+            "docs/esteira/estado/qg1-typecheck-web-cor-e5-ux-hom-r2.txt",
+            "docs/esteira/estado/qg1-check-e4-cor-e5-ux-hom-r2.txt",
+            "docs/esteira/estado/qg1-check-e5-cor-e5-ux-hom-r2.txt",
+            "docs/esteira/estado/qg2-smoke-e5-cor-e5-ux-hom-r2.txt",
+            "docs/esteira/estado/qg2-smoke-e4-cor-e5-ux-hom-r2.txt",
+            "docs/esteira/estado/qg2-smoke-authz-cor-e5-ux-hom-r2.txt",
+            "docs/esteira/estado/qg2-build-web-cor-e5-ux-hom-r2.txt",
+            "docs/esteira/estado/roteiro-ux-navegacao-e5-r2.md",
+            "docs/esteira/estado/captura-cor-e5-ux-hom-r2-catalogo-375.png",
+            "docs/esteira/estado/captura-cor-e5-ux-hom-r2-partida-dica.png",
+            "docs/esteira/estado/captura-cor-e5-ux-hom-r2-menu-1280.png"
+        ],
+        "arquivos": [
+            "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-memoria.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-sequencia.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-labirinto.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/jogos.module.css",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/page.tsx",
+            "apps/web/src/componentes/navegacao-app.tsx"
+        ],
+        "mensagemCommit": "fix(ux): refinar dica, fases, progresso e ícone da E5\n\nConsolida a ajuda em Modal com uma dica por partida, seletor visual de fases, barra de progresso discreta e ícone trending-up no menu.",
+        "proximaAcao": "Homologação humana no roteiro-ux-navegacao-e5-r2.md (375px e 1280px). Sem commit/push/deploy automático.",
+        "atualizadoEm": "2026-11-22T18:52:29.542Z"
     }
 }

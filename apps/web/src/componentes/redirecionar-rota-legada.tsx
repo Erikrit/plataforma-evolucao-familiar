@@ -20,7 +20,7 @@ export function RedirecionarRotaLegada() {
         pathname === "/" || pathname === ""
           ? rotaFamilia(slug, "/")
           : rotaFamilia(slug, pathname);
-      router.replace(destino);
+      router.replace(destino + window.location.search + window.location.hash);
       return;
     }
     if (pathname !== "/") {

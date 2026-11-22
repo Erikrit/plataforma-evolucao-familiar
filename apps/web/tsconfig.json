@@ -29,10 +29,12 @@
     }
   },
   "include": [
+    ".next-qg-cor-e5/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",
     "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/**/*.tsx",
+    ".next-qg-cor-e5-r2/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
