@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-21 — DEM-E1-ENTRADA COMPLETED técnico (humana PENDING)
+
+- **Demanda:** DEM-E1-ENTRADA-20261121 COMPLETED técnico; homologação humana PENDING_HUMAN (E1-ENT-08).
+- **Entrega:** boas-vindas em `/` e `/f`; cadastro em `/f/criar` (POST `/familias`); URL copiar/acessar; remoção do atalho `/f/oliveira`; slug reservado; regressão E1-ACE.
+- **QG-1/2/3:** PASS · Verifier indep. shell PASS; oficial BLOCKED Ask ([verifier](08888821-4ff0-48b5-a024-2b807aaa750e))
+- **Critérios:** E1-ENT-01..07 PASS; E1-ENT-08 PENDING_HUMAN; regressão ACE-01..08 PASS técnico
+- **Fingerprint:** `sha256:f02234b3d87c192d`
+- **Evidência:** `evidencia-e1-ent-20261121.json` · `roteiro-homologacao-e1-ent.md`
+- **Commit/push/deploy:** não executados
+- **mensagemCommit sugerida:** `feat(fundacao): cadastrar familia pela interface com endereco de acesso`
+
 ## 2026-11-21 — E1 humana REPROVADA; cadastro inicial aprovado e planejado
 
 - **Fonte humana:** responsável reprovou entrada /f e links fixos /f/oliveira; aceitou boas-vindas/cadastro e esclareceu que dispensa apenas o envio de mensagem.

@@ -7,6 +7,14 @@ import { randomBytes, scryptSync } from "node:crypto";
 const PADRAO_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const TAMANHO_MIN = 2;
 const TAMANHO_MAX = 48;
+const SLUGS_RESERVADOS = new Set([
+  "criar",
+  "entrar",
+  "acessar",
+  "convites",
+  "pessoas",
+  "gerenciar-familia",
+]);
 
 export function normalizarSlugFamilia(valor) {
   const slug = String(valor ?? "")
@@ -21,6 +29,13 @@ export function normalizarSlugFamilia(valor) {
       "Endereço de família inválido. Use letras minúsculas, números e hífens.",
     );
     erro.codigo = "SLUG_INVALIDO";
+    throw erro;
+  }
+  if (SLUGS_RESERVADOS.has(slug)) {
+    const erro = new Error(
+      "Este endereço é reservado. Escolha outro identificador.",
+    );
+    erro.codigo = "SLUG_RESERVADO";
     throw erro;
   }
   return slug;

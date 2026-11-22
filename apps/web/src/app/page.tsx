@@ -1,7 +1,7 @@
 "use client";
 
-import { Container, Title } from "@mantine/core";
-import { PainelFundacao } from "@/componentes/painel-fundacao";
+import { Container } from "@mantine/core";
+import { BoasVindasFamilia } from "@/componentes/boas-vindas-familia";
 import { RedirecionarRotaLegada } from "@/componentes/redirecionar-rota-legada";
 import { useSessao } from "@/componentes/contexto-sessao";
 import { EstadoCarregando } from "@/componentes/feedback";
@@ -22,11 +22,8 @@ export default function PaginaInicial() {
   }
 
   return (
-    <Container component="main" size="sm" px={0}>
-      <Title order={1} mb="md">
-        Nossa família
-      </Title>
-      <PainelFundacao />
+    <Container component="main" size="sm" px={0} py="md">
+      <BoasVindasFamilia />
     </Container>
   );
 }

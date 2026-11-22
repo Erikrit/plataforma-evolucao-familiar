@@ -75,20 +75,19 @@ export function PainelFundacao() {
     return (
       <Card withBorder padding="lg" radius="md">
         <Stack gap="md">
-          <Title order={2}>Entrar na família</Title>
+          <Title order={2}>Sessão necessária</Title>
           <Text c="dimmed" size="sm">
-            O acesso é pelo endereço da sua família (exemplo: /f/oliveira/entrar).
-            Não há login global nesta etapa.
+            Entre pelo endereço da sua família para continuar. Não há login global
+            nesta etapa.
           </Text>
           <Text size="sm">
-            Família de desenvolvimento local:{" "}
-            <Anchor component={Link} href="/f/oliveira/entrar">
-              /f/oliveira/entrar
+            <Anchor component={Link} href="/f">
+              Ir às boas-vindas
             </Anchor>
-          </Text>
-          <Text size="sm">
-            Recebeu um convite? Use o link enviado pela família (endereço
-            /f/…/convites/ativar).
+            {" · "}
+            <Anchor component={Link} href="/f/criar">
+              Criar minha família
+            </Anchor>
           </Text>
           <MensagemFeedback erro={erroSessao} />
         </Stack>

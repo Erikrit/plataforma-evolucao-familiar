@@ -52,10 +52,10 @@ reg(
 );
 reg(
   "home-sem-login-global",
-  fundacao.includes("/f/oliveira/entrar") &&
-    !fundacao.includes("await entrar(") &&
-    fundacao.includes("Não há login global"),
-  "home orienta URL familiar",
+  !fundacao.includes("await entrar(") &&
+    fundacao.includes("Não há login global") &&
+    !fundacao.includes("/f/oliveira"),
+  "home sem login global nem atalho fixo",
 );
 reg(
   "pagina-entrar-familiar",

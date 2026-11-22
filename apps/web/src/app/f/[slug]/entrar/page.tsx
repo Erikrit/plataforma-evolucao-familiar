@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
+  Anchor,
   Button,
   Card,
   Container,
@@ -23,6 +25,7 @@ import {
   obterContextoFamilia,
   type FamiliaContexto,
 } from "@/lib/api";
+import { ehSlugReservadoNaUi } from "@/lib/rotas-familia";
 
 export default function PaginaEntrarFamilia() {
   const params = useParams<{ slug: string }>();
@@ -40,6 +43,16 @@ export default function PaginaEntrarFamilia() {
     let ativo = true;
     setPronto(false);
     setErro(null);
+    setFamilia(null);
+    if (!slug || ehSlugReservadoNaUi(slug)) {
+      setErro(
+        "Este endereço é reservado ou inválido. Volte às boas-vindas ou escolha outro identificador.",
+      );
+      setPronto(true);
+      return () => {
+        ativo = false;
+      };
+    }
     obterContextoFamilia(slug)
       .then((ctx) => {
         if (!ativo) return;
@@ -131,7 +144,17 @@ export default function PaginaEntrarFamilia() {
                 </Button>
               </Stack>
             </form>
-          ) : null}
+          ) : (
+            <Text size="sm">
+              <Anchor component={Link} href="/f">
+                Voltar às boas-vindas
+              </Anchor>
+              {" · "}
+              <Anchor component={Link} href="/f/criar">
+                Criar minha família
+              </Anchor>
+            </Text>
+          )}
           <MensagemFeedback erro={erro} />
         </Stack>
       </Card>

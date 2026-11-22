@@ -151,6 +151,13 @@ export type FamiliaContexto = {
   slug: string;
 };
 
+export type FamiliaCriada = {
+  familia: FamiliaContexto;
+  pessoa: { id: string; nome: string };
+  usuario: { id: string; email: string };
+  caminhoEntrada: string;
+};
+
 export type UsuarioSessao = {
   id: string;
   email: string;
@@ -165,14 +172,55 @@ export type SessaoResposta = {
   familia?: FamiliaContexto;
 };
 
-async function lerErro(resposta: Response) {
+export class ErroApi extends Error {
+  codigo?: string;
+  alternativa?: string;
+
+  constructor(
+    mensagem: string,
+    extras?: { codigo?: string; alternativa?: string },
+  ) {
+    super(mensagem);
+    this.name = "ErroApi";
+    this.codigo = extras?.codigo;
+    this.alternativa = extras?.alternativa;
+  }
+}
+
+async function lerErro(resposta: Response): Promise<string> {
+  const detalhe = await lerErroDetalhado(resposta);
+  return detalhe.mensagem;
+}
+
+async function lerErroDetalhado(resposta: Response): Promise<{
+  mensagem: string;
+  codigo?: string;
+  alternativa?: string;
+}> {
   const texto = await resposta.text();
   try {
-    const json = JSON.parse(texto) as { message?: string | string[] };
-    if (Array.isArray(json.message)) return json.message.join("; ");
-    return json.message ?? texto;
+    const json = JSON.parse(texto) as {
+      message?: string | string[] | { message?: string; codigo?: string; alternativa?: string };
+      codigo?: string;
+      alternativa?: string;
+    };
+    if (Array.isArray(json.message)) {
+      return { mensagem: json.message.join("; ") };
+    }
+    if (json.message && typeof json.message === "object") {
+      return {
+        mensagem: json.message.message ?? texto,
+        codigo: json.message.codigo ?? json.codigo,
+        alternativa: json.message.alternativa ?? json.alternativa,
+      };
+    }
+    return {
+      mensagem: (json.message as string | undefined) ?? texto,
+      codigo: json.codigo,
+      alternativa: json.alternativa,
+    };
   } catch {
-    return texto || `HTTP ${resposta.status}`;
+    return { mensagem: texto || `HTTP ${resposta.status}` };
   }
 }
 
@@ -199,6 +247,44 @@ export async function obterContextoFamilia(
   );
   if (!resposta.ok) throw new Error(await lerErro(resposta));
   return (await resposta.json()) as FamiliaContexto;
+}
+
+export async function sugerirEnderecoFamilia(
+  nome: string,
+): Promise<{ slug: string }> {
+  const resposta = await fetchApi(
+    `/familias/sugerir-endereco?nome=${encodeURIComponent(nome)}`,
+  );
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return (await resposta.json()) as { slug: string };
+}
+
+export async function cadastrarFamilia(entrada: {
+  nomeFamilia: string;
+  nomeTitular: string;
+  email: string;
+  senha: string;
+  slug: string;
+}): Promise<FamiliaCriada> {
+  const resposta = await fetchApi("/familias", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      nomeFamilia: entrada.nomeFamilia,
+      nomeTitular: entrada.nomeTitular,
+      email: entrada.email,
+      senha: entrada.senha,
+      slug: entrada.slug,
+    }),
+  });
+  if (!resposta.ok) {
+    const detalhe = await lerErroDetalhado(resposta);
+    throw new ErroApi(detalhe.mensagem, {
+      codigo: detalhe.codigo,
+      alternativa: detalhe.alternativa,
+    });
+  }
+  return (await resposta.json()) as FamiliaCriada;
 }
 
 export async function entrar(
