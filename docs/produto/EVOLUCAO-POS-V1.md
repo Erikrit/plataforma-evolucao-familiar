@@ -246,6 +246,12 @@ Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pe
 
 **Proposta adicional em análise, NÃO aprovada por este aceite:** piloto com jogos de Memória de figuras, Complete a sequência e Caminhos e labirintos; cinco fases configuradas por jogo, dificuldade gradual, dicas e retorno positivo, sem estrelas digitais; posterior expansão por categoria. Validar regras de conclusão e variações de cada mecânica, conteúdo por idade, persistência mínima por pessoa e versão de jogo, acessibilidade, UX e registro no Módulo 04 antes de autorizar implementação.
 
+### E5 — Conquistas discretas aprovadas (2026-11-22)
+
+**Decisão expressa do Produto:** incentivo digital por **conquistas discretas**, não por coleção extensa de medalhas, ranking, sequência de dias, metas compulsórias, estrelas digitais ou recompensas materiais. Ao concluir legitimamente uma fase, oferecer confirmação visual breve e acessível; na biblioteca, apresentar progresso pessoal simples (fases experimentadas/concluídas e descoberta de jogos), sem pressão para jogar. Nenhum aviso insistente de retorno ou prêmio por frequência. A fase concluída com dicas ou ajuda recebe a mesma confirmação.
+
+**Limite da aprovação:** não autoriza jogo ou regra de pontuação a ser implementada; quantidade final de jogos/fases e critérios de retenção/resultado continuam em detalhamento. Proposta para análise subsequente: persistir por pessoa e versão do jogo um estado resumido de exploração/conclusão por fase e eventos mínimos de conclusão, reutilizáveis no Módulo 04 sem duplicar o histórico; não coletar movimentos, erros, tempo de reação ou identidade de quem ajudou. Especificar retomada e teste de interrupção/perda de conexão antes de implementar.
+
 ## 8. Participação, estrelas e evolução
 
 A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
