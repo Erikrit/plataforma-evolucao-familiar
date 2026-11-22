@@ -16,6 +16,7 @@ import type { RequisicaoComUsuario } from "../comum/tipos-requisicao";
 import { ServicoDesafios } from "./servico-desafios";
 import { ServicoParticipacoes } from "./servico-participacoes";
 import { ServicoRecompensas } from "./servico-recompensas";
+import { ServicoSugestoes } from "./servico-sugestoes";
 
 @Controller()
 @UseGuards(GuardaSessao)
@@ -24,6 +25,7 @@ export class ControladorDesenvolvimento {
     private readonly desafios: ServicoDesafios,
     private readonly participacoes: ServicoParticipacoes,
     private readonly recompensas: ServicoRecompensas,
+    private readonly sugestoes: ServicoSugestoes,
   ) {}
 
   @Get("desafios")
@@ -116,6 +118,35 @@ export class ControladorDesenvolvimento {
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.desafios.alterar(desafioId, requisicao.usuario!, corpo);
+  }
+
+  @Get("pessoas/:pessoaId/sugestoes")
+  listarSugestoes(
+    @Param("pessoaId") pessoaId: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.sugestoes.listarParaPessoa(pessoaId, requisicao.usuario!);
+  }
+
+  @Post("pessoas/:pessoaId/sugestoes/renovar")
+  renovarSugestoes(
+    @Param("pessoaId") pessoaId: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.sugestoes.renovar(pessoaId, requisicao.usuario!);
+  }
+
+  @Post("pessoas/:pessoaId/sugestoes/:desafioId/escolher")
+  escolherSugestao(
+    @Param("pessoaId") pessoaId: string,
+    @Param("desafioId") desafioId: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.sugestoes.escolher(
+      pessoaId,
+      desafioId,
+      requisicao.usuario!,
+    );
   }
 
   @Post("pessoas/:pessoaId/desafios/:desafioId/disponibilizar")

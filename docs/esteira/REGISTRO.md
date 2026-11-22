@@ -1,5 +1,17 @@
 # Registro da esteira
 
+## 2026-11-22 — DEM-E4 COMPLETED técnico (humana PENDING)
+
+- **Demanda:** DEM-E4-BIBLIOTECA-20261122 COMPLETED técnico; homologação humana PENDING_HUMAN (E4-HOM).
+- **Entrega:** Catálogo curado ≤24 com metadados/versão; sugestões ≤6 por pessoa; escolher/renovar ≤3 com persistência e Serializable; snapshot de conteúdo na participação; UI Sugestões/Renovar/Ver biblioteca; check/smoke e4; roteiro humano.
+- **Decisões:** estender `Desafio` (sem `modelo_atividade`); `SugestaoDesafioPessoa` ≠ `DesafioGuardado`; Explorar/Executadas/estrelas preservados.
+- **QG-1/2/3:** PASS · Verifier indep. shell PASS; oficial BLOCKED (Ask).
+- **Critérios:** E4-ACE-01..07 PASS; E4-HOM PENDING_HUMAN.
+- **Fingerprint:** `sha256:8767629646547880` (full `…92fd6a18`); base develop @ `0d2fa2b`.
+- **Próximo:** homologação humana no roteiro-homologacao-e4.md; sem commit/push/deploy.
+- **Integração documental:** autorizada pelo fluxo da esteira nesta conversa.
+
+
 ## 2026-11-22 — E4 aprovada e planejada
 
 - **Aceite humano:** proposta E4 aceita, incluindo até 24 modelos ativos, 6 sugestões por pessoa e renovação de até 3 alternativas.

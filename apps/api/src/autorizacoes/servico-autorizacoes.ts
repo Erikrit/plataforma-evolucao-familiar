@@ -645,7 +645,7 @@ export class ServicoAutorizacoes {
           tipo: "experiencia_recente",
           pessoaId: p.pessoaId,
           pessoaNome: nomePorId.get(p.pessoaId) ?? "Pessoa",
-          titulo: `Conquista: ${p.desafio.nome}`,
+          titulo: `Conquista: ${p.nomeAplicado ?? p.desafio.nome}`,
           quando: p.registradoEm,
         });
       }

@@ -179,70 +179,12 @@ try {
     });
   }
 
-  const biblioteca = [
-    {
-      id: "desafio_cat_memoria_cores",
-      nome: "Memória das cores",
-      instrucao:
-        "Mostre 3 objetos coloridos, esconda e peça para lembrar a ordem das cores.",
-      categoria: "memoria_atencao",
-      dificuldade: "simples",
-      materiais: "Objetos coloridos da casa",
-      duracaoMinutos: 10,
-    },
-    {
-      id: "desafio_cat_contar_passos",
-      nome: "Contar passos até a porta",
-      instrucao:
-        "Contem juntos os passos do sofá até a porta; depois tentem de novo.",
-      categoria: "raciocinio",
-      dificuldade: "simples",
-      materiais: null,
-      duracaoMinutos: 5,
-    },
-    {
-      id: "desafio_cat_historia_juntos",
-      nome: "Inventar uma história juntos",
-      instrucao:
-        "Um começa com uma frase; o outro continua. Sem pressa e sem correção.",
-      categoria: "linguagem",
-      dificuldade: "media",
-      materiais: null,
-      duracaoMinutos: 15,
-    },
-    {
-      id: "desafio_cat_desenho_livre",
-      nome: "Desenho livre do dia",
-      instrucao:
-        "Desenhem algo que gostaram hoje e contem um ao outro o que fizeram.",
-      categoria: "criatividade",
-      dificuldade: "simples",
-      materiais: "Papel e lápis de cor",
-      duracaoMinutos: 20,
-    },
-    {
-      id: "desafio_cat_equilibrio",
-      nome: "Equilíbrio no tapete",
-      instrucao:
-        "Andem em linha reta no tapete, um pé na frente do outro, de mãos dadas.",
-      categoria: "coordenacao",
-      dificuldade: "simples",
-      materiais: "Tapete ou fita no chão",
-      duracaoMinutos: 8,
-    },
-    {
-      id: "desafio_cat_guardar_brinquedos",
-      nome: "Guardar brinquedos juntos",
-      instrucao:
-        "Escolham 5 brinquedos e guardem no lugar combinado, sem pressa.",
-      categoria: "autonomia",
-      dificuldade: "simples",
-      materiais: null,
-      duracaoMinutos: 10,
-    },
-  ];
+  const { CATALOGO_BIBLIOTECA_E4 } = await import("./catalogo-biblioteca-e4.mjs");
+  if (CATALOGO_BIBLIOTECA_E4.length > 24) {
+    throw new Error("Catálogo E4 excede o limite de 24 modelos ativos.");
+  }
 
-  for (const item of biblioteca) {
+  for (const item of CATALOGO_BIBLIOTECA_E4) {
     await prisma.desafio.create({
       data: {
         id: item.id,
@@ -253,6 +195,12 @@ try {
         dificuldade: item.dificuldade,
         materiais: item.materiais,
         duracaoMinutos: item.duracaoMinutos,
+        faixaEtariaMin: item.faixaEtariaMin,
+        faixaEtariaMax: item.faixaEtariaMax,
+        origemConteudo: "autoral_pef",
+        versaoConteudo: 1,
+        adaptacoes: item.adaptacoes,
+        supervisao: item.supervisao,
         origem: "catalogo",
         ativo: true,
       },

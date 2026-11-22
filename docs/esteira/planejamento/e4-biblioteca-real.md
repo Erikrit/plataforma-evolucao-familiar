@@ -3,8 +3,15 @@
 **Demanda:** DEM-E4-BIBLIOTECA-20261122  
 **Tipo:** transversal · **Risco:** alto (isolamento, crianças, participação/estrelas).  
 **Aprovação:** Produto em 2026-11-22, Módulo 03 v1.3 §12.  
-**Estado:** READY para primeiro incremento; código/gates/homologação E4 pendentes.  
-**Base:** develop @ 4ae828da06b5dfa78abbedda56e5c5965aea33ac.
+**Estado:** E4-01..03 COMPLETED técnico; E4-HOM PENDING_HUMAN.  
+**Base:** develop @ 0d2fa2b4dc39d4c67b3b9b26f3604845a619c90a · fingerprint `sha256:8767629646547880…`.
+
+## Decisões técnicas (implementação)
+
+- Extensão de `Desafio` (faixa/origem/versão/adaptações) — sem tabela `modelo_atividade`.
+- Seleção privada em `SugestaoDesafioPessoa` com flag `escolhida`; **não** reutilizar `DesafioGuardado`.
+- Snapshot de conteúdo em `ParticipacaoDesafio` (`nomeAplicado`, etc.) para E4-ACE-06.
+- Limites 24/6/3 e renovação serializável no servidor (`ServicoSugestoes`).
 
 ## Evidência e dependências
 

@@ -33,17 +33,21 @@ import {
   IconeParticipou,
 } from "@/componentes/icones-experiencia";
 import {
+  escolherSugestaoDesafio,
   disponibilizarDesafio,
   disponibilizarRecompensa,
   listarDesafios,
   listarRecompensas,
+  listarSugestoesDesafio,
   obterEstrelas,
   obterPessoa,
   registrarParticipacaoDesafio,
+  renovarSugestoesDesafio,
   resgatarRecompensa,
   type DesafioResumo,
   type EstrelasResumo,
   type RecompensaResumo,
+  type SugestaoDesafio,
 } from "@/lib/api";
 import {
   podeOrganizarDesenvolvimento,
@@ -82,6 +86,12 @@ export default function PaginaDesenvolvimento() {
   const [nomePessoa, setNomePessoa] = useState("");
   const [acessoLiberado, setAcessoLiberado] = useState(false);
   const [desafios, setDesafios] = useState<DesafioResumo[] | null>(null);
+  const [sugestoes, setSugestoes] = useState<SugestaoDesafio[] | null>(null);
+  const [mensagemSugestoes, setMensagemSugestoes] = useState<string | null>(
+    null,
+  );
+  const [renovando, setRenovando] = useState(false);
+  const [escolhendoId, setEscolhendoId] = useState<string | null>(null);
   const [estrelas, setEstrelas] = useState<EstrelasResumo | null>(null);
   const [recompensas, setRecompensas] = useState<RecompensaResumo[] | null>(
     null,
@@ -113,6 +123,12 @@ export default function PaginaDesenvolvimento() {
     usuario?.pessoa.id,
     autorizacoes,
   );
+
+  const carregarSugestoes = useCallback(async () => {
+    const lista = await listarSugestoesDesafio(params.pessoaId);
+    setSugestoes(lista.sugestoes);
+    setMensagemSugestoes(lista.mensagem);
+  }, [params.pessoaId]);
 
   // Respostas de uma aba/categoria anterior não podem sobrescrever a lista atual.
   const carregarDesafios = useCallback(async () => {
@@ -176,6 +192,14 @@ export default function PaginaDesenvolvimento() {
       }
     })();
   }, [pronto, usuario, params.pessoaId]);
+
+  useEffect(() => {
+    if (!acessoLiberado) return;
+    setSugestoes(null);
+    carregarSugestoes().catch((e) =>
+      setErro(mensagemErroAmigavel(e, "Não foi possível carregar sugestões")),
+    );
+  }, [acessoLiberado, carregarSugestoes]);
 
   useEffect(() => {
     if (!acessoLiberado) return;
@@ -287,7 +311,11 @@ export default function PaginaDesenvolvimento() {
       setObservacao("");
       setChaveExecucao(novaChaveExecucao());
       setSelecionado(null);
-      await Promise.all([carregarDesafios(), carregarSaldoERecompensas()]);
+      await Promise.all([
+        carregarDesafios(),
+        carregarSaldoERecompensas(),
+        carregarSugestoes(),
+      ]);
     } catch (e) {
       setErro(
         mensagemErroAmigavel(e, "Não foi possível registrar. Tente de novo."),
@@ -303,6 +331,82 @@ export default function PaginaDesenvolvimento() {
     setChaveExecucao(novaChaveExecucao());
     setErro(null);
     setSucesso(null);
+  }
+
+  function abrirSugestao(item: SugestaoDesafio) {
+    abrirDesafio({
+      id: item.id,
+      nome: item.nome,
+      instrucao: item.instrucao,
+      categoria: item.categoria,
+      dificuldade: item.dificuldade,
+      materiais: item.materiais,
+      duracaoMinutos: item.duracaoMinutos,
+      faixaEtariaMin: item.faixaEtariaMin,
+      faixaEtariaMax: item.faixaEtariaMax,
+      origemConteudo: item.origemConteudo,
+      versaoConteudo: item.versaoConteudo,
+      adaptacoes: item.adaptacoes,
+      supervisao: item.supervisao,
+      origem: item.origem,
+      familiaId: null,
+      guardado: false,
+      disponivelParaNovaParticipacao: true,
+      estadoDisponibilidade: "explorar",
+    });
+  }
+
+  async function aoEscolherSugestao(item: SugestaoDesafio) {
+    if (!podeOrganizar || escolhendoId) return;
+    setEscolhendoId(item.id);
+    setErro(null);
+    setSucesso(null);
+    try {
+      const resp = await escolherSugestaoDesafio(params.pessoaId, item.id);
+      setSugestoes(resp.sugestoes);
+      setSucesso(
+        resp.jaEstavaEscolhida
+          ? `“${item.nome}” já estava escolhida.`
+          : `“${item.nome}” marcada para experimentar.`,
+      );
+    } catch (e) {
+      setErro(mensagemErroAmigavel(e, "Não foi possível escolher"));
+    } finally {
+      setEscolhendoId(null);
+    }
+  }
+
+  async function aoRenovarSugestoes() {
+    if (!podeOrganizar || renovando) return;
+    setRenovando(true);
+    setErro(null);
+    setSucesso(null);
+    try {
+      const resp = await renovarSugestoesDesafio(params.pessoaId);
+      setSugestoes(resp.sugestoes);
+      setMensagemSugestoes(resp.mensagem);
+      if (resp.trocadas === 0) {
+        setSucesso(
+          resp.mensagem ?? "Não há novas sugestões disponíveis no momento",
+        );
+      } else {
+        setSucesso(
+          resp.mensagem ??
+            `Renovamos ${resp.trocadas} sugestão${resp.trocadas === 1 ? "" : "ões"}. Escolhas mantidas.`,
+        );
+      }
+    } catch (e) {
+      setErro(mensagemErroAmigavel(e, "Não foi possível renovar"));
+    } finally {
+      setRenovando(false);
+    }
+  }
+
+  function irParaBiblioteca() {
+    setFiltro("explorar");
+    setCategoria(TODAS_CATEGORIAS);
+    const ancora = document.getElementById("biblioteca-brincadeiras");
+    ancora?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   const semSessao = pronto && !carregando && !usuario;
@@ -343,7 +447,111 @@ export default function PaginaDesenvolvimento() {
 
         {podeVer ? (
           <Stack gap="lg">
+            <Stack gap="sm">
+              <Group justify="space-between" align="center" wrap="wrap" gap="xs">
+                <Title order={2}>Sugestões para esta pessoa</Title>
+                <Group gap="xs">
+                  <Button
+                    variant="subtle"
+                    size="compact-sm"
+                    onClick={irParaBiblioteca}
+                  >
+                    Ver biblioteca
+                  </Button>
+                  {podeOrganizar ? (
+                    <Button
+                      variant="light"
+                      size="compact-sm"
+                      loading={renovando}
+                      onClick={() => void aoRenovarSugestoes()}
+                    >
+                      Renovar sugestões
+                    </Button>
+                  ) : null}
+                </Group>
+              </Group>
+              {mensagemSugestoes ? (
+                <Text size="sm" c="dimmed">
+                  {mensagemSugestoes}
+                </Text>
+              ) : null}
+              {sugestoes === null ? (
+                <EstadoCarregando rotulo="Carregando sugestões…" />
+              ) : sugestoes.length === 0 ? (
+                <EstadoVazio
+                  titulo="Sem sugestões agora"
+                  descricao="Quando houver atividades elegíveis na biblioteca, elas aparecem aqui. Sem cobrança."
+                />
+              ) : (
+                sugestoes.map((item) => (
+                  <Card key={item.id} withBorder padding="md" radius="md">
+                    <Stack gap="sm">
+                      <Group
+                        gap="sm"
+                        wrap="nowrap"
+                        align="flex-start"
+                        justify="space-between"
+                      >
+                        <Group
+                          gap="sm"
+                          wrap="nowrap"
+                          align="flex-start"
+                          style={{ flex: 1, cursor: "pointer" }}
+                          onClick={() => abrirSugestao(item)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              abrirSugestao(item);
+                            }
+                          }}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Abrir ${item.nome}`}
+                        >
+                          <IconeBrincadeira />
+                          <Stack gap={4}>
+                            <Text fw={600}>
+                              {item.nome}
+                              {item.escolhida ? " · Escolhida" : ""}
+                            </Text>
+                            <Text size="sm" c="dimmed">
+                              {ROTULOS_DIFICULDADE[item.dificuldade] ??
+                                item.dificuldade}
+                              {item.categoria
+                                ? ` · ${ROTULOS_CATEGORIA_DESENVOLVIMENTO[item.categoria] ?? item.categoria}`
+                                : ""}
+                            </Text>
+                            {item.instrucao ? (
+                              <Text size="sm" lineClamp={ehCelular ? 3 : 4}>
+                                {item.instrucao}
+                              </Text>
+                            ) : null}
+                            {item.materiais ? (
+                              <Text size="xs" c="dimmed">
+                                Materiais: {item.materiais}
+                              </Text>
+                            ) : null}
+                          </Stack>
+                        </Group>
+                      </Group>
+                      {podeOrganizar && !item.escolhida ? (
+                        <Button
+                          variant="light"
+                          size="sm"
+                          loading={escolhendoId === item.id}
+                          onClick={() => void aoEscolherSugestao(item)}
+                        >
+                          Escolher para experimentar
+                        </Button>
+                      ) : null}
+                    </Stack>
+                  </Card>
+                ))
+              )}
+            </Stack>
+
             <SegmentedControl
+              id="biblioteca-brincadeiras"
               fullWidth
               value={filtro}
               onChange={(v) => setFiltro(v as FiltroBrincadeira)}
@@ -599,6 +807,16 @@ export default function PaginaDesenvolvimento() {
             )}
             {selecionado.materiais ? (
               <Text size="sm">Materiais: {selecionado.materiais}</Text>
+            ) : null}
+            {selecionado.adaptacoes ? (
+              <Text size="sm" c="dimmed">
+                Adaptações: {selecionado.adaptacoes}
+              </Text>
+            ) : null}
+            {selecionado.supervisao ? (
+              <Text size="sm" c="dimmed">
+                Supervisão: {selecionado.supervisao}
+              </Text>
             ) : null}
 
             {filtro === "executadas" ||

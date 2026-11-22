@@ -40,6 +40,7 @@ model Pessoa {
   atividadesApoio      RegistroAtividade[]
   anexos               Anexo[]
   desafiosGuardados    DesafioGuardado[]
+  sugestoesDesafio     SugestaoDesafioPessoa[]
   disponibilidadesDesafio DisponibilidadeDesafio[]
   participacoesDesafio ParticipacaoDesafio[]
   movimentosEstrelas   MovimentoEstrelas[]
@@ -62,6 +63,7 @@ model Usuario {
   convitesCriados Convite[]          @relation("ConviteCriador")
   anexosCriados   Anexo[]            @relation("AnexoCriador")
   desafiosCriados Desafio[]          @relation("DesafioCriador")
+  sugestoesDesafioAtualizadas SugestaoDesafioPessoa[] @relation("SugestaoDesafioAutor")
   disponibilidadesDesafioAtualizadas DisponibilidadeDesafio[] @relation("DisponibilidadeDesafioAutor")
   participacoesRegistradas ParticipacaoDesafio[] @relation("ParticipacaoAutor")
   resgatesFeitos  ResgateRecompensa[] @relation("ResgateAutor")
@@ -270,6 +272,7 @@ model RegistroAtividade {
 }
 
 /// Biblioteca curada (familiaId nulo) ou brincadeira personalizada da família (DEV-F01/F02).
+/// Catálogo global: metadados E4 (faixa/origem/versão); máx. 24 ativos publicados.
 model Desafio {
   id              String              @id @default(cuid())
   familiaId       String?             @map("familia_id")
@@ -279,6 +282,16 @@ model Desafio {
   dificuldade     String              @default("simples")
   materiais       String?
   duracaoMinutos  Int?                @map("duracao_minutos")
+  /// Idade mínima orientativa (anos); não é diagnóstico nem bloqueio rígido.
+  faixaEtariaMin  Int?                @map("faixa_etaria_min")
+  /// Idade máxima orientativa (anos); nulo = sem teto.
+  faixaEtariaMax  Int?                @map("faixa_etaria_max")
+  /// Procedência do conteúdo curado (ex.: autoral_pef); sem dados pessoais.
+  origemConteudo  String?             @map("origem_conteudo")
+  /// Versão do texto publicado; participações guardam snapshot.
+  versaoConteudo  Int                 @default(1) @map("versao_conteudo")
+  adaptacoes      String?
+  supervisao      String?
   origem          String              @default("catalogo")
   ativo           Boolean             @default(true)
   criadoPorId     String?             @map("criado_por_id")
@@ -286,6 +299,7 @@ model Desafio {
   familia         Familia?            @relation(fields: [familiaId], references: [id])
   criadoPor       Usuario?            @relation("DesafioCriador", fields: [criadoPorId], references: [id])
   guardados         DesafioGuardado[]
+  sugestoes         SugestaoDesafioPessoa[]
   disponibilidades  DisponibilidadeDesafio[]
   participacoes     ParticipacaoDesafio[]
 
@@ -293,6 +307,25 @@ model Desafio {
   @@index([origem, ativo])
   @@index([categoria])
   @@map("desafio")
+}
+
+/// Seleção privada de sugestões da biblioteca (E4). Não é guardado legado nem Explorar/Executadas.
+model SugestaoDesafioPessoa {
+  id              String   @id @default(cuid())
+  pessoaId        String   @map("pessoa_id")
+  desafioId       String   @map("desafio_id")
+  /// Escolha explícita para experimentar; renovar preserva itens com escolhida=true.
+  escolhida       Boolean  @default(false)
+  criadoEm        DateTime @default(now()) @map("criado_em")
+  atualizadoEm    DateTime @default(now()) @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  pessoa          Pessoa   @relation(fields: [pessoaId], references: [id])
+  desafio         Desafio  @relation(fields: [desafioId], references: [id])
+  atualizadoPor   Usuario? @relation("SugestaoDesafioAutor", fields: [atualizadoPorId], references: [id])
+
+  @@unique([pessoaId, desafioId])
+  @@index([pessoaId, escolhida])
+  @@map("sugestao_desafio_pessoa")
 }
 
 /// Guardar para depois, sem prazo (retenção/compatibilidade; não é Executadas — ADR-013).
@@ -326,7 +359,7 @@ model DisponibilidadeDesafio {
   @@map("disponibilidade_desafio")
 }
 
-/// Participação presencial; estrelas snapshot na própria linha (DEV-F04/F05).
+/// Participação presencial; estrelas e conteúdo snapshot na própria linha (DEV-F04/F05, E4-ACE-06).
 model ParticipacaoDesafio {
   id                   String              @id @default(cuid())
   pessoaId             String              @map("pessoa_id")
@@ -336,6 +369,11 @@ model ParticipacaoDesafio {
   execucaoChave        String              @map("execucao_chave")
   dificuldadeAplicada  String              @map("dificuldade_aplicada")
   estrelasConcedidas   Int                 @map("estrelas_concedidas")
+  /// Snapshot do conteúdo vigente no momento da execução (E4).
+  versaoConteudoAplicada Int?              @map("versao_conteudo_aplicada")
+  nomeAplicado         String?             @map("nome_aplicado")
+  instrucaoAplicada    String?             @map("instrucao_aplicada")
+  categoriaAplicada    String?             @map("categoria_aplicada")
   registradoPorId      String              @map("registrado_por_id")
   registradoEm         DateTime            @default(now()) @map("registrado_em")
   versaoAtiva          Boolean             @default(true) @map("versao_ativa")

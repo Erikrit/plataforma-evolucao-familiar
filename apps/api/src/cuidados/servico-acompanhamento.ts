@@ -197,16 +197,18 @@ export class ServicoAcompanhamento {
           const verbo =
             p.resultado === "concluiu" ? "Concluiu" : "Participou";
           const obs = p.observacao ? ` — ${p.observacao}` : "";
+          const nome = p.nomeAplicado ?? p.desafio.nome;
+          const categoria = p.categoriaAplicada ?? p.desafio.categoria;
           return {
             tipo: p.substituiId
               ? "correcao_participacao"
               : "participacao",
             dominio: "desenvolvimento" as const,
             quando: p.registradoEm,
-            resumo: `${verbo}: ${p.desafio.nome} (+${p.estrelasConcedidas} estrelas)${obs}`,
+            resumo: `${verbo}: ${nome} (+${p.estrelasConcedidas} estrelas)${obs}`,
             origemId: p.id,
             versaoAtiva: p.versaoAtiva,
-            categoria: p.desafio.categoria,
+            categoria,
             detalhe: p.substituiId
               ? "Correção de registro anterior de brincadeira."
               : undefined,
@@ -580,12 +582,16 @@ export class ServicoAcompanhamento {
     const mapear = (
       p: (typeof todasParticipacoes)[number],
     ) => {
-      const categoriaBruta = (p.desafio.categoria ?? "").trim();
+      const categoriaBruta = (
+        p.categoriaAplicada ??
+        p.desafio.categoria ??
+        ""
+      ).trim();
       const categoria =
         categoriaBruta.length > 0 ? categoriaBruta : "nao_classificada";
       return {
         id: p.id,
-        nome: p.desafio.nome,
+        nome: p.nomeAplicado ?? p.desafio.nome,
         categoria,
         origem: p.desafio.origem,
         resultado: p.resultado,

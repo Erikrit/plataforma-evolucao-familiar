@@ -11,6 +11,12 @@ export const CATEGORIAS_BIBLIOTECA = [
 ] as const;
 export type CategoriaBiblioteca = (typeof CATEGORIAS_BIBLIOTECA)[number];
 
+/** Limites E4 (Módulo 03 §12) — aplicados no servidor. */
+export const LIMITE_CATALOGO_ATIVO = 24;
+export const LIMITE_SUGESTOES_PESSOA = 6;
+export const LIMITE_RENOVAR_SUGESTOES = 3;
+export const ORIGEM_CONTEUDO_AUTORAL = "autoral_pef";
+
 export const RESULTADOS_PARTICIPACAO = ["concluiu", "participou"] as const;
 export type ResultadoParticipacao = (typeof RESULTADOS_PARTICIPACAO)[number];
 

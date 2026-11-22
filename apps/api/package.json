@@ -21,6 +21,7 @@
     "smoke:e1-ent": "node scripts/smoke-e1-ent.mjs",
     "smoke:e2": "node scripts/smoke-e2.mjs",
     "smoke:e3": "node scripts/smoke-e3.mjs",
+    "smoke:e4": "node scripts/smoke-e4.mjs",
     "smoke:authz": "node scripts/smoke-e1-authz.mjs",
     "check:e1-01": "node scripts/check-e1-01.mjs",
     "check:e1-02": "node scripts/check-e1-02.mjs",
@@ -28,7 +29,8 @@
     "check:e1-04": "node scripts/check-e1-04.mjs",
     "check:e1-ent": "node scripts/check-e1-ent.mjs",
     "check:e2": "node scripts/check-e2.mjs",
-    "check:e3": "node scripts/check-e3.mjs"
+    "check:e3": "node scripts/check-e3.mjs",
+    "check:e4": "node scripts/check-e4.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.12",

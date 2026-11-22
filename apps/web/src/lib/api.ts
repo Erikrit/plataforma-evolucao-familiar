@@ -876,6 +876,12 @@ export type DesafioResumo = {
   dificuldade: string;
   materiais: string | null;
   duracaoMinutos: number | null;
+  faixaEtariaMin?: number | null;
+  faixaEtariaMax?: number | null;
+  origemConteudo?: string | null;
+  versaoConteudo?: number;
+  adaptacoes?: string | null;
+  supervisao?: string | null;
   origem: string;
   familiaId: string | null;
   guardado: boolean;
@@ -887,6 +893,33 @@ export type DesafioResumo = {
     registradoEm: string;
     estrelasConcedidas: number;
   } | null;
+};
+
+export type SugestaoDesafio = {
+  id: string;
+  nome: string;
+  instrucao: string | null;
+  categoria: string | null;
+  dificuldade: string;
+  materiais: string | null;
+  duracaoMinutos: number | null;
+  faixaEtariaMin: number | null;
+  faixaEtariaMax: number | null;
+  origemConteudo: string | null;
+  versaoConteudo: number;
+  adaptacoes: string | null;
+  supervisao: string | null;
+  origem: string;
+  escolhida: boolean;
+  atualizadoEm: string;
+};
+
+export type ListaSugestoes = {
+  pessoaId: string;
+  limite: number;
+  total: number;
+  mensagem: string | null;
+  sugestoes: SugestaoDesafio[];
 };
 
 export type ListaDesafios = {
@@ -1156,6 +1189,55 @@ export async function obterRelatorioPdf(
     );
   }
   return (await resposta.json()) as RelatorioPdf;
+}
+
+export async function listarSugestoesDesafio(
+  pessoaId: string,
+): Promise<ListaSugestoes> {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/sugestoes`);
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return (await resposta.json()) as ListaSugestoes;
+}
+
+export async function escolherSugestaoDesafio(
+  pessoaId: string,
+  desafioId: string,
+) {
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/sugestoes/${desafioId}/escolher`,
+    { method: "POST" },
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return resposta.json() as Promise<{
+    escolhida: boolean;
+    jaEstavaEscolhida?: boolean;
+    sugestoes: SugestaoDesafio[];
+  }>;
+}
+
+export async function renovarSugestoesDesafio(pessoaId: string) {
+  const resposta = await fetchApi(`/pessoas/${pessoaId}/sugestoes/renovar`, {
+    method: "POST",
+  });
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return resposta.json() as Promise<{
+    trocadas: number;
+    mensagem: string | null;
+    preservadas: number;
+    sugestoes: SugestaoDesafio[];
+  }>;
 }
 
 export async function listarDesafios(
