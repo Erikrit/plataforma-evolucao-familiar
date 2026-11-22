@@ -260,7 +260,7 @@
             "E3-RES-05"
         ],
         "bloqueios": [],
-        "proximaAcao": "Homologacao humana E3-HOM (roteiro-homologacao-e3.md); sem commit/push/deploy ate aceite.",
+        "proximaAcao": "Detalhar E4 — Biblioteca de atividades reais; defeito de anexos aberto e correção adiada por Produto.",
         "resultadoTecnico": "PASS",
         "fingerprint": "sha256:2dead837b08ac808",
         "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
@@ -306,7 +306,22 @@
         ],
         "mensagemCommit": "feat(cuidados,evolucao): baixar exames e organizar resumo por area\\n\\nFecha DEM-E3 tecnicamente: download autorizado sem viewer, resumo factual por area/periodo e PDF sem laudos; homologacao humana pendente.",
         "concluidaEm": "2026-11-22T06:48:56.464Z",
-        "nota": "PASS tecnico E3-EX/RES; E3-HOM PENDING_HUMAN. Scripts smoke-ef05/modulo-04 ausentes no checkout — QG-3 cobriu e1-03/e2/e1-ent/authz + smoke-e3."
+        "nota": "Entrega técnica histórica preservada; falha de salvar anexo relatada pelo responsável impede homologação da jornada. Correção adiada por Produto; demais jornadas não aprovadas automaticamente.",
+        "homologacaoSituacao": "IMPEDIDA_POR_DEFEITO_DE_ANEXO",
+        "defeitosRelacionados": [
+            "DEF-E3-ANEXO-SALVAR-20261122"
+        ],
+        "defeitosConhecidos": [
+            {
+                "id": "DEF-E3-ANEXO-SALVAR-20261122",
+                "estado": "ABERTO",
+                "tratamento": "ADIADO_POR_PRODUTO",
+                "data": "2026-11-22",
+                "relato": "Falha ao salvar anexo impediu homologação da jornada.",
+                "referenciaDisponivel": "d4a4db0cef5cca5bdb16772ea97cf1724634fcb9",
+                "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+            }
+        ]
     },
     "janelaIncrementos": [
         {
@@ -529,7 +544,22 @@
             ],
             "mensagemCommit": "feat(cuidados,evolucao): baixar exames e organizar resumo por area\\n\\nFecha DEM-E3 tecnicamente: download autorizado sem viewer, resumo factual por area/periodo e PDF sem laudos; homologacao humana pendente.",
             "concluidaEm": "2026-11-22T06:48:56.464Z",
-            "nota": "PASS tecnico E3-EX/RES; E3-HOM PENDING_HUMAN. Scripts smoke-ef05/modulo-04 ausentes no checkout — QG-3 cobriu e1-03/e2/e1-ent/authz + smoke-e3."
+            "nota": "Entrega técnica histórica preservada; falha de salvar anexo relatada pelo responsável impede homologação da jornada. Correção adiada por Produto; demais jornadas não aprovadas automaticamente.",
+            "homologacaoSituacao": "IMPEDIDA_POR_DEFEITO_DE_ANEXO",
+            "defeitosRelacionados": [
+                "DEF-E3-ANEXO-SALVAR-20261122"
+            ],
+            "defeitosConhecidos": [
+                {
+                    "id": "DEF-E3-ANEXO-SALVAR-20261122",
+                    "estado": "ABERTO",
+                    "tratamento": "ADIADO_POR_PRODUTO",
+                    "data": "2026-11-22",
+                    "relato": "Falha ao salvar anexo impediu homologação da jornada.",
+                    "referenciaDisponivel": "d4a4db0cef5cca5bdb16772ea97cf1724634fcb9",
+                    "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+                }
+            ]
         },
         {
             "id": "DEM-E2-ACESSOS-20261122",
@@ -2190,9 +2220,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologacao humana E3-HOM (roteiro-homologacao-e3.md); sem commit/push/deploy ate aceite.",
-    "atualizadoEm": "2026-11-22T06:48:56.464Z",
-    "notas": "DEM-E3 COMPLETED tecnico; homologacao humana PENDING_HUMAN. Sem commit.",
+    "proximaAcao": "Detalhar E4 — Biblioteca de atividades reais; defeito de anexos aberto e correção adiada por Produto.",
+    "atualizadoEm": "2026-11-22T06:56:45.243Z",
+    "notas": "E3-HOM pendente, anexos impedidos por DEF-E3-ANEXO-SALVAR-20261122. Avanço ao detalhamento E4 autorizado.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

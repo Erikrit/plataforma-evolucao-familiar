@@ -1,5 +1,14 @@
 # Registro da esteira
 
+## 2026-11-22 — Falha de salvar anexos; avanço E4 autorizado
+
+- **Relato humano:** atualização feita; anexos falham ao salvar, impedindo homologação da jornada.
+- **Defeito:** DEF-E3-ANEXO-SALVAR-20261122 ABERTO, tratamento adiado expressamente pelo Produto.
+- **Aceite:** E3-HOM PENDING_HUMAN; não inferir aprovação dos demais fluxos. Resultados técnicos históricos preservados.
+- **Próximo:** detalhar E4 — Biblioteca de atividades reais; correção futura deve reproduzir salvar → baixar, sem diagnóstico presumido.
+- **Referência:** develop @ d4a4db0cef5cca5bdb16772ea97cf1724634fcb9; sem testes/código nesta anotação. Commit documental autorizado nesta conversa.
+
+
 ## 2026-11-22 — DEM-E3 COMPLETED técnico (humana PENDING)
 
 - **Demanda:** DEM-E3-EXAMES-RESUMO-20261122 COMPLETED técnico; homologação humana PENDING_HUMAN (E3-HOM).

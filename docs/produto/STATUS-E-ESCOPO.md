@@ -1,6 +1,19 @@
 # Estado das decisões e escopo
 
-## E3 — implementação técnica concluída; homologação humana pendente, 2026-11-22
+## Defeito de anexos — tratamento adiado, 2026-11-22
+
+**DEF-E3-ANEXO-SALVAR-20261122 — ABERTO.** Responsável informou atualização feita, mas falha ao salvar anexo impediu homologar essa jornada. Causa técnica ainda não diagnosticada/reproduzida nesta anotação.
+
+**Impacto:** salvar anexo e validar o download de novo documento ficam com aceite humano impedido. E3-HOM permanece pendente; não presumir aprovação das demais jornadas da E3, que não receberam aceite explícito neste relato. Resultados técnicos existentes mantêm seu escopo histórico.
+
+**Decisão expressa:** registrar e tratar depois, avançando ao detalhamento da E4 — Biblioteca de atividades reais. Isso adia a correção, não encerra o defeito nem homologa anexos.
+
+**Retomada da correção:** reproduzir salvar exame com/sem anexo, identificar falha no upload, persistência ou vínculo sem presumir causa, verificar ausência de documento/exame parcial e retry sem duplicação, testar autorização e concluir salvar → baixar → abrir no dispositivo. Coletar erro, formato/tamanho e evidências sem dados clínicos reais.
+
+**Referência disponível:** develop @ d4a4db0cef5cca5bdb16772ea97cf1724634fcb9. Consulta documental/estática; nenhum teste executado nesta rodada. Publicação para uso segue adiada.
+
+
+## E3 — implementação técnica registrada; homologação de anexos impedida, 2026-11-22
 
 **Decisão APROVADA (desenho):** oferecer **Baixar arquivo** no exame; navegador/aplicativo do dispositivo faz a abertura. Retirados visualizador interno, zoom e paginação. Resumo único por área/período e fluxo de prévia/PDF do relatório.
 
