@@ -108,12 +108,10 @@
         "tipo": "transversal",
         "estado": "COMPLETED",
         "resultadoTecnico": "PASS",
-        "homologacaoHumana": "PENDING_HUMAN",
+        "homologacaoHumana": "APROVADA",
         "fingerprint": "sha256:f02234b3d87c192d",
         "fingerprintFull": "sha256:f02234b3d87c192d72595007566ec4b7419fd6839d23957b44a3f20921f639f6",
-        "criteriosPendentesHumanos": [
-            "E1-ENT-08"
-        ],
+        "criteriosPendentesHumanos": [],
         "evidencias": [
             "docs/esteira/estado/qg1-typecheck-api-e1-ent.txt",
             "docs/esteira/estado/qg1-typecheck-web-e1-ent.txt",
@@ -133,7 +131,18 @@
             "docs/esteira/estado/roteiro-homologacao-e1-ent.md",
             "docs/esteira/estado/evidencia-e1-ent-20261121.json"
         ],
-        "proximaAcao": "Homologacao humana E1-ENT-08 com roteiro-homologacao-e1-ent.md; sem commit/push/deploy ate pedido expresso."
+        "proximaAcao": "Detalhar E2 — Gestão compreensível de acessos conforme plano pós-V1; correção de entrada E1 homologada. Disponibilização para uso continua adiada.",
+        "homologacaoHumanaRegistro": {
+            "data": "2026-11-22",
+            "origem": "comunicação expressa do responsável do Produto nesta conversa",
+            "escopo": "correções de entrada/cadastro da DEM-E1-ENTRADA-20261121; critério humano E1-ENT-08",
+            "referenciaDisponivel": "2781c76ec2992976b268d7accadc948e45347b8a",
+            "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+        },
+        "criteriosOk": [
+            "E1-ENT-08"
+        ],
+        "nota": "Resultados técnicos históricos preservados; homologação humana das correções APROVADA pelo responsável em 2026-11-22."
     },
     "janelaIncrementos": [
         {
@@ -184,12 +193,11 @@
                 "E1-ACE-05",
                 "E1-ACE-06",
                 "E1-ACE-07",
-                "E1-ACE-08"
-            ],
-            "criteriosFalha": [],
-            "criteriosPendentesHumanos": [
+                "E1-ACE-08",
                 "E1-ENT-08"
             ],
+            "criteriosFalha": [],
+            "criteriosPendentesHumanos": [],
             "fingerprint": "sha256:f02234b3d87c192d",
             "fingerprintFull": "sha256:f02234b3d87c192d72595007566ec4b7419fd6839d23957b44a3f20921f639f6",
             "qg1": "PASS",
@@ -200,7 +208,7 @@
             "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificacao independente shell PASS (fingerprint + typecheck + check + smoke e1-ent + regressao E1).",
             "verifierOficial": "BLOCKED",
             "verifierOficialId": "08888821-4ff0-48b5-a024-2b807aaa750e",
-            "homologacaoHumana": "PENDING_HUMAN",
+            "homologacaoHumana": "APROVADA",
             "evidencias": [
                 "docs/esteira/estado/qg1-typecheck-api-e1-ent.txt",
                 "docs/esteira/estado/qg1-typecheck-web-e1-ent.txt",
@@ -244,7 +252,7 @@
                 ".gitignore"
             ],
             "mensagemCommit": "feat(fundacao): cadastrar familia pela interface com endereco de acesso\n\nFecha DEM-E1-ENTRADA: boas-vindas em / e /f, cadastro inicial sem envio de e-mail, URL copiar/acessar e regressao E1; homologacao humana pendente.",
-            "nota": "PASS tecnico E1-ENT-01..07 + regressao ACE; E1-ENT-08 PENDING_HUMAN. Sem envio de e-mail.",
+            "nota": "Resultados técnicos históricos preservados; homologação humana das correções APROVADA pelo responsável em 2026-11-22.",
             "concluidaEm": "2026-11-22T01:25:46.820Z",
             "planejamento": {
                 "caminho": "docs/esteira/planejamento/e1-contexto-familiar.md",
@@ -319,6 +327,13 @@
                         "concluidoEm": "2026-11-22T01:25:46.820Z"
                     }
                 ]
+            },
+            "homologacaoHumanaRegistro": {
+                "data": "2026-11-22",
+                "origem": "comunicação expressa do responsável do Produto nesta conversa",
+                "escopo": "correções de entrada/cadastro da DEM-E1-ENTRADA-20261121; critério humano E1-ENT-08",
+                "referenciaDisponivel": "2781c76ec2992976b268d7accadc948e45347b8a",
+                "fonte": "docs/produto/STATUS-E-ESCOPO.md"
             }
         },
         {
@@ -1630,9 +1645,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologacao humana E1-ENT-08 com roteiro-homologacao-e1-ent.md; sem commit/push/deploy ate pedido expresso.",
-    "atualizadoEm": "2026-11-22T01:25:46.820Z",
-    "notas": "DEM-E1-ENTRADA-20261121 tecnica COMPLETED; homologacao humana PENDING_HUMAN. Historico DEM-E1-FAMILIAS preservado com REPROVADA.",
+    "proximaAcao": "Detalhar E2 — Gestão compreensível de acessos conforme plano pós-V1; correção de entrada E1 homologada. Disponibilização para uso continua adiada.",
+    "atualizadoEm": "2026-11-22T04:21:23.654Z",
+    "notas": "DEM-E1-ENTRADA-20261121 COMPLETED; correções homologadas humanamente em 2026-11-22. Reprovação original preservada no histórico. Próxima frente E2.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

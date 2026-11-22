@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-22 — Correções de entrada E1 homologadas humanamente
+
+- **Aceite:** responsável informou correções feitas e homologação humana APROVADA para as correções; DEM-E1-ENTRADA-20261121, critério E1-ENT-08.
+- **Referência disponível:** develop @ `2781c76ec2992976b268d7accadc948e45347b8a`; evidência técnica `evidencia-e1-ent-20261121.json`.
+- **Escopo:** entrada/boas-vindas/cadastro familiar e endereço copiar/acessar; manter e-mail/senha sem envio de mensagem.
+- **Rastreabilidade:** atualizados estado ativo e histórico da demanda, STATUS e plano. Reprovação da entrega original e evidência técnica original preservadas.
+- **Verificação:** consulta documental/estática; testes e aplicação não reexecutados nesta atualização. QG-1/2/3 PASS e verifier independente shell PASS registrados; oficial BLOCKED Ask/shell.
+- **Próximo:** detalhamento E2, mantendo disponibilização para uso adiada.
+- **Integração documental:** commit autorizado pelo responsável nesta conversa.
+
+
 ## 2026-11-21 — DEM-E1-ENTRADA COMPLETED técnico (humana PENDING)
 
 - **Demanda:** DEM-E1-ENTRADA-20261121 COMPLETED técnico; homologação humana PENDING_HUMAN (E1-ENT-08).

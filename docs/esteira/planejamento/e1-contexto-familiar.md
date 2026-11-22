@@ -4,7 +4,7 @@
 **Tipo:** transversal · **Risco:** alto (autenticação, autorização, dados de saúde e criança)  
 **Base inspecionada:** develop @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`  
 **Aprovação:** L3, direção pós-V1 aprovada expressamente pelo Produto em 2026-11-21. Requisitos: Módulo 01 v1.7 §13.  
-**Situação atual:** incrementos E1-01..04 encerrados tecnicamente no registro; homologação humana REPROVADA por relato do Produto. Correção ativa DEM-E1-ENTRADA-20261121, detalhada no complemento abaixo. O plano original preservado a seguir corresponde à v1.7; regras substituídas de provisionamento privado cedem à especificação v1.8 §14.
+**Situação atual:** correção DEM-E1-ENTRADA-20261121 encerrada tecnicamente e homologada pelo responsável em 2026-11-22, critério E1-ENT-08. A reprovação original E1-01..04 permanece histórica. O plano original abaixo corresponde à v1.7; regras substituídas de provisionamento privado cedem à especificação v1.8 §14.
 
 ## Objetivo e recorte
 
@@ -101,7 +101,7 @@ Inspeção via GitHub, sem checkout local, execução da aplicação ou testes n
 
 ## Complemento vigente — DEM-E1-ENTRADA-20261121
 
-**Estado:** READY para execução, sem código alterado nesta rodada documental.  
+**Estado:** COMPLETED técnico; homologação humana das correções APROVADA pelo responsável em 2026-11-22. Referência disponível develop @ 2781c76ec2992976b268d7accadc948e45347b8a. A aprovação foi comunicada pelo responsável; não houve reexecução de testes neste registro.  
 **Tipo:** transversal (correção de entrada + mudança funcional aprovada).  
 **Aprovação:** L3, Módulo 01 v1.8, FUN-09/§14 e E1-ACE-01 atualizado.  
 **Risco:** alto: cadastro anônimo, criação da primeira conta, autorização e navegação familiar.  
@@ -140,4 +140,4 @@ São escolhas de implementação dentro do recorte aprovado. Qualquer necessidad
 
 Começar em janela anônima por / e repetir por /f. Criar espaço de teste com nome diferente de Oliveira, conferir/copiar endereço, acessar o login, entrar com a primeira conta e abrir gestão. Criar a segunda família e verificar recusa cruzada. Conferir nome repetido, endereço ocupado, e-mail existente, URL inválida, indisponibilidade da API e ausência de mensagem de e-mail. A confirmação não pode afirmar sucesso antes da persistência nem mostrar senha.
 
-**Próxima ação:** implementation-workflow de E1-ENT-01. E2 permanece aguardando correção e homologação da entrada E1.
+**Próxima ação:** detalhar a E2 — Gestão compreensível de acessos. O impedimento relativo à entrada E1 foi resolvido no escopo homologado. Evidências originais mantêm o estado da ocasião de sua geração; o aceite posterior está em STATUS e atual.json.

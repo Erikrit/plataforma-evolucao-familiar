@@ -1,18 +1,16 @@
 # Estado das decisões e escopo
 
-## E1 — homologação reprovada e correção de entrada aprovada, 2026-11-21
+## E1 — correções de entrada homologadas em 2026-11-22
 
-**Homologação humana da E1: REPROVADA**, por relato expresso do responsável. Motivo: entrada sem caminho útil em /f e referências fixas à família de desenvolvimento. A baseline V1 anteriormente homologada mantém seu aceite histórico; a evolução E1 precisa de correção e nova homologação antes de avançar à E2.
+**Homologação humana APROVADA** pelo responsável do Produto para as correções da demanda `DEM-E1-ENTRADA-20261121`, encerrando a pendência E1-ENT-08. Fonte: comunicação expressa nesta conversa, após informar que as correções foram feitas.
 
-**Decisão L3 APROVADA/DOCUMENTADA:** permitir boas-vindas em / e /f e criação de família/primeira conta administradora pela interface. Substitui a exclusividade anterior de provisionamento privado. Fonte canônica: Módulo 01 v1.8, FUN-09/§14; visão no Documento Mestre v1.8 §16.
+**Escopo do aceite:** boas-vindas, criação da família e primeira conta pela interface, endereço para copiar/acessar e entrada contextual corrigida. E-mail e senha permanecem no cadastro; envio de mensagem continua fora desta etapa. Não ampliar este aceite a funcionalidades futuras ou a dispositivos/casos específicos não descritos pelo responsável.
 
-**E-mail:** manter campo e-mail e senha para a conta. O responsável dispensou apenas o envio da mensagem. A confirmação entrega o endereço da família com copiar/acessar; sem envio, verificação ou recuperação por e-mail neste escopo.
+**Referência disponível:** develop @ `2781c76ec2992976b268d7accadc948e45347b8a`. O código contém as páginas /f e /f/criar e a evidência `docs/esteira/estado/evidencia-e1-ent-20261121.json` registra QG-1/2/3 PASS, verificação independente shell PASS e verifier oficial BLOCKED por ambiente Ask/shell. Esta rodada consulta documentação/código e registra o aceite humano; não reexecuta a aplicação ou os testes.
 
-**Estado efetivo inspecionado:** develop @ `efb9fecf07db18b2c20057e8ec7fd28663b26916` contém login por família e provisionamento privado. painel-fundacao.tsx contém /f/oliveira/entrar fixo e não há app/f/page.tsx. Inspeção estática remota; o localhost do responsável não foi operado.
+**Histórico:** a entrega original E1 foi reprovada em 2026-11-21 por entrada sem caminho útil e referências fixas a /f/oliveira. Esse resultado fica preservado no histórico e foi tratado pela demanda corretiva agora homologada. A baseline V1 conserva seu próprio aceite.
 
-**Esteira:** demanda `DEM-E1-ENTRADA-20261121` READY; plano complementar em `docs/esteira/planejamento/e1-contexto-familiar.md`, E1-ENT-01..03. Critérios E1-ENT-01..08 e regressão E1-ACE-01..08. Próxima ação: implementation-workflow da primeira fatia após reconciliar workspace/fingerprint.
-
-**Evidências anteriores:** QG-1/2/3 e verificação independente shell PASS continuam históricos; verifier oficial BLOCKED por ambiente. Não transformam a reprovação humana em aprovação. Código novo, testes e homologação da correção ainda não executados.
+**Próximo passo:** detalhar E2 — Gestão compreensível de acessos, conforme sequência aprovada. O bloqueio relativo à entrada E1 está encerrado no escopo corrigido. Publicação para uso segue adiada.
 
 ## Situação vigente — V1 homologada em 2026-11-21
 
@@ -48,7 +46,7 @@ O responsável solicitou tratar estas frentes antes da proposta de desativação
 
 **Limite do aceite:** direção, limites e ordem de trabalho. Pontuação digital, uso em recompensas, envio de dados pessoais à IA e regras clínicas continuam dependentes de decisão específica. Parâmetros quantitativos, modelos técnicos e protótipos não foram homologados por este aceite.
 
-**E1 atual:** entrega técnica original registrada; homologação humana REPROVADA e correção de entrada ativa conforme seção inicial deste documento. O recorte vigente é Módulo 01 v1.8 §13–14, plano complementar E1-ENT-01..03. A sequência E1–E7 permanece aprovada; a E2 aguarda a correção.
+**E1 atual:** correções de entrada DEM-E1-ENTRADA-20261121 homologadas humanamente em 2026-11-22; E1-ENT-08 aprovado. Recorte funcional no Módulo 01 v1.8 §13–14. Próxima frente: detalhamento da E2.
 
 **Política de dados:** Documento Mestre §13 continua aplicável. A V1 é referência histórica; a aprovação de cadastro pela interface não autoriza publicação para uso.
 
@@ -67,7 +65,7 @@ Principais alinhamentos:
 - IA editorial, IA de desenvolvimento e IA de cuidados são casos separados e entram em fases diferentes.
 - Arquitetura mantém monólito modular e evita infraestrutura nova sem necessidade comprovada.
 
-**Estado da consolidação:** DIREÇÃO DE PRODUTO APROVADA E DOCUMENTADA. E1 entregue tecnicamente e reprovada humanamente; correção de entrada aprovada e planejada no complemento vigente.
+**Estado da consolidação:** DIREÇÃO DE PRODUTO APROVADA E DOCUMENTADA. Correção da entrada E1 implementada conforme registro técnico e homologada pelo responsável em 2026-11-22; próximos detalhamentos seguem por entrega.
 
 ## Conta por família — decisão de Produto documentada em 2026-11-21
 
@@ -75,7 +73,7 @@ Principais alinhamentos:
 
 A proposta anterior de login global com participação em várias famílias foi substituída. A seleção de contextos após autenticação envolve apenas pessoas e áreas da família da conta. Documento EVOLUCAO-POS-V1.md reconciliado com essa decisão.
 
-**Situação E1 atualizada:** conta em uma única família permanece aprovada. Correção de entrada/cadastro no Módulo 01 v1.8 §14 e demanda DEM-E1-ENTRADA-20261121 READY, após homologação humana REPROVADA da entrega técnica anterior.
+**Situação E1 atualizada:** conta em uma única família preservada. Correção de entrada/cadastro do Módulo 01 v1.8 §14 encerrada com homologação humana APROVADA na DEM-E1-ENTRADA-20261121. A reprovação original permanece histórica.
 
 ## Primeira frente de evolução pós-V1 — 2026-11-21
 

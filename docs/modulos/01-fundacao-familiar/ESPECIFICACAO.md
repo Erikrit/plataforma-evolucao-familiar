@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
 **Versão:** especificação funcional v1.8 — boas-vindas e cadastro de família, aprovados em 2026-11-21  
-**Status funcional:** regras anteriores e alteração da entrada/cadastro v1.8 aprovadas pelo Produto; homologação humana da entrega E1 reprovada, conforme STATUS. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
+**Status funcional:** regras anteriores e alteração da entrada/cadastro v1.8 aprovadas pelo Produto; estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
 
@@ -279,4 +279,4 @@ Reservar os segmentos usados pelas rotas públicas, em especial `criar`, para n�
 | E1-ENT-07 | Acessar por identificador, URL familiar inexistente, raiz, /f/criar e convite têm retorno útil e não causam colisão com slug ou encaminhamento para dados de desenvolvimento. |
 | E1-ENT-08 | Nova homologação humana percorre raiz → cadastro → copiar/acessar → login → gestão e regressão de duas famílias, em celular e desktop. Falhas de rede não mostram criação como concluída. |
 
-**Encaminhamento:** complementar o plano E1 com a demanda `DEM-E1-ENTRADA-20261121`. A reprovação da entrega anterior permanece registrada até a nova homologação; aprovação desta regra não equivale a implementação.
+**Encaminhamento:** complementar o plano E1 com a demanda `DEM-E1-ENTRADA-20261121`. A reprovação e o aceite posterior das correções permanecem rastreáveis em STATUS e no estado da esteira; aprovação desta regra não equivale a implementação.
