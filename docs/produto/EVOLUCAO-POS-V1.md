@@ -240,6 +240,12 @@ Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pe
 
 **Não inferir desta decisão:** implementação autorizada da E5, catálogo definitivo, premiação, alteração de autorizações de criança, coleta de métricas granulares, compromisso clínico, homologação da E4 ou publicação em produção. E4-HOM permanece pendente conforme registros da esteira, E3 mantém defeito aberto de anexo. Elaborar critérios de fase experimentada versus concluída e homologar com família antes de desenvolver.
 
+### E5 — Critério de conclusão com ajuda aprovado (2026-11-22)
+
+**APROVADO expressamente pelo responsável do Produto:** uma fase pode ser considerada **Concluída** quando o objetivo próprio do jogo for atingido, **mesmo com dicas ou ajuda de adulto**. Não exigir conclusão independente, registrar erros ou diferenciar conclusão assistida para comparação. A fase **Não explorada** ainda não foi iniciada; **Experimentada** foi iniciada sem objetivo alcançado; **Concluída** alcançou objetivo e permanece registrada mesmo após repetições. Interrupção, pausa ou abandono não geram punição, estrelas ou avaliação clínica. Progresso livre aprovado acima continua válido.
+
+**Proposta adicional em análise, NÃO aprovada por este aceite:** piloto com jogos de Memória de figuras, Complete a sequência e Caminhos e labirintos; cinco fases configuradas por jogo, dificuldade gradual, dicas e retorno positivo, sem estrelas digitais; posterior expansão por categoria. Validar regras de conclusão e variações de cada mecânica, conteúdo por idade, persistência mínima por pessoa e versão de jogo, acessibilidade, UX e registro no Módulo 04 antes de autorizar implementação.
+
 ## 8. Participação, estrelas e evolução
 
 A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
