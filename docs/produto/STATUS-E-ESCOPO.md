@@ -1,5 +1,16 @@
 # Estado das decisões e escopo
 
+## E3 — recorte aprovado; desenho em validação, 2026-11-22
+
+**APROVADO pelo Produto:** visualizar PDF/imagem privada de exame e oferecer um único Resumo da pessoa organizado por Cuidados/Desenvolvimento, conforme áreas autorizadas, sem novos registros obrigatórios, IA ou interpretação clínica.
+
+**Fontes canônicas:** Módulo 02 v1.6 §10 (E3-EX-01..05) e Módulo 04 v1.2 §12 (E3-RES-01..05/E3-HOM). Desenho de baixa fidelidade em `docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md` §11.
+
+**Planejamento:** DEM-E3-EXAMES-RESUMO-20261122, E3-00..03 em `docs/esteira/planejamento/e3-exames-resumo.md`. Escopo funcional aprovado; implementação PENDING até validação visual E3-UX-00, conforme recomendação aceita pelo responsável.
+
+**Base:** develop @ 133eec53089fc9cbd98bfd1dfd4f1987af783f2a. Consulta estática e documental, sem código alterado nem testes novos. E2 homologada e histórico preservados. Publicação continua adiada.
+
+
 ## E2 — homologação humana aprovada, 2026-11-22
 
 **APROVADA pelo responsável do Produto** a demanda DEM-E2-ACESSOS-20261122, após informar melhorias feitas e homologação humana aprovada. Critério E2-ACE-08 encerrado; defeito DEF-E2-ATIVACAO-20261122 encerrado no escopo da solução por link manual.

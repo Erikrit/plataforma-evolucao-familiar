@@ -213,3 +213,43 @@ Homologar jornadas específicas:
 - **E7:** resumo de cuidado mostra fontes/limites e prepara conversa, sem sugerir conduta.
 
 Antes da implementação de cada entrega, produzir fluxo de baixa fidelidade e estados críticos. Protótipo visual e homologação humana continuam necessários; este documento organiza a proposta, não os substitui.
+
+## 11. E3 — desenho de baixa fidelidade para validação, 2026-11-22
+
+**Escopo funcional aprovado:** Módulo 02 v1.6 e Módulo 04 v1.2. **Desenho visual abaixo: PROPOSTA**, a validar antes da implementação. Não é protótipo executado nem prova de acessibilidade.
+
+### Tela A — detalhe do exame
+
+Ordem de leitura no Drawer/página já existente: nome da pessoa → descrição do exame → data quando conhecida e consulta relacionada → documento anexado → **Visualizar documento** → ação secundária **Baixar arquivo**. Sem documento, mostrar “Sem documento anexado”, sem ação vazia. Cadastro/edição continuam nos destinos existentes e autorizados.
+
+### Tela B — visualizador
+
+| Posição | Conteúdo |
+|---|---|
+| Topo | Voltar ao exame · nome do arquivo |
+| Área principal | PDF/imagem, priorizando leitura no celular |
+| Controles | Diminuir/ampliar · página atual/total quando aplicável |
+| Ação secundária | Baixar arquivo, quando autorizado |
+
+No celular, usar o espaço disponível, sem empilhar outro Drawer estreito dentro do detalhe. Na volta, preservar exame selecionado e contexto da lista. Teclado e foco devem funcionar sem depender de ícone. Documento ilegível/indisponível apresenta erro e retorno; formato sem prévia oferece alternativa autorizada. A escolha da biblioteca/componente será técnica, após verificar formatos e controles suportados.
+
+### Tela C — Resumo da pessoa
+
+| Ordem | Conteúdo |
+|---|---|
+| Cabeçalho | Pessoa · Resumo |
+| Filtro | Período atual; alterar se desejar |
+| Bloco Cuidados, se autorizado/aplicável | Estados de doses; consultas/exames; observações e mudanças relevantes |
+| Bloco Desenvolvimento, se autorizado/aplicável | Experiências; categorias exploradas; estrelas; observações |
+| Ação contextual | Preparar PDF conforme os tipos já disponíveis |
+
+Cada bloco usa fatos, datas e acesso à origem; detalhes extensos ficam recolhidos. Evitar repetir o histórico completo ou preencher com gráficos sem utilidade. Nenhuma contagem vira nota. Para período vazio, texto neutro. A ação de PDF mantém prévia/conferência e autorização vigentes.
+
+### Percursos de validação
+
+1. Cuidados → Consultas e exames → exame → visualizar/zoom/página → voltar.
+2. Resumo com apenas Cuidados, apenas Desenvolvimento e ambas as áreas autorizadas.
+3. Trocar período → conferir registros → preparar PDF do tipo autorizado.
+4. Repetir vazio, falha de documento e ausência/revogação de permissão.
+
+**E3-UX-00:** responsável valida hierarquia e jornadas acima antes de E3-01. Ajustes de layout podem ocorrer dentro das regras; mudança de acesso, exigência de dado ou comportamento clínico retorna a Produto.

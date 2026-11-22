@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-22 — E3 aprovada; desenho e planejamento preparados
+
+- **Aceite de Produto:** recomendação E3 aceita: visualizador privado de exame e Resumo factual por área, validando desenho antes de implementar.
+- **Requisitos:** Módulo 02 v1.6 §10 e Módulo 04 v1.2 §12.
+- **Demanda:** DEM-E3-EXAMES-RESUMO-20261122 PENDING; E3-00 em validação, E3-01..03 pendentes.
+- **Desenho/plano:** UX PROPOSTA-EVOLUCAO-POS-V1.md §11; planejamento/e3-exames-resumo.md.
+- **Base:** develop @ 133eec53089fc9cbd98bfd1dfd4f1987af783f2a; consulta estática, sem implementação ou testes nesta rodada.
+- **Próximo:** validar E3-UX-00 e liberar E3-01. E2 e seus aceites preservados; publicação adiada.
+- **Integração documental:** autorizada pelo responsável nesta conversa.
+
+
 ## 2026-11-22 — E2 homologada humanamente
 
 - **Fonte:** responsável comunicou melhorias feitas e homologação APROVADA.

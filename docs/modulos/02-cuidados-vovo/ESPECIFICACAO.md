@@ -1,6 +1,6 @@
 # Módulo 02 — Cuidados da Vovó
 
-**Versão:** especificação funcional v1.5 — observação diária opcional em substituição às categorias de apoio, aprovada em 2026-11-17  
+**Versão:** especificação funcional v1.6 — E3, visualização privada de exames, aprovada em 2026-11-22  
 **Status funcional:** especificação aprovada. Estado do código, evidências, notificações e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Dependência:** Fundação Familiar.
 
@@ -167,3 +167,25 @@ Concorrência de dois registros da mesma dose; reconfirmação; relato tardio; a
 Prontuário clínico, diagnóstico, recomendação de doses, OCR de receitas, farmácias/laboratórios, controle de estoque, gestão trabalhista e relatórios obrigatórios de turno.
 
 **Regra:** organizar e lembrar sem cobrança; não cadastrar informação sem justificativa para o cuidado.
+
+## 10. E3 — Visualização privada de exames
+
+**Recorte APROVADO pelo Produto em 2026-11-22**, após aceitação da recomendação E3. A organização visual será validada antes de implementar. Complementa CUI-F06/F10/F11; preserva permissões e cadastro mínimo.
+
+Em Consultas e exames, o detalhe do exame com arquivo oferece **Visualizar documento** e **Baixar arquivo**, somente quando a operação estiver autorizada. Abrir PDF/imagem no contexto da pessoa, com nome do documento, zoom, páginas quando aplicável e retorno ao detalhe sem perder orientação. No celular, priorizar o espaço de leitura e controles acessíveis.
+
+Descrição permanece obrigatória; data e arquivo opcionais, consulta relacionada quando existir. Não exigir transcrição, especialidade, resultado ou interpretação para abrir o documento. Data desconhecida continua desconhecida.
+
+Prever sem arquivo, carregamento, arquivo indisponível/inválido, formato sem prévia, acesso revogado e erro de rede. Formato sem prévia oferece download autorizado com explicação; erro técnico não deve ser disfarçado de formato não suportado. Não carregar bytes antes da autorização do servidor nem disponibilizar endereço público permanente.
+
+### Critérios E3 de exames
+
+| ID | Aceite |
+|---|---|
+| E3-EX-01 | Abrir PDF/imagem pelo detalhe do exame; nome, pessoa e data conhecida permanecem compreensíveis, sem novo cadastro. |
+| E3-EX-02 | Zoom e navegação de páginas quando aplicável funcionam em celular/desktop; voltar retorna ao contexto do exame. |
+| E3-EX-03 | Download e prévia exigem autorização contextual, inclusive API/URL direta, sessão revogada e família diferente; administrador e integrante não ganham acesso clínico por presunção. |
+| E3-EX-04 | Sem anexo, erro, arquivo inválido e formato sem prévia têm estados úteis e retorno seguro; nenhum sucesso fictício. |
+| E3-EX-05 | Cadastro mantém descrição mínima, data/arquivo opcionais; não interpreta resultados e não exige transcrição. |
+
+Resumo e PDF continuam de propriedade do Módulo 04 v1.2. Fora desta entrega: IA, OCR, valores laboratoriais estruturados, diagnóstico, nova classificação médica e migração de armazenamento como pré-condição. Plano em `docs/esteira/planejamento/e3-exames-resumo.md`.
