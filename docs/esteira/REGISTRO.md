@@ -1,5 +1,36 @@
 # Registro da esteira
 
+## 2026-11-22 — Catálogo de Jogos digitais recuperado no ambiente local
+
+- **E5-06-COR-02.** O catálogo falhava com Prisma `P2021` porque o PostgreSQL de desenvolvimento ainda não tinha a tabela de progresso da E5. Atualização aditiva aplicada e procedimento registrado no README.
+- **Verificação.** QG-1, revisão independente e QG-2 passaram. A reprodução em Chrome com dados fictícios confirmou a transição de HTTP 500 para 200, os três jogos e o registro de conclusão da primeira fase da Memória. [Relatório](estado/relatorio-teste-usuario-e5-20261122.md#erro-de-servidor-ao-abrir-jogos-digitais)
+- **Aceite.** E5-06 segue em validação humana de E4-HOM e E5-HOM.
+
+## 2026-11-22 — Correções do teste de uso e reteste da E5
+
+- **E5-06-COR-01.** Dica persistente da Memória, filtro aplicado a destaques e catálogo, singular no resgate unitário e compilação sem download de fonte.
+- **Verificação.** QG-1, revisão independente e QG-2 passaram. Chrome com 38 checagens, smokes E4 e E5 com 46 checagens no total e build web em rede restrita. [Reteste](estado/relatorio-teste-usuario-e5-20261122.md#reteste-após-as-correções)
+- **Aceite.** E5-06 segue em validação humana de E4-HOM e E5-HOM.
+
+## 2026-11-22 — Percursos de usuário da Biblioteca e da E5
+
+- **E5-06.** 28 checagens passaram na aplicação local em Chrome, entre desktop e viewport móvel emulada.
+- **Achados.** Dica da Memória, comunicação do escopo do filtro e plural no resgate unitário. O relato inclui passos de reprodução. [Relatório de teste de uso](estado/relatorio-teste-usuario-e5-20261122.md)
+- **Aceite.** Revalidação E4-HOM e homologação E5-HOM em dispositivo real seguem pendentes.
+
+## 2026-11-22 — Implementação local da Biblioteca e dos jogos digitais
+
+- **Entrega.** E5-01 a E5-05 concluídos tecnicamente. A Biblioteca contextual reúne Atividades reais e Jogos digitais, com Recompensas e Cadastros como destinos secundários.
+- **Piloto.** Memória, Sequência e Labirinto com cinco fases cada. Destaques e descobertas usam o progresso autorizado por pessoa e família. Histórico e Resumo leem os registros da E5.
+- **E5-06.** Validação integrada registrada por cenário e roteiro para o responsável e a criança. E4-HOM requer revalidação do percurso corrigido e E5-HOM está pendente de aceite humano. [Evidências](estado/evidencia-e5-20261122.json) · [Roteiro](estado/roteiro-homologacao-e5.md)
+
+## 2026-11-22 — E4 com aceite parcial e E5 planejada
+
+- **Retorno humano.** E4-HOM aprovada parcialmente. A organização da entrada e da Biblioteca será reavaliada após a correção E5-01. [Status e escopo](../produto/STATUS-E-ESCOPO.md)
+- **Demanda.** `DEM-E5-JOGOS-DIGITAIS-20261122`, transversal, risco alto, `READY` para iniciar E5-01. Base `develop @ 45e1231`, implementação E4 em `0a1055b`.
+- **Integração.** Módulo 03 §13 consolidado, desenho UX e seis incrementos. A Biblioteca contextual começa com Atividades reais e recebe os jogos quando houver uma jornada jogável. [Plano E5](planejamento/e5-jogos-digitais.md)
+- **Validação.** Revisão documental e estática, com bootstrap da esteira (42 verificações) e `check:e4` (8 verificações) aprovados. Implementação, verifier, QG do novo fluxo e E5-HOM pendentes. O hash da evidência histórica da E4 não foi reproduzido no checkout. O defeito de anexos E3 segue aberto e adiado.
+
 ## 2026-11-22 — DEM-E4 COMPLETED técnico (humana PENDING)
 
 - **Demanda:** DEM-E4-BIBLIOTECA-20261122 COMPLETED técnico; homologação humana PENDING_HUMAN (E4-HOM).

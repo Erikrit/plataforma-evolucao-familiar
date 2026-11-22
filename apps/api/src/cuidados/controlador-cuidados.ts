@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   Param,
   Patch,
   Post,
@@ -236,6 +237,7 @@ export class ControladorCuidados {
   }
 
   @Get("pessoas/:pessoaId/historico")
+  @Header("Cache-Control", "private, no-store")
   historico(
     @Param("pessoaId") pessoaId: string,
     @Query("de") de: string | undefined,
@@ -277,6 +279,7 @@ export class ControladorCuidados {
   }
 
   @Get("pessoas/:pessoaId/resumo-desenvolvimento")
+  @Header("Cache-Control", "private, no-store")
   resumoDesenvolvimento(
     @Param("pessoaId") pessoaId: string,
     @Query("de") de: string,
@@ -290,6 +293,7 @@ export class ControladorCuidados {
         de: de ?? new Date(0).toISOString(),
         ate: ate ?? new Date().toISOString(),
       },
+      { incluirJogos: true },
     );
   }
 

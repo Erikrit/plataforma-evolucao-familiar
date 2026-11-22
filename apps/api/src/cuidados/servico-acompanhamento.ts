@@ -7,6 +7,7 @@ import {
 import { ServicoPrisma } from "../prisma/servico-prisma";
 import { ServicoAutorizacoes } from "../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
+import { CATALOGO_JOGOS } from "../desenvolvimento/jogos/catalogo-jogos";
 import { chaveOcorrencia } from "./permissoes-cuidados";
 
 @Injectable()
@@ -168,7 +169,7 @@ export class ServicoAcompanhamento {
     }
 
     if (podeDesenvolvimento) {
-      const [participacoes, resgates] = await Promise.all([
+      const [participacoes, resgates, conclusoesJogos] = await Promise.all([
         this.prisma.participacaoDesafio.findMany({
           where: {
             pessoaId: pessoa.id,
@@ -189,6 +190,17 @@ export class ServicoAcompanhamento {
           },
           orderBy: { resgatadoEm: "desc" },
           include: { recompensa: { select: { nome: true } } },
+        }),
+        this.prisma.progressoFaseJogo.findMany({
+          where: {
+            familiaId: pessoa.familiaId,
+            pessoaId: pessoa.id,
+            concluidaEm: { gte: de, lte: ate },
+          },
+          select: {
+            jogoId: true, fase: true, concluidaEm: true,
+            versaoConclusao: true, nomeNaConclusao: true, categoriaNaConclusao: true,
+          },
         }),
       ]);
 
@@ -222,6 +234,18 @@ export class ServicoAcompanhamento {
           origemId: r.id,
         })),
       );
+      for (const conclusao of conclusoesJogos) {
+        if (!conclusao.concluidaEm) continue;
+        eventos.push({
+          tipo: "conclusao_fase_jogo",
+          dominio: "desenvolvimento",
+          quando: conclusao.concluidaEm,
+          resumo: `${conclusao.nomeNaConclusao ?? "Jogo digital"} · Fase ${conclusao.fase} concluída`,
+          origemId: `${conclusao.jogoId}/${conclusao.fase}`,
+          categoria: conclusao.categoriaNaConclusao,
+          detalhe: conclusao.versaoConclusao ? `Versão do jogo: ${conclusao.versaoConclusao}.` : undefined,
+        });
+      }
     }
 
     const filtroDominio = (periodo?.dominio ?? "").trim().toLowerCase();
@@ -544,6 +568,7 @@ export class ServicoAcompanhamento {
     pessoaId: string,
     usuario: UsuarioAutenticado,
     periodo: { de: string; ate: string },
+    opcoes: { incluirJogos?: boolean } = {},
   ) {
     const pessoa = await this.exigirVisao(pessoaId, usuario);
     const podeDesenvolvimento = await this.autorizacoes.podeVerDesenvolvimento(
@@ -569,15 +594,18 @@ export class ServicoAcompanhamento {
       registradoEm: { gte: de, lte: ate },
     } as const;
 
-    const todasParticipacoes = await this.prisma.participacaoDesafio.findMany({
-      where: filtroParticipacao,
-      orderBy: { registradoEm: "desc" },
-      include: {
-        desafio: {
-          select: { nome: true, categoria: true, origem: true },
+    const [todasParticipacoes, jogos] = await Promise.all([
+      this.prisma.participacaoDesafio.findMany({
+        where: filtroParticipacao,
+        orderBy: { registradoEm: "desc" },
+        include: {
+          desafio: {
+            select: { nome: true, categoria: true, origem: true },
+          },
         },
-      },
-    });
+      }),
+      opcoes.incluirJogos ? this.resumoJogos(pessoa.familiaId, pessoa.id, de, ate) : undefined,
+    ]);
 
     const mapear = (
       p: (typeof todasParticipacoes)[number],
@@ -635,6 +663,7 @@ export class ServicoAcompanhamento {
       pessoaNome: pessoa.nome,
       tipo: "desenvolvimento",
       periodo: { de: periodo.de, ate: periodo.ate },
+      ...(jogos ? { jogos } : {}),
       experiencias,
       categoriasExploradas,
       estrelas: {
@@ -659,6 +688,44 @@ export class ServicoAcompanhamento {
       ranking: false,
       previa: true,
     };
+  }
+
+  private async resumoJogos(familiaId: string, pessoaId: string, de: Date, ate: Date) {
+    const fases = await this.prisma.progressoFaseJogo.findMany({
+      where: { familiaId, pessoaId, primeiraExploracaoEm: { lte: ate } },
+      select: { jogoId: true, primeiraExploracaoEm: true, concluidaEm: true, nomeNaConclusao: true },
+      orderBy: { primeiraExploracaoEm: "asc" },
+    });
+    const jogos = new Map<string, {
+      id: string;
+      nome: string;
+      totalFases: number | null;
+      concluidasAte: number;
+      concluidasNoPeriodo: number;
+      experimentadoNoPeriodo: boolean;
+    }>();
+
+    for (const fase of fases) {
+      let jogo = jogos.get(fase.jogoId);
+      if (!jogo) {
+        const catalogo = CATALOGO_JOGOS.find((item) => item.id === fase.jogoId);
+        jogo = {
+          id: fase.jogoId,
+          nome: catalogo?.nome ?? fase.nomeNaConclusao ?? "Jogo digital arquivado",
+          totalFases: catalogo?.fases.length ?? null,
+          concluidasAte: 0,
+          concluidasNoPeriodo: 0,
+          experimentadoNoPeriodo: false,
+        };
+        jogos.set(fase.jogoId, jogo);
+      }
+      if (fase.primeiraExploracaoEm >= de) jogo.experimentadoNoPeriodo = true;
+      if (fase.concluidaEm && fase.concluidaEm <= ate) {
+        jogo.concluidasAte += 1;
+        if (fase.concluidaEm >= de) jogo.concluidasNoPeriodo += 1;
+      }
+    }
+    return [...jogos.values()];
   }
 
   /**

@@ -1,7 +1,7 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
-**Versão:** 1.3 — E4, biblioteca real limitada e sugestões renováveis, aprovada em 2026-11-22  
-**Estado:** regras anteriores e recorte E4 v1.3 aprovados pelo Produto. Implementação e homologação são registradas em STATUS-E-ESCOPO.md e na esteira.  
+**Versão:** 1.4 — E5, jogos digitais na Biblioteca de Desenvolvimento, consolidada para planejamento em 2026-11-22\
+**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
 
@@ -222,3 +222,40 @@ A entrega funciona com catálogo aprovado e seleção por regras locais. Conteú
 | E4-HOM | Homologar escolher → renovar preservando escolha → participar → Executadas → disponibilizar novamente, com duas famílias e regressão de estrelas/histórico. |
 
 **Fora:** jogos digitais (E5), IA com histórico pessoal, publicação automática, ranking, nova tabela de estrelas e correção de anexos. DEF-E3-ANEXO-SALVAR-20261122 permanece aberto e adiado por decisão expressa. Plano: `docs/esteira/planejamento/e4-biblioteca-real.md`.
+
+## 13. E5 — Jogos digitais na Biblioteca de Desenvolvimento
+
+Jogos breves complementam as atividades presenciais e registram descobertas lúdicas. O piloto é composto por **Memória de figuras** (Memória e atenção), **Complete a sequência** e **Caminhos e labirintos** (Raciocínio lógico), com **cinco fases por jogo**. Labirintos também envolvem coordenação na interação. O catálogo usa as categorias existentes e a cobertura do piloto segue a curadoria dos três jogos.
+
+**Origem das decisões.** As decisões funcionais estão registradas no Git na sequência `e00b23b`–`45e1231`. O recorte de três jogos e cinco fases foi fornecido na especificação consolidada indicada pelo responsável em 2026-11-22 para este planejamento. Configurações de fase, controles, ordenação e modelo de persistência são detalhados no [plano E5](../../esteira/planejamento/e5-jogos-digitais.md).
+
+### Regras funcionais
+
+- **E5-F01 — Descoberta.** Integrar **Jogos digitais** à Biblioteca de Desenvolvimento da pessoa. Exibir até três destaques automáticos, com continuidade e variedade por regras locais estáveis, seguidos do catálogo completo com **Todas** e filtros pelas categorias vigentes. Todos os jogos disponíveis à pessoa aparecem no catálogo, inclusive quando a data de nascimento está ausente. Faixa etária é orientativa. Sugestões renováveis e limites da seção 12 pertencem às atividades reais.
+- **E5-F02 — Fases.** Cada jogo oferece cinco fases com objetivo, instrução breve e dificuldade progressiva predefinida. Qualquer fase pode ser aberta no primeiro acesso e repetida livremente. A interface pode indicar uma próxima fase a experimentar. Dificuldade é atributo da fase, sem ajuste adaptativo ou seletor adicional.
+- **E5-F03 — Conteúdo.** Usar conteúdo próprio ou licenciado, curado e versionado. Memória varia pares aprovados e posições. Sequência varia padrões verificáveis. Labirinto usa mapas revisados e variações que preservam caminho válido. A versão e a dificuldade são rastreáveis. A partida opera com conteúdo aprovado e lógica hospedada na plataforma, sem serviços externos, IA durante o jogo, anúncios ou rastreadores de terceiros.
+- **E5-F04 — Partida.** Informar objetivo e controles antes de jogar. Dica e saída são sempre acessíveis durante a partida. Alcançar o objetivo conclui a fase, inclusive com dica ou ajuda de adulto. A celebração breve é acessível, respeita movimento reduzido e usa som somente de forma opcional. Partidas e repetições ficam livres de relógio, limite de vidas e contagem de erros.
+- **E5-F05 — Progresso.** **Não explorada** indica fase ainda não iniciada, **Experimentada** indica início registrado e **Concluída** indica objetivo atingido e confirmação persistida. Uma fase concluída mantém esse estado em novas partidas, reenvios e acessos simultâneos. Voltar após interrupção inicia uma nova partida desde o começo da fase e mantém as descobertas confirmadas. A interface confirma o salvamento após resposta confiável do servidor.
+- **E5-F06 — Reconhecimento.** A primeira conclusão gera um reconhecimento breve e um único registro de descoberta. A pessoa vê as próprias fases experimentadas e concluídas. Estrelas, saldo e resgates pertencem às atividades reais e seguem DEV-F03 a DEV-F06. O piloto restringe o reconhecimento ao progresso pessoal, sem metas, ranking, notificações de retorno ou comparação.
+- **E5-F07 — Evolução.** Histórico e Resumo leem jogos experimentados e conclusões diretamente da fonte E5, conforme as regras de período e autorização do Módulo 04. Mostrar fatos como “3 de 5 fases concluídas”. Cada primeira conclusão pode produzir um evento datado no Histórico com jogo, fase e versão. Os registros descrevem experiências lúdicas. A inclusão em prévia/PDF depende de avaliação de UX e testes de privacidade com as regras do Módulo 04.
+- **E5-F08 — Autorização e privacidade.** Jogar e consultar progresso exigem acesso autorizado ao Desenvolvimento da pessoa, verificado no servidor em cada operação. Uma criança sem conta joga com a supervisão de quem tem esse acesso. O piloto oferece partidas individuais, sem chat, fotos ou envio de provas. A tela apresenta somente a experiência de jogo e saída. A administração familiar por si só concede acesso à gestão. Definições e recursos globais têm dados editoriais. Progresso e descobertas são privados da pessoa e de sua família e ficam na plataforma, sem telemetria de movimentos, erros, tempo de reação ou identidade de quem ajudou.
+
+### Critérios de aceite
+
+| ID | Resultado verificável |
+|---|---|
+| E5-ACE-01 | Três jogos e cinco fases por jogo, com acesso direto às fases 4 e 5 desde a primeira visita. |
+| E5-ACE-02 | As três mecânicas têm objetivos verificáveis e dicas acessíveis. Concluir com ajuda produz o mesmo resultado. |
+| E5-ACE-03 | Cada fase tem variações curadas, resolúveis e coerentes com a dificuldade configurada. |
+| E5-ACE-04 | Repetir e pedir dicas são ações livres. A primeira descoberta é única e os movimentos de estrelas correspondem apenas a operações presenciais autorizadas. |
+| E5-ACE-05 | Inícios e conclusões simultâneos ou reenviados preservam o estado e a data da primeira conclusão. |
+| E5-ACE-06 | Ao interromper e abrir de novo, a fase começa do início com o progresso confirmado preservado. |
+| E5-ACE-07 | Erro ou resposta incerta de rede oferece recuperação e sinaliza salvamento somente após confirmação confiável. |
+| E5-ACE-08 | Até três destaques automáticos e catálogo completo filtrável, inclusive com zero, um ou dois jogos e ausência de nascimento. As entradas em destaque são únicas. |
+| E5-ACE-09 | Tela de partida com navegação própria. Acesso direto e API aplicam os mesmos limites por família, pessoa e autorização, inclusive após revogação. |
+| E5-ACE-10 | Celular e desktop permitem uso por toque e teclado, saída disponível, foco e contraste perceptíveis, áudio opcional e movimento reduzido. |
+| E5-ACE-11 | Histórico e Resumo derivam descobertas da E5. As regras de Explorar, Executadas, recompensas e estrelas continuam verificáveis nos percursos reais. |
+| E5-ACE-12 | Jogo, fase e versão são rastreáveis. Atualizar conteúdo mantém conquistas anteriores e os recursos globais contêm apenas dados editoriais. |
+| E5-HOM | Responsável autorizado e criança avaliam o piloto no celular com dados fictícios, da localização do jogo à escolha livre de fase, dica, conclusão, saída, retorno e leitura da evolução. Registrar o resultado humano explícito. |
+
+**Referências.** [Desenho da Biblioteca](../../ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md#5-biblioteca-de-desenvolvimento) · [Plano e regressões](../../esteira/planejamento/e5-jogos-digitais.md) · [Módulo 04](../04-evolucao-familiar/ESPECIFICACAO.md).

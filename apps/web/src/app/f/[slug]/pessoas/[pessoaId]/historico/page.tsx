@@ -42,6 +42,7 @@ const rotulosTipo: Record<string, string> = {
   suspensao: "Suspensão",
   anexo: "Documento",
   participacao: "Brincadeira",
+  conclusao_fase_jogo: "Jogo digital",
   correcao_participacao: "Correção de brincadeira",
   resgate_recompensa: "Resgate",
 };

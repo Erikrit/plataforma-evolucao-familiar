@@ -18,6 +18,7 @@ model Familia {
   convites     Convite[]
   anexos       Anexo[]
   desafios     Desafio[]
+  progressoJogos ProgressoFaseJogo[]
 
   @@map("familia")
 }
@@ -46,9 +47,32 @@ model Pessoa {
   movimentosEstrelas   MovimentoEstrelas[]
   recompensas          Recompensa[]
   resgatesRecompensa   ResgateRecompensa[]
+  progressoJogos      ProgressoFaseJogo[]
 
   @@index([familiaId])
   @@map("pessoa")
+}
+
+model ProgressoFaseJogo {
+  familiaId             String    @map("familia_id")
+  pessoaId              String    @map("pessoa_id")
+  jogoId                String    @map("jogo_id")
+  fase                  Int
+  primeiraExploracaoEm  DateTime  @map("primeira_exploracao_em")
+  versaoPrimeiraExploracao Int    @map("versao_primeira_exploracao")
+  ultimaAberturaEm      DateTime  @map("ultima_abertura_em")
+  versaoUltimaAbertura  Int      @map("versao_ultima_abertura")
+  concluidaEm           DateTime? @map("concluida_em")
+  versaoConclusao       Int?      @map("versao_conclusao")
+  chaveConclusao        String?   @map("chave_conclusao")
+  nomeNaConclusao      String?   @map("nome_na_conclusao")
+  categoriaNaConclusao String?   @map("categoria_na_conclusao")
+  familia               Familia   @relation(fields: [familiaId], references: [id])
+  pessoa                Pessoa    @relation(fields: [pessoaId], references: [id])
+
+  @@id([familiaId, pessoaId, jogoId, fase])
+  @@index([familiaId, pessoaId, concluidaEm])
+  @@map("progresso_fase_jogo")
 }
 
 model Usuario {

@@ -1,0 +1,182 @@
+.partida {
+  padding: clamp(1rem, 3vw, 2.5rem) 0;
+}
+
+.cartas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.4rem, 1.5vw, 0.85rem);
+}
+
+.cartas[data-colunas="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cartas[data-colunas="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.carta {
+  display: flex;
+  min-height: clamp(4.5rem, 15vw, 7rem);
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #6883af;
+  border-radius: var(--mantine-radius-md);
+  background: #e8effc;
+  color: #253b61;
+}
+
+.carta:focus-visible {
+  outline: 3px solid #244e95;
+  outline-offset: 2px;
+}
+
+.carta[data-estado="virada"] {
+  background: #fff;
+}
+
+.carta[data-estado="par"] {
+  background: #e7f5ec;
+  border-color: #3e785b;
+  cursor: default;
+}
+
+.carta[data-dica="true"] {
+  outline: 3px dashed #725000;
+  outline-offset: -5px;
+}
+
+.carta[data-dica="true"]:focus-visible {
+  outline: 3px solid #244e95;
+  outline-offset: 2px;
+  box-shadow: inset 0 0 0 3px #725000;
+}
+
+.figura {
+  font-size: clamp(1.2rem, 5.5vw, 2.35rem);
+  line-height: 1.15;
+}
+
+.nomeFigura {
+  max-width: 100%;
+  padding: 0 0.15rem;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font-size: clamp(0.68rem, 2.7vw, 0.88rem);
+}
+
+.numeroCarta {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.sequencia {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.25rem, 1fr));
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.peca,
+.pecaAcao {
+  display: flex;
+  min-height: 4.5rem;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border: 1px solid #6883af;
+  border-radius: var(--mantine-radius-md);
+  background: #fff;
+  color: #253b61;
+}
+
+.peca[data-lacuna="true"] {
+  border-style: dashed;
+  border-width: 2px;
+  background: #f0f4fc;
+}
+
+.pecaAcao {
+  border-width: 2px;
+  background: #e8effc;
+}
+
+.pecaAcao:focus-visible {
+  outline: 3px solid #244e95;
+  outline-offset: 2px;
+}
+
+.forma {
+  width: 1.65rem;
+  height: 1.65rem;
+  display: block;
+  background-color: #345ea6;
+}
+
+.forma[data-cor="dourado"] { background-color: #996009; }
+.forma[data-cor="verde"] { background-color: #236748; }
+.forma[data-cor="roxo"] { background-color: #783ca0; }
+.forma[data-forma="circulo"] { border-radius: 50%; }
+.forma[data-forma="triangulo"] { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.forma[data-forma="losango"] { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+
+.mapa {
+  display: grid;
+  width: min(100%, 27rem);
+  align-self: center;
+  overflow: hidden;
+  border: 2px solid #304470;
+  border-radius: var(--mantine-radius-md);
+  background: #fff;
+}
+
+.celula {
+  display: grid;
+  min-width: 0;
+  aspect-ratio: 1;
+  place-items: center;
+  color: #253b61;
+  line-height: 1;
+  font-size: clamp(0.7rem, 3vw, 1.35rem);
+}
+
+.celula[data-tipo="parede"] { background: #304470; }
+.celula[data-tipo="caminho"] { border: 1px solid #e1e8f5; }
+.celula[data-tipo="jogador"] { background: #cfe1fc; color: #163c83; }
+.celula[data-tipo="chegada"] { background: #dcf3e5; color: #206342; }
+
+.direcoes {
+  display: grid;
+  grid-template-areas: ". cima ." "esquerda baixo direita";
+  grid-template-columns: repeat(3, minmax(3rem, max-content));
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.seta {
+  min-width: 3rem;
+  min-height: 3rem;
+  font-size: 1.3rem;
+}
+
+.descoberta {
+  animation: descoberta 280ms ease-out;
+}
+
+@keyframes descoberta {
+  from { transform: translateY(0.3rem); opacity: 0.65; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .descoberta {
+    animation: none;
+  }
+}

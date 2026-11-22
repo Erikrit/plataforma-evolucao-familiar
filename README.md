@@ -62,6 +62,17 @@ Healthcheck da API: `GET http://localhost:3001/saude`.
 Admin local provisório: ver `PEF_ADMIN_*` em `.env.example` (dados fictícios).  
 Smoke FF-02 (API no ar): `npm run smoke:ff02`. Existem scripts smoke por módulo em `apps/api/scripts/` e evidências locais em `docs/esteira/estado/`; a suíte não foi reexecutada nesta atualização documental.
 
+### Atualizar o banco local após mudanças no schema
+
+Com o PostgreSQL de desenvolvimento em execução e o `.env` apontando para o banco local, rode os comandos abaixo e reinicie a API.
+
+```bash
+npm run db:generate
+npm run db:push
+```
+
+Na primeira atualização para Jogos Digitais (E5), `db:push` cria a tabela `progresso_fase_jogo`, usada ao abrir **Biblioteca → Jogos digitais**. A atualização da estrutura dispensa rodar o seed novamente.
+
 ## Situação e restrições
 
 Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar **regra aprovada, código existente, evidência local e homologação**. A autenticação e autorização ainda exigem revisão antes de usar dados reais sensíveis; a existência dos módulos e de QG-3 PASS registrado não equivale a liberação para uso real.

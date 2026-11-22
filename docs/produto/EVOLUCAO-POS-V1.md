@@ -1,9 +1,9 @@
 # Plano integrado de evolução pós-V1
 
-**Versão:** 2.2 — cadastro inicial pela interface; e-mail sem envio de mensagem  
-**Data de referência:** 2026-11-21  
+**Versão:** 2.3 — recorte E5 consolidado e planejamento da Biblioteca\
+**Data de referência:** 2026-11-21, com atualização E5 em 2026-11-22\
 **Base desta aprovação e planejamento:** `develop` @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`  
-**Estado:** direção integrada e sequência E1–E7 **APROVADAS pelo responsável do Produto em 2026-11-21**, por concordância expressa com a recomendação apresentada sobre a v2.0. Regras particulares de cada entrega ainda precisam de especificação; envio de dados pessoais à IA, regras clínicas e pontuação digital continuam **NEEDS_DECISION**. E1 possui recorte funcional no Módulo 01 v1.8 e planejamento na esteira; boas-vindas/cadastro aprovados após reprovação humana da entrada.  
+**Estado:** direção integrada e sequência E1–E7 **APROVADAS pelo responsável do Produto em 2026-11-21**. O recorte E5 está consolidado no Módulo 03 §13 para planejamento. Envio de dados pessoais à IA e regras clínicas exigem decisões próprias. As entregas e os aceites humanos constam em [STATUS-E-ESCOPO.md](STATUS-E-ESCOPO.md).\
 **Baseline:** a V1 homologada permanece preservada em `STATUS-E-ESCOPO.md`; este plano não declara implementação nem homologação das evoluções.
 
 ## 1. Objetivo e condução
@@ -112,7 +112,7 @@ A entrada cotidiana continua centrada em pessoa e áreas utilizadas. O Resumo pa
 | Área | Destinos propostos |
 |---|---|
 | Cuidados | Rotina, Medicamentos, Consultas e exames, acesso ao resumo contextual |
-| Desenvolvimento | Biblioteca com Atividades reais/Jogos digitais, participações/recompensas existentes, acesso ao resumo contextual |
+| Desenvolvimento | Biblioteca com Atividades reais e Jogos digitais, Recompensas e Cadastros conforme autorização, acesso ao Resumo contextual |
 | Evolução | Resumo e Histórico, com filtro por área autorizada; PDF no Resumo |
 | Gestão | Família, pessoas, participantes, convites e acessos |
 
@@ -126,7 +126,7 @@ Interface para criança/idoso deve usar linguagem adequada à pessoa, botões co
 1. **Entrada pela família:** abrir `/f/{slug}/entrar`, autenticar uma conta daquela família e seguir para a única pessoa/área útil ou para “Nossa família” quando houver mais de uma opção.
 2. **Rotina de cuidado:** selecionar a pessoa, abrir Rotina e registrar o acontecimento em poucos toques; configurações continuam fora da rotina.
 3. **Consulta de exame:** abrir Consultas e exames, selecionar um item e visualizar PDF/imagem no contexto, com data, descrição, origem e ação de baixar quando autorizada.
-4. **Escolha de experiência:** abrir Desenvolvimento, alternar entre Atividades reais e Jogos digitais, receber poucas opções relevantes e renovar apenas as sugestões disponíveis.
+4. **Escolha de experiência:** abrir Desenvolvimento → Biblioteca e escolher Atividades reais ou Jogos digitais. Renovar sugestões é uma ação de Atividades reais.
 5. **Compreensão do período:** abrir Resumo, escolher período e ver fatos por área. Uma ação separada pode gerar sugestões ou resumo assistido quando a funcionalidade estiver habilitada e autorizada.
 6. **Gestão:** abrir Gerenciar família, entender participantes, pessoas acompanhadas, área e responsabilidade sem editar uma matriz técnica de operações.
 
@@ -211,89 +211,17 @@ Faixa etária orienta a curadoria e a linguagem. Ela não bloqueia automaticamen
 
 ## 7. Jogos digitais e integração
 
-Primeiro piloto sugerido com até três jogos simples, escolhidos entre memória, sequência e labirinto. Validar uso com Laurinha e um adulto antes de estender a idosos e outras faixas. Adultos e idosos precisam de opções apropriadas e acessíveis, sem classificação apenas pela idade.
+A E5 oferece experiências lúdicas curtas na Biblioteca da pessoa. O piloto fornecido para planejamento reúne **Memória de figuras, Complete a sequência e Caminhos e labirintos**, com cinco fases de escolha livre por jogo. A regra vigente e os critérios estão no [Módulo 03 §13](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento).
 
-| Caminho pesquisado | Potencial | Validação necessária |
-|---|---|---|
-| Simon Tatham’s Portable Puzzle Collection | Puzzles de lógica, versões web JavaScript/WebAssembly e licença MIT | Adequação de jogo, tradução, toque, acessibilidade, versão e evento de conclusão |
-| Phaser aberto | Framework 2D com licença MIT para jogos próprios e adaptação de exemplos | Licença de cada exemplo e dos recursos visuais/áudio, integração com a web existente |
-| Componentes próprios em React | Jogos muito simples com integração direta | Custo de manutenção e qualidade da interação |
+As decisões registradas em 2026-11-22 no Git foram progressão livre (`e00b23b`), conclusão com ajuda (`e31d11e`), conquistas discretas (`2f7b999`), retomada do começo da fase (`f6ee30c`), variações curadas (`91fb141`), biblioteca por categorias (`58c6a95`) e destaques automáticos (`45e1231`). A especificação consolidada indicada pelo responsável complementa esse histórico com o tamanho e os jogos do piloto.
 
-A proposta prefere hospedar a versão avaliada dos jogos dentro da plataforma. Seleção exige publicidade ausente, telemetria controlada, licença adequada, funcionamento em celular e possibilidade de registrar eventos. Plataformas externas gratuitas precisam permitir integração e acesso a resultado verificável. Um iframe sem contrato de eventos é insuficiente para atribuir estrelas de forma confiável.
-
-Licença gratuita reduz custo de licenciamento. Desenvolvimento, acessibilidade, manutenção e infraestrutura continuam compondo o custo.
-
-
-### Fronteira do jogo digital
-
-Produto e UX apresentam atividades reais e jogos digitais na mesma Biblioteca de Desenvolvimento. Arquitetura mantém seus ciclos diferentes: uma atividade real recebe participação informada por adulto; um jogo possui versão executável, sessão, eventos mínimos e resultado validado.
-
-O piloto deve hospedar a versão aprovada dentro da plataforma, sem anúncios, rastreadores de terceiros ou navegação para fora do contexto familiar. Cada jogo precisa declarar objetivo lúdico, categoria sugerida, faixa orientativa, recursos de acessibilidade, regra de conclusão e regra de estrelas. O sistema registra somente o necessário para continuidade e crédito; movimentos detalhados, padrões de toque e tempo de reação não são coletados sem finalidade aprovada.
-
-Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pessoa e o jogo não oferece acesso a outras áreas. A saída retorna à Biblioteca ou ao Resumo da pessoa. Pausar, abandonar ou perder conexão não gera punição e não é tratado como fracasso de desenvolvimento.
-
-### E5 — Decisão específica de Produto: progressão livre (2026-11-22)
-
-**APROVADO expressamente pelo responsável do Produto:** a progressão nos jogos digitais é **livre**. Qualquer fase publicada e adequada ao jogo fica acessível sem obrigar a concluir as anteriores; a interface pode sugerir a próxima fase de dificuldade gradual, mas não bloqueia outras opções. A pessoa pode repetir qualquer fase. O progresso registra apenas experiências e conclusões legítimas, sem punição por interrupção, sem ranking ou metas de frequência.
-
-**Contexto da direção em discussão, ainda não integralmente aprovado como especificação E5:** jogos complementam atividades presenciais; qualidade visual/interativa intermediária; mais de uma fase por jogo; opções por categoria; incentivo por descobertas/conquistas simbólicas; leitura de evolução pessoal sem diagnóstico e sem estrelas digitais. Proposta inicial a avaliar: três jogos no piloto, seis como variedade-alvo e cinco fases por jogo. Esses números e os critérios de conclusão, conquistas, resultados, catálogo, integração e capacidade de edição ainda exigem detalhamento e validação antes da implementação. O objetivo de **não conceder estrelas digitais** foi manifestado pelo Produto nesta discussão; não alterar tabela ou saldo presencial.
-
-**Não inferir desta decisão:** implementação autorizada da E5, catálogo definitivo, premiação, alteração de autorizações de criança, coleta de métricas granulares, compromisso clínico, homologação da E4 ou publicação em produção. E4-HOM permanece pendente conforme registros da esteira, E3 mantém defeito aberto de anexo. Elaborar critérios de fase experimentada versus concluída e homologar com família antes de desenvolver.
-
-### E5 — Critério de conclusão com ajuda aprovado (2026-11-22)
-
-**APROVADO expressamente pelo responsável do Produto:** uma fase pode ser considerada **Concluída** quando o objetivo próprio do jogo for atingido, **mesmo com dicas ou ajuda de adulto**. Não exigir conclusão independente, registrar erros ou diferenciar conclusão assistida para comparação. A fase **Não explorada** ainda não foi iniciada; **Experimentada** foi iniciada sem objetivo alcançado; **Concluída** alcançou objetivo e permanece registrada mesmo após repetições. Interrupção, pausa ou abandono não geram punição, estrelas ou avaliação clínica. Progresso livre aprovado acima continua válido.
-
-**Proposta adicional em análise, NÃO aprovada por este aceite:** piloto com jogos de Memória de figuras, Complete a sequência e Caminhos e labirintos; cinco fases configuradas por jogo, dificuldade gradual, dicas e retorno positivo, sem estrelas digitais; posterior expansão por categoria. Validar regras de conclusão e variações de cada mecânica, conteúdo por idade, persistência mínima por pessoa e versão de jogo, acessibilidade, UX e registro no Módulo 04 antes de autorizar implementação.
-
-### E5 — Conquistas discretas aprovadas (2026-11-22)
-
-**Decisão expressa do Produto:** incentivo digital por **conquistas discretas**, não por coleção extensa de medalhas, ranking, sequência de dias, metas compulsórias, estrelas digitais ou recompensas materiais. Ao concluir legitimamente uma fase, oferecer confirmação visual breve e acessível; na biblioteca, apresentar progresso pessoal simples (fases experimentadas/concluídas e descoberta de jogos), sem pressão para jogar. Nenhum aviso insistente de retorno ou prêmio por frequência. A fase concluída com dicas ou ajuda recebe a mesma confirmação.
-
-**Limite da aprovação:** não autoriza jogo ou regra de pontuação a ser implementada; quantidade final de jogos/fases e critérios de retenção/resultado continuam em detalhamento. Proposta para análise subsequente: persistir por pessoa e versão do jogo um estado resumido de exploração/conclusão por fase e eventos mínimos de conclusão, reutilizáveis no Módulo 04 sem duplicar o histórico; não coletar movimentos, erros, tempo de reação ou identidade de quem ajudou. Especificar retomada e teste de interrupção/perda de conexão antes de implementar.
-
-### E5 — Retomada pelo início da fase aprovada (2026-11-22)
-
-**APROVADO expressamente pelo responsável do Produto:** ao retornar a uma partida interrompida, a pessoa **reinicia a fase escolhida desde o começo**, preservando fases já experimentadas, conclusões confirmadas e conquistas discretas anteriores. Não exigir snapshot de cartas viradas, posição de peça, percurso de labirinto ou movimentos intermediários. A progressão continua livre: qualquer fase pode ser escolhida ou repetida; nenhuma fase é bloqueada por interrupção. Saída e pausa não geram punição.
-
-**Limites de persistência e confiança a detalhar tecnicamente:** o estado de fase pode distinguir Não explorada, Experimentada e Concluída, sem regressão de Concluída para Experimentada em reenvios concorrentes; conclusões só aparecem como salvas após confirmação confiável do servidor. Tratar perda de conexão e fechamento abrupto com comunicação honesta, sem afirmar persistência de progresso não confirmada. Uma nova sessão usa a fase como configuração inicial, não restaura estado interno da partida. Registros são privados por pessoa/família, visíveis apenas a autorizados, e alimentam o histórico do Módulo 04 sem segunda fonte de verdade. Não coletar padrões de toque, erros, tempo de reação ou identificação de ajuda.
-
-**Próxima proposta UX para discussão:** fluxo da Biblioteca → jogo → fase → dicas opcionais → conclusão ou saída → retorno, com controles móveis e acessibilidade. Quantidade e identidade final dos jogos/fases permanecem propostas não homologadas, sem autorização de implementação da E5.
-
-### E5 — Fases configuradas, variações automáticas e conteúdo curado aprovados (2026-11-22)
-
-**APROVADO expressamente pelo responsável do Produto:** cada fase digital possui **dificuldade e objetivo definidos**, porém pode oferecer **variações automáticas limitadas** a partir de conteúdo previamente curado e regras testáveis. Não criar fases inteiramente fixas como única experiência nem geração procedural irrestrita/IA durante a partida. A variação altera cartas, imagens, padrões e posições dentro da dificuldade aprovada; **não** apaga ou reinicia progresso/conquistas. Progressão livre, dicas, conclusão com ajuda e retomada desde o início da fase continuam vigentes.
-
-**Encaminhamento para detalhamento, sem implementação autorizada:** definir para cada mecânica um conjunto versionado de conteúdos e configurações por fase; assegurar solução válida e dificuldade razoavelmente equivalente em todas as variantes; garantir qualidade visual, legibilidade no celular, acessibilidade e adequação para crianças/adultos/idosos. No piloto, preferir embaralhamento de pares aprovados em Memória, geração restrita de padrões resolúveis em Sequência e seleção de mapas revisados em Labirinto, sem precisar criar editor genérico nem motor de geração procedural. Quantidade definitiva de jogos, fases, variações e catálogo continua proposta sujeita a validação humana. Não alterar estrelas e recompensas de atividades presenciais.
-
-### E5 — Destaques e biblioteca por categoria aprovados (2026-11-22)
-
-**APROVADO expressamente pelo responsável do Produto:** a Biblioteca de Desenvolvimento apresenta os jogos digitais no contexto da pessoa com **até três jogos em destaque**, seguidos de **biblioteca completa com filtros pelas categorias existentes**. Os destaques podem incluir experiências já exploradas, com retomada simples pela escolha livre de qualquer fase, e opções ainda não experimentadas. Não criar telas adicionais de navegação, recomendador dependente de IA ou obrigação de jogar. Cada jogo pode ter categoria principal e outras associações se necessário, sem criar categorias técnicas novas por inferência; itens permanecem encontrados em Todas. Conteúdo, seleção e visualização respeitam pessoa/família e autorizações vigentes.
-
-**A definir no próximo detalhamento:** critério determinístico para ordenar os até três destaques sem perfilamento sensível nem questionário, comportamento quando a pessoa nunca jogou, catálogo pequeno/vazio, ausência de idade, mesmas opções disponíveis em categorias distintas e continuidade entre sessões. Não reaproveitar automaticamente a regra E4 de renovar sugestões (24/6/3) para jogos digitais, pois jogos e atividades presenciais possuem ciclos diferentes. Não confundir destaque editorial com recompensa, conclusão ou ponto. Quantidade final de jogos/fases ainda em discussão; nenhuma implementação da E5 autorizada.
-
-### E5 — Destaques automáticos aprovados (2026-11-22)
-
-**APROVADO expressamente pelo responsável do Produto:** os até três jogos destacados na Biblioteca de Desenvolvimento serão selecionados **automaticamente**, sem que o responsável precise fixar ou manter favoritos. Usar regra simples e determinística com o progresso já necessário para a experiência, priorizando continuidade e variedade, sem IA, questionários, métricas de erros, tempo de reação ou perfilamento sensível. Todos os jogos publicados permanecem acessíveis por categoria e em Todas, independentemente de destaque. Destaque não equivale a recomendação clínica, meta, acesso privilegiado nem liberação de fases.
-
-**Proposta de ordenação para detalhamento técnico/UX:** sem histórico, escolher até três jogos de categorias variadas e adequação orientativa; com histórico, incluir até um jogo recente e preencher com opções ainda não exploradas de categorias distintas; se todos já foram experimentados, variar opções de forma previsível e preservar acesso aos recentes. Sem idade, não ocultar opções gerais; com catálogo menor, mostrar apenas disponíveis, sem duplicar; empates e atualização de destaques devem manter estabilidade suficiente para não mudar a cada renderização. Não aplicar automaticamente os limites/renovação E4 de atividades presenciais. Exigir autorização por pessoa/família. **Quantidade final do catálogo e fases e critérios específicos da experiência ainda não estão aprovados; E5 segue em detalhamento, sem implementar nesta decisão.**
+O [planejamento E5](../esteira/planejamento/e5-jogos-digitais.md) começa pela correção de navegação levantada no aceite parcial da E4 e organiza os incrementos de produto, curadoria e verificação.
 
 ## 8. Participação, estrelas e evolução
 
-A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
+As estrelas e recompensas são vinculadas à participação presencial, conforme DEV-F03 a DEV-F06. A E5 reconhece a primeira conclusão de cada fase como descoberta pessoal, conforme E5-F06.
 
-**Exemplo desejado pelo responsável** concluir uma fase de labirinto pode conceder 3 estrelas digitais. O valor é referência de proposta e precisa ser calibrado com o incentivo das atividades reais.
-
-Recomendação inicial é distinguir estrelas reais e digitais por origem na apresentação. Definir explicitamente como cada origem poderá financiar recompensas antes de criar saldo combinado. A tabela atual do presencial permanece na baseline até mudança funcional aprovada. Créditos digitais devem ser decididos pelo servidor, com sessão identificada, validação do evento e idempotência. A política de repetição legítima deve permitir brincar novamente sem transformar reenvio técnico em crédito novo.
-
-Registrar desempenho em jogo como observação contextual. Mesmo progresso no mesmo jogo depende de dificuldade, ajuda, familiaridade e condições de uso. O resumo deve permitir comparar a própria pessoa em experiências semelhantes, sem inferir inteligência, atraso ou saúde cognitiva a partir do placar.
-
-
-### Recomendação de consistência
-
-Usar um único razão de movimentos de estrelas, preservando em cada crédito a origem `atividade_real` ou `jogo_digital`, a regra aplicada e a versão. A interface pode mostrar a origem separadamente e um total explicável. A possibilidade de gastar estrelas digitais e reais no mesmo catálogo de recompensas permanece **NEEDS_DECISION**; não somar economias silenciosamente.
-
-A tabela presencial já aprovada não muda. Cada jogo digital recebe uma regra curta e versionada. O exemplo de 3 estrelas por fase de labirinto pode ser usado no protótipo, mas vira regra somente após calibrar repetição, dificuldade e equilíbrio com experiências reais. Repetir para se divertir é permitido; conceder novo crédito depende da política explícita do jogo e nunca de reenvio técnico.
+Histórico e Resumo apresentam experiências digitais com base nos registros oficiais da E5. O período e as autorizações seguem as regras do Módulo 04. Idade orienta a escolha de conteúdo. Os registros descrevem o que foi experimentado e concluído.
 
 ## 9. Resumo por área e sugestões assistidas
 
@@ -302,7 +230,7 @@ A entrada de Resumo apresenta apenas as áreas utilizadas e autorizadas. Conteú
 | Contexto | Informações úteis |
 |---|---|
 | Cuidados | Fatos recentes, consultas/exames disponíveis, relatos de medicamentos e observações |
-| Desenvolvimento | Atividades reais/digitais por categoria, experiências recentes e progressão comparável dentro dos jogos |
+| Desenvolvimento | Atividades reais por categoria, jogos experimentados e primeiras conclusões de fase |
 | Continuidade | Sugestões escolhidas e observações posteriores, mantendo histórico |
 
 Exibir “sem registros suficientes” quando pertinente. Quantidade de atividades por categoria informa variedade registrada. Ela não mede a capacidade global da pessoa.
@@ -385,7 +313,7 @@ A sequência separa fundação, valor sem IA e usos assistidos. Cada entrega é 
 | E2 — Gestão compreensível de acessos | Pessoas, contas, convites e responsabilidades predefinidas por pessoa/área | Papéis personalizados e matriz técnica na UI | Administrador entende quem acompanha quem; três experiências não expõem ações indevidas |
 | E3 — Exames e Resumo factual | Visualizador privado PDF/imagem e evolução do Módulo 04 por área utilizada | OCR, interpretação clínica e IA | Uso móvel homologado; prévia, download e resumo respeitam autorização e fonte |
 | E4 — Catálogo real curado | Modelos globais versionados, faixa orientativa, curadoria, seleção pequena e renovar sugestões | Busca aberta em tempo real e publicação automática por IA | Responsável encontra/renova opções sem perder escolhas ou histórico |
-| E5 — Piloto de jogos digitais | Até três jogos, sessão supervisionada, eventos mínimos e estrelas com origem | Plataforma de jogos ampla, multiplayer e inferência cognitiva | Celular homologado; conclusão, retry e crédito são consistentes; nenhuma publicidade/telemetria indevida |
+| E5 — Piloto de jogos digitais | Biblioteca contextual, três jogos com cinco fases livres e descobertas pessoais | Estrelas digitais, plataforma de jogos ampla, multiplayer e inferência cognitiva | E5-HOM no celular, conclusão idempotente, progresso autorizado e regressão E4 |
 | E6 — Sugestões assistidas de desenvolvimento | Geração sob demanda usando catálogo aprovado e histórico mínimo, com escolha humana | Diagnóstico, plano automático ou alteração de pontuação | Fontes/período visíveis; recomendações úteis e descartáveis; falha mantém fluxo manual |
 | E7 — Resumo assistido de cuidados | Síntese rastreável para preparar acompanhamento e perguntas ao profissional | Diagnóstico, prescrição e automação de conduta | Revisão específica de privacidade/segurança e homologação com documentos controlados |
 
@@ -434,10 +362,10 @@ O planejamento E1 está em `docs/esteira/planejamento/e1-contexto-familiar.md`. 
 | Gestão por responsabilidades predefinidas, sem papéis personalizados | DIREÇÃO APROVADA; manter combinações da ADR-014 |
 | Resumo por área como evolução do Módulo 04 | DIREÇÃO APROVADA |
 | Catálogo global curado e seleção privada renovável | APROVADO no recorte E4, Módulo 03 v1.3 §12, limites 24/6/3 |
-| Atividades reais e jogos juntos na UX, separados no ciclo técnico | DIREÇÃO APROVADA |
-| Estrelas com origem preservada; economia combinada adiada | DIREÇÃO APROVADA; valor/crédito/resgate digital NEEDS_DECISION |
+| Atividades reais e jogos na Biblioteca de Desenvolvimento | DOCUMENTADO no Módulo 03 §12–13 |
+| Estrelas presenciais e conquistas digitais discretas | DOCUMENTADO em DEV-F05/06 e E5-F06 |
 | IA de desenvolvimento antes da IA de cuidados | DIREÇÃO APROVADA |
-| Regras clínicas, envio de dados pessoais e estrelas digitais | NEEDS_DECISION por entrega |
+| Regras clínicas e envio de dados pessoais à IA | NEEDS_DECISION por entrega |
 
 **Fonte do aceite:** resposta humana “Concordo com sua recomendação”, após a apresentação do commit `9193f16` e da recomendação de aprovar a direção integrada, reservando pontuação digital, envio de dados pessoais à IA e regras clínicas às respectivas entregas.
 

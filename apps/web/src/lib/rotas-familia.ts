@@ -84,3 +84,8 @@ export function pessoaIdDaUrl(pathname: string): string | null {
   const m = pathname.match(/\/pessoas\/([^/]+)/);
   return m?.[1] ?? null;
 }
+
+export function rotaRetornoPartida(pathname: string): string | null {
+  const partida = pathname.match(/^(\/f\/[^/]+\/pessoas\/[^/]+\/desenvolvimento\/biblioteca\/jogos\/[^/]+)\/fases\/[^/]+\/jogar\/?$/);
+  return partida?.[1] ?? null;
+}

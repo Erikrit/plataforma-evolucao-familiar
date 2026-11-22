@@ -250,15 +250,17 @@ export type SessaoResposta = {
 export class ErroApi extends Error {
   codigo?: string;
   alternativa?: string;
+  status?: number;
 
   constructor(
     mensagem: string,
-    extras?: { codigo?: string; alternativa?: string },
+    extras?: { codigo?: string; alternativa?: string; status?: number },
   ) {
     super(mensagem);
     this.name = "ErroApi";
     this.codigo = extras?.codigo;
     this.alternativa = extras?.alternativa;
+    this.status = extras?.status;
   }
 }
 
@@ -1081,6 +1083,14 @@ export type ResumoDesenvolvimento = {
     registradoEm: string;
   }[];
   categoriasExploradas: { categoria: string; quantidade: number }[];
+  jogos?: {
+    id: string;
+    nome: string;
+    totalFases: number | null;
+    concluidasAte: number;
+    concluidasNoPeriodo: number;
+    experimentadoNoPeriodo: boolean;
+  }[];
   estrelas: {
     concedidasNoPeriodo: number;
     esclarecimento: string;
@@ -1420,6 +1430,90 @@ export async function criarRecompensa(
     );
   }
   return (await resposta.json()) as RecompensaResumo;
+}
+
+export type FaseJogoResumo = {
+  numero: number;
+  titulo: string;
+  objetivo: string;
+  estado: "nao_explorada" | "experimentada" | "concluida";
+};
+
+export type JogoResumo = {
+  id: string;
+  nome: string;
+  descricao: string;
+  categoria: string;
+  instrucoes: string;
+  versao: number;
+  fases: FaseJogoResumo[];
+};
+
+export type CatalogoJogos = { jogos: JogoResumo[]; destaques: string[] };
+
+export type FiguraMemoria = { id: string; nome: string; simbolo: string };
+export type FiguraSequencia = {
+  id: string;
+  forma: "circulo" | "quadrado" | "triangulo" | "losango";
+  cor: "azul" | "dourado" | "verde" | "roxo";
+  nome: string;
+};
+export type ConteudoSequencia = {
+  tipo: "sequencia";
+  sequencia: (FiguraSequencia | null)[];
+  alternativas: FiguraSequencia[];
+  resposta: string;
+};
+export type PosicaoLabirinto = { linha: number; coluna: number };
+export type ConteudoLabirinto = {
+  tipo: "labirinto";
+  mapa: string[];
+  inicio: PosicaoLabirinto;
+  chegada: PosicaoLabirinto;
+};
+export type ConteudoPartida =
+  | { tipo: "memoria"; cartas: FiguraMemoria[] }
+  | ConteudoSequencia
+  | ConteudoLabirinto;
+export type InicioPartida = { versao: number; conteudo: ConteudoPartida };
+
+export type ConclusaoPartida = {
+  concluidaEm: string;
+  versaoConclusao: number;
+  primeiraDescoberta: boolean;
+};
+
+async function requisitarJogo<T>(caminho: string, init: RequestInit): Promise<T> {
+  const resposta = await fetchApi(caminho, init);
+  if (!resposta.ok) throw new ErroApi(await lerErro(resposta), { status: resposta.status });
+  return resposta.json() as Promise<T>;
+}
+
+export function listarJogos(pessoaId: string, signal: AbortSignal) {
+  return requisitarJogo<CatalogoJogos>(`/pessoas/${encodeURIComponent(pessoaId)}/jogos`, { signal });
+}
+
+function caminhoFaseJogo(pessoaId: string, jogoId: string, fase: number) {
+  return `/pessoas/${encodeURIComponent(pessoaId)}/jogos/${encodeURIComponent(jogoId)}/fases/${fase}`;
+}
+
+export function iniciarJogo(pessoaId: string, jogoId: string, fase: number, signal: AbortSignal) {
+  return requisitarJogo<InicioPartida>(caminhoFaseJogo(pessoaId, jogoId, fase) + "/iniciar", {
+    method: "POST",
+    signal,
+  });
+}
+
+export function concluirJogo(
+  pessoaId: string, jogoId: string, fase: number,
+  confirmacao: { versao: number; chave: string }, signal: AbortSignal,
+) {
+  return requisitarJogo<ConclusaoPartida>(caminhoFaseJogo(pessoaId, jogoId, fase) + "/concluir", {
+    method: "POST",
+    signal,
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(confirmacao),
+  });
 }
 
 export async function resgatarRecompensa(

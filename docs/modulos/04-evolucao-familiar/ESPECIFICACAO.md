@@ -88,6 +88,8 @@ Regras:
 
 O módulo lê, conforme permissão: pessoa, família, autorizações, dose/programação/consulta/exame/apoio, desafio/participação/estrelas/recompensa e documentos referenciados.
 
+Para a E5, a leitura de jogos em Histórico e Resumo segue [E5-F07 e E5-F08](../03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento) e os controles de autorização e período deste módulo.
+
 Metadados derivados internamente são permitidos apenas quando necessários à performance, rastreabilidade ou segurança; não são novos campos solicitados à família. A autoria permanece na fonte original.
 
 ## 8. Exceções e privacidade

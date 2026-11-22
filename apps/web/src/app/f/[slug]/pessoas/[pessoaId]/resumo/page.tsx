@@ -251,7 +251,9 @@ export default function PaginaResumo() {
     (resumoCuidados.observacoes?.length ?? 0) === 0 &&
     (resumoCuidados.mudancasProgramacao?.length ?? 0) === 0;
   const desenvolvimentoVazio =
-    resumoDev != null && resumoDev.experiencias.length === 0;
+    resumoDev != null &&
+    resumoDev.experiencias.length === 0 &&
+    (resumoDev.jogos?.length ?? 0) === 0;
   const tudoVazio =
     (podeCuidados ? cuidadosVazio || resumoCuidados == null : true) &&
     (podeDesenvolvimento ? desenvolvimentoVazio || resumoDev == null : true) &&
@@ -473,6 +475,28 @@ export default function PaginaResumo() {
                       <Text size="sm" c="dimmed">
                         Nenhum registro de Desenvolvimento neste período.
                       </Text>
+                    ) : null}
+                    {resumoDev.jogos?.length ? (
+                      <Stack gap="xs" component="section" aria-label="Jogos digitais">
+                        <Text fw={600} size="sm">Jogos digitais</Text>
+                        <Text size="xs" c="dimmed">Progresso até o fim do período</Text>
+                        {resumoDev.jogos.map((jogo) => (
+                          <Stack key={jogo.id} gap={2}>
+                            <Text size="sm">
+                              {jogo.nome} · {jogo.concluidasAte}
+                              {jogo.totalFases === null ? "" : ` de ${jogo.totalFases}`}
+                              {" "}{jogo.totalFases === null && jogo.concluidasAte === 1 ? "fase concluída" : "fases concluídas"}
+                            </Text>
+                            {jogo.concluidasNoPeriodo ? (
+                              <Text size="xs" c="dimmed">
+                                {jogo.concluidasNoPeriodo} {jogo.concluidasNoPeriodo === 1 ? "conclusão" : "conclusões"} no período
+                              </Text>
+                            ) : jogo.experimentadoNoPeriodo ? (
+                              <Text size="xs" c="dimmed">Fase nova experimentada no período</Text>
+                            ) : null}
+                          </Stack>
+                        ))}
+                      </Stack>
                     ) : null}
                     <Stack gap={4}>
                       <Text fw={600} size="sm">

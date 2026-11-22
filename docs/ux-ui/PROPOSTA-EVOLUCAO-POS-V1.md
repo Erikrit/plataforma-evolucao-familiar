@@ -25,7 +25,7 @@ Princípios de bloqueio:
 | Geral | Nossa família |
 | Pessoa | Rotina quando aplicável, Cuidados, Desenvolvimento, Resumo, Histórico |
 | Cuidados | Rotina, Medicamentos, Consultas e exames |
-| Desenvolvimento | Biblioteca, Executadas, Estrelas e recompensas |
+| Desenvolvimento | Biblioteca, Recompensas e Cadastros conforme autorização |
 | Gestão | Pessoas, Acessos e responsabilidades, Convites |
 | Editorial da plataforma | Catálogo e jogos, fora da gestão de uma família |
 
@@ -80,34 +80,41 @@ Não pedir transcrição, resultado ou interpretação para abrir um exame. Não
 
 ## 5. Biblioteca de Desenvolvimento
 
-### Estrutura
+### Navegação proposta para a correção E4 e a E5
 
-No contexto da pessoa:
+**Nossa família** prioriza pessoas e acompanhamentos autorizados. **Desenvolvimento** apresenta uma entrada curta com **Ver biblioteca** como ação principal. O mesmo destino aparece no menu contextual compartilhado no desktop e no Drawer móvel. **Recompensas** e **Cadastros** ficam no nível secundário de Desenvolvimento, com visibilidade por ação autorizada.
 
-- cabeçalho curto com Biblioteca;
-- alternância Atividades reais / Jogos digitais;
-- seção “Sugestões para esta pessoa” com poucas opções;
-- filtros simples por categoria e faixa orientativa quando realmente necessários;
-- ação “Renovar sugestões”;
-- acesso secundário a “Ver biblioteca”.
+```text
+Nossa família → Pessoa → Desenvolvimento
+                            ├─ Biblioteca
+                            │  ├─ Atividades reais
+                            │  └─ Jogos digitais → Jogo → Fase → Jogar
+                            ├─ Recompensas
+                            └─ Cadastros
+```
 
-Cada cartão mostra nome, modalidade, categoria, dificuldade/faixa orientativa e materiais ou duração somente quando ajudam a decidir. Instruções completas ficam no detalhe. Informar supervisão e acessibilidade quando pertinentes.
+**Biblioteca** abre em **Atividades reais**. A escolha entre modalidades acontece na Biblioteca e preserva pessoa, seção e filtro no retorno de um detalhe. A primeira entrega corretiva oferece o destino real com as funções de E4. A entrada **Jogos digitais** aparece com a primeira jornada jogável e autorizada.
 
-Renovar exibe progresso, substitui somente alternativas ainda não escolhidas e confirma a nova seleção após persistência. Não apagar atividades personalizadas, escolhidas ou executadas. Não apresentar contador de quantas vezes a família “deveria” renovar.
+### Atividades reais
+
+- **Explorar** reúne sugestões e catálogo. Mostre nome, categoria e informação que ajuda a escolher. Instruções completas, materiais e supervisão ficam no detalhe, antes da participação.
+- **Escolher para experimentar** e **Renovar sugestões** ficam perto das sugestões e aparecem para quem puder organizar. A renovação mostra andamento, troca apenas alternativas elegíveis e confirma a seleção após persistir. A pessoa pode encontrar as escolhas mantidas no mesmo lugar.
+- **Executadas** fica dentro de Atividades reais. Acesso à ocorrência e ação **Disponibilizar novamente** seguem as regras de autorização do Módulo 03.
+- **Atividades reais** apresenta o saldo de forma compacta perto das brincadeiras. **Recompensas** reúne o detalhe do saldo e as abas **Disponíveis** e **Resgatadas**. **Cadastros** concentra criação e manutenção. A experiência cotidiana usa a confirmação da participação já prevista no guia.
 
 ### Jogo digital
 
-Antes de iniciar, mostrar objetivo lúdico, controles, acessibilidade, regra de estrelas e quem está jogando. Um adulto autorizado confirma a pessoa quando a criança não possui conta. Durante o jogo, manter pausar/sair, som independente quando existir e alvos confortáveis.
+| Etapa | Tela e ação principal |
+|---|---|
+| Descobrir | Até três destaques dentro de Jogos digitais, seguidos do catálogo com **Todas** e filtro por categoria. Usar cartões compactos e um estado vazio simples quando o catálogo ou o filtro estiver sem opções. |
+| Escolher | Detalhe com objetivo, controles resumidos e cinco fases abertas. Estados em texto, com indicação discreta de descoberta. O responsável vê o contexto da pessoa antes de entregar o dispositivo. |
+| Jogar | Área de jogo com instrução curta, **Dica** e **Sair do jogo** visíveis. A sessão de partida apresenta apenas os controles relevantes e guarda o contexto da pessoa no servidor. |
+| Concluir | Confirmar o salvamento após a resposta do servidor. Mostrar reconhecimento breve na primeira conclusão, com opções **Jogar novamente** e **Escolher outra fase**. |
+| Interromper ou recuperar | **Sair do jogo** retorna ao contexto do jogo na Biblioteca. Havendo retorno incerto, oferecer **Tentar salvar novamente** com texto claro. Ao reabrir, iniciar a fase do começo e mostrar progresso confirmado. |
 
-Ao terminar:
+No celular, manter saída e dica alcançáveis e testar desde 320 px. Usar alvos confortáveis, foco visível e restituição de foco ao sair, ícones com rótulo e feedback acessível por texto. Controles de teclado e toque devem permitir terminar cada jogo. Cores, imagens e sons têm alternativas perceptíveis. A celebração respeita movimento reduzido e o áudio, quando disponível, começa desligado. [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
 
-- confirmar resultado somente após o servidor aceitar a sessão;
-- explicar estrelas concedidas e origem digital;
-- oferecer jogar novamente conforme a regra, voltar à Biblioteca ou ver Resumo;
-- conexão perdida não mostra crédito provisório como definitivo;
-- abandonar não gera mensagem de fracasso, perda ou cobrança.
-
-Adultos e idosos recebem nomes, imagens e instruções respeitosas, sem adaptação infantil baseada apenas em idade.
+Aplicar os mesmos rótulos, toque e feedback nas duas modalidades. Oferecer conteúdo respeitoso e faixa orientativa, inclusive para adultos e idosos. O fluxo de descoberta e as permissões seguem a [especificação do Módulo 03](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento).
 
 ## 6. Resumo da pessoa
 
@@ -208,7 +215,7 @@ Homologar jornadas específicas:
 - **E2:** alguém não técnico explica corretamente quem acompanha quem após usar a tela.
 - **E3:** exame abre em celular e Resumo diferencia fato, ausência de dado e conteúdo assistido.
 - **E4:** renovar sugestões não remove escolhas e não cria sensação de catálogo infinito.
-- **E5:** sessão e estrelas são compreensíveis mesmo com retry, pausa ou conexão perdida.
+- **E5:** responsável encontra a Biblioteca e uma fase no celular, entende a conclusão confirmada e consegue sair, retomar e recuperar um salvamento incerto.
 - **E6:** sugestão de desenvolvimento não parece diagnóstico e pode ser ignorada.
 - **E7:** resumo de cuidado mostra fontes/limites e prepara conversa, sem sugerir conduta.
 

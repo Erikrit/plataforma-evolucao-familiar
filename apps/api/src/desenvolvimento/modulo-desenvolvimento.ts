@@ -7,15 +7,18 @@ import { ServicoDesafios } from "./servico-desafios";
 import { ServicoParticipacoes } from "./servico-participacoes";
 import { ServicoRecompensas } from "./servico-recompensas";
 import { ServicoSugestoes } from "./servico-sugestoes";
+import { ControladorJogos } from "./jogos/controlador-jogos";
+import { ServicoJogos } from "./jogos/servico-jogos";
 
 @Module({
   imports: [ModuloPrisma, ModuloAuth, ModuloAutorizacoes],
-  controllers: [ControladorDesenvolvimento],
+  controllers: [ControladorDesenvolvimento, ControladorJogos],
   providers: [
     ServicoDesafios,
     ServicoParticipacoes,
     ServicoRecompensas,
     ServicoSugestoes,
+    ServicoJogos,
   ],
   exports: [
     ServicoDesafios,

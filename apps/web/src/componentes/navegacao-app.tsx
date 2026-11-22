@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   AppShell,
   Burger,
   Button,
+  Container,
   Drawer,
   Group,
   NavLink,
@@ -16,10 +17,12 @@ import {
 } from "@mantine/core";
 import { useSessao } from "@/componentes/contexto-sessao";
 import { podeOrganizarDesenvolvimento } from "@/lib/rotulos-experiencia";
+import { consultaCategoriaJogos } from "@/lib/filtros-jogos";
 import {
   extrairSlugDaUrl,
   pessoaIdDaUrl,
   rotaFamilia,
+  rotaRetornoPartida,
 } from "@/lib/rotas-familia";
 import {
   obterPessoa,
@@ -70,6 +73,18 @@ function areasDaPessoa(
       id: "desenvolvimento",
       rotulo: "Desenvolvimento",
       href: rotaFamilia(slug, `/pessoas/${pessoaId}/desenvolvimento`),
+    });
+    areas.push({
+      id: "biblioteca-desenvolvimento",
+      rotulo: "Biblioteca",
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}/desenvolvimento/biblioteca`),
+      subitem: true,
+    });
+    areas.push({
+      id: "recompensas-desenvolvimento",
+      rotulo: "Recompensas",
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}/desenvolvimento/recompensas`),
+      subitem: true,
     });
     if (podeOrganizar) {
       areas.push({
@@ -142,25 +157,23 @@ function MenuNavegacao({
   } = useSessao();
   const slug = slugUrl ?? usuario?.familia?.slug ?? null;
   const [saindo, setSaindo] = useState(false);
-  const [areasFallback, setAreasFallback] =
-    useState<AreasAutorizadasCartao | null>(null);
-  const [nomeFallback, setNomeFallback] = useState<string | null>(null);
+  const [fallback, setFallback] = useState<{
+    chave: string;
+    nome: string;
+    areas: AreasAutorizadasCartao;
+  } | null>(null);
 
   const pessoaId = pessoaIdDaUrl(pathname);
+  const chaveFallback = JSON.stringify([usuario?.id, slug, pessoaId]);
+  const fallbackAtual = fallback?.chave === chaveFallback ? fallback : null;
   const cartaoAtual = useMemo(
     () => cartoes.find((c) => c.pessoaId === pessoaId) ?? null,
     [cartoes, pessoaId],
   );
 
   useEffect(() => {
-    if (!usuario || !pessoaId || !contextoUrlCompativel) {
-      setAreasFallback(null);
-      setNomeFallback(null);
-      return;
-    }
-    if (cartaoAtual?.areasAutorizadas) {
-      setAreasFallback(cartaoAtual.areasAutorizadas);
-      setNomeFallback(cartaoAtual.nome);
+    if (!usuario || !pessoaId || !contextoUrlCompativel || cartaoAtual?.areasAutorizadas) {
+      setFallback(null);
       return;
     }
     let cancelado = false;
@@ -179,23 +192,21 @@ function MenuNavegacao({
         const desenvolvimento = lista.some(
           (a) => a.id === "desenvolvimento" && a.disponivel,
         );
-        setNomeFallback(perfil.nome);
-        setAreasFallback({
-          cuidados,
-          desenvolvimento,
-          historico: cuidados || desenvolvimento,
+        setFallback({
+          chave: chaveFallback,
+          nome: perfil.nome,
+          areas: { cuidados, desenvolvimento, historico: cuidados || desenvolvimento },
         });
       } catch {
         if (!cancelado) {
-          setAreasFallback(null);
-          setNomeFallback(null);
+          setFallback(null);
         }
       }
     })();
     return () => {
       cancelado = true;
     };
-  }, [usuario, pessoaId, cartaoAtual, contextoUrlCompativel]);
+  }, [usuario, pessoaId, cartaoAtual, contextoUrlCompativel, chaveFallback]);
 
   const areas = useMemo(
     () =>
@@ -203,7 +214,7 @@ function MenuNavegacao({
         ? areasDaPessoa(
             slug,
             pessoaId,
-            cartaoAtual?.areasAutorizadas ?? areasFallback,
+            cartaoAtual?.areasAutorizadas ?? fallbackAtual?.areas,
             podeOrganizarDesenvolvimento(
               pessoaId,
               usuario?.pessoa.id,
@@ -215,13 +226,13 @@ function MenuNavegacao({
       slug,
       pessoaId,
       cartaoAtual,
-      areasFallback,
+      fallbackAtual,
       usuario,
       autorizacoes,
       contextoUrlCompativel,
     ],
   );
-  const nomePessoaMenu = cartaoAtual?.nome ?? nomeFallback;
+  const nomePessoaMenu = cartaoAtual?.nome ?? fallbackAtual?.nome;
 
   async function aoSair() {
     setSaindo(true);
@@ -355,6 +366,9 @@ function MenuNavegacao({
               href={area.href}
               label={area.rotulo}
               active={itemNavAtivo(pathname, area)}
+              aria-current={
+                pathname === area.href ? "page" : itemNavAtivo(pathname, area) ? "location" : undefined
+              }
               onClick={onNavegar}
               pl={area.subitem ? "xl" : undefined}
             />
@@ -374,6 +388,11 @@ function MenuNavegacao({
   );
 }
 
+function SaidaDaPartida({ destino }: { destino: string }) {
+  const consulta = consultaCategoriaJogos(useSearchParams().get("categoria"));
+  return <Button component={Link} href={destino + consulta} variant="default">Sair do jogo</Button>;
+}
+
 export function NavegacaoApp({ children }: { children: ReactNode }) {
   const [menuAberto, setMenuAberto] = useState(false);
   const pathname = usePathname();
@@ -391,6 +410,22 @@ export function NavegacaoApp({ children }: { children: ReactNode }) {
     : pessoaId && nomePessoa
       ? nomePessoa
       : "Nossa família";
+
+  const retornoPartida = rotaRetornoPartida(pathname);
+  if (retornoPartida) {
+    return (
+      <main>
+        <Container size="sm" pt="md">
+          <Group justify="flex-end">
+            <Suspense fallback={<Button component={Link} href={retornoPartida} variant="default">Sair do jogo</Button>}>
+              <SaidaDaPartida destino={retornoPartida} />
+            </Suspense>
+          </Group>
+        </Container>
+        {children}
+      </main>
+    );
+  }
 
   return (
     <AppShell
@@ -430,7 +465,7 @@ export function NavegacaoApp({ children }: { children: ReactNode }) {
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar visibleFrom="sm" p={0}>
+      <AppShell.Navbar visibleFrom="sm" p={0} style={{ overflowY: "auto" }}>
         <MenuNavegacao />
       </AppShell.Navbar>
 

@@ -1,8 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { rotaFamilia } from "@/lib/rotas-familia";
+import { type FormEvent, useState } from "react";
 import {
   Button,
   Card,
@@ -16,19 +14,17 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { useSessao } from "@/componentes/contexto-sessao";
+import { useDesenvolvimento } from "@/componentes/contexto-desenvolvimento";
 import {
-  EstadoCarregando,
+  EstadoVazio,
   MensagemFeedback,
   mensagemErroAmigavel,
 } from "@/componentes/feedback";
 import {
   criarDesafioPersonalizado,
   criarRecompensa,
-  obterPessoa,
 } from "@/lib/api";
 import {
-  podeOrganizarDesenvolvimento,
   ROTULOS_CATEGORIA_DESENVOLVIMENTO,
 } from "@/lib/rotulos-experiencia";
 
@@ -37,12 +33,7 @@ const OPCOES_CATEGORIA = Object.entries(ROTULOS_CATEGORIA_DESENVOLVIMENTO).map(
 );
 
 export default function PaginaCadastrosDesenvolvimento() {
-  const params = useParams<{ slug: string; pessoaId: string }>();
-  const router = useRouter();
-  const { usuario, autorizacoes, pronto } = useSessao();
-  const [nomePessoa, setNomePessoa] = useState("");
-  const [acessoLiberado, setAcessoLiberado] = useState(false);
-  const [carregando, setCarregando] = useState(true);
+  const { pessoaId, nomePessoa, podeOrganizar } = useDesenvolvimento();
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [nomeNova, setNomeNova] = useState("");
@@ -53,42 +44,6 @@ export default function PaginaCadastrosDesenvolvimento() {
   const [nomeRecompensa, setNomeRecompensa] = useState("");
   const [custoRecompensa, setCustoRecompensa] = useState<number | string>(5);
   const [enviandoRecompensa, setEnviandoRecompensa] = useState(false);
-
-  const podeOrganizar = podeOrganizarDesenvolvimento(
-    params.pessoaId,
-    usuario?.pessoa.id,
-    autorizacoes,
-  );
-
-  useEffect(() => {
-    if (!pronto) return;
-    void (async () => {
-      setCarregando(true);
-      setErro(null);
-      setAcessoLiberado(false);
-      try {
-        if (!usuario) {
-          setErro("Entre na página inicial para ver o desenvolvimento.");
-          return;
-        }
-        const perfil = (await obterPessoa(
-          usuario.pessoa.familiaId,
-          params.pessoaId,
-        )) as { nome: string; areas?: { id: string; disponivel: boolean }[] };
-        setNomePessoa(perfil.nome);
-        const area = perfil.areas?.find((a) => a.id === "desenvolvimento");
-        if (!area?.disponivel || !podeOrganizar) {
-          setErro("Acesso negado aos cadastros do desenvolvimento desta pessoa.");
-          return;
-        }
-        setAcessoLiberado(true);
-      } catch (e) {
-        setErro(mensagemErroAmigavel(e, "Não foi possível carregar"));
-      } finally {
-        setCarregando(false);
-      }
-    })();
-  }, [pronto, usuario, params.pessoaId, podeOrganizar]);
 
   async function aoCriar(evento: FormEvent) {
     evento.preventDefault();
@@ -101,7 +56,7 @@ export default function PaginaCadastrosDesenvolvimento() {
     setErro(null);
     setSucesso(null);
     try {
-      await criarDesafioPersonalizado(params.pessoaId, {
+      await criarDesafioPersonalizado(pessoaId, {
         nome: nomeNova.trim(),
         dificuldade: dificuldadeNova,
         categoria: categoriaNova,
@@ -135,7 +90,7 @@ export default function PaginaCadastrosDesenvolvimento() {
     setErro(null);
     setSucesso(null);
     try {
-      await criarRecompensa(params.pessoaId, {
+      await criarRecompensa(pessoaId, {
         nome: nomeRecompensa.trim(),
         custo,
       });
@@ -149,103 +104,90 @@ export default function PaginaCadastrosDesenvolvimento() {
     }
   }
 
-  const podeVer = Boolean(usuario) && !carregando && acessoLiberado;
+
+  if (!podeOrganizar) {
+    return <EstadoVazio titulo="Acesso aos cadastros indisponível" />;
+  }
 
   return (
-    <Container component="main" size="sm" px={0}>
+    <Container size="sm" px={0}>
       <Stack gap="lg">
-        <Title order={1}>
-          Cadastros{nomePessoa ? ` · ${nomePessoa}` : ""}
-        </Title>
-
-        {!pronto || carregando ? <EstadoCarregando /> : null}
-
+        <Title order={1}>Cadastros · {nomePessoa}</Title>
         <MensagemFeedback erro={erro} sucesso={sucesso} />
+        <Card withBorder padding="md" radius="md">
+          <form onSubmit={aoCriar}>
+            <Stack gap="sm">
+              <Title order={2}>Nova brincadeira</Title>
+              <TextInput
+                label="Nome"
+                value={nomeNova}
+                onChange={(e) => setNomeNova(e.currentTarget.value)}
+                required
+              />
+              <Stack gap={4}>
+                <Text size="sm" fw={500} id="rotulo-dificuldade">
+                  Dificuldade
+                </Text>
+                <SegmentedControl
+                  fullWidth
+                  aria-labelledby="rotulo-dificuldade"
+                  value={dificuldadeNova}
+                  onChange={setDificuldadeNova}
+                  data={[
+                    { label: "Simples", value: "simples" },
+                    { label: "Média", value: "media" },
+                    { label: "Desafiadora", value: "desafiadora" },
+                  ]}
+                />
+              </Stack>
+              <Select
+                label="Categoria"
+                description="Opcional"
+                placeholder="Sem categoria"
+                data={OPCOES_CATEGORIA}
+                value={categoriaNova}
+                onChange={setCategoriaNova}
+                clearable
+                allowDeselect
+              />
+              <Textarea
+                label="Como brincar"
+                description="Opcional"
+                value={instrucaoNova}
+                onChange={(e) => setInstrucaoNova(e.currentTarget.value)}
+                minRows={2}
+                autosize
+              />
+              <Button type="submit" loading={enviandoCriacao}>
+                Salvar brincadeira
+              </Button>
+            </Stack>
+          </form>
+        </Card>
 
-        {pronto && !carregando && !usuario ? (
-          <Button variant="light" onClick={() => router.push(rotaFamilia(String(params.slug ?? ""), "/entrar"))}>
-            Ir para entrar
-          </Button>
-        ) : null}
-
-        {podeVer ? (
-          <>
-            <Card withBorder padding="md" radius="md">
-              <form onSubmit={aoCriar}>
-                <Stack gap="sm">
-                  <Title order={2}>Nova brincadeira</Title>
-                  <TextInput
-                    label="Nome"
-                    value={nomeNova}
-                    onChange={(e) => setNomeNova(e.currentTarget.value)}
-                    required
-                  />
-                  <Stack gap={4}>
-                    <Text size="sm" fw={500} id="rotulo-dificuldade">
-                      Dificuldade
-                    </Text>
-                    <SegmentedControl
-                      fullWidth
-                      aria-labelledby="rotulo-dificuldade"
-                      value={dificuldadeNova}
-                      onChange={setDificuldadeNova}
-                      data={[
-                        { label: "Simples", value: "simples" },
-                        { label: "Média", value: "media" },
-                        { label: "Desafiadora", value: "desafiadora" },
-                      ]}
-                    />
-                  </Stack>
-                  <Select
-                    label="Categoria"
-                    description="Opcional"
-                    placeholder="Sem categoria"
-                    data={OPCOES_CATEGORIA}
-                    value={categoriaNova}
-                    onChange={setCategoriaNova}
-                    clearable
-                    allowDeselect
-                  />
-                  <Textarea
-                    label="Como brincar"
-                    description="Opcional"
-                    value={instrucaoNova}
-                    onChange={(e) => setInstrucaoNova(e.currentTarget.value)}
-                    minRows={2}
-                    autosize
-                  />
-                  <Button type="submit" loading={enviandoCriacao}>
-                    Salvar brincadeira
-                  </Button>
-                </Stack>
-              </form>
-            </Card>
-
-            <Card withBorder padding="md" radius="md">
-              <form onSubmit={aoCriarRecompensa}>
-                <Stack gap="sm">
-                  <Title order={2}>Nova recompensa</Title>
-                  <TextInput
-                    label="Nome"
-                    value={nomeRecompensa}
-                    onChange={(e) => setNomeRecompensa(e.currentTarget.value)}
-                    required
-                  />
-                  <NumberInput
-                    label="Custo em estrelas"
-                    min={1}
-                    step={1}
-                    value={custoRecompensa}
-                    onChange={setCustoRecompensa}
-                  />
-                  <Button type="submit" loading={enviandoRecompensa}>
-                    Adicionar recompensa
-                  </Button>
-                </Stack>
-              </form>
-            </Card>
-          </>
-        ) : null}
+        <Card withBorder padding="md" radius="md">
+          <form onSubmit={aoCriarRecompensa}>
+            <Stack gap="sm">
+              <Title order={2}>Nova recompensa</Title>
+              <TextInput
+                label="Nome"
+                value={nomeRecompensa}
+                onChange={(e) => setNomeRecompensa(e.currentTarget.value)}
+                required
+              />
+              <NumberInput
+                label="Custo em estrelas"
+                min={1}
+                step={1}
+                value={custoRecompensa}
+                onChange={setCustoRecompensa}
+              />
+              <Button type="submit" loading={enviandoRecompensa}>
+                Adicionar recompensa
+              </Button>
+            </Stack>
+          </form>
+        </Card>
       </Stack>
     </Container>
   );

@@ -1,15 +1,18 @@
 # Estado das decisões e escopo
 
-## E4 — biblioteca real aprovada e planejada, 2026-11-22
+## E5 — Jogos digitais e organização da Biblioteca, 2026-11-22
 
-**APROVADO pelo Produto:** catálogo curado com até 24 modelos publicados ativos, até 6 sugestões por pessoa e renovação de até 3 alternativas não escolhidas. Preservar escolhas, personalizadas, histórico, pontos e disponibilidade Explorar/Executadas. Internet/IA em tempo real e jogos digitais ficam fora desta entrega.
+**Implementada localmente.** A Biblioteca fica no menu contextual de Desenvolvimento, com Atividades reais e Jogos digitais. O piloto entrega Memória de figuras, Complete a sequência e Caminhos e labirintos, com cinco fases de escolha livre por jogo. Histórico e Resumo leem as descobertas da fonte E5 com autorização da pessoa. As estrelas pertencem às participações presenciais.
 
-**Fonte:** Módulo 03 v1.3 §12, E4-ACE-01..07/E4-HOM. Plano em `docs/esteira/planejamento/e4-biblioteca-real.md`. Demanda DEM-E4-BIBLIOTECA-20261122 READY, E4-01..03; próximo implementation-workflow E4-01.
+**Esteira.** E5-01 a E5-05 de `DEM-E5-JOGOS-DIGITAIS-20261122` concluídos tecnicamente. E5-06 concentra a validação integrada e a homologação humana. [Evidências](../esteira/estado/evidencia-e5-20261122.json) · [Roteiro de homologação](../esteira/estado/roteiro-homologacao-e5.md) · [Módulo 03 v1.4 §13](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento)
 
-**Base inspecionada:** develop @ 4ae828da06b5dfa78abbedda56e5c5965aea33ac. Desafio já admite catálogo global e atividades privadas; API combina ambos e trata disponibilidade por pessoa. Levantamento estático, sem implementação/testes nesta atualização.
+## E4 — biblioteca real com homologação humana parcial, 2026-11-22
 
-**Pendência preservada:** E3-HOM continua pendente, com falha ao salvar anexos DEF-E3-ANEXO-SALVAR-20261122 aberta e adiada expressamente. Prosseguir na E4 não aprova anexos nem outras jornadas não homologadas da E3. Publicação segue adiada.
+**Implementação registrada em `0a1055b`.** E4-01 a E4-03 constam como concluídos tecnicamente no registro original. O escopo aprovado para atividades reais consta no [Módulo 03 §12](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#12-e4--biblioteca-de-atividades-reais). [Evidência técnico-histórica](../esteira/estado/evidencia-e4-20261122.json)
 
+**Homologação humana E4-HOM aprovada parcialmente**, conforme relato do responsável sobre a entrega anterior. A E5-01 deu à Biblioteca um destino contextual e simplificou a entrada de Desenvolvimento. A revalidação humana do percurso real está no roteiro da E5-06. [Roteiro de homologação](../esteira/estado/roteiro-homologacao-e5.md)
+
+**E3-HOM** segue pendente pelo defeito de anexos `DEF-E3-ANEXO-SALVAR-20261122`, aberto e adiado por decisão de Produto.
 
 ## Defeito de anexos — tratamento adiado, 2026-11-22
 
@@ -119,7 +122,7 @@ Principais alinhamentos:
 - Visualização de exame e resumo factual entregam valor antes da IA.
 - Catálogo global é finito, versionado e curado; seleção e histórico permanecem privados.
 - Atividades reais e jogos digitais aparecem juntos para a pessoa, com ciclos técnicos distintos.
-- Estrelas preservam origem; economia combinada ainda depende de decisão.
+- Estrelas preservam sua origem presencial. O recorte E5 formaliza descobertas digitais no [Módulo 03 §13](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento).
 - Gestão mostra quem acompanha quem, área e responsabilidade, sem matriz técnica na interface.
 - IA editorial, IA de desenvolvimento e IA de cuidados são casos separados e entram em fases diferentes.
 - Arquitetura mantém monólito modular e evita infraestrutura nova sem necessidade comprovada.

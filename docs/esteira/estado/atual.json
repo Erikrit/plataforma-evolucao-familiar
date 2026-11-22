@@ -104,38 +104,46 @@
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
     "demanda": {
-        "id": "DEM-E4-BIBLIOTECA-20261122",
+        "id": "DEM-E5-JOGOS-DIGITAIS-20261122",
         "tipo": "transversal",
-        "origem": "humano — proposta E4 aceita em 2026-11-22, limites 24/6/3",
-        "estado": "COMPLETED",
+        "origem": "Relato humano de homologação parcial da E4, especificação E5 fornecida pelo responsável e decisões no Git.",
+        "estado": "IN_VALIDATION",
         "aprovacao": {
-            "nivel": "L3",
+            "nivel": "L2",
             "status": "DOCUMENTADA",
-            "referencia": "docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md v1.3 §12"
+            "referencia": "docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md v1.4 §13",
+            "nota": "Organização de UX e integração documental. As decisões de Produto da E5 constam nos commits e00b23b a 45e1231. O recorte de três jogos com cinco fases por jogo foi fornecido para planejamento."
         },
         "risco": "alto",
-        "escopo": "Biblioteca real curada e limitada, seleção privada por pessoa e renovação controlada, preservando disponibilidade e estrelas.",
-        "fora": [
-            "IA/internet em tempo real",
-            "jogos digitais E5",
-            "nova pontuação",
-            "correção de anexos E3",
-            "publicação"
-        ],
+        "escopo": "Corrigir a navegação E4 com Biblioteca no Desenvolvimento da pessoa e planejar o piloto de jogos, progresso privado e leitura no Módulo 04.",
         "criteriosAceite": [
-            "E4-ACE-01",
-            "E4-ACE-02",
+            "E5-UX-01",
+            "E5-UX-02",
+            "E5-UX-03",
             "E4-ACE-03",
             "E4-ACE-04",
             "E4-ACE-05",
             "E4-ACE-06",
             "E4-ACE-07",
-            "E4-HOM"
+            "E4-HOM",
+            "E5-ACE-01",
+            "E5-ACE-02",
+            "E5-ACE-03",
+            "E5-ACE-04",
+            "E5-ACE-05",
+            "E5-ACE-06",
+            "E5-ACE-07",
+            "E5-ACE-08",
+            "E5-ACE-09",
+            "E5-ACE-10",
+            "E5-ACE-11",
+            "E5-ACE-12",
+            "E5-HOM"
         ],
         "dependencias": [
-            "Módulo 03 vigente",
-            "ADR-009/013/014",
-            "Documento Mestre §13"
+            "E4 implementada em 0a1055b e percurso real a revalidar após E5-01.",
+            "Sessão familiar e autorização contextual de Desenvolvimento, conforme ADR-006/014.",
+            "Módulo 04 e ADR-009 para leitura de progresso. Documento Mestre §13 para dados pré-uso."
         ],
         "pendenciasForaEscopo": [
             {
@@ -145,69 +153,86 @@
                 "fonte": "docs/produto/STATUS-E-ESCOPO.md"
             }
         ],
+        "fluxo": [
+            "task-routing",
+            "module-planning",
+            "implementation-workflow",
+            "quality-gate"
+        ],
         "revisao": {
             "branch": "develop",
-            "commit": "0d2fa2b4dc39d4c67b3b9b26f3604845a619c90a",
+            "commit": "45e1231bedd3b9742221240711df94e8566252fd",
             "tipo": "implementacao_local"
         },
         "reconciliacaoLocal": {
             "status": "OK",
-            "nota": "Working tree local sem commit; schema push + generate feitos; fingerprint recalculado."
+            "nota": "Fingerprint documental conferido com o checkout no início da implementação."
         },
         "arquivos": [
-            "apps/api/prisma/schema.prisma",
-            "apps/api/prisma/catalogo-biblioteca-e4.mjs",
-            "apps/api/prisma/seed.mjs",
-            "apps/api/src/desenvolvimento/constantes-desenvolvimento.ts",
-            "apps/api/src/desenvolvimento/servico-sugestoes.ts",
-            "apps/api/src/desenvolvimento/servico-desafios.ts",
-            "apps/api/src/desenvolvimento/servico-participacoes.ts",
-            "apps/api/src/desenvolvimento/controlador-desenvolvimento.ts",
-            "apps/api/src/desenvolvimento/modulo-desenvolvimento.ts",
-            "apps/api/src/cuidados/servico-acompanhamento.ts",
-            "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+            "docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md",
+            "docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md",
+            "docs/produto/EVOLUCAO-POS-V1.md",
+            "docs/produto/STATUS-E-ESCOPO.md",
+            "docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md",
+            "docs/esteira/planejamento/e5-jogos-digitais.md",
+            "docs/esteira/REGISTRO.md",
             "apps/api/scripts/check-e4.mjs",
-            "apps/api/scripts/smoke-e4.mjs",
-            "apps/api/package.json",
-            "apps/web/src/lib/api.ts",
             "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/page.tsx",
-            "docs/esteira/planejamento/e4-biblioteca-real.md",
-            "docs/esteira/estado/roteiro-homologacao-e4.md"
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/layout.tsx",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/page.tsx",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/cadastros/page.tsx",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/recompensas/page.tsx",
+            "apps/web/src/componentes/contexto-desenvolvimento.tsx",
+            "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx",
+            "apps/web/src/componentes/navegacao-app.tsx",
+            "apps/web/src/lib/chave-operacao.ts",
+            "apps/api/prisma/schema.prisma",
+            "apps/api/package.json",
+            "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts",
+            "apps/api/src/desenvolvimento/jogos/controlador-jogos.ts",
+            "apps/api/src/desenvolvimento/jogos/servico-jogos.ts",
+            "apps/api/src/desenvolvimento/modulo-desenvolvimento.ts",
+            "apps/api/scripts/check-e5.mjs",
+            "apps/api/scripts/smoke-e5.mjs",
+            "apps/web/src/lib/api.ts",
+            "apps/web/src/lib/rotas-familia.ts",
+            "apps/web/src/componentes/desenvolvimento/navegacao-biblioteca.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/catalogo-jogos.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-memoria.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/jogos.module.css",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/page.tsx",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/page.tsx",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/fases/[fase]/jogar/page.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-sequencia.tsx",
+            "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-labirinto.tsx",
+            "apps/api/src/desenvolvimento/jogos/destaques-jogos.ts",
+            "apps/api/src/cuidados/controlador-cuidados.ts",
+            "apps/api/src/cuidados/servico-acompanhamento.ts",
+            "apps/web/src/lib/filtros-jogos.ts",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/historico/page.tsx",
+            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx",
+            "docs/esteira/estado/roteiro-homologacao-e5.md",
+            "docs/esteira/estado/relatorio-teste-usuario-e5-20261122.md",
+            "apps/web/src/app/layout.tsx",
+            "README.md"
         ],
         "planejamento": {
-            "caminho": "docs/esteira/planejamento/e4-biblioteca-real.md",
+            "caminho": "docs/esteira/planejamento/e5-jogos-digitais.md",
             "especificacao": {
                 "caminho": "docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md",
-                "versao": "v1.3",
-                "status": "aprovado"
+                "versao": "v1.4 §13",
+                "status": "CONSOLIDADA_PARA_PLANEJAMENTO"
             },
             "incrementos": [
                 {
-                    "id": "E4-01",
+                    "id": "E5-01",
                     "status": "COMPLETED",
                     "requisitos": [
-                        "E4-ACE-01",
-                        "E4-ACE-02",
-                        "E4-ACE-06"
-                    ],
-                    "aceite": "Catálogo curado/versionado, metadados e sugestões elegíveis"
-                },
-                {
-                    "id": "E4-02",
-                    "status": "COMPLETED",
-                    "requisitos": [
-                        "E4-ACE-03",
-                        "E4-ACE-04",
-                        "E4-ACE-05"
-                    ],
-                    "aceite": "Escolher e renovar com persistência, limites e segurança"
-                },
-                {
-                    "id": "E4-03",
-                    "status": "COMPLETED",
-                    "requisitos": [
-                        "E4-ACE-01",
-                        "E4-ACE-02",
+                        "E5-F01",
+                        "E5-UX-01",
+                        "E5-UX-02",
+                        "E5-UX-03",
                         "E4-ACE-03",
                         "E4-ACE-04",
                         "E4-ACE-05",
@@ -215,43 +240,563 @@
                         "E4-ACE-07",
                         "E4-HOM"
                     ],
-                    "aceite": "Experiência móvel, regressão e homologação humana",
-                    "nota": "E4-HOM PENDING_HUMAN"
+                    "aceite": "Biblioteca contextual, percurso E4 com Atividades reais, Recompensas e Cadastros acessíveis conforme autorização.",
+                    "qg": [
+                        "QG-1",
+                        "verifier",
+                        "QG-2"
+                    ],
+                    "alvos": [
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento",
+                        "apps/web/src/componentes/navegacao-app.tsx",
+                        "apps/api/scripts/check-e4.mjs"
+                    ],
+                    "arquivos": [
+                        "apps/api/scripts/check-e4.mjs",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/layout.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/cadastros/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/recompensas/page.tsx",
+                        "apps/web/src/componentes/contexto-desenvolvimento.tsx",
+                        "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx",
+                        "apps/web/src/componentes/navegacao-app.tsx",
+                        "apps/web/src/lib/chave-operacao.ts"
+                    ],
+                    "fingerprint": "sha256:5eba32708e2ffa47",
+                    "fingerprintFull": "sha256:5eba32708e2ffa47aa5c36071eabf19fb7a2308cf6e80309b5d1757c3d87e409",
+                    "verificacao": {
+                        "qg1": "PASS",
+                        "verifier": "PASS",
+                        "qg2": "PASS",
+                        "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+                        "humano": "PENDING_HUMAN"
+                    },
+                    "tentativasCorrecao": {
+                        "focoPosAcao": 1,
+                        "leituraSugestoes": 1,
+                        "identidadeMenu": 1,
+                        "traceNextBloqueado": 1
+                    },
+                    "criteriosOk": [
+                        "E5-UX-01",
+                        "E5-UX-02",
+                        "E5-UX-03",
+                        "E4-ACE-03",
+                        "E4-ACE-04",
+                        "E4-ACE-05",
+                        "E4-ACE-06",
+                        "E4-ACE-07"
+                    ],
+                    "concluidoEm": "2026-11-22T13:58:33.630Z",
+                    "mensagemCommit": "feat(desenvolvimento): dar destino próprio à Biblioteca e às recompensas"
+                },
+                {
+                    "id": "E5-02",
+                    "status": "COMPLETED",
+                    "requisitos": [
+                        "E5-F02",
+                        "E5-F03",
+                        "E5-F04",
+                        "E5-F05",
+                        "E5-F06",
+                        "E5-F08"
+                    ],
+                    "aceite": "Memória com cinco fases, modo de partida, autorização e progresso idempotente.",
+                    "qg": [
+                        "QG-1",
+                        "verifier",
+                        "QG-2"
+                    ],
+                    "alvos": [
+                        "apps/api/prisma/schema.prisma",
+                        "apps/api/src/desenvolvimento/jogos",
+                        "apps/web/src/componentes/desenvolvimento/jogos",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca"
+                    ],
+                    "arquivos": [
+                        "apps/api/prisma/schema.prisma",
+                        "apps/api/package.json",
+                        "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts",
+                        "apps/api/src/desenvolvimento/jogos/controlador-jogos.ts",
+                        "apps/api/src/desenvolvimento/jogos/servico-jogos.ts",
+                        "apps/api/src/desenvolvimento/modulo-desenvolvimento.ts",
+                        "apps/api/scripts/check-e5.mjs",
+                        "apps/api/scripts/smoke-e5.mjs",
+                        "apps/web/src/lib/api.ts",
+                        "apps/web/src/lib/rotas-familia.ts",
+                        "apps/web/src/lib/chave-operacao.ts",
+                        "apps/web/src/componentes/navegacao-app.tsx",
+                        "apps/web/src/componentes/desenvolvimento/navegacao-biblioteca.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/catalogo-jogos.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-memoria.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/jogos.module.css",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/fases/[fase]/jogar/page.tsx"
+                    ],
+                    "fingerprint": "sha256:e1505c818d6cf990",
+                    "fingerprintFull": "sha256:e1505c818d6cf990a5187794ee01118eaefd3c7594185ad5b3b9ecbb80ab0aee",
+                    "verificacao": {
+                        "qg1": "PASS",
+                        "verifier": "PASS",
+                        "qg2": "PASS",
+                        "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+                        "humano": "PENDING_HUMAN"
+                    },
+                    "tentativasCorrecao": {
+                        "saidaDuranteGuarda": 1
+                    },
+                    "concluidoEm": "2026-11-22T14:12:19.082Z",
+                    "mensagemCommit": "feat(jogos): oferecer Memória de figuras com progresso privado",
+                    "criteriosOk": [
+                        "E5-ACE-01..07, 09, 10 e 12 no recorte de Memória"
+                    ]
+                },
+                {
+                    "id": "E5-03",
+                    "status": "COMPLETED",
+                    "requisitos": [
+                        "E5-F02",
+                        "E5-F03",
+                        "E5-F04",
+                        "E5-F05"
+                    ],
+                    "aceite": "Sequência com cinco fases e padrões curados, resolúveis e acessíveis.",
+                    "qg": [
+                        "QG-1",
+                        "verifier",
+                        "QG-2"
+                    ],
+                    "alvos": [
+                        "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts",
+                        "apps/web/src/componentes/desenvolvimento/jogos",
+                        "apps/api/scripts/check-e5.mjs",
+                        "apps/api/scripts/smoke-e5.mjs"
+                    ],
+                    "arquivos": [
+                        "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts",
+                        "apps/api/scripts/check-e5.mjs",
+                        "apps/api/scripts/smoke-e5.mjs",
+                        "apps/web/src/lib/api.ts",
+                        "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-sequencia.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/jogos.module.css"
+                    ],
+                    "fingerprint": "sha256:318b8e0140c13dd4",
+                    "fingerprintFull": "sha256:318b8e0140c13dd4fd519fa91c7671d3dc06a51f4fa3b2aed928d3e901a2f901",
+                    "verificacao": {
+                        "qg1": "PASS",
+                        "verifier": "PASS",
+                        "qg2": "PASS",
+                        "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+                        "humano": "PENDING_HUMAN"
+                    },
+                    "tentativasCorrecao": {
+                        "distratoresDaSequencia": 1
+                    },
+                    "concluidoEm": "2026-11-22T14:19:53.161Z",
+                    "mensagemCommit": "feat(jogos): adicionar Complete a sequência",
+                    "criteriosOk": [
+                        "E5-ACE-01..03, 06, 10 e 12 no recorte de Sequência"
+                    ]
+                },
+                {
+                    "id": "E5-04",
+                    "status": "COMPLETED",
+                    "requisitos": [
+                        "E5-F02",
+                        "E5-F03",
+                        "E5-F04",
+                        "E5-F05"
+                    ],
+                    "aceite": "Labirinto com cinco fases, mapas testados e controles de toque e teclado.",
+                    "qg": [
+                        "QG-1",
+                        "verifier",
+                        "QG-2"
+                    ],
+                    "alvos": [
+                        "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts",
+                        "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-labirinto.tsx",
+                        "apps/api/scripts/check-e5.mjs",
+                        "apps/api/scripts/smoke-e5.mjs"
+                    ],
+                    "arquivos": [
+                        "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts",
+                        "apps/api/scripts/check-e5.mjs",
+                        "apps/api/scripts/smoke-e5.mjs",
+                        "apps/web/src/lib/api.ts",
+                        "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/jogos.module.css",
+                        "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-labirinto.tsx"
+                    ],
+                    "fingerprint": "sha256:d2ab1a3d17a05b32",
+                    "fingerprintFull": "sha256:d2ab1a3d17a05b32a9e240d0a27bbb63d2398c77a2eb9b70cc58badb1aea5ef3",
+                    "verificacao": {
+                        "qg1": "PASS",
+                        "verifier": "PASS",
+                        "qg2": "PASS",
+                        "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+                        "humano": "PENDING_HUMAN"
+                    },
+                    "concluidoEm": "2026-11-22T14:23:53.133Z",
+                    "mensagemCommit": "feat(jogos): adicionar Caminhos e labirintos acessível",
+                    "criteriosOk": [
+                        "E5-ACE-01..03, 06, 10 e 12 no recorte de Labirinto"
+                    ]
+                },
+                {
+                    "id": "E5-05",
+                    "status": "COMPLETED",
+                    "requisitos": [
+                        "E5-F01",
+                        "E5-F06",
+                        "E5-F07",
+                        "E5-F08"
+                    ],
+                    "aceite": "Destaques determinísticos e progresso derivado no Histórico e Resumo autorizados.",
+                    "qg": [
+                        "QG-1",
+                        "verifier",
+                        "QG-2"
+                    ],
+                    "alvos": [
+                        "apps/api/src/desenvolvimento/jogos",
+                        "apps/api/src/cuidados/servico-acompanhamento.ts",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/historico",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo"
+                    ],
+                    "arquivos": [
+                        "apps/api/src/desenvolvimento/jogos/destaques-jogos.ts",
+                        "apps/api/src/desenvolvimento/jogos/servico-jogos.ts",
+                        "apps/api/src/cuidados/controlador-cuidados.ts",
+                        "apps/api/src/cuidados/servico-acompanhamento.ts",
+                        "apps/api/scripts/check-e5.mjs",
+                        "apps/api/scripts/smoke-e5.mjs",
+                        "apps/web/src/lib/api.ts",
+                        "apps/web/src/lib/filtros-jogos.ts",
+                        "apps/web/src/componentes/navegacao-app.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/fases/[fase]/jogar/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/historico/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx"
+                    ],
+                    "fingerprint": "sha256:dc862163b51e4a75",
+                    "fingerprintFull": "sha256:dc862163b51e4a750450acd5ec0ce79f6b792170c122b33a34c96b39bbf43908",
+                    "verificacao": {
+                        "qg1": "PASS",
+                        "verifier": "PASS",
+                        "qg2": "PASS",
+                        "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+                        "humano": "PENDING_HUMAN"
+                    },
+                    "tentativasCorrecao": {
+                        "cacheDeDadosPrivados": 1,
+                        "pastaDoBuildEmUso": 1
+                    },
+                    "concluidoEm": "2026-11-22T14:37:49.154Z",
+                    "mensagemCommit": "feat(evolucao): integrar descobertas digitais ao Histórico e ao Resumo",
+                    "criteriosOk": [
+                        "E5-ACE-04",
+                        "E5-ACE-05",
+                        "E5-ACE-08",
+                        "E5-ACE-09",
+                        "E5-ACE-11",
+                        "E5-ACE-12"
+                    ]
+                },
+                {
+                    "id": "E5-06",
+                    "status": "IN_VALIDATION",
+                    "requisitos": [
+                        "E4-HOM",
+                        "E5-HOM"
+                    ],
+                    "aceite": "Regressão integrada e resultados humanos explícitos no percurso corrigido da E4 e no piloto E5.",
+                    "qg": [
+                        "QG-3",
+                        "homologacao"
+                    ],
+                    "alvos": [
+                        "docs/esteira/estado/roteiro-homologacao-e5.md",
+                        "docs/esteira/estado/evidencia-e5-20261122.json",
+                        "docs/produto/STATUS-E-ESCOPO.md"
+                    ],
+                    "tentativasCorrecao": {
+                        "alinhamentoDasSetasEm320px": 1
+                    },
+                    "arquivos": [
+                        "docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md",
+                        "docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md",
+                        "docs/produto/EVOLUCAO-POS-V1.md",
+                        "docs/produto/STATUS-E-ESCOPO.md",
+                        "docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md",
+                        "docs/esteira/planejamento/e5-jogos-digitais.md",
+                        "docs/esteira/REGISTRO.md",
+                        "apps/api/scripts/check-e4.mjs",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/layout.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/cadastros/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/recompensas/page.tsx",
+                        "apps/web/src/componentes/contexto-desenvolvimento.tsx",
+                        "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx",
+                        "apps/web/src/componentes/navegacao-app.tsx",
+                        "apps/web/src/lib/chave-operacao.ts",
+                        "apps/api/prisma/schema.prisma",
+                        "apps/api/package.json",
+                        "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts",
+                        "apps/api/src/desenvolvimento/jogos/controlador-jogos.ts",
+                        "apps/api/src/desenvolvimento/jogos/servico-jogos.ts",
+                        "apps/api/src/desenvolvimento/modulo-desenvolvimento.ts",
+                        "apps/api/scripts/check-e5.mjs",
+                        "apps/api/scripts/smoke-e5.mjs",
+                        "apps/web/src/lib/api.ts",
+                        "apps/web/src/lib/rotas-familia.ts",
+                        "apps/web/src/componentes/desenvolvimento/navegacao-biblioteca.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/catalogo-jogos.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-memoria.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/jogos.module.css",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/[jogoId]/fases/[fase]/jogar/page.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-sequencia.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-labirinto.tsx",
+                        "apps/api/src/desenvolvimento/jogos/destaques-jogos.ts",
+                        "apps/api/src/cuidados/controlador-cuidados.ts",
+                        "apps/api/src/cuidados/servico-acompanhamento.ts",
+                        "apps/web/src/lib/filtros-jogos.ts",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/historico/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx",
+                        "docs/esteira/estado/roteiro-homologacao-e5.md"
+                    ],
+                    "fingerprint": "sha256:aa75593cac5d3f57",
+                    "fingerprintFull": "sha256:aa75593cac5d3f5727b23a92e92244e7530bdd90021db9fc221c0defb4a9df80",
+                    "verificacao": {
+                        "qg1": "PASS",
+                        "verifier": "PASS",
+                        "qg2": "PASS",
+                        "qg3": "PASS",
+                        "humano": "PENDING_HUMAN",
+                        "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json"
+                    },
+                    "criteriosOk": [
+                        "E5-UX-01",
+                        "E5-UX-02",
+                        "E5-UX-03",
+                        "E4-ACE-03",
+                        "E4-ACE-04",
+                        "E4-ACE-05",
+                        "E4-ACE-06",
+                        "E4-ACE-07",
+                        "E5-ACE-01",
+                        "E5-ACE-02",
+                        "E5-ACE-03",
+                        "E5-ACE-04",
+                        "E5-ACE-05",
+                        "E5-ACE-06",
+                        "E5-ACE-07",
+                        "E5-ACE-08",
+                        "E5-ACE-09",
+                        "E5-ACE-10",
+                        "E5-ACE-11",
+                        "E5-ACE-12"
+                    ],
+                    "criteriosPendentes": [
+                        "E4-HOM",
+                        "E5-HOM"
+                    ],
+                    "roteiro": "docs/esteira/estado/roteiro-homologacao-e5.md",
+                    "validadoTecnicamenteEm": "2026-11-22T14:43:47.476Z"
+                },
+                {
+                    "id": "E5-06-COR-01",
+                    "tipo": "correcao",
+                    "status": "COMPLETED",
+                    "aprovacao": {
+                        "nivel": "L2",
+                        "status": "APROVADA",
+                        "referencia": "Pedido de correção dos achados do relatório de teste de uso"
+                    },
+                    "requisitos": [
+                        "E5-ACE-02",
+                        "E5-ACE-08",
+                        "E5-ACE-10",
+                        "E4-HOM"
+                    ],
+                    "aceite": "Manter a dica da próxima carta, aplicar a categoria aos jogos exibidos, flexionar valores de recompensa e compilar sem buscar a fonte na rede.",
+                    "arquivos": [
+                        "apps/web/src/app/layout.tsx",
+                        "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-memoria.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/page.tsx",
+                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/recompensas/page.tsx"
+                    ],
+                    "fingerprint": "sha256:df0b227d6b9d4939",
+                    "fingerprintFull": "sha256:df0b227d6b9d49398c7bb50b3fd52821e7119abe3b339c85db9585f5ec5ed547",
+                    "verificacao": {
+                        "qg1": "PASS",
+                        "verifier": "PASS",
+                        "qg2": "PASS",
+                        "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json"
+                    },
+                    "criteriosOk": [
+                        "Dica da segunda carta",
+                        "Categoria em destaques e catálogo",
+                        "Singular e plural nas recompensas",
+                        "Build em rede restrita"
+                    ],
+                    "tentativasCorrecao": {
+                        "tiposGeradosDoNext": 1
+                    },
+                    "concluidoEm": "2026-11-22T15:37:01.415Z",
+                    "mensagemCommit": "fix(desenvolvimento): corrigir feedback e filtro da biblioteca"
+                },
+                {
+                    "id": "E5-06-COR-02",
+                    "tipo": "correcao",
+                    "status": "COMPLETED",
+                    "origem": "Erro de servidor ao abrir Jogos digitais reportado pelo responsável",
+                    "requisitos": [
+                        "E5-ACE-01",
+                        "E5-ACE-05",
+                        "E5-ACE-09"
+                    ],
+                    "aceite": "Preparar o banco local para o catálogo, testar a jornada e documentar a atualização do schema.",
+                    "arquivos": [
+                        "README.md"
+                    ],
+                    "fingerprint": "sha256:16946cbc721c8a20",
+                    "fingerprintFull": "sha256:16946cbc721c8a2057470883887dd6e1910a05d63dc92111a781e3d627a3f305",
+                    "qg1": {
+                        "resultado": "PASS",
+                        "checagens": [
+                            "Diff revisado: quatro comandos aditivos limitados à tabela de progresso.",
+                            "Bootstrap da esteira: 42 checagens.",
+                            "git diff --check sem erros."
+                        ]
+                    },
+                    "aprovacao": {
+                        "nivel": "L2",
+                        "status": "APROVADA",
+                        "referencia": "Solicitação de verificação da aba Jogos e correção dos achados na aplicação local."
+                    },
+                    "verificacao": {
+                        "qg1": "PASS",
+                        "verifier": "PASS",
+                        "qg2": "PASS",
+                        "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json"
+                    },
+                    "criteriosOk": [
+                        "Preparação aditiva do banco local",
+                        "Catálogo acessível após sincronização",
+                        "Abertura e conclusão de fase",
+                        "Atualização do schema documentada"
+                    ],
+                    "tentativasCorrecao": {
+                        "permissaoBuildNext": 1,
+                        "arquivoDevToolsChrome": 1
+                    },
+                    "concluidoEm": "2026-11-22T16:36:34.018Z",
+                    "mensagemCommit": "docs(dev): orientar sincronização do schema local para jogos digitais"
                 }
             ]
         },
+        "testesPertinentes": [
+            "Typecheck e build web/API conforme arquivos do incremento.",
+            "check:e4 e smoke:e4 para a regressão presencial.",
+            "smoke:authz e novo smoke E5 com acesso direto, duas famílias, revogação, idempotência, concorrência e falha de rede.",
+            "Histórico, Resumo, consistência da prévia com PDF e testes de curadoria/acessibilidade.",
+            "E4-HOM e E5-HOM nos percursos móveis, com dados fictícios."
+        ],
         "verificacao": {
             "qg1": "PASS",
             "qg2": "PASS",
             "qg3": "PASS",
             "verifier": "PASS",
-            "verifierNota": "Oficial BLOCKED (Ask); independente shell PASS prevalece",
-            "verifierId": "27f515c0-3ef7-49d1-8fd8-ee03590f5cef",
+            "nota": "Implementação e verificações técnicas concluídas. E4-HOM e E5-HOM aguardam resultado humano.",
+            "documental": {
+                "status": "PASS",
+                "checagens": [
+                    {
+                        "comando": "node scripts/esteira/validar-bootstrap.mjs",
+                        "resultado": "42 checagens, sem erros ou avisos"
+                    },
+                    {
+                        "comando": "node apps/api/scripts/check-e4.mjs",
+                        "resultado": "8 checagens estáticas E4"
+                    }
+                ]
+            },
             "evidencias": [
-                "docs/esteira/estado/qg1-check-e4.txt",
-                "docs/esteira/estado/qg1-typecheck-api-e4.txt",
-                "docs/esteira/estado/qg1-typecheck-web-e4.txt",
-                "docs/esteira/estado/qg2-smoke-e4.txt",
-                "docs/esteira/estado/qg2-build-api-e4.txt",
-                "docs/esteira/estado/evidencia-e4-20261122.json",
-                "docs/esteira/estado/roteiro-homologacao-e4.md"
-            ]
+                "docs/esteira/estado/evidencia-e5-20261122.json",
+                "docs/esteira/estado/roteiro-homologacao-e5.md"
+            ],
+            "testeUsuario": {
+                "perfil": "homologacao_assistida",
+                "status": "PASS_COM_ACHADOS",
+                "checagensAprovadas": 28,
+                "roteiro": "docs/esteira/estado/roteiro-homologacao-e5.md",
+                "evidencia": "docs/esteira/estado/relatorio-teste-usuario-e5-20261122.md",
+                "fingerprintProduto": "sha256:c317a0da336a3835d01f3bf2aca670c43a43f17079a258398da8324da9949601",
+                "fingerprintVerificacaoTecnica": "sha256:aa75593cac5d3f5727b23a92e92244e7530bdd90021db9fc221c0defb4a9df80",
+                "homologacaoHumana": "PENDING_HUMAN",
+                "verifier": "PASS"
+            },
+            "retesteUsuario": {
+                "status": "PASS",
+                "incremento": "E5-06-COR-01",
+                "checagensAprovadas": 38,
+                "fingerprint": "sha256:df0b227d6b9d49398c7bb50b3fd52821e7119abe3b339c85db9585f5ec5ed547",
+                "evidencia": "docs/esteira/estado/relatorio-teste-usuario-e5-20261122.md"
+            },
+            "retesteErroJogos": {
+                "status": "PASS",
+                "incremento": "E5-06-COR-02",
+                "checagensAprovadas": 4,
+                "fingerprint": "sha256:16946cbc721c8a2057470883887dd6e1910a05d63dc92111a781e3d627a3f305",
+                "evidencia": "docs/esteira/estado/relatorio-teste-usuario-e5-20261122.md"
+            }
         },
         "homologacaoHumana": "PENDING_HUMAN",
+        "bloqueios": [],
+        "fingerprintNota": "O hash atual identifica produto e documentação após as correções. A evidência integrada inicial e o reteste preservam seus respectivos fingerprints.",
+        "proximaAcao": "Revalidar E4-HOM e concluir E5-HOM com o responsável e a criança em dispositivo real.",
+        "fingerprint": "sha256:6055f47445b40dae",
+        "fingerprintFull": "sha256:6055f47445b40dae3eb84655e057b9cd6c38d4ee536efc245859ad1177c5cca7",
+        "incrementoAtivo": "E5-06",
         "criteriosOk": [
-            "E4-ACE-01",
-            "E4-ACE-02",
+            "E5-UX-01",
+            "E5-UX-02",
+            "E5-UX-03",
             "E4-ACE-03",
             "E4-ACE-04",
             "E4-ACE-05",
             "E4-ACE-06",
-            "E4-ACE-07"
+            "E4-ACE-07",
+            "E5-ACE-01",
+            "E5-ACE-02",
+            "E5-ACE-03",
+            "E5-ACE-04",
+            "E5-ACE-05",
+            "E5-ACE-06",
+            "E5-ACE-07",
+            "E5-ACE-08",
+            "E5-ACE-09",
+            "E5-ACE-10",
+            "E5-ACE-11",
+            "E5-ACE-12"
         ],
-        "bloqueios": [],
-        "fingerprint": "sha256:8767629646547880f28abbd8ed00eb13598bf778198f4dba81bea13392fd6a18",
-        "fingerprintNota": "Hash SHA-256 do conteúdo concatenado dos arquivos afetados.",
-        "mensagemCommit": "feat(desenvolvimento): biblioteca curada com sugestões e renovação controlada",
-        "proximaAcao": "Homologação humana E4-HOM (roteiro-homologacao-e4.md); sem commit/push/deploy automático."
+        "criteriosPendentes": [
+            "E4-HOM",
+            "E5-HOM"
+        ],
+        "mensagemCommit": "feat(desenvolvimento): integrar biblioteca e jogos digitais"
     },
     "janelaIncrementos": [
         {
@@ -283,6 +828,13 @@
             },
             "risco": "alto",
             "escopo": "Biblioteca real curada e limitada, seleção privada por pessoa e renovação controlada, preservando disponibilidade e estrelas.",
+            "fora": [
+                "IA/internet em tempo real",
+                "jogos digitais E5",
+                "nova pontuação",
+                "correção de anexos E3",
+                "publicação"
+            ],
             "criteriosAceite": [
                 "E4-ACE-01",
                 "E4-ACE-02",
@@ -293,6 +845,113 @@
                 "E4-ACE-07",
                 "E4-HOM"
             ],
+            "dependencias": [
+                "Módulo 03 vigente",
+                "ADR-009/013/014",
+                "Documento Mestre §13"
+            ],
+            "pendenciasForaEscopo": [
+                {
+                    "id": "DEF-E3-ANEXO-SALVAR-20261122",
+                    "estado": "ABERTO",
+                    "tratamento": "ADIADO_POR_PRODUTO",
+                    "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+                }
+            ],
+            "revisao": {
+                "branch": "develop",
+                "commit": "0d2fa2b4dc39d4c67b3b9b26f3604845a619c90a",
+                "tipo": "implementacao_local"
+            },
+            "reconciliacaoLocal": {
+                "status": "OK",
+                "nota": "Working tree local sem commit; schema push + generate feitos; fingerprint recalculado."
+            },
+            "arquivos": [
+                "apps/api/prisma/schema.prisma",
+                "apps/api/prisma/catalogo-biblioteca-e4.mjs",
+                "apps/api/prisma/seed.mjs",
+                "apps/api/src/desenvolvimento/constantes-desenvolvimento.ts",
+                "apps/api/src/desenvolvimento/servico-sugestoes.ts",
+                "apps/api/src/desenvolvimento/servico-desafios.ts",
+                "apps/api/src/desenvolvimento/servico-participacoes.ts",
+                "apps/api/src/desenvolvimento/controlador-desenvolvimento.ts",
+                "apps/api/src/desenvolvimento/modulo-desenvolvimento.ts",
+                "apps/api/src/cuidados/servico-acompanhamento.ts",
+                "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+                "apps/api/scripts/check-e4.mjs",
+                "apps/api/scripts/smoke-e4.mjs",
+                "apps/api/package.json",
+                "apps/web/src/lib/api.ts",
+                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+                "docs/esteira/planejamento/e4-biblioteca-real.md",
+                "docs/esteira/estado/roteiro-homologacao-e4.md"
+            ],
+            "planejamento": {
+                "caminho": "docs/esteira/planejamento/e4-biblioteca-real.md",
+                "especificacao": {
+                    "caminho": "docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md",
+                    "versao": "v1.3",
+                    "status": "aprovado"
+                },
+                "incrementos": [
+                    {
+                        "id": "E4-01",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E4-ACE-01",
+                            "E4-ACE-02",
+                            "E4-ACE-06"
+                        ],
+                        "aceite": "Catálogo curado/versionado, metadados e sugestões elegíveis"
+                    },
+                    {
+                        "id": "E4-02",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E4-ACE-03",
+                            "E4-ACE-04",
+                            "E4-ACE-05"
+                        ],
+                        "aceite": "Escolher e renovar com persistência, limites e segurança"
+                    },
+                    {
+                        "id": "E4-03",
+                        "status": "COMPLETED",
+                        "requisitos": [
+                            "E4-ACE-01",
+                            "E4-ACE-02",
+                            "E4-ACE-03",
+                            "E4-ACE-04",
+                            "E4-ACE-05",
+                            "E4-ACE-06",
+                            "E4-ACE-07",
+                            "E4-HOM"
+                        ],
+                        "aceite": "Experiência móvel, regressão e homologação humana",
+                        "nota": "E4-HOM PENDING_HUMAN"
+                    }
+                ]
+            },
+            "verificacao": {
+                "qg1": "PASS",
+                "qg2": "PASS",
+                "qg3": "PASS",
+                "verifier": "PASS",
+                "verifierNota": "Oficial BLOCKED (Ask); independente shell PASS prevalece",
+                "verifierId": "27f515c0-3ef7-49d1-8fd8-ee03590f5cef",
+                "evidencias": [
+                    "docs/esteira/estado/qg1-check-e4.txt",
+                    "docs/esteira/estado/qg1-typecheck-api-e4.txt",
+                    "docs/esteira/estado/qg1-typecheck-web-e4.txt",
+                    "docs/esteira/estado/qg2-smoke-e4.txt",
+                    "docs/esteira/estado/qg2-build-api-e4.txt",
+                    "docs/esteira/estado/evidencia-e4-20261122.json",
+                    "docs/esteira/estado/roteiro-homologacao-e4.md"
+                ],
+                "nota": "Oficial BLOCKED Ask; shell independente PASS"
+            },
+            "homologacaoHumana": "APROVADA_PARCIALMENTE",
             "criteriosOk": [
                 "E4-ACE-01",
                 "E4-ACE-02",
@@ -302,19 +961,22 @@
                 "E4-ACE-06",
                 "E4-ACE-07"
             ],
-            "homologacaoHumana": "PENDING_HUMAN",
+            "bloqueios": [],
             "fingerprint": "sha256:8767629646547880f28abbd8ed00eb13598bf778198f4dba81bea13392fd6a18",
+            "fingerprintNota": "Hash SHA-256 do conteúdo concatenado dos arquivos afetados.",
+            "mensagemCommit": "feat(desenvolvimento): biblioteca curada com sugestões e renovação controlada",
+            "proximaAcao": "Revalidar E4-HOM no fluxo da Biblioteca após E5-01, com registro consolidado em E5-06.",
             "evidencia": "docs/esteira/estado/evidencia-e4-20261122.json",
             "roteiro": "docs/esteira/estado/roteiro-homologacao-e4.md",
-            "verificacao": {
-                "qg1": "PASS",
-                "qg2": "PASS",
-                "qg3": "PASS",
-                "verifier": "PASS",
-                "nota": "Oficial BLOCKED Ask; shell independente PASS"
-            },
-            "mensagemCommit": "feat(desenvolvimento): biblioteca curada com sugestões e renovação controlada",
-            "concluidaEm": "2026-11-22"
+            "concluidaEm": "2026-11-22",
+            "homologacaoHumanaAnterior": "PENDING_HUMAN",
+            "retornoHumano": {
+                "data": "2026-11-22",
+                "criterio": "E4-HOM",
+                "nota": "Responsável informou aceite parcial. Organização da entrada e Biblioteca será corrigida em E5-01 e reavaliada no percurso E4-HOM.",
+                "revalidacao": "PENDING_HUMAN",
+                "demandaCorretiva": "DEM-E5-JOGOS-DIGITAIS-20261122"
+            }
         },
         {
             "id": "DEM-E3-EXAMES-RESUMO-20261122",
@@ -2195,9 +2857,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologação humana E4-HOM (roteiro-homologacao-e4.md); sem commit/push/deploy automático.",
-    "atualizadoEm": "2026-11-22T07:02:30.890Z",
-    "notas": "E4 READY com limites 24/6/3 aprovados. E3 não homologada integralmente; anexos com defeito adiado, preservado no histórico.",
+    "proximaAcao": "Revalidar E4-HOM e concluir E5-HOM com o responsável e a criança em dispositivo real.",
+    "atualizadoEm": "2026-11-22T16:36:34.059Z",
+    "notas": "E5-06-COR-02 concluído tecnicamente. Banco local sincronizado para Jogos digitais. E5-06 segue em validação humana E4-HOM e E5-HOM.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",
@@ -2245,6 +2907,76 @@
             "status": "COMPLETED",
             "fingerprint": "ef06-2026-11-16",
             "verifierId": "b26db6d1-5a99-45cb-865b-b240239f53d9"
+        },
+        {
+            "id": "E5-01",
+            "demandaId": "DEM-E5-JOGOS-DIGITAIS-20261122",
+            "status": "COMPLETED",
+            "fingerprint": "sha256:5eba32708e2ffa47",
+            "fingerprintFull": "sha256:5eba32708e2ffa47aa5c36071eabf19fb7a2308cf6e80309b5d1757c3d87e409",
+            "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+            "mensagemCommit": "feat(desenvolvimento): dar destino próprio à Biblioteca e às recompensas",
+            "concluidoEm": "2026-11-22T13:58:33.630Z"
+        },
+        {
+            "id": "E5-02",
+            "demandaId": "DEM-E5-JOGOS-DIGITAIS-20261122",
+            "status": "COMPLETED",
+            "fingerprint": "sha256:e1505c818d6cf990",
+            "fingerprintFull": "sha256:e1505c818d6cf990a5187794ee01118eaefd3c7594185ad5b3b9ecbb80ab0aee",
+            "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+            "mensagemCommit": "feat(jogos): oferecer Memória de figuras com progresso privado",
+            "concluidoEm": "2026-11-22T14:12:19.082Z"
+        },
+        {
+            "id": "E5-03",
+            "demandaId": "DEM-E5-JOGOS-DIGITAIS-20261122",
+            "status": "COMPLETED",
+            "fingerprint": "sha256:318b8e0140c13dd4",
+            "fingerprintFull": "sha256:318b8e0140c13dd4fd519fa91c7671d3dc06a51f4fa3b2aed928d3e901a2f901",
+            "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+            "mensagemCommit": "feat(jogos): adicionar Complete a sequência",
+            "concluidoEm": "2026-11-22T14:19:53.161Z"
+        },
+        {
+            "id": "E5-04",
+            "demandaId": "DEM-E5-JOGOS-DIGITAIS-20261122",
+            "status": "COMPLETED",
+            "fingerprint": "sha256:d2ab1a3d17a05b32",
+            "fingerprintFull": "sha256:d2ab1a3d17a05b32a9e240d0a27bbb63d2398c77a2eb9b70cc58badb1aea5ef3",
+            "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+            "mensagemCommit": "feat(jogos): adicionar Caminhos e labirintos acessível",
+            "concluidoEm": "2026-11-22T14:23:53.133Z"
+        },
+        {
+            "id": "E5-05",
+            "demandaId": "DEM-E5-JOGOS-DIGITAIS-20261122",
+            "status": "COMPLETED",
+            "fingerprint": "sha256:dc862163b51e4a75",
+            "fingerprintFull": "sha256:dc862163b51e4a750450acd5ec0ce79f6b792170c122b33a34c96b39bbf43908",
+            "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+            "mensagemCommit": "feat(evolucao): integrar descobertas digitais ao Histórico e ao Resumo",
+            "concluidoEm": "2026-11-22T14:37:49.154Z"
+        },
+        {
+            "id": "E5-06-COR-01",
+            "demandaId": "DEM-E5-JOGOS-DIGITAIS-20261122",
+            "status": "COMPLETED",
+            "fingerprint": "sha256:df0b227d6b9d4939",
+            "fingerprintFull": "sha256:df0b227d6b9d49398c7bb50b3fd52821e7119abe3b339c85db9585f5ec5ed547",
+            "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+            "mensagemCommit": "fix(desenvolvimento): corrigir feedback e filtro da biblioteca",
+            "concluidoEm": "2026-11-22T15:37:01.415Z"
+        },
+        {
+            "id": "E5-06-COR-02",
+            "demandaId": "DEM-E5-JOGOS-DIGITAIS-20261122",
+            "status": "COMPLETED",
+            "fingerprint": "sha256:16946cbc721c8a20",
+            "fingerprintFull": "sha256:16946cbc721c8a2057470883887dd6e1910a05d63dc92111a781e3d627a3f305",
+            "evidencia": "docs/esteira/estado/evidencia-e5-20261122.json",
+            "mensagemCommit": "docs(dev): orientar sincronização do schema local para jogos digitais",
+            "concluidoEm": "2026-11-22T16:36:34.018Z"
         }
     ],
     "modulo": {

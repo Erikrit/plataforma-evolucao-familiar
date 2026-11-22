@@ -34,11 +34,15 @@ const controlador = readFileSync(
   join(raiz, "apps/api/src/desenvolvimento/controlador-desenvolvimento.ts"),
   "utf8",
 );
-const page = readFileSync(
+const entradaDesenvolvimento = readFileSync(
   join(
     raiz,
     "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/page.tsx",
   ),
+  "utf8",
+);
+const biblioteca = readFileSync(
+  join(raiz, "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx"),
   "utf8",
 );
 const api = readFileSync(join(raiz, "apps/web/src/lib/api.ts"), "utf8");
@@ -108,11 +112,12 @@ reg(
 );
 reg(
   "E4-ACE-07-ui",
-  page.includes("Sugestões para esta pessoa") &&
-    page.includes("Renovar sugestões") &&
-    page.includes("Ver biblioteca") &&
-    page.includes("Escolher para experimentar") &&
-    page.includes("Sem sugestões agora") &&
+  entradaDesenvolvimento.includes("Ver biblioteca") &&
+    entradaDesenvolvimento.includes('caminho + "/biblioteca"') &&
+    biblioteca.includes("Sugestões para esta pessoa") &&
+    biblioteca.includes("Renovar sugestões") &&
+    biblioteca.includes("Escolher para experimentar") &&
+    biblioteca.includes("Sem sugestões agora") &&
     api.includes("listarSugestoesDesafio") &&
     api.includes("renovarSugestoesDesafio"),
   "UI móvel com sugestões, renovar e biblioteca existente",
