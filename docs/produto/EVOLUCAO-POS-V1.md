@@ -272,6 +272,12 @@ Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pe
 
 **A definir no próximo detalhamento:** critério determinístico para ordenar os até três destaques sem perfilamento sensível nem questionário, comportamento quando a pessoa nunca jogou, catálogo pequeno/vazio, ausência de idade, mesmas opções disponíveis em categorias distintas e continuidade entre sessões. Não reaproveitar automaticamente a regra E4 de renovar sugestões (24/6/3) para jogos digitais, pois jogos e atividades presenciais possuem ciclos diferentes. Não confundir destaque editorial com recompensa, conclusão ou ponto. Quantidade final de jogos/fases ainda em discussão; nenhuma implementação da E5 autorizada.
 
+### E5 — Destaques automáticos aprovados (2026-11-22)
+
+**APROVADO expressamente pelo responsável do Produto:** os até três jogos destacados na Biblioteca de Desenvolvimento serão selecionados **automaticamente**, sem que o responsável precise fixar ou manter favoritos. Usar regra simples e determinística com o progresso já necessário para a experiência, priorizando continuidade e variedade, sem IA, questionários, métricas de erros, tempo de reação ou perfilamento sensível. Todos os jogos publicados permanecem acessíveis por categoria e em Todas, independentemente de destaque. Destaque não equivale a recomendação clínica, meta, acesso privilegiado nem liberação de fases.
+
+**Proposta de ordenação para detalhamento técnico/UX:** sem histórico, escolher até três jogos de categorias variadas e adequação orientativa; com histórico, incluir até um jogo recente e preencher com opções ainda não exploradas de categorias distintas; se todos já foram experimentados, variar opções de forma previsível e preservar acesso aos recentes. Sem idade, não ocultar opções gerais; com catálogo menor, mostrar apenas disponíveis, sem duplicar; empates e atualização de destaques devem manter estabilidade suficiente para não mudar a cada renderização. Não aplicar automaticamente os limites/renovação E4 de atividades presenciais. Exigir autorização por pessoa/família. **Quantidade final do catálogo e fases e critérios específicos da experiência ainda não estão aprovados; E5 segue em detalhamento, sem implementar nesta decisão.**
+
 ## 8. Participação, estrelas e evolução
 
 A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
