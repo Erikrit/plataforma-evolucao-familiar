@@ -277,7 +277,9 @@ export class ServicoMedicamentos {
       where: { id: medicamentoId },
       include: { pessoa: true },
     });
-    if (!med) throw new NotFoundException("Medicamento não encontrado.");
+    if (!med || med.pessoa.familiaId !== usuario.pessoa.familiaId) {
+      throw new NotFoundException("Medicamento não encontrado.");
+    }
     const pode = await this.autorizacoes.podeRegistrarRelatoCuidados(
       med.pessoa.familiaId,
       med.pessoaId,
@@ -344,7 +346,11 @@ export class ServicoMedicamentos {
       where: { id: registroId },
       include: { medicamento: { include: { pessoa: true } } },
     });
-    if (!atual || !atual.versaoAtiva) {
+    if (
+      !atual ||
+      !atual.versaoAtiva ||
+      atual.medicamento.pessoa.familiaId !== usuario.pessoa.familiaId
+    ) {
       throw new NotFoundException("Registro ativo não encontrado.");
     }
     const pode = await this.autorizacoes.podeRegistrarRelatoCuidados(
@@ -602,9 +608,8 @@ export class ServicoMedicamentos {
 
   private async exigirPessoaVisivel(pessoaId: string, usuario: UsuarioAutenticado) {
     const pessoa = await this.prisma.pessoa.findUnique({ where: { id: pessoaId } });
-    if (!pessoa) throw new NotFoundException("Pessoa não encontrada.");
-    if (pessoa.familiaId !== usuario.pessoa.familiaId) {
-      throw new ForbiddenException("Pessoa fora da família da sessão.");
+    if (!pessoa || pessoa.familiaId !== usuario.pessoa.familiaId) {
+      throw new NotFoundException("Pessoa não encontrada.");
     }
     const pode = await this.autorizacoes.podeVerCuidados(
       pessoa.familiaId,
@@ -625,7 +630,9 @@ export class ServicoMedicamentos {
       where: { id: medicamentoId },
       include: { pessoa: true },
     });
-    if (!med) throw new NotFoundException("Medicamento não encontrado.");
+    if (!med || med.pessoa.familiaId !== usuario.pessoa.familiaId) {
+      throw new NotFoundException("Medicamento não encontrado.");
+    }
     const pode = await this.autorizacoes.podeAlterarProgramacaoCuidados(
       med.pessoa.familiaId,
       med.pessoaId,

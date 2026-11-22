@@ -35,9 +35,13 @@ type EstadoSessao = {
   filtradoPorAutorizacao: boolean;
   podeGerenciarFamilia: boolean;
   erroSessao: string | null;
+  slugUrl: string | null;
+  contextoUrlCompativel: boolean;
   entrarNaSessao: (usuario: UsuarioSessao) => Promise<InicioResposta>;
   recarregarInicio: () => Promise<void>;
   limparSessaoLocal: () => void;
+  limparDadosContexto: () => void;
+  marcarSlugUrl: (slug: string | null) => void;
 };
 
 const ContextoSessao = createContext<EstadoSessao | null>(null);
@@ -53,9 +57,9 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
   const [destinoEntrada, setDestinoEntrada] = useState<string | null>(null);
   const [filtradoPorAutorizacao, setFiltrado] = useState(false);
   const [erroSessao, setErroSessao] = useState<string | null>(null);
+  const [slugUrl, setSlugUrl] = useState<string | null>(null);
 
-  const limparSessaoLocal = useCallback(() => {
-    setUsuario(null);
+  const limparDadosContexto = useCallback(() => {
     setCartoes([]);
     setDestaques([]);
     setAcessos(null);
@@ -63,6 +67,15 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
     setContextos([]);
     setDestinoEntrada(null);
     setFiltrado(false);
+  }, []);
+
+  const limparSessaoLocal = useCallback(() => {
+    setUsuario(null);
+    limparDadosContexto();
+  }, [limparDadosContexto]);
+
+  const marcarSlugUrl = useCallback((slug: string | null) => {
+    setSlugUrl(slug);
   }, []);
 
   const aplicarInicio = useCallback(async (atual: UsuarioSessao) => {
@@ -80,6 +93,16 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
     setContextos(inicio.contextos ?? []);
     setDestinoEntrada(inicio.destinoEntrada ?? null);
     setFiltrado(inicio.filtradoPorAutorizacao);
+    if (inicio.familiaSlug) {
+      setUsuario({
+        ...atual,
+        familia: {
+          id: atual.pessoa.familiaId,
+          nome: atual.familia?.nome ?? "",
+          slug: inicio.familiaSlug,
+        },
+      });
+    }
     return inicio;
   }, []);
 
@@ -91,20 +114,26 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
     [aplicarInicio],
   );
 
+  const slugSessao = usuario?.familia?.slug ?? null;
+  const contextoUrlCompativel = Boolean(
+    usuario && slugUrl && slugSessao && slugUrl === slugSessao,
+  );
+
   const recarregarInicio = useCallback(async () => {
     if (!usuario) return;
+    if (!slugUrl || usuario.familia?.slug !== slugUrl) {
+      limparDadosContexto();
+      return;
+    }
     await aplicarInicio(usuario);
-  }, [usuario, aplicarInicio]);
+  }, [usuario, aplicarInicio, slugUrl, limparDadosContexto]);
 
   useEffect(() => {
     limparSessaoLegada();
     void (async () => {
       try {
         const me = await obterMe();
-        if (me) {
-          setUsuario(me);
-          await aplicarInicio(me);
-        }
+        if (me) setUsuario(me);
       } catch (e) {
         setErroSessao(
           mensagemErroAmigavel(e, "Não foi possível verificar a sessão"),
@@ -113,28 +142,60 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
         setPronto(true);
       }
     })();
-  }, [aplicarInicio]);
+  }, []);
+
+  useEffect(() => {
+    if (!pronto || !usuario) return;
+    if (!slugUrl) {
+      limparDadosContexto();
+      return;
+    }
+    if (usuario.familia?.slug && usuario.familia.slug !== slugUrl) {
+      limparDadosContexto();
+      return;
+    }
+    let cancelado = false;
+    void (async () => {
+      try {
+        await aplicarInicio(usuario);
+      } catch (e) {
+        if (!cancelado) {
+          limparDadosContexto();
+          setErroSessao(
+            mensagemErroAmigavel(e, "Não foi possível carregar o início"),
+          );
+        }
+      }
+    })();
+    return () => {
+      cancelado = true;
+    };
+  }, [pronto, usuario?.id, slugUrl, aplicarInicio, limparDadosContexto]);
 
   const podeGerenciarFamilia = Boolean(
-    usuario && acessos?.modo === "administracao",
+    usuario && acessos?.modo === "administracao" && contextoUrlCompativel,
   );
 
   const valor = useMemo<EstadoSessao>(
     () => ({
       pronto,
       usuario,
-      cartoes,
-      destaques,
-      acessos,
-      autorizacoes,
-      contextos,
-      destinoEntrada,
+      cartoes: contextoUrlCompativel ? cartoes : [],
+      destaques: contextoUrlCompativel ? destaques : [],
+      acessos: contextoUrlCompativel ? acessos : null,
+      autorizacoes: contextoUrlCompativel ? autorizacoes : [],
+      contextos: contextoUrlCompativel ? contextos : [],
+      destinoEntrada: contextoUrlCompativel ? destinoEntrada : null,
       filtradoPorAutorizacao,
       podeGerenciarFamilia,
       erroSessao,
+      slugUrl,
+      contextoUrlCompativel,
       entrarNaSessao,
       recarregarInicio,
       limparSessaoLocal,
+      limparDadosContexto,
+      marcarSlugUrl,
     }),
     [
       pronto,
@@ -148,9 +209,13 @@ export function ProvedorSessao({ children }: { children: ReactNode }) {
       filtradoPorAutorizacao,
       podeGerenciarFamilia,
       erroSessao,
+      slugUrl,
+      contextoUrlCompativel,
       entrarNaSessao,
       recarregarInicio,
       limparSessaoLocal,
+      limparDadosContexto,
+      marcarSlugUrl,
     ],
   );
 

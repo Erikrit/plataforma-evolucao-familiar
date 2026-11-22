@@ -34,6 +34,7 @@ import {
   type AcessoResumo,
   type CombinacaoAcessoConcedivel,
 } from "@/lib/api";
+import { rotaFamilia } from "@/lib/rotas-familia";
 import { rotuloPapelExperiencia } from "@/lib/rotulos-experiencia";
 
 type AreaConcessao = CombinacaoAcessoConcedivel["area"];
@@ -367,7 +368,13 @@ export function PainelGerenciarFamilia() {
           nomeConvidado: criada.nome,
           pessoaContaId: criada.id,
         });
-        const caminho = `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
+        const slug = usuario.familia?.slug;
+        const caminho = slug
+          ? rotaFamilia(
+              slug,
+              `/convites/ativar?token=${encodeURIComponent(convite.token)}`,
+            )
+          : `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
         setLinkAtivacao(caminho);
         setEmailContaNova("");
         setPrecisaEntrar(false);
@@ -397,7 +404,13 @@ export function PainelGerenciarFamilia() {
         nomeConvidado: nomePessoa,
         pessoaContaId: pessoaId,
       });
-      const caminho = `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
+      const slug = usuario.familia?.slug;
+      const caminho = slug
+        ? rotaFamilia(
+            slug,
+            `/convites/ativar?token=${encodeURIComponent(convite.token)}`,
+          )
+        : `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
       setLinkAtivacao(caminho);
       setPessoaHabilitarId(null);
       setEmailHabilitar("");
@@ -429,7 +442,13 @@ export function PainelGerenciarFamilia() {
         responsabilidade: responsabilidadeConvite,
         pessoaAlvoId: pessoaAlvoConviteId,
       });
-      const caminho = `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
+      const slug = usuario.familia?.slug;
+      const caminho = slug
+        ? rotaFamilia(
+            slug,
+            `/convites/ativar?token=${encodeURIComponent(convite.token)}`,
+          )
+        : `/convites/ativar?token=${encodeURIComponent(convite.token)}`;
       setLinkAtivacao(caminho);
       setEtapaConfirmacaoConvite(false);
       setSucesso(
@@ -737,7 +756,7 @@ export function PainelGerenciarFamilia() {
                           ) : null}
                           <Anchor
                             component={Link}
-                            href={`/pessoas/${p.pessoaId}`}
+                            href={usuario?.familia?.slug ? rotaFamilia(usuario.familia.slug, `/pessoas/${p.pessoaId}`) : `/pessoas/${p.pessoaId}`}
                             size="sm"
                           >
                             Abrir perfil

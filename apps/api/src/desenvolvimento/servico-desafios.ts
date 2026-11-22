@@ -280,7 +280,7 @@ export class ServicoDesafios {
       );
     }
     if (desafio.familiaId !== usuario.pessoa.familiaId) {
-      throw new ForbiddenException("Brincadeira fora da família da sessão.");
+      throw new NotFoundException("Brincadeira não encontrada.");
     }
     await this.exigirAlgumDesenvolvimentoNaFamilia(
       desafio.familiaId,
@@ -574,9 +574,8 @@ export class ServicoDesafios {
     const pessoa = await this.prisma.pessoa.findUnique({
       where: { id: pessoaId },
     });
-    if (!pessoa) throw new NotFoundException("Pessoa não encontrada.");
-    if (pessoa.familiaId !== usuario.pessoa.familiaId) {
-      throw new ForbiddenException("Pessoa fora da família da sessão.");
+    if (!pessoa || pessoa.familiaId !== usuario.pessoa.familiaId) {
+      throw new NotFoundException("Pessoa não encontrada.");
     }
     const pode = await this.autorizacoes.podeVerDesenvolvimento(
       pessoa.familiaId,

@@ -104,11 +104,11 @@ export async function garantirResponsavelDesenvolvimento(
   return corpo;
 }
 
-export async function login(base, email, senha) {
+export async function login(base, email, senha, familiaSlug = "oliveira") {
   const r = await fetch(`${base}/sessoes`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ email, senha }),
+    body: JSON.stringify({ email, senha, familiaSlug }),
   });
   const texto = await r.text();
   let corpo;

@@ -48,6 +48,7 @@ try {
     data: {
       id: "familia_seed_local",
       nome: "Família Oliveira",
+      slug: "oliveira",
     },
   });
 

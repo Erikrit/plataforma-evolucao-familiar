@@ -133,6 +133,7 @@ export type ContextoOperacional = {
 
 export type InicioResposta = {
   familiaId: string;
+  familiaSlug?: string;
   cartoes: CartaoInicio[];
   destaques?: DestaqueInicio[];
   autorizacoes: AutorizacaoResumo[];
@@ -144,16 +145,24 @@ export type InicioResposta = {
   filtradoPorAutorizacao: boolean;
 };
 
+export type FamiliaContexto = {
+  id: string;
+  nome: string;
+  slug: string;
+};
+
 export type UsuarioSessao = {
   id: string;
   email: string;
   pessoa: { id: string; nome: string; familiaId: string };
+  familia?: FamiliaContexto;
 };
 
 export type SessaoResposta = {
   autenticacao?: string;
   expiraEm?: string;
   usuario: UsuarioSessao;
+  familia?: FamiliaContexto;
 };
 
 async function lerErro(resposta: Response) {
@@ -182,15 +191,26 @@ const fetchApi = (caminho: string, init: RequestInit = {}) => {
   });
 };
 
+export async function obterContextoFamilia(
+  slug: string,
+): Promise<FamiliaContexto> {
+  const resposta = await fetchApi(
+    `/familias/contexto/${encodeURIComponent(slug)}`,
+  );
+  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  return (await resposta.json()) as FamiliaContexto;
+}
+
 export async function entrar(
   email: string,
   senha: string,
+  familiaSlug: string,
 ): Promise<SessaoResposta> {
   limparSessaoLegada();
   const resposta = await fetchApi("/sessoes", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ email, senha }),
+    body: JSON.stringify({ email, senha, familiaSlug }),
   });
   if (!resposta.ok) throw new Error(await lerErro(resposta));
   const corpo = (await resposta.json()) as SessaoResposta & { token?: string };
@@ -198,6 +218,7 @@ export async function entrar(
     autenticacao: corpo.autenticacao,
     expiraEm: corpo.expiraEm,
     usuario: corpo.usuario,
+    familia: corpo.familia,
   };
 }
 
@@ -294,11 +315,13 @@ export async function criarConvite(
 
 export async function ativarConvite(
   token: string,
-  corpo: { senha: string; nome?: string },
+  corpo: { senha: string; nome?: string; familiaSlug: string },
 ): Promise<{
   ok?: boolean;
   pessoaId?: string;
   reutilizouPessoa?: boolean;
+  familiaSlug?: string;
+  destinoEntrada?: string;
 }> {
   const resposta = await fetchApi(`/convites/${encodeURIComponent(token)}/ativar`, {
     method: "POST",

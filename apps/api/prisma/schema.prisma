@@ -10,6 +10,8 @@ datasource db {
 model Familia {
   id           String         @id @default(cuid())
   nome         String
+  /// Identificador legível estável para URL /f/{slug}; não muda ao renomear.
+  slug         String         @unique
   criadaEm     DateTime       @default(now()) @map("criada_em")
   pessoas      Pessoa[]
   autorizacoes Autorizacao[]

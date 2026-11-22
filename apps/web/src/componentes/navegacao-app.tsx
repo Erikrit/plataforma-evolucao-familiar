@@ -17,6 +17,11 @@ import {
 import { useSessao } from "@/componentes/contexto-sessao";
 import { podeOrganizarDesenvolvimento } from "@/lib/rotulos-experiencia";
 import {
+  extrairSlugDaUrl,
+  pessoaIdDaUrl,
+  rotaFamilia,
+} from "@/lib/rotas-familia";
+import {
   obterPessoa,
   sair,
   type AreasAutorizadasCartao,
@@ -30,15 +35,16 @@ type AreaNav = {
 };
 
 function areasDaPessoa(
+  slug: string,
   pessoaId: string,
   auth: AreasAutorizadasCartao | null | undefined,
-  podeOrganizarDesenvolvimento: boolean,
+  podeOrganizar: boolean,
 ): AreaNav[] {
   const areas: AreaNav[] = [
     {
       id: "perfil",
       rotulo: "Perfil",
-      href: `/pessoas/${pessoaId}`,
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}`),
     },
   ];
   if (!auth) return areas;
@@ -46,30 +52,33 @@ function areasDaPessoa(
     areas.push({
       id: "rotina",
       rotulo: "Rotina",
-      href: `/pessoas/${pessoaId}/cuidados`,
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}/cuidados`),
     });
     areas.push({
       id: "medicamentos",
       rotulo: "Medicamentos",
-      href: `/pessoas/${pessoaId}/cuidados/medicamentos`,
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}/cuidados/medicamentos`),
     });
     areas.push({
       id: "consultas",
       rotulo: "Consultas e exames",
-      href: `/pessoas/${pessoaId}/cuidados/consultas`,
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}/cuidados/consultas`),
     });
   }
   if (auth.desenvolvimento) {
     areas.push({
       id: "desenvolvimento",
       rotulo: "Desenvolvimento",
-      href: `/pessoas/${pessoaId}/desenvolvimento`,
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}/desenvolvimento`),
     });
-    if (podeOrganizarDesenvolvimento) {
+    if (podeOrganizar) {
       areas.push({
         id: "cadastros-desenvolvimento",
         rotulo: "Cadastros",
-        href: `/pessoas/${pessoaId}/desenvolvimento/cadastros`,
+        href: rotaFamilia(
+          slug,
+          `/pessoas/${pessoaId}/desenvolvimento/cadastros`,
+        ),
         subitem: true,
       });
     }
@@ -78,20 +87,25 @@ function areasDaPessoa(
     areas.push({
       id: "historico",
       rotulo: "Histórico",
-      href: `/pessoas/${pessoaId}/historico`,
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}/historico`),
     });
     areas.push({
       id: "resumo",
       rotulo: "Resumo",
-      href: `/pessoas/${pessoaId}/resumo`,
+      href: rotaFamilia(slug, `/pessoas/${pessoaId}/resumo`),
     });
   }
   return areas;
 }
 
 function ativoPorHref(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
-  if (href === "/gerenciar-familia") return pathname.startsWith("/gerenciar-familia");
+  const home = href.match(/^\/f\/[^/]+\/?$/);
+  if (home) {
+    return pathname === href || pathname === href.replace(/\/$/, "");
+  }
+  if (href.endsWith("/gerenciar-familia")) {
+    return pathname.includes("/gerenciar-familia");
+  }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -116,28 +130,30 @@ function MenuNavegacao({
   onNavegar?: () => void;
 }) {
   const pathname = usePathname();
+  const slugUrl = extrairSlugDaUrl(pathname);
   const {
     pronto,
     usuario,
     cartoes,
     autorizacoes,
     podeGerenciarFamilia,
+    contextoUrlCompativel,
     limparSessaoLocal,
   } = useSessao();
+  const slug = slugUrl ?? usuario?.familia?.slug ?? null;
   const [saindo, setSaindo] = useState(false);
   const [areasFallback, setAreasFallback] =
     useState<AreasAutorizadasCartao | null>(null);
   const [nomeFallback, setNomeFallback] = useState<string | null>(null);
 
-  const pessoaMatch = pathname.match(/^\/pessoas\/([^/]+)/);
-  const pessoaId = pessoaMatch?.[1] ?? null;
+  const pessoaId = pessoaIdDaUrl(pathname);
   const cartaoAtual = useMemo(
     () => cartoes.find((c) => c.pessoaId === pessoaId) ?? null,
     [cartoes, pessoaId],
   );
 
   useEffect(() => {
-    if (!usuario || !pessoaId) {
+    if (!usuario || !pessoaId || !contextoUrlCompativel) {
       setAreasFallback(null);
       setNomeFallback(null);
       return;
@@ -179,13 +195,13 @@ function MenuNavegacao({
     return () => {
       cancelado = true;
     };
-  }, [usuario, pessoaId, cartaoAtual]);
+  }, [usuario, pessoaId, cartaoAtual, contextoUrlCompativel]);
 
-  // Só monta destinos após flags reais; sem auth ainda → só Perfil (sem vazamento).
   const areas = useMemo(
     () =>
-      pessoaId
+      slug && pessoaId && contextoUrlCompativel
         ? areasDaPessoa(
+            slug,
             pessoaId,
             cartaoAtual?.areasAutorizadas ?? areasFallback,
             podeOrganizarDesenvolvimento(
@@ -195,7 +211,15 @@ function MenuNavegacao({
             ),
           )
         : [],
-    [pessoaId, cartaoAtual, areasFallback, usuario, autorizacoes],
+    [
+      slug,
+      pessoaId,
+      cartaoAtual,
+      areasFallback,
+      usuario,
+      autorizacoes,
+      contextoUrlCompativel,
+    ],
   );
   const nomePessoaMenu = cartaoAtual?.nome ?? nomeFallback;
 
@@ -222,29 +246,71 @@ function MenuNavegacao({
     );
   }
 
-  if (!usuario) {
+  if (slugUrl && usuario && !contextoUrlCompativel) {
     return (
       <Stack gap="xs" p="md">
         <Text size="sm" c="dimmed">
-          Entre para ver a família.
+          Contexto familiar diferente. Nenhum dado desta ou da outra família é
+          exibido aqui.
         </Text>
         <NavLink
           component={Link}
-          href="/"
-          label="Entrar"
-          active={pathname === "/"}
+          href={rotaFamilia(slugUrl, "/entrar")}
+          label="Entrar nesta família"
           onClick={onNavegar}
         />
-        <NavLink
-          component={Link}
-          href="/convites/ativar"
-          label="Ativar convite"
-          active={pathname.startsWith("/convites")}
-          onClick={onNavegar}
-        />
+        {usuario.familia?.slug ? (
+          <NavLink
+            component={Link}
+            href={rotaFamilia(usuario.familia.slug, "/")}
+            label="Ir à sua família"
+            onClick={onNavegar}
+          />
+        ) : null}
+        <Button
+          variant="default"
+          onClick={() => void aoSair()}
+          loading={saindo}
+          fullWidth
+        >
+          Sair
+        </Button>
       </Stack>
     );
   }
+
+  if (!usuario || !slug) {
+    return (
+      <Stack gap="xs" p="md">
+        <Text size="sm" c="dimmed">
+          Entre pelo endereço da família.
+        </Text>
+        {slugUrl ? (
+          <NavLink
+            component={Link}
+            href={rotaFamilia(slugUrl, "/entrar")}
+            label="Entrar"
+            active={pathname.endsWith("/entrar")}
+            onClick={onNavegar}
+          />
+        ) : (
+          <NavLink
+            component={Link}
+            href="/"
+            label="Início"
+            active={pathname === "/"}
+            onClick={onNavegar}
+          />
+        )}
+        <Text size="sm" c="dimmed">
+          Convites são ativados pelo link /f/…/convites/ativar da família.
+        </Text>
+      </Stack>
+    );
+  }
+
+  const hrefInicio = rotaFamilia(slug, "/");
+  const hrefGestao = rotaFamilia(slug, "/gerenciar-familia");
 
   return (
     <Stack gap="md" p="md">
@@ -261,17 +327,17 @@ function MenuNavegacao({
         </Text>
         <NavLink
           component={Link}
-          href="/"
+          href={hrefInicio}
           label="Nossa família"
-          active={pathname === "/"}
+          active={ativoPorHref(pathname, hrefInicio)}
           onClick={onNavegar}
         />
         {podeGerenciarFamilia ? (
           <NavLink
             component={Link}
-            href="/gerenciar-familia"
+            href={hrefGestao}
             label="Gerenciar família"
-            active={ativoPorHref(pathname, "/gerenciar-familia")}
+            active={ativoPorHref(pathname, hrefGestao)}
             onClick={onNavegar}
           />
         ) : null}
@@ -311,19 +377,20 @@ function MenuNavegacao({
 export function NavegacaoApp({ children }: { children: ReactNode }) {
   const [menuAberto, setMenuAberto] = useState(false);
   const pathname = usePathname();
-  const { usuario, cartoes } = useSessao();
+  const { usuario, cartoes, contextoUrlCompativel } = useSessao();
+  const slug = extrairSlugDaUrl(pathname) ?? usuario?.familia?.slug ?? null;
 
-  const pessoaMatch = pathname.match(/^\/pessoas\/([^/]+)/);
-  const pessoaId = pessoaMatch?.[1] ?? null;
+  const pessoaId = pessoaIdDaUrl(pathname);
   const nomePessoa =
-    cartoes.find((c) => c.pessoaId === pessoaId)?.nome ?? null;
+    contextoUrlCompativel
+      ? (cartoes.find((c) => c.pessoaId === pessoaId)?.nome ?? null)
+      : null;
 
-  const titulo =
-    pathname.startsWith("/gerenciar-familia")
-      ? "Gerenciar família"
-      : pessoaId && nomePessoa
-        ? nomePessoa
-        : "Nossa família";
+  const titulo = pathname.includes("/gerenciar-familia")
+    ? "Gerenciar família"
+    : pessoaId && nomePessoa
+      ? nomePessoa
+      : "Nossa família";
 
   return (
     <AppShell
@@ -349,9 +416,13 @@ export function NavegacaoApp({ children }: { children: ReactNode }) {
               <Title order={4} component="p" style={{ margin: 0 }}>
                 {titulo}
               </Title>
-              {usuario && pessoaId ? (
+              {usuario && pessoaId && contextoUrlCompativel ? (
                 <Text size="xs" c="dimmed">
                   Acompanhamento por pessoa
+                </Text>
+              ) : slug ? (
+                <Text size="xs" c="dimmed">
+                  /f/{slug}
                 </Text>
               ) : null}
             </Stack>

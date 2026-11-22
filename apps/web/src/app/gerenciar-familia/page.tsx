@@ -1,10 +1,7 @@
-import { Container } from "@mantine/core";
-import { PainelGerenciarFamilia } from "@/componentes/painel-gerenciar-familia";
+"use client";
 
-export default function PaginaGerenciarFamilia() {
-  return (
-    <Container component="main" size="sm" px={0}>
-      <PainelGerenciarFamilia />
-    </Container>
-  );
+import { RedirecionarRotaLegada } from "@/componentes/redirecionar-rota-legada";
+
+export default function PaginaGerenciarLegada() {
+  return <RedirecionarRotaLegada />;
 }

@@ -79,11 +79,12 @@ export class ServicoAnexos {
     const anexo = await this.prisma.anexo.findUnique({
       where: { id: anexoId },
     });
-    if (!anexo || anexo.revogadoEm) {
+    if (
+      !anexo ||
+      anexo.revogadoEm ||
+      usuario.pessoa.familiaId !== anexo.familiaId
+    ) {
       throw new NotFoundException("Anexo não encontrado.");
-    }
-    if (usuario.pessoa.familiaId !== anexo.familiaId) {
-      throw new ForbiddenException("Anexo fora do alcance da sessão.");
     }
     if (anexo.pessoaId) {
       const pode = await this.autorizacoes.podeConsultarAnexosCuidados(
@@ -124,11 +125,12 @@ export class ServicoAnexos {
     const anexo = await this.prisma.anexo.findUnique({
       where: { id: anexoId },
     });
-    if (!anexo || anexo.revogadoEm) {
+    if (
+      !anexo ||
+      anexo.revogadoEm ||
+      usuario.pessoa.familiaId !== anexo.familiaId
+    ) {
       throw new NotFoundException("Anexo não encontrado.");
-    }
-    if (usuario.pessoa.familiaId !== anexo.familiaId) {
-      throw new ForbiddenException("Anexo fora do alcance.");
     }
 
     for (const medicamentoId of medicamentoIds) {

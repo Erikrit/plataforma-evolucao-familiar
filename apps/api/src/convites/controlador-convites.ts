@@ -16,6 +16,7 @@ type CorpoConvite = {
 type CorpoAtivacao = {
   senha?: string;
   nome?: string;
+  familiaSlug?: string;
 };
 
 @Controller()

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   GoneException,
   Injectable,
   NotFoundException,
@@ -14,6 +15,7 @@ import {
   type Responsabilidade,
 } from "../autorizacoes/responsabilidades";
 import { gerarHashSenha } from "../comum/senha";
+import { normalizarSlugFamilia } from "../comum/slug-familia";
 
 const DURACAO_CONVITE_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -116,16 +118,30 @@ export class ServicoConvites {
 
   async ativar(
     token: string,
-    entrada: { senha?: string; nome?: string },
+    entrada: { senha?: string; nome?: string; familiaSlug?: string },
   ) {
+    const slugInformado = (entrada.familiaSlug ?? "").trim();
+    if (!slugInformado) {
+      throw new BadRequestException(
+        "Informe o endereço da família para ativar o convite.",
+      );
+    }
+    const slug = normalizarSlugFamilia(slugInformado);
+
     const convite = await this.prisma.convite.findUnique({
       where: { token },
       include: {
+        familia: { select: { id: true, slug: true } },
         pessoaAlvo: true,
         pessoaConta: { include: { usuario: { select: { id: true } } } },
       },
     });
     if (!convite) throw new NotFoundException("Convite não encontrado.");
+    if (!convite.familia?.slug || convite.familia.slug !== slug) {
+      throw new ForbiddenException(
+        "Convite não é válido neste contexto familiar.",
+      );
+    }
     if (convite.usadoEm) {
       throw new GoneException("Convite já utilizado.");
     }
@@ -209,10 +225,12 @@ export class ServicoConvites {
       email: resultado.usuario.email,
       pessoaId: resultado.pessoaId,
       familiaId: convite.familiaId,
+      familiaSlug: convite.familia.slug,
       pessoaAlvoId: convite.pessoaAlvoId,
       pessoaContaId: convite.pessoaContaId,
       responsabilidade: convite.responsabilidade,
       reutilizouPessoa: Boolean(convite.pessoaContaId),
+      destinoEntrada: `/f/${convite.familia.slug}/entrar`,
     };
   }
 }

@@ -1,8 +1,10 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Req,
   Res,
@@ -16,11 +18,17 @@ import type { RequisicaoComUsuario } from "../comum/tipos-requisicao";
 type CorpoEntrada = {
   email?: string;
   senha?: string;
+  familiaSlug?: string;
 };
 
 @Controller()
 export class ControladorSessao {
   constructor(private readonly sessoes: ServicoSessao) {}
+
+  @Get("familias/contexto/:slug")
+  async contextoFamilia(@Param("slug") slug: string) {
+    return this.sessoes.obterFamiliaPorSlug(slug);
+  }
 
   @Post("sessoes")
   async entrar(
@@ -29,7 +37,13 @@ export class ControladorSessao {
   ) {
     const email = (corpo.email ?? "").trim();
     const senha = corpo.senha ?? "";
-    const sessao = await this.sessoes.entrar(email, senha);
+    const familiaSlug = (corpo.familiaSlug ?? "").trim();
+    if (!familiaSlug) {
+      throw new BadRequestException(
+        "Informe o endereço da família para entrar.",
+      );
+    }
+    const sessao = await this.sessoes.entrar(email, senha, familiaSlug);
     this.definirCookieSessao(resposta, sessao.token, sessao.expiraEm);
     return sessao;
   }
@@ -46,8 +60,11 @@ export class ControladorSessao {
 
   @Get("me")
   @UseGuards(GuardaSessao)
-  eu(@Req() requisicao: Request & RequisicaoComUsuario) {
+  async eu(@Req() requisicao: Request & RequisicaoComUsuario) {
     const usuario = requisicao.usuario!;
+    const familia = await this.sessoes.obterFamiliaPorId(
+      usuario.pessoa.familiaId,
+    );
     return {
       id: usuario.id,
       email: usuario.email,
@@ -55,6 +72,11 @@ export class ControladorSessao {
         id: usuario.pessoa.id,
         nome: usuario.pessoa.nome,
         familiaId: usuario.pessoa.familiaId,
+      },
+      familia: {
+        id: familia.id,
+        nome: familia.nome,
+        slug: familia.slug,
       },
       autenticacao: "sessao_mvp",
     };

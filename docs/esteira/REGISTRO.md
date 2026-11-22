@@ -1,5 +1,53 @@
 # Registro da esteira
 
+## 2026-11-21 — E1-04 COMPLETED (técnico PASS; humana PENDING)
+
+- **Demanda:** DEM-E1-FAMILIAS-20261121 COMPLETED técnico; homologação humana PENDING_HUMAN.
+- **Entrega:** QG-3 integrado; smokes legados pré-contexto removidos; suíte nova `e1-01..04` + `e1-jornadas` + `e1-authz`; roteiro humano.
+- **QG-1/2/3:** PASS · Verifier indep. shell PASS; oficial BLOCKED Ask ([verifier](0aa384e2-1a46-49bf-b313-dff5de6cdbc9))
+- **Critérios:** E1-ACE-01..08 PASS técnico; ACE-08 humano pendente
+- **Fingerprint:** `sha256:7b3f13d6c96b7878`
+- **Evidência:** `evidencia-e1-04-20261121.json` · `roteiro-homologacao-e1-04.md`
+- **Commit/push/deploy:** não executados
+
+## 2026-11-21 — E1-03 COMPLETED (técnico PASS)
+
+- **Demanda:** DEM-E1-FAMILIAS-20261121 permanece IN_PROGRESS; próximo E1-04.
+- **Entrega:** isolamento API (404 cruzado sem revelar existência), ativação de convite com `familiaSlug`, UI `/f/{slug}/convites/ativar`, revogação com sessão invalidada.
+- **QG-1/2:** PASS · QG-3 N/A · Verifier indep. shell PASS; oficial BLOCKED Ask ([verifier](e1e2abc8-7846-4f42-9703-318e202cec51))
+- **Critérios:** E1-ACE-05/06/07 PASS
+- **Fingerprint:** `sha256:6b7f7732595e5810`
+- **Evidência:** `evidencia-e1-03-20261121.json`
+- **Commit/push/deploy:** não executados
+
+## 2026-11-21 — E1-02 COMPLETED (técnico PASS)
+
+- **Demanda:** DEM-E1-FAMILIAS-20261121 permanece IN_PROGRESS; próximo E1-03.
+- **Entrega:** árvore `/f/[slug]/*`, guarda de contexto, `destinoEntrada`/hrefs com slug, rotas legadas redirecionadas, limpeza de dados ao trocar URL.
+- **QG-1/2:** PASS · QG-3 N/A · Verifier indep. shell PASS; oficial BLOCKED Ask ([verifier](e1dff68b-bedb-41fe-8ab2-b28dc2e5ba84))
+- **Critérios:** E1-ACE-03/04 PASS
+- **Fingerprint:** `sha256:0f36e9f6de2d4126`
+- **Evidência:** `evidencia-e1-02-20261121.json`
+- **Commit/push/deploy:** não executados
+
+## 2026-11-21 — E1-01 COMPLETED (técnico PASS)
+
+- **Demanda:** DEM-E1-FAMILIAS-20261121 permanece IN_PROGRESS; próximo E1-02.
+- **Entrega:** `Familia.slug`; provisionamento privado (CLI); POST `/sessoes` com `familiaSlug`; `/f/[slug]/entrar`; home sem login global.
+- **QG-1/2:** PASS · QG-3 N/A (incremento) · Verifier indep. shell PASS; oficial BLOCKED Ask ([verifier](93fede9b-e1da-480f-b366-79d9bdd033be))
+- **Critérios:** E1-ACE-01/02 PASS
+- **Fingerprint:** `sha256:efa4c2550a447dc2`
+- **Evidência:** `evidencia-e1-01-20261121.json`
+- **Commit/push/deploy:** não executados
+
+## 2026-11-21 — Retomada DEM-E1-FAMILIAS / E1-01 IN_PROGRESS
+
+- **Reconciliação:** develop @ `1cb67a05c848d1698b0a938becf6c57afe8c5a6c`, worktree limpo; base de plano `9193f16` ancestral.
+- **Triagem:** transversal aprovada L3 (M01 v1.7 §13); fluxo implementation-workflow → quality-gate + verifier.
+- **Decisões técnicas locais E1-01:** `familiaSlug` obrigatório em POST /sessoes; slug `[a-z0-9-]+` único; provisionamento via CLI/`lib-provisionar-familia` com senha só em `PEF_PROVISION_SENHA`.
+- **Escopo ativo:** E1-ACE-01/02 — schema slug, seed oliveira, login contextual, `/f/[slug]/entrar`, smoke/check e1-01.
+- **Commit/push/deploy:** não executados.
+
 ## 2026-11-21 — Direção pós-V1 aprovada e planejamento E1
 
 - **Fonte do aceite:** responsável do Produto concordou com a recomendação de aprovar a direção E1–E7 apresentada sobre o commit `9193f16`. Reservadas decisões particulares de pontuação digital, dados pessoais/IA e clínica.

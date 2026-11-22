@@ -436,6 +436,14 @@ export class ServicoAutorizacoes {
 
   async cartoesInicio(familiaId: string, usuario: UsuarioAutenticado) {
     await this.garantirFamilia(familiaId, usuario);
+    const familia = await this.prisma.familia.findUnique({
+      where: { id: familiaId },
+      select: { slug: true },
+    });
+    if (!familia?.slug) {
+      throw new NotFoundException("Família sem endereço configurado.");
+    }
+    const baseFamilia = `/f/${familia.slug}`;
     const visao = await this.idsPessoasVisiveis(familiaId, usuario);
     const pessoas = await this.prisma.pessoa.findMany({
       where:
@@ -501,7 +509,7 @@ export class ServicoAutorizacoes {
           pessoaId: cartao.pessoaId,
           nome: cartao.nome,
           area: "cuidados",
-          href: `/pessoas/${cartao.pessoaId}/cuidados`,
+          href: `${baseFamilia}/pessoas/${cartao.pessoaId}/cuidados`,
         });
       }
       if (cartao.areasAutorizadas.desenvolvimento) {
@@ -509,7 +517,7 @@ export class ServicoAutorizacoes {
           pessoaId: cartao.pessoaId,
           nome: cartao.nome,
           area: "desenvolvimento",
-          href: `/pessoas/${cartao.pessoaId}/desenvolvimento`,
+          href: `${baseFamilia}/pessoas/${cartao.pessoaId}/desenvolvimento`,
         });
       }
     }
@@ -518,11 +526,14 @@ export class ServicoAutorizacoes {
     if (contextos.length === 1) {
       destinoEntrada = contextos[0].href;
     } else if (contextos.length === 0 && visao.adminFamilia) {
-      destinoEntrada = "/gerenciar-familia";
+      destinoEntrada = `${baseFamilia}/gerenciar-familia`;
+    } else if (contextos.length > 1) {
+      destinoEntrada = baseFamilia;
     }
 
     return {
       familiaId,
+      familiaSlug: familia.slug,
       cartoes,
       destaques,
       autorizacoes,

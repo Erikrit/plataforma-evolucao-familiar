@@ -1,17 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import {
   Anchor,
   Button,
   Card,
-  PasswordInput,
   SimpleGrid,
   Stack,
   Text,
-  TextInput,
   Title,
 } from "@mantine/core";
 import { useSessao } from "@/componentes/contexto-sessao";
@@ -19,9 +16,9 @@ import {
   EstadoCarregando,
   EstadoVazio,
   MensagemFeedback,
-  mensagemErroAmigavel,
 } from "@/componentes/feedback";
-import { entrar, type AcessoResumo, type ContextoOperacional } from "@/lib/api";
+import { type AcessoResumo, type ContextoOperacional } from "@/lib/api";
+import { rotaFamilia } from "@/lib/rotas-familia";
 import { rotuloPapelExperiencia } from "@/lib/rotulos-experiencia";
 
 function textoAcesso(a: AcessoResumo): string {
@@ -38,7 +35,6 @@ function rotuloArea(area: ContextoOperacional["area"]): string {
 }
 
 export function PainelFundacao() {
-  const router = useRouter();
   const {
     pronto,
     usuario,
@@ -48,14 +44,8 @@ export function PainelFundacao() {
     contextos,
     destinoEntrada,
     podeGerenciarFamilia,
-    entrarNaSessao,
     erroSessao,
   } = useSessao();
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState<string | null>(null);
-  const [sucesso, setSucesso] = useState<string | null>(null);
-  const [carregando, setCarregando] = useState(false);
 
   const contextosPorPessoa = useMemo(() => {
     const mapa = new Map<
@@ -77,25 +67,6 @@ export function PainelFundacao() {
     }));
   }, [contextos]);
 
-  async function aoEntrar(evento: FormEvent) {
-    evento.preventDefault();
-    setCarregando(true);
-    setErro(null);
-    setSucesso(null);
-    try {
-      const nova = await entrar(email, senha);
-      const inicio = await entrarNaSessao(nova.usuario);
-      setSucesso("Você entrou.");
-      if (inicio.destinoEntrada) {
-        router.replace(inicio.destinoEntrada);
-      }
-    } catch (e) {
-      setErro(mensagemErroAmigavel(e, "Não foi possível entrar"));
-    } finally {
-      setCarregando(false);
-    }
-  }
-
   if (!pronto) {
     return <EstadoCarregando rotulo="Verificando sessão…" />;
   }
@@ -104,39 +75,38 @@ export function PainelFundacao() {
     return (
       <Card withBorder padding="lg" radius="md">
         <Stack gap="md">
-          <Title order={2}>Entrar</Title>
+          <Title order={2}>Entrar na família</Title>
           <Text c="dimmed" size="sm">
-            Use o e-mail e a senha da sua conta familiar.
+            O acesso é pelo endereço da sua família (exemplo: /f/oliveira/entrar).
+            Não há login global nesta etapa.
           </Text>
-          <form onSubmit={aoEntrar}>
-            <Stack gap="sm">
-              <TextInput
-                label="E-mail"
-                value={email}
-                onChange={(e) => setEmail(e.currentTarget.value)}
-                autoComplete="username"
-                required
-                type="email"
-              />
-              <PasswordInput
-                label="Senha"
-                value={senha}
-                onChange={(e) => setSenha(e.currentTarget.value)}
-                autoComplete="current-password"
-                required
-              />
-              <Button type="submit" loading={carregando}>
-                Entrar
-              </Button>
-            </Stack>
-          </form>
           <Text size="sm">
-            Recebeu um convite?{" "}
-            <Anchor component={Link} href="/convites/ativar">
-              Ativar convite
+            Família de desenvolvimento local:{" "}
+            <Anchor component={Link} href="/f/oliveira/entrar">
+              /f/oliveira/entrar
             </Anchor>
           </Text>
-          <MensagemFeedback erro={erro ?? erroSessao} sucesso={sucesso} />
+          <Text size="sm">
+            Recebeu um convite? Use o link enviado pela família (endereço
+            /f/…/convites/ativar).
+          </Text>
+          <MensagemFeedback erro={erroSessao} />
+        </Stack>
+      </Card>
+    );
+  }
+
+  const slug = usuario.familia?.slug;
+  if (!slug) {
+    return (
+      <Card withBorder padding="lg" radius="md">
+        <Stack gap="md">
+          <Title order={2}>Contexto incompleto</Title>
+          <Text c="dimmed" size="sm">
+            Não foi possível identificar o endereço da família nesta sessão.
+            Entre novamente pelo endereço /f/…/entrar.
+          </Text>
+          <MensagemFeedback erro={erroSessao} />
         </Stack>
       </Card>
     );
@@ -144,6 +114,7 @@ export function PainelFundacao() {
 
   const escolhaMultipla = contextos.length > 1;
   const contextoUnico = contextos.length === 1 ? contextos[0] : null;
+  const hrefGestao = rotaFamilia(slug, "/gerenciar-familia");
 
   return (
     <Stack gap="lg">
@@ -177,7 +148,7 @@ export function PainelFundacao() {
               <Card
                 key={`${d.tipo}-${d.pessoaId}-${d.quando}`}
                 component={Link}
-                href={`/pessoas/${d.pessoaId}`}
+                href={rotaFamilia(slug, `/pessoas/${d.pessoaId}`)}
                 withBorder
                 padding="sm"
                 radius="md"
@@ -252,7 +223,7 @@ export function PainelFundacao() {
                 <Card
                   key={cartao.pessoaId}
                   component={Link}
-                  href={`/pessoas/${cartao.pessoaId}`}
+                  href={rotaFamilia(slug, `/pessoas/${cartao.pessoaId}`)}
                   withBorder
                   padding="md"
                   radius="md"
@@ -281,7 +252,7 @@ export function PainelFundacao() {
       {podeGerenciarFamilia ? (
         <Card
           component={Link}
-          href="/gerenciar-familia"
+          href={hrefGestao}
           withBorder
           padding="md"
           radius="md"
@@ -289,14 +260,14 @@ export function PainelFundacao() {
         >
           <Text fw={600}>Gerenciar família</Text>
           <Text size="sm" c="dimmed">
-            {destinoEntrada === "/gerenciar-familia" && contextos.length === 0
+            {destinoEntrada === hrefGestao && contextos.length === 0
               ? "Nenhum contexto operacional — abra a gestão da família."
               : "Pessoas, acessos e convites — área administrativa separada do acompanhamento."}
           </Text>
         </Card>
       ) : null}
 
-      <MensagemFeedback erro={erro ?? erroSessao} sucesso={sucesso} />
+      <MensagemFeedback erro={erroSessao} />
     </Stack>
   );
 }

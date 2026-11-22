@@ -456,9 +456,8 @@ export class ServicoRecompensas {
     const pessoa = await this.prisma.pessoa.findUnique({
       where: { id: pessoaId },
     });
-    if (!pessoa) throw new NotFoundException("Pessoa não encontrada.");
-    if (pessoa.familiaId !== usuario.pessoa.familiaId) {
-      throw new ForbiddenException("Pessoa fora da família da sessão.");
+    if (!pessoa || pessoa.familiaId !== usuario.pessoa.familiaId) {
+      throw new NotFoundException("Pessoa não encontrada.");
     }
     const pode = await this.autorizacoes.podeVerDesenvolvimento(
       pessoa.familiaId,

@@ -1125,9 +1125,8 @@ export class ServicoAcompanhamento {
 
   private async exigirVisao(pessoaId: string, usuario: UsuarioAutenticado) {
     const pessoa = await this.prisma.pessoa.findUnique({ where: { id: pessoaId } });
-    if (!pessoa) throw new NotFoundException("Pessoa não encontrada.");
-    if (pessoa.familiaId !== usuario.pessoa.familiaId) {
-      throw new ForbiddenException("Pessoa fora da família.");
+    if (!pessoa || pessoa.familiaId !== usuario.pessoa.familiaId) {
+      throw new NotFoundException("Pessoa não encontrada.");
     }
     const [cuidados, desenvolvimento] = await Promise.all([
       this.autorizacoes.podeVerCuidados(

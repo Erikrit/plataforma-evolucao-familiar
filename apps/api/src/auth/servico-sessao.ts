@@ -1,10 +1,12 @@
 import {
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { createHash, randomBytes } from "node:crypto";
 import { ServicoPrisma } from "../prisma/servico-prisma";
 import { verificarSenha } from "../comum/senha";
+import { normalizarSlugFamilia } from "../comum/slug-familia";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
 
 const DURACAO_SESSAO_MS = 12 * 60 * 60 * 1000;
@@ -18,12 +20,26 @@ export function hashTokenSessao(token: string): string {
 export class ServicoSessao {
   constructor(private readonly prisma: ServicoPrisma) {}
 
-  async entrar(email: string, senha: string) {
+  async entrar(email: string, senha: string, familiaSlug: string) {
+    const slug = normalizarSlugFamilia(familiaSlug);
+    const familia = await this.prisma.familia.findUnique({
+      where: { slug },
+      select: { id: true, nome: true, slug: true },
+    });
+    if (!familia) {
+      throw new NotFoundException("Endereço de família não encontrado.");
+    }
+
     const usuario = await this.prisma.usuario.findUnique({
       where: { email: email.trim().toLowerCase() },
       include: { pessoa: true },
     });
-    if (!usuario || !verificarSenha(senha, usuario.senhaHash)) {
+    const credenciaisOk =
+      !!usuario && verificarSenha(senha, usuario.senhaHash);
+    const mesmaFamilia =
+      !!usuario && usuario.pessoa.familiaId === familia.id;
+
+    if (!credenciaisOk || !mesmaFamilia) {
       throw new UnauthorizedException("Credenciais inválidas.");
     }
 
@@ -41,6 +57,11 @@ export class ServicoSessao {
       token,
       expiraEm: sessao.expiraEm.toISOString(),
       autenticacao: "sessao_mvp",
+      familia: {
+        id: familia.id,
+        nome: familia.nome,
+        slug: familia.slug,
+      },
       usuario: {
         id: usuario.id,
         email: usuario.email,
@@ -51,6 +72,29 @@ export class ServicoSessao {
         },
       },
     };
+  }
+
+  async obterFamiliaPorSlug(familiaSlug: string) {
+    const slug = normalizarSlugFamilia(familiaSlug);
+    const familia = await this.prisma.familia.findUnique({
+      where: { slug },
+      select: { id: true, nome: true, slug: true },
+    });
+    if (!familia) {
+      throw new NotFoundException("Endereço de família não encontrado.");
+    }
+    return familia;
+  }
+
+  async obterFamiliaPorId(familiaId: string) {
+    const familia = await this.prisma.familia.findUnique({
+      where: { id: familiaId },
+      select: { id: true, nome: true, slug: true },
+    });
+    if (!familia) {
+      throw new NotFoundException("Família da sessão não encontrada.");
+    }
+    return familia;
   }
 
   async obterUsuarioPorToken(

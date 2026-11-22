@@ -72,7 +72,12 @@ export class ServicoCompromissos {
       where: { id: consultaId },
       include: { pessoa: true },
     });
-    if (!consulta) throw new NotFoundException("Consulta não encontrada.");
+    if (
+      !consulta ||
+      consulta.pessoa.familiaId !== usuario.pessoa.familiaId
+    ) {
+      throw new NotFoundException("Consulta não encontrada.");
+    }
     await this.exigirOrganizacao(consulta.pessoaId, usuario);
 
     return this.prisma.consulta.update({
@@ -189,9 +194,8 @@ export class ServicoCompromissos {
 
   private async exigirVisao(pessoaId: string, usuario: UsuarioAutenticado) {
     const pessoa = await this.prisma.pessoa.findUnique({ where: { id: pessoaId } });
-    if (!pessoa) throw new NotFoundException("Pessoa não encontrada.");
-    if (pessoa.familiaId !== usuario.pessoa.familiaId) {
-      throw new ForbiddenException("Pessoa fora da família.");
+    if (!pessoa || pessoa.familiaId !== usuario.pessoa.familiaId) {
+      throw new NotFoundException("Pessoa não encontrada.");
     }
     const pode = await this.autorizacoes.podeVerCuidados(
       pessoa.familiaId,
