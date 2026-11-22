@@ -82,26 +82,32 @@ export class ControladorSessao {
     };
   }
 
+  private opcoesCookieSessao(): {
+    httpOnly: true;
+    sameSite: "lax";
+    secure: boolean;
+    path: "/";
+  } {
+    return {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.COOKIE_SECURE === "true",
+      path: "/",
+    };
+  }
+
   private definirCookieSessao(
     resposta: Response,
     token: string,
     expiraEmIso: string,
   ) {
-    const seguro = process.env.COOKIE_SECURE === "true";
     resposta.cookie(NOME_COOKIE_SESSAO, token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: seguro,
-      path: "/",
+      ...this.opcoesCookieSessao(),
       expires: new Date(expiraEmIso),
     });
   }
 
   private limparCookieSessao(resposta: Response) {
-    resposta.clearCookie(NOME_COOKIE_SESSAO, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-    });
+    resposta.clearCookie(NOME_COOKIE_SESSAO, this.opcoesCookieSessao());
   }
 }

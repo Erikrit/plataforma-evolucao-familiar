@@ -2,7 +2,9 @@
 
 ## Estabilização pré-uso — 2026-11-22
 
-**Demanda ativa:** `ESTABILIZACAO-PRE-USO-20261122` (READY). Objetivo: preparar a plataforma para uso real **sem** novas funcionalidades e **sem** iniciar E6/E7. Plano em `docs/esteira/planejamento/estabilizacao-pre-uso.md` (EST-00..EST-04).
+**Demanda ativa:** `ESTABILIZACAO-PRE-USO-20261122` (IN_PROGRESS). Objetivo: preparar a plataforma para uso real **sem** novas funcionalidades e **sem** iniciar E6/E7. Plano em `docs/esteira/planejamento/estabilizacao-pre-uso.md` (EST-00..EST-04).
+
+**EST-02 (auth enxuta):** COMPLETED técnico — ADR-015 (sessão/cookie; sem JWT); regressões auth PASS (`qg*-est-02*`); verifier PASS_COM_ACHADOS; gaps residuais (rate-limit de login; HTTPS/`COOKIE_SECURE` no alvo) bloqueiam uso real. Evidência `docs/esteira/estado/evidencia-est-02-20261122.json`. Próximo: EST-03.
 
 **Publicação para uso real:** ainda **não autorizada**. Critérios de bloqueio no plano EST.
 
@@ -100,7 +102,7 @@ O aceite abrange a V1 existente dos módulos 01–04. A demanda `DEM-M04-EVO-REV
 |---|---|---|
 | Remoção/desativação de pessoas e tratamento do histórico funcional | Produto + Arquitetura + UX | Definir comportamento e jornada antes de implementar |
 | Opções válidas de vínculo e edição administrativa (UX-HOM-02-SELETOR) | Produto + UX | Fechar opções e apresentação no contexto administrativo |
-| Autenticação definitiva, sessões e revisão de segurança | Arquitetura + Qualidade | Reconciliar solução e testes para futura disponibilização |
+| Autenticação/sessões (ADR-015: sessão/cookie enxuta; sem JWT) | Arquitetura + Qualidade | EST-02 da estabilização: regressão e gaps residuais; publicação ainda não autorizada |
 | Lembretes reais ACE-C12 e canais/dispositivos | Arquitetura + UX + Qualidade | Validar entrega e comportamento em aparelhos previstos |
 | Contratos, retenção de dados e PWA/alternativa móvel | Arquitetura | Resolver conforme necessidade efetiva de uso e decisões existentes |
 

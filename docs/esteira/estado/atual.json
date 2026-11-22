@@ -2571,7 +2571,7 @@
             "nivel": "L2",
             "status": "APROVADA",
             "referencia": "Pedido humano ESTABILIZACAO-PRE-USO-20261122; docs/produto/STATUS-E-ESCOPO.md; GOVERNANCA L2 estabilização",
-            "nota": "Estabilização e correção de defeitos comprovados. Sem E6/E7. Sem publicação automática."
+            "nota": "Estabilização; ADR-015 auth enxuta APROVADA; sem E6/E7; sem publicação automática."
         },
         "risco": "alto",
         "escopo": "Reconciliação documental; correção DEF-E3-ANEXO; regressão auth/autorização; consistência histórico/resumo/PDF e E4 residual; prontidão operacional (backup/restore/Docker/health) sem liberar produção. Inclui EST-01-UX visual Resumo/Histórico autorizada pelo responsável.",
@@ -2591,10 +2591,11 @@
             "EST-BLOQ-USO-REAL"
         ],
         "dependencias": [
-            "COR-E5-UX-HOM-R2 homologada APROVADA em develop @ e050a99",
-            "DEF-E3-ANEXO-SALVAR-20261122 ABERTO",
+            "COR-E5-UX-HOM-R2 homologada APROVADA",
+            "DEF-E3-ANEXO CORRIGIDO TECNICAMENTE (E3-HOM PENDING_HUMAN)",
             "E4-HOM APROVADA_PARCIALMENTE",
             "E1/E2 homologações humanas APROVADAS",
+            "ADR-015 DOCUMENTADA",
             "Sem autorização de publicação"
         ],
         "pendenciasForaEscopo": [
@@ -2631,12 +2632,13 @@
                 },
                 {
                     "id": "EST-02",
-                    "status": "READY",
-                    "aceite": "Sessões/convites/autorização contextual sem regressão E1/E2"
+                    "status": "COMPLETED",
+                    "aceite": "Sessão/cookie (ADR-015); regressão E1/E2/authz; gaps residuais documentados; sem JWT",
+                    "fingerprint": "sha256:785fd27e1b52924e"
                 },
                 {
                     "id": "EST-03",
-                    "status": "PENDING",
+                    "status": "READY",
                     "aceite": "Histórico/resumo/PDF/documentos privados isolados; E4 residual tipificado"
                 },
                 {
@@ -2646,7 +2648,7 @@
                 }
             ]
         },
-        "incrementoAtivo": "EST-02",
+        "incrementoAtivo": "EST-03",
         "testesPertinentes": [
             "Reprodução controlada do upload de anexo com dados fictícios",
             "smoke:e3 e regressão authz/anexos",
@@ -2662,86 +2664,65 @@
         "reconciliacaoLocal": {
             "status": "OK",
             "branch": "develop",
-            "commit": "e050a999b2a040df62860d4ecd113c11b0718ccc",
-            "workingTree": "clean",
+            "commit": "c8cb29b",
+            "workingTree": "dirty_est02",
             "originDevelop": "up_to_date",
             "divergencias": [
-                "STATUS e estado marcavam E5 R2 como REPROVADA/PENDING; responsável confirmou APROVADA",
-                "demanda.checkoutLocal apontava alterações não commitadas; working tree limpa em e050a99",
-                "E3-HOM PENDING_HUMAN; DEF-E3-ANEXO permanece ABERTO",
-                "E4-HOM APROVADA_PARCIALMENTE sem revalidação humana consolidada pós-E5",
-                "Sem autorização de publicação para uso real"
+                "Alterações locais EST-02 não commitadas",
+                "E3-HOM PENDING_HUMAN",
+                "Sem autorização de publicação",
+                "Rate-limit login ausente (bloqueante uso real)"
             ],
-            "em": "2026-11-22T19:11:25.344Z"
+            "em": "2026-11-22T20:56:19.415Z"
         },
         "fingerprintNota": "Fingerprint de produto será recalculado por incremento ao alterar código. EST-00 é documental.",
         "verificacao": {
             "qg1": "PASS",
             "qg2": "PASS",
             "verifier": "PASS_COM_ACHADOS",
-            "verifierId": "aaf2fcd8-caf9-466e-8251-508ad3986721",
-            "nota": "EST-01 técnico COMPLETED; E3-HOM PENDING_HUMAN. Próximo EST-02 auth/sessões."
+            "verifierId": "da2a6d0d-442f-4cae-9b1f-8738694a624f",
+            "nota": "EST-02 COMPLETED técnico; EST-03 READY; publicação não autorizada"
         },
-        "proximaAcao": "Homologação humana E3-HOM (anexo ~200KB na UI) e iniciar EST-02 (auth/sessões/autorização).",
-        "atualizadoEm": "2026-11-22T19:26:32.394Z",
-        "fingerprint": "sha256:8f2ac0f5afe25966",
-        "fingerprintFull": "sha256:8f2ac0f5afe25966e235c32f0ad3d74f50952334b7b5c164f79eaa7047eb265a",
+        "proximaAcao": "Iniciar EST-03 (histórico/resumo/PDF/documentos privados e E4 residual).",
+        "atualizadoEm": "2026-11-22T20:56:19.415Z",
+        "fingerprint": "sha256:785fd27e1b52924e",
+        "fingerprintFull": "sha256:785fd27e1b52924e2de73803dde9898bbd87b96cf5b2332c6c6ad1efb353f8dc",
         "arquivos": [
-            "apps/api/src/main.ts",
-            "apps/api/src/anexos/limites-anexo.ts",
-            "apps/api/src/anexos/servico-anexos.ts",
-            "apps/api/scripts/smoke-e3.mjs",
-            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
-            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/historico/page.tsx",
-            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx"
+            "apps/api/src/auth/controlador-sessao.ts",
+            "apps/api/scripts/smoke-est-02-sessao.mjs",
+            "docs/arquitetura/DECISOES.md",
+            "docs/esteira/planejamento/estabilizacao-pre-uso.md",
+            "docs/produto/STATUS-E-ESCOPO.md",
+            "docs/esteira/REGISTRO.md",
+            "docs/esteira/estado/qg1-typecheck-est-02.txt",
+            "docs/esteira/estado/qg2-smoke-e1-01-est-02.txt",
+            "docs/esteira/estado/qg2-smoke-e1-ent-est-02.txt",
+            "docs/esteira/estado/qg2-smoke-e1-03-est-02.txt",
+            "docs/esteira/estado/qg2-smoke-e2-est-02.txt",
+            "docs/esteira/estado/qg2-smoke-authz-est-02.txt",
+            "docs/esteira/estado/qg2-smoke-est-02-sessao.txt"
         ],
-        "mensagemCommit": "fix(cuidados,evolucao): permitir anexos maiores e alinhar resumo/histórico\n\nCorrige HTTP 413 no upload de exames e unifica o layout de Resumo e Histórico ao padrão visual PEF.",
+        "mensagemCommit": "fix(auth): alinhar limpeza do cookie seguro e fechar EST-02\\n\\nDocumenta ADR-015 (sessão/cookie enxuta) e corrige clearCookie para respeitar COOKIE_SECURE.",
         "ultimoIncremento": {
-            "id": "EST-01",
+            "id": "EST-02",
             "status": "COMPLETED",
-            "tipo": "correcao",
+            "tipo": "transversal",
             "requisitos": [
-                "DEF-E3-ANEXO-SALVAR-20261122",
-                "EST-01-ANEXO",
-                "EST-01-UX-EVO"
+                "EST-02-AUTH",
+                "ADR-015"
             ],
-            "aceite": "Salvar exame com/sem anexo (payload >100KB); download; UX Resumo/Histórico alinhada ao padrão PEF",
-            "arquivos": [
-                "apps/api/src/main.ts",
-                "apps/api/src/anexos/limites-anexo.ts",
-                "apps/api/src/anexos/servico-anexos.ts",
-                "apps/api/scripts/smoke-e3.mjs",
-                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
-                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/historico/page.tsx",
-                "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx"
-            ],
-            "fingerprint": "sha256:8f2ac0f5afe25966",
-            "fingerprintFull": "sha256:8f2ac0f5afe25966e235c32f0ad3d74f50952334b7b5c164f79eaa7047eb265a",
-            "verificacao": {
-                "qg1": "PASS",
-                "verifier": "PASS_COM_ACHADOS",
-                "verifierId": "aaf2fcd8-caf9-466e-8251-508ad3986721",
-                "qg2": "PASS",
-                "humano": "PENDING_HUMAN",
-                "nota": "E3-HOM aguarda aceite humano pós-correção. Achados: órfão possível se abandonar form após upload; evidência nova gravada.",
-                "evidencia": "docs/esteira/estado/evidencia-est-01-20261122.json"
-            },
-            "criteriosOk": [
-                "HTTP 413 reproduzido e corrigido (body 12mb)",
-                "Validação 8MB servidor/cliente",
-                "Retry sem re-upload (anexoPendenteId)",
-                "smoke-e3 18 OK incl. médio >100KB",
-                "smoke-authz OK",
-                "typecheck api+web PASS",
-                "build web PASS",
-                "UX Histórico/Resumo Card/coresPef"
-            ],
-            "criteriosPendentes": [
-                "E3-HOM"
-            ],
-            "causaRaiz": "Nest/Express json body ~100kb; PDF em base64 ~273KB → 413",
-            "concluidoEm": "2026-11-22T19:26:32.394Z",
-            "mensagemCommit": "fix(cuidados,evolucao): permitir anexos maiores e alinhar resumo/histórico\n\nCorrige HTTP 413 no upload de exames e unifica o layout de Resumo e Histórico ao padrão visual PEF."
-        }
+            "aceite": "Sessão/cookie (ADR-015); regressão E1/E2/authz; gaps residuais documentados; sem JWT",
+            "fingerprint": "sha256:785fd27e1b52924e",
+            "verifier": "PASS_COM_ACHADOS"
+        },
+        "incrementosConcluidos": [
+            {
+                "id": "EST-02",
+                "status": "COMPLETED",
+                "fingerprint": "sha256:785fd27e1b52924e",
+                "em": "2026-11-22T20:56:19.415Z",
+                "verifier": "PASS_COM_ACHADOS"
+            }
+        ]
     }
 }

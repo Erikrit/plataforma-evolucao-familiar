@@ -18,6 +18,32 @@ Decisões abaixo são direções preliminares aprovadas conceitualmente, não pr
 | ADR-012 | Esteira de desenvolvimento permitida neste repositório | Mantém o mesmo checkout, com separação lógica da documentação funcional do produto; agentes/skills/hooks não alteram requisitos aprovados automaticamente |
 | ADR-013 | Disponibilidade atual de brincadeiras/recompensas separada do histórico | Atende CT-20261119-001/002 (DEV-F03/F04/F06 v1.2) com menor adaptação segura sobre o modelo vigente |
 | ADR-014 | Gestão de acessos reutiliza as três responsabilidades contextuais | Atende CT-20261119-003 sem matriz nova, sem papel inédito e com fechamento dos controles de administrador |
+| ADR-015 | Autenticação enxuta por sessão/cookie (uso familiar privado) | Fecha a lacuna de “auth definitiva” sem JWT nem arquitetura empresarial; corrige só falhas comprovadas |
+
+## ADR-015 — Autenticação enxuta por sessão/cookie (pré-uso / uso familiar privado)
+
+**Status:** APROVADA pelo responsável do Produto (2026-11-22) e DOCUMENTADA pela Arquitetura.  
+**Demanda:** `ESTABILIZACAO-PRE-USO-20261122` · incremento EST-02.  
+**Não substitui** ADR-006 (autorização por pessoa/contexto) nem ADR-014 (gestão de acessos).  
+**Não altera** requisitos funcionais dos módulos; define o recorte de autenticação para estabilização e uso familiar privado.
+
+### Decisão
+
+1. Manter autenticação por **sessão server-side** com cookie HttpOnly (`pef_sessao`), token opaco armazenado com hash, validade finita e logout/revogação que apagam a sessão no servidor.
+2. **Não migrar para JWT** e não introduzir provedor IdP, OAuth obrigatório, SSO ou matriz empresarial de autenticação.
+3. Reutilizar as **autorizações contextuais** já existentes (ADR-006 / ADR-014) para isolamento entre famílias e pessoas e para documentos de saúde/dados infantis.
+4. Em EST-02 e evoluções de estabilização: **corrigir somente falhas comprovadas** (reproduzidas por teste ou inspeção). Mudança estrutural inevitável exige `NEEDS_DECISION` antes de implementar.
+
+### Controles já previstos pela baseline (não redesenhar)
+
+- Cookie: `httpOnly`, `sameSite=lax`, `secure` quando `COOKIE_SECURE=true`.
+- CORS com origem configurável (`WEB_ORIGIN`) e `credentials: true`.
+- Guarda de sessão nas rotas privadas; login contextual por slug da família.
+- Invalidação de sessões na revogação de autorização (ADR-014).
+
+### Fora desta ADR
+
+JWT; autenticação multi-fator empresarial; redesenho de convites além do escopo E2 homologado; declaração de prontidão de produção (permanece nos critérios de bloqueio da estabilização).
 
 ## ADR-013 — Disponibilidade atual ≠ histórico (Módulo 03)
 
@@ -106,7 +132,7 @@ Layout móvel/desktop da aba, texto final da confirmação, seletor de vínculo,
 
 ## A validar
 
-- Revisão de autenticação para produção e dispositivos reais. No MVP, a invalidação de sessão na revogação e o catálogo fechado de concessão ficam definidos na ADR-014; a suíte existente ainda não cobre o último administrador.
+- Revisão de autenticação para produção e dispositivos reais: recorte de produto fechado pela **ADR-015** (sessão/cookie enxuta, sem JWT). Invalidação de sessão na revogação e catálogo fechado de concessão permanecem na ADR-014; a suíte existente ainda não cobre o último administrador. Gaps operacionais (ex.: limite de tentativas de login, HTTPS/`COOKIE_SECURE` no ambiente alvo) seguem na estabilização EST-02/EST-04, sem redesenho.
 - Casos-limite e validação técnica da programação de medicamentos: **comportamento funcional do MVP já aprovado na especificação v1.3 do Módulo 02**; não reabrir a regra nem inventar horários clínicos.
 - Confiabilidade e canais dos lembretes em dispositivos reais.
 - Contratos exatos da API, restrições e política de dados — **parcialmente endereçado por ADR-013 para disponibilidade/reativação; detalhe de payloads na implementação**.

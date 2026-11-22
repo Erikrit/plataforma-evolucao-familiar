@@ -3,8 +3,8 @@
 **Demanda:** `ESTABILIZACAO-PRE-USO-20261122`  
 **Tipo:** transversal · **Risco:** alto (saúde, documentos, auth, operação)  
 **Aprovação:** pedido humano de estabilização sem E6/E7 e sem novas funcionalidades  
-**Base reconciliada:** `develop` @ `e050a999b2a040df62860d4ecd113c11b0718ccc` (working tree limpa)  
-**Estado:** EST-00 COMPLETED · EST-01 COMPLETED técnico (E3-HOM PENDING_HUMAN) · EST-02 READY
+**Base reconciliada:** `develop` @ `c8cb29b` (working tree limpa; EST-01 commitado; origin/develop alinhada)  
+**Estado:** EST-00 COMPLETED · EST-01 COMPLETED técnico (E3-HOM PENDING_HUMAN) · EST-02 COMPLETED técnico · EST-03 READY
 
 ## Contexto homologado
 
@@ -12,7 +12,7 @@
 |---|---|---|
 | E1 entrada | APROVADA | Escopo DEM-E1-ENTRADA |
 | E2 acessos/link | APROVADA | Envio automático de e-mail adiado |
-| E3 exames/resumo | PENDING_HUMAN | `DEF-E3-ANEXO-SALVAR-20261122` ABERTO |
+| E3 exames/resumo | PENDING_HUMAN | `DEF-E3-ANEXO-SALVAR-20261122` CORRIGIDO TECNICAMENTE (EST-01); E3-HOM pendente |
 | E4 biblioteca real | APROVADA_PARCIALMENTE | Revalidação residual pós-E5 |
 | E5 jogos + UX R2 | APROVADA (R2) | Reprovações R1/R2 históricas preservadas |
 | Publicação uso real | NÃO AUTORIZADA | Bloqueios abaixo |
@@ -43,14 +43,25 @@
 
 ### EST-02 — Autenticação, sessões, convites e autorização
 
-- **Problema comprovado:** STATUS lista “autenticação definitiva, sessões e revisão de segurança” como lacuna pré-disponibilização; E1/E2 homologadas no escopo atual, não como revisão de produção.
+- **Problema comprovado:** STATUS listava “autenticação definitiva, sessões e revisão de segurança” como lacuna pré-disponibilização; E1/E2 homologadas no escopo funcional, não como revisão de produção.
+- **Decisão de Produto APROVADA (2026-11-22) — segurança enxuta para uso familiar privado:**
+  - Manter autenticação existente por sessão/cookie.
+  - Não migrar para JWT.
+  - Não criar arquitetura empresarial de autenticação.
+  - Reutilizar autorizações contextuais existentes (ADR-006 / ADR-014).
+  - Preservar isolamento entre famílias e pessoas.
+  - Corrigir somente falhas comprovadas.
+- **Registro canônico:** ADR-015 em `docs/arquitetura/DECISOES.md` (não duplicar regras aqui).
 - **Impacto/risco:** alto para uso real.
-- **Arquivos:** auth/guarda-sessão, convites, `servico-autorizacoes.ts`, smokes e1/e2/authz, ADR-006/014.
-- **Menor solução:** inventário de gaps vs baseline homologada; correções só de regressão/defeito comprovado; sem redesenhar auth definitiva sem decisão L3.
-- **Aceite:** regressão E1/E2/authz PASS; lista explícita do que ainda bloqueia produção.
-- **Testes:** smokes e1-ent, e2, authz, ct-acessos.
+- **Arquivos:** auth/guarda-sessão, cookie `pef_sessao`, convites, `servico-autorizacoes.ts`, smokes e1/e2/authz, ADR-006/014/015.
+- **Menor solução:** inventário e regressão dos controles vigentes; correções só de defeito reproduzido; sem redesenho de auth.
+- **Aceite técnico:** regressão login/sessão/logout + E1/E2/authz PASS; inventário de controles e gaps/riscos residuais documentados; **não** marcar COMPLETED só com docs — exige evidência de testes.
+- **Testes essenciais (proporcionais):** login válido/inválido; validade/expiração de sessão; logout/revogação; cookie em produção (`COOKIE_SECURE`); HTTPS/CORS/origem e proteção CSRF (sameSite + origem); proteção básica a tentativas repetidas de login; acesso direto não autorizado; isolamento pessoas/famílias; documentos de saúde e dados infantis via authz existente.
 - **Dependências:** EST-01 preferível (não bloqueante técnico).
-- **Homologação humana:** se alterar jornada de acesso; senão evidência técnica + nota de gaps.
+- **Homologação humana:** não exigida nesta fatia (sem mudança de jornada de acesso). Publicação permanece não autorizada.
+- **Resultado técnico:** regressões PASS; correção local `clearCookie` alinhado a `COOKIE_SECURE`; gaps residuais (sem rate-limit de login; HTTPS/`COOKIE_SECURE`/`WEB_ORIGIN` no ambiente alvo) documentados como bloqueantes operacionais — ver evidência EST-02.
+- **Verifier:** PASS_COM_ACHADOS (`da2a6d0d-442f-4cae-9b1f-8738694a624f`) — fingerprint recalculado no fechamento.
+- **Estado do incremento:** COMPLETED técnico.
 
 ### EST-03 — Histórico, resumo, PDF, documentos privados e E4 residual
 
@@ -91,7 +102,9 @@ Não declarar pronto para uso real enquanto qualquer item abaixo for verdadeiro:
 4. Segredos/dados reais no repositório ou logs  
 5. Ausência de autorização humana explícita de publicação  
 6. E6/E7 ou funcionalidade nova introduzida sob rótulo de estabilização  
+7. Ambiente de uso real sem HTTPS + `COOKIE_SECURE=true` + `WEB_ORIGIN` correto  
+8. Ausência de proteção básica a tentativas repetidas de login no ambiente alvo (gap confirmado em EST-02; mitigação mínima exige decisão se for além do padrão local de cadastro)
 
 ## Próxima ação
 
-Iniciar **EST-01** com `implementation-workflow` + `quality-gate`: reproduzir falha de salvar anexo com dados fictícios e corrigir a causa raiz comprovada.
+Iniciar **EST-03** (READY): histórico/resumo/PDF/documentos privados e E4 residual. Não iniciar E6/E7. Não declarar prontidão de produção.

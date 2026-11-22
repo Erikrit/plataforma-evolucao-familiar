@@ -1,5 +1,14 @@
 # Registro da esteira
 
+## EST-02 — auth enxuta (COMPLETED técnico)
+
+- **Demanda:** `ESTABILIZACAO-PRE-USO-20261122` · incremento EST-02 COMPLETED técnico.
+- **Decisão Produto APROVADA:** segurança enxuta → **ADR-015** (sessão/cookie; sem JWT; sem auth empresarial; ADR-006/014; só falhas comprovadas).
+- **Correção:** `clearCookie` com as mesmas opções de `COOKIE_SECURE` do set.
+- **QG-1/2:** typecheck PASS; smoke e1-01/e1-ent/e1-03/e2/authz PASS; smoke-est-02-sessao PASS (`qg*-est-02*.txt`). Sem rate-limit de login (risco residual / bloqueante uso real).
+- **Verifier:** PASS_COM_ACHADOS (`da2a6d0d-…`). Evidência: [JSON](estado/evidencia-est-02-20261122.json).
+- **Próximo:** EST-03. Sem E6/E7. Sem prontidão de produção. Sem commit/push/deploy automático.
+
 ## EST-01 — anexos E3 + UX Resumo/Histórico
 
 - **Demanda:** `ESTABILIZACAO-PRE-USO-20261122` · incremento EST-01 COMPLETED técnico.
