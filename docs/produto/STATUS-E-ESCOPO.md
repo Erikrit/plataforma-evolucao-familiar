@@ -1,19 +1,18 @@
 # Estado das decisões e escopo
 
-## E2 — recorte aprovado e planejado, 2026-11-22
+## E2 — homologação humana aprovada, 2026-11-22
 
-**Decisão APROVADA/DOCUMENTADA:** convite por link compartilhado manualmente pelo administrador. E-mail segue identificador de login, mas envio automático de mensagem fica adiado. Fonte: concordância expressa do responsável nesta conversa à proposta E2; fonte funcional Módulo 01 v1.9 §15.
+**APROVADA pelo responsável do Produto** a demanda DEM-E2-ACESSOS-20261122, após informar melhorias feitas e homologação humana aprovada. Critério E2-ACE-08 encerrado; defeito DEF-E2-ATIVACAO-20261122 encerrado no escopo da solução por link manual.
 
-**Escopo:** Pessoas, Acessos e responsabilidades e Convites; habilitar/ativar sem duplicar pessoa, copiar link contextual, distinguir estados reais e compreender concessão/retirada. Preservar combinações ADR-014 e controles de acesso próprio.
+**Escopo:** habilitação/ativação de conta por link compartilhado, estados de pessoas/convites e gestão compreensível de acessos, conforme Módulo 01 v1.9 §15. Envio automático de e-mail continua adiado.
 
-**Estado:** DEM-E2-ACESSOS-20261122 READY, plano em `docs/esteira/planejamento/e2-acessos-ativacao.md`, E2-01..04. Próxima ação: implementation-workflow E2-01 após reconciliar checkout/fingerprint. Código e testes não alterados/executados nesta rodada.
+**Referência disponível:** develop @ `e3a75a9fca41c6bd0125ae39af3aa50f1f11d350`. Evidência técnica `docs/esteira/estado/evidencia-e2-20261122.json`: QG-1/2/3 PASS e verificação independente shell PASS. Verifier oficial FAIL (build antigo + Ask/shell), conforme nota de reexecução independente após build OK. Esta anotação não reclassifica o resultado oficial nem equivale a reexecução de testes.
 
-**Evidência estática:** develop @ 2ccc5d4a421289a2899557de91f6935f6807dd95. O serviço gera token/link e o painel o apresenta, mas usa “Enviar convite”; o serviço inspecionado não envia mensagem. Funcionamento ponta a ponta ainda deve ser verificado. Não encerrar o defeito somente por mudar rótulos.
-
+**Próxima etapa:** detalhar E3 — visualização privada de exames e resumo factual por área. Publicação para uso segue adiada.
 
 ## Defeito conhecido — ativação de acesso de pessoas, 2026-11-22
 
-**ID:** DEF-E2-ATIVACAO-20261122. **Estado:** ABERTO; solução por link manual APROVADA e planejada na E2, implementação/validação pendentes.
+**ID:** DEF-E2-ATIVACAO-20261122. **Estado:** ENCERRADO em 2026-11-22 após homologação humana da E2. Solução adotada: link compartilhado manualmente; envio automático permanece fora do escopo. Relato e encaminhamento originais abaixo são históricos.
 
 **Relato humano:** após a melhoria da entrada familiar, ao criar pessoas não ocorre o envio de e-mail esperado; isso impede validar a ativação e o acesso dessas novas contas. O acesso inicial ficou mais claro. A causa técnica ainda não foi diagnosticada nem reproduzida nesta atualização.
 

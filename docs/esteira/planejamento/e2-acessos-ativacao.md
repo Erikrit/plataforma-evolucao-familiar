@@ -1,7 +1,7 @@
 # E2 — Gestão de acessos e ativação por link
 
 **Demanda:** DEM-E2-ACESSOS-20261122  
-**Estado:** COMPLETED técnico (E2-01..04); homologação humana PENDING (E2-ACE-08).  
+**Estado:** COMPLETED técnico e homologação humana APROVADA pelo responsável em 2026-11-22 (E2-ACE-08). DEF-E2-ATIVACAO-20261122 encerrado no escopo do link manual.  
 **Tipo:** transversal · **Risco:** alto (contas, saúde/criança, autorização).  
 **Aprovação:** Módulo 01 v1.9 §15, E2-ACE-01..08.  
 **Base inspecionada:** develop @ 2ccc5d4a421289a2899557de91f6935f6807dd95.
@@ -44,3 +44,7 @@ Três jornadas: cadastrar pessoa e ativar sua conta pelo link; conceder acompanh
 O relato de defeito permanece aberto até E2-ACE-08. Rótulo correto por si não demonstra correção da jornada. Aceite humano deve identificar o escopo efetivamente percorrido.
 
 **Retomada:** comparar branch/checkout, alterações locais e não rastreados; calcular fingerprint dos arquivos afetados. Esta rodada é remota e documental. Próxima ação: implementation-workflow E2-01. Sem bloqueio funcional identificado; contratos e estados exatos são fechados no desenho técnico inicial.
+
+## Aceite humano — 2026-11-22
+
+Responsável informou melhorias feitas e homologação aprovada. Referência disponível develop @ e3a75a9fca41c6bd0125ae39af3aa50f1f11d350. O aceite encerra E2-ACE-08 e o defeito de ativação no escopo do link manual. Análises iniciais e pendências de homologação acima ficam como histórico do planejamento. Evidência técnica original preservada, sem testes reexecutados nesta atualização. Próximo: detalhar E3.

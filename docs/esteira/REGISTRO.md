@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-22 — E2 homologada humanamente
+
+- **Fonte:** responsável comunicou melhorias feitas e homologação APROVADA.
+- **Demanda/critério:** DEM-E2-ACESSOS-20261122 / E2-ACE-08.
+- **Defeito:** DEF-E2-ATIVACAO-20261122 encerrado no escopo do link manual; envio automático adiado.
+- **Referência:** develop @ `e3a75a9fca41c6bd0125ae39af3aa50f1f11d350`; evidencia-e2-20261122.json.
+- **Verificação:** registros técnicos consultados, sem reexecução. QG-1/2/3 e independente shell PASS; verifier oficial FAIL preservado, com justificativa/reexecução descritas na evidência.
+- **Próximo:** detalhamento E3 — exames e resumo por área, sem publicação.
+- **Integração documental:** autorizada pelo responsável nesta conversa.
+
+
 ## 2026-11-22 — DEM-E2 COMPLETED técnico (humana PENDING)
 
 - **Demanda:** DEM-E2-ACESSOS-20261122 COMPLETED técnico; homologação humana PENDING_HUMAN (E2-ACE-08); DEF-E2-ATIVACAO-20261122 permanece aberto.

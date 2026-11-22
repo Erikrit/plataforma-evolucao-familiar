@@ -126,12 +126,11 @@
             "E2-ACE-04",
             "E2-ACE-05",
             "E2-ACE-06",
-            "E2-ACE-07"
-        ],
-        "criteriosFalha": [],
-        "criteriosPendentesHumanos": [
+            "E2-ACE-07",
             "E2-ACE-08"
         ],
+        "criteriosFalha": [],
+        "criteriosPendentesHumanos": [],
         "defeitosRelacionados": [
             "DEF-E2-ATIVACAO-20261122"
         ],
@@ -145,7 +144,7 @@
         "verifierNota": "Verifier oficial FAIL (build antigo + Ask/shell); verificacao independente shell PASS apos build web OK.",
         "verifierOficial": "FAIL",
         "verifierOficialId": "31e6ffd8-4532-4eb6-b4c3-41cb4b7a2a90",
-        "homologacaoHumana": "PENDING_HUMAN",
+        "homologacaoHumana": "APROVADA",
         "evidencias": [
             "docs/esteira/estado/qg1-typecheck-api-e2.txt",
             "docs/esteira/estado/qg1-typecheck-web-e2.txt",
@@ -180,7 +179,7 @@
             "docs/esteira/estado/roteiro-homologacao-e2.md"
         ],
         "mensagemCommit": "feat(fundacao): ativar acessos por link manual e esclarecer estados\\n\\nFecha DEM-E2 tecnicamente: gerar/copiar convite, ativacao sem e-mail, estados de conta/convite e regressao ADR-014; homologacao humana pendente.",
-        "nota": "PASS tecnico E2-ACE-01..07; E2-ACE-08 e DEF-E2 PENDING_HUMAN. Link manual aprovado; sem envio automatico de e-mail.",
+        "nota": "PASS técnico histórico preservado, incluindo divergência do verifier oficial; homologação humana E2 APROVADA em 2026-11-22. Defeito de ativação encerrado pela solução por link manual.",
         "concluidaEm": "2026-11-22T05:15:42.322Z",
         "planejamento": {
             "caminho": "docs/esteira/planejamento/e2-acessos-ativacao.md",
@@ -279,7 +278,17 @@
             "tipo": "implementacao_local"
         },
         "bloqueios": [],
-        "proximaAcao": "Homologacao humana E2-ACE-08 (roteiro-homologacao-e2.md); DEF-E2 permanece aberto ate aceite."
+        "proximaAcao": "Detalhar E3 — exames e resumo factual por área; publicação segue adiada.",
+        "homologacaoHumanaRegistro": {
+            "data": "2026-11-22",
+            "origem": "comunicação expressa do responsável do Produto nesta conversa",
+            "referenciaDisponivel": "e3a75a9fca41c6bd0125ae39af3aa50f1f11d350",
+            "escopo": "E2 — melhorias de acessos/ativação por link manual",
+            "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+        },
+        "defeitosEncerrados": [
+            "DEF-E2-ATIVACAO-20261122"
+        ]
     },
     "janelaIncrementos": [
         {
@@ -322,12 +331,11 @@
                 "E2-ACE-04",
                 "E2-ACE-05",
                 "E2-ACE-06",
-                "E2-ACE-07"
-            ],
-            "criteriosFalha": [],
-            "criteriosPendentesHumanos": [
+                "E2-ACE-07",
                 "E2-ACE-08"
             ],
+            "criteriosFalha": [],
+            "criteriosPendentesHumanos": [],
             "defeitosRelacionados": [
                 "DEF-E2-ATIVACAO-20261122"
             ],
@@ -341,7 +349,7 @@
             "verifierNota": "Verifier oficial FAIL (build antigo + Ask/shell); verificacao independente shell PASS apos build web OK.",
             "verifierOficial": "FAIL",
             "verifierOficialId": "31e6ffd8-4532-4eb6-b4c3-41cb4b7a2a90",
-            "homologacaoHumana": "PENDING_HUMAN",
+            "homologacaoHumana": "APROVADA",
             "evidencias": [
                 "docs/esteira/estado/qg1-typecheck-api-e2.txt",
                 "docs/esteira/estado/qg1-typecheck-web-e2.txt",
@@ -376,7 +384,7 @@
                 "docs/esteira/estado/roteiro-homologacao-e2.md"
             ],
             "mensagemCommit": "feat(fundacao): ativar acessos por link manual e esclarecer estados\\n\\nFecha DEM-E2 tecnicamente: gerar/copiar convite, ativacao sem e-mail, estados de conta/convite e regressao ADR-014; homologacao humana pendente.",
-            "nota": "PASS tecnico E2-ACE-01..07; E2-ACE-08 e DEF-E2 PENDING_HUMAN. Link manual aprovado; sem envio automatico de e-mail.",
+            "nota": "PASS técnico histórico preservado, incluindo divergência do verifier oficial; homologação humana E2 APROVADA em 2026-11-22. Defeito de ativação encerrado pela solução por link manual.",
             "concluidaEm": "2026-11-22T05:15:42.322Z",
             "planejamento": {
                 "caminho": "docs/esteira/planejamento/e2-acessos-ativacao.md",
@@ -464,7 +472,17 @@
                         "concluidoEm": "2026-11-22T05:15:42.322Z"
                     }
                 ]
-            }
+            },
+            "homologacaoHumanaRegistro": {
+                "data": "2026-11-22",
+                "origem": "comunicação expressa do responsável do Produto nesta conversa",
+                "referenciaDisponivel": "e3a75a9fca41c6bd0125ae39af3aa50f1f11d350",
+                "escopo": "E2 — melhorias de acessos/ativação por link manual",
+                "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+            },
+            "defeitosEncerrados": [
+                "DEF-E2-ATIVACAO-20261122"
+            ]
         },
         {
             "id": "DEM-E1-ENTRADA-20261121",
@@ -1949,9 +1967,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologacao humana E2-ACE-08 (roteiro-homologacao-e2.md); DEF-E2 permanece aberto ate aceite.",
-    "atualizadoEm": "2026-11-22T05:15:42.322Z",
-    "notas": "E2 tecnico PASS; homologacao humana PENDING. DEF-E2-ATIVACAO aberto ate E2-ACE-08. Historico E1 preservado.",
+    "proximaAcao": "Detalhar E3 — exames e resumo factual por área; publicação segue adiada.",
+    "atualizadoEm": "2026-11-22T05:32:33.387Z",
+    "notas": "E2 homologada humanamente; DEF-E2-ATIVACAO-20261122 encerrado no escopo do link manual. Próxima frente E3.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",
