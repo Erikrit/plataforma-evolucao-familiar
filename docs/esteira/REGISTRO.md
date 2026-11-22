@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-22 — E4 aprovada e planejada
+
+- **Aceite humano:** proposta E4 aceita, incluindo até 24 modelos ativos, 6 sugestões por pessoa e renovação de até 3 alternativas.
+- **Fonte funcional:** Módulo 03 v1.3 §12, E4-ACE-01..07/E4-HOM.
+- **Demanda:** DEM-E4-BIBLIOTECA-20261122 READY; plano e4-biblioteca-real.md, E4-01..03.
+- **Base:** develop @ 4ae828da06b5dfa78abbedda56e5c5965aea33ac; schema e servico-desafios inspecionados estaticamente, sem testes ou código nesta rodada.
+- **Preservação:** renovar não executa/reativa nem gera pontos; modelos globais sem dados pessoais e escolhas privadas.
+- **Pendência:** DEF-E3-ANEXO-SALVAR-20261122 continua aberto/adiado; E3 sem novo aceite humano.
+- **Próximo:** implementation-workflow E4-01; integração documental autorizada pelo responsável nesta conversa.
+
+
 ## 2026-11-22 — Falha de salvar anexos; avanço E4 autorizado
 
 - **Relato humano:** atualização feita; anexos falham ao salvar, impedindo homologação da jornada.

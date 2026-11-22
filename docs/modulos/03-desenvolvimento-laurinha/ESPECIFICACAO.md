@@ -1,7 +1,7 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
-**Versão:** 1.2 — revisão funcional de Executadas e Recompensas aprovada em 2026-11-19  
-**Estado:** especificação funcional v1.2 aprovada para o MVP (fonte oficial deste módulo); implementação e homologação humana desta revisão ainda pendentes.  
+**Versão:** 1.3 — E4, biblioteca real limitada e sugestões renováveis, aprovada em 2026-11-22  
+**Estado:** regras anteriores e recorte E4 v1.3 aprovados pelo Produto. Implementação e homologação são registradas em STATUS-E-ESCOPO.md e na esteira.  
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
 
@@ -177,3 +177,48 @@ Evitar classificação, observação, evidência fotográfica, justificativa ou 
 Planejamento com calendário obrigatório; declaração de atividade não realizada; metas compulsórias; ranking; notas escolares/clínicas; XP separado; níveis complexos; jogos digitais; geração por IA; medição de inteligência; foto/vídeo como prova; relatórios manuais; painel próprio duplicado de evolução.
 
 **Princípio de aceite:** a família vive a experiência; a plataforma reconhece e lembra, sem fiscalizar.
+
+## 12. E4 — Biblioteca de atividades reais
+
+**APROVADO pelo responsável do Produto em 2026-11-22**, por concordância com a proposta: catálogo curado, seleção pequena e renovação de sugestões antes de automatizar sua alimentação. Limites iniciais aprovados: **até 24 modelos publicados ativos, até 6 sugestões por pessoa e renovação de até 3 opções por solicitação**.
+
+### Conteúdo e privacidade
+
+Modelos de catálogo são compartilhados e não contêm dados pessoais. Cada modelo publicado tem nome, instrução curta, categoria, dificuldade, faixa etária orientativa, materiais quando necessários e origem. Duração/adaptações e supervisão aparecem quando úteis. Atividades personalizadas e escolhas/participações pertencem ao contexto privado da família/pessoa.
+
+Usar categorias existentes, incluindo Todas e tratamento vigente de atividades personalizadas sem categoria. Publicar conteúdo curado e apropriado para crianças, adultos e idosos, com tratamento respeitoso e sem promessas clínicas. Idade orienta a escolha e não representa capacidade. Não exigir nascimento, interesses ou questionário para oferecer opções; se faltar idade, permitir explorar por faixa orientativa ou opções gerais sem inventar idade.
+
+O limite de 24 aplica-se aos modelos publicados ativos do catálogo global, não ao histórico, modelos arquivados nem atividades personalizadas da família. Alterar/arquivar modelo não reescreve instruções relevantes, dificuldade ou estrelas de execuções anteriores: preservar a versão executada.
+
+### Sugestões e escolha
+
+Oferecer até 6 sugestões elegíveis no contexto da pessoa. Excluir as indisponíveis para nova participação conforme DEV-F03; diversificar categorias sem diagnosticar necessidades ou impor metas. Com poucas alternativas, mostrar menos opções e explicar de forma neutra. Não duplicar itens para completar a quantidade.
+
+Responsável com organização de Desenvolvimento autorizada pode escolher/manter uma atividade para experimentar e solicitar **Renovar sugestões**. A seleção é privada por pessoa, compartilhada entre seus responsáveis autorizados; não depende do navegador individual.
+
+Renovar substitui **até 3 alternativas ainda não escolhidas** por outras do catálogo curado, conforme disponibilidade. Preserva atividades escolhidas, personalizadas, participações e versões históricas. Sem alternativas, manter a seleção e informar “Não há novas sugestões disponíveis no momento”. Não há garantia de novidade infinita.
+
+### Ciclos que permanecem distintos
+
+Escolher ou renovar não registra participação, não gera estrelas e não altera Explorar/Executadas. Após Concluiu/Participou persistido, a atividade continua indo para Executadas; nova participação depende da disponibilização autorizada já existente. Renovar nunca reabre uma atividade executada. A tabela de estrelas e recompensas permanece vigente.
+
+A interface aproveita Biblioteca e Explorar/Executadas. “Sugestões para esta pessoa”, “Renovar sugestões” e acesso a “Ver biblioteca” ficam no contexto da pessoa, sem novo menu global. Registros e estados operacionais usam os contratos de origem, sem histórico duplicado.
+
+### Alimentação inicial
+
+A entrega funciona com catálogo aprovado e seleção por regras locais. Conteúdo inicial pode ser mantido de forma versionada no repositório/seed, com revisão de qualidade antes de publicação. Internet/IA podem futuramente preparar candidatos para curadoria; pesquisa automática, geração em tempo real e publicação automática não integram E4. A manutenção do catálogo global não é poder do administrador de família.
+
+### Critérios de aceite
+
+| ID | Critério |
+|---|---|
+| E4-ACE-01 | Catálogo contém no máximo 24 modelos ativos publicados, com metadados necessários e curadoria registrada; personalizadas/histórico não entram nesse limite. |
+| E4-ACE-02 | Pessoa recebe até 6 sugestões elegíveis, sem exigir novos dados pessoais; faixa orientativa não é diagnóstico nem bloqueio rígido. |
+| E4-ACE-03 | Renovar troca até 3 opções não escolhidas, sem duplicar itens, sem apagar escolhas/personalizadas e com retorno útil se faltarem alternativas. |
+| E4-ACE-04 | Seleção persiste por pessoa e respeita família/operação; responsáveis da mesma pessoa veem estado consistente, inclusive retry e concorrência. |
+| E4-ACE-05 | Escolher/renovar não concede pontos nem reabre Executadas; participação, reativação e resgates mantêm DEV-F03..06. |
+| E4-ACE-06 | Atualização/arquivamento não altera conteúdo e créditos de execuções históricas; dados pessoais nunca são publicados no catálogo global. |
+| E4-ACE-07 | Biblioteca móvel permite entender instruções/materiais, escolher e renovar sem excesso de opções; vazio/erro não geram cobrança. |
+| E4-HOM | Homologar escolher → renovar preservando escolha → participar → Executadas → disponibilizar novamente, com duas famílias e regressão de estrelas/histórico. |
+
+**Fora:** jogos digitais (E5), IA com histórico pessoal, publicação automática, ranking, nova tabela de estrelas e correção de anexos. DEF-E3-ANEXO-SALVAR-20261122 permanece aberto e adiado por decisão expressa. Plano: `docs/esteira/planejamento/e4-biblioteca-real.md`.

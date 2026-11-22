@@ -104,224 +104,113 @@
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
     "demanda": {
-        "id": "DEM-E3-EXAMES-RESUMO-20261122",
+        "id": "DEM-E4-BIBLIOTECA-20261122",
         "tipo": "transversal",
-        "origem": "humano — recomendação E3 aceita em 2026-11-22",
-        "estado": "COMPLETED",
+        "origem": "humano — proposta E4 aceita em 2026-11-22, limites 24/6/3",
+        "estado": "READY",
         "aprovacao": {
             "nivel": "L3",
             "status": "DOCUMENTADA",
-            "referencia": "Módulo 02 v1.7 §10; Módulo 04 v1.2 §12; UX §11, desenho simplificado aprovado em 2026-11-22"
+            "referencia": "docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md v1.3 §12"
         },
         "risco": "alto",
-        "escopo": "Download privado de exames e Resumo único por área/período, com exportações existentes; sem visualizador embutido.",
+        "escopo": "Biblioteca real curada e limitada, seleção privada por pessoa e renovação controlada, preservando disponibilidade e estrelas.",
+        "fora": [
+            "IA/internet em tempo real",
+            "jogos digitais E5",
+            "nova pontuação",
+            "correção de anexos E3",
+            "publicação"
+        ],
         "criteriosAceite": [
-            "E3-EX-01",
-            "E3-EX-02",
-            "E3-EX-03",
-            "E3-EX-04",
-            "E3-EX-05",
-            "E3-RES-01",
-            "E3-RES-02",
-            "E3-RES-03",
-            "E3-RES-04",
-            "E3-RES-05",
-            "E3-HOM"
+            "E4-ACE-01",
+            "E4-ACE-02",
+            "E4-ACE-03",
+            "E4-ACE-04",
+            "E4-ACE-05",
+            "E4-ACE-06",
+            "E4-ACE-07",
+            "E4-HOM"
         ],
         "dependencias": [
-            "E2 homologada",
-            "ADR-004/006/009/010/014"
+            "Módulo 03 vigente",
+            "ADR-009/013/014",
+            "Documento Mestre §13"
         ],
-        "planejamento": {
-            "caminho": "docs/esteira/planejamento/e3-exames-resumo.md",
-            "incrementos": [
-                {
-                    "id": "E3-00",
-                    "status": "COMPLETED",
-                    "requisitos": [
-                        "E3-UX-00"
-                    ],
-                    "aceite": "E3-UX-00 aprovado pelo responsável em 2026-11-22: download externo, restante do desenho mantido; somente desenho."
-                },
-                {
-                    "id": "E3-01",
-                    "status": "COMPLETED",
-                    "requisitos": [
-                        "E3-EX-01",
-                        "E3-EX-02",
-                        "E3-EX-03",
-                        "E3-EX-04",
-                        "E3-EX-05"
-                    ],
-                    "aceite": "Baixar documento com autorização, integridade e estados seguros; sem viewer.",
-                    "fingerprint": "sha256:2dead837b08ac808",
-                    "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
-                    "qg1": "PASS",
-                    "qg2": "PASS",
-                    "qg3": "NOT_APPLICABLE",
-                    "verifier": "PASS",
-                    "verifierId": "indep-shell-e3-20261122",
-                    "concluidoEm": "2026-11-22T06:48:56.464Z"
-                },
-                {
-                    "id": "E3-02",
-                    "status": "COMPLETED",
-                    "requisitos": [
-                        "E3-RES-01",
-                        "E3-RES-02",
-                        "E3-RES-03",
-                        "E3-RES-04"
-                    ],
-                    "aceite": "Resumo por área, fontes e vazios",
-                    "fingerprint": "sha256:2dead837b08ac808",
-                    "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
-                    "qg1": "PASS",
-                    "qg2": "PASS",
-                    "qg3": "NOT_APPLICABLE",
-                    "verifier": "PASS",
-                    "verifierId": "indep-shell-e3-20261122",
-                    "concluidoEm": "2026-11-22T06:48:56.464Z"
-                },
-                {
-                    "id": "E3-03",
-                    "status": "COMPLETED",
-                    "requisitos": [
-                        "E3-EX-01",
-                        "E3-EX-02",
-                        "E3-EX-03",
-                        "E3-EX-04",
-                        "E3-EX-05",
-                        "E3-RES-01",
-                        "E3-RES-02",
-                        "E3-RES-03",
-                        "E3-RES-04",
-                        "E3-RES-05",
-                        "E3-HOM"
-                    ],
-                    "aceite": "Paridade prévia/PDF, regressão e homologação humana",
-                    "fingerprint": "sha256:2dead837b08ac808",
-                    "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
-                    "qg1": "PASS",
-                    "qg2": "PASS",
-                    "qg3": "PASS",
-                    "verifier": "PASS",
-                    "verifierId": "indep-shell-e3-20261122",
-                    "verifierOficial": "BLOCKED",
-                    "verifierOficialId": "66a7cfc5-4af6-4d9e-8e6b-77af298fcbe7",
-                    "concluidoEm": "2026-11-22T06:48:56.464Z"
-                }
-            ]
-        },
-        "revisao": {
-            "branch": "develop",
-            "commit": "8a517523319a76740f21ad51da5a6e02cb29f6c1",
-            "tipo": "implementacao_local"
-        },
-        "reconciliacaoLocal": {
-            "status": "OK",
-            "nota": "Workspace develop @ 8a51752; fingerprint recalculado e revalidado."
-        },
-        "verificacao": {
-            "qg1": "PASS",
-            "qg2": "PASS",
-            "qg3": "PASS",
-            "verifier": "PASS",
-            "evidencias": [
-                "docs/esteira/estado/qg1-typecheck-api-e3.txt",
-                "docs/esteira/estado/qg1-typecheck-web-e3.txt",
-                "docs/esteira/estado/qg1-check-estatico-e3.txt",
-                "docs/esteira/estado/qg2-smoke-e3.txt",
-                "docs/esteira/estado/qg2-build-web-e3.txt",
-                "docs/esteira/estado/qg2-smoke-authz-e3.txt",
-                "docs/esteira/estado/qg3-smoke-e1-03-e3.txt",
-                "docs/esteira/estado/qg3-smoke-e2-e3.txt",
-                "docs/esteira/estado/qg3-smoke-e1-ent-e3.txt",
-                "docs/esteira/estado/verifier-rerun-fingerprint-e3.txt",
-                "docs/esteira/estado/verifier-rerun-check-e3.txt",
-                "docs/esteira/estado/verifier-rerun-typecheck-api-e3.txt",
-                "docs/esteira/estado/verifier-rerun-typecheck-web-e3.txt",
-                "docs/esteira/estado/verifier-rerun-smoke-e3.txt",
-                "docs/esteira/estado/roteiro-homologacao-e3.md",
-                "docs/esteira/estado/evidencia-e3-20261122.json"
-            ]
-        },
-        "homologacaoHumana": "PENDING_HUMAN",
-        "criteriosOk": [
-            "E3-UX-00",
-            "E3-EX-01",
-            "E3-EX-02",
-            "E3-EX-03",
-            "E3-EX-04",
-            "E3-EX-05",
-            "E3-RES-01",
-            "E3-RES-02",
-            "E3-RES-03",
-            "E3-RES-04",
-            "E3-RES-05"
-        ],
-        "bloqueios": [],
-        "proximaAcao": "Detalhar E4 — Biblioteca de atividades reais; defeito de anexos aberto e correção adiada por Produto.",
-        "resultadoTecnico": "PASS",
-        "fingerprint": "sha256:2dead837b08ac808",
-        "fingerprintFull": "sha256:2dead837b08ac808b21a3f075d5478410fcc93772a22cca07770b7bab0edb14c",
-        "qg1": "PASS",
-        "qg2": "PASS",
-        "qg3": "PASS",
-        "verifier": "PASS",
-        "verifierId": "indep-shell-e3-20261122",
-        "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificacao independente shell PASS (fingerprint + check + typecheck + smoke e3 + regressao e1-03/e2/e1-ent/authz).",
-        "verifierOficial": "BLOCKED",
-        "verifierOficialId": "66a7cfc5-4af6-4d9e-8e6b-77af298fcbe7",
-        "criteriosFalha": [],
-        "criteriosPendentesHumanos": [
-            "E3-HOM"
-        ],
-        "arquivos": [
-            "apps/web/src/lib/api.ts",
-            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
-            "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx",
-            "apps/api/src/cuidados/servico-acompanhamento.ts",
-            "apps/api/scripts/smoke-e3.mjs",
-            "apps/api/scripts/check-e3.mjs",
-            "apps/api/package.json",
-            "docs/esteira/estado/roteiro-homologacao-e3.md"
-        ],
-        "evidencias": [
-            "docs/esteira/estado/qg1-typecheck-api-e3.txt",
-            "docs/esteira/estado/qg1-typecheck-web-e3.txt",
-            "docs/esteira/estado/qg1-check-estatico-e3.txt",
-            "docs/esteira/estado/qg2-smoke-e3.txt",
-            "docs/esteira/estado/qg2-build-web-e3.txt",
-            "docs/esteira/estado/qg2-smoke-authz-e3.txt",
-            "docs/esteira/estado/qg3-smoke-e1-03-e3.txt",
-            "docs/esteira/estado/qg3-smoke-e2-e3.txt",
-            "docs/esteira/estado/qg3-smoke-e1-ent-e3.txt",
-            "docs/esteira/estado/verifier-rerun-fingerprint-e3.txt",
-            "docs/esteira/estado/verifier-rerun-check-e3.txt",
-            "docs/esteira/estado/verifier-rerun-typecheck-api-e3.txt",
-            "docs/esteira/estado/verifier-rerun-typecheck-web-e3.txt",
-            "docs/esteira/estado/verifier-rerun-smoke-e3.txt",
-            "docs/esteira/estado/roteiro-homologacao-e3.md",
-            "docs/esteira/estado/evidencia-e3-20261122.json"
-        ],
-        "mensagemCommit": "feat(cuidados,evolucao): baixar exames e organizar resumo por area\\n\\nFecha DEM-E3 tecnicamente: download autorizado sem viewer, resumo factual por area/periodo e PDF sem laudos; homologacao humana pendente.",
-        "concluidaEm": "2026-11-22T06:48:56.464Z",
-        "nota": "Entrega técnica histórica preservada; falha de salvar anexo relatada pelo responsável impede homologação da jornada. Correção adiada por Produto; demais jornadas não aprovadas automaticamente.",
-        "homologacaoSituacao": "IMPEDIDA_POR_DEFEITO_DE_ANEXO",
-        "defeitosRelacionados": [
-            "DEF-E3-ANEXO-SALVAR-20261122"
-        ],
-        "defeitosConhecidos": [
+        "pendenciasForaEscopo": [
             {
                 "id": "DEF-E3-ANEXO-SALVAR-20261122",
                 "estado": "ABERTO",
                 "tratamento": "ADIADO_POR_PRODUTO",
-                "data": "2026-11-22",
-                "relato": "Falha ao salvar anexo impediu homologação da jornada.",
-                "referenciaDisponivel": "d4a4db0cef5cca5bdb16772ea97cf1724634fcb9",
                 "fonte": "docs/produto/STATUS-E-ESCOPO.md"
             }
-        ]
+        ],
+        "revisao": {
+            "branch": "develop",
+            "commit": "4ae828da06b5dfa78abbedda56e5c5965aea33ac",
+            "tipo": "inspecao_estatica_remota"
+        },
+        "reconciliacaoLocal": {
+            "status": "PENDING",
+            "nota": "Reconciliar branch, alterações/não rastreados e fingerprint antes de implementar."
+        },
+        "planejamento": {
+            "caminho": "docs/esteira/planejamento/e4-biblioteca-real.md",
+            "especificacao": {
+                "caminho": "docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md",
+                "versao": "v1.3",
+                "status": "aprovado"
+            },
+            "incrementos": [
+                {
+                    "id": "E4-01",
+                    "status": "READY",
+                    "requisitos": [
+                        "E4-ACE-01",
+                        "E4-ACE-02",
+                        "E4-ACE-06"
+                    ],
+                    "aceite": "Catálogo curado/versionado, metadados e sugestões elegíveis"
+                },
+                {
+                    "id": "E4-02",
+                    "status": "PENDING",
+                    "requisitos": [
+                        "E4-ACE-03",
+                        "E4-ACE-04",
+                        "E4-ACE-05"
+                    ],
+                    "aceite": "Escolher e renovar com persistência, limites e segurança"
+                },
+                {
+                    "id": "E4-03",
+                    "status": "PENDING",
+                    "requisitos": [
+                        "E4-ACE-01",
+                        "E4-ACE-02",
+                        "E4-ACE-03",
+                        "E4-ACE-04",
+                        "E4-ACE-05",
+                        "E4-ACE-06",
+                        "E4-ACE-07",
+                        "E4-HOM"
+                    ],
+                    "aceite": "Experiência móvel, regressão e homologação humana"
+                }
+            ]
+        },
+        "verificacao": {
+            "qg1": "PENDING",
+            "qg2": "PENDING",
+            "qg3": "PENDING",
+            "verifier": "PENDING",
+            "evidencias": []
+        },
+        "homologacaoHumana": "PENDING_HUMAN",
+        "criteriosOk": [],
+        "bloqueios": [],
+        "fingerprintNota": "Planejamento remoto; gerar hash real no incremento local.",
+        "proximaAcao": "Executar implementation-workflow E4-01, conferindo contratos e desenho da Biblioteca antes de editar componentes."
     },
     "janelaIncrementos": [
         {
@@ -2220,9 +2109,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Detalhar E4 — Biblioteca de atividades reais; defeito de anexos aberto e correção adiada por Produto.",
-    "atualizadoEm": "2026-11-22T06:56:45.243Z",
-    "notas": "E3-HOM pendente, anexos impedidos por DEF-E3-ANEXO-SALVAR-20261122. Avanço ao detalhamento E4 autorizado.",
+    "proximaAcao": "Executar implementation-workflow E4-01, conferindo contratos e desenho da Biblioteca antes de editar componentes.",
+    "atualizadoEm": "2026-11-22T07:02:30.890Z",
+    "notas": "E4 READY com limites 24/6/3 aprovados. E3 não homologada integralmente; anexos com defeito adiado, preservado no histórico.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

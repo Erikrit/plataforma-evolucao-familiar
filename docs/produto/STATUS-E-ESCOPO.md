@@ -1,5 +1,16 @@
 # Estado das decisões e escopo
 
+## E4 — biblioteca real aprovada e planejada, 2026-11-22
+
+**APROVADO pelo Produto:** catálogo curado com até 24 modelos publicados ativos, até 6 sugestões por pessoa e renovação de até 3 alternativas não escolhidas. Preservar escolhas, personalizadas, histórico, pontos e disponibilidade Explorar/Executadas. Internet/IA em tempo real e jogos digitais ficam fora desta entrega.
+
+**Fonte:** Módulo 03 v1.3 §12, E4-ACE-01..07/E4-HOM. Plano em `docs/esteira/planejamento/e4-biblioteca-real.md`. Demanda DEM-E4-BIBLIOTECA-20261122 READY, E4-01..03; próximo implementation-workflow E4-01.
+
+**Base inspecionada:** develop @ 4ae828da06b5dfa78abbedda56e5c5965aea33ac. Desafio já admite catálogo global e atividades privadas; API combina ambos e trata disponibilidade por pessoa. Levantamento estático, sem implementação/testes nesta atualização.
+
+**Pendência preservada:** E3-HOM continua pendente, com falha ao salvar anexos DEF-E3-ANEXO-SALVAR-20261122 aberta e adiada expressamente. Prosseguir na E4 não aprova anexos nem outras jornadas não homologadas da E3. Publicação segue adiada.
+
+
 ## Defeito de anexos — tratamento adiado, 2026-11-22
 
 **DEF-E3-ANEXO-SALVAR-20261122 — ABERTO.** Responsável informou atualização feita, mas falha ao salvar anexo impediu homologar essa jornada. Causa técnica ainda não diagnosticada/reproduzida nesta anotação.

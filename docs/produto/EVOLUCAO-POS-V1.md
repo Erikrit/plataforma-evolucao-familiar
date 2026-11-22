@@ -171,14 +171,14 @@ Se houver extração de valores, manter exame original, unidade, intervalo do la
 
 Proposta de catálogo compartilhado de modelos aprovados, sem dados pessoais, e seleção privada de atividades por família/pessoa. Um modelo global não contém o histórico de quem o executou. Atividades personalizadas da família continuam privadas até decisão explícita de publicação.
 
-**Parâmetros iniciais sugeridos, configuráveis no produto após validação**
+**Parâmetros E4 aprovados pelo Produto em 2026-11-22, fonte canônica Módulo 03 v1.3 §12**
 
 - Até 24 modelos ativos no catálogo inicial.
 - Até 6 sugestões visíveis para a pessoa por vez.
 - Atualização apresenta até 3 alternativas para o responsável escolher.
 - Conteúdo anterior pode ser arquivado do catálogo ativo, preservando a versão referenciada nas participações.
 
-Esses números são proposta de densidade, não uma restrição funcional já aprovada.
+Os limites 24/6/3 foram aprovados para a primeira entrega E4. Conteúdo arquivado, histórico e atividades personalizadas não compõem o teto de modelos ativos.
 
 Cada modelo deve ter origem, instrução curta, categoria, dificuldade, idade sugerida/faixa, materiais quando necessários e adaptações de acessibilidade/supervisão pertinentes. Idade orienta adequação; interesses e necessidades reais ajudam a escolher dificuldade. O usuário não deve preencher uma avaliação extensa para receber sugestões.
 
@@ -387,7 +387,7 @@ O planejamento E1 está em `docs/esteira/planejamento/e1-contexto-familiar.md`. 
 | Cadastro inicial pela interface de boas-vindas | APROVADO; substitui exclusividade do provisionamento privado, Módulo 01 v1.8 §14 |
 | Gestão por responsabilidades predefinidas, sem papéis personalizados | DIREÇÃO APROVADA; manter combinações da ADR-014 |
 | Resumo por área como evolução do Módulo 04 | DIREÇÃO APROVADA |
-| Catálogo global curado e seleção privada renovável | DIREÇÃO APROVADA; limites quantitativos a fechar |
+| Catálogo global curado e seleção privada renovável | APROVADO no recorte E4, Módulo 03 v1.3 §12, limites 24/6/3 |
 | Atividades reais e jogos juntos na UX, separados no ciclo técnico | DIREÇÃO APROVADA |
 | Estrelas com origem preservada; economia combinada adiada | DIREÇÃO APROVADA; valor/crédito/resgate digital NEEDS_DECISION |
 | IA de desenvolvimento antes da IA de cuidados | DIREÇÃO APROVADA |
