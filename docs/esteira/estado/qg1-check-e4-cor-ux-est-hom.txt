@@ -1,0 +1,14 @@
+﻿
+> @pef/api@0.1.0 check:e4
+> node scripts/check-e4.mjs
+
+PASS E4-ACE-01-limite-constante — Catálogo com 24 ids únicos ≤ 24
+PASS E4-ACE-01-metadados-schema — Extensão de Desafio + seleção privada (sem segunda tabela global)
+PASS E4-ACE-02-sugestoes — Até 6 sugestões elegíveis com diversificação
+PASS E4-ACE-03-renovar — Renovar até 3 não escolhidas com mensagem de escassez
+PASS E4-ACE-04-persistencia — Seleção própria, concorrência e sem reuso de DesafioGuardado
+PASS E4-ACE-05-sem-pontos — Escolher/renovar não concede estrelas nem reabre Executadas
+PASS E4-ACE-06-snapshot — Snapshot de conteúdo na participação e no histórico
+PASS E4-ACE-07-ui — UI móvel com sugestões, renovar e biblioteca existente
+
+check-e4: 8 checagens OK

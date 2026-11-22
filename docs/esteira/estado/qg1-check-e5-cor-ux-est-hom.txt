@@ -1,0 +1,5 @@
+﻿
+> @pef/api@0.1.0 check:e5
+> node scripts/check-e5.mjs
+
+check-e5: três jogos, 15 fases, variantes e destaques determinísticos validados

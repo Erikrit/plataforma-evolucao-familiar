@@ -1,5 +1,29 @@
 # Registro da esteira
 
+## 2026-11-22 — Auditoria técnica de consultas e artefatos
+
+- Lembretes passaram a consultar doses em lote e exigem permissão de leitura de Cuidados, conforme M02. A home reutiliza as concessões ativas da própria requisição.
+- Revisão independente aprovada após o ajuste para dados com versões ativas duplicadas. Smokes de autorização, jornadas, E2, E4 e E5 executados com PostgreSQL isolado.
+- Inventário, evidências e plano dos recortes pendentes. [Auditoria técnica](planejamento/auditoria-tecnica-20261122.md)
+
+## COR-UX-EST-HOM-20261122 — COMPLETED técnico
+
+- **Tipo:** melhoria_ux · **Origem:** homologação humana da estabilização **APROVADA PARCIALMENTE**.
+- **Checkout:** `develop` @ `95cb9de` + alterações locais (sem commit automático).
+- **Entrega Etapa A:** `EsqueletoLista`; sugestões após catálogo; feedback de Renovar na seção (causa UX comprovada; backend OK); Modal Mantine pós-fase (próxima / catálogo / parabéns final).
+- **QG:** typecheck + check/smoke e4/e5/authz PASS. Build web **BLOCKED** (EPERM `.next/trace`). Verifier **PASS_COM_ACHADOS**. Fingerprint `sha256:7ba70a28dc7944d0…`.
+- **Humano:** COR-UX-HOM PENDING — [roteiro](estado/roteiro-homologacao-cor-ux-est-hom.md). Evidência: [JSON](estado/evidencia-cor-ux-est-hom-20261122.json).
+- **Etapa B:** só planejamento L3 — [expansao-catalogos-e4-e5.md](planejamento/expansao-catalogos-e4-e5.md). Sem implementação.
+- **Próximo:** homologação humana; depois retomar EST-03. Sem commit/push/deploy automático.
+
+## COR-UX-EST-HOM-20261122 — triagem
+
+- **Tipo:** melhoria_ux · **Origem:** homologação humana da estabilização **APROVADA PARCIALMENTE**.
+- **Checkout:** `develop` @ `95cb9de`, alinhado a `origin/develop`, working tree limpa.
+- **Estabilização:** `ESTABILIZACAO-PRE-USO-20261122` **PAUSED** (EST-00..02 COMPLETED técnico; EST-03/04 pendentes). Apontamentos: loading contextual, posição das sugestões, Renovar, diálogo pós-fase.
+- **Etapa B:** expansão de catálogos — **somente planejamento** (`docs/esteira/planejamento/expansao-catalogos-e4-e5.md`); L3 Produto; sem implementação nesta demanda.
+- **Fluxo:** implementation-workflow → quality-gate → homologação humana. Sem commit/push/deploy automático.
+
 ## EST-02 — auth enxuta (COMPLETED técnico)
 
 - **Demanda:** `ESTABILIZACAO-PRE-USO-20261122` · incremento EST-02 COMPLETED técnico.

@@ -15,6 +15,11 @@ import {
   type Responsabilidade,
 } from "./responsabilidades";
 
+const LEITURA_CUIDADOS: Responsabilidade[] = [
+  "responsavel_cuidados",
+  "colaboradora_cuidados",
+];
+
 @Injectable()
 export class ServicoAutorizacoes {
   constructor(
@@ -322,10 +327,7 @@ export class ServicoAutorizacoes {
   ): Promise<boolean> {
     if (usuario.pessoa.familiaId !== familiaId) return false;
     if (usuario.pessoa.id === pessoaId) return true;
-    return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, [
-      "responsavel_cuidados",
-      "colaboradora_cuidados",
-    ]);
+    return this.temResponsabilidadeSobrePessoa(familiaId, pessoaId, usuario, LEITURA_CUIDADOS);
   }
 
   /**
@@ -493,13 +495,21 @@ export class ServicoAutorizacoes {
     const cartoes = [];
     const idsCuidados: string[] = [];
     const idsDesenvolvimento: string[] = [];
+    const alvosCuidados = new Set<string>();
+    const alvosDesenvolvimento = new Set<string>();
+    for (const { pessoaAlvoId, responsabilidade } of autorizacoes) {
+      if (!pessoaAlvoId) continue;
+      if (LEITURA_CUIDADOS.includes(responsabilidade as Responsabilidade)) {
+        alvosCuidados.add(pessoaAlvoId);
+      }
+      if (responsabilidade === "responsavel_desenvolvimento") {
+        alvosDesenvolvimento.add(pessoaAlvoId);
+      }
+    }
     for (const p of pessoas) {
-      const cuidados = await this.podeVerCuidados(familiaId, p.id, usuario);
-      const desenvolvimento = await this.podeVerDesenvolvimento(
-        familiaId,
-        p.id,
-        usuario,
-      );
+      const propriaPessoa = p.id === usuario.pessoa.id;
+      const cuidados = propriaPessoa || alvosCuidados.has(p.id);
+      const desenvolvimento = propriaPessoa || alvosDesenvolvimento.has(p.id);
       if (cuidados) idsCuidados.push(p.id);
       if (desenvolvimento) idsDesenvolvimento.push(p.id);
       const estadoConta = visao.adminFamilia

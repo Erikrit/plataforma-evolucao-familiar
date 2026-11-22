@@ -134,6 +134,41 @@ export function EstadoCarregando({
   );
 }
 
+/** Placeholder contextual no lugar da lista — evita tela intermediária em branco. */
+export function EsqueletoLista({
+  rotulo = "Carregando…",
+  linhas = 3,
+}: {
+  rotulo?: string;
+  linhas?: number;
+}) {
+  const quantidade = Math.min(Math.max(linhas, 1), 6);
+  return (
+    <Stack gap="sm" role="status" aria-live="polite" aria-busy="true">
+      <Group gap="sm" align="center">
+        <Loader color="azul" size="sm" />
+        <Text c="dimmed" size="sm">
+          {rotulo}
+        </Text>
+      </Group>
+      {Array.from({ length: quantidade }, (_, indice) => (
+        <div
+          key={indice}
+          aria-hidden
+          style={{
+            height: "4.25rem",
+            borderRadius: "var(--mantine-radius-md)",
+            border: "1px solid var(--mantine-color-gray-3)",
+            background:
+              "linear-gradient(90deg, var(--mantine-color-gray-1) 0%, var(--mantine-color-gray-0) 50%, var(--mantine-color-gray-1) 100%)",
+            backgroundSize: "200% 100%",
+          }}
+        />
+      ))}
+    </Stack>
+  );
+}
+
 export function EstadoVazio({
   titulo,
   descricao,

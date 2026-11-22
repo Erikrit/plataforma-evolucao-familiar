@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Card, Container, Group, SegmentedControl, Stack, Text, Title } from "@mantine/core";
 import { useDesenvolvimento } from "@/componentes/contexto-desenvolvimento";
 import {
-  EstadoCarregando,
+  EsqueletoLista,
   EstadoVazio,
   MensagemFeedback,
   mensagemErroAmigavel,
@@ -129,7 +129,7 @@ export default function PaginaRecompensas() {
             <Button variant="light" onClick={() => void carregar()}>Tentar novamente</Button>
           </Stack>
         ) : !lista ? (
-          <EstadoCarregando rotulo="Carregando recompensas…" />
+          <EsqueletoLista rotulo="Carregando recompensas…" linhas={3} />
         ) : lista.recompensas.length === 0 ? (
           <EstadoVazio titulo={filtro === "disponiveis" ? "Nenhuma recompensa disponível" : "Nenhum resgate ainda"} />
         ) : (

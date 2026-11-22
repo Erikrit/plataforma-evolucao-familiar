@@ -277,7 +277,13 @@ export class ServicoAcompanhamento {
     usuario: UsuarioAutenticado,
     dataRef?: string,
   ) {
-    const pessoa = await this.exigirVisao(pessoaId, usuario);
+    const pessoa = await this.prisma.pessoa.findUnique({ where: { id: pessoaId } });
+    if (!pessoa || pessoa.familiaId !== usuario.pessoa.familiaId) {
+      throw new NotFoundException("Pessoa não encontrada.");
+    }
+    if (!(await this.autorizacoes.podeVerCuidados(pessoa.familiaId, pessoa.id, usuario))) {
+      throw new ForbiddenException("Acesso negado aos lembretes de cuidados.");
+    }
     const dia = (dataRef ?? new Date().toISOString().slice(0, 10)).trim();
     const medicamentos = await this.prisma.medicamento.findMany({
       where: { pessoaId: pessoa.id, status: "ativo" },
@@ -300,28 +306,43 @@ export class ServicoAcompanhamento {
       insistente: false;
     }> = [];
 
-    for (const med of medicamentos) {
+    const ocorrencias = medicamentos.flatMap((med) => {
       const prog = med.programacoes[0];
-      if (!prog) continue;
-      const horarios = Array.isArray(prog.horarios)
+      const horarios = Array.isArray(prog?.horarios)
         ? (prog.horarios as string[])
         : [];
-      for (const horario of horarios) {
-        const chave = chaveOcorrencia(med.id, dia, horario);
-        const registro = await this.prisma.registroDose.findFirst({
-          where: { ocorrenciaChave: chave, versaoAtiva: true },
-        });
-        itens.push({
-          tipo: "medicamento",
-          medicamentoId: med.id,
-          titulo: med.nome,
-          horario,
-          estado: registro
-            ? registro.situacao
-            : "sem_confirmacao_apenas_informativo",
-          insistente: false,
-        });
-      }
+      return horarios.map((horario) => ({
+        med, horario, chave: chaveOcorrencia(med.id, dia, horario),
+      }));
+    });
+    const chaves = [...new Set(ocorrencias.map(({ chave }) => chave))];
+    const registros = chaves.length ? await this.prisma.registroDose.findMany({
+      where: { ocorrenciaChave: { in: chaves }, versaoAtiva: true },
+      select: { ocorrenciaChave: true, situacao: true },
+    }) : [];
+    const situacaoPorChave = new Map<string, string>();
+    const chavesDuplicadas = new Set<string>();
+    for (const { ocorrenciaChave, situacao } of registros) {
+      if (situacaoPorChave.has(ocorrenciaChave)) chavesDuplicadas.add(ocorrenciaChave);
+      situacaoPorChave.set(ocorrenciaChave, situacao);
+    }
+    // Dados antigos podem ter duas versões ativas. Nesses casos, preserve a leitura anterior.
+    for (const chave of chavesDuplicadas) {
+      const registro = await this.prisma.registroDose.findFirst({
+        where: { ocorrenciaChave: chave, versaoAtiva: true },
+      });
+      if (registro) situacaoPorChave.set(chave, registro.situacao);
+      else situacaoPorChave.delete(chave);
+    }
+    for (const { med, horario, chave } of ocorrencias) {
+      itens.push({
+        tipo: "medicamento",
+        medicamentoId: med.id,
+        titulo: med.nome,
+        horario,
+        estado: situacaoPorChave.get(chave) ?? "sem_confirmacao_apenas_informativo",
+        insistente: false,
+      });
     }
 
     const consultas = await this.prisma.consulta.findMany({

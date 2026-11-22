@@ -3,7 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Button, Stack } from "@mantine/core";
 import { useDesenvolvimento } from "@/componentes/contexto-desenvolvimento";
-import { EstadoCarregando, EstadoVazio, mensagemErroAmigavel } from "@/componentes/feedback";
+import { EsqueletoLista, EstadoVazio, mensagemErroAmigavel } from "@/componentes/feedback";
 import { ErroApi, listarJogos, type CatalogoJogos } from "@/lib/api";
 
 type Consulta =
@@ -43,7 +43,7 @@ export function CatalogoJogosAutorizado({
   if (consulta.estado === "pronta") return children(consulta.catalogo);
 
   if (consulta.estado === "carregando") {
-    return <EstadoCarregando rotulo="Carregando jogos…" />;
+    return <EsqueletoLista rotulo="Carregando jogos…" linhas={4} />;
   }
 
   return (

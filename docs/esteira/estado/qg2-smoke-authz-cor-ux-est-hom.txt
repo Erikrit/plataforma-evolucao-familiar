@@ -1,0 +1,66 @@
+﻿
+> @pef/api@0.1.0 smoke:authz
+> node scripts/smoke-e1-authz.mjs
+
+{
+  "ok": true,
+  "resultados": [
+    {
+      "nome": "cria-pessoas",
+      "ok": true,
+      "detalhe": {
+        "a": "cmwsdbmyd004mssjcdsri4ef6",
+        "b": "cmwsdbn0g004ossjcv5jtj8hw"
+      }
+    },
+    {
+      "nome": "admin-puro-negado-rotina",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "admin-puro-negado-pdf",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "admin-com-concessao-ok",
+      "ok": true,
+      "detalhe": {
+        "status": 200
+      }
+    },
+    {
+      "nome": "sessao-A-pessoa-B-404",
+      "ok": true,
+      "detalhe": {
+        "status": 404
+      }
+    },
+    {
+      "nome": "admin-gestao-ok",
+      "ok": true,
+      "detalhe": {
+        "status": 200
+      }
+    },
+    {
+      "nome": "admin-gestao-familia-B-negada",
+      "ok": true,
+      "detalhe": {
+        "status": 403
+      }
+    },
+    {
+      "nome": "login-sem-familiaSlug-recusado",
+      "ok": true,
+      "detalhe": {
+        "status": 400
+      }
+    }
+  ]
+}

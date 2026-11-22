@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -23,6 +24,7 @@ import {
   type JogoResumo,
 } from "@/lib/api";
 import { novaChaveOperacao } from "@/lib/chave-operacao";
+import { consultaCatalogoJogos } from "@/lib/filtros-jogos";
 import { TabuleiroMemoria } from "./tabuleiro-memoria";
 import { TabuleiroSequencia } from "./tabuleiro-sequencia";
 import { TabuleiroLabirinto } from "./tabuleiro-labirinto";
@@ -85,7 +87,8 @@ export function PartidaJogo({
   fase: FaseJogoResumo;
   retorno: string;
 }) {
-  const { pessoaId } = useDesenvolvimento();
+  const { pessoaId, caminho } = useDesenvolvimento();
+  const busca = useSearchParams();
   const [etapa, setEtapa] = useState<Etapa>({ tipo: "abrindo" });
   const [modalDicaAberto, setModalDicaAberto] = useState(false);
   const [dicaDaPartida, setDicaDaPartida] = useState<string | null>(null);
@@ -94,6 +97,19 @@ export function PartidaJogo({
   const obterDicaRef = useRef<ObterDicaPartida | null>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const focoEstado = useRef<HTMLHeadingElement>(null);
+  const focoCelebracao = useRef<HTMLHeadingElement>(null);
+
+  const consultaCatalogo = consultaCatalogoJogos({
+    categoria: busca.get("categoria"),
+    fases: busca.get("fases"),
+  });
+  const proximaFase = useMemo(
+    () => jogo.fases.find((item) => item.numero === fase.numero + 1) ?? null,
+    [jogo.fases, fase.numero],
+  );
+  const hrefProximaFase = proximaFase
+    ? `${caminho}/biblioteca/jogos/${jogo.id}/fases/${proximaFase.numero}/jogar${consultaCatalogo}`
+    : null;
 
   const registrarObterDica = useCallback((obter: ObterDicaPartida | null) => {
     obterDicaRef.current = obter;
@@ -106,8 +122,11 @@ export function PartidaJogo({
   }, []);
 
   useEffect(() => {
+    if (etapa.tipo === "salva") {
+      focoCelebracao.current?.focus();
+      return;
+    }
     if (
-      etapa.tipo === "salva" ||
       etapa.tipo === "pendente" ||
       etapa.tipo === "indisponivel" ||
       etapa.tipo === "erro"
@@ -311,29 +330,62 @@ export function PartidaJogo({
         </Alert>
       ) : null}
 
-      {etapa.tipo === "salva" ? (
-        <Alert
-          color="teal"
-          className={etapa.descoberta ? estilos.descoberta : undefined}
-        >
-          <Stack align="flex-start">
-            <Title order={2} size="h4" ref={focoEstado} tabIndex={-1}>
-              Fase concluída
+      <Modal
+        opened={etapa.tipo === "salva"}
+        onClose={() => undefined}
+        withCloseButton={false}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        centered
+        radius="md"
+        size="md"
+        padding="md"
+        overlayProps={{ backgroundOpacity: 0.45, blur: 1 }}
+        transitionProps={{ transition: "fade", duration: 150 }}
+        aria-labelledby="titulo-celebracao-fase"
+        aria-describedby="texto-celebracao-fase"
+      >
+        {etapa.tipo === "salva" ? (
+          <Stack
+            gap="md"
+            className={etapa.descoberta ? estilos.descoberta : undefined}
+          >
+            <Title
+              order={2}
+              size="h3"
+              id="titulo-celebracao-fase"
+              ref={focoCelebracao}
+              tabIndex={-1}
+            >
+              {hrefProximaFase
+                ? "Fase concluída!"
+                : "Parabéns — todas as fases!"}
             </Title>
-            <Text role="status">
-              {etapa.descoberta
-                ? "Primeira descoberta registrada!"
-                : "Progresso confirmado."}
+            <Text id="texto-celebracao-fase" role="status">
+              {hrefProximaFase
+                ? etapa.descoberta
+                  ? "Primeira descoberta registrada. Que tal a próxima fase?"
+                  : "Progresso confirmado. Você pode seguir ou escolher outra fase."
+                : etapa.descoberta
+                  ? "Você concluiu a última fase deste jogo. Primeira descoberta registrada!"
+                  : "Você concluiu a última fase deste jogo. Progresso confirmado."}
             </Text>
-            <Group>
-              <Button onClick={() => void comecar()}>Jogar novamente</Button>
+            <Stack gap="sm">
+              {hrefProximaFase ? (
+                <Button component={Link} href={hrefProximaFase}>
+                  Ir para próxima fase
+                </Button>
+              ) : null}
               <Button component={Link} href={retorno} variant="light">
-                Escolher outra fase
+                Voltar ao catálogo
               </Button>
-            </Group>
+              <Button variant="subtle" onClick={() => void comecar()}>
+                Jogar esta fase de novo
+              </Button>
+            </Stack>
           </Stack>
-        </Alert>
-      ) : null}
+        ) : null}
+      </Modal>
 
       {etapa.tipo === "indisponivel" ? (
         <Alert color="orange">

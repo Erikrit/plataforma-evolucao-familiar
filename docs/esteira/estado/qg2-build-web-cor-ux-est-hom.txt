@@ -1,0 +1,31 @@
+
+> @pef/web@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.29
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 74s
+   Skipping linting
+   Checking validity of types ...
+
+   We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+   The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+   	- include was updated to add '.next-qg-cor-ux/types/**/*.ts'
+
+   Collecting page data ...
+   Generating static pages (0/8) ...
+   Generating static pages (2/8) 
+   Generating static pages (4/8) 
+   Generating static pages (6/8) 
+ ✓ Generating static pages (8/8)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+---
+RESULTADO: BLOCKED
+MOTIVO: EPERM ao abrir apps/web/.next/trace (lock de ambiente Windows). Compilação chegou a 'Collecting build traces' com PEF_NEXT_DIST_DIR=.next-qg-cor-ux antes de abortar. Typecheck web PASS; smokes e4/e5/authz PASS.
+

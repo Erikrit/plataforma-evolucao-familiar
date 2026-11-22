@@ -2,7 +2,7 @@
 
 ## Estabilização pré-uso — 2026-11-22
 
-**Demanda ativa:** `ESTABILIZACAO-PRE-USO-20261122` (IN_PROGRESS). Objetivo: preparar a plataforma para uso real **sem** novas funcionalidades e **sem** iniciar E6/E7. Plano em `docs/esteira/planejamento/estabilizacao-pre-uso.md` (EST-00..EST-04).
+**Demanda ativa:** `COR-UX-EST-HOM-20261122` (IN_PROGRESS) — correções UX da homologação parcial. `ESTABILIZACAO-PRE-USO-20261122` permanece **PAUSED** (EST-00..02 COMPLETED técnico; EST-03/04 a retomar). Expansão de catálogos: só planejamento L3 em `docs/esteira/planejamento/expansao-catalogos-e4-e5.md` (sem implementação).
 
 **EST-02 (auth enxuta):** COMPLETED técnico — ADR-015 (sessão/cookie; sem JWT); regressões auth PASS (`qg*-est-02*`); verifier PASS_COM_ACHADOS; gaps residuais (rate-limit de login; HTTPS/`COOKIE_SECURE` no alvo) bloqueiam uso real. Evidência `docs/esteira/estado/evidencia-est-02-20261122.json`. Próximo: EST-03.
 

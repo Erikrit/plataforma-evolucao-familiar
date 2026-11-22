@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  Anchor,
+  Alert,
   Button,
   Card,
   Chip,
@@ -19,7 +19,7 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { useDesenvolvimento } from "@/componentes/contexto-desenvolvimento";
 import {
-  EstadoCarregando,
+  EsqueletoLista,
   EstadoVazio,
   MensagemFeedback,
   mensagemErroAmigavel,
@@ -72,6 +72,7 @@ export function BibliotecaAtividades() {
   const [sugestoes, setSugestoes] = useState<SugestaoDesafio[] | null>(null);
   const [mensagemSugestoes, setMensagemSugestoes] = useState<string | null>(null);
   const [erroSugestoes, setErroSugestoes] = useState<string | null>(null);
+  const [statusRenovacao, setStatusRenovacao] = useState<string | null>(null);
   const [carregandoSugestoes, setCarregandoSugestoes] = useState(true);
   const [renovando, setRenovando] = useState(false);
   const [escolhendoId, setEscolhendoId] = useState<string | null>(null);
@@ -249,6 +250,7 @@ export function BibliotecaAtividades() {
     setEscolhendoId(item.id);
     setErro(null);
     setSucesso(null);
+    setStatusRenovacao(null);
     try {
       const resp = await escolherSugestaoDesafio(pessoaId, item.id);
       requisicaoSugestoes.current += 1;
@@ -272,6 +274,7 @@ export function BibliotecaAtividades() {
     setRenovando(true);
     setErro(null);
     setSucesso(null);
+    setStatusRenovacao(null);
     try {
       const resp = await renovarSugestoesDesafio(pessoaId);
       requisicaoSugestoes.current += 1;
@@ -279,18 +282,20 @@ export function BibliotecaAtividades() {
       setErroSugestoes(null);
       setSugestoes(resp.sugestoes);
       setMensagemSugestoes(resp.mensagem);
+      // Feedback junto da seção (não no topo), para permanecer visível após o catálogo.
       if (resp.trocadas === 0) {
-        setSucesso(
+        setStatusRenovacao(
           resp.mensagem ?? "Não há novas sugestões disponíveis no momento",
         );
       } else {
-        setSucesso(
+        setStatusRenovacao(
           resp.mensagem ??
             `Renovamos ${resp.trocadas} sugest${resp.trocadas === 1 ? "ão" : "ões"}. Escolhas mantidas.`,
         );
       }
     } catch (e) {
       setErro(mensagemErroAmigavel(e, "Não foi possível renovar"));
+      setStatusRenovacao(null);
     } finally {
       setRenovando(false);
     }
@@ -314,69 +319,6 @@ export function BibliotecaAtividades() {
           { label: "Executadas", value: "executadas" },
         ]}
       />
-      {filtro === "explorar" ? (
-        <Stack gap="sm">
-          <Group justify="space-between" align="center" gap="xs">
-            <Title order={2}>Sugestões para esta pessoa</Title>
-            {podeOrganizar ? (
-              <Button
-                variant="light"
-                size="sm"
-                loading={renovando}
-                disabled={Boolean(escolhendoId) || carregandoSugestoes}
-                onClick={() => void aoRenovarSugestoes()}
-              >
-                Renovar sugestões
-              </Button>
-            ) : null}
-          </Group>
-          {mensagemSugestoes ? <Text size="sm" c="dimmed">{mensagemSugestoes}</Text> : null}
-          {erroSugestoes ? (
-            <Stack align="flex-start">
-              <EstadoVazio titulo="Sugestões indisponíveis" descricao={erroSugestoes} />
-              <Button variant="light" onClick={() => void carregarSugestoes()}>Tentar novamente</Button>
-            </Stack>
-          ) : sugestoes === null ? (
-            <EstadoCarregando rotulo="Carregando sugestões…" />
-          ) : sugestoes.length === 0 ? (
-            <EstadoVazio titulo="Sem sugestões agora" />
-          ) : (
-            <>
-              <Anchor href="#catalogo-atividades" size="sm">Ver todas as atividades</Anchor>
-              {sugestoes.map((item) => (
-                <Card key={item.id} withBorder padding="md" radius="md">
-                  <Stack gap="sm">
-                    <UnstyledButton onClick={() => abrirSugestao(item)}>
-                      <Group gap="sm" wrap="nowrap" align="flex-start">
-                        <IconeBrincadeira />
-                        <Stack gap={4}>
-                          <Text fw={600}>{item.nome}{item.escolhida ? " · Escolhida" : ""}</Text>
-                          <Text size="sm" c="dimmed">
-                            {ROTULOS_DIFICULDADE[item.dificuldade] ?? item.dificuldade}
-                            {item.categoria ? " · " + (ROTULOS_CATEGORIA_DESENVOLVIMENTO[item.categoria] ?? item.categoria) : ""}
-                          </Text>
-                          {item.instrucao ? <Text size="sm" lineClamp={ehCelular ? 2 : 3}>{item.instrucao}</Text> : null}
-                        </Stack>
-                      </Group>
-                    </UnstyledButton>
-                    {podeOrganizar && !item.escolhida ? (
-                      <Button
-                        variant="light"
-                        size="sm"
-                        loading={escolhendoId === item.id}
-                        disabled={carregandoSugestoes || renovando || (escolhendoId !== null && escolhendoId !== item.id)}
-                        onClick={() => void aoEscolherSugestao(item)}
-                      >
-                        Escolher para experimentar
-                      </Button>
-                    ) : null}
-                  </Stack>
-                </Card>
-              ))}
-            </>
-          )}
-        </Stack>
-      ) : null}
       <Stack gap="sm" id="catalogo-atividades" style={{ scrollMarginTop: "5rem" }}>
         <Title order={2} ref={tituloCatalogo} tabIndex={-1}>{tituloLista}</Title>
         <Chip.Group
@@ -398,7 +340,7 @@ export function BibliotecaAtividades() {
             <Button variant="light" onClick={() => void carregarDesafios()}>Tentar novamente</Button>
           </Stack>
         ) : desafios === null ? (
-          <EstadoCarregando rotulo="Carregando brincadeiras…" />
+          <EsqueletoLista rotulo="Carregando brincadeiras…" linhas={4} />
         ) : desafios.length === 0 ? (
           <EstadoVazio
             titulo={
@@ -461,6 +403,71 @@ export function BibliotecaAtividades() {
           ))
         )}
       </Stack>
+      {filtro === "explorar" ? (
+        <Stack gap="sm" id="sugestoes-pessoa">
+          <Group justify="space-between" align="center" gap="xs">
+            <Title order={2}>Sugestões para esta pessoa</Title>
+            {podeOrganizar ? (
+              <Button
+                variant="light"
+                size="sm"
+                loading={renovando}
+                disabled={Boolean(escolhendoId) || carregandoSugestoes}
+                onClick={() => void aoRenovarSugestoes()}
+              >
+                Renovar sugestões
+              </Button>
+            ) : null}
+          </Group>
+          {mensagemSugestoes ? <Text size="sm" c="dimmed">{mensagemSugestoes}</Text> : null}
+          {statusRenovacao ? (
+            <Alert color="azul" variant="light" role="status" aria-live="polite" title="Sugestões">
+              <Text size="sm">{statusRenovacao}</Text>
+            </Alert>
+          ) : null}
+          {erroSugestoes ? (
+            <Stack align="flex-start">
+              <EstadoVazio titulo="Sugestões indisponíveis" descricao={erroSugestoes} />
+              <Button variant="light" onClick={() => void carregarSugestoes()}>Tentar novamente</Button>
+            </Stack>
+          ) : sugestoes === null || carregandoSugestoes ? (
+            <EsqueletoLista rotulo="Carregando sugestões…" linhas={3} />
+          ) : sugestoes.length === 0 ? (
+            <EstadoVazio titulo="Sem sugestões agora" />
+          ) : (
+            sugestoes.map((item) => (
+              <Card key={item.id} withBorder padding="md" radius="md">
+                <Stack gap="sm">
+                  <UnstyledButton onClick={() => abrirSugestao(item)}>
+                    <Group gap="sm" wrap="nowrap" align="flex-start">
+                      <IconeBrincadeira />
+                      <Stack gap={4}>
+                        <Text fw={600}>{item.nome}{item.escolhida ? " · Escolhida" : ""}</Text>
+                        <Text size="sm" c="dimmed">
+                          {ROTULOS_DIFICULDADE[item.dificuldade] ?? item.dificuldade}
+                          {item.categoria ? " · " + (ROTULOS_CATEGORIA_DESENVOLVIMENTO[item.categoria] ?? item.categoria) : ""}
+                        </Text>
+                        {item.instrucao ? <Text size="sm" lineClamp={ehCelular ? 2 : 3}>{item.instrucao}</Text> : null}
+                      </Stack>
+                    </Group>
+                  </UnstyledButton>
+                  {podeOrganizar && !item.escolhida ? (
+                    <Button
+                      variant="light"
+                      size="sm"
+                      loading={escolhendoId === item.id}
+                      disabled={carregandoSugestoes || renovando || (escolhendoId !== null && escolhendoId !== item.id)}
+                      onClick={() => void aoEscolherSugestao(item)}
+                    >
+                      Escolher para experimentar
+                    </Button>
+                  ) : null}
+                </Stack>
+              </Card>
+            ))
+          )}
+        </Stack>
+      ) : null}
 
     <Drawer
       opened={Boolean(selecionado)}

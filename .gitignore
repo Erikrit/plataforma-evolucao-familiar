@@ -24,6 +24,8 @@ backups/
 # Artefatos locais da esteira (podem conter traces/sensíveis)
 docs/esteira/estado/*.local.json
 docs/esteira/evidencias/
+/docs/esteira/estado/*.local.txt
+/docs/esteira/estado/*.local.png
 .cursor/esteira/tmp/
 .cursor/hooks/state/
 *.ndjson
