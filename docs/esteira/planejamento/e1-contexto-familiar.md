@@ -4,7 +4,7 @@
 **Tipo:** transversal · **Risco:** alto (autenticação, autorização, dados de saúde e criança)  
 **Base inspecionada:** develop @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`  
 **Aprovação:** L3, direção pós-V1 aprovada expressamente pelo Produto em 2026-11-21. Requisitos: Módulo 01 v1.7 §13.  
-**Estado do planejamento:** READY para retomada no checkout de desenvolvimento. Código, gates e homologação da E1 pendentes.
+**Situação atual:** incrementos E1-01..04 encerrados tecnicamente no registro; homologação humana REPROVADA por relato do Produto. Correção ativa DEM-E1-ENTRADA-20261121, detalhada no complemento abaixo. O plano original preservado a seguir corresponde à v1.7; regras substituídas de provisionamento privado cedem à especificação v1.8 §14.
 
 ## Objetivo e recorte
 
@@ -98,3 +98,46 @@ Inspeção via GitHub, sem checkout local, execução da aplicação ou testes n
 - Revisão de autenticação para futura disponibilização continua pendência própria; E1 testa o comportamento pré-uso com contas fictícias.
 - Pontuação digital, conteúdo clínico e envio de dados à IA não bloqueiam E1 porque estão fora do seu escopo.
 - Próxima ação: implementation-workflow de E1-01 após reconciliar checkout/branch/fingerprint. Não herdar PASS ou homologação da V1 para esta demanda.
+
+## Complemento vigente — DEM-E1-ENTRADA-20261121
+
+**Estado:** READY para execução, sem código alterado nesta rodada documental.  
+**Tipo:** transversal (correção de entrada + mudança funcional aprovada).  
+**Aprovação:** L3, Módulo 01 v1.8, FUN-09/§14 e E1-ACE-01 atualizado.  
+**Risco:** alto: cadastro anônimo, criação da primeira conta, autorização e navegação familiar.  
+**Base inspecionada:** develop @ efb9fecf07db18b2c20057e8ec7fd28663b26916.
+
+### Fatos e dependências
+
+- Homologação E1 reprovada expressamente pelo responsável por entrada sem caminho útil e referências a /f/oliveira.
+- Código contém link fixo em painel-fundacao.tsx e não possui app/f/page.tsx.
+- lib-provisionar-familia.mjs já cria família/pessoa/usuário/admin em transação, mas só por CLI. Reaproveitar a regra numa camada de aplicação apropriada.
+- O requisito anterior de exclusividade privada está substituído. E-mail e senha continuam obrigatórios; somente o envio da mensagem foi dispensado.
+- A ausência de integração de e-mail não bloqueia esta demanda. Recuperação/verificação por e-mail, publicação, papéis e áreas novas ficam fora.
+- Antes de editar, reconciliar checkout, branch, alterações locais e não rastreados. A inspeção remota não informa git status do executor nem produz fingerprint local.
+
+### Fatias verticais
+
+| Incremento | Requisitos | Resultado e aceite | Arquivos previstos |
+|---|---|---|---|
+| E1-ENT-01 — Cadastrar e confirmar | E1-ENT-01..06 | / e /f oferecem criar/acessar; /f/criar usa quatro campos, sugere endereço e cria família+primeira conta/admin; confirmação mostra URL/copiar/acessar. Falha e retry sem duplicação. | apps/web/src/app/page.tsx, app/f/page.tsx e app/f/criar/page.tsx; lib/api.ts; serviço/controlador de cadastro a definir na API; schema/slug-familia/serviço de criação conforme necessidade; testes |
+| E1-ENT-02 — Acessar e orientar | E1-ENT-01/04/07 | Acesso por identificador, links e retornos reais; guarda distingue páginas públicas e privadas; slug reservado e URL inexistente têm tratamento; retirar atalhos fixos do fluxo de visitante. | guarda-contexto-familiar.tsx, contexto-sessao.tsx, painel-fundacao.tsx, rotas-familia.ts, app/f/[slug]/layout.tsx e entrar/page.tsx; testes |
+| E1-ENT-03 — Regressão e nova homologação | E1-ENT-01..08 e E1-ACE-01..08 | Executar testes de criação/concorrência/isolamento e regressões pertinentes; percorrer raiz → cadastro → login → gestão no navegador; novo roteiro humano e evidências | suítes E1, package.json se necessário; roteiro/evidências novas em docs/esteira/estado |
+
+Cada fatia usa QG-1 → verifier → QG-2. E1-ENT-03 fecha o conjunto com QG-3 e PENDING_HUMAN até aceite expresso. Os PASS da entrega anterior continuam históricos e não validam código novo.
+
+### Decisões técnicas a fechar no início da implementação
+
+1. Endpoint/camada de cadastro inicial com validação no servidor, transação, tratamento de corrida/reenvio e primeira administração definida pelo servidor.
+2. Exceções exatas das páginas públicas na guarda existente; nenhuma autorização privada deve depender só da URL.
+3. Sugestão de slug válida, segmentos reservados e unicidade, mantendo nome familiar livre para repetição.
+4. URL de confirmação a partir de origem confiável do ambiente; teste sem hardcode de localhost/família.
+5. Dados/segredos ausentes de logs e armazenamento do navegador; limitação simples de abuso para a nova operação anônima.
+
+São escolhas de implementação dentro do recorte aprovado. Qualquer necessidade de mudar papéis, cardinalidade de conta ou habilitar família existente deve ser encaminhada ao Produto.
+
+### Roteiro humano de saída
+
+Começar em janela anônima por / e repetir por /f. Criar espaço de teste com nome diferente de Oliveira, conferir/copiar endereço, acessar o login, entrar com a primeira conta e abrir gestão. Criar a segunda família e verificar recusa cruzada. Conferir nome repetido, endereço ocupado, e-mail existente, URL inválida, indisponibilidade da API e ausência de mensagem de e-mail. A confirmação não pode afirmar sucesso antes da persistência nem mostrar senha.
+
+**Próxima ação:** implementation-workflow de E1-ENT-01. E2 permanece aguardando correção e homologação da entrada E1.

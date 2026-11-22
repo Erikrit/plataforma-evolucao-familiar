@@ -1,4 +1,4 @@
-# Documento Mestre do Produto — v1.7
+# Documento Mestre do Produto — v1.8
 
 **Estado:** baseline de visão e requisitos funcionais aprovados para o MVP. O estado da implementação, evidências e homologação é mantido somente em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Público da baseline V1:** família única. **Direção pós-V1 aprovada:** famílias isoladas no mesmo sistema/banco, com conta pessoal vinculada a uma única família, conforme §14.
@@ -158,3 +158,11 @@ A evolução abrange contexto familiar isolado, gestão compreensível de acesso
 Esta aprovação fixa visão, limites e ordem de trabalho. Pontuação digital e seu uso em recompensas, envio de dados pessoais à IA e regras clínicas exigem decisão específica nas respectivas entregas. Números propostos de catálogo/jogos e contratos candidatos não se tornam obrigações aprovadas automaticamente.
 
 O primeiro recorte funcional pertence ao Módulo 01 v1.7, seção 13. Seu planejamento pode seguir para execução na esteira. As fontes dos módulos 02–04 serão atualizadas quando cada entrega tiver regras fechadas. A disponibilização do produto para uso continua dependendo de decisão própria, conforme §13.
+
+## 16. Entrada e cadastro de família — decisão de Produto, 2026-11-21
+
+Após reprovar humanamente a entrada da E1, o responsável aprovou boas-vindas em / e /f, com criação de família e primeira conta pessoal administradora pela interface. Essa decisão substitui a exclusividade do provisionamento privado prevista no primeiro recorte E1. O fluxo mantém os limites de conta por família e autorização contextual.
+
+**E-mail permanece identificador de login.** O responsável dispensou apenas o envio da mensagem nesta etapa. A confirmação apresenta o endereço da família e ações para copiar/acessar, com senha definida pelo titular durante o cadastro.
+
+Fonte funcional: Módulo 01 v1.8, FUN-09 e seção 14. Planejamento e homologação pertencem à esteira e ao STATUS. A mudança autoriza evolução pré-uso; disponibilização pública em produção continua dependendo de decisão própria.

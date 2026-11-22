@@ -104,26 +104,37 @@
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
     "demanda": {
-        "id": "DEM-E1-FAMILIAS-20261121",
+        "id": "DEM-E1-ENTRADA-20261121",
         "tipo": "transversal",
-        "origem": "humano — aprovação da direção E1–E7 após commit 9193f16",
-        "estado": "COMPLETED",
+        "origem": "homologação humana E1 reprovada + cadastro pela interface aprovado + dispensa apenas do envio de e-mail",
+        "estado": "READY",
         "aprovacao": {
             "nivel": "L3",
             "status": "DOCUMENTADA",
-            "referencia": "docs/produto/DOCUMENTO-MESTRE.md v1.7 §15; docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md v1.7 §13"
+            "referencia": "docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md v1.8 FUN-09/§14; Documento Mestre v1.8 §16"
         },
         "risco": "alto",
-        "escopo": "E1: provisionamento privado, conta pessoal em uma família, login/URL contextual e isolamento de recursos dos módulos 01–04.",
+        "escopo": "Boas-vindas / e /f, cadastro inicial de família/primeiro admin, endereço copiar/acessar e entrada contextual sem links fixos.",
         "fora": [
-            "E2 redesenho de acessos",
-            "novos papéis ou poderes próprios",
-            "cadastro público e cobrança",
-            "conta com várias famílias",
-            "jogos, estrelas digitais, IA e regras clínicas",
-            "publicação para uso"
+            "envio de e-mail",
+            "verificação ou recuperação por e-mail",
+            "publicação para uso",
+            "papéis novos",
+            "mudança de acesso próprio",
+            "conta em várias famílias",
+            "E2 e demais entregas"
         ],
         "criteriosAceite": [
+            "E1-ENT-01",
+            "E1-ENT-02",
+            "E1-ENT-03",
+            "E1-ENT-04",
+            "E1-ENT-05",
+            "E1-ENT-06",
+            "E1-ENT-07",
+            "E1-ENT-08"
+        ],
+        "regressao": [
             "E1-ACE-01",
             "E1-ACE-02",
             "E1-ACE-03",
@@ -131,276 +142,101 @@
             "E1-ACE-05",
             "E1-ACE-06",
             "E1-ACE-07",
-            "E1-ACE-08"
+            "E1-ACE-08",
+            "ADR-014"
         ],
         "dependencias": [
-            "FUN-08",
-            "FAM-R05",
-            "FAM-R07",
-            "FAM-R11",
-            "FAM-R12",
-            "FAM-R13",
-            "M01 §11 entrada contextual",
-            "ADR-014",
+            "login contextual e isolamento E1 existentes",
+            "Módulo 01 v1.8",
             "Documento Mestre §13"
         ],
         "revisao": {
             "branch": "develop",
-            "commit": "9193f1660ec2fa06ebdd19d633cc83b86e3a828e",
+            "commit": "efb9fecf07db18b2c20057e8ec7fd28663b26916",
             "tipo": "inspecao_estatica_remota"
         },
         "reconciliacaoLocal": {
-            "status": "OK",
-            "branch": "develop",
-            "commit": "1cb67a05c848d1698b0a938becf6c57afe8c5a6c",
-            "worktree": "dirty-e1-01",
-            "nota": "E1-01 implementado localmente; alterações preservadas sem commit."
+            "status": "PENDING",
+            "nota": "Antes de editar código: comparar branch/workspace/alterações locais/não rastreados e recalcular fingerprint real."
         },
         "planejamento": {
             "caminho": "docs/esteira/planejamento/e1-contexto-familiar.md",
             "especificacao": {
                 "caminho": "docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md",
-                "versao": "v1.7",
+                "versao": "v1.8",
                 "status": "aprovado"
             },
             "incrementos": [
                 {
-                    "id": "E1-01",
-                    "status": "COMPLETED",
+                    "id": "E1-ENT-01",
+                    "status": "READY",
                     "requisitos": [
-                        "E1-ACE-01",
-                        "E1-ACE-02"
+                        "E1-ENT-01",
+                        "E1-ENT-02",
+                        "E1-ENT-03",
+                        "E1-ENT-04",
+                        "E1-ENT-05",
+                        "E1-ENT-06"
                     ],
-                    "aceite": "Provisionamento privado e login contextual; contas A/B isoladas",
-                    "fingerprint": "sha256:efa4c2550a447dc2",
-                    "fingerprintFull": "sha256:efa4c2550a447dc26c92b5383da2e211f3dfd8572d3f23eb9cb919a08174348c",
-                    "qg1": "PASS",
-                    "qg2": "PASS",
-                    "qg3": "NOT_APPLICABLE",
-                    "verifier": "PASS",
-                    "verifierId": "indep-shell-e1-01-20261121",
-                    "verifierOficial": "BLOCKED",
-                    "verifierOficialId": "93fede9b-e1da-480f-b366-79d9bdd033be",
-                    "concluidoEm": "2026-11-21T19:54:17.642Z",
-                    "arquivos": [
-                        "apps/api/prisma/schema.prisma",
-                        "apps/api/prisma/seed.mjs",
-                        "apps/api/src/comum/slug-familia.ts",
-                        "apps/api/src/auth/servico-sessao.ts",
-                        "apps/api/src/auth/controlador-sessao.ts",
-                        "apps/api/scripts/lib-provisionar-familia.mjs",
-                        "apps/api/scripts/provisionar-familia.mjs",
-                        "apps/api/scripts/smoke-e1-01.mjs",
-                        "apps/api/scripts/check-e1-01.mjs",
-                        "apps/api/scripts/smoke-ff05.mjs",
-                        "apps/api/package.json",
-                        "apps/web/src/lib/api.ts",
-                        "apps/web/src/app/f/[slug]/entrar/page.tsx",
-                        "apps/web/src/componentes/painel-fundacao.tsx"
-                    ],
-                    "mensagemCommit": "feat(fundacao): provisionar familias e login contextual por slug\n\nEntrega E1-01 (E1-ACE-01/02): slug unico, bootstrap privado com admin e entrada em /f/{slug}/entrar sem login global."
+                    "aceite": "Cadastrar nova família/admin pela interface e apresentar URL copiar/acessar, sem envio de mensagem"
                 },
                 {
-                    "id": "E1-02",
-                    "status": "COMPLETED",
+                    "id": "E1-ENT-02",
+                    "status": "PENDING",
                     "requisitos": [
-                        "E1-ACE-03",
-                        "E1-ACE-04"
+                        "E1-ENT-01",
+                        "E1-ENT-04",
+                        "E1-ENT-07"
                     ],
-                    "aceite": "Navegação familiar completa, troca segura de contexto e entrada autorizada",
-                    "fingerprint": "sha256:0f36e9f6de2d4126",
-                    "fingerprintFull": "sha256:0f36e9f6de2d4126df2ae397e38f53d6e9658f233a1a156f8222a120d2bec059",
-                    "qg1": "PASS",
-                    "qg2": "PASS",
-                    "qg3": "NOT_APPLICABLE",
-                    "verifier": "PASS",
-                    "verifierId": "indep-shell-e1-02-20261121",
-                    "verifierOficial": "BLOCKED",
-                    "verifierOficialId": "e1dff68b-bedb-41fe-8ab2-b28dc2e5ba84",
-                    "concluidoEm": "2026-11-21T20:07:37.071Z",
-                    "arquivos": [
-                        "apps/api/src/autorizacoes/servico-autorizacoes.ts",
-                        "apps/api/scripts/check-e1-02.mjs",
-                        "apps/api/scripts/smoke-e1-02.mjs",
-                        "apps/api/package.json",
-                        "apps/web/src/lib/rotas-familia.ts",
-                        "apps/web/src/lib/api.ts",
-                        "apps/web/src/componentes/contexto-sessao.tsx",
-                        "apps/web/src/componentes/guarda-contexto-familiar.tsx",
-                        "apps/web/src/componentes/navegacao-app.tsx",
-                        "apps/web/src/componentes/painel-fundacao.tsx",
-                        "apps/web/src/componentes/painel-gerenciar-familia.tsx",
-                        "apps/web/src/componentes/redirecionar-rota-legada.tsx",
-                        "apps/web/src/app/page.tsx",
-                        "apps/web/src/app/f/[slug]/layout.tsx",
-                        "apps/web/src/app/f/[slug]/page.tsx",
-                        "apps/web/src/app/f/[slug]/entrar/page.tsx",
-                        "apps/web/src/app/f/[slug]/gerenciar-familia/page.tsx",
-                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/page.tsx",
-                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/page.tsx",
-                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
-                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
-                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/page.tsx",
-                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/cadastros/page.tsx",
-                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/historico/page.tsx",
-                        "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx",
-                        "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
-                        "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
-                        "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
-                        "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
-                        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
-                        "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/cadastros/page.tsx",
-                        "apps/web/src/app/pessoas/[pessoaId]/historico/page.tsx",
-                        "apps/web/src/app/pessoas/[pessoaId]/resumo/page.tsx",
-                        "apps/web/src/app/gerenciar-familia/page.tsx"
-                    ],
-                    "mensagemCommit": "feat(fundacao): navegar a familia sob /f/{slug} com guarda de contexto\n\nEntrega E1-02 (E1-ACE-03/04): links e destinoEntrada com slug, limpeza ao trocar URL e rotas legadas redirecionadas.",
-                    "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificacao independente shell PASS."
+                    "aceite": "Acesso por endereço, guarda pública/privada, rotas reservadas e retorno útil sem referência fixa"
                 },
                 {
-                    "id": "E1-03",
-                    "status": "COMPLETED",
+                    "id": "E1-ENT-03",
+                    "status": "PENDING",
                     "requisitos": [
-                        "E1-ACE-05",
-                        "E1-ACE-06",
-                        "E1-ACE-07"
+                        "E1-ENT-01",
+                        "E1-ENT-02",
+                        "E1-ENT-03",
+                        "E1-ENT-04",
+                        "E1-ENT-05",
+                        "E1-ENT-06",
+                        "E1-ENT-07",
+                        "E1-ENT-08"
                     ],
-                    "aceite": "API, relações, convites, anexos, resumo/PDF e revogação isolados",
-                    "fingerprint": "sha256:6b7f7732595e5810",
-                    "fingerprintFull": "sha256:6b7f7732595e58109595f29ca77dc08bf6755d8aa02d05cce0189194336779a8",
-                    "qg1": "PASS",
-                    "qg2": "PASS",
-                    "qg3": "NOT_APPLICABLE",
-                    "verifier": "PASS",
-                    "verifierId": "indep-shell-e1-03-20261121",
-                    "verifierOficial": "BLOCKED",
-                    "verifierOficialId": "e1e2abc8-7846-4f42-9703-318e202cec51",
-                    "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificacao independente shell PASS.",
-                    "concluidoEm": "2026-11-21T20:21:58.721Z",
-                    "arquivos": [
-                        "apps/api/src/anexos/servico-anexos.ts",
-                        "apps/api/src/convites/servico-convites.ts",
-                        "apps/api/src/convites/controlador-convites.ts",
-                        "apps/api/src/cuidados/servico-acompanhamento.ts",
-                        "apps/api/src/cuidados/servico-medicamentos.ts",
-                        "apps/api/src/cuidados/servico-compromissos.ts",
-                        "apps/api/src/desenvolvimento/servico-desafios.ts",
-                        "apps/api/src/desenvolvimento/servico-participacoes.ts",
-                        "apps/api/src/desenvolvimento/servico-recompensas.ts",
-                        "apps/api/scripts/smoke-e1-03.mjs",
-                        "apps/api/scripts/check-e1-03.mjs",
-                        "apps/api/scripts/lib-authz-smoke.mjs",
-                        "apps/api/package.json",
-                        "apps/web/src/lib/api.ts",
-                        "apps/web/src/app/f/[slug]/layout.tsx",
-                        "apps/web/src/app/f/[slug]/convites/ativar/page.tsx",
-                        "apps/web/src/app/convites/ativar/page.tsx",
-                        "apps/web/src/componentes/painel-gerenciar-familia.tsx",
-                        "apps/web/src/componentes/painel-fundacao.tsx",
-                        "apps/web/src/componentes/navegacao-app.tsx"
-                    ],
-                    "mensagemCommit": "fix(fundacao): isolar recursos e convites por familia na API\n\nEntrega E1-03 (E1-ACE-05/06/07): 404 cruzado sem revelar existencia, ativacao com familiaSlug e revogacao com sessao invalidada."
-                },
-                {
-                    "id": "E1-04",
-                    "status": "COMPLETED",
-                    "requisitos": [
-                        "E1-ACE-01",
-                        "E1-ACE-02",
-                        "E1-ACE-03",
-                        "E1-ACE-04",
-                        "E1-ACE-05",
-                        "E1-ACE-06",
-                        "E1-ACE-07",
-                        "E1-ACE-08"
-                    ],
-                    "aceite": "Regressão integrada, QG-3 e homologação humana",
-                    "arquivos": [
-                        "apps/api/package.json",
-                        "apps/api/scripts/smoke-e1-01.mjs",
-                        "apps/api/scripts/smoke-e1-02.mjs",
-                        "apps/api/scripts/smoke-e1-03.mjs",
-                        "apps/api/scripts/smoke-e1-04.mjs",
-                        "apps/api/scripts/smoke-e1-jornadas.mjs",
-                        "apps/api/scripts/smoke-e1-authz.mjs",
-                        "apps/api/scripts/check-e1-04.mjs",
-                        "docs/esteira/estado/roteiro-homologacao-e1-04.md"
-                    ],
-                    "fingerprint": "sha256:7b3f13d6c96b7878",
-                    "fingerprintFull": "sha256:7b3f13d6c96b7878391ab70fc7040adb00d023974b7c68fb21687508b6d7a9a4",
-                    "qg1": "PASS",
-                    "qg2": "PASS",
-                    "qg3": "PASS",
-                    "verifier": "PASS",
-                    "verifierId": "indep-shell-e1-04-20261121",
-                    "verifierOficial": "BLOCKED",
-                    "verifierOficialId": "0aa384e2-1a46-49bf-b313-dff5de6cdbc9",
-                    "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificacao independente shell PASS.",
-                    "concluidoEm": "2026-11-21T20:49:49.178Z",
-                    "mensagemCommit": "test(esteira): fechar E1 com suíte contextual e QG-3\n\nSubstitui smokes legados pré-contexto familiar por E1-01..04/jornadas/authz; regressão M01–04 e isolamento cobertos; homologação humana pendente."
+                    "aceite": "Regressão E1 e nova homologação humana desde a raiz"
                 }
             ]
         },
         "arquivosPrevistos": [
-            "apps/api/prisma/schema.prisma",
-            "apps/api/prisma/seed.mjs",
-            "apps/api/src/auth",
-            "apps/api/src/convites",
-            "apps/api/src/autorizacoes",
-            "apps/api/src/pessoas",
-            "apps/api/src/anexos",
-            "apps/api/src/cuidados",
-            "apps/api/src/desenvolvimento",
-            "apps/web/src/app",
-            "apps/web/src/componentes/contexto-sessao.tsx",
-            "apps/web/src/lib/api.ts"
+            "apps/web/src/app/page.tsx",
+            "apps/web/src/app/f/page.tsx",
+            "apps/web/src/app/f/criar/page.tsx",
+            "apps/web/src/app/f/[slug]/layout.tsx",
+            "apps/web/src/app/f/[slug]/entrar/page.tsx",
+            "apps/web/src/componentes/painel-fundacao.tsx",
+            "apps/web/src/componentes/guarda-contexto-familiar.tsx",
+            "apps/web/src/lib/api.ts",
+            "apps/web/src/lib/rotas-familia.ts",
+            "apps/api/src — serviço/controlador de cadastro a definir",
+            "apps/api/src/comum/slug-familia.ts",
+            "apps/api/scripts — testes E1 pertinentes"
         ],
         "verificacao": {
-            "qg1": "PASS",
-            "qg2": "PASS",
-            "qg3": "PASS",
-            "verifier": "PASS",
-            "verifierId": "indep-shell-e1-04-20261121",
-            "verifierOficial": "BLOCKED",
-            "verifierOficialId": "0aa384e2-1a46-49bf-b313-dff5de6cdbc9",
-            "ultimoIncremento": "E1-04",
-            "evidencias": [
-                "docs/esteira/estado/qg1-typecheck-api-e1-04.txt",
-                "docs/esteira/estado/qg1-typecheck-web-e1-04.txt",
-                "docs/esteira/estado/qg1-check-estatico-e1-04.txt",
-                "docs/esteira/estado/qg2-build-web-e1-04.txt",
-                "docs/esteira/estado/qg2-smoke-authz-e1-04.txt",
-                "docs/esteira/estado/qg2-smoke-e1-04.txt",
-                "docs/esteira/estado/qg3-smoke-e1-04.txt",
-                "docs/esteira/estado/verifier-rerun-fingerprint-e1-04.txt",
-                "docs/esteira/estado/verifier-rerun-check-e1-04.txt",
-                "docs/esteira/estado/verifier-rerun-typecheck-api-e1-04.txt",
-                "docs/esteira/estado/verifier-rerun-typecheck-web-e1-04.txt",
-                "docs/esteira/estado/verifier-rerun-smoke-e1-04.txt",
-                "docs/esteira/estado/roteiro-homologacao-e1-04.md",
-                "docs/esteira/estado/evidencia-e1-04-20261121.json"
-            ],
-            "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente shell PASS."
+            "qg1": "PENDING",
+            "qg2": "PENDING",
+            "qg3": "PENDING",
+            "verifier": "PENDING",
+            "evidencias": []
         },
         "homologacaoHumana": "PENDING_HUMAN",
-        "criteriosOk": [
-            "E1-ACE-01",
-            "E1-ACE-02",
-            "E1-ACE-03",
-            "E1-ACE-04",
-            "E1-ACE-05",
-            "E1-ACE-06",
-            "E1-ACE-07",
-            "E1-ACE-08"
-        ],
-        "fingerprintNota": "Hash dos arquivos do incremento E1-04 (fechamento).",
-        "bloqueios": [],
-        "proximaAcao": "Aguardar homologação humana E1 (roteiro-homologacao-e1-04.md); sem commit/push.",
-        "fingerprint": "sha256:7b3f13d6c96b7878",
-        "fingerprintFull": "sha256:7b3f13d6c96b7878391ab70fc7040adb00d023974b7c68fb21687508b6d7a9a4",
+        "criteriosOk": [],
+        "criteriosFalha": [],
         "criteriosPendentesHumanos": [
-            "E1-ACE-08"
-        ]
+            "E1-ENT-08"
+        ],
+        "bloqueios": [],
+        "fingerprintNota": "Rodada documental; nenhum fingerprint de código local calculado. Evidências da E1 anterior não validam esta correção.",
+        "proximaAcao": "Retomar E1-ENT-01 com implementation-workflow após reconciliar workspace; produzir evidências novas e encaminhar à homologação humana."
     },
     "janelaIncrementos": [
         {
@@ -447,9 +283,7 @@
                 "E1-ACE-08"
             ],
             "criteriosFalha": [],
-            "criteriosPendentesHumanos": [
-                "E1-ACE-08"
-            ],
+            "criteriosPendentesHumanos": [],
             "fingerprint": "sha256:7b3f13d6c96b7878",
             "fingerprintFull": "sha256:7b3f13d6c96b7878391ab70fc7040adb00d023974b7c68fb21687508b6d7a9a4",
             "qg1": "PASS",
@@ -460,7 +294,7 @@
             "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente shell PASS.",
             "verifierOficial": "BLOCKED",
             "verifierOficialId": "0aa384e2-1a46-49bf-b313-dff5de6cdbc9",
-            "homologacaoHumana": "PENDING_HUMAN",
+            "homologacaoHumana": "REPROVADA",
             "evidencias": [
                 "docs/esteira/estado/qg1-typecheck-api-e1-04.txt",
                 "docs/esteira/estado/qg1-typecheck-web-e1-04.txt",
@@ -543,7 +377,7 @@
                 "docs/esteira/estado/roteiro-homologacao-e1-04.md"
             ],
             "mensagemCommit": "test(esteira): fechar E1 com suíte contextual e QG-3\n\nSubstitui smokes legados pré-contexto familiar por E1-01..04/jornadas/authz; regressão M01–04 e isolamento cobertos; homologação humana pendente.",
-            "nota": "PASS técnico E1-ACE-01..08 (QG-3 suíte nova). Homologação humana PENDING_HUMAN. Smokes legados removidos por decisão humana (dados de desenvolvimento recriáveis).",
+            "nota": "PASS técnico histórico preservado; homologação humana REPROVADA em 2026-11-21. Correção aprovada na DEM-E1-ENTRADA-20261121; novos testes e aceite necessários.",
             "concluidaEm": "2026-11-21T20:49:49.178Z",
             "planejamento": {
                 "caminho": "docs/esteira/planejamento/e1-contexto-familiar.md",
@@ -729,7 +563,17 @@
                         "mensagemCommit": "test(esteira): fechar E1 com suíte contextual e QG-3\\n\\nSubstitui smokes legados pré-contexto familiar por E1-01..04/jornadas/authz; regressão M01–04 e isolamento cobertos; homologação humana pendente."
                     }
                 ]
-            }
+            },
+            "homologacaoHumanaRegistro": {
+                "data": "2026-11-21",
+                "origem": "relato expresso do responsável do Produto nesta conversa",
+                "referenciaDisponivel": "efb9fecf07db18b2c20057e8ec7fd28663b26916",
+                "motivo": "Entrada /f sem caminho útil e referências fixas à família Oliveira.",
+                "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+            },
+            "falhasHomologacao": [
+                "E1-ACE-08 — jornada de entrada reprovada pelo responsável"
+            ]
         },
         {
             "id": "DEM-M04-EVO-REV-20261121",
@@ -1721,9 +1565,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Aguardar homologação humana E1 (roteiro-homologacao-e1-04.md); sem commit/push.",
-    "atualizadoEm": "2026-11-21T20:49:49.178Z",
-    "notas": "DEM-E1 COMPLETED técnico PASS; E1-01..E1-04 fechados. Homologação humana PENDING_HUMAN. Sem commit.",
+    "proximaAcao": "Retomar E1-ENT-01 com implementation-workflow após reconciliar workspace; produzir evidências novas e encaminhar à homologação humana.",
+    "atualizadoEm": "2026-11-22T00:54:03.029Z",
+    "notas": "E1 original técnica COMPLETED com homologação humana REPROVADA; histórico preservado. Correção de entrada/cadastro DEM-E1-ENTRADA-20261121 READY. Sem envio de mensagem; e-mail/senha mantidos.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

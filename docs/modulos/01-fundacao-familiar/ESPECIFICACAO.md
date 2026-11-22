@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.7 — recorte E1 da evolução familiar, direção aprovada em 2026-11-21  
-**Status funcional:** base v1.5, conta por família v1.6 e recorte E1 v1.7 aprovados pelo Produto. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
+**Versão:** especificação funcional v1.8 — boas-vindas e cadastro de família, aprovados em 2026-11-21  
+**Status funcional:** regras anteriores e alteração da entrada/cadastro v1.8 aprovadas pelo Produto; homologação humana da entrega E1 reprovada, conforme STATUS. Estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
 
@@ -72,6 +72,10 @@ A estrutura básica de navegação permanece consistente para todos; **conteúdo
 O servidor valida que a conta autenticada pertence à família selecionada antes de responder às operações daquele espaço. Pessoa-alvo, convites, autorizações, anexos, registros, relatórios e futuras solicitações de IA devem respeitar esse mesmo limite. Uma alteração de URL ou identificador de recurso não transfere a sessão nem concede acesso a outra família.
 
 Após o login, a navegação segue os contextos de pessoas e áreas autorizadas dentro da família da conta. A proposta anterior de conta global compartilhada entre famílias está substituída. O detalhamento técnico da URL e dos contratos deve reutilizar a relação existente Usuario/Pessoa/Familia quando suficiente.
+
+### FUN-09 — Boas-vindas e criação da família
+
+Permitir iniciar pela raiz ou por `/f`, cadastrar uma nova família e sua primeira conta pessoal administradora e obter o endereço de acesso na confirmação. E-mail permanece identificador de login; não enviar mensagem de e-mail nesta etapa. Regras e aceite na seção 14.
 
 ## 4. Fluxos
 
@@ -206,7 +210,7 @@ A base V1 homologada continua identificada em STATUS-E-ESCOPO.md. A operação c
 
 ### Escopo funcional
 
-- Permitir provisionar famílias distintas em operação privada controlada pela equipe da plataforma, com identificação legível estável para a URL e primeira conta administradora pessoal. O titular define sua senha pelo fluxo seguro escolhido na implementação. O administrador familiar comum não cria outras famílias nem concede administração pelo seletor de responsabilidades.
+- Permitir criar uma nova família e sua primeira conta administradora pessoal pela tela de boas-vindas, conforme seção 14. Essa decisão substitui a exclusividade anterior do provisionamento privado. O utilitário existente pode continuar para desenvolvimento; a concessão genérica de responsabilidades não passa a criar administradores.
 - Acessar a família por `/f/{slug}/entrar` e manter esse contexto na navegação protegida. Renomear a família não muda automaticamente seu endereço; edição de slug não integra a UI desta entrega.
 - Autenticar credenciais somente quando a conta pertencer à família solicitada. A sessão conserva uma única família. A unicidade global de e-mail existente é preservada.
 - Após autenticação, aplicar a entrada já aprovada: um contexto operacional abre diretamente; múltiplos contextos permitem escolher pessoas/áreas; administrador sem contexto operacional abre gestão.
@@ -217,7 +221,7 @@ A base V1 homologada continua identificada em STATUS-E-ESCOPO.md. A operação c
 
 | ID | Comportamento verificável |
 |---|---|
-| E1-ACE-01 | Provisionar duas famílias fictícias com contas administradoras distintas; colisão de endereço/e-mail é rejeitada sem estado parcial. O fluxo comum de acesso não pode criar famílias ou administradores extras. |
+| E1-ACE-01 | Criar duas famílias fictícias com contas administradoras distintas; colisão de endereço/e-mail é rejeitada sem estado parcial. O cadastro inicial só cria a administração da nova família e não permite alterar ou conceder administração em família existente. Complementado por E1-ENT-01..08. |
 | E1-ACE-02 | Credenciais válidas da família A entram na URL A e são recusadas na URL B; autenticação inválida não identifica se outra conta existe. |
 | E1-ACE-03 | Sessão A em URL B não mostra dados de A nem B; o usuário recebe orientação de acesso. Recarregar, voltar no navegador e trocar de conta não exibe conteúdo retido do contexto anterior. |
 | E1-ACE-04 | A navegação e a entrada pós-login conservam a família em links, pessoas e áreas; administrador, responsável, integrante e autoacompanhamento mantêm seus limites vigentes. |
@@ -228,8 +232,51 @@ A base V1 homologada continua identificada em STATUS-E-ESCOPO.md. A operação c
 
 ### Fora da E1
 
-Cadastro público, planos/cobrança, troca de família na mesma conta, papéis novos, Integrante em Desenvolvimento, poderes adicionais de autoacompanhamento, reestruturação visual de acessos da E2, desativação de pessoas, visualizador novo de exames, jogos e IA.
+Planos/cobrança, envio de mensagens de e-mail, recuperação de acesso por e-mail, troca de família na mesma conta, papéis novos, Integrante em Desenvolvimento, poderes adicionais de autoacompanhamento, reestruturação visual de acessos da E2, desativação de pessoas, visualizador novo de exames, jogos e IA. O cadastro inicial de família passou a integrar E1 pela decisão da seção 14.
 
 ### Execução
 
 Plano e incrementos em `docs/esteira/planejamento/e1-contexto-familiar.md`. Esta aprovação define comportamento, não comprova implementação. Aplicar a política pré-uso do Documento Mestre §13, sem alterar invariantes de histórico, autorização e rastreabilidade durante a execução.
+
+## 14. Boas-vindas, cadastro inicial e endereço de acesso
+
+**Decisão L3 APROVADA pelo responsável do Produto em 2026-11-21.** Após reprovação humana da entrada da E1, o responsável aceitou a proposta de cadastro da família pela interface e esclareceu: dispensar **apenas o envio da mensagem de e-mail** neste momento. Nome, e-mail e senha da primeira conta continuam no cadastro. Esta decisão substitui a exclusividade do provisionamento privado da v1.7 §13; mantém conta pessoal em uma única família, login contextual e autorizações existentes.
+
+### Jornada e dados mínimos
+
+1. Visitante em `/` ou `/f` encontra boas-vindas com **Criar minha família** e **Acessar minha família**. As duas URLs oferecem o mesmo destino útil; não renderizar tela vazia, instrução técnica isolada ou atalho fixo para família de teste.
+2. **Criar minha família** abre `/f/criar`. Pedir nome da família/espaço, nome do titular, e-mail e senha. Não exigir CPF, telefone, nascimento, parentesco ou cadastro de outra pessoa.
+3. Sugerir endereço a partir do nome e permitir ajustá-lo antes de concluir, com prévia. Famílias podem ter nomes iguais, mas cada endereço é único. Resolver colisão com alternativa disponível, mantendo a decisão visível ao titular; unicidade deve ser garantida também ao persistir.
+4. Criar família, pessoa do titular, conta e autorização de administrador de forma consistente. A pessoa do titular é reutilizada no acompanhamento próprio; não duplicá-la. Não exigir escolha de papel para a primeira conta.
+5. Exibir confirmação com o endereço real `/f/{slug}/entrar` e ações **Copiar endereço** e **Acessar minha família**. Acessar leva ao login daquela família; não é necessário gerar sessão automaticamente ao cadastrar.
+6. Em **Acessar minha família**, permitir informar o endereço/identificador familiar e seguir para seu login. Não listar famílias existentes. Endereço inválido oferece tentar novamente ou voltar às boas-vindas.
+7. Login, convites, navegação e retorno usam o contexto real da família. O login pede e-mail e senha. Contas existentes não são vinculadas automaticamente a um novo cadastro por conhecer seu e-mail.
+
+### E-mail e senha
+
+- E-mail continua obrigatório na conta e globalmente único, conforme modelo vigente.
+- O titular define sua senha no cadastro; a mensagem de confirmação não mostra nem envia essa senha.
+- Nesta etapa não há envio, confirmação de endereço eletrônico, recuperação por e-mail nem dependência de SMTP/provedor. Não apresentar “e-mail enviado” ou “e-mail verificado”.
+- O endereço de acesso é fornecido na própria confirmação. Mensagem por e-mail poderá ser evolução futura com escopo próprio.
+- O cadastro não habilita uso público em produção por consequência; publicação do sistema permanece decisão separada.
+
+### Fronteiras de autorização
+
+A criação inicial só concede administração na família recém-criada pelo mesmo fluxo. Não aceitar familiaId de destino, papel arbitrário ou pessoa de outra família para essa operação. O papel administrativo mantém os limites da FUN-04 e ADR-014; o acesso próprio mantém a seção 11. Qualquer responsabilidade de cuidados/desenvolvimento continua contextual.
+
+Reservar os segmentos usados pelas rotas públicas, em especial `criar`, para não serem slugs familiares. Após o cadastro, o slug continua estável; a alteração de nome não muda o endereço.
+
+### Critérios adicionais de aceitação
+
+| ID | Critério |
+|---|---|
+| E1-ENT-01 | Em sessão anônima, / e /f apresentam boas-vindas com caminhos operáveis para criar e acessar; navegação pública não aponta para oliveira ou outra família fixa. |
+| E1-ENT-02 | Cadastrar com os quatro dados mínimos; sugerir endereço válido, tratar nome repetido, colisão e segmento reservado sem exigir recadastro dos campos corretos. |
+| E1-ENT-03 | Salvar família, pessoa, conta e primeira administração juntos; falha, concorrência, duplo clique ou retry não geram duplicidade ou estado parcial. |
+| E1-ENT-04 | Confirmação mostra a URL correta para o ambiente, copiar funciona com alternativa se indisponível e acessar abre o login da família criada. Não depende de envio de e-mail. |
+| E1-ENT-05 | Conta usa e-mail/senha; nenhum e-mail é enviado nem exibido como verificado. Endereço/e-mail já utilizados não permitem tomar conta/família existente. |
+| E1-ENT-06 | Nova família não recebe registros, participantes ou capacidades de outra; o servidor ignora/recusa tentativa de selecionar familiaId/papel de destino. Limites de administração e acesso próprio permanecem vigentes. |
+| E1-ENT-07 | Acessar por identificador, URL familiar inexistente, raiz, /f/criar e convite têm retorno útil e não causam colisão com slug ou encaminhamento para dados de desenvolvimento. |
+| E1-ENT-08 | Nova homologação humana percorre raiz → cadastro → copiar/acessar → login → gestão e regressão de duas famílias, em celular e desktop. Falhas de rede não mostram criação como concluída. |
+
+**Encaminhamento:** complementar o plano E1 com a demanda `DEM-E1-ENTRADA-20261121`. A reprovação da entrega anterior permanece registrada até a nova homologação; aprovação desta regra não equivale a implementação.

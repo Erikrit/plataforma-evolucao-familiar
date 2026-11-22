@@ -1,5 +1,19 @@
 # Estado das decisões e escopo
 
+## E1 — homologação reprovada e correção de entrada aprovada, 2026-11-21
+
+**Homologação humana da E1: REPROVADA**, por relato expresso do responsável. Motivo: entrada sem caminho útil em /f e referências fixas à família de desenvolvimento. A baseline V1 anteriormente homologada mantém seu aceite histórico; a evolução E1 precisa de correção e nova homologação antes de avançar à E2.
+
+**Decisão L3 APROVADA/DOCUMENTADA:** permitir boas-vindas em / e /f e criação de família/primeira conta administradora pela interface. Substitui a exclusividade anterior de provisionamento privado. Fonte canônica: Módulo 01 v1.8, FUN-09/§14; visão no Documento Mestre v1.8 §16.
+
+**E-mail:** manter campo e-mail e senha para a conta. O responsável dispensou apenas o envio da mensagem. A confirmação entrega o endereço da família com copiar/acessar; sem envio, verificação ou recuperação por e-mail neste escopo.
+
+**Estado efetivo inspecionado:** develop @ `efb9fecf07db18b2c20057e8ec7fd28663b26916` contém login por família e provisionamento privado. painel-fundacao.tsx contém /f/oliveira/entrar fixo e não há app/f/page.tsx. Inspeção estática remota; o localhost do responsável não foi operado.
+
+**Esteira:** demanda `DEM-E1-ENTRADA-20261121` READY; plano complementar em `docs/esteira/planejamento/e1-contexto-familiar.md`, E1-ENT-01..03. Critérios E1-ENT-01..08 e regressão E1-ACE-01..08. Próxima ação: implementation-workflow da primeira fatia após reconciliar workspace/fingerprint.
+
+**Evidências anteriores:** QG-1/2/3 e verificação independente shell PASS continuam históricos; verifier oficial BLOCKED por ambiente. Não transformam a reprovação humana em aprovação. Código novo, testes e homologação da correção ainda não executados.
+
 ## Situação vigente — V1 homologada em 2026-11-21
 
 **V1 HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO. Publicação para uso adiada por decisão expressa.**
@@ -34,9 +48,9 @@ O responsável solicitou tratar estas frentes antes da proposta de desativação
 
 **Limite do aceite:** direção, limites e ordem de trabalho. Pontuação digital, uso em recompensas, envio de dados pessoais à IA e regras clínicas continuam dependentes de decisão específica. Parâmetros quantitativos, modelos técnicos e protótipos não foram homologados por este aceite.
 
-**E1 planejada:** fonte funcional no Módulo 01 v1.7 §13; plano em `docs/esteira/planejamento/e1-contexto-familiar.md`, demanda `DEM-E1-FAMILIAS-20261121`. Quatro incrementos verticais e E1-ACE-01..08. Próxima ação: retomar no checkout e executar E1-01 pela implementation-workflow, após reconciliar alterações locais e fingerprint. Situação READY para implementação; gates e homologação da E1 pendentes.
+**E1 atual:** entrega técnica original registrada; homologação humana REPROVADA e correção de entrada ativa conforme seção inicial deste documento. O recorte vigente é Módulo 01 v1.8 §13–14, plano complementar E1-ENT-01..03. A sequência E1–E7 permanece aprovada; a E2 aguarda a correção.
 
-**Evidência desta rodada:** consulta estática de `develop` @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`; sem execução local. O estado histórico da V1 e seus aceites foram preservados. A política pré-uso do Documento Mestre §13 continua aplicável.
+**Política de dados:** Documento Mestre §13 continua aplicável. A V1 é referência histórica; a aprovação de cadastro pela interface não autoriza publicação para uso.
 
 ## Consolidação multidisciplinar da evolução — 2026-11-21
 
@@ -53,7 +67,7 @@ Principais alinhamentos:
 - IA editorial, IA de desenvolvimento e IA de cuidados são casos separados e entram em fases diferentes.
 - Arquitetura mantém monólito modular e evita infraestrutura nova sem necessidade comprovada.
 
-**Estado da consolidação:** DIREÇÃO DE PRODUTO APROVADA E DOCUMENTADA. E1 planejada, implementação ainda não iniciada nesta rodada; evidências técnicas e homologação devem ser produzidas durante a execução.
+**Estado da consolidação:** DIREÇÃO DE PRODUTO APROVADA E DOCUMENTADA. E1 entregue tecnicamente e reprovada humanamente; correção de entrada aprovada e planejada no complemento vigente.
 
 ## Conta por família — decisão de Produto documentada em 2026-11-21
 
@@ -61,7 +75,7 @@ Principais alinhamentos:
 
 A proposta anterior de login global com participação em várias famílias foi substituída. A seleção de contextos após autenticação envolve apenas pessoas e áreas da família da conta. Documento EVOLUCAO-POS-V1.md reconciliado com essa decisão.
 
-**Situação E1 atualizada:** planejamento registrado em `docs/esteira/planejamento/e1-contexto-familiar.md` e demanda ativa READY. A conta em uma família já estava aprovada na v1.6; o recorte executável está na v1.7 §13. Código e testes permanecem pendentes nesta rodada.
+**Situação E1 atualizada:** conta em uma única família permanece aprovada. Correção de entrada/cadastro no Módulo 01 v1.8 §14 e demanda DEM-E1-ENTRADA-20261121 READY, após homologação humana REPROVADA da entrega técnica anterior.
 
 ## Primeira frente de evolução pós-V1 — 2026-11-21
 

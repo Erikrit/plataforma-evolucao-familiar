@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-21 — E1 humana REPROVADA; cadastro inicial aprovado e planejado
+
+- **Fonte humana:** responsável reprovou entrada /f e links fixos /f/oliveira; aceitou boas-vindas/cadastro e esclareceu que dispensa apenas o envio de mensagem.
+- **Decisão L3:** Módulo 01 v1.8 FUN-09/§14 substitui exclusividade do provisionamento privado. E-mail/senha permanecem; confirmação entrega URL copiar/acessar.
+- **Base inspecionada:** develop @ efb9fecf07db18b2c20057e8ec7fd28663b26916. Consulta remota, sem operar localhost ou executar testes.
+- **Demanda anterior:** DEM-E1-FAMILIAS-20261121 mantém PASS técnico histórico; homologação humana registrada REPROVADA.
+- **Demanda ativa:** DEM-E1-ENTRADA-20261121, transversal, alto risco, READY; planejamento complementar em e1-contexto-familiar.md, E1-ENT-01..03.
+- **Próxima ação:** implementation-workflow de E1-ENT-01 após reconciliar checkout/fingerprint. Novos gates e nova homologação pendentes.
+- **Integração:** atualização documental no GitHub autorizada pelo responsável nesta conversa. Código de aplicação não alterado nesta rodada.
+
+
 ## 2026-11-21 — E1-04 COMPLETED (técnico PASS; humana PENDING)
 
 - **Demanda:** DEM-E1-FAMILIAS-20261121 COMPLETED técnico; homologação humana PENDING_HUMAN.

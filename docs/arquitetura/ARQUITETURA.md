@@ -158,4 +158,18 @@ Esta lista é um **rascunho conceitual histórico**, não um inventário confiá
 
 Inspeção de `develop` @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`: Familia ainda não possui slug; login recebe e-mail/senha sem família; rotas web ainda não têm /f/[slug]. Anexos implementados usam `conteudoBase64` no banco e retorno autenticado. Armazenamento S3 é direção arquitetural, não integração demonstrada por essa inspeção. A E1 deve proteger o caminho de arquivo existente sem exigir migração de armazenamento para cumprir o isolamento.
 
-Preservar as combinações da ADR-014: Cuidados Responsável/Integrante e Desenvolvimento Responsável. Integrante em Desenvolvimento e concessão genérica de Administrador continuam fora do escopo. O bootstrap privado da primeira administração não amplia o catálogo de concessão familiar.
+Preservar as combinações da ADR-014: Cuidados Responsável/Integrante e Desenvolvimento Responsável. Integrante em Desenvolvimento e concessão genérica de Administrador continuam fora do escopo. A criação da primeira administração, agora disponível no cadastro inicial conforme Módulo 01 v1.8 §14, não amplia o catálogo genérico de concessão familiar.
+
+## Alteração E1 — cadastro inicial sem envio de e-mail, 2026-11-21
+
+**Fonte de Produto aprovada:** Módulo 01 v1.8, FUN-09 e §14. A exclusividade do provisionamento privado é substituída pelo cadastro inicial na interface; o utilitário CLI pode permanecer para testes/desenvolvimento.
+
+A implementação deve extrair/reutilizar a regra de criação consistente de família, pessoa, usuário e autorização inicial no backend. Não expor o script CLI como rota nem confiar em papel/familiaId enviados pelo navegador. O cadastro cria somente uma nova família, mantendo unicidade global de e-mail, slug único e limites da ADR-014.
+
+Preservar transação e restrições de unicidade; tratar corrida, reenvio e falha sem estado parcial. Definir mecanismo simples de idempotência para a mesma solicitação de cadastro, sem persistir senha em claro ou registrá-la em logs. Validar campos e limites no servidor; limitar abuso da nova operação anônima proporcionalmente ao ambiente.
+
+Reservar segmentos públicos como criar, considerando rotas estáticas de Next.js e validação de slug no servidor. Excluir /f e /f/criar da guarda que exige sessão/família; não estender essa exceção às rotas privadas. A raiz deve tratar sessão válida e visitante sem reutilizar contexto familiar indevido.
+
+A confirmação constrói a URL a partir de origem confiável/configurada para o ambiente e slug validado. O endereço é exibido para copiar/acessar. E-mail segue como identificador obrigatório; não há envio, verificação de e-mail nem recuperação por mensagem neste escopo, e a conta não pode ser marcada como verificada.
+
+**Base estática desta correção:** develop @ efb9fecf07db18b2c20057e8ec7fd28663b26916. O provisionamento atual está em apps/api/scripts/lib-provisionar-familia.mjs; o PainelFundacao contém /f/oliveira/entrar fixo; não existe apps/web/src/app/f/page.tsx. São evidências de código consultado, não teste do localhost do responsável.

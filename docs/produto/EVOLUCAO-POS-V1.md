@@ -1,9 +1,9 @@
 # Plano integrado de evolução pós-V1
 
-**Versão:** 2.1 — direção de Produto aprovada; planejamento E1  
+**Versão:** 2.2 — cadastro inicial pela interface; e-mail sem envio de mensagem  
 **Data de referência:** 2026-11-21  
 **Base desta aprovação e planejamento:** `develop` @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`  
-**Estado:** direção integrada e sequência E1–E7 **APROVADAS pelo responsável do Produto em 2026-11-21**, por concordância expressa com a recomendação apresentada sobre a v2.0. Regras particulares de cada entrega ainda precisam de especificação; envio de dados pessoais à IA, regras clínicas e pontuação digital continuam **NEEDS_DECISION**. E1 possui recorte funcional no Módulo 01 v1.7 e planejamento na esteira.  
+**Estado:** direção integrada e sequência E1–E7 **APROVADAS pelo responsável do Produto em 2026-11-21**, por concordância expressa com a recomendação apresentada sobre a v2.0. Regras particulares de cada entrega ainda precisam de especificação; envio de dados pessoais à IA, regras clínicas e pontuação digital continuam **NEEDS_DECISION**. E1 possui recorte funcional no Módulo 01 v1.8 e planejamento na esteira; boas-vindas/cadastro aprovados após reprovação humana da entrada.  
 **Baseline:** a V1 homologada permanece preservada em `STATUS-E-ESCOPO.md`; este plano não declara implementação nem homologação das evoluções.
 
 ## 1. Objetivo e condução
@@ -85,14 +85,14 @@ A conta tem um único contexto familiar. O acesso a outra URL familiar exige aut
 
 A proposta anterior de conta global com múltiplas participações foi substituída por esta decisão explícita. O modelo vigente Usuario → Pessoa → Familia é o ponto de partida para a solução mínima. Uso individual pode começar com espaço de uma pessoa e o mesmo modelo de família.
 
-**Primeiro piloto** duas famílias fictícias, convites administrados e ingresso controlado. Cadastro público, cobrança e planos comerciais podem receber decisão própria em outra entrega.
+**Primeiro piloto** duas famílias fictícias, cadastro inicial pela interface e convites administrados. A regra de cadastro passou a integrar a correção E1 conforme Módulo 01 v1.8 §14. Cobrança, planos comerciais e publicação para uso continuam fora desta etapa.
 
 **Critérios técnicos iniciais** isolamento de banco, anexos, prévias/PDF, busca, cache se houver, rotinas agendadas e solicitações de IA. A API deve verificar família em todas as operações e relações entre entidades. A escolha de RLS ou outro reforço pertence à análise arquitetural, conforme riscos e capacidade operacional.
 
 
 ### Fechamento recomendado para a primeira entrega
 
-A primeira versão multifamília deve ser privada e administrada pela equipe da plataforma. A família é provisionada com nome, slug estável e primeira conta administradora; cadastro público, planos, cobrança e autoatendimento comercial ficam fora dessa etapa. Essa escolha reduz superfície de fraude e permite validar isolamento e uso real antes de abrir aquisição.
+**Atualização aprovada após homologação reprovada:** a criação inicial passa a ocorrer pela interface de boas-vindas em / ou /f, com nome da família, nome do titular, e-mail e senha. A proposta anterior de provisionamento exclusivamente privado está substituída. O utilitário existente pode permanecer para desenvolvimento. A confirmação entrega o endereço real da família para copiar/acessar, sem envio de e-mail nesta etapa. Regras canônicas no Módulo 01 v1.8 §14.
 
 Detalhamento de E1 a aplicar à direção aprovada, preservando o catálogo de acessos atual:
 
@@ -101,7 +101,7 @@ Detalhamento de E1 a aplicar à direção aprovada, preservando o catálogo de a
 - não oferecer seletor de famílias, pois a conta possui um único contexto familiar;
 - impedir que renomear a família altere automaticamente o slug;
 - apresentar mensagem de acesso inválido sem revelar se outra família, pessoa ou documento existe;
-- criar a família por operação administrativa controlada até existir decisão específica sobre cadastro público.
+- criar a nova família e sua primeira administração no mesmo fluxo consistente, sem permitir escolher ou alterar uma família existente;
 
 A URL melhora orientação e identidade do espaço. Ela nunca é a única barreira de isolamento. Família precisa acompanhar banco, armazenamento de arquivos, geração de PDF, rotinas agendadas, logs operacionais, cache, exportações e solicitações de IA.
 
@@ -335,7 +335,7 @@ A sequência separa fundação, valor sem IA e usos assistidos. Cada entrega é 
 
 | Entrega | Escopo principal | Fora da entrega | Evidência para avançar |
 |---|---|---|---|
-| E1 — Contexto familiar e isolamento | Provisionar família, slug, login contextual, conta em uma única família e proteção de banco/arquivos/PDF/rotinas | Cadastro público, cobrança, seletor de famílias | Duas famílias fictícias; tentativas cruzadas por URL e IDs negadas; jornadas válidas preservadas |
+| E1 — Contexto familiar e isolamento | Boas-vindas, cadastro de família/admin, endereço, login contextual e proteção de banco/arquivos/PDF/rotinas | Envio de e-mail, cobrança, seletor de famílias | Raiz → cadastro → login homologados; duas famílias isoladas |
 | E2 — Gestão compreensível de acessos | Pessoas, contas, convites e responsabilidades predefinidas por pessoa/área | Papéis personalizados e matriz técnica na UI | Administrador entende quem acompanha quem; três experiências não expõem ações indevidas |
 | E3 — Exames e Resumo factual | Visualizador privado PDF/imagem e evolução do Módulo 04 por área utilizada | OCR, interpretação clínica e IA | Uso móvel homologado; prévia, download e resumo respeitam autorização e fonte |
 | E4 — Catálogo real curado | Modelos globais versionados, faixa orientativa, curadoria, seleção pequena e renovar sugestões | Busca aberta em tempo real e publicação automática por IA | Responsável encontra/renova opções sem perder escolhas ou histórico |
@@ -352,7 +352,7 @@ A sequência separa fundação, valor sem IA e usos assistidos. Cada entrega é 
 5. Qualidade verifica regra, isolamento, acessibilidade e regressão.
 6. Homologação humana confirma valor e esforço antes de declarar a entrega concluída.
 
-O planejamento detalhado da E1 está em `docs/esteira/planejamento/e1-contexto-familiar.md`, demanda `DEM-E1-FAMILIAS-20261121`. A próxima atividade é retomar esse plano no checkout de desenvolvimento e executar seu primeiro incremento. A E2 pode ser desenhada em paralelo documental, mas sua implementação depende do contexto familiar estar consistente. E3–E5 podem ser refinadas sem enviar dados pessoais a IA. E6 e E7 exigem aprovações próprias.
+O planejamento E1 está em `docs/esteira/planejamento/e1-contexto-familiar.md`. Após a reprovação humana da demanda original, a próxima atividade é executar E1-ENT-01 da correção `DEM-E1-ENTRADA-20261121`, conforme Módulo 01 v1.8 §14. A E2 pode ser desenhada em paralelo documental, mas sua implementação depende do contexto familiar estar consistente. E3–E5 podem ser refinadas sem enviar dados pessoais a IA. E6 e E7 exigem aprovações próprias.
 
 ## 13. Consolidação por especialidade
 
@@ -383,8 +383,8 @@ O planejamento detalhado da E1 está em `docs/esteira/planejamento/e1-contexto-f
 | Item | Estado |
 |---|---|
 | Conta pessoal vinculada a uma única família | APROVADA/DOCUMENTADA |
-| Banco compartilhado com isolamento lógico por família e URL contextual | DIREÇÃO APROVADA; recorte E1 em Módulo 01 v1.7 |
-| Provisionamento privado antes de cadastro público | DIREÇÃO APROVADA |
+| Banco compartilhado com isolamento lógico por família e URL contextual | DIREÇÃO APROVADA; recorte E1 em Módulo 01 v1.8 |
+| Cadastro inicial pela interface de boas-vindas | APROVADO; substitui exclusividade do provisionamento privado, Módulo 01 v1.8 §14 |
 | Gestão por responsabilidades predefinidas, sem papéis personalizados | DIREÇÃO APROVADA; manter combinações da ADR-014 |
 | Resumo por área como evolução do Módulo 04 | DIREÇÃO APROVADA |
 | Catálogo global curado e seleção privada renovável | DIREÇÃO APROVADA; limites quantitativos a fechar |
@@ -395,7 +395,7 @@ O planejamento detalhado da E1 está em `docs/esteira/planejamento/e1-contexto-f
 
 **Fonte do aceite:** resposta humana “Concordo com sua recomendação”, após a apresentação do commit `9193f16` e da recomendação de aprovar a direção integrada, reservando pontuação digital, envio de dados pessoais à IA e regras clínicas às respectivas entregas.
 
-O Documento Mestre §15 registra a visão aprovada. A especificação do Módulo 01 v1.7 recebe apenas o recorte E1. As especificações dos módulos 02–04 mantêm suas regras operacionais até o fechamento de cada entrega. Desenhos UX e modelos técnicos ainda candidatos não ganham aprovação detalhada por consequência deste aceite.
+O Documento Mestre §15 registra a visão aprovada. A especificação do Módulo 01 v1.8 contém o recorte E1 e a correção de entrada aprovada. As especificações dos módulos 02–04 mantêm suas regras operacionais até o fechamento de cada entrega. Desenhos UX e modelos técnicos ainda candidatos não ganham aprovação detalhada por consequência deste aceite.
 
 ## 14. Referências pesquisadas em 2026-11-21
 

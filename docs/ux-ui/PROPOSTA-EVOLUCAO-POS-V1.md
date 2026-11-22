@@ -3,7 +3,7 @@
 **Data:** 2026-11-21  
 **Base:** `develop` @ `40001ec919604c1665f8a26b75a4d5ea89dc4650`  
 **Estado:** direção de Produto E1–E7 APROVADA em 2026-11-21; desenho detalhado de UX/UI permanece PROPOSTA para validação por entrega. A aprovação não comprova implementação, acessibilidade ou homologação.  
-**Fonte de visão:** `docs/produto/EVOLUCAO-POS-V1.md` v2.1.
+**Fonte de visão:** `docs/produto/EVOLUCAO-POS-V1.md` v2.2. Entrada/cadastro aprovados no Módulo 01 v1.8 §14; demais desenhos seguem o estado indicado.
 
 ## 1. Objetivo da experiência
 
@@ -34,6 +34,16 @@ No celular, usar o mesmo Drawer/AppShell aprovado. Ao selecionar uma pessoa, man
 “Resumo” evolui a área já existente do Módulo 04. “Histórico” continua sendo a linha do tempo derivada. A Biblioteca reúne Atividades reais e Jogos digitais para a pessoa, sem exigir que compartilhem o mesmo fluxo técnico.
 
 ## 3. Entrada por família
+
+### Boas-vindas e cadastro — direção aprovada em 2026-11-21
+
+Fonte funcional: Módulo 01 v1.8 §14. A raiz e /f devem oferecer uma entrada útil com “Criar minha família” e “Acessar minha família”. Em /f/criar, apresentar nome da família, nome do titular, e-mail e senha; sugerir o endereço com ajuste opcional e prévia.
+
+Após salvar, exibir confirmação com o endereço real, “Copiar endereço” e “Acessar minha família”. Não aguardar envio de mensagem; não informar que e-mail foi enviado/verificado. Acessar leva ao login contextual. Em caso de erro, preservar campos não secretos e manter senha apenas em memória enquanto o formulário estiver ativo, sem persistência no navegador.
+
+“Acessar minha família” aceita o identificador familiar e leva ao login sem listar famílias. URL inválida oferece tentar novamente ou voltar. Eliminar links fixos para família fictícia; exemplos de ajuda não podem ser atalhos operáveis para dados de desenvolvimento.
+
+Validar este percurso em celular e desktop desde a raiz. A reprovação humana anterior decorreu da entrada sem caminho útil e referências fixas; homologar o fluxo completo, incluindo ausência de contexto, colisão, falha de rede e confirmação.
 
 ### Estados
 
@@ -184,7 +194,7 @@ Homologar jornadas específicas:
 
 | Participante | Jornada |
 |---|---|
-| Equipe da plataforma + titular inicial | provisionamento privado e definição da primeira conta pessoal |
+| Titular inicial | criar família e primeira conta na tela de boas-vindas, copiar endereço e entrar |
 | Administrador familiar | entrar, compreender acessos e convidar dentro da própria família |
 | Responsável | ver exame, organizar área e escolher experiência |
 | Integrante | entrar direto na rotina e registrar sem ver configurações |
