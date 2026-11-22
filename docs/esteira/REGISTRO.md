@@ -1,5 +1,15 @@
 # Registro da esteira
 
+## 2026-11-22 — E3-UX-00 aprovado com download externo
+
+- **Decisão humana:** baixar anexo e abrir no aplicativo do dispositivo; restante do desenho E3 aprovado.
+- **Escopo:** retirados viewer/zoom/paginação próprios; mantidas autorização, Resumo por área e prévia/PDF de relatório.
+- **Fontes:** Módulo 02 v1.7 §10; Módulo 04 v1.2 §12; UX §11.
+- **Estado:** E3-00 COMPLETED somente como desenho; demanda e E3-01 READY. Gates e homologação de implementação pendentes.
+- **Referência:** develop @ 382a90e4eb44b9c0cdaffa70c88bba813a450149; atualização documental sem código/testes.
+- **Próximo:** implementation-workflow E3-01. Integração documental autorizada pelo responsável.
+
+
 ## 2026-11-22 — E3 aprovada; desenho e planejamento preparados
 
 - **Aceite de Produto:** recomendação E3 aceita: visualizador privado de exame e Resumo factual por área, validando desenho antes de implementar.

@@ -107,14 +107,14 @@
         "id": "DEM-E3-EXAMES-RESUMO-20261122",
         "tipo": "transversal",
         "origem": "humano — recomendação E3 aceita em 2026-11-22",
-        "estado": "PENDING",
+        "estado": "READY",
         "aprovacao": {
             "nivel": "L3",
             "status": "DOCUMENTADA",
-            "referencia": "Módulo 02 v1.6 §10 e Módulo 04 v1.2 §12"
+            "referencia": "Módulo 02 v1.7 §10; Módulo 04 v1.2 §12; UX §11, desenho simplificado aprovado em 2026-11-22"
         },
         "risco": "alto",
-        "escopo": "Visualização privada de exames e Resumo único por área/período, com exportações existentes.",
+        "escopo": "Download privado de exames e Resumo único por área/período, com exportações existentes; sem visualizador embutido.",
         "criteriosAceite": [
             "E3-EX-01",
             "E3-EX-02",
@@ -130,23 +130,22 @@
         ],
         "dependencias": [
             "E2 homologada",
-            "ADR-004/006/009/010/014",
-            "E3-UX-00"
+            "ADR-004/006/009/010/014"
         ],
         "planejamento": {
             "caminho": "docs/esteira/planejamento/e3-exames-resumo.md",
             "incrementos": [
                 {
                     "id": "E3-00",
-                    "status": "IN_VALIDATION",
+                    "status": "COMPLETED",
                     "requisitos": [
                         "E3-UX-00"
                     ],
-                    "aceite": "Validar desenho de baixa fidelidade em UX §11"
+                    "aceite": "E3-UX-00 aprovado pelo responsável em 2026-11-22: download externo, restante do desenho mantido; somente desenho."
                 },
                 {
                     "id": "E3-01",
-                    "status": "PENDING",
+                    "status": "READY",
                     "requisitos": [
                         "E3-EX-01",
                         "E3-EX-02",
@@ -154,7 +153,7 @@
                         "E3-EX-04",
                         "E3-EX-05"
                     ],
-                    "aceite": "Visualizar/baixar documento com autorização e estados seguros"
+                    "aceite": "Baixar documento com autorização, integridade e estados seguros; sem viewer."
                 },
                 {
                     "id": "E3-02",
@@ -204,11 +203,11 @@
             "evidencias": []
         },
         "homologacaoHumana": "PENDING_HUMAN",
-        "criteriosOk": [],
-        "bloqueios": [
-            "E3-UX-00 — validação do desenho antes da implementação"
+        "criteriosOk": [
+            "E3-UX-00"
         ],
-        "proximaAcao": "Validar desenho E3 em PROPOSTA-EVOLUCAO-POS-V1.md §11; após aceite, E3-01 READY."
+        "bloqueios": [],
+        "proximaAcao": "Executar implementation-workflow E3-01 após reconciliar workspace/fingerprint."
     },
     "janelaIncrementos": [
         {
@@ -1887,9 +1886,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Validar desenho E3 em PROPOSTA-EVOLUCAO-POS-V1.md §11; após aceite, E3-01 READY.",
-    "atualizadoEm": "2026-11-22T05:38:18.757Z",
-    "notas": "E3 funcional aprovada, desenho em validação antes de implementar. E2 e seu aceite preservados no histórico.",
+    "proximaAcao": "Executar implementation-workflow E3-01 após reconciliar workspace/fingerprint.",
+    "atualizadoEm": "2026-11-22T05:44:01.448Z",
+    "notas": "E3 READY; desenho aprovado com download externo. Nenhum código/teste executado nesta atualização.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

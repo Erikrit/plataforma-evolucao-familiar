@@ -1,15 +1,14 @@
 # Estado das decisões e escopo
 
-## E3 — recorte aprovado; desenho em validação, 2026-11-22
+## E3 — desenho simplificado aprovado, 2026-11-22
 
-**APROVADO pelo Produto:** visualizar PDF/imagem privada de exame e oferecer um único Resumo da pessoa organizado por Cuidados/Desenvolvimento, conforme áreas autorizadas, sem novos registros obrigatórios, IA ou interpretação clínica.
+**Decisão APROVADA:** oferecer **Baixar arquivo** no exame; navegador/aplicativo do dispositivo faz a abertura. Retirados visualizador interno, zoom e paginação. O responsável aprovou o restante do desenho: Resumo único por área/período e fluxo de prévia/PDF do relatório.
 
-**Fontes canônicas:** Módulo 02 v1.6 §10 (E3-EX-01..05) e Módulo 04 v1.2 §12 (E3-RES-01..05/E3-HOM). Desenho de baixa fidelidade em `docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md` §11.
+**Fontes:** Módulo 02 v1.7 §10, Módulo 04 v1.2 §12 e UX PROPOSTA-EVOLUCAO-POS-V1.md §11. A prévia do relatório permanece; ela é distinta da leitura de anexos de exames.
 
-**Planejamento:** DEM-E3-EXAMES-RESUMO-20261122, E3-00..03 em `docs/esteira/planejamento/e3-exames-resumo.md`. Escopo funcional aprovado; implementação PENDING até validação visual E3-UX-00, conforme recomendação aceita pelo responsável.
+**Esteira:** DEM-E3-EXAMES-RESUMO-20261122 READY, E3-UX-00 aprovado e E3-01 liberado. Plano em `docs/esteira/planejamento/e3-exames-resumo.md`. Próximo: implementation-workflow E3-01 após reconciliação do workspace.
 
-**Base:** develop @ 133eec53089fc9cbd98bfd1dfd4f1987af783f2a. Consulta estática e documental, sem código alterado nem testes novos. E2 homologada e histórico preservados. Publicação continua adiada.
-
+**Referência:** develop @ 382a90e4eb44b9c0cdaffa70c88bba813a450149. Atualização documental; implementação/testes/homologação E3 pendentes. Histórico E2 e publicação adiada preservados.
 
 ## E2 — homologação humana aprovada, 2026-11-22
 

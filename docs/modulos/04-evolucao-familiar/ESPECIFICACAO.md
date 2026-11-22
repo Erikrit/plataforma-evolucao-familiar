@@ -1,7 +1,7 @@
 # Módulo 04 — Evolução Familiar
 
 **Versão:** 1.2 — E3, Resumo da pessoa por área, aprovada em 2026-11-22  
-**Estado:** base funcional e recorte E3 v1.2 aprovados pelo Produto; desenho visual da E3 aguarda validação antes de implementar.  
+**Estado:** base funcional e recorte E3 v1.2 aprovados pelo Produto; desenho E3 aprovado em 2026-11-22 com simplificação para download de exames.  
 **Dependências funcionais:** Módulo 01 para pessoas/autorizações; registros de cuidados do 02 e experiências do 03 à medida que existirem.
 
 ## 1. Propósito
@@ -144,7 +144,7 @@ Analytics genérico, dashboards de produtividade, rankings, evolução por nota,
 
 ## 12. E3 — Um Resumo da pessoa, organizado por área
 
-**APROVADO pelo Produto em 2026-11-22**, por aceitação da recomendação de visualizador de exames e resumo factual por área. Evolui as seções 3 e 5, sem criar outra fonte de histórico.
+**APROVADO pelo Produto em 2026-11-22**, por aceitação da recomendação de download de exames e resumo factual por área. Evolui as seções 3 e 5, sem criar outra fonte de histórico.
 
 A pessoa possui uma única entrada **Resumo** e período comum de leitura. Apresentar os blocos aplicáveis e autorizados **Cuidados** e/ou **Desenvolvimento**, respeitando contextos efetivos existentes. Não inferir área apenas por parentesco, idade, rótulo de perfil ou presença de contagem. Área autorizada sem registros no período recebe mensagem neutra, sem inferir falta de cuidado/desenvolvimento. “Área” significa área do sistema, não especialidade médica.
 
@@ -162,6 +162,6 @@ A pessoa possui uma única entrada **Resumo** e período comum de leitura. Apres
 | E3-RES-03 | Desenvolvimento mostra experiências, categorias, estrelas e observações já existentes, sem ranking, diagnóstico ou registro extra obrigatório. |
 | E3-RES-04 | Vazio no período, erro e permissão alterada têm tratamento neutro; itens, links, totais e documentos não vazam entre pessoas/famílias. |
 | E3-RES-05 | Prévia/PDF mantêm a seleção autorizada do tipo escolhido e dados completos; correções/vigências de origem são respeitadas, sem embutir laudos por padrão. |
-| E3-HOM | Homologar abrir exame no celular e compreender o período sem redigitar informação, incluindo navegação, retorno e exportação pertinente. |
+| E3-HOM | Homologar baixar exame no celular e compreender o período sem redigitar informação, incluindo navegação, retorno e exportação pertinente. |
 
 Fora da E3: IA, semáforo geral de saúde, metas de uso e formulário adicional para alimentar resumo. Desenho em `docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md`, seção E3; plano em `docs/esteira/planejamento/e3-exames-resumo.md`.

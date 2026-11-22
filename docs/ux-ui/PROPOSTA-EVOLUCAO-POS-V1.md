@@ -214,42 +214,20 @@ Homologar jornadas específicas:
 
 Antes da implementação de cada entrega, produzir fluxo de baixa fidelidade e estados críticos. Protótipo visual e homologação humana continuam necessários; este documento organiza a proposta, não os substitui.
 
-## 11. E3 — desenho de baixa fidelidade para validação, 2026-11-22
+## 11. E3 — desenho aprovado com download de exames, 2026-11-22
 
-**Escopo funcional aprovado:** Módulo 02 v1.6 e Módulo 04 v1.2. **Desenho visual abaixo: PROPOSTA**, a validar antes da implementação. Não é protótipo executado nem prova de acessibilidade.
+**E3-UX-00 APROVADO pelo responsável:** retirar a abertura interna de arquivos e manter o restante do desenho. Fonte vigente: Módulo 02 v1.7 §10 e Módulo 04 v1.2 §12. Propostas anteriores de visualizador nas seções gerais deste documento ficam substituídas para a E3 por este desenho.
 
-### Tela A — detalhe do exame
-
-Ordem de leitura no Drawer/página já existente: nome da pessoa → descrição do exame → data quando conhecida e consulta relacionada → documento anexado → **Visualizar documento** → ação secundária **Baixar arquivo**. Sem documento, mostrar “Sem documento anexado”, sem ação vazia. Cadastro/edição continuam nos destinos existentes e autorizados.
-
-### Tela B — visualizador
-
-| Posição | Conteúdo |
+| Tela | Organização aprovada |
 |---|---|
-| Topo | Voltar ao exame · nome do arquivo |
-| Área principal | PDF/imagem, priorizando leitura no celular |
-| Controles | Diminuir/ampliar · página atual/total quando aplicável |
-| Ação secundária | Baixar arquivo, quando autorizado |
+| Detalhe do exame | Pessoa, descrição, data conhecida e documento → **Baixar arquivo** |
+| Resumo da pessoa | Período no topo → Cuidados e/ou Desenvolvimento conforme áreas aplicáveis/autorizadas |
+| Exportação do resumo | Preparar PDF → conferir prévia → baixar |
 
-No celular, usar o espaço disponível, sem empilhar outro Drawer estreito dentro do detalhe. Na volta, preservar exame selecionado e contexto da lista. Teclado e foco devem funcionar sem depender de ícone. Documento ilegível/indisponível apresenta erro e retorno; formato sem prévia oferece alternativa autorizada. A escolha da biblioteca/componente será técnica, após verificar formatos e controles suportados.
+O download mantém o detalhe do exame disponível. Mostrar nome/formato do anexo, estado de preparação, erro e alternativa de tentar novamente. Sem anexo, texto neutro sem botão vazio. O navegador/aplicativo do dispositivo abre o arquivo conforme suas configurações; não criar viewer, zoom, paginação ou tela de leitura própria.
 
-### Tela C — Resumo da pessoa
+Resumo preserva blocos factuais, datas, fontes e detalhes recolhidos, com vazio neutro. Prévia/PDF dos relatórios continuam no fluxo aprovado. Não expor informações por contagens/links de áreas sem autorização.
 
-| Ordem | Conteúdo |
-|---|---|
-| Cabeçalho | Pessoa · Resumo |
-| Filtro | Período atual; alterar se desejar |
-| Bloco Cuidados, se autorizado/aplicável | Estados de doses; consultas/exames; observações e mudanças relevantes |
-| Bloco Desenvolvimento, se autorizado/aplicável | Experiências; categorias exploradas; estrelas; observações |
-| Ação contextual | Preparar PDF conforme os tipos já disponíveis |
+Validação humana da implementação: baixar PDF/imagem em celular/desktop e abrir pelo recurso do dispositivo; trocar período, conferir fontes e exportar resumo autorizado; repetir falha de rede e acesso revogado.
 
-Cada bloco usa fatos, datas e acesso à origem; detalhes extensos ficam recolhidos. Evitar repetir o histórico completo ou preencher com gráficos sem utilidade. Nenhuma contagem vira nota. Para período vazio, texto neutro. A ação de PDF mantém prévia/conferência e autorização vigentes.
-
-### Percursos de validação
-
-1. Cuidados → Consultas e exames → exame → visualizar/zoom/página → voltar.
-2. Resumo com apenas Cuidados, apenas Desenvolvimento e ambas as áreas autorizadas.
-3. Trocar período → conferir registros → preparar PDF do tipo autorizado.
-4. Repetir vazio, falha de documento e ausência/revogação de permissão.
-
-**E3-UX-00:** responsável valida hierarquia e jornadas acima antes de E3-01. Ajustes de layout podem ocorrer dentro das regras; mudança de acesso, exigência de dado ou comportamento clínico retorna a Produto.
+Este é aceite do desenho, não homologação do código a implementar.
