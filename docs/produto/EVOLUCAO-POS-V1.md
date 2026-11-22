@@ -260,6 +260,12 @@ Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pe
 
 **Próxima proposta UX para discussão:** fluxo da Biblioteca → jogo → fase → dicas opcionais → conclusão ou saída → retorno, com controles móveis e acessibilidade. Quantidade e identidade final dos jogos/fases permanecem propostas não homologadas, sem autorização de implementação da E5.
 
+### E5 — Fases configuradas, variações automáticas e conteúdo curado aprovados (2026-11-22)
+
+**APROVADO expressamente pelo responsável do Produto:** cada fase digital possui **dificuldade e objetivo definidos**, porém pode oferecer **variações automáticas limitadas** a partir de conteúdo previamente curado e regras testáveis. Não criar fases inteiramente fixas como única experiência nem geração procedural irrestrita/IA durante a partida. A variação altera cartas, imagens, padrões e posições dentro da dificuldade aprovada; **não** apaga ou reinicia progresso/conquistas. Progressão livre, dicas, conclusão com ajuda e retomada desde o início da fase continuam vigentes.
+
+**Encaminhamento para detalhamento, sem implementação autorizada:** definir para cada mecânica um conjunto versionado de conteúdos e configurações por fase; assegurar solução válida e dificuldade razoavelmente equivalente em todas as variantes; garantir qualidade visual, legibilidade no celular, acessibilidade e adequação para crianças/adultos/idosos. No piloto, preferir embaralhamento de pares aprovados em Memória, geração restrita de padrões resolúveis em Sequência e seleção de mapas revisados em Labirinto, sem precisar criar editor genérico nem motor de geração procedural. Quantidade definitiva de jogos, fases, variações e catálogo continua proposta sujeita a validação humana. Não alterar estrelas e recompensas de atividades presenciais.
+
 ## 8. Participação, estrelas e evolução
 
 A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
