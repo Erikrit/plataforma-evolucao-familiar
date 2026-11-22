@@ -266,6 +266,12 @@ Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pe
 
 **Encaminhamento para detalhamento, sem implementação autorizada:** definir para cada mecânica um conjunto versionado de conteúdos e configurações por fase; assegurar solução válida e dificuldade razoavelmente equivalente em todas as variantes; garantir qualidade visual, legibilidade no celular, acessibilidade e adequação para crianças/adultos/idosos. No piloto, preferir embaralhamento de pares aprovados em Memória, geração restrita de padrões resolúveis em Sequência e seleção de mapas revisados em Labirinto, sem precisar criar editor genérico nem motor de geração procedural. Quantidade definitiva de jogos, fases, variações e catálogo continua proposta sujeita a validação humana. Não alterar estrelas e recompensas de atividades presenciais.
 
+### E5 — Destaques e biblioteca por categoria aprovados (2026-11-22)
+
+**APROVADO expressamente pelo responsável do Produto:** a Biblioteca de Desenvolvimento apresenta os jogos digitais no contexto da pessoa com **até três jogos em destaque**, seguidos de **biblioteca completa com filtros pelas categorias existentes**. Os destaques podem incluir experiências já exploradas, com retomada simples pela escolha livre de qualquer fase, e opções ainda não experimentadas. Não criar telas adicionais de navegação, recomendador dependente de IA ou obrigação de jogar. Cada jogo pode ter categoria principal e outras associações se necessário, sem criar categorias técnicas novas por inferência; itens permanecem encontrados em Todas. Conteúdo, seleção e visualização respeitam pessoa/família e autorizações vigentes.
+
+**A definir no próximo detalhamento:** critério determinístico para ordenar os até três destaques sem perfilamento sensível nem questionário, comportamento quando a pessoa nunca jogou, catálogo pequeno/vazio, ausência de idade, mesmas opções disponíveis em categorias distintas e continuidade entre sessões. Não reaproveitar automaticamente a regra E4 de renovar sugestões (24/6/3) para jogos digitais, pois jogos e atividades presenciais possuem ciclos diferentes. Não confundir destaque editorial com recompensa, conclusão ou ponto. Quantidade final de jogos/fases ainda em discussão; nenhuma implementação da E5 autorizada.
+
 ## 8. Participação, estrelas e evolução
 
 A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
