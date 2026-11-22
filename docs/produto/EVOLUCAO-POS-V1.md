@@ -232,6 +232,14 @@ O piloto deve hospedar a versão aprovada dentro da plataforma, sem anúncios, r
 
 Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pessoa e o jogo não oferece acesso a outras áreas. A saída retorna à Biblioteca ou ao Resumo da pessoa. Pausar, abandonar ou perder conexão não gera punição e não é tratado como fracasso de desenvolvimento.
 
+### E5 — Decisão específica de Produto: progressão livre (2026-11-22)
+
+**APROVADO expressamente pelo responsável do Produto:** a progressão nos jogos digitais é **livre**. Qualquer fase publicada e adequada ao jogo fica acessível sem obrigar a concluir as anteriores; a interface pode sugerir a próxima fase de dificuldade gradual, mas não bloqueia outras opções. A pessoa pode repetir qualquer fase. O progresso registra apenas experiências e conclusões legítimas, sem punição por interrupção, sem ranking ou metas de frequência.
+
+**Contexto da direção em discussão, ainda não integralmente aprovado como especificação E5:** jogos complementam atividades presenciais; qualidade visual/interativa intermediária; mais de uma fase por jogo; opções por categoria; incentivo por descobertas/conquistas simbólicas; leitura de evolução pessoal sem diagnóstico e sem estrelas digitais. Proposta inicial a avaliar: três jogos no piloto, seis como variedade-alvo e cinco fases por jogo. Esses números e os critérios de conclusão, conquistas, resultados, catálogo, integração e capacidade de edição ainda exigem detalhamento e validação antes da implementação. O objetivo de **não conceder estrelas digitais** foi manifestado pelo Produto nesta discussão; não alterar tabela ou saldo presencial.
+
+**Não inferir desta decisão:** implementação autorizada da E5, catálogo definitivo, premiação, alteração de autorizações de criança, coleta de métricas granulares, compromisso clínico, homologação da E4 ou publicação em produção. E4-HOM permanece pendente conforme registros da esteira, E3 mantém defeito aberto de anexo. Elaborar critérios de fase experimentada versus concluída e homologar com família antes de desenvolver.
+
 ## 8. Participação, estrelas e evolução
 
 A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
