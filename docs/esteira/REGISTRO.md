@@ -1,5 +1,24 @@
 # Registro da esteira
 
+## ESTABILIZACAO-PRE-USO — EST-03 COMPLETED técnico
+
+- **Tipo:** transversal · **Incremento:** EST-03.
+- **Checkout base:** `develop` @ `348a44a`.
+- **Defeitos corrigidos:** Cache-Control ausente em resumo/prévia/PDF; `temDocumento` vazava para colaboradora.
+- **QG:** typecheck/build API+web PASS; smoke est-03-docs (15), e3, e4, e5, authz PASS. Verifier **PASS_COM_ACHADOS** (`62d6b3ae-7f00-47fd-b03f-7b5a73fa0527`). Fingerprint `sha256:89d4dae23976eedc…`.
+- **E4 residual:** tipificada (smoke PASS; HOM parcial preservada; expansão L3 fora).
+- **Humano:** PENDING — [roteiro](estado/roteiro-homologacao-est-03.md). Evidência: [JSON](estado/evidencia-est-03-20261122.json).
+- **Próximo:** EST-04 quando autorizado. Sem push/deploy; publicação não autorizada.
+
+## ESTABILIZACAO-PRE-USO — EST-03 retomada (triagem)
+
+- **Tipo:** transversal · **Origem:** pedido humano para executar EST-03.
+- **Checkout:** `develop` @ `348a44a` (= `origin/develop`); working tree limpa.
+- **Divergências registradas:** STATUS/`atual.json` tinham `EVO-CATALOGO-JOGOS` como demanda ativa (L3 PENDENTE) e estabilização PAUSED; revisão apontava `5e23c7a`. Prevaleceu o estado real + pedido humano: estabilização reativada; EVO pausada em `demandaPausadaL3` sem perder NEEDS_DECISION.
+- **Preservados:** E1/E2 APROVADAS; E5 UX R2 APROVADA; EST-00..02 COMPLETED técnico; ADR-015; auditoria técnica.
+- **Fluxo:** implementation-workflow (diagnóstico → correção só com evidência) → quality-gate → verifier. Sem E6/E7, sem EST-04, sem push/deploy.
+- **Próximo:** diagnosticar isolamento Histórico/Resumo/PDF/documentos e E4 residual.
+
 ## EVO-CATALOGO-JOGOS-20261122 — planejamento L3 (NEEDS_DECISION)
 
 - **Tipo:** transversal · **Origem:** pedido humano de arquitetura extensível do catálogo digital.

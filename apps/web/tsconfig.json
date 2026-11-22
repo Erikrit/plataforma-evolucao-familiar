@@ -31,11 +31,12 @@
   "include": [
     ".next-qg-cor-e5-r2/types/**/*.ts",
     ".next-qg-cor-e5/types/**/*.ts",
+    ".next-qg-est-01/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    ".next-qg-est-01/types/**/*.ts"
+    ".next-qg-est-03/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

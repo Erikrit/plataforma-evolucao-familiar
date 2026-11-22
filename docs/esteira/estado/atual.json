@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "commit": "5e23c7a7c6e854c33051586581103a228c17c760",
-        "nota": "EVO-CATALOGO-JOGOS planejamento L3; checkout alinhado origin/develop; sem implementação."
+        "commit": "348a44a01591a5bbb5665b5d9585c359eee4c575",
+        "nota": "EST-03 COMPLETED técnico sobre base 348a44a; alterações locais prontas para commit; EVO-CATALOGO permanece NEEDS_DECISION."
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -104,184 +104,10 @@
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
     "demandaAnterior": {
-        "id": "ESTABILIZACAO-PRE-USO-20261122",
-        "tipo": "transversal",
-        "origem": "Responsável — preparar plataforma para uso real sem E6/E7 e sem novas funcionalidades",
-        "estado": "PAUSED",
-        "aprovacao": {
-            "nivel": "L2",
-            "status": "APROVADA",
-            "referencia": "Pedido humano ESTABILIZACAO-PRE-USO-20261122; docs/produto/STATUS-E-ESCOPO.md; GOVERNANCA L2 estabilização",
-            "nota": "Estabilização; ADR-015 auth enxuta APROVADA; sem E6/E7; sem publicação automática."
-        },
-        "risco": "alto",
-        "escopo": "Reconciliação documental; correção DEF-E3-ANEXO; regressão auth/autorização; consistência histórico/resumo/PDF e E4 residual; prontidão operacional (backup/restore/Docker/health) sem liberar produção. Inclui EST-01-UX visual Resumo/Histórico autorizada pelo responsável.",
-        "impacto": "Cuidados (anexos), Fundação (auth/sessões), Evolução (histórico/resumo/PDF), operação local",
-        "fora": [
-            "E6",
-            "E7",
-            "novas funcionalidades",
-            "publicação para uso real sem critérios de bloqueio"
-        ],
-        "criteriosAceite": [
-            "EST-00-REC",
-            "EST-01-ANEXO",
-            "EST-02-AUTH",
-            "EST-03-DOCS",
-            "EST-04-OPS",
-            "EST-BLOQ-USO-REAL"
-        ],
-        "dependencias": [
-            "COR-E5-UX-HOM-R2 homologada APROVADA",
-            "DEF-E3-ANEXO CORRIGIDO TECNICAMENTE (E3-HOM PENDING_HUMAN)",
-            "E4-HOM APROVADA_PARCIALMENTE",
-            "E1/E2 homologações humanas APROVADAS",
-            "ADR-015 DOCUMENTADA",
-            "Sem autorização de publicação"
-        ],
-        "pendenciasForaEscopo": [
-            {
-                "id": "E6-IA-DESENVOLVIMENTO",
-                "estado": "FORA",
-                "tratamento": "NAO_INICIAR"
-            },
-            {
-                "id": "E7-IA-CUIDADOS",
-                "estado": "FORA",
-                "tratamento": "NAO_INICIAR"
-            }
-        ],
-        "fluxo": [
-            "task-routing",
-            "module-planning",
-            "implementation-workflow",
-            "quality-gate"
-        ],
-        "planejamento": {
-            "caminho": "docs/esteira/planejamento/estabilizacao-pre-uso.md",
-            "incrementos": [
-                {
-                    "id": "EST-00",
-                    "status": "COMPLETED",
-                    "aceite": "Reconciliação e plano documentados; E5 R2 humana APROVADA registrada"
-                },
-                {
-                    "id": "EST-01",
-                    "status": "COMPLETED",
-                    "aceite": "Salvar exame com/sem anexo (payload >100KB); download; UX Resumo/Histórico alinhada ao padrão PEF",
-                    "fingerprint": "sha256:8f2ac0f5afe25966"
-                },
-                {
-                    "id": "EST-02",
-                    "status": "COMPLETED",
-                    "aceite": "Sessão/cookie (ADR-015); regressão E1/E2/authz; gaps residuais documentados; sem JWT",
-                    "fingerprint": "sha256:785fd27e1b52924e"
-                },
-                {
-                    "id": "EST-03",
-                    "status": "READY",
-                    "aceite": "Histórico/resumo/PDF/documentos privados isolados; E4 residual tipificado"
-                },
-                {
-                    "id": "EST-04",
-                    "status": "PENDING",
-                    "aceite": "Backup/restore e health documentados; critérios de bloqueio para uso real aplicados"
-                }
-            ]
-        },
-        "incrementoAtivo": "EST-03",
-        "testesPertinentes": [
-            "Reprodução controlada do upload de anexo com dados fictícios",
-            "smoke:e3 e regressão authz/anexos",
-            "smoke:e1-ent / smoke:e2 / smoke:authz conforme incremento",
-            "smoke:e4 / histórico-resumo/PDF quando EST-03",
-            "Procedimento backup/restore e healthcheck quando EST-04",
-            "Homologação humana E3-HOM após EST-01"
-        ],
-        "bloqueios": [
-            "Publicação para uso real sem backup/restore validado e sem E3-HOM",
-            "Não usar db reset/push destrutivo em banco compartilhado"
-        ],
-        "reconciliacaoLocal": {
-            "status": "OK",
-            "branch": "develop",
-            "commit": "c8cb29b",
-            "workingTree": "dirty_est02",
-            "originDevelop": "up_to_date",
-            "divergencias": [
-                "Alterações locais EST-02 não commitadas",
-                "E3-HOM PENDING_HUMAN",
-                "Sem autorização de publicação",
-                "Rate-limit login ausente (bloqueante uso real)"
-            ],
-            "em": "2026-11-22T20:56:19.415Z"
-        },
-        "fingerprintNota": "Fingerprint de produto será recalculado por incremento ao alterar código. EST-00 é documental.",
-        "verificacao": {
-            "qg1": "PASS",
-            "qg2": "PASS",
-            "verifier": "PASS_COM_ACHADOS",
-            "verifierId": "da2a6d0d-442f-4cae-9b1f-8738694a624f",
-            "nota": "EST-02 COMPLETED técnico; EST-03 READY; publicação não autorizada"
-        },
-        "proximaAcao": "Retomar EST-03 após COR-UX-EST-HOM-20261122",
-        "atualizadoEm": "2026-11-22T21:40:28.249Z",
-        "fingerprint": "sha256:785fd27e1b52924e",
-        "fingerprintFull": "sha256:785fd27e1b52924e2de73803dde9898bbd87b96cf5b2332c6c6ad1efb353f8dc",
-        "arquivos": [
-            "apps/api/src/auth/controlador-sessao.ts",
-            "apps/api/scripts/smoke-est-02-sessao.mjs",
-            "docs/arquitetura/DECISOES.md",
-            "docs/esteira/planejamento/estabilizacao-pre-uso.md",
-            "docs/produto/STATUS-E-ESCOPO.md",
-            "docs/esteira/REGISTRO.md",
-            "docs/esteira/estado/qg1-typecheck-est-02.txt",
-            "docs/esteira/estado/qg2-smoke-e1-01-est-02.txt",
-            "docs/esteira/estado/qg2-smoke-e1-ent-est-02.txt",
-            "docs/esteira/estado/qg2-smoke-e1-03-est-02.txt",
-            "docs/esteira/estado/qg2-smoke-e2-est-02.txt",
-            "docs/esteira/estado/qg2-smoke-authz-est-02.txt",
-            "docs/esteira/estado/qg2-smoke-est-02-sessao.txt"
-        ],
-        "mensagemCommit": "fix(auth): alinhar limpeza do cookie seguro e fechar EST-02\\n\\nDocumenta ADR-015 (sessão/cookie enxuta) e corrige clearCookie para respeitar COOKIE_SECURE.",
-        "ultimoIncremento": {
-            "id": "EST-02",
-            "status": "COMPLETED",
-            "tipo": "transversal",
-            "requisitos": [
-                "EST-02-AUTH",
-                "ADR-015"
-            ],
-            "aceite": "Sessão/cookie (ADR-015); regressão E1/E2/authz; gaps residuais documentados; sem JWT",
-            "fingerprint": "sha256:785fd27e1b52924e",
-            "verifier": "PASS_COM_ACHADOS"
-        },
-        "incrementosConcluidos": [
-            {
-                "id": "EST-02",
-                "status": "COMPLETED",
-                "fingerprint": "sha256:785fd27e1b52924e",
-                "em": "2026-11-22T20:56:19.415Z",
-                "verifier": "PASS_COM_ACHADOS"
-            }
-        ],
-        "homologacaoHumana": "APROVADA_PARCIALMENTE",
-        "homologacaoParcial": {
-            "resultado": "APROVADA_PARCIALMENTE",
-            "em": "2026-11-22T21:40:28.249Z",
-            "fonte": "Responsável do Produto nesta conversa",
-            "apontamentos": [
-                "Telas sem feedback de carregamento contextual",
-                "Sugestões de Atividades reais acima do catálogo principal",
-                "Renovar sugestões com falha percebida (causa a investigar)",
-                "Conclusão de fase digital sem diálogo de celebração/próxima fase"
-            ],
-            "foraEscopoNestaRodada": [
-                "Expansão de catálogos (Etapa B — só planejamento L3)",
-                "EST-03/EST-04 da estabilização (retomada após COR-UX)"
-            ]
-        },
-        "pausadaPor": "COR-UX-EST-HOM-20261122"
+        "id": "COR-UX-EST-HOM-20261122",
+        "nota": "Precedente imediato da estabilização retomada; ver demandasConcluidas para detalhe COMPLETED técnico",
+        "estado": "COMPLETED",
+        "homologacaoHumana": "PENDING_HUMAN"
     },
     "janelaIncrementos": [
         {
@@ -2658,6 +2484,250 @@
         "fingerprint": "ef-modulo04-qg3-2026-11-16"
     },
     "demanda": {
+        "id": "ESTABILIZACAO-PRE-USO-20261122",
+        "tipo": "transversal",
+        "origem": "Responsável — preparar plataforma para uso real sem E6/E7 e sem novas funcionalidades",
+        "estado": "IN_PROGRESS",
+        "aprovacao": {
+            "nivel": "L2",
+            "status": "APROVADA",
+            "referencia": "Pedido humano ESTABILIZACAO-PRE-USO-20261122; docs/produto/STATUS-E-ESCOPO.md; GOVERNANCA L2 estabilização",
+            "nota": "Estabilização; ADR-015 auth enxuta APROVADA; sem E6/E7; sem publicação automática."
+        },
+        "risco": "alto",
+        "escopo": "Reconciliação documental; correção DEF-E3-ANEXO; regressão auth/autorização; consistência histórico/resumo/PDF e E4 residual; prontidão operacional (backup/restore/Docker/health) sem liberar produção. Inclui EST-01-UX visual Resumo/Histórico autorizada pelo responsável.",
+        "impacto": "Cuidados (anexos), Fundação (auth/sessões), Evolução (histórico/resumo/PDF), operação local",
+        "fora": [
+            "E6",
+            "E7",
+            "novas funcionalidades",
+            "publicação para uso real sem critérios de bloqueio"
+        ],
+        "criteriosAceite": [
+            "EST-00-REC",
+            "EST-01-ANEXO",
+            "EST-02-AUTH",
+            "EST-03-DOCS",
+            "EST-04-OPS",
+            "EST-BLOQ-USO-REAL"
+        ],
+        "dependencias": [
+            "COR-E5-UX-HOM-R2 homologada APROVADA",
+            "DEF-E3-ANEXO CORRIGIDO TECNICAMENTE (E3-HOM PENDING_HUMAN)",
+            "E4-HOM APROVADA_PARCIALMENTE",
+            "E1/E2 homologações humanas APROVADAS",
+            "ADR-015 DOCUMENTADA",
+            "Sem autorização de publicação"
+        ],
+        "pendenciasForaEscopo": [
+            {
+                "id": "E6-IA-DESENVOLVIMENTO",
+                "estado": "FORA",
+                "tratamento": "NAO_INICIAR"
+            },
+            {
+                "id": "E7-IA-CUIDADOS",
+                "estado": "FORA",
+                "tratamento": "NAO_INICIAR"
+            }
+        ],
+        "fluxo": [
+            "task-routing",
+            "module-planning",
+            "implementation-workflow",
+            "quality-gate"
+        ],
+        "planejamento": {
+            "caminho": "docs/esteira/planejamento/estabilizacao-pre-uso.md",
+            "incrementos": [
+                {
+                    "id": "EST-00",
+                    "status": "COMPLETED",
+                    "aceite": "Reconciliação e plano documentados; E5 R2 humana APROVADA registrada"
+                },
+                {
+                    "id": "EST-01",
+                    "status": "COMPLETED",
+                    "aceite": "Salvar exame com/sem anexo (payload >100KB); download; UX Resumo/Histórico alinhada ao padrão PEF",
+                    "fingerprint": "sha256:8f2ac0f5afe25966"
+                },
+                {
+                    "id": "EST-02",
+                    "status": "COMPLETED",
+                    "aceite": "Sessão/cookie (ADR-015); regressão E1/E2/authz; gaps residuais documentados; sem JWT",
+                    "fingerprint": "sha256:785fd27e1b52924e"
+                },
+                {
+                    "id": "EST-03",
+                    "status": "COMPLETED",
+                    "aceite": "Isolamento + cache privado + temDocumento gated; E4 residual tipificada; HOM PENDING",
+                    "fingerprint": "sha256:89d4dae23976eedc"
+                },
+                {
+                    "id": "EST-04",
+                    "status": "PENDING",
+                    "aceite": "Backup/restore e health documentados; critérios de bloqueio para uso real aplicados"
+                }
+            ]
+        },
+        "incrementoAtivo": "EST-04",
+        "testesPertinentes": [
+            "Reprodução controlada do upload de anexo com dados fictícios",
+            "smoke:e3 e regressão authz/anexos",
+            "smoke:e1-ent / smoke:e2 / smoke:authz conforme incremento",
+            "smoke:e4 / histórico-resumo/PDF quando EST-03",
+            "Procedimento backup/restore e healthcheck quando EST-04",
+            "Homologação humana E3-HOM após EST-01"
+        ],
+        "bloqueios": [
+            "Publicação para uso real sem backup/restore validado e sem E3-HOM",
+            "Não usar db reset/push destrutivo em banco compartilhado"
+        ],
+        "reconciliacaoLocal": {
+            "status": "OK",
+            "branch": "develop",
+            "commit": "348a44a",
+            "workingTree": "dirty_est03_ready_commit",
+            "originDevelop": "up_to_date",
+            "divergencias": [
+                "E3-HOM PENDING_HUMAN",
+                "COR-UX-HOM PENDING_HUMAN",
+                "E4-HOM APROVADA_PARCIALMENTE (residual tipificado)",
+                "EVO-CATALOGO NEEDS_DECISION em demandaPausadaL3",
+                "Sem autorização de publicação"
+            ],
+            "em": "2026-11-22T23:12:22.081Z"
+        },
+        "fingerprintNota": "Fingerprint de produto será recalculado por incremento ao alterar código. EST-00 é documental.",
+        "verificacao": {
+            "qg1": "PASS",
+            "qg2": "PASS",
+            "verifier": "PASS_COM_ACHADOS",
+            "verifierId": "62d6b3ae-7f00-47fd-b03f-7b5a73fa0527",
+            "nota": "EST-03 COMPLETED técnico; EST-04 PENDING; homologação humana EST-03 PENDING_HUMAN; publicação não autorizada"
+        },
+        "proximaAcao": "Commit local humano EST-03 (hooks bloqueiam commit do agente); homologação humana EST-03; EST-04 quando autorizado",
+        "atualizadoEm": "2026-11-22T23:12:22.081Z",
+        "fingerprint": "sha256:89d4dae23976eedc",
+        "fingerprintFull": "sha256:89d4dae23976eedcc7de602160bada6925e878fd564d98743e948f03fd18e8ae",
+        "arquivos": [
+            "apps/api/src/cuidados/controlador-cuidados.ts",
+            "apps/api/src/cuidados/servico-acompanhamento.ts",
+            "apps/api/scripts/smoke-est-03-docs.mjs",
+            "apps/api/package.json",
+            "docs/esteira/planejamento/estabilizacao-pre-uso.md",
+            "docs/produto/STATUS-E-ESCOPO.md",
+            "docs/esteira/REGISTRO.md",
+            "docs/esteira/estado/evidencia-est-03-20261122.json",
+            "docs/esteira/estado/roteiro-homologacao-est-03.md"
+        ],
+        "mensagemCommit": "fix(privacidade): cache e metadado de anexo no resumo/PDF\\n\\nFecha EST-03 tecnicamente: Cache-Control privado em resumo/prévia/PDF e temDocumento só para quem pode consultar anexos.",
+        "ultimoIncremento": {
+            "id": "EST-03",
+            "status": "COMPLETED",
+            "tipo": "transversal",
+            "requisitos": [
+                "EST-03-DOCS",
+                "EVO-R05",
+                "EVO-R10",
+                "E3-RES-05"
+            ],
+            "aceite": "Isolamento histórico/resumo/PDF/anexos; PDF sem anexos; E4 residual tipificada",
+            "fingerprint": "sha256:89d4dae23976eedc",
+            "verifier": "PASS_COM_ACHADOS",
+            "verifierId": "62d6b3ae-7f00-47fd-b03f-7b5a73fa0527"
+        },
+        "incrementosConcluidos": [
+            {
+                "id": "EST-02",
+                "status": "COMPLETED",
+                "fingerprint": "sha256:785fd27e1b52924e",
+                "em": "2026-11-22T20:56:19.415Z",
+                "verifier": "PASS_COM_ACHADOS"
+            },
+            {
+                "id": "EST-03",
+                "status": "COMPLETED",
+                "fingerprint": "sha256:89d4dae23976eedc",
+                "em": "2026-11-22T23:12:22.081Z",
+                "verifier": "PASS_COM_ACHADOS"
+            }
+        ],
+        "homologacaoHumana": "PENDING_HUMAN",
+        "homologacaoParcial": {
+            "resultado": "APROVADA_PARCIALMENTE",
+            "em": "2026-11-22T21:40:28.249Z",
+            "fonte": "Responsável do Produto nesta conversa",
+            "apontamentos": [
+                "Telas sem feedback de carregamento contextual",
+                "Sugestões de Atividades reais acima do catálogo principal",
+                "Renovar sugestões com falha percebida (causa a investigar)",
+                "Conclusão de fase digital sem diálogo de celebração/próxima fase"
+            ],
+            "foraEscopoNestaRodada": [
+                "Expansão de catálogos (Etapa B — só planejamento L3)",
+                "EST-03/EST-04 da estabilização (retomada após COR-UX)"
+            ]
+        },
+        "retomadaPor": "Pedido humano EST-03 em 2026-11-22"
+    },
+    "auditoriaTecnica": {
+        "id": "AUDITORIA-TECNICA-20261122",
+        "estado": "COMPLETED",
+        "base": "95cb9de",
+        "arquivos": [
+            ".gitignore",
+            "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+            "apps/api/src/cuidados/servico-acompanhamento.ts",
+            "apps/api/scripts/check-lembretes-lote.mjs"
+        ],
+        "fingerprint": "sha256:ba76fd35e84abf476bc6f13dcba79124022e35f6197703d5e0674be8bf971d76",
+        "recortesValidados": [
+            "Lembretes em lote e controle de leitura de Cuidados",
+            "Reuso de concessões ativas na home",
+            "Inventário e padrões para artefatos locais"
+        ],
+        "verificacao": {
+            "qg1": "PASS",
+            "verifier": "PASS após ajuste de duplicatas",
+            "qg2": "PASS nos recortes implementados",
+            "qg3": "Regressões selecionadas passaram, auditoria ainda aberta"
+        },
+        "proximaAcao": "Limpeza autorizada realizada.",
+        "evidencia": "docs/esteira/planejamento/auditoria-tecnica-20261122.md",
+        "retomada": {
+            "base": "534e020",
+            "arquivo": "apps/api/src/cuidados/servico-acompanhamento.ts",
+            "gitBlob": "a2f9746ca70ac605a03e1072537bccfbdb175e08",
+            "buildWeb": "PASS",
+            "buildApi": "PASS",
+            "verifier": "PASS",
+            "regressoes": [
+                "E1 autorização",
+                "E1 jornadas",
+                "E2",
+                "E4",
+                "E5"
+            ],
+            "frontend": "TIMEOUT",
+            "candidatosRemocao": 6
+        },
+        "encerramento": {
+            "base": "de4bb09",
+            "frontend": "PERF-04: /inicio 2 → 1 no Chrome com API simulada",
+            "fingerprintProvedor": "git:df835f61464471e9bd9ec0f9b54d5e89d92e3e53",
+            "verificador": "PASS",
+            "repo": "6 candidatos preservados, bootstrap 42 na cópia sem os candidatos",
+            "evidencia": "docs/esteira/planejamento/auditoria-tecnica-20261122.md"
+        },
+        "mensagemCommit": "perf(web): evitar leitura duplicada da home no login",
+        "limpeza": {
+            "logsRemovidos": 6,
+            "retencaoPreventiva": 29,
+            "inventario": "docs/esteira/planejamento/auditoria-tecnica-20261122.md"
+        }
+    },
+    "demandaPausadaL3": {
         "id": "EVO-CATALOGO-JOGOS-20261122",
         "tipo": "transversal",
         "origem": "Pedido humano — arquitetura extensível do catálogo digital (aprovação L3)",
@@ -2760,64 +2830,10 @@
             "docs/produto/STATUS-E-ESCOPO.md"
         ],
         "proximaAcao": "Aguardar decisão L3 do Produto sobre evo-catalogo-jogos-20261122.md. Sem implementação até aprovação.",
-        "atualizadoEm": "2026-11-22T22:49:19.883Z",
+        "atualizadoEm": "2026-11-22T23:03:43.349Z",
         "estadoExibicao": "AGUARDANDO_APROVACAO_L3",
-        "incrementosConcluidos": []
-    },
-    "auditoriaTecnica": {
-        "id": "AUDITORIA-TECNICA-20261122",
-        "estado": "COMPLETED",
-        "base": "95cb9de",
-        "arquivos": [
-            ".gitignore",
-            "apps/api/src/autorizacoes/servico-autorizacoes.ts",
-            "apps/api/src/cuidados/servico-acompanhamento.ts",
-            "apps/api/scripts/check-lembretes-lote.mjs"
-        ],
-        "fingerprint": "sha256:ba76fd35e84abf476bc6f13dcba79124022e35f6197703d5e0674be8bf971d76",
-        "recortesValidados": [
-            "Lembretes em lote e controle de leitura de Cuidados",
-            "Reuso de concessões ativas na home",
-            "Inventário e padrões para artefatos locais"
-        ],
-        "verificacao": {
-            "qg1": "PASS",
-            "verifier": "PASS após ajuste de duplicatas",
-            "qg2": "PASS nos recortes implementados",
-            "qg3": "Regressões selecionadas passaram, auditoria ainda aberta"
-        },
-        "proximaAcao": "Limpeza autorizada realizada.",
-        "evidencia": "docs/esteira/planejamento/auditoria-tecnica-20261122.md",
-        "retomada": {
-            "base": "534e020",
-            "arquivo": "apps/api/src/cuidados/servico-acompanhamento.ts",
-            "gitBlob": "a2f9746ca70ac605a03e1072537bccfbdb175e08",
-            "buildWeb": "PASS",
-            "buildApi": "PASS",
-            "verifier": "PASS",
-            "regressoes": [
-                "E1 autorização",
-                "E1 jornadas",
-                "E2",
-                "E4",
-                "E5"
-            ],
-            "frontend": "TIMEOUT",
-            "candidatosRemocao": 6
-        },
-        "encerramento": {
-            "base": "de4bb09",
-            "frontend": "PERF-04: /inicio 2 → 1 no Chrome com API simulada",
-            "fingerprintProvedor": "git:df835f61464471e9bd9ec0f9b54d5e89d92e3e53",
-            "verificador": "PASS",
-            "repo": "6 candidatos preservados, bootstrap 42 na cópia sem os candidatos",
-            "evidencia": "docs/esteira/planejamento/auditoria-tecnica-20261122.md"
-        },
-        "mensagemCommit": "perf(web): evitar leitura duplicada da home no login",
-        "limpeza": {
-            "logsRemovidos": 6,
-            "retencaoPreventiva": 29,
-            "inventario": "docs/esteira/planejamento/auditoria-tecnica-20261122.md"
-        }
+        "incrementosConcluidos": [],
+        "pausadaPor": "ESTABILIZACAO-PRE-USO-20261122 / EST-03",
+        "notaRetomada": "Pausada sem perder L3 PENDENTE; retomável após decisão do Produto. Sem implementação."
     }
 }

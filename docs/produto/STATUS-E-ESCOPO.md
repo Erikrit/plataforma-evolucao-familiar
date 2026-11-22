@@ -2,9 +2,11 @@
 
 ## Estabilização pré-uso — 2026-11-22
 
-**Demanda ativa:** `EVO-CATALOGO-JOGOS-20261122` (**NEEDS_DECISION** / L3 Produto **PENDENTE**) — arquitetura extensível do catálogo digital; especificação em [`docs/esteira/planejamento/evo-catalogo-jogos-20261122.md`](../esteira/planejamento/evo-catalogo-jogos-20261122.md). **Sem implementação** até aprovação explícita. `COR-UX-EST-HOM-20261122` permanece COMPLETED técnico (homologação humana ainda PENDING). `ESTABILIZACAO-PRE-USO-20261122` permanece **PAUSED** (EST-00..02 COMPLETED técnico; EST-03/04 a retomar). Expansão de atividades reais (E4): planejamento L3 em [`expansao-catalogos-e4-e5.md`](../esteira/planejamento/expansao-catalogos-e4-e5.md).
+**Demanda ativa:** `ESTABILIZACAO-PRE-USO-20261122` — **EST-03 COMPLETED técnico**; próximo **EST-04** PENDING. Base: `develop` @ `348a44a` + commit EST-03. `EVO-CATALOGO-JOGOS-20261122` permanece **NEEDS_DECISION** / L3 **PENDENTE** (`demandaPausadaL3`; sem implementação). `COR-UX-EST-HOM-20261122` COMPLETED técnico (homologação humana PENDING). EST-00..02 COMPLETED técnico. Expansão de catálogos E4: só planejamento L3 em [`expansao-catalogos-e4-e5.md`](../esteira/planejamento/expansao-catalogos-e4-e5.md).
 
-**EST-02 (auth enxuta):** COMPLETED técnico — ADR-015 (sessão/cookie; sem JWT); regressões auth PASS (`qg*-est-02*`); verifier PASS_COM_ACHADOS; gaps residuais (rate-limit de login; HTTPS/`COOKIE_SECURE` no alvo) bloqueiam uso real. Evidência `docs/esteira/estado/evidencia-est-02-20261122.json`. Próximo: EST-03.
+**EST-03 (docs/privacidade):** COMPLETED técnico — cache privado em resumo/prévia/PDF; `temDocumento` oculto à colaboradora; isolamento e PDF sem anexos regressados (`smoke:est-03-docs` + e3/e4/e5/authz). Verifier PASS_COM_ACHADOS. Homologação humana PENDING ([roteiro](../esteira/estado/roteiro-homologacao-est-03.md)). Evidência `docs/esteira/estado/evidencia-est-03-20261122.json`.
+
+**EST-02 (auth enxuta):** COMPLETED técnico — ADR-015 (sessão/cookie; sem JWT); regressões auth PASS (`qg*-est-02*`); verifier PASS_COM_ACHADOS; gaps residuais (rate-limit de login; HTTPS/`COOKIE_SECURE` no alvo) bloqueiam uso real. Evidência `docs/esteira/estado/evidencia-est-02-20261122.json`.
 
 **Publicação para uso real:** ainda **não autorizada**. Critérios de bloqueio no plano EST.
 

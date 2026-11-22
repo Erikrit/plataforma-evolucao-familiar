@@ -266,6 +266,7 @@ export class ControladorCuidados {
   }
 
   @Get("pessoas/:pessoaId/resumo-cuidados")
+  @Header("Cache-Control", "private, no-store")
   resumo(
     @Param("pessoaId") pessoaId: string,
     @Query("de") de: string,
@@ -298,6 +299,7 @@ export class ControladorCuidados {
   }
 
   @Get("pessoas/:pessoaId/resumo-previa")
+  @Header("Cache-Control", "private, no-store")
   resumoPrevia(
     @Param("pessoaId") pessoaId: string,
     @Query("de") de: string,
@@ -311,6 +313,7 @@ export class ControladorCuidados {
   }
 
   @Get("pessoas/:pessoaId/relatorio.pdf")
+  @Header("Cache-Control", "private, no-store")
   async relatorioPdf(
     @Param("pessoaId") pessoaId: string,
     @Query("de") de: string,

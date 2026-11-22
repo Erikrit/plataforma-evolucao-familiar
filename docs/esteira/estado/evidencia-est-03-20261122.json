@@ -1,0 +1,70 @@
+{
+  "demandaId": "ESTABILIZACAO-PRE-USO-20261122",
+  "incrementoId": "EST-03",
+  "em": "2026-11-23T00:15:00.000Z",
+  "branch": "develop",
+  "commitBase": "348a44a01591a5bbb5665b5d9585c359eee4c575",
+  "workingTreeNota": "alterações locais EST-03 prontas para commit",
+  "fingerprint": "sha256:89d4dae23976eedc",
+  "fingerprintFull": "sha256:89d4dae23976eedcc7de602160bada6925e878fd564d98743e948f03fd18e8ae",
+  "arquivosProduto": [
+    "apps/api/src/cuidados/controlador-cuidados.ts",
+    "apps/api/src/cuidados/servico-acompanhamento.ts",
+    "apps/api/scripts/smoke-est-03-docs.mjs",
+    "apps/api/package.json"
+  ],
+  "problemasComprovados": [
+    {
+      "id": "DEF-EST03-CACHE-RESUMO-PDF",
+      "evidenciaPre": "docs/esteira/estado/qg2-smoke-est-03-docs-diag.txt",
+      "descricao": "resumo-cuidados, resumo-previa e relatorio.pdf sem Cache-Control private,no-store (histórico já tinha)",
+      "correcao": "@Header Cache-Control nos três endpoints"
+    },
+    {
+      "id": "DEF-EST03-TEMDOCUMENTO-COLAB",
+      "evidenciaPre": "docs/esteira/estado/qg2-smoke-est-03-docs-diag2.txt",
+      "descricao": "Resumo/prévia expunham temDocumento=true à colaboradora_cuidados; histórico já omitia anexoId/detalhe",
+      "correcao": "temDocumento gated por podeConsultarAnexosCuidados"
+    }
+  ],
+  "naoAlterado": [
+    "Jornadas E1/E2",
+    "UX E5 homologada R2",
+    "Semântica de estrelas/recompensas/progresso",
+    "EST-04 / E6 / E7",
+    "Expansão de catálogos (L3)"
+  ],
+  "e4Residual": {
+    "smokeE4": "PASS 16 checagens",
+    "homologacaoHumana": "APROVADA_PARCIALMENTE preservada",
+    "tipificacao": [
+      "Organização da entrada da Biblioteca já tratada em E5-01 + COR-UX (loading/sugestões/renovar/celebração)",
+      "Revalidação humana do percurso presencial E4-HOM permanece recomendada, sem reescrita do módulo",
+      "Expansão quantitativa do catálogo E4 é L3 fora do EST-03"
+    ]
+  },
+  "desempenho": {
+    "nota": "Auditoria técnica 2026-11-22 já otimizou volume de doses em resumo/histórico; sem novo defeito de latência reproduzido nesta fatia. Janelas longas seguem com memória proporcional às ocorrências."
+  },
+  "checagens": [
+    { "nome": "typecheck @pef/api", "status": "PASS", "evidencia": "docs/esteira/estado/qg1-typecheck-api-est-03.txt" },
+    { "nome": "typecheck @pef/web", "status": "PASS", "evidencia": "docs/esteira/estado/qg1-typecheck-web-est-03.txt" },
+    { "nome": "smoke:est-03-docs", "status": "PASS", "evidencia": "docs/esteira/estado/qg2-smoke-est-03-docs.txt", "checagens": 15 },
+    { "nome": "smoke:e3", "status": "PASS", "evidencia": "docs/esteira/estado/qg2-smoke-e3-est-03.txt" },
+    { "nome": "smoke:e4", "status": "PASS", "evidencia": "docs/esteira/estado/qg2-smoke-e4-est-03.txt" },
+    { "nome": "smoke:e5", "status": "PASS", "evidencia": "docs/esteira/estado/qg2-smoke-e5-est-03.txt" },
+    { "nome": "smoke:authz", "status": "PASS", "evidencia": "docs/esteira/estado/qg2-smoke-authz-est-03.txt" },
+    { "nome": "build @pef/api", "status": "PASS", "evidencia": "docs/esteira/estado/qg2-build-api-est-03.txt" },
+    { "nome": "build @pef/web", "status": "PASS", "evidencia": "docs/esteira/estado/qg2-build-web-est-03.txt", "nota": "PEF_NEXT_DIST_DIR=.next-qg-est-03" }
+  ],
+  "verifier": {
+    "veredicto": "PASS_COM_ACHADOS",
+    "agentId": "62d6b3ae-7f00-47fd-b03f-7b5a73fa0527",
+    "achados": [
+      "Fingerprint EST-02 no estado até o fechamento — recalculado neste encerramento",
+      "Reexecução shell bloqueada no Ask mode do verifier; evidências QG do orquestrador revalidáveis"
+    ]
+  },
+  "homologacaoHumana": "PENDING_HUMAN",
+  "roteiro": "docs/esteira/estado/roteiro-homologacao-est-03.md"
+}

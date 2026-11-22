@@ -375,6 +375,11 @@ export class ServicoAcompanhamento {
         "Acesso negado ao resumo de cuidados desta pessoa.",
       );
     }
+    const podeAnexos = await this.autorizacoes.podeConsultarAnexosCuidados(
+      pessoa.familiaId,
+      pessoa.id,
+      usuario,
+    );
 
     const de = this.inicioDoPeriodo(periodo.de);
     const ate = this.fimDoPeriodo(periodo.ate);
@@ -552,7 +557,7 @@ export class ServicoAcompanhamento {
         descricao: e.descricao,
         data: e.data,
         criadoEm: e.criadoEm,
-        temDocumento: Boolean(e.anexoId),
+        temDocumento: podeAnexos && Boolean(e.anexoId),
       })),
       observacoes: atividades.map((a) => ({
         id: a.id,

@@ -3,8 +3,8 @@
 **Demanda:** `ESTABILIZACAO-PRE-USO-20261122`  
 **Tipo:** transversal · **Risco:** alto (saúde, documentos, auth, operação)  
 **Aprovação:** pedido humano de estabilização sem E6/E7 e sem novas funcionalidades  
-**Base reconciliada:** `develop` @ `c8cb29b` (working tree limpa; EST-01 commitado; origin/develop alinhada)  
-**Estado:** EST-00 COMPLETED · EST-01 COMPLETED técnico (E3-HOM PENDING_HUMAN) · EST-02 COMPLETED técnico · EST-03 READY
+**Base reconciliada:** `develop` @ `348a44a` (working tree limpa; origin/develop alinhada; EVO-CATALOGO L3 pausada sem implementação)  
+**Estado:** EST-00 COMPLETED · EST-01 COMPLETED técnico (E3-HOM PENDING_HUMAN) · EST-02 COMPLETED técnico · EST-03 COMPLETED técnico · EST-04 PENDING
 
 ## Contexto homologado
 
@@ -65,14 +65,16 @@
 
 ### EST-03 — Histórico, resumo, PDF, documentos privados e E4 residual
 
-- **Problema comprovado:** E4-HOM parcial; PDF/resumo sem anexos embutidos (desenho E3); documentos privados dependem do fluxo de anexo estável.
-- **Impacto/risco:** alto (privacidade/isolamento); médio se só tipificação E4.
-- **Arquivos:** `servico-acompanhamento.ts`, páginas histórico/resumo, API PDF, biblioteca E4, smoke e4/e5.
-- **Menor solução:** regressão de isolamento e paridade prévia/PDF; tipificar pendências E4 sem reescrever módulo aprovado.
-- **Aceite:** sem vazamento entre pessoas/famílias; PDF sem anexos; E4 residual documentada ou revalidada no escopo mínimo.
-- **Testes:** smoke e4, regressão resumo/PDF, authz documentos.
+- **Problemas comprovados (diagnóstico):** (1) `resumo-cuidados` / `resumo-previa` / `relatorio.pdf` sem `Cache-Control: private, no-store`; (2) Resumo/prévia expunham `temDocumento=true` à colaboradora (Histórico já omitia). Isolamento famílias/pessoas, paridade prévia/PDF sem bytes de anexo e smoke E4 já PASS na baseline.
+- **Impacto/risco:** alto (privacidade); E4 residual médio (tipificação).
+- **Arquivos:** `controlador-cuidados.ts`, `servico-acompanhamento.ts`, `smoke-est-03-docs.mjs`, `package.json` (script).
+- **Correções:** headers de cache alinhados ao Histórico; `temDocumento` gated por `podeConsultarAnexosCuidados`.
+- **Aceite técnico:** PASS (QG + verifier PASS_COM_ACHADOS). E4 residual tipificada sem reescrita do módulo; expansão de catálogo permanece L3 fora.
+- **Testes:** `smoke:est-03-docs` (15), e3/e4/e5/authz, typecheck, builds.
+- **Desempenho:** sem novo defeito nesta fatia; otimizações da auditoria 2026-11-22 preservadas.
 - **Dependências:** EST-01 para jornada de documento.
-- **Homologação humana:** E4 residual se houver mudança de percurso; PDF/histórico conforme impacto.
+- **Homologação humana:** PENDING — [roteiro-homologacao-est-03.md](../estado/roteiro-homologacao-est-03.md).
+- **Estado do incremento:** COMPLETED técnico.
 
 ### EST-04 — Banco, backup/restore, Docker, health e implantação
 
@@ -107,4 +109,4 @@ Não declarar pronto para uso real enquanto qualquer item abaixo for verdadeiro:
 
 ## Próxima ação
 
-Iniciar **EST-03** (READY): histórico/resumo/PDF/documentos privados e E4 residual. Não iniciar E6/E7. Não declarar prontidão de produção.
+Iniciar **EST-04** (ops/backup/health) quando autorizado. Homologação humana EST-03/E3-HOM/E4 residual conforme roteiros. Não iniciar E6/E7. Não declarar prontidão de produção.
