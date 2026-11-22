@@ -252,6 +252,14 @@ Para criança sem conta, um adulto autorizado inicia a sessão no contexto da pe
 
 **Limite da aprovação:** não autoriza jogo ou regra de pontuação a ser implementada; quantidade final de jogos/fases e critérios de retenção/resultado continuam em detalhamento. Proposta para análise subsequente: persistir por pessoa e versão do jogo um estado resumido de exploração/conclusão por fase e eventos mínimos de conclusão, reutilizáveis no Módulo 04 sem duplicar o histórico; não coletar movimentos, erros, tempo de reação ou identidade de quem ajudou. Especificar retomada e teste de interrupção/perda de conexão antes de implementar.
 
+### E5 — Retomada pelo início da fase aprovada (2026-11-22)
+
+**APROVADO expressamente pelo responsável do Produto:** ao retornar a uma partida interrompida, a pessoa **reinicia a fase escolhida desde o começo**, preservando fases já experimentadas, conclusões confirmadas e conquistas discretas anteriores. Não exigir snapshot de cartas viradas, posição de peça, percurso de labirinto ou movimentos intermediários. A progressão continua livre: qualquer fase pode ser escolhida ou repetida; nenhuma fase é bloqueada por interrupção. Saída e pausa não geram punição.
+
+**Limites de persistência e confiança a detalhar tecnicamente:** o estado de fase pode distinguir Não explorada, Experimentada e Concluída, sem regressão de Concluída para Experimentada em reenvios concorrentes; conclusões só aparecem como salvas após confirmação confiável do servidor. Tratar perda de conexão e fechamento abrupto com comunicação honesta, sem afirmar persistência de progresso não confirmada. Uma nova sessão usa a fase como configuração inicial, não restaura estado interno da partida. Registros são privados por pessoa/família, visíveis apenas a autorizados, e alimentam o histórico do Módulo 04 sem segunda fonte de verdade. Não coletar padrões de toque, erros, tempo de reação ou identificação de ajuda.
+
+**Próxima proposta UX para discussão:** fluxo da Biblioteca → jogo → fase → dicas opcionais → conclusão ou saída → retorno, com controles móveis e acessibilidade. Quantidade e identidade final dos jogos/fases permanecem propostas não homologadas, sem autorização de implementação da E5.
+
 ## 8. Participação, estrelas e evolução
 
 A participação presencial continua com registro rápido do adulto e tabela vigente. Sessões digitais registram automaticamente pessoa, família, jogo, versão, dificuldade, fase e resultado pertinente, sem coletar movimentos/toques excessivos.
