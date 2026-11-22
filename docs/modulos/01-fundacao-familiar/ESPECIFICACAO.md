@@ -1,7 +1,7 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.8 — boas-vindas e cadastro de família, aprovados em 2026-11-21  
-**Status funcional:** regras anteriores e alteração da entrada/cadastro v1.8 aprovadas pelo Produto; estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
+**Versão:** especificação funcional v1.9 — E2, ativação por link e gestão compreensível de acessos, aprovada em 2026-11-22  
+**Status funcional:** regras anteriores e recorte E2 v1.9 aprovados pelo Produto; estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
 
@@ -27,7 +27,7 @@ Exibir dados básicos e entradas para áreas autorizadas; completar dados progre
 
 ### FUN-03 — Convites
 
-Somente administrador inicial convida no MVP. Vincular conta a pessoa existente ou nova pessoa externa; selecionar responsabilidade e pessoa-alvo. Convite com validade e controle de uso.
+Somente administrador inicial convida no MVP. Vincular conta a pessoa existente ou nova pessoa externa; selecionar responsabilidade e pessoa-alvo. Convite com validade e controle de uso. Na E2, gerar link para compartilhamento manual pelo administrador, conforme seção 15; envio automático de mensagem fica adiado.
 
 ### FUN-04 — Autorizações
 
@@ -280,3 +280,46 @@ Reservar os segmentos usados pelas rotas públicas, em especial `criar`, para n�
 | E1-ENT-08 | Nova homologação humana percorre raiz → cadastro → copiar/acessar → login → gestão e regressão de duas famílias, em celular e desktop. Falhas de rede não mostram criação como concluída. |
 
 **Encaminhamento:** complementar o plano E1 com a demanda `DEM-E1-ENTRADA-20261121`. A reprovação e o aceite posterior das correções permanecem rastreáveis em STATUS e no estado da esteira; aprovação desta regra não equivale a implementação.
+
+## 15. E2 — ativação por link e gestão compreensível de acessos
+
+**APROVADO pelo responsável do Produto em 2026-11-22**, após proposta de organizar Pessoas, Acessos e responsabilidades e Convites e concordância expressa com compartilhar o link manualmente nesta etapa. Complementa FUN-01/03/04/07 e preserva as combinações da ADR-014. Trata DEF-E2-ATIVACAO-20261122, sem presumir que o defeito esteja corrigido.
+
+### Pessoas e conta
+
+Cadastrar pessoa apenas com nome. “Esta pessoa precisa entrar no sistema?” permite habilitar conta usando e-mail e convite. Nome da ficha, identidade da conta e pessoa acompanhada permanecem distintos. Pessoa acompanhada sem conta não precisa receber convite.
+
+Apresentar estados compreensíveis derivados dos dados: sem conta, convite pendente, convite expirado e conta ativa. Convite usado indica ativação realizada, não autorização permanente; direitos e revogação continuam nos controles vigentes. Habilitar acesso de pessoa existente reutiliza pessoaId, sem criar outro cadastro.
+
+### Convites e ativação
+
+O administrador escolhe **Gerar convite**. Ao persistir, o sistema mostra **“Convite criado — compartilhe o link para ativar o acesso”**, endereço completo da família, validade e ação **Copiar link de ativação**, com alternativa de seleção manual. O administrador compartilha pelo canal que preferir.
+
+O titular abre o link, define sua senha e ativa a conta. E-mail continua identificador de login, mas não é enviado e não fica marcado como verificado pelo uso do convite. A ativação ocorre apenas na família de origem; após sucesso, apresentar acesso ao login correto. Não enviar ou exibir senha ao administrador.
+
+Gerar o convite não equivale a enviar mensagem nem a ativar conta. Substituir rótulos “Enviar convite” e feedbacks de envio no fluxo abrangido. Envio automático de e-mail fica adiado para evolução própria; o defeito só se encerra após a jornada por link funcionar e receber homologação.
+
+Convites são geridos pelo administrador da família. Preservar prazo e uso único existentes. Convite expirado/usado, e-mail já associado a conta e pessoa já habilitada recebem orientação compreensível, sem vincular conta existente por conhecer seu e-mail. Não adicionar recuperação de senha ou regeneração de convite sem necessidade e escopo definidos.
+
+### Acessos e responsabilidades
+
+Manter três destinos administrativos: Pessoas; Acessos e responsabilidades; Convites. Em Acessos, a visão padrão agrupa por pessoa acompanhada e responde quem, área, responsabilidade e estado. Administração familiar aparece separada das responsabilidades de acompanhamento.
+
+Permitir conceder somente combinações já suportadas: Cuidados com Responsável ou Integrante; Desenvolvimento com Responsável. Quem já possui conta recebe concessão; quem ainda não possui segue para convite. Revisar em frase compreensível, como “Mikaela acompanhará Laurinha em Desenvolvimento como Responsável”. Não pré-conceder acesso só por parentesco ou por cadastrar pessoa.
+
+Retirar acompanhamento bloqueia operações futuras e invalida sessões conforme regra vigente, preservando autoria e histórico. Acesso próprio continua conforme seção 11; administrador não recebe conteúdo clínico/infantil por presunção. Não introduzir matriz técnica na interface, papéis personalizados ou Integrante em Desenvolvimento.
+
+### Critérios de aceite E2
+
+| ID | Critério |
+|---|---|
+| E2-ACE-01 | Cadastro mínimo sem conta continua possível; habilitar conta em pessoa existente mantém pessoaId e não pede senha ao administrador. |
+| E2-ACE-02 | Gerar convite mostra sucesso somente após persistir, link absoluto contextual, validade e copiar/selecionar; não afirma envio de mensagem. |
+| E2-ACE-03 | Titular ativa pelo link, define senha e entra na família correta, sem conta/pessoa duplicada; e-mail não é tratado como verificado. |
+| E2-ACE-04 | Convite expirado/usado, família trocada, e-mail/conta já existente, concorrência e falha de rede não concedem acesso indevido nem produzem sucesso falso. |
+| E2-ACE-05 | Pessoas e Convites distinguem sem conta, pendente, expirado e ativado com dados reais; somente administrador consulta metadados administrativos da própria família. |
+| E2-ACE-06 | Acessos mostra quem acompanha quem/área/responsabilidade; concessão e convite oferecem apenas combinações ADR-014 e confirmação compreensível. |
+| E2-ACE-07 | Revogação, último administrador, acesso próprio e isolamento entre pessoas/famílias mantêm controles vigentes, inclusive URL/API direta. |
+| E2-ACE-08 | Homologar cadastrar/ativar, conceder e retirar acompanhamento em celular/desktop; DEF-E2-ATIVACAO-20261122 só encerra após validação da jornada afetada. |
+
+**Fora:** envio automático de mensagens, recuperação de senha, papéis novos, ampliação de autorizações, alteração de estrelas/IA e publicação. Plano em `docs/esteira/planejamento/e2-acessos-ativacao.md`.

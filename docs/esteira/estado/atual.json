@@ -104,45 +104,117 @@
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
     "demanda": {
-        "id": "DEM-E1-ENTRADA-20261121",
+        "id": "DEM-E2-ACESSOS-20261122",
         "tipo": "transversal",
-        "estado": "COMPLETED",
-        "resultadoTecnico": "PASS",
-        "homologacaoHumana": "APROVADA",
-        "fingerprint": "sha256:f02234b3d87c192d",
-        "fingerprintFull": "sha256:f02234b3d87c192d72595007566ec4b7419fd6839d23957b44a3f20921f639f6",
-        "criteriosPendentesHumanos": [],
-        "evidencias": [
-            "docs/esteira/estado/qg1-typecheck-api-e1-ent.txt",
-            "docs/esteira/estado/qg1-typecheck-web-e1-ent.txt",
-            "docs/esteira/estado/qg1-check-estatico-e1-ent.txt",
-            "docs/esteira/estado/qg2-smoke-e1-ent.txt",
-            "docs/esteira/estado/qg2-build-web-e1-ent.txt",
-            "docs/esteira/estado/qg3-smoke-e1-01-e1-ent.txt",
-            "docs/esteira/estado/qg3-smoke-e1-02-e1-ent.txt",
-            "docs/esteira/estado/qg3-smoke-e1-03-e1-ent.txt",
-            "docs/esteira/estado/qg3-smoke-e1-04-e1-ent.txt",
-            "docs/esteira/estado/qg3-smoke-authz-e1-ent.txt",
-            "docs/esteira/estado/verifier-rerun-fingerprint-e1-ent.txt",
-            "docs/esteira/estado/verifier-rerun-check-e1-ent.txt",
-            "docs/esteira/estado/verifier-rerun-typecheck-api-e1-ent.txt",
-            "docs/esteira/estado/verifier-rerun-typecheck-web-e1-ent.txt",
-            "docs/esteira/estado/verifier-rerun-smoke-e1-ent.txt",
-            "docs/esteira/estado/roteiro-homologacao-e1-ent.md",
-            "docs/esteira/estado/evidencia-e1-ent-20261121.json"
-        ],
-        "proximaAcao": "Detalhar E2 — Gestão compreensível de acessos conforme plano pós-V1; correção de entrada E1 homologada. Disponibilização para uso continua adiada.",
-        "homologacaoHumanaRegistro": {
-            "data": "2026-11-22",
-            "origem": "comunicação expressa do responsável do Produto nesta conversa",
-            "escopo": "correções de entrada/cadastro da DEM-E1-ENTRADA-20261121; critério humano E1-ENT-08",
-            "referenciaDisponivel": "2781c76ec2992976b268d7accadc948e45347b8a",
-            "fonte": "docs/produto/STATUS-E-ESCOPO.md"
+        "origem": "humano — proposta E2 aceita e link manual aprovado para DEF-E2-ATIVACAO-20261122",
+        "estado": "READY",
+        "aprovacao": {
+            "nivel": "L3",
+            "status": "DOCUMENTADA",
+            "referencia": "docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md v1.9 §15"
         },
-        "criteriosOk": [
-            "E1-ENT-08"
+        "risco": "alto",
+        "escopo": "Ativação por link manual, estados de pessoas/convites e compreensão de acompanhamento por pessoa/área/responsabilidade.",
+        "fora": [
+            "envio automático de e-mail",
+            "recuperação de senha",
+            "papéis novos",
+            "ampliação do acesso próprio",
+            "publicação"
         ],
-        "nota": "Resultados técnicos históricos preservados; homologação humana das correções APROVADA pelo responsável em 2026-11-22."
+        "criteriosAceite": [
+            "E2-ACE-01",
+            "E2-ACE-02",
+            "E2-ACE-03",
+            "E2-ACE-04",
+            "E2-ACE-05",
+            "E2-ACE-06",
+            "E2-ACE-07",
+            "E2-ACE-08"
+        ],
+        "defeitosRelacionados": [
+            "DEF-E2-ATIVACAO-20261122"
+        ],
+        "dependencias": [
+            "E1 entrada homologada",
+            "ADR-014",
+            "FUN-03/04/07",
+            "FAM-R05/07/11/12/13"
+        ],
+        "revisao": {
+            "branch": "develop",
+            "commit": "2ccc5d4a421289a2899557de91f6935f6807dd95",
+            "tipo": "inspecao_estatica_remota"
+        },
+        "reconciliacaoLocal": {
+            "status": "PENDING",
+            "nota": "Conferir checkout, alterações locais/não rastreados e fingerprint antes de implementar."
+        },
+        "planejamento": {
+            "caminho": "docs/esteira/planejamento/e2-acessos-ativacao.md",
+            "especificacao": {
+                "caminho": "docs/modulos/01-fundacao-familiar/ESPECIFICACAO.md",
+                "versao": "v1.9",
+                "status": "aprovado"
+            },
+            "incrementos": [
+                {
+                    "id": "E2-01",
+                    "status": "READY",
+                    "requisitos": [
+                        "E2-ACE-01",
+                        "E2-ACE-02",
+                        "E2-ACE-03",
+                        "E2-ACE-04"
+                    ],
+                    "aceite": "Gerar/copiar convite, ativar/login sem duplicação"
+                },
+                {
+                    "id": "E2-02",
+                    "status": "PENDING",
+                    "requisitos": [
+                        "E2-ACE-05"
+                    ],
+                    "aceite": "Estados reais de conta/convite e leitura administrativa segura"
+                },
+                {
+                    "id": "E2-03",
+                    "status": "PENDING",
+                    "requisitos": [
+                        "E2-ACE-06",
+                        "E2-ACE-07"
+                    ],
+                    "aceite": "Acompanhamento claro, catálogo e revogação preservados"
+                },
+                {
+                    "id": "E2-04",
+                    "status": "PENDING",
+                    "requisitos": [
+                        "E2-ACE-01",
+                        "E2-ACE-02",
+                        "E2-ACE-03",
+                        "E2-ACE-04",
+                        "E2-ACE-05",
+                        "E2-ACE-06",
+                        "E2-ACE-07",
+                        "E2-ACE-08"
+                    ],
+                    "aceite": "Regressão integrada e homologação humana"
+                }
+            ]
+        },
+        "verificacao": {
+            "qg1": "PENDING",
+            "qg2": "PENDING",
+            "qg3": "PENDING",
+            "verifier": "PENDING",
+            "evidencias": []
+        },
+        "homologacaoHumana": "PENDING_HUMAN",
+        "criteriosOk": [],
+        "bloqueios": [],
+        "fingerprintNota": "Planejamento remoto; calcular hash real do código na retomada.",
+        "proximaAcao": "Retomar E2-01 por implementation-workflow, desenhar estados críticos e reconciliar workspace antes de editar."
     },
     "janelaIncrementos": [
         {
@@ -1645,9 +1717,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Detalhar E2 — Gestão compreensível de acessos conforme plano pós-V1; correção de entrada E1 homologada. Disponibilização para uso continua adiada.",
-    "atualizadoEm": "2026-11-22T04:21:23.654Z",
-    "notas": "DEM-E1-ENTRADA-20261121 COMPLETED; correções homologadas humanamente em 2026-11-22. Reprovação original preservada no histórico. Próxima frente E2.",
+    "proximaAcao": "Retomar E2-01 por implementation-workflow, desenhar estados críticos e reconciliar workspace antes de editar.",
+    "atualizadoEm": "2026-11-22T04:30:35.748Z",
+    "notas": "E1 entrada homologada, histórico preservado. E2 READY, link manual aprovado; defeito de ativação aberto até validação/homologação.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",

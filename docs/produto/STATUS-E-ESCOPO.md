@@ -1,12 +1,23 @@
 # Estado das decisões e escopo
 
+## E2 — recorte aprovado e planejado, 2026-11-22
+
+**Decisão APROVADA/DOCUMENTADA:** convite por link compartilhado manualmente pelo administrador. E-mail segue identificador de login, mas envio automático de mensagem fica adiado. Fonte: concordância expressa do responsável nesta conversa à proposta E2; fonte funcional Módulo 01 v1.9 §15.
+
+**Escopo:** Pessoas, Acessos e responsabilidades e Convites; habilitar/ativar sem duplicar pessoa, copiar link contextual, distinguir estados reais e compreender concessão/retirada. Preservar combinações ADR-014 e controles de acesso próprio.
+
+**Estado:** DEM-E2-ACESSOS-20261122 READY, plano em `docs/esteira/planejamento/e2-acessos-ativacao.md`, E2-01..04. Próxima ação: implementation-workflow E2-01 após reconciliar checkout/fingerprint. Código e testes não alterados/executados nesta rodada.
+
+**Evidência estática:** develop @ 2ccc5d4a421289a2899557de91f6935f6807dd95. O serviço gera token/link e o painel o apresenta, mas usa “Enviar convite”; o serviço inspecionado não envia mensagem. Funcionamento ponta a ponta ainda deve ser verificado. Não encerrar o defeito somente por mudar rótulos.
+
+
 ## Defeito conhecido — ativação de acesso de pessoas, 2026-11-22
 
-**ID:** DEF-E2-ATIVACAO-20261122. **Estado:** ABERTO; tratamento encaminhado à E2 por decisão expressa do responsável.
+**ID:** DEF-E2-ATIVACAO-20261122. **Estado:** ABERTO; solução por link manual APROVADA e planejada na E2, implementação/validação pendentes.
 
 **Relato humano:** após a melhoria da entrada familiar, ao criar pessoas não ocorre o envio de e-mail esperado; isso impede validar a ativação e o acesso dessas novas contas. O acesso inicial ficou mais claro. A causa técnica ainda não foi diagnosticada nem reproduzida nesta atualização.
 
-**Delimitação:** o envio de mensagem dispensado no cadastro inicial de família/primeiro administrador não deve ser confundido com o fluxo de convite/habilitação da conta de outra pessoa. Pessoa acompanhada sem conta continua podendo ser cadastrada apenas com nome. A correção deve conferir como o convite é entregue hoje e oferecer um caminho efetivamente utilizável de ativação; necessidade de integração de envio e seu escopo devem ser fechados na E2, sem pressupor serviço de e-mail já implementado.
+**Delimitação:** o envio de mensagem dispensado no cadastro inicial de família/primeiro administrador não deve ser confundido com o fluxo de convite/habilitação da conta de outra pessoa. Pessoa acompanhada sem conta continua podendo ser cadastrada apenas com nome. A correção deve conferir como o convite é entregue hoje e oferecer um caminho efetivamente utilizável de ativação; Produto posteriormente aprovou o link compartilhado manualmente na E2 e adiou integração de envio automático. Fonte funcional: Módulo 01 v1.9 §15.
 
 **Decisão de seguimento:** avançar no planejamento da E2 incluindo este defeito, sem exigir sua correção prévia para discutir a evolução. O defeito continua impedindo o aceite da jornada afetada; não constitui aprovação do acesso de novas pessoas. Aceite anterior das correções de entrada preservado no seu escopo.
 

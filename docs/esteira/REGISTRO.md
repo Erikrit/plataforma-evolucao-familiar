@@ -1,5 +1,16 @@
 # Registro da esteira
 
+## 2026-11-22 — E2 aprovada e planejada: ativação por link e gestão de acessos
+
+- **Aprovação humana:** link compartilhado manualmente; envio automático adiado. Recorte Módulo 01 v1.9 §15, E2-ACE-01..08.
+- **Demanda:** DEM-E2-ACESSOS-20261122, transversal, risco alto, READY; E2-01..04 em `docs/esteira/planejamento/e2-acessos-ativacao.md`.
+- **Defeito:** DEF-E2-ATIVACAO-20261122 permanece ABERTO até correção e homologação da jornada.
+- **Base:** develop @ 2ccc5d4a421289a2899557de91f6935f6807dd95. Inspeção do serviço de convite e painel administrativo.
+- **Achado:** geração de token/link existente, sem envio no serviço inspecionado; botão ainda rotulado “Enviar convite”. Ativação ponta a ponta não validada nesta rodada.
+- **Validação:** somente revisão documental/estática; novos gates, verifier e homologação pendentes. Histórico E1 preservado.
+- **Próximo:** implementation-workflow E2-01. Integração documental autorizada pelo responsável nesta conversa.
+
+
 ## 2026-11-22 — Correções de entrada E1 homologadas humanamente
 
 - **Aceite:** responsável informou correções feitas e homologação humana APROVADA para as correções; DEM-E1-ENTRADA-20261121, critério E1-ENT-08.
