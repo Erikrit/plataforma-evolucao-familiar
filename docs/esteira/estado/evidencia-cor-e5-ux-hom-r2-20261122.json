@@ -3,6 +3,7 @@
   "tipo": "melhoria_ux",
   "branch": "develop",
   "commitBase": "4cb8cf01e29527d624dbce270f0997d87a12754e",
+  "commitHomologado": "e050a999b2a040df62860d4ecd113c11b0718ccc",
   "fingerprint": "sha256:9e70ea931ca2ff30",
   "fingerprintFull": "sha256:9e70ea931ca2ff30fb9095589c753057b6de3cef4e639857e5f1fad2f3573cbf",
   "prototipoPreservado": "docs/esteira/estado/prototipo-cor-e5-ux-hom-20261122.html",
@@ -22,7 +23,19 @@
       "smokeAuthz": "PASS",
       "buildWeb": "PASS com PEF_NEXT_DIST_DIR=.next-qg-cor-e5-r2"
     },
-    "homologacaoHumana": "REPROVADA"
+    "homologacaoHumana": "APROVADA",
+    "homologacaoHumanaHistorico": [
+      {
+        "resultado": "REPROVADA",
+        "nota": "Registro técnico/roteiro anteriores à confirmação do responsável; preservado como histórico."
+      },
+      {
+        "resultado": "APROVADA",
+        "fonte": "Responsável do Produto — ESTABILIZACAO-PRE-USO-20261122",
+        "versaoHomologada": "develop@e050a999b2a040df62860d4ecd113c11b0718ccc",
+        "nota": "Aceite humano da correção UX R2. Não reexecuta nem inventa PASS de testes; evidências QG/verifier desta entrega permanecem as listadas."
+      }
+    ]
   },
   "evidencias": [
     "docs/esteira/estado/qg1-typecheck-web-cor-e5-ux-hom-r2.txt",
@@ -46,4 +59,4 @@
     "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/jogos/page.tsx",
     "apps/web/src/componentes/navegacao-app.tsx"
   ]
-}\n
+}

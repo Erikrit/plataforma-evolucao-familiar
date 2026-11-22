@@ -1,12 +1,30 @@
 # Registro da esteira
 
+## EST-01 — anexos E3 + UX Resumo/Histórico
+
+- **Demanda:** `ESTABILIZACAO-PRE-USO-20261122` · incremento EST-01 COMPLETED técnico.
+- **Causa:** HTTP 413 ao salvar anexo ~200 KB (limite JSON ~100 KB).
+- **Correção:** body 12 MB; limite 8 MB validado; UI com checagem e retry sem duplicar upload; smoke médio >100 KB.
+- **UX:** Histórico e Resumo alinhados a Card/`coresPef` (mesmo padrão da Rotina), sem mudança de regra.
+- **QG:** typecheck api/web PASS; smoke-e3 18 OK; smoke-authz PASS; build web PASS. Verifier **PASS_COM_ACHADOS** (`aaf2fcd8-…`). Fingerprint `sha256:8f2ac0f5afe25966…`.
+- **Humano:** E3-HOM PENDING_HUMAN. Sem commit/push/deploy.
+- **Evidência:** [JSON](estado/evidencia-est-01-20261122.json)
+
+## ESTABILIZACAO-PRE-USO-20261122 — triagem e EST-00
+
+- **Tipo:** transversal · **Origem:** preparar uso real sem E6/E7 e sem novas funcionalidades.
+- **Checkout:** `develop` @ `e050a99`, working tree limpa, alinhada a `origin/develop`.
+- **Reconciliação:** E5 UX R2 humana **APROVADA** (reprovações R1/R2 históricas preservadas). E3 anexos ABERTO. E4 parcial. Sem autorização de publicação.
+- **Plano:** [estabilizacao-pre-uso.md](planejamento/estabilizacao-pre-uso.md) — EST-00 COMPLETED; próximo EST-01 (`DEF-E3-ANEXO-SALVAR`).
+- **Estado demanda:** READY · incremento ativo EST-01. Sem commit/push/deploy automático.
+
 ## COR-E5-UX-HOM-R2-20261122
 
 - **Tipo:** melhoria_ux · **Origem:** homologação humana REPROVADA da R1; correções complementares aprovadas (dica Modal, seletor, barra, ícone).
 - **Preservado:** protótipo R1, catálogo com partida direta, menu/agrupamento, permissões/persistência/histórico/estrelas presenciais.
 - **Entrega:** Modal Dica (como jogar + 1 dica/partida); seletor compacto de fases com estados; barra verde-clara; ícone Desenvolvimento trending-up.
 - **QG:** typecheck, check-e4/e5, smoke-e4/e5/authz e build web PASS. Verifier PASS (após correção de cache da dica e rótulos). Fingerprint `sha256:9e70ea931ca2ff30…`.
-- **Estado:** COMPLETED técnico · **homologação humana REPROVADA** até novo aceite. Sem commit/push/deploy.
+- **Estado:** COMPLETED · **homologação humana APROVADA** em 2026-11-22 (versão `e050a99`). Histórico: R1 REPROVADA; registro intermediário R2 REPROVADA até o aceite. Sem commit/push/deploy automático nesta anotação.
 - **Evidência:** [JSON](estado/evidencia-cor-e5-ux-hom-r2-20261122.json) · [Roteiro](estado/roteiro-ux-navegacao-e5-r2.md)
 
 ## COR-E5-UX-HOM-20261122

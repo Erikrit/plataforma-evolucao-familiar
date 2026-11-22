@@ -131,6 +131,36 @@ try {
   });
   const anexoId = anexoOk.corpo.id;
 
+  // DEF-E3-ANEXO: payload acima do antigo limite ~100kb do body parser
+  const pdfMedio = Buffer.concat([
+    Buffer.from("%PDF-1.4\n%PEF-E3-MEDIO\n"),
+    Buffer.alloc(180 * 1024, 0x41),
+    Buffer.from("\n%%EOF\n"),
+  ]);
+  const anexoMedio = await json(
+    await fetch(`${base}/familias/${idFamA}/anexos`, {
+      method: "POST",
+      headers: hA,
+      body: JSON.stringify({
+        pessoaId: pessoaAId,
+        nomeArquivo: `exame-e3-medio-${stamp}.pdf`,
+        mimeTipo: "application/pdf",
+        conteudoBase64: pdfMedio.toString("base64"),
+      }),
+    }),
+  );
+  reg(
+    "cria-anexo-exame-medio-gt-100kb",
+    anexoMedio.status < 300 &&
+      anexoMedio.corpo?.id &&
+      Number(anexoMedio.corpo?.tamanhoBytes) > 100 * 1024,
+    {
+      status: anexoMedio.status,
+      tamanhoBytes: anexoMedio.corpo?.tamanhoBytes,
+      detalhe: String(anexoMedio.bruto ?? "").slice(0, 160),
+    },
+  );
+
   const exame = await json(
     await fetch(`${base}/pessoas/${pessoaAId}/exames`, {
       method: "POST",

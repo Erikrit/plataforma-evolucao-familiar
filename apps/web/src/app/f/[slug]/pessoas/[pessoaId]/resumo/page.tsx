@@ -7,6 +7,7 @@ import { rotaFamilia } from "@/lib/rotas-familia";
 import {
   Anchor,
   Button,
+  Card,
   Container,
   Group,
   SegmentedControl,
@@ -30,6 +31,47 @@ import {
   EstadoVazio,
   MensagemFeedback,
 } from "@/componentes/feedback";
+import { coresPef } from "@/tema/mantine";
+
+function CartaoMetrica({ rotulo, valor }: { rotulo: string; valor: number }) {
+  return (
+    <Card
+      withBorder
+      padding="sm"
+      radius="md"
+      bg={coresPef.primariaSuave}
+      style={{ flex: "1 1 9rem", minWidth: "8.5rem" }}
+    >
+      <Stack gap={2}>
+        <Text size="xs" c="dimmed">
+          {rotulo}
+        </Text>
+        <Text fw={700} size="lg" c={coresPef.texto}>
+          {valor}
+        </Text>
+      </Stack>
+    </Card>
+  );
+}
+
+function CabecalhoSecao({
+  titulo,
+  href,
+  rotuloLink,
+}: {
+  titulo: string;
+  href: string;
+  rotuloLink: string;
+}) {
+  return (
+    <Group justify="space-between" align="baseline" wrap="wrap">
+      <Title order={2}>{titulo}</Title>
+      <Anchor component={Link} href={href} size="sm">
+        {rotuloLink}
+      </Anchor>
+    </Group>
+  );
+}
 
 type PresetPeriodo = "7" | "30" | "personalizado";
 
@@ -285,46 +327,53 @@ export default function PaginaResumo() {
 
         {autenticado && !acessoNegado ? (
           <Stack gap="md">
-            <SegmentedControl
-              fullWidth
-              size="xs"
-              value={preset}
-              onChange={(v) => aplicarPreset(v as PresetPeriodo)}
-              data={[
-                { label: "Últimos 7 dias", value: "7" },
-                { label: "Últimos 30 dias", value: "30" },
-                { label: "Personalizado", value: "personalizado" },
-              ]}
-            />
+            <Card withBorder padding="md" radius="md" bg={coresPef.primariaSuave}>
+              <Stack gap="sm">
+                <Text size="sm" fw={600} c={coresPef.texto}>
+                  Período
+                </Text>
+                <SegmentedControl
+                  fullWidth
+                  size="xs"
+                  value={preset}
+                  onChange={(v) => aplicarPreset(v as PresetPeriodo)}
+                  data={[
+                    { label: "Últimos 7 dias", value: "7" },
+                    { label: "Últimos 30 dias", value: "30" },
+                    { label: "Personalizado", value: "personalizado" },
+                  ]}
+                />
 
-            {preset === "personalizado" ? (
-              <Group grow align="flex-end">
-                <TextInput
-                  type="date"
-                  label="De"
-                  value={de}
-                  onChange={(e) => {
-                    setPreset("personalizado");
-                    setPdfPronto(null);
-                    setDe(e.currentTarget.value);
-                  }}
-                />
-                <TextInput
-                  type="date"
-                  label="Até"
-                  value={ate}
-                  onChange={(e) => {
-                    setPreset("personalizado");
-                    setPdfPronto(null);
-                    setAte(e.currentTarget.value);
-                  }}
-                />
-              </Group>
-            ) : (
-              <Text size="xs" c="dimmed">
-                Período: {de} a {ate}
-              </Text>
-            )}
+                {preset === "personalizado" ? (
+                  <Group grow align="flex-end">
+                    <TextInput
+                      type="date"
+                      label="De"
+                      value={de}
+                      onChange={(e) => {
+                        setPreset("personalizado");
+                        setPdfPronto(null);
+                        setDe(e.currentTarget.value);
+                      }}
+                    />
+                    <TextInput
+                      type="date"
+                      label="Até"
+                      value={ate}
+                      onChange={(e) => {
+                        setPreset("personalizado");
+                        setPdfPronto(null);
+                        setAte(e.currentTarget.value);
+                      }}
+                    />
+                  </Group>
+                ) : (
+                  <Text size="xs" c="dimmed">
+                    De {de} até {ate}
+                  </Text>
+                )}
+              </Stack>
+            </Card>
 
             {podeVer ? (
               <Stack gap="md">
@@ -336,277 +385,335 @@ export default function PaginaResumo() {
                 ) : null}
 
                 {podeCuidados && resumoCuidados ? (
-                  <Stack gap="sm">
-                    <Group justify="space-between" align="baseline" wrap="wrap">
-                      <Text fw={700}>Cuidados</Text>
-                      <Anchor
-                        component={Link}
+                  <Card withBorder padding="md" radius="md" bg={coresPef.superficie}>
+                    <Stack gap="md">
+                      <CabecalhoSecao
+                        titulo="Cuidados"
                         href={hrefCuidados}
-                        size="xs"
-                      >
-                        Ver origem em Cuidados
-                      </Anchor>
-                    </Group>
-                    {cuidadosVazio ? (
-                      <Text size="sm" c="dimmed">
-                        Nenhum registro de Cuidados neste período.
-                      </Text>
-                    ) : null}
-                    <Stack gap={4}>
-                      <Text size="sm">
-                        {resumoCuidados.doses.previstos} doses previstas
-                      </Text>
-                      <Text size="sm">
-                        {resumoCuidados.doses.tomadasInformadas} tomadas
-                        informadas
-                      </Text>
-                      <Text size="sm">
-                        {resumoCuidados.doses.naoTomadasInformadas} não tomadas
-                        informadas
-                      </Text>
-                      <Text size="sm">
-                        {resumoCuidados.doses.semConfirmacao} sem confirmação
-                      </Text>
+                        rotuloLink="Ver origem em Cuidados"
+                      />
+                      {cuidadosVazio ? (
+                        <Text size="sm" c="dimmed">
+                          Nenhum registro de Cuidados neste período.
+                        </Text>
+                      ) : null}
+                      <Group gap="sm" align="stretch">
+                        <CartaoMetrica
+                          rotulo="Previstas"
+                          valor={resumoCuidados.doses.previstos}
+                        />
+                        <CartaoMetrica
+                          rotulo="Tomadas"
+                          valor={resumoCuidados.doses.tomadasInformadas}
+                        />
+                        <CartaoMetrica
+                          rotulo="Não tomadas"
+                          valor={resumoCuidados.doses.naoTomadasInformadas}
+                        />
+                        <CartaoMetrica
+                          rotulo="Sem confirmação"
+                          valor={resumoCuidados.doses.semConfirmacao}
+                        />
+                      </Group>
                       <Text size="xs" c="dimmed">
                         {resumoCuidados.esclarecimento}
                       </Text>
-                    </Stack>
 
-                    <Stack gap={4}>
-                      <Group justify="space-between" align="baseline" wrap="wrap">
+                      <Stack gap="sm">
+                        <Group justify="space-between" align="baseline" wrap="wrap">
+                          <Text fw={600} size="sm">
+                            Consultas e exames
+                          </Text>
+                          <Anchor component={Link} href={hrefConsultas} size="xs">
+                            Abrir Consultas e exames
+                          </Anchor>
+                        </Group>
+                        {resumoCuidados.consultas.length === 0 ? (
+                          <Text size="sm" c="dimmed">
+                            Nenhuma consulta neste período.
+                          </Text>
+                        ) : (
+                          resumoCuidados.consultas.map((c) => (
+                            <Card key={c.id} withBorder padding="sm" radius="md">
+                              <Text size="sm" fw={600}>
+                                {c.especialidadeOuDescricao}
+                              </Text>
+                              <Text size="xs" c="dimmed">
+                                {formatarQuando(c.dataHora)} · {c.status}
+                              </Text>
+                            </Card>
+                          ))
+                        )}
+                        {resumoCuidados.exames.length === 0 ? (
+                          <Text size="sm" c="dimmed">
+                            Nenhum exame neste período.
+                          </Text>
+                        ) : (
+                          resumoCuidados.exames.map((e) => {
+                            const dataConhecida = formatarDataCurta(e.data);
+                            return (
+                              <Card key={e.id} withBorder padding="sm" radius="md">
+                                <Text size="sm" fw={600}>
+                                  {e.descricao}
+                                </Text>
+                                <Text size="xs" c="dimmed">
+                                  {dataConhecida
+                                    ? dataConhecida
+                                    : `Registrado em ${formatarQuando(e.criadoEm)}`}
+                                  {e.temDocumento
+                                    ? " · documento disponível no app"
+                                    : ""}
+                                </Text>
+                              </Card>
+                            );
+                          })
+                        )}
+                      </Stack>
+
+                      <Stack gap="sm">
                         <Text fw={600} size="sm">
-                          Consultas e exames
+                          Observações de apoio
                         </Text>
-                        <Anchor
-                          component={Link}
-                          href={hrefConsultas}
-                          size="xs"
-                        >
-                          Abrir Consultas e exames
-                        </Anchor>
-                      </Group>
-                      {resumoCuidados.consultas.length === 0 ? (
-                        <Text size="sm" c="dimmed">
-                          Nenhuma consulta neste período.
-                        </Text>
-                      ) : (
-                        resumoCuidados.consultas.map((c) => (
-                          <Text key={c.id} size="sm">
-                            {c.especialidadeOuDescricao} ·{" "}
-                            {formatarQuando(c.dataHora)} · {c.status}
+                        {(resumoCuidados.observacoes?.length ?? 0) === 0 ? (
+                          <Text size="sm" c="dimmed">
+                            Nenhuma neste período.
                           </Text>
-                        ))
-                      )}
-                      {resumoCuidados.exames.length === 0 ? (
-                        <Text size="sm" c="dimmed">
-                          Nenhum exame neste período.
-                        </Text>
-                      ) : (
-                        resumoCuidados.exames.map((e) => {
-                          const dataConhecida = formatarDataCurta(e.data);
-                          return (
-                            <Text key={e.id} size="sm">
-                              {e.descricao}
-                              {dataConhecida
-                                ? ` · ${dataConhecida}`
-                                : ` · registrado em ${formatarQuando(e.criadoEm)}`}
-                              {e.temDocumento
-                                ? " · documento disponível no app"
-                                : ""}
-                            </Text>
-                          );
-                        })
-                      )}
-                    </Stack>
+                        ) : (
+                          resumoCuidados.observacoes?.map((o) => (
+                            <Card key={o.id} withBorder padding="sm" radius="md">
+                              <Text size="sm">
+                                {o.descricao}
+                                {o.observacao ? ` — ${o.observacao}` : ""}
+                              </Text>
+                              <Text size="xs" c="dimmed">
+                                {formatarQuando(o.concluidaEm)}
+                              </Text>
+                            </Card>
+                          ))
+                        )}
+                      </Stack>
 
-                    <Stack gap={4}>
-                      <Text fw={600} size="sm">
-                        Observações de apoio
-                      </Text>
-                      {(resumoCuidados.observacoes?.length ?? 0) === 0 ? (
-                        <Text size="sm" c="dimmed">
-                          Nenhuma neste período.
+                      <Stack gap="sm">
+                        <Text fw={600} size="sm">
+                          Mudanças de programação
                         </Text>
-                      ) : (
-                        resumoCuidados.observacoes?.map((o) => (
-                          <Text key={o.id} size="sm">
-                            {o.descricao}
-                            {o.observacao ? ` — ${o.observacao}` : ""} ·{" "}
-                            {formatarQuando(o.concluidaEm)}
+                        {(resumoCuidados.mudancasProgramacao?.length ?? 0) ===
+                        0 ? (
+                          <Text size="sm" c="dimmed">
+                            Nenhuma neste período.
                           </Text>
-                        ))
-                      )}
+                        ) : (
+                          resumoCuidados.mudancasProgramacao?.map((p) => (
+                            <Card key={p.id} withBorder padding="sm" radius="md">
+                              <Text size="sm" fw={600}>
+                                {p.medicamento}
+                              </Text>
+                              <Text size="xs" c="dimmed">
+                                Horários {p.horarios} · {formatarQuando(p.criadoEm)}
+                              </Text>
+                            </Card>
+                          ))
+                        )}
+                      </Stack>
                     </Stack>
-
-                    <Stack gap={4}>
-                      <Text fw={600} size="sm">
-                        Mudanças de programação
-                      </Text>
-                      {(resumoCuidados.mudancasProgramacao?.length ?? 0) ===
-                      0 ? (
-                        <Text size="sm" c="dimmed">
-                          Nenhuma neste período.
-                        </Text>
-                      ) : (
-                        resumoCuidados.mudancasProgramacao?.map((p) => (
-                          <Text key={p.id} size="sm">
-                            {p.medicamento}: horários {p.horarios} ·{" "}
-                            {formatarQuando(p.criadoEm)}
-                          </Text>
-                        ))
-                      )}
-                    </Stack>
-                  </Stack>
+                  </Card>
                 ) : null}
 
                 {podeDesenvolvimento && resumoDev ? (
-                  <Stack gap="sm">
-                    <Group justify="space-between" align="baseline" wrap="wrap">
-                      <Text fw={700}>Desenvolvimento</Text>
-                      <Anchor
-                        component={Link}
+                  <Card withBorder padding="md" radius="md" bg={coresPef.superficie}>
+                    <Stack gap="md">
+                      <CabecalhoSecao
+                        titulo="Desenvolvimento"
                         href={hrefDesenvolvimento}
-                        size="xs"
-                      >
-                        Ver origem em Desenvolvimento
-                      </Anchor>
-                    </Group>
-                    {desenvolvimentoVazio ? (
-                      <Text size="sm" c="dimmed">
-                        Nenhum registro de Desenvolvimento neste período.
-                      </Text>
-                    ) : null}
-                    {resumoDev.jogos?.length ? (
-                      <Stack gap="xs" component="section" aria-label="Jogos digitais">
-                        <Text fw={600} size="sm">Jogos digitais</Text>
-                        <Text size="xs" c="dimmed">Progresso até o fim do período</Text>
-                        {resumoDev.jogos.map((jogo) => (
-                          <Stack key={jogo.id} gap={2}>
-                            <Text size="sm">
-                              {jogo.nome} · {jogo.concluidasAte}
-                              {jogo.totalFases === null ? "" : ` de ${jogo.totalFases}`}
-                              {" "}{jogo.totalFases === null && jogo.concluidasAte === 1 ? "fase concluída" : "fases concluídas"}
-                            </Text>
-                            {jogo.concluidasNoPeriodo ? (
-                              <Text size="xs" c="dimmed">
-                                {jogo.concluidasNoPeriodo} {jogo.concluidasNoPeriodo === 1 ? "conclusão" : "conclusões"} no período
+                        rotuloLink="Ver origem em Desenvolvimento"
+                      />
+                      {desenvolvimentoVazio ? (
+                        <Text size="sm" c="dimmed">
+                          Nenhum registro de Desenvolvimento neste período.
+                        </Text>
+                      ) : null}
+                      {resumoDev.jogos?.length ? (
+                        <Stack
+                          gap="sm"
+                          component="section"
+                          aria-label="Jogos digitais"
+                        >
+                          <Text fw={600} size="sm">
+                            Jogos digitais
+                          </Text>
+                          <Text size="xs" c="dimmed">
+                            Progresso até o fim do período
+                          </Text>
+                          {resumoDev.jogos.map((jogo) => (
+                            <Card key={jogo.id} withBorder padding="sm" radius="md">
+                              <Text size="sm" fw={600}>
+                                {jogo.nome}
                               </Text>
-                            ) : jogo.experimentadoNoPeriodo ? (
-                              <Text size="xs" c="dimmed">Fase nova experimentada no período</Text>
-                            ) : null}
-                          </Stack>
-                        ))}
+                              <Text size="xs" c="dimmed">
+                                {jogo.concluidasAte}
+                                {jogo.totalFases === null
+                                  ? ""
+                                  : ` de ${jogo.totalFases}`}{" "}
+                                {jogo.totalFases === null &&
+                                jogo.concluidasAte === 1
+                                  ? "fase concluída"
+                                  : "fases concluídas"}
+                              </Text>
+                              {jogo.concluidasNoPeriodo ? (
+                                <Text size="xs" c="dimmed">
+                                  {jogo.concluidasNoPeriodo}{" "}
+                                  {jogo.concluidasNoPeriodo === 1
+                                    ? "conclusão"
+                                    : "conclusões"}{" "}
+                                  no período
+                                </Text>
+                              ) : jogo.experimentadoNoPeriodo ? (
+                                <Text size="xs" c="dimmed">
+                                  Fase nova experimentada no período
+                                </Text>
+                              ) : null}
+                            </Card>
+                          ))}
+                        </Stack>
+                      ) : null}
+                      <Stack gap="sm">
+                        <Text fw={600} size="sm">
+                          Experiências
+                        </Text>
+                        {resumoDev.experiencias.length === 0 ? (
+                          <Text size="sm" c="dimmed">
+                            Nenhuma brincadeira registrada neste período.
+                          </Text>
+                        ) : (
+                          resumoDev.experiencias.map((e) => (
+                            <Card key={e.id} withBorder padding="sm" radius="md">
+                              <Text size="sm" fw={600}>
+                                {rotuloResultado(e.resultado)}: {e.nome}
+                              </Text>
+                              <Text size="xs" c="dimmed">
+                                {rotuloCategoria(e.categoria)} (+
+                                {e.estrelasConcedidas} estrelas) ·{" "}
+                                {formatarQuando(e.registradoEm)}
+                              </Text>
+                            </Card>
+                          ))
+                        )}
                       </Stack>
-                    ) : null}
-                    <Stack gap={4}>
-                      <Text fw={600} size="sm">
-                        Experiências
-                      </Text>
-                      {resumoDev.experiencias.length === 0 ? (
-                        <Text size="sm" c="dimmed">
-                          Nenhuma brincadeira registrada neste período.
-                        </Text>
-                      ) : (
-                        resumoDev.experiencias.map((e) => (
-                          <Text key={e.id} size="sm">
-                            {rotuloResultado(e.resultado)}: {e.nome} ·{" "}
-                            {rotuloCategoria(e.categoria)} (+
-                            {e.estrelasConcedidas} estrelas) ·{" "}
-                            {formatarQuando(e.registradoEm)}
-                          </Text>
-                        ))
-                      )}
-                    </Stack>
 
-                    <Stack gap={4}>
-                      <Text fw={600} size="sm">
-                        Categorias
-                      </Text>
-                      {resumoDev.categoriasExploradas.length === 0 ? (
-                        <Text size="sm" c="dimmed">
-                          Ainda sem categorias neste período.
+                      <Stack gap="sm">
+                        <Text fw={600} size="sm">
+                          Categorias
                         </Text>
-                      ) : (
-                        resumoDev.categoriasExploradas.map((c) => (
-                          <Text key={c.categoria} size="sm">
-                            {rotuloCategoria(c.categoria)}: {c.quantidade}
+                        {resumoDev.categoriasExploradas.length === 0 ? (
+                          <Text size="sm" c="dimmed">
+                            Ainda sem categorias neste período.
                           </Text>
-                        ))
-                      )}
-                    </Stack>
+                        ) : (
+                          <Group gap="sm">
+                            {resumoDev.categoriasExploradas.map((c) => (
+                              <Card
+                                key={c.categoria}
+                                withBorder
+                                padding="sm"
+                                radius="md"
+                                bg={coresPef.primariaSuave}
+                              >
+                                <Text size="sm" fw={600}>
+                                  {rotuloCategoria(c.categoria)}
+                                </Text>
+                                <Text size="xs" c="dimmed">
+                                  {c.quantidade}
+                                </Text>
+                              </Card>
+                            ))}
+                          </Group>
+                        )}
+                      </Stack>
 
-                    <Stack gap={4}>
-                      <Text fw={600} size="sm">
-                        Estrelas no período
-                      </Text>
-                      <Text size="sm">
-                        {resumoDev.estrelas.concedidasNoPeriodo} concedidas
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        {resumoDev.estrelas.esclarecimento}
-                      </Text>
-                    </Stack>
-
-                    <Stack gap={4}>
-                      <Text fw={600} size="sm">
-                        Observações da família
-                      </Text>
-                      {resumoDev.observacoes.length === 0 ? (
-                        <Text size="sm" c="dimmed">
-                          Nenhuma observação neste período.
+                      <Card withBorder padding="sm" radius="md" bg={coresPef.primariaSuave}>
+                        <Text fw={600} size="sm">
+                          Estrelas no período
                         </Text>
-                      ) : (
-                        resumoDev.observacoes.map((o) => (
-                          <Text key={o.experienciaId} size="sm">
-                            {o.nome}: {o.texto}
+                        <Text fw={700} size="lg" c={coresPef.texto}>
+                          {resumoDev.estrelas.concedidasNoPeriodo}
+                        </Text>
+                        <Text size="xs" c="dimmed">
+                          {resumoDev.estrelas.esclarecimento}
+                        </Text>
+                      </Card>
+
+                      <Stack gap="sm">
+                        <Text fw={600} size="sm">
+                          Observações da família
+                        </Text>
+                        {resumoDev.observacoes.length === 0 ? (
+                          <Text size="sm" c="dimmed">
+                            Nenhuma observação neste período.
                           </Text>
-                        ))
-                      )}
+                        ) : (
+                          resumoDev.observacoes.map((o) => (
+                            <Card
+                              key={o.experienciaId}
+                              withBorder
+                              padding="sm"
+                              radius="md"
+                            >
+                              <Text size="sm" fw={600}>
+                                {o.nome}
+                              </Text>
+                              <Text size="sm">{o.texto}</Text>
+                            </Card>
+                          ))
+                        )}
+                      </Stack>
                     </Stack>
-                  </Stack>
+                  </Card>
                 ) : null}
 
                 {podeExportar ? (
-                  <Stack gap="sm">
-                    <Text size="xs" c="dimmed">
-                      A tela acima é a mesma seleção do PDF. Anexos sensíveis não
-                      entram na exportação.
-                    </Text>
-                    {!pdfPronto ? (
-                      <Button
-                        variant="light"
-                        loading={preparandoPdf}
-                        onClick={() => void prepararPdf()}
-                      >
-                        Preparar PDF
-                      </Button>
-                    ) : (
-                      <Stack gap={6}>
-                        <Text size="sm">
-                          Prévia pronta
-                          {pdfPronto.paginas
-                            ? ` · ${pdfPronto.paginas} página(s)`
-                            : ""}
-                          . Confira o conteúdo acima e baixe o arquivo.
-                        </Text>
-                        <Text size="xs" c="dimmed">
-                          {pdfPronto.aviso}
-                        </Text>
-                        <Group grow>
-                          <Button variant="filled" onClick={baixarPdf}>
-                            Baixar PDF
-                          </Button>
-                          <Button
-                            variant="subtle"
-                            loading={preparandoPdf}
-                            onClick={() => void prepararPdf()}
-                          >
-                            Preparar de novo
-                          </Button>
-                        </Group>
-                      </Stack>
-                    )}
-                  </Stack>
+                  <Card withBorder padding="md" radius="md" bg={coresPef.superficie}>
+                    <Stack gap="sm">
+                      <Title order={2}>Exportar</Title>
+                      <Text size="xs" c="dimmed">
+                        A tela acima é a mesma seleção do PDF. Anexos sensíveis não
+                        entram na exportação.
+                      </Text>
+                      {!pdfPronto ? (
+                        <Button
+                          variant="light"
+                          loading={preparandoPdf}
+                          onClick={() => void prepararPdf()}
+                        >
+                          Preparar PDF
+                        </Button>
+                      ) : (
+                        <Stack gap={6}>
+                          <Text size="sm">
+                            Prévia pronta
+                            {pdfPronto.paginas
+                              ? ` · ${pdfPronto.paginas} página(s)`
+                              : ""}
+                            . Confira o conteúdo acima e baixe o arquivo.
+                          </Text>
+                          <Text size="xs" c="dimmed">
+                            {pdfPronto.aviso}
+                          </Text>
+                          <Group grow>
+                            <Button variant="filled" onClick={baixarPdf}>
+                              Baixar PDF
+                            </Button>
+                            <Button
+                              variant="subtle"
+                              loading={preparandoPdf}
+                              onClick={() => void prepararPdf()}
+                            >
+                              Preparar de novo
+                            </Button>
+                          </Group>
+                        </Stack>
+                      )}
+                    </Stack>
+                  </Card>
                 ) : (
                   <Text size="xs" c="dimmed">
                     Sua conta pode consultar o resumo, mas não exportar o PDF

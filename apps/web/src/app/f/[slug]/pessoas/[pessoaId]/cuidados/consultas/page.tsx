@@ -48,6 +48,9 @@ const HORAS_CHEIAS = Array.from({ length: 24 }, (_, i) => {
   return { value: h, label: h };
 });
 
+/** Alinhado a apps/api/src/anexos/limites-anexo.ts */
+const LIMITE_BYTES_ANEXO = 8 * 1024 * 1024;
+
 type ItemLista =
   | { kind: "consulta"; quando: number; consulta: ConsultaLista }
   | { kind: "exame"; quando: number; exame: ExameLista };
@@ -91,6 +94,7 @@ export default function PaginaConsultasExames() {
   const [exameDesc, setExameDesc] = useState("");
   const [exameData, setExameData] = useState("");
   const [exameArquivo, setExameArquivo] = useState<File | null>(null);
+  const [anexoPendenteId, setAnexoPendenteId] = useState<string | null>(null);
 
   const podeOrganizar = podeOrganizarConsultasExames(
     params.pessoaId,
@@ -213,10 +217,18 @@ export default function PaginaConsultasExames() {
     setErro(null);
     setSucesso(null);
     try {
-      let anexoId: string | null = null;
-      if (exameArquivo) {
+      let anexoId = anexoPendenteId;
+      if (exameArquivo && !anexoId) {
         if (!podeAnexos || !familiaId) {
           throw new Error("Sem autorização para anexar documento.");
+        }
+        if (exameArquivo.size > LIMITE_BYTES_ANEXO) {
+          throw new Error(
+            `Escolha um arquivo de até ${Math.floor(LIMITE_BYTES_ANEXO / (1024 * 1024))} MB.`,
+          );
+        }
+        if (exameArquivo.size <= 0) {
+          throw new Error("Arquivo vazio não pode ser anexado.");
         }
         const base64 = await lerArquivoBase64(exameArquivo);
         const anexo = await criarAnexo(familiaId, {
@@ -226,6 +238,7 @@ export default function PaginaConsultasExames() {
           conteudoBase64: base64,
         });
         anexoId = anexo.id;
+        setAnexoPendenteId(anexo.id);
       }
       await criarExame(params.pessoaId, {
         descricao: exameDesc.trim(),
@@ -235,6 +248,7 @@ export default function PaginaConsultasExames() {
       setExameDesc("");
       setExameData("");
       setExameArquivo(null);
+      setAnexoPendenteId(null);
       setMostrarExame(false);
       await carregar(params.pessoaId);
       setSucesso("Exame registrado.");
@@ -520,15 +534,25 @@ export default function PaginaConsultasExames() {
                         onChange={(e) => setExameData(e.currentTarget.value)}
                       />
                       {podeAnexos ? (
-                        <TextInput
-                          label="Documento (opcional)"
-                          type="file"
-                          accept="image/*,.pdf,application/pdf"
-                          onChange={(e) => {
-                            const arquivo = e.currentTarget.files?.[0] ?? null;
-                            setExameArquivo(arquivo);
-                          }}
-                        />
+                        <Stack gap={4}>
+                          <TextInput
+                            label="Documento (opcional)"
+                            type="file"
+                            accept="image/*,.pdf,application/pdf"
+                            onChange={(e) => {
+                              const arquivo = e.currentTarget.files?.[0] ?? null;
+                              setExameArquivo(arquivo);
+                              setAnexoPendenteId(null);
+                            }}
+                          />
+                          <Text size="xs" c="dimmed">
+                            PDF ou imagem, até{" "}
+                            {Math.floor(LIMITE_BYTES_ANEXO / (1024 * 1024))} MB.
+                            {anexoPendenteId
+                              ? " Documento já enviado — ao tentar de novo, só registra o exame."
+                              : ""}
+                          </Text>
+                        </Stack>
                       ) : null}
                       <Button type="submit" loading={enviandoForm}>
                         Registrar
@@ -539,6 +563,7 @@ export default function PaginaConsultasExames() {
                         onClick={() => {
                           setMostrarExame(false);
                           setExameArquivo(null);
+                          setAnexoPendenteId(null);
                         }}
                         disabled={enviandoForm}
                       >

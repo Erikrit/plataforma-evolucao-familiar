@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { rotaFamilia } from "@/lib/rotas-familia";
 import {
   Button,
+  Card,
   Collapse,
   Container,
   Group,
@@ -27,6 +28,7 @@ import {
   MensagemFeedback,
 } from "@/componentes/feedback";
 import { MarcadorEventoHistorico } from "@/componentes/icones-experiencia";
+import { coresPef } from "@/tema/mantine";
 
 const rotulosTipo: Record<string, string> = {
   dose: "Medicamento",
@@ -104,25 +106,21 @@ function ItemHistorico({ evento }: { evento: EventoHistorico }) {
   const [aberto, setAberto] = useState(false);
   const temDetalhe = Boolean(evento.detalhe) || evento.versaoAtiva === false;
   return (
-    <Stack
-      gap={4}
-      p="sm"
-      style={{
-        borderBottom: "1px solid var(--mantine-color-gray-2)",
-      }}
-    >
+    <Card withBorder padding="md" radius="md" bg={coresPef.superficie}>
       <Group align="flex-start" gap="sm" wrap="nowrap">
         <MarcadorEventoHistorico tipo={evento.tipo} />
-        <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+        <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
           <Group justify="space-between" gap="xs" wrap="nowrap">
-            <Text size="sm" fw={600}>
+            <Text size="sm" c="dimmed">
               {rotuloTipo(evento.tipo)}
             </Text>
             <Text size="xs" c="dimmed">
               {formatarHorario(evento.quando)}
             </Text>
           </Group>
-          <Text size="sm">{evento.resumo}</Text>
+          <Text fw={600} size="sm">
+            {evento.resumo}
+          </Text>
           {evento.versaoAtiva === false ? (
             <Text size="xs" c="orange">
               Relato substituído por correção posterior.
@@ -147,7 +145,7 @@ function ItemHistorico({ evento }: { evento: EventoHistorico }) {
           </Collapse>
         </Stack>
       </Group>
-    </Stack>
+    </Card>
   );
 }
 
@@ -292,49 +290,60 @@ export default function PaginaHistorico() {
 
         {autenticado && !acessoNegado ? (
           <Stack gap="md">
-            <SegmentedControl
-              fullWidth
-              size="xs"
-              value={preset}
-              onChange={(v) => aplicarPreset(v as PresetPeriodo)}
-              data={[
-                { label: "Últimos 7 dias", value: "7" },
-                { label: "Últimos 30 dias", value: "30" },
-                { label: "Personalizado", value: "personalizado" },
-              ]}
-            />
-
-            {preset === "personalizado" ? (
-              <Group grow align="flex-end">
-                <TextInput
-                  type="date"
-                  label="De"
-                  value={de}
-                  onChange={(e) => {
-                    setPreset("personalizado");
-                    setDe(e.currentTarget.value);
-                  }}
+            <Card withBorder padding="md" radius="md" bg={coresPef.primariaSuave}>
+              <Stack gap="sm">
+                <Text size="sm" fw={600} c={coresPef.texto}>
+                  Período
+                </Text>
+                <SegmentedControl
+                  fullWidth
+                  size="xs"
+                  value={preset}
+                  onChange={(v) => aplicarPreset(v as PresetPeriodo)}
+                  data={[
+                    { label: "Últimos 7 dias", value: "7" },
+                    { label: "Últimos 30 dias", value: "30" },
+                    { label: "Personalizado", value: "personalizado" },
+                  ]}
                 />
-                <TextInput
-                  type="date"
-                  label="Até"
-                  value={ate}
-                  onChange={(e) => {
-                    setPreset("personalizado");
-                    setAte(e.currentTarget.value);
-                  }}
-                />
-              </Group>
-            ) : null}
 
-            {opcoesDominio.length > 2 ? (
-              <SegmentedControl
-                fullWidth
-                value={dominio}
-                onChange={(v) => setDominio(v as DominioFiltro)}
-                data={opcoesDominio}
-              />
-            ) : null}
+                {preset === "personalizado" ? (
+                  <Group grow align="flex-end">
+                    <TextInput
+                      type="date"
+                      label="De"
+                      value={de}
+                      onChange={(e) => {
+                        setPreset("personalizado");
+                        setDe(e.currentTarget.value);
+                      }}
+                    />
+                    <TextInput
+                      type="date"
+                      label="Até"
+                      value={ate}
+                      onChange={(e) => {
+                        setPreset("personalizado");
+                        setAte(e.currentTarget.value);
+                      }}
+                    />
+                  </Group>
+                ) : (
+                  <Text size="xs" c="dimmed">
+                    De {de} até {ate}
+                  </Text>
+                )}
+
+                {opcoesDominio.length > 2 ? (
+                  <SegmentedControl
+                    fullWidth
+                    value={dominio}
+                    onChange={(v) => setDominio(v as DominioFiltro)}
+                    data={opcoesDominio}
+                  />
+                ) : null}
+              </Stack>
+            </Card>
 
             {podeVer && grupos.length === 0 ? (
               <EstadoVazio
@@ -345,16 +354,23 @@ export default function PaginaHistorico() {
 
             {podeVer
               ? grupos.map(([dia, itens]) => (
-                  <Stack key={dia} gap={0}>
-                    <Text size="sm" fw={700} px="sm" pt="xs">
+                  <Stack key={dia} gap="sm">
+                    <Text
+                      size="sm"
+                      fw={700}
+                      c={coresPef.texto}
+                      style={{ letterSpacing: "0.01em" }}
+                    >
                       {rotuloDia(dia)}
                     </Text>
-                    {itens.map((e) => (
-                      <ItemHistorico
-                        key={`${e.tipo}-${e.origemId}-${e.quando}`}
-                        evento={e}
-                      />
-                    ))}
+                    <Stack gap="sm">
+                      {itens.map((e) => (
+                        <ItemHistorico
+                          key={`${e.tipo}-${e.origemId}-${e.quando}`}
+                          evento={e}
+                        />
+                      ))}
+                    </Stack>
                   </Stack>
                 ))
               : null}

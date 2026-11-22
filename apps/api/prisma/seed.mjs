@@ -568,7 +568,7 @@ try {
           exames: 2,
           doses: idxDose,
           observacoesRotina: rotinas.length,
-          biblioteca: biblioteca.length,
+          biblioteca: CATALOGO_BIBLIOTECA_E4.length,
           participacoesLaurinha: participacoes.length,
           recompensas: 2,
         },

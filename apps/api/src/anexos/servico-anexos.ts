@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -7,6 +8,7 @@ import { randomBytes } from "node:crypto";
 import { ServicoPrisma } from "../prisma/servico-prisma";
 import { ServicoAutorizacoes } from "../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
+import { LIMITE_BYTES_ANEXO } from "./limites-anexo";
 
 @Injectable()
 export class ServicoAnexos {
@@ -48,9 +50,22 @@ export class ServicoAnexos {
     const nomeArquivo = (entrada.nomeArquivo ?? "anexo.bin").trim();
     const mimeTipo = (entrada.mimeTipo ?? "application/octet-stream").trim();
     const conteudoBase64 = entrada.conteudoBase64?.trim() || null;
-    const tamanhoBytes = conteudoBase64
-      ? Buffer.from(conteudoBase64, "base64").length
-      : 0;
+    let tamanhoBytes = 0;
+    if (conteudoBase64) {
+      try {
+        tamanhoBytes = Buffer.from(conteudoBase64, "base64").length;
+      } catch {
+        throw new BadRequestException("Conteúdo do arquivo inválido.");
+      }
+      if (tamanhoBytes <= 0) {
+        throw new BadRequestException("Arquivo vazio não pode ser anexado.");
+      }
+      if (tamanhoBytes > LIMITE_BYTES_ANEXO) {
+        throw new BadRequestException(
+          `Arquivo acima do limite de ${Math.floor(LIMITE_BYTES_ANEXO / (1024 * 1024))} MB.`,
+        );
+      }
+    }
 
     return this.prisma.anexo.create({
       data: {

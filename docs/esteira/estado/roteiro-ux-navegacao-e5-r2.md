@@ -1,9 +1,9 @@
 # Homologação — COR-E5-UX-HOM-R2-20261122
 
-Precedente: `COR-E5-UX-HOM-20261122` (técnico COMPLETED; **homologação REPROVADA**).  
+Precedente: `COR-E5-UX-HOM-20261122` (técnico COMPLETED; **homologação REPROVADA** — histórico).  
 Protótipo R1 preservado: `prototipo-cor-e5-ux-hom-20261122.html`.
 
-**Resultado humano desta rodada: REPROVADA até novo aceite.**
+**Resultado humano desta rodada: APROVADA** (responsável, 2026-11-22), versão `develop` @ `e050a99`. O status intermediário REPROVADA do roteiro técnico permanece apenas como histórico até o aceite.
 
 Validar em 375px e 1280px, teclado, leitor de tela, foco do Modal e movimento reduzido.
 

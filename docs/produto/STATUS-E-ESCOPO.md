@@ -1,12 +1,20 @@
 # Estado das decisões e escopo
 
+## Estabilização pré-uso — 2026-11-22
+
+**Demanda ativa:** `ESTABILIZACAO-PRE-USO-20261122` (READY). Objetivo: preparar a plataforma para uso real **sem** novas funcionalidades e **sem** iniciar E6/E7. Plano em `docs/esteira/planejamento/estabilizacao-pre-uso.md` (EST-00..EST-04).
+
+**Publicação para uso real:** ainda **não autorizada**. Critérios de bloqueio no plano EST.
+
 ## E5 — Jogos digitais e organização da Biblioteca, 2026-11-22
 
-**Homologação humana REPROVADA em 2026-11-22.** Correção UX em `COR-E5-UX-HOM-20261122`: implementação técnica local concluída; **aguardando nova homologação humana** (roteiro `docs/esteira/estado/roteiro-ux-navegacao-e5.md`).
+**Homologação humana da correção UX R2 APROVADA em 2026-11-22** pelo responsável do Produto (`COR-E5-UX-HOM-R2-20261122`). Versão homologada: `develop` @ `e050a999b2a040df62860d4ecd113c11b0718ccc` (`fix(ux): refinar dica, fases, progresso e ícone da E5`). Evidências técnicas R2 permanecem as já registradas; este registro não reexecuta testes.
 
-**Implementada localmente.** A Biblioteca fica no menu contextual de Desenvolvimento, com Atividades reais e Jogos digitais. O piloto entrega Memória de figuras, Complete a sequência e Caminhos e labirintos, com cinco fases de escolha livre por jogo. Histórico e Resumo leem as descobertas da fonte E5 com autorização da pessoa. As estrelas pertencem às participações presenciais.
+**Histórico preservado:** homologação R1 `COR-E5-UX-HOM-20261122` **REPROVADA** (funcional aceito; visual/navegação não). Registro intermediário da R2 como REPROVADA até o novo aceite permanece histórico. Não ampliar este aceite a E3, E4 residual, segurança definitiva ou publicação.
 
-**Esteira.** E5-01 a E5-05 de `DEM-E5-JOGOS-DIGITAIS-20261122` concluídos tecnicamente. E5-06 concentra a validação integrada e a homologação humana. [Evidências](../esteira/estado/evidencia-e5-20261122.json) · [Roteiro de homologação](../esteira/estado/roteiro-homologacao-e5.md) · [Módulo 03 v1.4 §13](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento)
+**Implementada em develop.** A Biblioteca fica no menu contextual de Desenvolvimento, com Atividades reais e Jogos digitais. O piloto entrega Memória de figuras, Complete a sequência e Caminhos e labirintos, com cinco fases de escolha livre por jogo. Histórico e Resumo leem as descobertas da fonte E5 com autorização da pessoa. As estrelas pertencem às participações presenciais.
+
+**Esteira.** E5-01 a E5-05 de `DEM-E5-JOGOS-DIGITAIS-20261122` concluídos tecnicamente; correções UX R1/R2 encerradas no escopo homologado. [Evidências E5](../esteira/estado/evidencia-e5-20261122.json) · [Evidência R2](../esteira/estado/evidencia-cor-e5-ux-hom-r2-20261122.json) · [Roteiro R2](../esteira/estado/roteiro-ux-navegacao-e5-r2.md) · [Módulo 03 v1.4 §13](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento)
 
 ## E4 — biblioteca real com homologação humana parcial, 2026-11-22
 
@@ -16,17 +24,15 @@
 
 **E3-HOM** segue pendente pelo defeito de anexos `DEF-E3-ANEXO-SALVAR-20261122`, aberto e adiado por decisão de Produto.
 
-## Defeito de anexos — tratamento adiado, 2026-11-22
+## Defeito de anexos — correção técnica EST-01, 2026-11-22
 
-**DEF-E3-ANEXO-SALVAR-20261122 — ABERTO.** Responsável informou atualização feita, mas falha ao salvar anexo impediu homologar essa jornada. Causa técnica ainda não diagnosticada/reproduzida nesta anotação.
+**DEF-E3-ANEXO-SALVAR-20261122 — CORRIGIDO TECNICAMENTE em EST-01** (`ESTABILIZACAO-PRE-USO-20261122`). Causa raiz: HTTP 413 (`request entity too large`) no POST de anexos com JSON/base64 acima do limite padrão ~100 KB do Nest/Express. Correção: body JSON até 12 MB, validação explícita de 8 MB, checagem na UI e retry sem reenviar o arquivo. Smoke E3 com 18 checagens (inclui payload >100 KB) PASS.
 
-**Impacto:** salvar anexo e validar o download de novo documento ficam com aceite humano impedido. E3-HOM permanece pendente; não presumir aprovação das demais jornadas da E3, que não receberam aceite explícito neste relato. Resultados técnicos existentes mantêm seu escopo histórico.
+**E3-HOM permanece PENDING_HUMAN** até novo aceite do responsável na jornada salvar → baixar → abrir no dispositivo (dados fictícios). Demais jornadas da E3 não são aprovadas automaticamente por esta correção.
 
-**Decisão expressa:** registrar e tratar depois, avançando ao detalhamento da E4 — Biblioteca de atividades reais. Isso adia a correção, não encerra o defeito nem homologa anexos.
+**Histórico:** defeito aberto e adiado por Produto ao avançar E4; retomado na estabilização pré-uso. Evidência: `docs/esteira/estado/evidencia-est-01-20261122.json`.
 
-**Retomada da correção:** reproduzir salvar exame com/sem anexo, identificar falha no upload, persistência ou vínculo sem presumir causa, verificar ausência de documento/exame parcial e retry sem duplicação, testar autorização e concluir salvar → baixar → abrir no dispositivo. Coletar erro, formato/tamanho e evidências sem dados clínicos reais.
-
-**Referência disponível:** develop @ d4a4db0cef5cca5bdb16772ea97cf1724634fcb9. Consulta documental/estática; nenhum teste executado nesta rodada. Publicação para uso segue adiada.
+**Publicação para uso segue adiada.**
 
 
 ## E3 — implementação técnica registrada; homologação de anexos impedida, 2026-11-22
