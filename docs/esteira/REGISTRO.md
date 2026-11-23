@@ -1,5 +1,11 @@
 # Registro da esteira
 
+## DEM-PWA-ONLINE-20261123 — PWA online
+
+- **Resultado técnico:** COMPLETED. Manifesto na raiz, abertura standalone e ícones Android e Apple. A aplicação usa as rotas e a sessão existentes.
+- **Verificação:** typecheck da web, lint do manifesto, build de produção e verificação independente passaram. O servidor local entregou o manifesto e os quatro ícones. O lint global apontou 25 erros em arquivos preexistentes fora do incremento.
+- **Homologação:** PENDING_HUMAN. Em URL HTTPS de homologação, instalar no Chrome Android e, se o iPhone fizer parte da homologação, no Safari. Abrir pelo ícone, entrar, fechar e reabrir, navegar à Rotina, concluir uma fase e verificar Voltar, teclado e recuperação depois de perda de conexão. Usar dados fictícios.
+
 ## EVO-CATALOGO-JOGOS-20261122 — CAT-HOM APROVADA
 
 - **Origem:** responsável do Produto nesta conversa (“aprovado”), após CAT-01..05 técnicos + QG-3.

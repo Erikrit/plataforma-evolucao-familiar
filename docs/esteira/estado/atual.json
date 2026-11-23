@@ -106,9 +106,7 @@
     "demandaAnterior": {
         "id": "EVO-CATALOGO-JOGOS-20261122",
         "estado": "COMPLETED",
-        "homologacaoHumana": "APROVADA",
-        "estadoExibicao": "HOMOLOGADA",
-        "nota": "Catálogo E5 8/40 homologado. Preservar evidências. Publicação permanece pendente de autorização explícita."
+        "homologacaoHumana": "APROVADA"
     },
     "janelaIncrementos": [
         {
@@ -159,7 +157,216 @@
                 "Publicação"
             ],
             "proximaAcao": "CAT-HOM APROVADA. Avaliar bloqueios operacionais restantes (EST-02, restore alvo) e só então pedir autorização explícita de publicação. Sem E6/E7.",
-            "atualizadoEm": "2026-11-23T02:58:22.339Z"
+            "atualizadoEm": "2026-11-23T02:58:22.339Z",
+            "dependencias": [
+                "E5 homologada R2",
+                "ADR-006/013/014/015",
+                "ProgressoFaseJogo vigente",
+                "CATEGORIAS_BIBLIOTECA"
+            ],
+            "fluxo": [
+                "task-routing",
+                "module-planning",
+                "implementation-workflow",
+                "quality-gate"
+            ],
+            "criteriosAceite": [
+                "CAT-ACE-01",
+                "CAT-ACE-02",
+                "CAT-ACE-03",
+                "CAT-ACE-04",
+                "CAT-ACE-05",
+                "CAT-HOM"
+            ],
+            "planejamento": {
+                "caminho": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
+                "expansaoE4Relacionada": "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
+                "incrementos": [
+                    {
+                        "id": "CAT-01",
+                        "status": "COMPLETED",
+                        "aceite": "Migração inicial e carga oficial idempotentes. 24 modelos E4, 3 jogos e 15 fases E5. Banco novo sem dados familiares e progresso existente preservado em ensaio separado."
+                    },
+                    {
+                        "id": "CAT-02",
+                        "status": "COMPLETED",
+                        "aceite": "API lê catálogo do PostgreSQL e o piloto mantém contratos, UX R2, autorização contextual e progresso."
+                    },
+                    {
+                        "id": "CAT-03",
+                        "status": "COMPLETED",
+                        "aceite": "Pares de sombras, Ache o intruso, Palavra e figura e Entrega no jardim jogáveis com componentes reaproveitados."
+                    },
+                    {
+                        "id": "CAT-04",
+                        "status": "COMPLETED",
+                        "aceite": "Histórias em cenas integrado. Oito jogos e 40 fases oficiais, duas variantes curadas por fase nova e Biblioteca validada em celular."
+                    },
+                    {
+                        "id": "CAT-05",
+                        "status": "COMPLETED",
+                        "aceite": "QG-3 de regressão e roteiro CAT-HOM. Registrar aceite humano explícito antes de liberar a publicação."
+                    }
+                ]
+            },
+            "incrementoAtivo": null,
+            "incrementosConcluidos": [
+                {
+                    "id": "CAT-01",
+                    "status": "COMPLETED",
+                    "fingerprint": "sha256:86ff077d89ea019cafb1c2f4b19d55a6fd468ffb5782ad267a653dc029caccf2",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "verifier": "PASS_COM_ACHADOS",
+                    "verifierId": "091e1592-ac82-490b-a4f6-3f0ef17791dd",
+                    "evidencias": [
+                        "docs/esteira/estado/qg1-typecheck-cat-01.txt",
+                        "docs/esteira/estado/qg2-cat-01-bancos.txt",
+                        "docs/esteira/estado/evidencia-cat-01-20261122.json"
+                    ],
+                    "mensagemCommit": "feat(catalogo): versionar migração inicial e carga oficial E4/E5\n\nSepara a carga idempotente (24 modelos, 3 jogos, 15 fases) do seed fictício e preserva o progresso do piloto."
+                },
+                {
+                    "id": "CAT-02",
+                    "status": "COMPLETED",
+                    "fingerprint": "sha256:6a82e6eadf99068766df6385881a5f1f7c1bc67d9e8706d7ba254f33df5ff574",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "verifier": "PASS_COM_ACHADOS",
+                    "verifierId": "7ca165dc-e2a9-42f7-a148-d65210c2c1ef",
+                    "evidencias": [
+                        "docs/esteira/estado/qg1-typecheck-cat-02.txt",
+                        "docs/esteira/estado/qg1-typecheck-web-cat-02.txt",
+                        "docs/esteira/estado/qg1-check-e5-cat-02.txt",
+                        "docs/esteira/estado/qg2-smoke-e5-cat-02.txt",
+                        "docs/esteira/estado/qg2-smoke-authz-cat-02.txt",
+                        "docs/esteira/estado/qg2-smoke-e4-cat-02.txt",
+                        "docs/esteira/estado/evidencia-cat-02-20261122.json"
+                    ],
+                    "mensagemCommit": "feat(jogos): ler catálogo digital do PostgreSQL com motores em código\n\nMantém contratos do piloto, authz e progresso; Resumo resolve editorial no banco."
+                },
+                {
+                    "id": "CAT-03",
+                    "status": "COMPLETED",
+                    "fingerprint": "sha256:529553854fdd041d7ec185ce2fafc60c26997cbda34d60ed4cb157a753cb1d79",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "verifier": "PASS_COM_ACHADOS",
+                    "verifierId": "3070adbc-f175-4891-9bf7-6654cb965c98",
+                    "evidencias": [
+                        "docs/esteira/estado/qg1-typecheck-api-cat-03.txt",
+                        "docs/esteira/estado/qg1-typecheck-web-cat-03.txt",
+                        "docs/esteira/estado/qg1-check-e5-cat-03.txt",
+                        "docs/esteira/estado/qg1-check-cat-03.txt",
+                        "docs/esteira/estado/qg2-smoke-e5-cat-03.txt",
+                        "docs/esteira/estado/qg2-smoke-authz-cat-03.txt",
+                        "docs/esteira/estado/qg2-smoke-e4-cat-03.txt",
+                        "docs/esteira/estado/evidencia-cat-03-20261122.json"
+                    ],
+                    "mensagemCommit": "feat(jogos): publicar quatro jogos E5 reaproveitando motores\n\nPares de sombras, Ache o intruso, Palavra e figura e Entrega no jardim com 20 fases curadas na carga oficial."
+                },
+                {
+                    "id": "CAT-04",
+                    "status": "COMPLETED",
+                    "fingerprint": "sha256:d0a5de32eb5f954e3e377a5224d56559b9e84144e3e034357a73ab153e562ef7",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "verifier": "PASS_COM_ACHADOS",
+                    "verifierId": "340b7b3d-ce2a-47fc-8d44-2ecfb4d03fc6",
+                    "homologacaoHumanaPreviaAteCat03": "APROVADA",
+                    "evidencias": [
+                        "docs/esteira/estado/qg1-typecheck-api-cat-04.txt",
+                        "docs/esteira/estado/qg1-typecheck-web-cat-04.txt",
+                        "docs/esteira/estado/qg1-check-cat-04.txt",
+                        "docs/esteira/estado/qg1-check-cat-03-reg-cat-04.txt",
+                        "docs/esteira/estado/qg1-check-e5-cat-04.txt",
+                        "docs/esteira/estado/qg2-carga-oficial-cat-04.txt",
+                        "docs/esteira/estado/qg2-smoke-e5-cat-04.txt",
+                        "docs/esteira/estado/qg2-smoke-authz-cat-04.txt",
+                        "docs/esteira/estado/qg2-smoke-e4-cat-04.txt",
+                        "docs/esteira/estado/evidencia-cat-04-20261122.json"
+                    ],
+                    "mensagemCommit": "feat(jogos): integrar Histórias em cenas e fechar catálogo E5 8/40\\n\\nMotor de ordenação com toque, teclado e desfazer; cinco fases curadas na carga oficial."
+                },
+                {
+                    "id": "CAT-05",
+                    "status": "COMPLETED",
+                    "fingerprint": "sha256:7b9096782b35d1ae09d5b88c4f678c6c7b88850a0807f4e6ed99666e12cdcb45",
+                    "qg1": "PASS",
+                    "qg2": "PASS",
+                    "qg3": "PASS",
+                    "verifier": "PASS_COM_ACHADOS",
+                    "verifierId": "a2fdad4b-2406-4045-990e-17ff05d4b17b",
+                    "homologacaoHumana": "PENDING_HUMAN",
+                    "evidencias": [
+                        "docs/esteira/estado/qg3-typecheck-api-cat-05.txt",
+                        "docs/esteira/estado/qg3-typecheck-web-cat-05.txt",
+                        "docs/esteira/estado/qg3-build-api-cat-05.txt",
+                        "docs/esteira/estado/qg3-build-web-cat-05.txt",
+                        "docs/esteira/estado/qg3-check-cat-04-cat-05.txt",
+                        "docs/esteira/estado/qg3-check-cat-03-cat-05.txt",
+                        "docs/esteira/estado/qg3-check-e5-cat-05.txt",
+                        "docs/esteira/estado/qg3-carga-oficial-cat-05.txt",
+                        "docs/esteira/estado/qg3-smoke-e5-cat-05.txt",
+                        "docs/esteira/estado/qg3-smoke-e4-cat-05.txt",
+                        "docs/esteira/estado/qg3-smoke-authz-cat-05.txt",
+                        "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
+                        "docs/esteira/estado/evidencia-cat-05-20261122.json"
+                    ],
+                    "mensagemCommit": "chore(catalogo): fechar CAT-05 com QG-3 e roteiro CAT-HOM\\n\\nRegressão E4/E5/authz e builds ok; aceite humano em celular permanece pendente e publicação não autorizada."
+                }
+            ],
+            "verificacao": {
+                "qg1": {
+                    "status": "PASS",
+                    "evidencia": "docs/esteira/estado/qg3-typecheck-api-cat-05.txt"
+                },
+                "qg2": {
+                    "status": "PASS",
+                    "evidencia": "docs/esteira/estado/qg3-smoke-e5-cat-05.txt"
+                },
+                "qg3": {
+                    "status": "PASS",
+                    "evidencia": "docs/esteira/estado/evidencia-cat-05-20261122.json"
+                },
+                "verifier": "PASS_COM_ACHADOS",
+                "verifierId": "a2fdad4b-2406-4045-990e-17ff05d4b17b",
+                "homologacaoCelular": "APROVADA",
+                "CAT_HOM": "APROVADA",
+                "homologacaoHumanaAteCat03": "APROVADA"
+            },
+            "arquivos": [
+                "docs/esteira/estado/evidencia-cat-hom-20261122.json",
+                "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
+                "docs/esteira/estado/atual.json",
+                "docs/esteira/REGISTRO.md",
+                "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
+                "docs/produto/STATUS-E-ESCOPO.md"
+            ],
+            "homologacaoHumanaAteCat03": "APROVADA",
+            "fechamentoTecnico": {
+                "em": "2026-11-23T02:34:25.505Z",
+                "qg3": "PASS",
+                "catalogo": {
+                    "e4": 24,
+                    "e5Jogos": 8,
+                    "e5Fases": 40
+                },
+                "publicacao": "NAO_AUTORIZADA"
+            },
+            "homologacaoHumanaRegistro": {
+                "em": "2026-11-23T02:58:22.339Z",
+                "resultado": "APROVADA",
+                "fonte": "Responsável do Produto nesta conversa (\"aprovado\")",
+                "evidencia": "docs/esteira/estado/evidencia-cat-hom-20261122.json",
+                "roteiro": "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
+                "naoAutorizado": [
+                    "publicação",
+                    "deploy/push/PR",
+                    "E6/E7",
+                    "gaps EST-02/restore VPS"
+                ]
+            }
         },
         {
             "id": "ESTABILIZACAO-PRE-USO-20261122",
@@ -2685,7 +2892,7 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Revisar CAT-02 local e autorizar CAT-03 (quatro jogos novos reaproveitando motores).",
+    "proximaAcao": "Homologar a instalação em aparelho real numa URL HTTPS de homologação.",
     "atualizadoEm": "2026-11-22T23:47:45.979Z",
     "notas": "ESTABILIZACAO HOMOLOGADA (humano APROVADO). EST-00..04 + QG-3. Publicação não autorizada; gaps ops/EST-02 permanecem. E5 UX R2 APROVADA. Catálogos L3 pendentes; E6/E7 fora.",
     "decisaoPendente": {
@@ -2824,238 +3031,63 @@
         "fingerprint": "ef-modulo04-qg3-2026-11-16"
     },
     "demanda": {
-        "id": "EVO-CATALOGO-JOGOS-20261122",
-        "tipo": "transversal",
-        "origem": "Decisão explícita do responsável do Produto, 2026-11-22",
+        "id": "DEM-PWA-ONLINE-20261123",
+        "tipo": "melhoria_funcional",
+        "origem": "Responsável pelo Produto, 2026-11-23",
         "estado": "COMPLETED",
         "aprovacao": {
-            "nivel": "L3",
+            "nivel": "L2",
             "status": "APROVADA",
-            "referencia": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
-            "nota": "Oito jogos e catálogo em PostgreSQL antes da primeira publicação."
+            "referencia": "Aceite explícito do incremento PWA online"
         },
-        "risco": "alto",
-        "escopo": "Catálogo oficial E4/E5, expansão digital em PostgreSQL, preservação do progresso e homologação da UX.",
+        "escopo": "Instalação pelo navegador e abertura pelo ícone em modo standalone.",
+        "impacto": "Metadados e recursos estáticos do frontend.",
+        "risco": "baixo",
         "fora": [
-            "Expansão E4",
-            "E6/E7",
-            "Publicação"
-        ],
-        "dependencias": [
-            "E5 homologada R2",
-            "ADR-006/013/014/015",
-            "ProgressoFaseJogo vigente",
-            "CATEGORIAS_BIBLIOTECA"
+            "offline e service worker",
+            "notificações",
+            "cadastro e autenticação",
+            "publicação"
         ],
         "fluxo": [
             "task-routing",
-            "module-planning",
             "implementation-workflow",
             "quality-gate"
         ],
         "criteriosAceite": [
-            "CAT-ACE-01",
-            "CAT-ACE-02",
-            "CAT-ACE-03",
-            "CAT-ACE-04",
-            "CAT-ACE-05",
-            "CAT-HOM"
+            "Manifesto válido, com identidade e escopo na raiz, abertura standalone e ícones Android/iOS.",
+            "A versão de produção entrega o manifesto e os ícones nas rotas públicas.",
+            "Homologação em aparelho real por HTTPS, incluindo abertura pelo ícone, sessão, Rotina, jogos e recuperação após queda de conexão."
         ],
-        "planejamento": {
-            "caminho": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
-            "expansaoE4Relacionada": "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
-            "incrementos": [
-                {
-                    "id": "CAT-01",
-                    "status": "COMPLETED",
-                    "aceite": "Migração inicial e carga oficial idempotentes. 24 modelos E4, 3 jogos e 15 fases E5. Banco novo sem dados familiares e progresso existente preservado em ensaio separado."
-                },
-                {
-                    "id": "CAT-02",
-                    "status": "COMPLETED",
-                    "aceite": "API lê catálogo do PostgreSQL e o piloto mantém contratos, UX R2, autorização contextual e progresso."
-                },
-                {
-                    "id": "CAT-03",
-                    "status": "COMPLETED",
-                    "aceite": "Pares de sombras, Ache o intruso, Palavra e figura e Entrega no jardim jogáveis com componentes reaproveitados."
-                },
-                {
-                    "id": "CAT-04",
-                    "status": "COMPLETED",
-                    "aceite": "Histórias em cenas integrado. Oito jogos e 40 fases oficiais, duas variantes curadas por fase nova e Biblioteca validada em celular."
-                },
-                {
-                    "id": "CAT-05",
-                    "status": "COMPLETED",
-                    "aceite": "QG-3 de regressão e roteiro CAT-HOM. Registrar aceite humano explícito antes de liberar a publicação."
-                }
-            ]
-        },
-        "incrementoAtivo": null,
-        "estadoExibicao": "HOMOLOGADA",
-        "incrementosConcluidos": [
-            {
-                "id": "CAT-01",
-                "status": "COMPLETED",
-                "fingerprint": "sha256:86ff077d89ea019cafb1c2f4b19d55a6fd468ffb5782ad267a653dc029caccf2",
-                "qg1": "PASS",
-                "qg2": "PASS",
-                "verifier": "PASS_COM_ACHADOS",
-                "verifierId": "091e1592-ac82-490b-a4f6-3f0ef17791dd",
-                "evidencias": [
-                    "docs/esteira/estado/qg1-typecheck-cat-01.txt",
-                    "docs/esteira/estado/qg2-cat-01-bancos.txt",
-                    "docs/esteira/estado/evidencia-cat-01-20261122.json"
-                ],
-                "mensagemCommit": "feat(catalogo): versionar migração inicial e carga oficial E4/E5\n\nSepara a carga idempotente (24 modelos, 3 jogos, 15 fases) do seed fictício e preserva o progresso do piloto."
-            },
-            {
-                "id": "CAT-02",
-                "status": "COMPLETED",
-                "fingerprint": "sha256:6a82e6eadf99068766df6385881a5f1f7c1bc67d9e8706d7ba254f33df5ff574",
-                "qg1": "PASS",
-                "qg2": "PASS",
-                "verifier": "PASS_COM_ACHADOS",
-                "verifierId": "7ca165dc-e2a9-42f7-a148-d65210c2c1ef",
-                "evidencias": [
-                    "docs/esteira/estado/qg1-typecheck-cat-02.txt",
-                    "docs/esteira/estado/qg1-typecheck-web-cat-02.txt",
-                    "docs/esteira/estado/qg1-check-e5-cat-02.txt",
-                    "docs/esteira/estado/qg2-smoke-e5-cat-02.txt",
-                    "docs/esteira/estado/qg2-smoke-authz-cat-02.txt",
-                    "docs/esteira/estado/qg2-smoke-e4-cat-02.txt",
-                    "docs/esteira/estado/evidencia-cat-02-20261122.json"
-                ],
-                "mensagemCommit": "feat(jogos): ler catálogo digital do PostgreSQL com motores em código\n\nMantém contratos do piloto, authz e progresso; Resumo resolve editorial no banco."
-            },
-            {
-                "id": "CAT-03",
-                "status": "COMPLETED",
-                "fingerprint": "sha256:529553854fdd041d7ec185ce2fafc60c26997cbda34d60ed4cb157a753cb1d79",
-                "qg1": "PASS",
-                "qg2": "PASS",
-                "verifier": "PASS_COM_ACHADOS",
-                "verifierId": "3070adbc-f175-4891-9bf7-6654cb965c98",
-                "evidencias": [
-                    "docs/esteira/estado/qg1-typecheck-api-cat-03.txt",
-                    "docs/esteira/estado/qg1-typecheck-web-cat-03.txt",
-                    "docs/esteira/estado/qg1-check-e5-cat-03.txt",
-                    "docs/esteira/estado/qg1-check-cat-03.txt",
-                    "docs/esteira/estado/qg2-smoke-e5-cat-03.txt",
-                    "docs/esteira/estado/qg2-smoke-authz-cat-03.txt",
-                    "docs/esteira/estado/qg2-smoke-e4-cat-03.txt",
-                    "docs/esteira/estado/evidencia-cat-03-20261122.json"
-                ],
-                "mensagemCommit": "feat(jogos): publicar quatro jogos E5 reaproveitando motores\n\nPares de sombras, Ache o intruso, Palavra e figura e Entrega no jardim com 20 fases curadas na carga oficial."
-            },
-            {
-                "id": "CAT-04",
-                "status": "COMPLETED",
-                "fingerprint": "sha256:d0a5de32eb5f954e3e377a5224d56559b9e84144e3e034357a73ab153e562ef7",
-                "qg1": "PASS",
-                "qg2": "PASS",
-                "verifier": "PASS_COM_ACHADOS",
-                "verifierId": "340b7b3d-ce2a-47fc-8d44-2ecfb4d03fc6",
-                "homologacaoHumanaPreviaAteCat03": "APROVADA",
-                "evidencias": [
-                    "docs/esteira/estado/qg1-typecheck-api-cat-04.txt",
-                    "docs/esteira/estado/qg1-typecheck-web-cat-04.txt",
-                    "docs/esteira/estado/qg1-check-cat-04.txt",
-                    "docs/esteira/estado/qg1-check-cat-03-reg-cat-04.txt",
-                    "docs/esteira/estado/qg1-check-e5-cat-04.txt",
-                    "docs/esteira/estado/qg2-carga-oficial-cat-04.txt",
-                    "docs/esteira/estado/qg2-smoke-e5-cat-04.txt",
-                    "docs/esteira/estado/qg2-smoke-authz-cat-04.txt",
-                    "docs/esteira/estado/qg2-smoke-e4-cat-04.txt",
-                    "docs/esteira/estado/evidencia-cat-04-20261122.json"
-                ],
-                "mensagemCommit": "feat(jogos): integrar Histórias em cenas e fechar catálogo E5 8/40\\n\\nMotor de ordenação com toque, teclado e desfazer; cinco fases curadas na carga oficial."
-            },
-            {
-                "id": "CAT-05",
-                "status": "COMPLETED",
-                "fingerprint": "sha256:7b9096782b35d1ae09d5b88c4f678c6c7b88850a0807f4e6ed99666e12cdcb45",
-                "qg1": "PASS",
-                "qg2": "PASS",
-                "qg3": "PASS",
-                "verifier": "PASS_COM_ACHADOS",
-                "verifierId": "a2fdad4b-2406-4045-990e-17ff05d4b17b",
-                "homologacaoHumana": "PENDING_HUMAN",
-                "evidencias": [
-                    "docs/esteira/estado/qg3-typecheck-api-cat-05.txt",
-                    "docs/esteira/estado/qg3-typecheck-web-cat-05.txt",
-                    "docs/esteira/estado/qg3-build-api-cat-05.txt",
-                    "docs/esteira/estado/qg3-build-web-cat-05.txt",
-                    "docs/esteira/estado/qg3-check-cat-04-cat-05.txt",
-                    "docs/esteira/estado/qg3-check-cat-03-cat-05.txt",
-                    "docs/esteira/estado/qg3-check-e5-cat-05.txt",
-                    "docs/esteira/estado/qg3-carga-oficial-cat-05.txt",
-                    "docs/esteira/estado/qg3-smoke-e5-cat-05.txt",
-                    "docs/esteira/estado/qg3-smoke-e4-cat-05.txt",
-                    "docs/esteira/estado/qg3-smoke-authz-cat-05.txt",
-                    "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
-                    "docs/esteira/estado/evidencia-cat-05-20261122.json"
-                ],
-                "mensagemCommit": "chore(catalogo): fechar CAT-05 com QG-3 e roteiro CAT-HOM\\n\\nRegressão E4/E5/authz e builds ok; aceite humano em celular permanece pendente e publicação não autorizada."
-            }
+        "arquivos": [
+            "apps/web/src/app/manifest.ts",
+            "apps/web/src/app/apple-icon.png",
+            "apps/web/public/icones/app-192.png",
+            "apps/web/public/icones/app-512.png",
+            "apps/web/public/icones/app-maskable-512.png"
         ],
-        "fingerprint": "sha256:7b9096782b35d1ae09d5b88c4f678c6c7b88850a0807f4e6ed99666e12cdcb45",
+        "proximaAcao": "Homologar a instalação em aparelho real numa URL HTTPS de homologação.",
+        "homologacaoHumana": "PENDING_HUMAN",
+        "fingerprint": "sha256:7bc92badcbf74c70540e10910aebffbf8d508b525b9550f9d987731cfc6afd7b",
         "verificacao": {
             "qg1": {
                 "status": "PASS",
-                "evidencia": "docs/esteira/estado/qg3-typecheck-api-cat-05.txt"
+                "checagens": [
+                    "npm run typecheck -w @pef/web (exit 0)",
+                    "eslint apps/web/src/app/manifest.ts (exit 0)"
+                ],
+                "lintGlobal": "FAIL preexistente em hooks .codex, postcss.config.cjs e painel-gerenciar-familia.tsx (25 erros fora dos arquivos alterados)."
             },
             "qg2": {
                 "status": "PASS",
-                "evidencia": "docs/esteira/estado/qg3-smoke-e5-cat-05.txt"
-            },
-            "qg3": {
-                "status": "PASS",
-                "evidencia": "docs/esteira/estado/evidencia-cat-05-20261122.json"
-            },
-            "verifier": "PASS_COM_ACHADOS",
-            "verifierId": "a2fdad4b-2406-4045-990e-17ff05d4b17b",
-            "homologacaoCelular": "APROVADA",
-            "CAT_HOM": "APROVADA",
-            "homologacaoHumanaAteCat03": "APROVADA"
+                "checagens": [
+                    "npm run build -w @pef/web (exit 0)",
+                    "next start local: HTML anuncia manifesto e ícone Apple, manifesto JSON válido e quatro PNGs com HTTP 200 e dimensões esperadas"
+                ],
+                "verifier": "PASS — leitura independente do build, manifesto, dimensões dos PNGs, área segura do ícone maskable e escopo."
+            }
         },
-        "arquivos": [
-            "docs/esteira/estado/evidencia-cat-hom-20261122.json",
-            "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
-            "docs/esteira/estado/atual.json",
-            "docs/esteira/REGISTRO.md",
-            "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
-            "docs/produto/STATUS-E-ESCOPO.md"
-        ],
-        "proximaAcao": "CAT-HOM APROVADA. Avaliar bloqueios operacionais restantes (EST-02, restore alvo) e só então pedir autorização explícita de publicação. Sem E6/E7.",
-        "atualizadoEm": "2026-11-23T02:58:22.339Z",
-        "homologacaoHumanaAteCat03": "APROVADA",
-        "homologacaoHumana": "APROVADA",
-        "CAT_HOM": "APROVADA",
-        "fechamentoTecnico": {
-            "em": "2026-11-23T02:34:25.505Z",
-            "qg3": "PASS",
-            "catalogo": {
-                "e4": 24,
-                "e5Jogos": 8,
-                "e5Fases": 40
-            },
-            "publicacao": "NAO_AUTORIZADA"
-        },
-        "homologacaoHumanaRegistro": {
-            "em": "2026-11-23T02:58:22.339Z",
-            "resultado": "APROVADA",
-            "fonte": "Responsável do Produto nesta conversa (\"aprovado\")",
-            "evidencia": "docs/esteira/estado/evidencia-cat-hom-20261122.json",
-            "roteiro": "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
-            "naoAutorizado": [
-                "publicação",
-                "deploy/push/PR",
-                "E6/E7",
-                "gaps EST-02/restore VPS"
-            ]
-        }
+        "mensagemCommit": "feat(web): permitir instalação da Plataforma Familiar como PWA"
     },
     "auditoriaTecnica": {
         "id": "AUDITORIA-TECNICA-20261122",
