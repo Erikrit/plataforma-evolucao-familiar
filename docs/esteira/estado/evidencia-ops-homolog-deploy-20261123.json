@@ -1,0 +1,62 @@
+{
+  "demandaId": "DEM-OPS-HOMOLOG-DEPLOY-20261123",
+  "data": "2026-11-23",
+  "base": "develop@fb8af68c29de4de374d42e83131a4c4f7790e2c5",
+  "escopo": "Primeiro pacote de homologação: Dockerfiles, Compose homolog, migrate+carga oficial, workflow GHCR manual",
+  "fora": [
+    "deploy automático CI→VPS",
+    "publicação para uso real",
+    "seed fictício de desenvolvimento"
+  ],
+  "anexos": "Persistidos no PostgreSQL (conteudoBase64); volume pef_homolog_pg preserva banco/anexos; sem volume de uploads em disco",
+  "nextPublicApiUrl": {
+    "momento": "build da imagem web (ARG/ENV NEXT_PUBLIC_API_URL)",
+    "validacaoLocal": "embutido http://127.0.0.1:3011 no chunk estático da web",
+    "regra": "URL pública do navegador; nunca hostname Docker interno"
+  },
+  "verificacaoLocal": {
+    "dockerBuildApi": "PASS",
+    "dockerBuildWeb": "PASS",
+    "composeConfig": "PASS",
+    "migrateBancoVazio": {
+      "status": "PASS",
+      "migracao": "20261122220000_inicial_catalogo_editorial",
+      "carga": {
+        "e4Modelos": 24,
+        "e5Jogos": 8,
+        "e5Fases": 40,
+        "familias": 0,
+        "usuarios": 0
+      }
+    },
+    "cargaIdempotente": "PASS (segunda execução: No pending migrations; 24/8/40; familias 0)",
+    "getSaude": {
+      "status": "PASS",
+      "corpo": {
+        "status": "ok",
+        "api": "ok",
+        "banco": "ok"
+      }
+    },
+    "webHttp": {
+      "status": "PASS",
+      "codigo": 200,
+      "portaHostValidacao": 3010
+    }
+  },
+  "imagensLocais": [
+    "ghcr.io/erikrit/plataforma-evolucao-familiar/api:fb8af68c29de4de374d42e83131a4c4f7790e2c5",
+    "ghcr.io/erikrit/plataforma-evolucao-familiar/web:fb8af68c29de4de374d42e83131a4c4f7790e2c5"
+  ],
+  "workflow": ".github/workflows/publicar-imagens-homolog.yml (workflow_dispatch; requer presença na branch padrão main para primeira execução)",
+  "procedimentoVps": "docs/esteira/estado/procedimento-homolog-deploy.md",
+  "qg1": "PASS (artefatos Docker/Compose/workflow + typecheck implícito no workflow; validação local de build)",
+  "qg2": "PASS (compose up, migrate, /saude, web 200)",
+  "homologacaoHumanaVps": "PENDING_HUMAN",
+  "publicacaoUsoReal": "nao_autorizada",
+  "verifier": {
+    "status": "PASS_COM_ACHADOS",
+    "id": "2f507a08-b788-438b-8735-fbb4d265aafc",
+    "nota": "estático ok; runtime na evidência do agente principal"
+  }
+}

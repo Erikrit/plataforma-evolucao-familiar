@@ -1,5 +1,14 @@
 # Registro da esteira
 
+## DEM-OPS-HOMOLOG-DEPLOY-20261123 — pacote de homologação (VPS)
+
+- **Tipo:** transversal (ops). **Estado técnico:** COMPLETED (local, sem commit/push/deploy automático).
+- **Entrega:** Dockerfiles multi-stage API/web; `docker-compose.homolog.yml` (imagens por SHA, PG16 sem porta no host, API/web em `127.0.0.1`); `migrate deploy` + `carga-oficial` idempotente (24/8/40, sem contas); workflow `workflow_dispatch` → GHCR; procedimento `/opt/pef-homolog`.
+- **Anexos:** no PostgreSQL; volume `pef_homolog_pg` preserva dados. Sem volume de uploads.
+- **QG local:** build das duas imagens PASS; `compose config` PASS; migrate em banco vazio PASS; carga idempotente PASS; web HTTP 200; `GET /saude` ok.
+- **Evidência:** [JSON](estado/evidencia-ops-homolog-deploy-20261123.json) · [procedimento](estado/procedimento-homolog-deploy.md).
+- **Próximo:** workflow na branch padrão (`main`); disparo manual; pull/up na VPS. Publicação para uso real **não** autorizada.
+
 ## DEM-PWA-ONLINE-20261123 — PWA online
 
 - **Resultado técnico:** COMPLETED. Manifesto na raiz, abertura standalone e ícones Android e Apple. A aplicação usa as rotas e a sessão existentes.

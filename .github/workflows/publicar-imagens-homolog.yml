@@ -1,0 +1,111 @@
+# Publica imagens de homologação no GHCR. Disparo manual apenas.
+# Deploy automático na VPS fica fora deste workflow (teste manual primeiro).
+#
+# A primeira execução no GitHub Actions exige o arquivo na branch padrão (main).
+# Depois, pode-se disparar escolhendo a ref (ex.: develop) no workflow_dispatch.
+name: Publicar imagens homolog
+
+on:
+  workflow_dispatch:
+    inputs:
+      next_public_api_url:
+        description: "URL pública da API para o bundle Next (NEXT_PUBLIC_API_URL)"
+        required: true
+        default: "https://api-homolog.exemplo.com"
+      ref_nota:
+        description: "Nota opcional (não altera o SHA do commit checked out)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publicar-imagens-homolog-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validar-e-publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      NEXT_PUBLIC_API_URL: ${{ inputs.next_public_api_url }}
+      REGISTRY: ghcr.io
+      IMAGE_BASE: ghcr.io/${{ github.repository }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.18"
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Validar typecheck
+        run: npm run typecheck
+
+      - name: Validar Prisma generate
+        run: npm run prisma:generate -w @pef/api
+
+      - name: Definir SHA e tags
+        id: meta
+        run: |
+          SHA="${GITHUB_SHA}"
+          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
+          echo "api=${IMAGE_BASE}/api:${SHA}" >> "$GITHUB_OUTPUT"
+          echo "web=${IMAGE_BASE}/web:${SHA}" >> "$GITHUB_OUTPUT"
+          echo "Publicando SHA=${SHA}"
+          echo "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}"
+
+      - name: Login GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build e push API
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.api }}
+            ${{ env.IMAGE_BASE }}/api:homolog-latest
+          cache-from: type=gha,scope=pef-api
+          cache-to: type=gha,mode=max,scope=pef-api
+
+      - name: Build e push Web
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          push: true
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
+          tags: |
+            ${{ steps.meta.outputs.web }}
+            ${{ env.IMAGE_BASE }}/web:homolog-latest
+          cache-from: type=gha,scope=pef-web
+          cache-to: type=gha,mode=max,scope=pef-web
+
+      - name: Resumo
+        run: |
+          cat <<EOF
+          Imagens publicadas (mesmo SHA):
+          - ${{ steps.meta.outputs.api }}
+          - ${{ steps.meta.outputs.web }}
+          NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+          Nota: ${{ inputs.ref_nota }}
+          Próximo passo: pull/migrate/up manual em /opt/pef-homolog (sem deploy automático).
+          EOF

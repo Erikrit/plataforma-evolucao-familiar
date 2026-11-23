@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "commit": "3491646dddce37fdf5959924f8277485b28cc151",
-        "nota": "EVO-CATALOGO HOMOLOGADA (CAT-HOM APROVADA). Publicação não autorizada. Sem commit/push/deploy."
+        "commit": "fb8af68c29de4de374d42e83131a4c4f7790e2c5",
+        "nota": "Pacote homolog deploy preparado localmente. Sem commit/push/deploy automático. Publicação uso real não autorizada."
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -126,6 +126,65 @@
         }
     ],
     "demandasConcluidas": [
+        {
+            "id": "DEM-PWA-ONLINE-20261123",
+            "tipo": "melhoria_funcional",
+            "origem": "Responsável pelo Produto, 2026-11-23",
+            "estado": "COMPLETED",
+            "aprovacao": {
+                "nivel": "L2",
+                "status": "APROVADA",
+                "referencia": "Aceite explícito do incremento PWA online"
+            },
+            "escopo": "Instalação pelo navegador e abertura pelo ícone em modo standalone.",
+            "impacto": "Metadados e recursos estáticos do frontend.",
+            "risco": "baixo",
+            "fora": [
+                "offline e service worker",
+                "notificações",
+                "cadastro e autenticação",
+                "publicação"
+            ],
+            "fluxo": [
+                "task-routing",
+                "implementation-workflow",
+                "quality-gate"
+            ],
+            "criteriosAceite": [
+                "Manifesto válido, com identidade e escopo na raiz, abertura standalone e ícones Android/iOS.",
+                "A versão de produção entrega o manifesto e os ícones nas rotas públicas.",
+                "Homologação em aparelho real por HTTPS, incluindo abertura pelo ícone, sessão, Rotina, jogos e recuperação após queda de conexão."
+            ],
+            "arquivos": [
+                "apps/web/src/app/manifest.ts",
+                "apps/web/src/app/apple-icon.png",
+                "apps/web/public/icones/app-192.png",
+                "apps/web/public/icones/app-512.png",
+                "apps/web/public/icones/app-maskable-512.png"
+            ],
+            "proximaAcao": "Homologar a instalação em aparelho real numa URL HTTPS de homologação.",
+            "homologacaoHumana": "PENDING_HUMAN",
+            "fingerprint": "sha256:7bc92badcbf74c70540e10910aebffbf8d508b525b9550f9d987731cfc6afd7b",
+            "verificacao": {
+                "qg1": {
+                    "status": "PASS",
+                    "checagens": [
+                        "npm run typecheck -w @pef/web (exit 0)",
+                        "eslint apps/web/src/app/manifest.ts (exit 0)"
+                    ],
+                    "lintGlobal": "FAIL preexistente em hooks .codex, postcss.config.cjs e painel-gerenciar-familia.tsx (25 erros fora dos arquivos alterados)."
+                },
+                "qg2": {
+                    "status": "PASS",
+                    "checagens": [
+                        "npm run build -w @pef/web (exit 0)",
+                        "next start local: HTML anuncia manifesto e ícone Apple, manifesto JSON válido e quatro PNGs com HTTP 200 e dimensões esperadas"
+                    ],
+                    "verifier": "PASS — leitura independente do build, manifesto, dimensões dos PNGs, área segura do ícone maskable e escopo."
+                }
+            },
+            "mensagemCommit": "feat(web): permitir instalação da Plataforma Familiar como PWA"
+        },
         {
             "id": "EVO-CATALOGO-JOGOS-20261122",
             "tipo": "transversal",
@@ -3031,23 +3090,23 @@
         "fingerprint": "ef-modulo04-qg3-2026-11-16"
     },
     "demanda": {
-        "id": "DEM-PWA-ONLINE-20261123",
-        "tipo": "melhoria_funcional",
-        "origem": "Responsável pelo Produto, 2026-11-23",
+        "id": "DEM-OPS-HOMOLOG-DEPLOY-20261123",
+        "tipo": "transversal",
+        "origem": "Responsável pelo Produto, 2026-11-23 — primeiro pacote de deploy de homologação",
         "estado": "COMPLETED",
         "aprovacao": {
             "nivel": "L2",
             "status": "APROVADA",
-            "referencia": "Aceite explícito do incremento PWA online"
+            "referencia": "Pedido explícito de preparar pacote de homologação na VPS Hostinger; dados fictícios; sem deploy automático"
         },
-        "escopo": "Instalação pelo navegador e abertura pelo ícone em modo standalone.",
-        "impacto": "Metadados e recursos estáticos do frontend.",
-        "risco": "baixo",
+        "escopo": "Dockerfiles API/web, Compose homolog, migrate+carga oficial, workflow GHCR manual, validação local e comandos VPS /opt/pef-homolog",
+        "impacto": "Operação de homologação; não altera requisitos funcionais de produto",
+        "risco": "medio",
         "fora": [
-            "offline e service worker",
-            "notificações",
-            "cadastro e autenticação",
-            "publicação"
+            "deploy automático CI→VPS",
+            "publicação para uso real",
+            "seed/fixtures de desenvolvimento",
+            "proxy HTTPS na VPS (fora do pacote de imagens)"
         ],
         "fluxo": [
             "task-routing",
@@ -3055,39 +3114,44 @@
             "quality-gate"
         ],
         "criteriosAceite": [
-            "Manifesto válido, com identidade e escopo na raiz, abertura standalone e ícones Android/iOS.",
-            "A versão de produção entrega o manifesto e os ícones nas rotas públicas.",
-            "Homologação em aparelho real por HTTPS, incluindo abertura pelo ícone, sessão, Rotina, jogos e recuperação após queda de conexão."
+            "Dockerfiles multi-stage com workspaces/lockfile",
+            "NEXT_PUBLIC_API_URL validado no build da web",
+            "Compose homolog com imagens por SHA, PG16 sem porta publicada, API/web em 127.0.0.1",
+            "migrate deploy + carga oficial idempotente sem contas",
+            "workflow_dispatch publica api e web no GHCR com o mesmo SHA",
+            "validação local: build, compose config, migrate, web, GET /saude"
         ],
         "arquivos": [
-            "apps/web/src/app/manifest.ts",
-            "apps/web/src/app/apple-icon.png",
-            "apps/web/public/icones/app-192.png",
-            "apps/web/public/icones/app-512.png",
-            "apps/web/public/icones/app-maskable-512.png"
+            "apps/api/Dockerfile",
+            "apps/web/Dockerfile",
+            "apps/web/next.config.ts",
+            "docker-compose.homolog.yml",
+            ".dockerignore",
+            ".github/workflows/publicar-imagens-homolog.yml",
+            "deploy/homolog/migrar-e-carregar.sh",
+            "deploy/homolog/env.example",
+            "docs/esteira/estado/procedimento-homolog-deploy.md",
+            "docs/esteira/estado/evidencia-ops-homolog-deploy-20261123.json"
         ],
-        "proximaAcao": "Homologar a instalação em aparelho real numa URL HTTPS de homologação.",
-        "homologacaoHumana": "PENDING_HUMAN",
-        "fingerprint": "sha256:7bc92badcbf74c70540e10910aebffbf8d508b525b9550f9d987731cfc6afd7b",
+        "fingerprint": "sha256:c3516fdedf55013f9715f8d32a4da23195ffc141d1a53929f36e37e7dc5c3e30",
         "verificacao": {
             "qg1": {
-                "status": "PASS",
-                "checagens": [
-                    "npm run typecheck -w @pef/web (exit 0)",
-                    "eslint apps/web/src/app/manifest.ts (exit 0)"
-                ],
-                "lintGlobal": "FAIL preexistente em hooks .codex, postcss.config.cjs e painel-gerenciar-familia.tsx (25 erros fora dos arquivos alterados)."
+                "status": "PASS"
             },
             "qg2": {
-                "status": "PASS",
-                "checagens": [
-                    "npm run build -w @pef/web (exit 0)",
-                    "next start local: HTML anuncia manifesto e ícone Apple, manifesto JSON válido e quatro PNGs com HTTP 200 e dimensões esperadas"
-                ],
-                "verifier": "PASS — leitura independente do build, manifesto, dimensões dos PNGs, área segura do ícone maskable e escopo."
-            }
+                "status": "PASS"
+            },
+            "verifier": "PASS_COM_ACHADOS",
+            "evidencias": [
+                "docs/esteira/estado/evidencia-ops-homolog-deploy-20261123.json",
+                "docs/esteira/estado/procedimento-homolog-deploy.md"
+            ],
+            "verifierId": "2f507a08-b788-438b-8735-fbb4d265aafc",
+            "verifierNota": "Inspeção estática PASS; runtime não reexecutado no verifier (Ask/shell). Runtime local documentado na evidência pelo agente principal."
         },
-        "mensagemCommit": "feat(web): permitir instalação da Plataforma Familiar como PWA"
+        "proximaAcao": "Merge do workflow na branch padrão (main), disparar workflow_dispatch, pull/up manual em /opt/pef-homolog. Sem deploy automático.",
+        "homologacaoHumanaVps": "PENDING_HUMAN",
+        "mensagemCommit": "ops(homolog): preparar imagens GHCR, Compose e migrate para a VPS\\n\\nPacote de homologação com carga oficial idempotente; deploy automático e publicação para uso real ficam de fora."
     },
     "auditoriaTecnica": {
         "id": "AUDITORIA-TECNICA-20261122",

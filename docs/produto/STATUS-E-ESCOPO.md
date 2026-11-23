@@ -34,6 +34,8 @@ Reconciliados nesta rodada STATUS, plano de estabilização e encaminhamentos de
 
 **Ordem recomendada:** tratar bloqueios operacionais restantes (gaps EST-02, restore/migrate no alvo) se for rumo a uso real; publicação só com autorização humana explícita. Deploy automático não autorizado. A expansão E5 aprovada e sua homologação são requisitos da primeira publicação.
 
+**Pacote de homologação (ops) — 2026-11-23:** `DEM-OPS-HOMOLOG-DEPLOY-20261123` preparado na `develop` (Dockerfiles, Compose homolog, migrate + carga oficial, workflow GHCR manual). Primeira subida na VPS é de **homologação com dados fictícios**; não autoriza uso real. Procedimento: [`procedimento-homolog-deploy.md`](../esteira/estado/procedimento-homolog-deploy.md).
+
 
 ## Catálogo digital e primeira publicação — decisão L3, 2026-11-22
 
