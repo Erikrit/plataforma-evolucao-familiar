@@ -1,0 +1,42 @@
+{
+  "demandaId": "ESTABILIZACAO-PRE-USO-20261122",
+  "perfil": "QG-3",
+  "tipo": "fechamento_tecnico",
+  "em": "2026-11-22T23:42:00.000Z",
+  "branch": "develop",
+  "commitBase": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
+  "workingTreeNota": "alterações locais EST-04 + docs de fechamento; sem commit automático",
+  "incrementosTecnicos": ["EST-00", "EST-01", "EST-02", "EST-03", "EST-04"],
+  "fingerprintUltimoIncremento": "sha256:393af5ec2b09df78",
+  "checagens": [
+    { "nome": "typecheck api+web", "status": "PASS", "evidencia": "docs/esteira/estado/qg3-typecheck-est-fechamento.txt" },
+    { "nome": "smoke:est-04-ops", "status": "PASS", "evidencia": "docs/esteira/estado/qg3-smoke-est-04-ops-fechamento.txt", "nota": "reexecução após subir API" },
+    { "nome": "smoke:authz", "status": "PASS", "evidencia": "docs/esteira/estado/qg3-smoke-authz-est-fechamento.txt" },
+    { "nome": "smoke:est-03-docs", "status": "PASS", "checagens": 15, "evidencia": "docs/esteira/estado/qg3-smoke-est-03-docs-fechamento.txt" },
+    { "nome": "smoke:e3", "status": "PASS", "checagens": 18, "evidencia": "docs/esteira/estado/qg3-smoke-e3-est-fechamento.txt" }
+  ],
+  "homologacaoHumana": {
+    "status": "PENDING_HUMAN",
+    "emCursoPeloResponsavel": true,
+    "roteiros": [
+      "docs/esteira/estado/roteiro-homologacao-e3.md",
+      "docs/esteira/estado/roteiro-homologacao-est-03.md",
+      "docs/esteira/estado/roteiro-homologacao-e4.md",
+      "docs/esteira/estado/roteiro-homologacao-cor-ux-est-hom.md"
+    ],
+    "nota": "Fechamento técnico não aprova jornadas humanas nem publicação"
+  },
+  "publicacao": "NAO_AUTORIZADA",
+  "bloqueiosUsoRealAindaVerdadeiros": [
+    "E3-HOM / EST-03 / E4 residual / COR-UX-HOM sem aceite humano registrado nesta rodada",
+    "Backup/restore no ambiente alvo (VPS) não evidenciado",
+    "Sem prisma/migrations versionado para alvo",
+    "Gaps EST-02: rate-limit login; HTTPS + COOKIE_SECURE + WEB_ORIGIN no alvo",
+    "Sem autorização humana explícita de publicação"
+  ],
+  "preservado": [
+    "E5 UX R2 humana APROVADA",
+    "EVO-CATALOGO NEEDS_DECISION / L3 pendente",
+    "Sem E6/E7"
+  ]
+}

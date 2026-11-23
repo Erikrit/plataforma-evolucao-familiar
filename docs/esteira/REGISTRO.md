@@ -1,5 +1,44 @@
 # Registro da esteira
 
+## ESTABILIZACAO-PRE-USO — homologação humana APROVADA
+
+- **Origem:** responsável do Produto nesta conversa (“aprovado”), após fechamento técnico QG-3.
+- **Frentes:** E3-HOM, EST-03-HOM, E4 residual, COR-UX-HOM → **APROVADA**.
+- **Estado:** demanda `HOMOLOGADA` / `COMPLETED`. Evidência: [JSON](estado/evidencia-estabilizacao-hom-20261122.json).
+- **Não autorizado por este aceite:** publicação para uso real; E6/E7; L3 catálogos; encerramento automático dos gaps EST-02 / restore VPS.
+- **Próximo:** se rumo a uso real, tratar bloqueios operacionais restantes e exigir autorização explícita de publicação. Sem commit/push/deploy automático.
+
+## ESTABILIZACAO-PRE-USO — fechamento técnico QG-3
+
+- **Tipo:** transversal · **Perfil:** QG-3 fechamento do conjunto EST-00..04.
+- **Origem:** pedido humano de fechamento durante homologação em curso.
+- **QG-3:** typecheck api+web PASS; `smoke:est-04-ops`, `smoke:authz`, `smoke:est-03-docs` (15), `smoke:e3` (18) PASS. Evidência: [JSON](estado/evidencia-estabilizacao-fechamento-qg3-20261122.json).
+- **Estado:** demanda `COMPLETED` / `AGUARDANDO_HOMOLOGACAO_HUMANA`. Homologação humana **não** aprovada por este fechamento.
+- **Publicação:** não autorizada. Bloqueios de uso real preservados.
+- **Preservados:** E5 UX R2 APROVADA; EVO-CATALOGO L3 pendente; sem E6/E7.
+- **Próximo:** registrar resultado humano nos roteiros; sem commit/push/deploy automático.
+
+## ESTABILIZACAO-PRE-USO — EST-04 COMPLETED técnico (ops local)
+
+- **Tipo:** transversal · **Incremento:** EST-04.
+- **Checkout base:** `develop` @ `1c4c404` + alinhamento documental `origin/docs/alinhamento-est04-20261122` reconciliado (histórico preservado).
+- **Entrega:** estratégia schema (`db push` / sem `migrations`); `migrate diff` sync; backup `pg_dump` + restore em `pef_restore_est04` (23=23); Docker healthy; `/saude` 200/503; procedimento e smoke `est-04-ops` (15 PASS).
+- **QG:** typecheck api/web PASS; build api PASS; smoke ops PASS. Verifier **PASS_COM_ACHADOS** (`8d107190-9eeb-4eef-b42e-497661fa026b`) — shell do verifier em Ask; evidências do orquestrador. Fingerprint `sha256:393af5ec2b09df78…`.
+- **Bloqueios residuais:** restore local ≠ VPS; sem migrate history; gaps EST-02; humanos PENDING; publicação não autorizada.
+- **Preservados:** E5 UX R2 APROVADA; EST-03; EVO-CATALOGO L3 pendente; sem E6/E7.
+- **Evidência:** [JSON](estado/evidencia-est-04-20261122.json) · [procedimento](estado/procedimento-est-04-ops.md).
+- **Próximo:** homologações humanas em paralelo; fechar gaps de bloqueio antes de pedir publicação. Sem push/deploy.
+
+## 2026-11-22 — Alinhamento do projeto após integração EST-03
+
+- **Origem:** pedido humano de alinhamento e próximo passo; reconciliação documental na demanda existente ESTABILIZACAO-PRE-USO-20261122, sem novo módulo ou regra funcional.
+- **Base inspecionada:** `develop` @ `1c4c404b5e39beb06a1c37aa6527aad0cc566912`; checkout inicial limpo. EST-03 já integrada; encaminhamento antigo de commit local e campo global de iniciar EST-02 estavam superados.
+- **Correções documentais:** STATUS, plano EST e `atual.json` apontam ao próximo EST-04 (PENDING); referência E4→defeito E3 aberto foi reconciliada com a correção técnica EST-01. Evidências antigas e fingerprints de produto preservados.
+- **Homologações:** E5 R2 APROVADA preservada; E3-HOM, EST-03, E4 residual e COR-UX-HOM continuam pendentes no seu escopo. Nenhuma aprovação inferida do novo pedido.
+- **Prioridade:** operação/backup/restore/health, com gaps de segurança do alvo explícitos; catálogos L3 pendentes; E6/E7 fora; sem liberação de produção. Não reaplicar o plano antigo E5 sobre UX já homologada.
+- **Validação nesta rodada:** documental e consistência de estado; não reexecuta produto ou infraestrutura. Sem código, commit, push, PR ou deploy.
+
+
 ## ESTABILIZACAO-PRE-USO — EST-03 COMPLETED técnico
 
 - **Tipo:** transversal · **Incremento:** EST-03.

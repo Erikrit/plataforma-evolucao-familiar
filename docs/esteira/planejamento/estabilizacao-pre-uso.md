@@ -3,8 +3,8 @@
 **Demanda:** `ESTABILIZACAO-PRE-USO-20261122`  
 **Tipo:** transversal · **Risco:** alto (saúde, documentos, auth, operação)  
 **Aprovação:** pedido humano de estabilização sem E6/E7 e sem novas funcionalidades  
-**Base reconciliada:** `develop` @ `348a44a` (working tree limpa; origin/develop alinhada; EVO-CATALOGO L3 pausada sem implementação)  
-**Estado:** EST-00 COMPLETED · EST-01 COMPLETED técnico (E3-HOM PENDING_HUMAN) · EST-02 COMPLETED técnico · EST-03 COMPLETED técnico · EST-04 PENDING
+**Base reconciliada:** `develop` @ `1c4c404b5e39beb06a1c37aa6527aad0cc566912` (EST-03 integrada; EST-04 ops local COMPLETED técnico; EVO-CATALOGO L3 permanece pausada sem implementação)
+**Estado:** EST-00..04 COMPLETED técnico · QG-3 PASS · **homologação humana APROVADA** · demanda `HOMOLOGADA` · publicação não autorizada
 
 ## Contexto homologado
 
@@ -86,6 +86,9 @@
 - **Testes:** restore em volume descartável; health; migrate dry-run/status.
 - **Dependências:** EST-01..03 preferíveis para não validar ops sobre defeito crítico aberto.
 - **Homologação humana:** autorização explícita de publicação (fora desta demanda até critérios verdes).
+- **Resultado técnico (2026-11-22):** pasta `prisma/migrations` ausente — estratégia local `db push` + conferência `prisma migrate diff` (sync OK). Backup `pg_dump` + restore em `pef_restore_est04` (23=23 tabelas) com evidência. Docker healthy; `/saude` 200 com banco e 503 sem banco. Smoke `est-04-ops` 15 PASS. Procedimento: [procedimento-est-04-ops.md](../estado/procedimento-est-04-ops.md). Evidência: [evidencia-est-04-20261122.json](../estado/evidencia-est-04-20261122.json).
+- **Bloqueios residuais:** restore local ≠ VPS; sem histórico migrate para alvo; compose só Postgres; gaps EST-02 (login/HTTPS/cookie/origem); humanos PENDING; publicação não autorizada.
+- **Estado do incremento:** COMPLETED técnico (ops local); **não** autoriza uso real.
 
 ## Ordem por risco real
 
@@ -109,4 +112,6 @@ Não declarar pronto para uso real enquanto qualquer item abaixo for verdadeiro:
 
 ## Próxima ação
 
-Iniciar **EST-04** (ops/backup/health) quando autorizado. Homologação humana EST-03/E3-HOM/E4 residual conforme roteiros. Não iniciar E6/E7. Não declarar prontidão de produção.
+**Homologação humana APROVADA** (2026-11-22) para E3-HOM, EST-03, E4 residual e COR-UX-HOM. Evidência: [evidencia-estabilizacao-hom-20261122.json](../estado/evidencia-estabilizacao-hom-20261122.json). E5 UX R2 permanece APROVADA no seu escopo.
+
+**Ainda bloqueiam uso real:** gaps EST-02 (proteção de login; HTTPS/`COOKIE_SECURE`/`WEB_ORIGIN`); restore/migrate no ambiente alvo; ausência de autorização explícita de publicação. Sem E6/E7, sem expansão L3, sem push/PR/deploy pelos agentes.

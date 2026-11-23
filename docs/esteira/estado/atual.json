@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "commit": "348a44a01591a5bbb5665b5d9585c359eee4c575",
-        "nota": "EST-03 COMPLETED técnico sobre base 348a44a; alterações locais prontas para commit; EVO-CATALOGO permanece NEEDS_DECISION."
+        "commit": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
+        "nota": "Homologação humana da estabilização APROVADA pelo responsável; working tree com EST-04 local; publicação não autorizada."
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -128,12 +128,112 @@
     ],
     "demandasConcluidas": [
         {
+            "id": "ESTABILIZACAO-PRE-USO-20261122",
+            "tipo": "transversal",
+            "origem": "Responsável — preparar plataforma para uso real sem E6/E7 e sem novas funcionalidades",
+            "estado": "COMPLETED",
+            "homologacaoHumana": "APROVADA",
+            "estadoExibicao": "HOMOLOGADA",
+            "aprovacao": {
+                "nivel": "L2",
+                "status": "APROVADA",
+                "referencia": "Pedido humano ESTABILIZACAO-PRE-USO-20261122; docs/produto/STATUS-E-ESCOPO.md; GOVERNANCA L2 estabilização",
+                "nota": "Estabilização; ADR-015 auth enxuta APROVADA; sem E6/E7; sem publicação automática."
+            },
+            "risco": "alto",
+            "escopo": "Reconciliação documental; correção DEF-E3-ANEXO; regressão auth/autorização; consistência histórico/resumo/PDF e E4 residual; prontidão operacional (backup/restore/Docker/health) sem liberar produção. Inclui EST-01-UX visual Resumo/Histórico autorizada pelo responsável.",
+            "fingerprint": "sha256:393af5ec2b09df78",
+            "fingerprintFull": "sha256:393af5ec2b09df787cb273a21d51dcea19b7770f8ea63bc3314ed3f6b0ac6da1",
+            "verifier": "PASS_COM_ACHADOS",
+            "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b",
+            "qg3": "PASS",
+            "fechamentoTecnico": {
+                "perfil": "QG-3",
+                "status": "PASS",
+                "em": "2026-11-22T23:40:36.285Z",
+                "evidencia": "docs/esteira/estado/evidencia-estabilizacao-fechamento-qg3-20261122.json",
+                "incrementos": [
+                    "EST-00",
+                    "EST-01",
+                    "EST-02",
+                    "EST-03",
+                    "EST-04"
+                ],
+                "fingerprint": "sha256:393af5ec2b09df78",
+                "verifierEst04": "8d107190-9eeb-4eef-b42e-497661fa026b",
+                "nota": "Fechamento técnico do conjunto; não equivale a aceite humano nem autorização de publicação"
+            },
+            "incrementosConcluidos": [
+                {
+                    "id": "EST-02",
+                    "status": "COMPLETED",
+                    "fingerprint": "sha256:785fd27e1b52924e",
+                    "em": "2026-11-22T20:56:19.415Z",
+                    "verifier": "PASS_COM_ACHADOS"
+                },
+                {
+                    "id": "EST-03",
+                    "status": "COMPLETED",
+                    "fingerprint": "sha256:89d4dae23976eedc",
+                    "em": "2026-11-22T23:12:22.081Z",
+                    "verifier": "PASS_COM_ACHADOS"
+                },
+                {
+                    "id": "EST-04",
+                    "status": "COMPLETED",
+                    "fingerprint": "sha256:393af5ec2b09df78",
+                    "em": "2026-11-22T23:34:24.337Z",
+                    "verifier": "PASS_COM_ACHADOS"
+                }
+            ],
+            "mensagemCommit": "ops(estabilizacao): fechar EST-00..04 tecnicamente com QG-3\\n\\nOps local, privacidade, auth enxuta e anexos evidenciados; homologacao humana e publicacao permanecem pendentes.",
+            "evidenciaQg3": "docs/esteira/estado/evidencia-estabilizacao-fechamento-qg3-20261122.json",
+            "concluidoEm": "2026-11-22T23:40:36.285Z",
+            "arquivadoEm": "2026-11-22T23:40:36.285Z",
+            "nota": "Arquivo técnico do conjunto EST; demanda permanece em demanda ativa até registro humano / decisão de publicação",
+            "homologacaoHumanaRegistro": {
+                "resultado": "APROVADA",
+                "em": "2026-11-22T23:47:45.979Z",
+                "fonte": "Responsável do Produto nesta conversa (aprovado)",
+                "frentes": [
+                    {
+                        "id": "E3-HOM",
+                        "resultado": "APROVADA",
+                        "escopo": "Salvar/baixar/abrir anexo fictício após EST-01"
+                    },
+                    {
+                        "id": "EST-03-HOM",
+                        "resultado": "APROVADA",
+                        "escopo": "Histórico/Resumo/prévia/PDF, privacidade documentos, E4 residual"
+                    },
+                    {
+                        "id": "E4-HOM-RESIDUAL",
+                        "resultado": "APROVADA",
+                        "escopo": "Revalidação residual Biblioteca no roteiro EST-03/E4"
+                    },
+                    {
+                        "id": "COR-UX-HOM",
+                        "resultado": "APROVADA",
+                        "escopo": "Loading, sugestões, renovar, celebração — correção UX posterior à E5 R2"
+                    }
+                ],
+                "naoAmpliar": [
+                    "Publicação para uso real",
+                    "EVO-CATALOGO L3",
+                    "E6/E7",
+                    "Gaps EST-02 (rate-limit/HTTPS/COOKIE_SECURE/WEB_ORIGIN) e restore VPS"
+                ],
+                "nota": "Aceite humano do conjunto pendente da estabilização; não autoriza publicação nem fecha bloqueios operacionais restantes."
+            },
+            "atualizadoEm": "2026-11-22T23:47:45.979Z"
+        },
+        {
             "id": "COR-UX-EST-HOM-20261122",
             "tipo": "melhoria_ux",
             "origem": "Homologação humana APROVADA PARCIALMENTE da ESTABILIZACAO-PRE-USO-20261122 — correções UX autorizadas; expansão de catálogos só planejamento",
             "estado": "COMPLETED",
-            "homologacaoHumana": "PENDING_HUMAN",
-            "estadoExibicao": "AGUARDANDO_HOMOLOGACAO_HUMANA",
+            "homologacaoHumana": "APROVADA",
+            "estadoExibicao": "HOMOLOGADA",
             "demandaPrecedente": "ESTABILIZACAO-PRE-USO-20261122",
             "aprovacao": {
                 "nivel": "L1",
@@ -155,7 +255,13 @@
             },
             "sucedidaPor": "EVO-CATALOGO-JOGOS-20261122",
             "concluidoEm": "2026-11-22T22:02:39.185Z",
-            "arquivadoEm": "2026-11-22T22:49:19.883Z"
+            "arquivadoEm": "2026-11-22T22:49:19.883Z",
+            "homologacaoHumanaRegistro": {
+                "resultado": "APROVADA",
+                "em": "2026-11-22T23:47:45.979Z",
+                "fonte": "Responsável do Produto nesta conversa, no aceite da estabilização",
+                "nota": "Aceite da frente COR-UX-HOM junto com o conjunto pendente da estabilização"
+            }
         },
         {
             "id": "COR-E5-UX-HOM-R2-20261122",
@@ -2345,9 +2451,9 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologação humana E3-HOM (anexo ~200KB na UI) e iniciar EST-02 (auth/sessões/autorização).",
-    "atualizadoEm": "2026-11-22T19:26:32.394Z",
-    "notas": "EST-01 COMPLETED técnico (anexos+UX evo). DEF-E3 corrigido; E3-HOM PENDING_HUMAN. Verifier PASS_COM_ACHADOS. Sem commit/push/deploy.",
+    "proximaAcao": "Homologação humana APROVADA. Avaliar bloqueios operacionais restantes (restore alvo, migrate, gaps EST-02) e só então decidir pedido explícito de publicação. Sem E6/E7/expansão L3.",
+    "atualizadoEm": "2026-11-22T23:47:45.979Z",
+    "notas": "ESTABILIZACAO HOMOLOGADA (humano APROVADO). EST-00..04 + QG-3. Publicação não autorizada; gaps ops/EST-02 permanecem. E5 UX R2 APROVADA. Catálogos L3 pendentes; E6/E7 fora.",
     "decisaoPendente": {
         "id": "UX-HOM-02-SELETOR",
         "status": "NEEDS_DECISION",
@@ -2487,7 +2593,7 @@
         "id": "ESTABILIZACAO-PRE-USO-20261122",
         "tipo": "transversal",
         "origem": "Responsável — preparar plataforma para uso real sem E6/E7 e sem novas funcionalidades",
-        "estado": "IN_PROGRESS",
+        "estado": "COMPLETED",
         "aprovacao": {
             "nivel": "L2",
             "status": "APROVADA",
@@ -2565,12 +2671,13 @@
                 },
                 {
                     "id": "EST-04",
-                    "status": "PENDING",
-                    "aceite": "Backup/restore e health documentados; critérios de bloqueio para uso real aplicados"
+                    "status": "COMPLETED",
+                    "aceite": "Backup/restore descartável e /saude evidenciados localmente; bloqueios de uso real aplicados; sem deploy",
+                    "fingerprint": "sha256:393af5ec2b09df78"
                 }
             ]
         },
-        "incrementoAtivo": "EST-04",
+        "incrementoAtivo": null,
         "testesPertinentes": [
             "Reprodução controlada do upload de anexo com dados fictícios",
             "smoke:e3 e regressão authz/anexos",
@@ -2580,62 +2687,71 @@
             "Homologação humana E3-HOM após EST-01"
         ],
         "bloqueios": [
-            "Publicação para uso real sem backup/restore validado e sem E3-HOM",
+            "Backup/restore validado só no Docker local — repetir no ambiente alvo",
+            "Sem prisma/migrations versionado para alvo",
+            "Gaps EST-02: rate-limit login; HTTPS + COOKIE_SECURE + WEB_ORIGIN no alvo",
+            "Sem autorização humana explícita de publicação",
             "Não usar db reset/push destrutivo em banco compartilhado"
         ],
         "reconciliacaoLocal": {
             "status": "OK",
             "branch": "develop",
-            "commit": "348a44a",
-            "workingTree": "dirty_est03_ready_commit",
-            "originDevelop": "up_to_date",
+            "commit": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
+            "workingTree": "dirty_est04_ready",
+            "originDevelop": "up_to_date_base",
+            "nota": "Docs reconciliados de origin/docs/alinhamento-est04-20261122; EST-04 ops local COMPLETED técnico; sem commit/push/deploy.",
             "divergencias": [
                 "E3-HOM PENDING_HUMAN",
+                "EST-03 HOM PENDING_HUMAN",
                 "COR-UX-HOM PENDING_HUMAN",
-                "E4-HOM APROVADA_PARCIALMENTE (residual tipificado)",
+                "E4-HOM APROVADA_PARCIALMENTE (residual)",
                 "EVO-CATALOGO NEEDS_DECISION em demandaPausadaL3",
+                "Restore local não prova VPS",
+                "Sem prisma/migrations versionado",
+                "Gaps EST-02 (login/HTTPS/COOKIE_SECURE/WEB_ORIGIN)",
                 "Sem autorização de publicação"
             ],
-            "em": "2026-11-22T23:12:22.081Z"
+            "em": "2026-11-22T23:34:24.337Z"
         },
         "fingerprintNota": "Fingerprint de produto será recalculado por incremento ao alterar código. EST-00 é documental.",
         "verificacao": {
             "qg1": "PASS",
             "qg2": "PASS",
+            "qg3": "PASS",
             "verifier": "PASS_COM_ACHADOS",
-            "verifierId": "62d6b3ae-7f00-47fd-b03f-7b5a73fa0527",
-            "nota": "EST-03 COMPLETED técnico; EST-04 PENDING; homologação humana EST-03 PENDING_HUMAN; publicação não autorizada"
+            "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b",
+            "nota": "QG-3 PASS + homologação humana APROVADA (E3-HOM, EST-03, E4 residual, COR-UX-HOM). Publicação NÃO autorizada.",
+            "homologacaoHumana": "APROVADA"
         },
-        "proximaAcao": "Commit local humano EST-03 (hooks bloqueiam commit do agente); homologação humana EST-03; EST-04 quando autorizado",
-        "atualizadoEm": "2026-11-22T23:12:22.081Z",
-        "fingerprint": "sha256:89d4dae23976eedc",
-        "fingerprintFull": "sha256:89d4dae23976eedcc7de602160bada6925e878fd564d98743e948f03fd18e8ae",
+        "proximaAcao": "Homologação humana APROVADA. Avaliar bloqueios operacionais restantes (restore alvo, migrate, gaps EST-02) e só então decidir pedido explícito de publicação. Sem E6/E7/expansão L3.",
+        "atualizadoEm": "2026-11-22T23:47:45.979Z",
+        "fingerprint": "sha256:393af5ec2b09df78",
+        "fingerprintFull": "sha256:393af5ec2b09df787cb273a21d51dcea19b7770f8ea63bc3314ed3f6b0ac6da1",
         "arquivos": [
-            "apps/api/src/cuidados/controlador-cuidados.ts",
-            "apps/api/src/cuidados/servico-acompanhamento.ts",
-            "apps/api/scripts/smoke-est-03-docs.mjs",
+            "apps/api/scripts/smoke-est-04-ops.mjs",
             "apps/api/package.json",
+            "docs/esteira/estado/procedimento-est-04-ops.md",
+            "README.md",
+            "docker-compose.yml",
+            "apps/api/src/saude/controlador-saude.ts",
             "docs/esteira/planejamento/estabilizacao-pre-uso.md",
             "docs/produto/STATUS-E-ESCOPO.md",
             "docs/esteira/REGISTRO.md",
-            "docs/esteira/estado/evidencia-est-03-20261122.json",
-            "docs/esteira/estado/roteiro-homologacao-est-03.md"
+            "docs/esteira/estado/evidencia-est-04-20261122.json"
         ],
-        "mensagemCommit": "fix(privacidade): cache e metadado de anexo no resumo/PDF\\n\\nFecha EST-03 tecnicamente: Cache-Control privado em resumo/prévia/PDF e temDocumento só para quem pode consultar anexos.",
+        "mensagemCommit": "ops(estabilizacao): fechar EST-00..04 tecnicamente com QG-3\\n\\nOps local, privacidade, auth enxuta e anexos evidenciados; homologacao humana e publicacao permanecem pendentes.",
         "ultimoIncremento": {
-            "id": "EST-03",
+            "id": "EST-04",
             "status": "COMPLETED",
             "tipo": "transversal",
             "requisitos": [
-                "EST-03-DOCS",
-                "EVO-R05",
-                "EVO-R10",
-                "E3-RES-05"
+                "EST-04-OPS",
+                "EST-BLOQ-USO-REAL"
             ],
-            "aceite": "Isolamento histórico/resumo/PDF/anexos; PDF sem anexos; E4 residual tipificada",
-            "fingerprint": "sha256:89d4dae23976eedc",
+            "aceite": "Ops local: schema sync, backup/restore descartavel, Docker, /saude; sem autorizar publicacao",
+            "fingerprint": "sha256:393af5ec2b09df78",
             "verifier": "PASS_COM_ACHADOS",
-            "verifierId": "62d6b3ae-7f00-47fd-b03f-7b5a73fa0527"
+            "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b"
         },
         "incrementosConcluidos": [
             {
@@ -2651,9 +2767,16 @@
                 "fingerprint": "sha256:89d4dae23976eedc",
                 "em": "2026-11-22T23:12:22.081Z",
                 "verifier": "PASS_COM_ACHADOS"
+            },
+            {
+                "id": "EST-04",
+                "status": "COMPLETED",
+                "fingerprint": "sha256:393af5ec2b09df78",
+                "em": "2026-11-22T23:34:24.337Z",
+                "verifier": "PASS_COM_ACHADOS"
             }
         ],
-        "homologacaoHumana": "PENDING_HUMAN",
+        "homologacaoHumana": "APROVADA",
         "homologacaoParcial": {
             "resultado": "APROVADA_PARCIALMENTE",
             "em": "2026-11-22T21:40:28.249Z",
@@ -2669,7 +2792,95 @@
                 "EST-03/EST-04 da estabilização (retomada após COR-UX)"
             ]
         },
-        "retomadaPor": "Pedido humano EST-03 em 2026-11-22"
+        "retomadaPor": "Pedido humano EST-04 em 2026-11-22",
+        "reconciliacaoAnteriorEST03": {
+            "status": "OK",
+            "branch": "develop",
+            "commit": "348a44a",
+            "workingTree": "dirty_est03_ready_commit",
+            "originDevelop": "up_to_date",
+            "divergencias": [
+                "E3-HOM PENDING_HUMAN",
+                "COR-UX-HOM PENDING_HUMAN",
+                "E4-HOM APROVADA_PARCIALMENTE (residual tipificado)",
+                "EVO-CATALOGO NEEDS_DECISION em demandaPausadaL3",
+                "Sem autorização de publicação"
+            ],
+            "em": "2026-11-22T23:12:22.081Z"
+        },
+        "alinhamentoDocumental": {
+            "dataLocal": "2026-11-22",
+            "tipo": "reconciliacao_de_status",
+            "base": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
+            "escopo": "Atualizar encaminhamento e reconciliar fontes existentes; não implementa EST-04 nem homologa jornadas.",
+            "proximaEtapaPlanejada": "EST-04",
+            "estadoEST04Preservado": "PENDING",
+            "fontes": [
+                "docs/produto/STATUS-E-ESCOPO.md",
+                "docs/esteira/planejamento/estabilizacao-pre-uso.md",
+                "docs/esteira/estado/evidencia-est-03-20261122.json"
+            ]
+        },
+        "est04": {
+            "status": "COMPLETED_TECNICO",
+            "procedimento": "docs/esteira/estado/procedimento-est-04-ops.md",
+            "evidencia": "docs/esteira/estado/evidencia-est-04-20261122.json",
+            "smoke": "smoke:est-04-ops",
+            "fingerprint": "sha256:393af5ec2b09df78",
+            "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b",
+            "publicacao": "NAO_AUTORIZADA"
+        },
+        "estadoExibicao": "HOMOLOGADA",
+        "fechamentoTecnico": {
+            "perfil": "QG-3",
+            "status": "PASS",
+            "em": "2026-11-22T23:40:36.285Z",
+            "evidencia": "docs/esteira/estado/evidencia-estabilizacao-fechamento-qg3-20261122.json",
+            "incrementos": [
+                "EST-00",
+                "EST-01",
+                "EST-02",
+                "EST-03",
+                "EST-04"
+            ],
+            "fingerprint": "sha256:393af5ec2b09df78",
+            "verifierEst04": "8d107190-9eeb-4eef-b42e-497661fa026b",
+            "nota": "Fechamento técnico do conjunto; não equivale a aceite humano nem autorização de publicação"
+        },
+        "homologacaoHumanaRegistro": {
+            "resultado": "APROVADA",
+            "em": "2026-11-22T23:47:45.979Z",
+            "fonte": "Responsável do Produto nesta conversa (aprovado)",
+            "frentes": [
+                {
+                    "id": "E3-HOM",
+                    "resultado": "APROVADA",
+                    "escopo": "Salvar/baixar/abrir anexo fictício após EST-01"
+                },
+                {
+                    "id": "EST-03-HOM",
+                    "resultado": "APROVADA",
+                    "escopo": "Histórico/Resumo/prévia/PDF, privacidade documentos, E4 residual"
+                },
+                {
+                    "id": "E4-HOM-RESIDUAL",
+                    "resultado": "APROVADA",
+                    "escopo": "Revalidação residual Biblioteca no roteiro EST-03/E4"
+                },
+                {
+                    "id": "COR-UX-HOM",
+                    "resultado": "APROVADA",
+                    "escopo": "Loading, sugestões, renovar, celebração — correção UX posterior à E5 R2"
+                }
+            ],
+            "naoAmpliar": [
+                "Publicação para uso real",
+                "EVO-CATALOGO L3",
+                "E6/E7",
+                "Gaps EST-02 (rate-limit/HTTPS/COOKIE_SECURE/WEB_ORIGIN) e restore VPS"
+            ],
+            "nota": "Aceite humano do conjunto pendente da estabilização; não autoriza publicação nem fecha bloqueios operacionais restantes."
+        }
     },
     "auditoriaTecnica": {
         "id": "AUDITORIA-TECNICA-20261122",

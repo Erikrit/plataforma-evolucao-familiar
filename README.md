@@ -73,6 +73,8 @@ npm run db:push
 
 Na primeira atualização para Jogos Digitais (E5), `db:push` cria a tabela `progresso_fase_jogo`, usada ao abrir **Biblioteca → Jogos digitais**. A atualização da estrutura dispensa rodar o seed novamente.
 
+Não há pasta `prisma/migrations` nesta fase pré-uso: a estrutura local usa `db push`. Backup/restore e `/saude` em ambiente controlado: [procedimento EST-04](docs/esteira/estado/procedimento-est-04-ops.md) e `npm run smoke:est-04-ops -w @pef/api`. Dump em `backups/` (ignorado pelo git). Validação local não autoriza publicação nem substitui restore no ambiente alvo.
+
 ## Situação e restrições
 
 Consulte [Status e escopo](docs/produto/STATUS-E-ESCOPO.md) para diferenciar **regra aprovada, código existente, evidência local e homologação**. A autenticação e autorização ainda exigem revisão antes de usar dados reais sensíveis; a existência dos módulos e de QG-3 PASS registrado não equivale a liberação para uso real.

@@ -2,13 +2,37 @@
 
 ## Estabilização pré-uso — 2026-11-22
 
-**Demanda ativa:** `ESTABILIZACAO-PRE-USO-20261122` — **EST-03 COMPLETED técnico**; próximo **EST-04** PENDING. Base: `develop` @ `348a44a` + commit EST-03. `EVO-CATALOGO-JOGOS-20261122` permanece **NEEDS_DECISION** / L3 **PENDENTE** (`demandaPausadaL3`; sem implementação). `COR-UX-EST-HOM-20261122` COMPLETED técnico (homologação humana PENDING). EST-00..02 COMPLETED técnico. Expansão de catálogos E4: só planejamento L3 em [`expansao-catalogos-e4-e5.md`](../esteira/planejamento/expansao-catalogos-e4-e5.md).
+**Demanda ativa:** `ESTABILIZACAO-PRE-USO-20261122` — **HOMOLOGADA** (EST-00..04 + QG-3 PASS + **homologação humana APROVADA** pelo responsável em 2026-11-22). Base: `develop` @ `1c4c404b5e39beb06a1c37aa6527aad0cc566912` + alterações locais EST-04. Publicação **ainda não autorizada** (bloqueios operacionais restantes). `EVO-CATALOGO-JOGOS-20261122` permanece **NEEDS_DECISION** / L3 **PENDENTE** (`demandaPausadaL3`; sem implementação). `COR-UX-EST-HOM-20261122` homologação humana **APROVADA** neste aceite. Expansão de catálogos E4: só planejamento L3 em [`expansao-catalogos-e4-e5.md`](../esteira/planejamento/expansao-catalogos-e4-e5.md). Evidências: [QG-3](../esteira/estado/evidencia-estabilizacao-fechamento-qg3-20261122.json) · [HOM](../esteira/estado/evidencia-estabilizacao-hom-20261122.json).
 
-**EST-03 (docs/privacidade):** COMPLETED técnico — cache privado em resumo/prévia/PDF; `temDocumento` oculto à colaboradora; isolamento e PDF sem anexos regressados (`smoke:est-03-docs` + e3/e4/e5/authz). Verifier PASS_COM_ACHADOS. Homologação humana PENDING ([roteiro](../esteira/estado/roteiro-homologacao-est-03.md)). Evidência `docs/esteira/estado/evidencia-est-03-20261122.json`.
+**Aceite humano (escopo):** E3-HOM, EST-03 (Histórico/Resumo/prévia/PDF/privacidade), E4 residual e COR-UX-HOM. Não amplia a publicação, L3 de catálogos, E6/E7 nem gaps EST-02/restore VPS.
 
-**EST-02 (auth enxuta):** COMPLETED técnico — ADR-015 (sessão/cookie; sem JWT); regressões auth PASS (`qg*-est-02*`); verifier PASS_COM_ACHADOS; gaps residuais (rate-limit de login; HTTPS/`COOKIE_SECURE` no alvo) bloqueiam uso real. Evidência `docs/esteira/estado/evidencia-est-02-20261122.json`.
+**EST-04 (ops local):** COMPLETED técnico — schema sync; backup/restore descartável; Docker; `/saude` 200/503. Restore local **não** prova VPS. [Procedimento](../esteira/estado/procedimento-est-04-ops.md) · [Evidência](../esteira/estado/evidencia-est-04-20261122.json).
+
+**EST-03 (docs/privacidade):** COMPLETED técnico + **homologação humana APROVADA**. Evidência técnica `docs/esteira/estado/evidencia-est-03-20261122.json`.
+
+**EST-02 (auth enxuta):** COMPLETED técnico — ADR-015; gaps residuais (rate-limit de login; HTTPS/`COOKIE_SECURE`/`WEB_ORIGIN` no alvo) **continuam bloqueando uso real**. Evidência `docs/esteira/estado/evidencia-est-02-20261122.json`.
 
 **Publicação para uso real:** ainda **não autorizada**. Critérios de bloqueio no plano EST.
+
+### Alinhamento vigente e próximo encaminhamento — 2026-11-22
+
+Reconciliados nesta rodada STATUS, plano de estabilização e encaminhamentos de `atual.json`. O campo global ainda indicava iniciar EST-02 e a demanda pedia commit EST-03; ambos ficaram superados pela `develop` atual. Nenhum resultado técnico ou aceite humano foi promovido por esta atualização.
+
+| Frente | Estado vigente | Encaminhamento |
+|---|---|---|
+| E1/E2 | Homologadas no escopo registrado | Preservar jornadas e acesso contextual. |
+| E5 e UX R2 | Implementadas; UX R2 humana APROVADA | Preservar partida direta, dica, fase/progresso e menu agrupado. Não reaplicar planejamento/patch E5 antigo sobre essa entrega. |
+| COR-UX-EST-HOM | Homologação humana APROVADA (com a estabilização) | Preservar loading, sugestões, renovar e celebração no escopo aceito. |
+| Anexos E3 / EST-01 | E3-HOM APROVADA | Preservar salvar → baixar → abrir no dispositivo. |
+| EST-02 | COMPLETED técnico, gaps residuais | Preservar ADR-015; fechar rate-limit/HTTPS/cookie/origem no alvo antes do uso real. |
+| EST-03 | Homologação humana APROVADA | Preservar isolamento, cache privado e metadado de anexo gated. |
+| Auditoria técnica | Concluída no recorte registrado | Preservar otimizações; não reabrir varredura genérica. |
+| EST-04 | COMPLETED técnico (ops local) | Repetir backup/restore no ambiente alvo; sem declarar produção. |
+| Catálogos E4/E5 extensíveis | Planejamento L3 PENDENTE | Sem CAT-01..05 até aprovação L3. |
+| E6/E7 e publicação | Fora / publicação não autorizada | Decisão explícita de publicação ainda necessária. |
+
+**Ordem recomendada:** tratar bloqueios operacionais restantes (gaps EST-02, restore/migrate no alvo) se for rumo a uso real; publicação só com autorização humana explícita. Deploy automático não autorizado. L3 de catálogos permanece pendente.
+
 
 ## Catálogo digital extensível — planejamento L3, 2026-11-22
 
@@ -28,28 +52,28 @@
 
 **Implementação registrada em `0a1055b`.** E4-01 a E4-03 constam como concluídos tecnicamente no registro original. O escopo aprovado para atividades reais consta no [Módulo 03 §12](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#12-e4--biblioteca-de-atividades-reais). [Evidência técnico-histórica](../esteira/estado/evidencia-e4-20261122.json)
 
-**Homologação humana E4-HOM aprovada parcialmente**, conforme relato do responsável sobre a entrega anterior. A E5-01 deu à Biblioteca um destino contextual e simplificou a entrada de Desenvolvimento. A revalidação humana do percurso real está no roteiro da E5-06. [Roteiro de homologação](../esteira/estado/roteiro-homologacao-e5.md)
+**Homologação humana E4-HOM** foi aprovada parcialmente na entrega anterior; a **revalidação residual** no escopo da estabilização foi **APROVADA** em 2026-11-22. A E5-01 deu à Biblioteca um destino contextual. [Roteiro E5](../esteira/estado/roteiro-homologacao-e5.md) · aceite na [evidência HOM](../esteira/estado/evidencia-estabilizacao-hom-20261122.json).
 
-**E3-HOM** segue pendente pelo defeito de anexos `DEF-E3-ANEXO-SALVAR-20261122`, aberto e adiado por decisão de Produto.
+**E3-HOM** **APROVADA** em 2026-11-22 no aceite humano da estabilização, após a correção técnica EST-01 de `DEF-E3-ANEXO-SALVAR-20261122`. O registro original de defeito aberto/adiado permanece histórico.
 
 ## Defeito de anexos — correção técnica EST-01, 2026-11-22
 
 **DEF-E3-ANEXO-SALVAR-20261122 — CORRIGIDO TECNICAMENTE em EST-01** (`ESTABILIZACAO-PRE-USO-20261122`). Causa raiz: HTTP 413 (`request entity too large`) no POST de anexos com JSON/base64 acima do limite padrão ~100 KB do Nest/Express. Correção: body JSON até 12 MB, validação explícita de 8 MB, checagem na UI e retry sem reenviar o arquivo. Smoke E3 com 18 checagens (inclui payload >100 KB) PASS.
 
-**E3-HOM permanece PENDING_HUMAN** até novo aceite do responsável na jornada salvar → baixar → abrir no dispositivo (dados fictícios). Demais jornadas da E3 não são aprovadas automaticamente por esta correção.
+**E3-HOM** ficou PENDING_HUMAN após a correção técnica e foi **APROVADA** em 2026-11-22 no aceite humano da estabilização (jornada salvar → baixar → abrir, dados fictícios).
 
 **Histórico:** defeito aberto e adiado por Produto ao avançar E4; retomado na estabilização pré-uso. Evidência: `docs/esteira/estado/evidencia-est-01-20261122.json`.
 
 **Publicação para uso segue adiada.**
 
 
-## E3 — implementação técnica registrada; homologação de anexos impedida, 2026-11-22
+## E3 — implementação técnica registrada; homologação de anexos (atualizado), 2026-11-22
 
 **Decisão APROVADA (desenho):** oferecer **Baixar arquivo** no exame; navegador/aplicativo do dispositivo faz a abertura. Retirados visualizador interno, zoom e paginação. Resumo único por área/período e fluxo de prévia/PDF do relatório.
 
 **Fontes:** Módulo 02 v1.7 §10, Módulo 04 v1.2 §12 e UX PROPOSTA-EVOLUCAO-POS-V1.md §11.
 
-**Esteira:** DEM-E3-EXAMES-RESUMO-20261122 COMPLETED técnico (E3-01..03); E3-HOM PENDING_HUMAN. Fingerprint `sha256:2dead837b08ac808`. Plano em `docs/esteira/planejamento/e3-exames-resumo.md`; roteiro em `docs/esteira/estado/roteiro-homologacao-e3.md`.
+**Esteira:** DEM-E3-EXAMES-RESUMO-20261122 COMPLETED técnico (E3-01..03); E3-HOM **APROVADA** em 2026-11-22 (estabilização). Fingerprint técnico histórico `sha256:2dead837b08ac808`. Plano em `docs/esteira/planejamento/e3-exames-resumo.md`; roteiro em `docs/esteira/estado/roteiro-homologacao-e3.md`.
 
 **Referência de base documental:** develop @ `8a517523319a76740f21ad51da5a6e02cb29f6c1` (implementação local sem commit). Publicação permanece adiada.
 
