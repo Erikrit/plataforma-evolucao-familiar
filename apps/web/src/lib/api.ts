@@ -1446,23 +1446,45 @@ export type JogoResumo = {
   categoria: string;
   instrucoes: string;
   versao: number;
+  tipoMecanica?: string;
   fases: FaseJogoResumo[];
 };
 
 export type CatalogoJogos = { jogos: JogoResumo[]; destaques: string[] };
 
-export type FiguraMemoria = { id: string; nome: string; simbolo: string };
+export type FiguraMemoria = {
+  id: string;
+  nome: string;
+  simbolo: string;
+  face?: "objeto" | "sombra";
+};
 export type FiguraSequencia = {
   id: string;
   forma: "circulo" | "quadrado" | "triangulo" | "losango";
   cor: "azul" | "dourado" | "verde" | "roxo";
   nome: string;
 };
+export type FiguraEscolha = { id: string; nome: string; simbolo: string };
+export type CenaOrdenacao = { id: string; nome: string; simbolo: string };
 export type ConteudoSequencia = {
   tipo: "sequencia";
   sequencia: (FiguraSequencia | null)[];
   alternativas: FiguraSequencia[];
   resposta: string;
+};
+export type ConteudoEscolha = {
+  tipo: "escolha";
+  enunciado: string;
+  opcoes: FiguraEscolha[];
+  resposta: string;
+  dica?: string;
+};
+export type ConteudoOrdenacao = {
+  tipo: "ordenacao";
+  enunciado: string;
+  cenas: CenaOrdenacao[];
+  ordemCorreta: string[];
+  dica?: string;
 };
 export type PosicaoLabirinto = { linha: number; coluna: number };
 export type ConteudoLabirinto = {
@@ -1470,12 +1492,19 @@ export type ConteudoLabirinto = {
   mapa: string[];
   inicio: PosicaoLabirinto;
   chegada: PosicaoLabirinto;
+  pontos?: PosicaoLabirinto[];
 };
 export type ConteudoPartida =
   | { tipo: "memoria"; cartas: FiguraMemoria[] }
   | ConteudoSequencia
+  | ConteudoEscolha
+  | ConteudoOrdenacao
   | ConteudoLabirinto;
-export type InicioPartida = { versao: number; conteudo: ConteudoPartida };
+export type InicioPartida = {
+  versao: number;
+  tipoMecanica?: string;
+  conteudo: ConteudoPartida;
+};
 
 export type ConclusaoPartida = {
   concluidaEm: string;

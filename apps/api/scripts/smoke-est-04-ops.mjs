@@ -108,10 +108,14 @@ async function principal() {
   });
 
   const migrationsExiste = existsSync(join(raizApi, "prisma", "migrations"));
-  registrar("estrategia_schema_sem_migrations_dir", migrationsExiste === false, {
-    estrategiaVigente: "prisma db push (fase pré-uso; Documento Mestre §13)",
+  const migracaoInicial = existsSync(
+    join(raizApi, "prisma", "migrations", "20261122220000_inicial_catalogo_editorial", "migration.sql"),
+  );
+  registrar("estrategia_schema_migrations_versionadas", migrationsExiste && migracaoInicial, {
+    estrategiaVigente: "prisma migrate deploy (CAT-01); db push permanece útil em ensaios locais",
     migrationsDir: migrationsExiste,
-    bloqueioUsoReal: "histórico migrate ainda ausente para ambiente alvo",
+    migracaoInicial,
+    nota: "CAT-01 introduz histórico migrate; aplicar no alvo permanece operação autorizada separadamente",
   });
 
   // Prisma 6: db push não tem --dry-run; migrate diff é somente leitura.

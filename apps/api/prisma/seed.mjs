@@ -179,33 +179,8 @@ try {
     });
   }
 
-  const { CATALOGO_BIBLIOTECA_E4 } = await import("./catalogo-biblioteca-e4.mjs");
-  if (CATALOGO_BIBLIOTECA_E4.length > 24) {
-    throw new Error("Catálogo E4 excede o limite de 24 modelos ativos.");
-  }
-
-  for (const item of CATALOGO_BIBLIOTECA_E4) {
-    await prisma.desafio.create({
-      data: {
-        id: item.id,
-        familiaId: null,
-        nome: item.nome,
-        instrucao: item.instrucao,
-        categoria: item.categoria,
-        dificuldade: item.dificuldade,
-        materiais: item.materiais,
-        duracaoMinutos: item.duracaoMinutos,
-        faixaEtariaMin: item.faixaEtariaMin,
-        faixaEtariaMax: item.faixaEtariaMax,
-        origemConteudo: "autoral_pef",
-        versaoConteudo: 1,
-        adaptacoes: item.adaptacoes,
-        supervisao: item.supervisao,
-        origem: "catalogo",
-        ativo: true,
-      },
-    });
-  }
+  const { carregarCatalogosOficiais } = await import("./carga-oficial.mjs");
+  const cargaOficial = await carregarCatalogosOficiais(prisma);
 
   const inicioVigencia = diasAtras(21, 8, 0);
 
@@ -568,7 +543,9 @@ try {
           exames: 2,
           doses: idxDose,
           observacoesRotina: rotinas.length,
-          biblioteca: CATALOGO_BIBLIOTECA_E4.length,
+          biblioteca: cargaOficial.e4Modelos,
+          jogosDigitais: cargaOficial.e5Jogos,
+          fasesDigitais: cargaOficial.e5Fases,
           participacoesLaurinha: participacoes.length,
           recompensas: 2,
         },

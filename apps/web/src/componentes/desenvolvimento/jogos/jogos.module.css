@@ -60,6 +60,11 @@
   line-height: 1.15;
 }
 
+.figura[data-face="sombra"] {
+  filter: grayscale(1) brightness(0);
+  opacity: 0.92;
+}
+
 .nomeFigura {
   max-width: 100%;
   padding: 0 0.15rem;
@@ -113,6 +118,43 @@
   outline-offset: 2px;
 }
 
+.pecaAcao[data-foco="true"] {
+  outline: 3px solid #244e95;
+  outline-offset: 2px;
+}
+
+.ordenacao:focus-visible {
+  outline: none;
+}
+
+.filaOrdenacao {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.slotOrdenacao {
+  display: flex;
+  min-height: 4.75rem;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border: 2px dashed #6883af;
+  border-radius: var(--mantine-radius-md);
+  background: #f0f4fc;
+  color: #253b61;
+}
+
+.slotOrdenacao[data-preenchido="true"] {
+  border-style: solid;
+  background: #e8effc;
+}
+
 .forma {
   width: 1.65rem;
   height: 1.65rem;
@@ -151,6 +193,8 @@
 .celula[data-tipo="caminho"] { border: 1px solid #e1e8f5; }
 .celula[data-tipo="jogador"] { background: #cfe1fc; color: #163c83; }
 .celula[data-tipo="chegada"] { background: #dcf3e5; color: #206342; }
+.celula[data-tipo="entrega"] { background: #fff4d6; color: #725000; }
+.celula[data-tipo="entregaFeita"] { background: #e7f5ec; color: #3e785b; }
 
 .direcoes {
   display: grid;

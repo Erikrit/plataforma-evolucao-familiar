@@ -1,7 +1,5 @@
-import type { JogoCatalogo } from "./catalogo-jogos";
-
 export function selecionarDestaquesJogos(
-  jogos: readonly Pick<JogoCatalogo, "id" | "categoria">[],
+  jogos: readonly { id: string; categoria: string }[],
   aberturas: readonly { jogoId: string; ultimaAberturaEm: Date }[],
 ) {
   const porJogo = new Map<string, number>();
@@ -17,7 +15,7 @@ export function selecionarDestaquesJogos(
   const destaque = new Set<string>();
   const categorias = new Set<string>();
 
-  function incluir(jogo: Pick<JogoCatalogo, "id" | "categoria">) {
+  function incluir(jogo: { id: string; categoria: string }) {
     if (destaque.size === 3 || destaque.has(jogo.id)) return;
     destaque.add(jogo.id);
     categorias.add(jogo.categoria);

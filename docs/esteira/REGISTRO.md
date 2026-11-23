@@ -1,5 +1,60 @@
 # Registro da esteira
 
+## EVO-CATALOGO-JOGOS-20261122 — CAT-HOM APROVADA
+
+- **Origem:** responsável do Produto nesta conversa (“aprovado”), após CAT-01..05 técnicos + QG-3.
+- **Resultado:** **CAT-HOM APROVADA** · demanda **HOMOLOGADA**. Evidência: [JSON](estado/evidencia-cat-hom-20261122.json) · [roteiro](estado/roteiro-homologacao-cat-hom.md).
+- **Catálogo:** 24 modelos E4 + **8 jogos / 40 fases** E5.
+- **Não autorizado por este aceite:** publicação para uso real; deploy/push/PR; E6/E7; encerramento automático dos gaps EST-02 / restore VPS.
+- **Próximo:** se rumo a uso real, tratar bloqueios operacionais restantes e exigir **autorização explícita de publicação**. Sem commit/push/deploy automático.
+
+## EVO-CATALOGO-JOGOS-20261122 — CAT-05 (QG-3 + roteiro CAT-HOM)
+
+- **Estado técnico:** COMPLETED (local, sem commit/push). **CAT-HOM:** PENDING_HUMAN. Publicação **não** autorizada.
+- **Entrega:** QG-3 de regressão do conjunto CAT-01..04; roteiro humano [CAT-HOM](estado/roteiro-homologacao-cat-hom.md); catálogo oficial 24 E4 + **8 jogos / 40 fases**.
+- **QG-3:** typecheck/build API+web PASS (`PEF_NEXT_DIST_DIR=.next-qg-cat-05`); checks cat-04/03/e5 PASS; carga 8/40; `smoke:e5` 40 OK; `smoke:e4` 16 OK; `smoke:authz` PASS. Verifier PASS_COM_ACHADOS (`a2fdad4b-2406-4045-990e-17ff05d4b17b`).
+- **Evidência:** [JSON](estado/evidencia-cat-05-20261122.json).
+- **Próximo:** aceite humano CAT-HOM no celular; só então avaliar autorização de publicação (independente).
+
+## EVO-CATALOGO-JOGOS-20261122 — CAT-04 (Histórias em cenas + 8/40)
+
+- **Estado técnico:** COMPLETED (local, sem commit/push). **CAT-05:** PENDING. Homologação celular: PENDING_HUMAN.
+- **Homologação humana até CAT-03:** APROVADA (responsável nesta conversa).
+- **Entrega:** Histórias em cenas (motor `ordenacao`, toque/teclado/desfazer); 5 fases × 2 variantes; carga oficial **8 jogos / 40 fases**.
+- **QG:** typecheck API/web PASS; `check:cat-04` + regressão `check:cat-03`/`check:e5` PASS; carga 8/40; `smoke:e5` 40 OK; `smoke:authz` PASS; `smoke:e4` 16 OK. Verifier PASS_COM_ACHADOS (`340b7b3d-ce2a-47fc-8d44-2ecfb4d03fc6`).
+- **Evidência:** [JSON](estado/evidencia-cat-04-20261122.json).
+- **Próximo:** CAT-05 (QG-3 + roteiro CAT-HOM).
+
+## EVO-CATALOGO-JOGOS-20261122 — CAT-03 (quatro jogos novos)
+
+- **Estado técnico:** COMPLETED (local, sem commit/push). **CAT-04..05:** PENDING. Homologação celular: PENDING_HUMAN.
+- **Entrega:** Pares de sombras (memória com faces), Ache o intruso e Palavra e figura (escolha), Entrega no jardim (labirinto com pontos P); 20 fases curadas; carga oficial 7 jogos / 35 fases.
+- **QG:** typecheck API/web PASS; `check:e5` + `check:cat-03` PASS; `smoke:e5` 38 OK; `smoke:authz` PASS; `smoke:e4` 16 OK. Verifier PASS_COM_ACHADOS.
+- **Evidência:** [JSON](estado/evidencia-cat-03-20261122.json).
+- **Próximo:** CAT-04 (Histórias em cenas + oito jogos / 40 fases).
+
+## EVO-CATALOGO-JOGOS-20261122 — CAT-02 (leitura PostgreSQL)
+
+- **Estado técnico:** COMPLETED (local, sem commit/push). **CAT-03..05:** PENDING.
+- **Entrega:** `ServicoJogos` lê `jogo_digital`/`fase_jogo_digital`; motores em código por `tipoMecanica`; `iniciar` devolve `tipoMecanica`; Resumo resolve editorial no PG.
+- **QG:** typecheck API/web PASS; `check:e5` PASS; `smoke:e5` 30 OK; `smoke:authz` PASS; `smoke:e4` 16 OK. Verifier PASS_COM_ACHADOS.
+- **Evidência:** [JSON](estado/evidencia-cat-02-20261122.json).
+- **Próximo:** CAT-03 (quatro jogos novos).
+
+## EVO-CATALOGO-JOGOS-20261122 — CAT-01 (migração + carga oficial)
+
+- **Estado técnico:** COMPLETED (local, sem commit/push). **CAT-02..05:** PENDING.
+- **Entrega:** migração inicial Prisma com `JogoDigital`/`FaseJogoDigital`; `db:carga-oficial` idempotente (24 E4 + 3 jogos + 15 fases); seed fictício separado.
+- **QG:** typecheck API PASS; bancos descartáveis `qg:cat-01` PASS (novo + piloto com progresso preservado).
+- **Evidências:** [JSON](estado/evidencia-cat-01-20261122.json) · [QG-1](estado/qg1-typecheck-cat-01.txt) · [QG-2](estado/qg2-cat-01-bancos.txt).
+- **Próximo:** CAT-02 (leitura do catálogo digital a partir do PostgreSQL).
+
+## EVO-CATALOGO-JOGOS-20261122 — decisão L3 e planejamento da V1
+
+- Produto aprovou oito jogos, catálogo PostgreSQL, cadastro inicial aberto e renomeação planejada da branch padrão para `master`.
+- CAT-01 READY para migração inicial e carga oficial isolada. CAT-02..05 PENDING. Homologação E5 R2 e fechamento da estabilização preservados.
+- [Catálogo e critérios](planejamento/evo-catalogo-jogos-20261122.md) · [Preparação operacional](planejamento/estabilizacao-pre-uso.md).
+
 ## ESTABILIZACAO-PRE-USO — homologação humana APROVADA
 
 - **Origem:** responsável do Produto nesta conversa (“aprovado”), após fechamento técnico QG-3.

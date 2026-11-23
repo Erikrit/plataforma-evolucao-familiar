@@ -1,5 +1,6 @@
 import { randomInt } from "node:crypto";
 import type { CategoriaBiblioteca } from "../constantes-desenvolvimento";
+import { montarConteudoMotor } from "./motores-jogos";
 
 type FiguraMemoria = Readonly<{ id: string; nome: string; simbolo: string }>;
 
@@ -131,11 +132,6 @@ const trianguloAzul = peca("triangulo", "azul");
 const trianguloVerde = peca("triangulo", "verde");
 const losangoVerde = peca("losango", "verde");
 const losangoRoxo = peca("losango", "roxo");
-
-const PECAS_SEQUENCIA = [
-  circuloAzul, circuloDourado, circuloRoxo, circuloVerde, quadradoAzul,
-  quadradoVerde, trianguloAzul, trianguloVerde, losangoVerde, losangoRoxo,
-];
 
 const SEQUENCIA: JogoCatalogo = {
   id: "sequencia",
@@ -270,44 +266,21 @@ const LABIRINTO: JogoCatalogo = {
 
 export const CATALOGO_JOGOS: readonly JogoCatalogo[] = [MEMORIA, SEQUENCIA, LABIRINTO];
 
-export function embaralhar<T>(itens: readonly T[], sortear: (limite: number) => number): T[] {
-  const resultado = [...itens];
-  for (let i = resultado.length - 1; i > 0; i -= 1) {
-    const outro = sortear(i + 1);
-    [resultado[i], resultado[outro]] = [resultado[outro], resultado[i]];
-  }
-  return resultado;
-}
-
+/** Mantém check:e5 sobre o piloto em código; a API lê o editorial no PostgreSQL (CAT-02). */
 export function montarConteudoFase(fase: Fase, sortear: (limite: number) => number = randomInt) {
   if (fase.tipo === "memoria") {
-    const figuras = fase.conjuntos[sortear(fase.conjuntos.length)];
-    return { tipo: fase.tipo, cartas: embaralhar([...figuras, ...figuras], sortear) };
+    return montarConteudoMotor(fase.tipo, { conjuntos: fase.conjuntos }, sortear);
   }
   if (fase.tipo === "labirinto") {
-    const mapa = fase.mapas[sortear(fase.mapas.length)];
-    return { tipo: fase.tipo, mapa, inicio: localizar(mapa, "I"), chegada: localizar(mapa, "F") };
+    return montarConteudoMotor(fase.tipo, { mapas: fase.mapas }, sortear);
   }
-  const padrao = fase.padroes[sortear(fase.padroes.length)];
-  const correta = padrao[fase.lacuna % padrao.length];
-  const sequencia = Array.from({ length: fase.comprimento }, (_, indice) =>
-    indice === fase.lacuna ? null : padrao[indice % padrao.length],
+  return montarConteudoMotor(
+    fase.tipo,
+    {
+      comprimento: fase.comprimento,
+      lacuna: fase.lacuna,
+      padroes: fase.padroes,
+    },
+    sortear,
   );
-  const outrasPecas = PECAS_SEQUENCIA.filter((item) => item.id !== correta.id);
-  const mesmaForma = embaralhar(outrasPecas.filter((item) => item.forma === correta.forma), sortear);
-  const mesmaCor = embaralhar(outrasPecas.filter((item) => item.cor === correta.cor), sortear);
-  const soMudaCor = padrao.every((item) => item.forma === correta.forma);
-  const soMudaForma = padrao.every((item) => item.cor === correta.cor);
-  const distratoras = soMudaCor
-    ? mesmaForma.slice(0, 2)
-    : soMudaForma
-      ? mesmaCor.slice(0, 2)
-      : [mesmaForma[0], mesmaCor[0]];
-  const alternativas = embaralhar([correta, ...distratoras], sortear);
-  return { tipo: fase.tipo, sequencia, alternativas, resposta: correta.id };
-}
-
-function localizar(mapa: readonly string[], marco: "I" | "F") {
-  const linha = mapa.findIndex((conteudo) => conteudo.includes(marco));
-  return { linha, coluna: mapa[linha].indexOf(marco) };
 }

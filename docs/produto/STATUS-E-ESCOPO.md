@@ -2,7 +2,7 @@
 
 ## Estabilização pré-uso — 2026-11-22
 
-**Demanda ativa:** `ESTABILIZACAO-PRE-USO-20261122` — **HOMOLOGADA** (EST-00..04 + QG-3 PASS + **homologação humana APROVADA** pelo responsável em 2026-11-22). Base: `develop` @ `1c4c404b5e39beb06a1c37aa6527aad0cc566912` + alterações locais EST-04. Publicação **ainda não autorizada** (bloqueios operacionais restantes). `EVO-CATALOGO-JOGOS-20261122` permanece **NEEDS_DECISION** / L3 **PENDENTE** (`demandaPausadaL3`; sem implementação). `COR-UX-EST-HOM-20261122` homologação humana **APROVADA** neste aceite. Expansão de catálogos E4: só planejamento L3 em [`expansao-catalogos-e4-e5.md`](../esteira/planejamento/expansao-catalogos-e4-e5.md). Evidências: [QG-3](../esteira/estado/evidencia-estabilizacao-fechamento-qg3-20261122.json) · [HOM](../esteira/estado/evidencia-estabilizacao-hom-20261122.json).
+**Estabilização concluída:** `ESTABILIZACAO-PRE-USO-20261122` — **HOMOLOGADA** (EST-00..04 + QG-3 PASS + **homologação humana APROVADA** pelo responsável em 2026-11-22). Fechamento registrado em `develop` @ `3491646`. Publicação **ainda não autorizada** (bloqueios operacionais restantes). `EVO-CATALOGO-JOGOS-20261122`: L3 **APROVADA**; CAT-01..05 **COMPLETED**; **CAT-HOM APROVADA** (2026-11-22) — demanda **HOMOLOGADA** (8 jogos / 40 fases). [HOM](../esteira/estado/evidencia-cat-hom-20261122.json) · [roteiro](../esteira/estado/roteiro-homologacao-cat-hom.md) · [QG-3](../esteira/estado/evidencia-cat-05-20261122.json). Publicação **ainda não** autorizada por este aceite. `COR-UX-EST-HOM-20261122` homologação humana **APROVADA** neste aceite. Expansão de catálogos E4: só planejamento L3 em [`expansao-catalogos-e4-e5.md`](../esteira/planejamento/expansao-catalogos-e4-e5.md). Evidências estabilização: [QG-3](../esteira/estado/evidencia-estabilizacao-fechamento-qg3-20261122.json) · [HOM](../esteira/estado/evidencia-estabilizacao-hom-20261122.json).
 
 **Aceite humano (escopo):** E3-HOM, EST-03 (Histórico/Resumo/prévia/PDF/privacidade), E4 residual e COR-UX-HOM. Não amplia a publicação, L3 de catálogos, E6/E7 nem gaps EST-02/restore VPS.
 
@@ -28,15 +28,18 @@ Reconciliados nesta rodada STATUS, plano de estabilização e encaminhamentos de
 | EST-03 | Homologação humana APROVADA | Preservar isolamento, cache privado e metadado de anexo gated. |
 | Auditoria técnica | Concluída no recorte registrado | Preservar otimizações; não reabrir varredura genérica. |
 | EST-04 | COMPLETED técnico (ops local) | Repetir backup/restore no ambiente alvo; sem declarar produção. |
-| Catálogos E4/E5 extensíveis | Planejamento L3 PENDENTE | Sem CAT-01..05 até aprovação L3. |
+| Catálogo E5 para V1 | HOMOLOGADA (CAT-01..05 + CAT-HOM APROVADA) | Oito jogos e 40 fases em PostgreSQL. Publicação ainda exige autorização explícita e bloqueios ops. |
+| Catálogo E4 | 24 modelos da V1 | Separar a carga oficial do seed de desenvolvimento. Expansão posterior em planejamento. |
 | E6/E7 e publicação | Fora / publicação não autorizada | Decisão explícita de publicação ainda necessária. |
 
-**Ordem recomendada:** tratar bloqueios operacionais restantes (gaps EST-02, restore/migrate no alvo) se for rumo a uso real; publicação só com autorização humana explícita. Deploy automático não autorizado. L3 de catálogos permanece pendente.
+**Ordem recomendada:** tratar bloqueios operacionais restantes (gaps EST-02, restore/migrate no alvo) se for rumo a uso real; publicação só com autorização humana explícita. Deploy automático não autorizado. A expansão E5 aprovada e sua homologação são requisitos da primeira publicação.
 
 
-## Catálogo digital extensível — planejamento L3, 2026-11-22
+## Catálogo digital e primeira publicação — decisão L3, 2026-11-22
 
-**`EVO-CATALOGO-JOGOS-20261122` em NEEDS_DECISION.** Proposta arquitetural (editorial PostgreSQL + motores/renderizadores em código + `ProgressoFaseJogo` preservado) e plano CAT-01..05 aguardam aprovação explícita L3 do Produto. Documento: [`evo-catalogo-jogos-20261122.md`](../esteira/planejamento/evo-catalogo-jogos-20261122.md). Não altera o Módulo 03 canônico nesta etapa; não implementa jogos novos nem object storage.
+**Escopo aprovado:** oito jogos, cinco fases livres por jogo, catálogo editorial PostgreSQL e preservação da UX R2 e do progresso. A carga da VPS inclui os 24 modelos oficiais E4 e os jogos aprovados. [Plano CAT](../esteira/planejamento/evo-catalogo-jogos-20261122.md).
+
+**Cadastro aberto** cria uma família própria e sua conta administrativa inicial. Ingressar em família existente depende de convite, com acesso a dados condicionado à autorização contextual. **Branch de publicação:** renomeação de `main` para `master` planejada, CI na PR `develop` → `master` e primeira publicação por ação humana. [Plano operacional](../esteira/planejamento/estabilizacao-pre-uso.md).
 
 ## E5 — Jogos digitais e organização da Biblioteca, 2026-11-22
 

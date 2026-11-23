@@ -75,6 +75,43 @@ model ProgressoFaseJogo {
   @@map("progresso_fase_jogo")
 }
 
+/// Catálogo editorial digital (E5). Separado do progresso privado.
+model JogoDigital {
+  id             String            @id
+  nome           String
+  descricao      String
+  categoria      String
+  instrucoes     String
+  tipoMecanica   String            @map("tipo_mecanica")
+  versao         Int               @default(1)
+  faixaEtariaMin Int?              @map("faixa_etaria_min")
+  faixaEtariaMax Int?              @map("faixa_etaria_max")
+  ativo          Boolean           @default(true)
+  publicadoEm    DateTime?         @map("publicado_em")
+  ordemEditorial Int               @default(0) @map("ordem_editorial")
+  capaRef        String?           @map("capa_ref")
+  criadoEm       DateTime          @default(now()) @map("criado_em")
+  atualizadoEm   DateTime          @updatedAt @map("atualizado_em")
+  fases          FaseJogoDigital[]
+
+  @@index([ativo, categoria])
+  @@map("jogo_digital")
+}
+
+model FaseJogoDigital {
+  jogoId       String      @map("jogo_id")
+  numero       Int
+  titulo       String
+  objetivo     String
+  dificuldade  String
+  configuracao Json
+  versao       Int         @default(1)
+  jogo         JogoDigital @relation(fields: [jogoId], references: [id])
+
+  @@id([jogoId, numero])
+  @@map("fase_jogo_digital")
+}
+
 model Usuario {
   id              String             @id @default(cuid())
   pessoaId        String             @unique @map("pessoa_id")

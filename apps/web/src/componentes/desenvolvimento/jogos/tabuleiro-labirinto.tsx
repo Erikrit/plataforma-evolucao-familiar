@@ -45,6 +45,10 @@ function mesmaPosicao(a: PosicaoLabirinto, b: PosicaoLabirinto) {
   return a.linha === b.linha && a.coluna === b.coluna;
 }
 
+function chavePosicao(posicao: PosicaoLabirinto) {
+  return `${posicao.linha}/${posicao.coluna}`;
+}
+
 function proximaPosicao(posicao: PosicaoLabirinto, direcao: Direcao) {
   return {
     linha: posicao.linha + direcao.linha,
@@ -57,17 +61,21 @@ function podeAndar(mapa: readonly string[], posicao: PosicaoLabirinto) {
   return Boolean(celula && celula !== "#");
 }
 
-function caminhoSugerido(conteudo: ConteudoLabirinto, origem: PosicaoLabirinto) {
+function caminhoSugerido(
+  conteudo: ConteudoLabirinto,
+  origem: PosicaoLabirinto,
+  alvo: PosicaoLabirinto,
+) {
   const fila: { posicao: PosicaoLabirinto; primeira?: Direcao }[] = [
     { posicao: origem },
   ];
-  const visitadas = new Set([`${origem.linha}/${origem.coluna}`]);
+  const visitadas = new Set([chavePosicao(origem)]);
   for (let i = 0; i < fila.length; i += 1) {
     const { posicao, primeira } = fila[i];
-    if (mesmaPosicao(posicao, conteudo.chegada)) return primeira;
+    if (mesmaPosicao(posicao, alvo)) return primeira;
     for (const direcao of DIRECOES) {
       const proxima = proximaPosicao(posicao, direcao);
-      const chave = `${proxima.linha}/${proxima.coluna}`;
+      const chave = chavePosicao(proxima);
       if (!podeAndar(conteudo.mapa, proxima) || visitadas.has(chave)) continue;
       visitadas.add(chave);
       fila.push({ posicao: proxima, primeira: primeira ?? direcao });
@@ -84,12 +92,14 @@ export function TabuleiroLabirinto({
   aoConcluir: () => void;
   registrarObterDica: (obter: (() => string | null) | null) => void;
 }) {
+  const pontos = conteudo.pontos ?? [];
   const [posicao, setPosicao] = useState(conteudo.inicio);
+  const [coletados, setColetados] = useState<string[]>([]);
   const [mensagem, setMensagem] = useState("");
   const [dica, setDica] = useState<Direcao["id"] | null>(null);
   const foco = useRef<HTMLDivElement>(null);
-  const posicaoAtual = useRef(posicao);
-  posicaoAtual.current = posicao;
+  const estado = useRef({ posicao, coletados });
+  estado.current = { posicao, coletados };
 
   useEffect(() => {
     foco.current?.focus();
@@ -97,15 +107,22 @@ export function TabuleiroLabirinto({
 
   useEffect(() => {
     registrarObterDica(() => {
-      const proxima = caminhoSugerido(conteudo, posicaoAtual.current);
+      const atual = estado.current;
+      const pendente = pontos.find(
+        (ponto) => !atual.coletados.includes(chavePosicao(ponto)),
+      );
+      const alvo = pendente ?? conteudo.chegada;
+      const proxima = caminhoSugerido(conteudo, atual.posicao, alvo);
       if (!proxima) return null;
       setDica(proxima.id);
-      const texto = `Tente ir para ${proxima.nome}.`;
+      const texto = pendente
+        ? `Vá para ${proxima.nome} até o próximo ponto de entrega.`
+        : `Tente ir para ${proxima.nome} até a chegada.`;
       setMensagem(texto);
       return texto;
     });
     return () => registrarObterDica(null);
-  }, [conteudo, registrarObterDica]);
+  }, [conteudo, pontos, registrarObterDica]);
 
   function mover(direcao: Direcao) {
     const destino = proximaPosicao(posicao, direcao);
@@ -114,9 +131,30 @@ export function TabuleiroLabirinto({
       setMensagem("Há uma parede nessa direção. Procure outra passagem.");
       return;
     }
-    setMensagem("");
+    const chave = chavePosicao(destino);
+    const novosColetados =
+      pontos.some((ponto) => mesmaPosicao(ponto, destino))
+      && !coletados.includes(chave)
+        ? [...coletados, chave]
+        : coletados;
+    setColetados(novosColetados);
     setPosicao(destino);
-    if (mesmaPosicao(destino, conteudo.chegada)) aoConcluir();
+    if (mesmaPosicao(destino, conteudo.chegada)) {
+      if (novosColetados.length < pontos.length) {
+        setMensagem(
+          `Ainda faltam ${pontos.length - novosColetados.length} ponto(s) de entrega.`,
+        );
+        return;
+      }
+      setMensagem("");
+      aoConcluir();
+      return;
+    }
+    setMensagem(
+      novosColetados.length > coletados.length
+        ? `Entrega feita (${novosColetados.length} de ${pontos.length}).`
+        : "",
+    );
   }
 
   function peloTeclado(evento: KeyboardEvent<HTMLDivElement>) {
@@ -141,7 +179,11 @@ export function TabuleiroLabirinto({
       aria-label="Labirinto. Use as setas para mover."
       onKeyDown={peloTeclado}
     >
-      <Text fw={600}>Encontre a chegada</Text>
+      <Text fw={600}>
+        {pontos.length > 0
+          ? `Entregas ${coletados.length} de ${pontos.length}. Depois, chegue ao destino.`
+          : "Encontre a chegada"}
+      </Text>
       <div
         className={estilos.mapa}
         style={{
@@ -152,16 +194,32 @@ export function TabuleiroLabirinto({
         {conteudo.mapa.flatMap((linha, i) =>
           [...linha].map((celula, j) => {
             const aqui = posicao.linha === i && posicao.coluna === j;
+            const ponto = pontos.some(
+              (item) => item.linha === i && item.coluna === j,
+            );
+            const entregue = coletados.includes(`${i}/${j}`);
             const tipo = aqui
               ? "jogador"
               : celula === "#"
                 ? "parede"
                 : celula === "F"
                   ? "chegada"
-                  : "caminho";
+                  : ponto
+                    ? entregue
+                      ? "entregaFeita"
+                      : "entrega"
+                    : "caminho";
             return (
               <span className={estilos.celula} key={`${i}/${j}`} data-tipo={tipo}>
-                {aqui ? "●" : celula === "F" ? "⚑" : ""}
+                {aqui
+                  ? "●"
+                  : celula === "F"
+                    ? "⚑"
+                    : ponto
+                      ? entregue
+                        ? "✓"
+                        : "◆"
+                      : ""}
               </span>
             );
           }),

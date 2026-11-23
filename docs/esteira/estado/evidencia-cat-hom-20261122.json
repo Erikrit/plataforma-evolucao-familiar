@@ -1,0 +1,26 @@
+{
+  "demandaId": "EVO-CATALOGO-JOGOS-20261122",
+  "tipo": "homologacao_humana",
+  "criterio": "CAT-ACE-05 / CAT-HOM",
+  "resultado": "APROVADA",
+  "em": "2026-11-23T02:54:00.000Z",
+  "fonte": "Responsável do Produto nesta conversa (\"aprovado\")",
+  "roteiro": "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
+  "baseTecnica": {
+    "qg3": "docs/esteira/estado/evidencia-cat-05-20261122.json",
+    "fingerprintTecnico": "sha256:7b9096782b35d1ae09d5b88c4f678c6c7b88850a0807f4e6ed99666e12cdcb45",
+    "catalogo": { "e4Modelos": 24, "e5Jogos": 8, "e5Fases": 40 },
+    "incrementos": ["CAT-01", "CAT-02", "CAT-03", "CAT-04", "CAT-05"]
+  },
+  "escopoAceite": [
+    "Biblioteca e UX R2 com oito jogos digitais",
+    "Histórias em cenas (ordenação) e demais mecânicas do lote",
+    "Progresso, histórico e isolamento com dados fictícios"
+  ],
+  "naoAutorizadoPorEsteAceite": [
+    "Publicação para uso real",
+    "Deploy / push / PR / tag / release",
+    "E6/E7",
+    "Encerramento automático dos gaps EST-02 e restore no ambiente alvo"
+  ]
+}

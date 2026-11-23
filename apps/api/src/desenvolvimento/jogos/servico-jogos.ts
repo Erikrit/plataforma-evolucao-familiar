@@ -9,8 +9,8 @@ import type { ProgressoFaseJogo } from "@prisma/client";
 import { ServicoAutorizacoes } from "../../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../../comum/tipos-requisicao";
 import { ServicoPrisma } from "../../prisma/servico-prisma";
-import { CATALOGO_JOGOS, montarConteudoFase } from "./catalogo-jogos";
 import { selecionarDestaquesJogos } from "./destaques-jogos";
+import { obterMotor } from "./motores-jogos";
 
 @Injectable()
 export class ServicoJogos {
@@ -21,22 +21,41 @@ export class ServicoJogos {
 
   async listar(pessoaId: string, usuario: UsuarioAutenticado) {
     const escopo = await this.exigirDesenvolvimento(pessoaId, usuario);
-    const progresso = await this.prisma.progressoFaseJogo.findMany({
-      where: escopo,
-      select: { jogoId: true, fase: true, concluidaEm: true, ultimaAberturaEm: true },
-    });
+    const [progresso, catalogo] = await Promise.all([
+      this.prisma.progressoFaseJogo.findMany({
+        where: escopo,
+        select: { jogoId: true, fase: true, concluidaEm: true, ultimaAberturaEm: true },
+      }),
+      this.prisma.jogoDigital.findMany({
+        where: { ativo: true },
+        orderBy: [{ ordemEditorial: "asc" }, { id: "asc" }],
+        include: {
+          fases: { orderBy: { numero: "asc" } },
+        },
+      }),
+    ]);
     const porFase = new Map(progresso.map((item) => [`${item.jogoId}/${item.fase}`, item]));
     return {
-      destaques: selecionarDestaquesJogos(CATALOGO_JOGOS, progresso),
-      jogos: CATALOGO_JOGOS.map(({ fases, ...jogo }) => ({
-        ...jogo,
-        fases: fases.map(({ numero, titulo, objetivo }) => {
-          const fase = porFase.get(`${jogo.id}/${numero}`);
+      destaques: selecionarDestaquesJogos(catalogo, progresso),
+      jogos: catalogo.map((jogo) => ({
+        id: jogo.id,
+        nome: jogo.nome,
+        descricao: jogo.descricao,
+        categoria: jogo.categoria,
+        instrucoes: jogo.instrucoes,
+        versao: jogo.versao,
+        tipoMecanica: jogo.tipoMecanica,
+        fases: jogo.fases.map((fase) => {
+          const progressoFase = porFase.get(`${jogo.id}/${fase.numero}`);
           return {
-            numero,
-            titulo,
-            objetivo,
-            estado: fase?.concluidaEm ? "concluida" : fase ? "experimentada" : "nao_explorada",
+            numero: fase.numero,
+            titulo: fase.titulo,
+            objetivo: fase.objetivo,
+            estado: progressoFase?.concluidaEm
+              ? "concluida"
+              : progressoFase
+                ? "experimentada"
+                : "nao_explorada",
           };
         }),
       })),
@@ -45,7 +64,9 @@ export class ServicoJogos {
 
   async iniciar(pessoaId: string, jogoId: string, numero: number, usuario: UsuarioAutenticado) {
     const escopo = await this.exigirDesenvolvimento(pessoaId, usuario);
-    const { jogo, fase } = this.exigirFase(jogoId, numero);
+    const { jogo, fase } = await this.exigirFase(jogoId, numero, { exigirAtivo: true });
+    const motor = obterMotor(jogo.tipoMecanica);
+    const configuracao = motor.validarConfiguracao(fase.configuracao);
     const identidade = { ...escopo, jogoId, fase: numero };
     const agora = new Date();
     await this.prisma.$transaction(async (tx) => {
@@ -64,7 +85,11 @@ export class ServicoJogos {
         data: { ultimaAberturaEm: agora, versaoUltimaAbertura: jogo.versao },
       });
     });
-    return { versao: jogo.versao, conteudo: montarConteudoFase(fase) };
+    return {
+      versao: jogo.versao,
+      tipoMecanica: jogo.tipoMecanica,
+      conteudo: motor.montarConteudo(configuracao),
+    };
   }
 
   async concluir(
@@ -75,7 +100,7 @@ export class ServicoJogos {
     entrada: { versao?: unknown; chave?: unknown } | undefined,
   ) {
     const escopo = await this.exigirDesenvolvimento(pessoaId, usuario);
-    const { jogo } = this.exigirFase(jogoId, numero);
+    const { jogo } = await this.exigirFase(jogoId, numero, { exigirAtivo: false });
     const { versao, chave } = entrada ?? {};
     if (typeof versao !== "number" || !Number.isInteger(versao) || versao < 1
       || typeof chave !== "string" || !/^[a-f0-9]{32}$/.test(chave)) {
@@ -122,10 +147,23 @@ export class ServicoJogos {
     };
   }
 
-  private exigirFase(jogoId: string, numero: number) {
-    const jogo = CATALOGO_JOGOS.find((item) => item.id === jogoId);
-    const fase = jogo?.fases.find((item) => item.numero === numero);
+  private async exigirFase(
+    jogoId: string,
+    numero: number,
+    opcoes: { exigirAtivo: boolean },
+  ) {
+    const jogo = await this.prisma.jogoDigital.findFirst({
+      where: {
+        id: jogoId,
+        ...(opcoes.exigirAtivo ? { ativo: true } : {}),
+      },
+      include: {
+        fases: { where: { numero }, take: 1 },
+      },
+    });
+    const fase = jogo?.fases[0];
     if (!jogo || !fase) throw new NotFoundException("Fase não encontrada.");
+    obterMotor(jogo.tipoMecanica);
     return { jogo, fase };
   }
 

@@ -9,9 +9,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
+    "prisma:migrate:deploy": "prisma migrate deploy",
     "db:ping": "node scripts/ping-db.mjs",
     "db:seed": "node prisma/seed.mjs",
+    "db:carga-oficial": "node prisma/carga-oficial.mjs",
     "db:reset": "node scripts/reset-db-local.mjs",
+    "qg:cat-01": "node scripts/qg-cat-01.mjs",
     "provisionar:familia": "node scripts/provisionar-familia.mjs",
     "smoke:e1-01": "node scripts/smoke-e1-01.mjs",
     "smoke:e1-02": "node scripts/smoke-e1-02.mjs",
@@ -34,7 +37,9 @@
     "check:e2": "node scripts/check-e2.mjs",
     "check:e3": "node scripts/check-e3.mjs",
     "check:e4": "node scripts/check-e4.mjs",
-    "check:e5": "node scripts/check-e5.mjs"
+    "check:e5": "node scripts/check-e5.mjs",
+    "check:cat-03": "node scripts/check-cat-03.mjs",
+    "check:cat-04": "node scripts/check-cat-04.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.12",

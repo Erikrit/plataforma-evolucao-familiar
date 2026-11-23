@@ -1,14 +1,15 @@
 # Expansão dos catálogos (E4 real + E5 digital) — planejamento
 
-**Status:** PLANEJAMENTO SOMENTE · **Aprovação:** L3 Produto **PENDENTE**  
-**Demanda de origem:** `COR-UX-EST-HOM-20261122` Etapa B  
-**Não implementar** até aprovação expressa do responsável pelo Produto.
+**Status:** PLANEJAMENTO SOMENTE · **Aprovação da expansão E4:** L3 Produto **PENDENTE**
 
-> **Frente digital (arquitetura extensível):** consolidada em [`evo-catalogo-jogos-20261122.md`](evo-catalogo-jogos-20261122.md) (`EVO-CATALOGO-JOGOS-20261122`, L3 **PENDENTE**). Este arquivo mantém a expansão de **atividades reais (E4)** e o vínculo histórico; modelo Prisma, motores/renderizadores e CAT-01..05 do catálogo digital deferem ao documento novo.
+**Demanda de origem:** `COR-UX-EST-HOM-20261122` Etapa B  
+A expansão E4 aguarda aprovação expressa. A ampliação digital da V1 foi aprovada em 2026-11-22 e segue o plano EVO.
+
+**Frente digital:** [EVO-CATALOGO-JOGOS-20261122](evo-catalogo-jogos-20261122.md) é a referência para os oito jogos, a persistência em PostgreSQL e os incrementos CAT.
 
 ## Objetivo
 
-Avaliar e especificar a ampliação do catálogo de atividades reais além do limite E4 (24) e o dimensionamento do catálogo digital (~20 entradas por categoria), sem misturar com as correções UX da Etapa A.
+Avaliar e especificar a ampliação do catálogo de atividades reais além do limite E4 (24), sem misturar com as correções UX da Etapa A.
 
 ## Restrições preservadas
 
@@ -34,32 +35,9 @@ Avaliar e especificar a ampliação do catálogo de atividades reais além do li
 - Manter sugestões ≤ 6 e renovação ≤ 3 até nova decisão; esgotamento continua mensagem neutra.
 - Faixa etária orientativa, dificuldade, categoria, publicação (`ativo`) e `versaoConteudo` já existentes — reutilizar.
 
-### 2. Catálogo digital ~20 por categoria
+### 2. Relação com o lançamento
 
-- **Especificação consolidada:** [`evo-catalogo-jogos-20261122.md`](evo-catalogo-jogos-20261122.md) (arquitetura em 4 camadas, Prisma, contratos, CAT-01..05, compatibilidade dos 3 jogos).
-- Meta de planejamento: ~20 entradas publicadas por categoria de desenvolvimento, com curadoria progressiva e motores/renderizadores registrados em código.
-- Não inventar mecânica nova na primeira expansão de conteúdo; novos motores só via incremento futuro aprovado.
-- Cada entrada: título, categoria, faixa orientativa, dificuldade por fase, estado de publicação, versão editorial, refs visuais externas (sem object storage nesta etapa).
-
-### 3. Persistência de metadados editoriais
-
-- Modelo aditivo detalhado no plano EVO (`JogoDigital`, `FaseJogoDigital`, `RecursoVisualJogo`), mantendo `ProgressoFaseJogo` e IDs estáveis.
-- Seed e curadoria por scripts revisáveis; publicação controlada (`ativo` / `publicadoEm`).
-- Histórico de progresso e descobertas permanece por pessoa; republicação não apaga progresso.
-
-### 4. Curadoria, seed e migração
-
-- Fluxo: rascunho editorial → revisão humana → seed/migração aditiva → smoke → homologação por lote.
-- Critérios de aceite por lote: quantidade, categorias cobertas, faixa orientativa documentada, regressão de authz/progresso, sem estrelas digitais novas.
-
-### 5. Expansão progressiva
-
-| Fase | Escopo sugerido | Aceite |
-|---|---|---|
-| B1 | Decisão L3 de tetos E4 e arquitetura digital (EVO) | Documento(s) aprovado(s) |
-| B2 | +N atividades reais curadas (lote 1) | Smoke E4 + homologação parcial |
-| B3 | CAT-01..05 do plano EVO (fundação editorial digital) | Smoke E5 + regressão progresso |
-| B4 | Lotes de conteúdo digital (~20/categoria) após CAT | Homologação por categoria |
+A V1 conserva os 24 modelos E4, até seis sugestões e renovação de até três. A revisão desse teto fica para etapa própria após a V1. A carga oficial deve incluir o catálogo E4 existente e o catálogo digital aprovado. Critérios de curadoria e homologação dos jogos constam no plano EVO.
 
 ## Impacto / riscos
 
@@ -69,9 +47,9 @@ Avaliar e especificar a ampliação do catálogo de atividades reais além do li
 
 ## Encaminhamento
 
-1. Responsável pelo Produto aprova ou ajusta tetos E4 (este doc) e/ou arquitetura digital ([evo-catalogo-jogos-20261122.md](evo-catalogo-jogos-20261122.md)) — L3.
-2. Só então: incrementos de implementação separados (reais vs. CAT-*).
-3. Etapa A (COR-UX) permanece independente e não bloqueada por esta expansão.
+1. Preparar a carga oficial dos 24 modelos atuais no CAT-01.
+2. Avaliar um lote futuro de atividades reais com aprovação de Produto e verificação dos limites.
+3. Preservar os aceites da Etapa A (COR-UX).
 
 ## Fora de escopo explícito
 

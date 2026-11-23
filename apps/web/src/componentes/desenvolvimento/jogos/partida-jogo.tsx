@@ -27,6 +27,8 @@ import { novaChaveOperacao } from "@/lib/chave-operacao";
 import { consultaCatalogoJogos } from "@/lib/filtros-jogos";
 import { TabuleiroMemoria } from "./tabuleiro-memoria";
 import { TabuleiroSequencia } from "./tabuleiro-sequencia";
+import { TabuleiroEscolha } from "./tabuleiro-escolha";
+import { TabuleiroOrdenacao } from "./tabuleiro-ordenacao";
 import { TabuleiroLabirinto } from "./tabuleiro-labirinto";
 import estilos from "./jogos.module.css";
 
@@ -62,6 +64,22 @@ function Tabuleiro({
     case "sequencia":
       return (
         <TabuleiroSequencia
+          conteudo={conteudo}
+          aoConcluir={aoConcluir}
+          registrarObterDica={registrarObterDica}
+        />
+      );
+    case "escolha":
+      return (
+        <TabuleiroEscolha
+          conteudo={conteudo}
+          aoConcluir={aoConcluir}
+          registrarObterDica={registrarObterDica}
+        />
+      );
+    case "ordenacao":
+      return (
+        <TabuleiroOrdenacao
           conteudo={conteudo}
           aoConcluir={aoConcluir}
           registrarObterDica={registrarObterDica}

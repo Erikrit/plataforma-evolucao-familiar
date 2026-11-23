@@ -7,7 +7,6 @@ import {
 import { ServicoPrisma } from "../prisma/servico-prisma";
 import { ServicoAutorizacoes } from "../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
-import { CATALOGO_JOGOS } from "../desenvolvimento/jogos/catalogo-jogos";
 import { chaveOcorrencia } from "./permissoes-cuidados";
 
 @Injectable()
@@ -710,6 +709,18 @@ export class ServicoAcompanhamento {
       select: { jogoId: true, primeiraExploracaoEm: true, concluidaEm: true, nomeNaConclusao: true },
       orderBy: { primeiraExploracaoEm: "asc" },
     });
+    const idsJogos = [...new Set(fases.map((fase) => fase.jogoId))];
+    const editoriais = idsJogos.length === 0
+      ? []
+      : await this.prisma.jogoDigital.findMany({
+        where: { id: { in: idsJogos } },
+        select: {
+          id: true,
+          nome: true,
+          _count: { select: { fases: true } },
+        },
+      });
+    const porEditorial = new Map(editoriais.map((jogo) => [jogo.id, jogo]));
     const jogos = new Map<string, {
       id: string;
       nome: string;
@@ -722,11 +733,11 @@ export class ServicoAcompanhamento {
     for (const fase of fases) {
       let jogo = jogos.get(fase.jogoId);
       if (!jogo) {
-        const catalogo = CATALOGO_JOGOS.find((item) => item.id === fase.jogoId);
+        const editorial = porEditorial.get(fase.jogoId);
         jogo = {
           id: fase.jogoId,
-          nome: catalogo?.nome ?? fase.nomeNaConclusao ?? "Jogo digital arquivado",
-          totalFases: catalogo?.fases.length ?? null,
+          nome: editorial?.nome ?? fase.nomeNaConclusao ?? "Jogo digital arquivado",
+          totalFases: editorial?._count.fases ?? null,
           concluidasAte: 0,
           concluidasNoPeriodo: 0,
           experimentadoNoPeriodo: false,

@@ -1,0 +1,219 @@
+{
+  "demanda": "EVO-CATALOGO-JOGOS-20261122",
+  "incremento": "CAT-01",
+  "status": "PASS",
+  "falhas": 0,
+  "checagens": [
+    {
+      "nome": "prisma_generate",
+      "status": "PASS",
+      "generateExit": 0,
+      "nota": "generate ok",
+      "stderr": "Environment variables loaded from .env\n"
+    },
+    {
+      "nome": "criar_banco_novo",
+      "status": "PASS",
+      "banco": "pef_cat01_novo"
+    },
+    {
+      "nome": "migrate_banco_novo",
+      "status": "PASS",
+      "stdout": "Prisma schema loaded from prisma\\schema.prisma\nDatasource \"db\": PostgreSQL database \"pef_cat01_novo\", schema \"public\" at \"localhost:5433\"\n\n1 migration found in prisma/migrations\n\nApplying migration `20261122220000_inicial_catalogo_editorial`\n\nThe following migration(s) have been applied:\n\nmigrations/\n  └─ 20261122220000_inicial_catalogo_editorial/\n    └─ migration.sql\n      \nAll migrations have been successfully applied.\n",
+      "stderr": "Environment variables loaded from .env\n"
+    },
+    {
+      "nome": "carga1_banco_novo",
+      "status": "PASS",
+      "resumo": {
+        "ok": true,
+        "e4Modelos": 24,
+        "e5Jogos": 3,
+        "e5Fases": 15,
+        "familias": 0,
+        "usuarios": 0,
+        "medicamentos": 0,
+        "progresso": 0
+      },
+      "stderr": ""
+    },
+    {
+      "nome": "carga2_banco_novo_idempotente",
+      "status": "PASS",
+      "resumo": {
+        "ok": true,
+        "e4Modelos": 24,
+        "e5Jogos": 3,
+        "e5Fases": 15,
+        "familias": 0,
+        "usuarios": 0,
+        "medicamentos": 0,
+        "progresso": 0
+      }
+    },
+    {
+      "nome": "contagens_banco_novo",
+      "status": "PASS",
+      "contagens": {
+        "e4": 24,
+        "jogos": 3,
+        "fases": 15,
+        "idsJogos": [
+          "labirinto",
+          "memoria",
+          "sequencia"
+        ],
+        "familias": 0,
+        "usuarios": 0,
+        "medicamentos": 0,
+        "consultas": 0,
+        "exames": 0,
+        "progresso": 0
+      }
+    },
+    {
+      "nome": "criar_banco_piloto",
+      "status": "PASS",
+      "banco": "pef_cat01_piloto"
+    },
+    {
+      "nome": "clonar_schema_pre_editorial",
+      "status": "PASS",
+      "dump": 0,
+      "restaurar": "SET\nSET\nSET\nSET\nSET\n set_config \n------------\n \n(1 row)\n\nSET\nSET\nSET\nSET\nSET\nSET\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nALTER TABLE\nALTER TA"
+    },
+    {
+      "nome": "piloto_sem_tabelas_editoriais",
+      "status": "PASS",
+      "saida": "0"
+    },
+    {
+      "nome": "inserir_progresso_piloto",
+      "status": "PASS",
+      "chaves": [
+        {
+          "jogoId": "labirinto",
+          "fase": 5,
+          "chaveConclusao": "labirinto|5|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        },
+        {
+          "jogoId": "memoria",
+          "fase": 1,
+          "chaveConclusao": "memoria|1|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        },
+        {
+          "jogoId": "sequencia",
+          "fase": 2,
+          "chaveConclusao": "sequencia|2|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "nome": "transicao_schema_aditiva",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "nome": "carga1_banco_piloto",
+      "status": "PASS",
+      "stdout": "{\n  \"ok\": true,\n  \"e4Modelos\": 24,\n  \"e5Jogos\": 3,\n  \"e5Fases\": 15,\n  \"familias\": 1,\n  \"usuarios\": 0,\n  \"medicamentos\": 0,\n  \"progresso\": 3\n}\n"
+    },
+    {
+      "nome": "carga2_banco_piloto",
+      "status": "PASS",
+      "stdout": "{\n  \"ok\": true,\n  \"e4Modelos\": 24,\n  \"e5Jogos\": 3,\n  \"e5Fases\": 15,\n  \"familias\": 1,\n  \"usuarios\": 0,\n  \"medicamentos\": 0,\n  \"progresso\": 3\n}\n"
+    },
+    {
+      "nome": "progresso_preservado",
+      "status": "PASS",
+      "antes": [
+        {
+          "jogoId": "labirinto",
+          "fase": 5,
+          "chaveConclusao": "labirinto|5|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        },
+        {
+          "jogoId": "memoria",
+          "fase": 1,
+          "chaveConclusao": "memoria|1|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        },
+        {
+          "jogoId": "sequencia",
+          "fase": 2,
+          "chaveConclusao": "sequencia|2|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        }
+      ],
+      "depois": [
+        {
+          "jogoId": "labirinto",
+          "fase": 5,
+          "chaveConclusao": "labirinto|5|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        },
+        {
+          "jogoId": "memoria",
+          "fase": 1,
+          "chaveConclusao": "memoria|1|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        },
+        {
+          "jogoId": "sequencia",
+          "fase": 2,
+          "chaveConclusao": "sequencia|2|v1",
+          "concluidaEm": "2026-11-20T15:00:00.000Z"
+        }
+      ],
+      "contagens": {
+        "e4": 24,
+        "jogos": 3,
+        "fases": 15,
+        "idsJogos": [
+          "labirinto",
+          "memoria",
+          "sequencia"
+        ],
+        "familias": 1,
+        "usuarios": 0,
+        "medicamentos": 0,
+        "consultas": 0,
+        "exames": 0,
+        "progresso": 3
+      }
+    },
+    {
+      "nome": "catalogo_piloto_apos_carga",
+      "status": "PASS",
+      "contagens": {
+        "e4": 24,
+        "jogos": 3,
+        "fases": 15,
+        "idsJogos": [
+          "labirinto",
+          "memoria",
+          "sequencia"
+        ],
+        "familias": 1,
+        "usuarios": 0,
+        "medicamentos": 0,
+        "consultas": 0,
+        "exames": 0,
+        "progresso": 3
+      }
+    },
+    {
+      "nome": "limpeza_bancos_descartaveis",
+      "status": "PASS",
+      "bancos": [
+        "pef_cat01_novo",
+        "pef_cat01_piloto"
+      ]
+    }
+  ],
+  "em": "2026-11-23T00:57:14.269Z"
+}

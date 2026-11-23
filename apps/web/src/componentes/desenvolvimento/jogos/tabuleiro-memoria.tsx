@@ -101,7 +101,11 @@ export function TabuleiroMemoria({
             >
               {visivel ? (
                 <>
-                  <span className={estilos.figura} aria-hidden="true">
+                  <span
+                    className={estilos.figura}
+                    data-face={figura.face ?? "objeto"}
+                    aria-hidden="true"
+                  >
                     {figura.simbolo}
                   </span>
                   <span className={estilos.nomeFigura}>{figura.nome}</span>

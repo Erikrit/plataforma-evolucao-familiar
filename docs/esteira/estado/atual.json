@@ -2,8 +2,8 @@
     "schemaVersao": 2,
     "revisao": {
         "branch": "develop",
-        "commit": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
-        "nota": "Homologação humana da estabilização APROVADA pelo responsável; working tree com EST-04 local; publicação não autorizada."
+        "commit": "3491646dddce37fdf5959924f8277485b28cc151",
+        "nota": "EVO-CATALOGO HOMOLOGADA (CAT-HOM APROVADA). Publicação não autorizada. Sem commit/push/deploy."
     },
     "moduloId": "04-evolucao-familiar",
     "incrementoId": "EF-06",
@@ -104,10 +104,11 @@
     "fingerprintNota": "Histórico simbólico preservado. Novas demandas usam hash SHA-256 verificável em demanda.fingerprint.",
     "tentativasCorrecao": {},
     "demandaAnterior": {
-        "id": "COR-UX-EST-HOM-20261122",
-        "nota": "Precedente imediato da estabilização retomada; ver demandasConcluidas para detalhe COMPLETED técnico",
+        "id": "EVO-CATALOGO-JOGOS-20261122",
         "estado": "COMPLETED",
-        "homologacaoHumana": "PENDING_HUMAN"
+        "homologacaoHumana": "APROVADA",
+        "estadoExibicao": "HOMOLOGADA",
+        "nota": "Catálogo E5 8/40 homologado. Preservar evidências. Publicação permanece pendente de autorização explícita."
     },
     "janelaIncrementos": [
         {
@@ -127,6 +128,39 @@
         }
     ],
     "demandasConcluidas": [
+        {
+            "id": "EVO-CATALOGO-JOGOS-20261122",
+            "tipo": "transversal",
+            "origem": "Decisão explícita do responsável do Produto, 2026-11-22",
+            "estado": "COMPLETED",
+            "homologacaoHumana": "APROVADA",
+            "estadoExibicao": "HOMOLOGADA",
+            "aprovacao": {
+                "nivel": "L3",
+                "status": "APROVADA",
+                "referencia": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
+                "nota": "Oito jogos e catálogo em PostgreSQL antes da primeira publicação."
+            },
+            "risco": "alto",
+            "escopo": "Catálogo oficial E4/E5, expansão digital em PostgreSQL, preservação do progresso e homologação da UX.",
+            "fingerprint": "sha256:7b9096782b35d1ae09d5b88c4f678c6c7b88850a0807f4e6ed99666e12cdcb45",
+            "qg3": "PASS",
+            "CAT_HOM": "APROVADA",
+            "catalogo": {
+                "e4": 24,
+                "e5Jogos": 8,
+                "e5Fases": 40
+            },
+            "evidenciaHomologacao": "docs/esteira/estado/evidencia-cat-hom-20261122.json",
+            "evidenciaTecnica": "docs/esteira/estado/evidencia-cat-05-20261122.json",
+            "fora": [
+                "Expansão E4",
+                "E6/E7",
+                "Publicação"
+            ],
+            "proximaAcao": "CAT-HOM APROVADA. Avaliar bloqueios operacionais restantes (EST-02, restore alvo) e só então pedir autorização explícita de publicação. Sem E6/E7.",
+            "atualizadoEm": "2026-11-23T02:58:22.339Z"
+        },
         {
             "id": "ESTABILIZACAO-PRE-USO-20261122",
             "tipo": "transversal",
@@ -225,7 +259,207 @@
                 ],
                 "nota": "Aceite humano do conjunto pendente da estabilização; não autoriza publicação nem fecha bloqueios operacionais restantes."
             },
-            "atualizadoEm": "2026-11-22T23:47:45.979Z"
+            "atualizadoEm": "2026-11-22T23:47:45.979Z",
+            "impacto": "Cuidados (anexos), Fundação (auth/sessões), Evolução (histórico/resumo/PDF), operação local",
+            "fora": [
+                "E6",
+                "E7",
+                "novas funcionalidades",
+                "publicação para uso real sem critérios de bloqueio"
+            ],
+            "criteriosAceite": [
+                "EST-00-REC",
+                "EST-01-ANEXO",
+                "EST-02-AUTH",
+                "EST-03-DOCS",
+                "EST-04-OPS",
+                "EST-BLOQ-USO-REAL"
+            ],
+            "dependencias": [
+                "COR-E5-UX-HOM-R2 homologada APROVADA",
+                "DEF-E3-ANEXO CORRIGIDO TECNICAMENTE (E3-HOM PENDING_HUMAN)",
+                "E4-HOM APROVADA_PARCIALMENTE",
+                "E1/E2 homologações humanas APROVADAS",
+                "ADR-015 DOCUMENTADA",
+                "Sem autorização de publicação"
+            ],
+            "pendenciasForaEscopo": [
+                {
+                    "id": "E6-IA-DESENVOLVIMENTO",
+                    "estado": "FORA",
+                    "tratamento": "NAO_INICIAR"
+                },
+                {
+                    "id": "E7-IA-CUIDADOS",
+                    "estado": "FORA",
+                    "tratamento": "NAO_INICIAR"
+                }
+            ],
+            "fluxo": [
+                "task-routing",
+                "module-planning",
+                "implementation-workflow",
+                "quality-gate"
+            ],
+            "planejamento": {
+                "caminho": "docs/esteira/planejamento/estabilizacao-pre-uso.md",
+                "incrementos": [
+                    {
+                        "id": "EST-00",
+                        "status": "COMPLETED",
+                        "aceite": "Reconciliação e plano documentados; E5 R2 humana APROVADA registrada"
+                    },
+                    {
+                        "id": "EST-01",
+                        "status": "COMPLETED",
+                        "aceite": "Salvar exame com/sem anexo (payload >100KB); download; UX Resumo/Histórico alinhada ao padrão PEF",
+                        "fingerprint": "sha256:8f2ac0f5afe25966"
+                    },
+                    {
+                        "id": "EST-02",
+                        "status": "COMPLETED",
+                        "aceite": "Sessão/cookie (ADR-015); regressão E1/E2/authz; gaps residuais documentados; sem JWT",
+                        "fingerprint": "sha256:785fd27e1b52924e"
+                    },
+                    {
+                        "id": "EST-03",
+                        "status": "COMPLETED",
+                        "aceite": "Isolamento + cache privado + temDocumento gated; E4 residual tipificada; HOM PENDING",
+                        "fingerprint": "sha256:89d4dae23976eedc"
+                    },
+                    {
+                        "id": "EST-04",
+                        "status": "COMPLETED",
+                        "aceite": "Backup/restore descartável e /saude evidenciados localmente; bloqueios de uso real aplicados; sem deploy",
+                        "fingerprint": "sha256:393af5ec2b09df78"
+                    }
+                ]
+            },
+            "incrementoAtivo": null,
+            "testesPertinentes": [
+                "Reprodução controlada do upload de anexo com dados fictícios",
+                "smoke:e3 e regressão authz/anexos",
+                "smoke:e1-ent / smoke:e2 / smoke:authz conforme incremento",
+                "smoke:e4 / histórico-resumo/PDF quando EST-03",
+                "Procedimento backup/restore e healthcheck quando EST-04",
+                "Homologação humana E3-HOM após EST-01"
+            ],
+            "bloqueios": [
+                "Backup/restore validado só no Docker local — repetir no ambiente alvo",
+                "Sem prisma/migrations versionado para alvo",
+                "Gaps EST-02: rate-limit login; HTTPS + COOKIE_SECURE + WEB_ORIGIN no alvo",
+                "Sem autorização humana explícita de publicação",
+                "Não usar db reset/push destrutivo em banco compartilhado"
+            ],
+            "reconciliacaoLocal": {
+                "status": "OK",
+                "branch": "develop",
+                "commit": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
+                "workingTree": "dirty_est04_ready",
+                "originDevelop": "up_to_date_base",
+                "nota": "Docs reconciliados de origin/docs/alinhamento-est04-20261122; EST-04 ops local COMPLETED técnico; sem commit/push/deploy.",
+                "divergencias": [
+                    "E3-HOM PENDING_HUMAN",
+                    "EST-03 HOM PENDING_HUMAN",
+                    "COR-UX-HOM PENDING_HUMAN",
+                    "E4-HOM APROVADA_PARCIALMENTE (residual)",
+                    "EVO-CATALOGO NEEDS_DECISION em demandaPausadaL3",
+                    "Restore local não prova VPS",
+                    "Sem prisma/migrations versionado",
+                    "Gaps EST-02 (login/HTTPS/COOKIE_SECURE/WEB_ORIGIN)",
+                    "Sem autorização de publicação"
+                ],
+                "em": "2026-11-22T23:34:24.337Z"
+            },
+            "fingerprintNota": "Fingerprint de produto será recalculado por incremento ao alterar código. EST-00 é documental.",
+            "verificacao": {
+                "qg1": "PASS",
+                "qg2": "PASS",
+                "qg3": "PASS",
+                "verifier": "PASS_COM_ACHADOS",
+                "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b",
+                "nota": "QG-3 PASS + homologação humana APROVADA (E3-HOM, EST-03, E4 residual, COR-UX-HOM). Publicação NÃO autorizada.",
+                "homologacaoHumana": "APROVADA"
+            },
+            "proximaAcao": "Homologação humana APROVADA. Avaliar bloqueios operacionais restantes (restore alvo, migrate, gaps EST-02) e só então decidir pedido explícito de publicação. Sem E6/E7/expansão L3.",
+            "arquivos": [
+                "apps/api/scripts/smoke-est-04-ops.mjs",
+                "apps/api/package.json",
+                "docs/esteira/estado/procedimento-est-04-ops.md",
+                "README.md",
+                "docker-compose.yml",
+                "apps/api/src/saude/controlador-saude.ts",
+                "docs/esteira/planejamento/estabilizacao-pre-uso.md",
+                "docs/produto/STATUS-E-ESCOPO.md",
+                "docs/esteira/REGISTRO.md",
+                "docs/esteira/estado/evidencia-est-04-20261122.json"
+            ],
+            "ultimoIncremento": {
+                "id": "EST-04",
+                "status": "COMPLETED",
+                "tipo": "transversal",
+                "requisitos": [
+                    "EST-04-OPS",
+                    "EST-BLOQ-USO-REAL"
+                ],
+                "aceite": "Ops local: schema sync, backup/restore descartavel, Docker, /saude; sem autorizar publicacao",
+                "fingerprint": "sha256:393af5ec2b09df78",
+                "verifier": "PASS_COM_ACHADOS",
+                "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b"
+            },
+            "homologacaoParcial": {
+                "resultado": "APROVADA_PARCIALMENTE",
+                "em": "2026-11-22T21:40:28.249Z",
+                "fonte": "Responsável do Produto nesta conversa",
+                "apontamentos": [
+                    "Telas sem feedback de carregamento contextual",
+                    "Sugestões de Atividades reais acima do catálogo principal",
+                    "Renovar sugestões com falha percebida (causa a investigar)",
+                    "Conclusão de fase digital sem diálogo de celebração/próxima fase"
+                ],
+                "foraEscopoNestaRodada": [
+                    "Expansão de catálogos (Etapa B — só planejamento L3)",
+                    "EST-03/EST-04 da estabilização (retomada após COR-UX)"
+                ]
+            },
+            "retomadaPor": "Pedido humano EST-04 em 2026-11-22",
+            "reconciliacaoAnteriorEST03": {
+                "status": "OK",
+                "branch": "develop",
+                "commit": "348a44a",
+                "workingTree": "dirty_est03_ready_commit",
+                "originDevelop": "up_to_date",
+                "divergencias": [
+                    "E3-HOM PENDING_HUMAN",
+                    "COR-UX-HOM PENDING_HUMAN",
+                    "E4-HOM APROVADA_PARCIALMENTE (residual tipificado)",
+                    "EVO-CATALOGO NEEDS_DECISION em demandaPausadaL3",
+                    "Sem autorização de publicação"
+                ],
+                "em": "2026-11-22T23:12:22.081Z"
+            },
+            "alinhamentoDocumental": {
+                "dataLocal": "2026-11-22",
+                "tipo": "reconciliacao_de_status",
+                "base": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
+                "escopo": "Atualizar encaminhamento e reconciliar fontes existentes; não implementa EST-04 nem homologa jornadas.",
+                "proximaEtapaPlanejada": "EST-04",
+                "estadoEST04Preservado": "PENDING",
+                "fontes": [
+                    "docs/produto/STATUS-E-ESCOPO.md",
+                    "docs/esteira/planejamento/estabilizacao-pre-uso.md",
+                    "docs/esteira/estado/evidencia-est-03-20261122.json"
+                ]
+            },
+            "est04": {
+                "status": "COMPLETED_TECNICO",
+                "procedimento": "docs/esteira/estado/procedimento-est-04-ops.md",
+                "evidencia": "docs/esteira/estado/evidencia-est-04-20261122.json",
+                "smoke": "smoke:est-04-ops",
+                "fingerprint": "sha256:393af5ec2b09df78",
+                "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b",
+                "publicacao": "NAO_AUTORIZADA"
+            }
         },
         {
             "id": "COR-UX-EST-HOM-20261122",
@@ -2451,7 +2685,7 @@
             "concluidaEm": "2026-11-16T18:35:00.000Z"
         }
     ],
-    "proximaAcao": "Homologação humana APROVADA. Avaliar bloqueios operacionais restantes (restore alvo, migrate, gaps EST-02) e só então decidir pedido explícito de publicação. Sem E6/E7/expansão L3.",
+    "proximaAcao": "Revisar CAT-02 local e autorizar CAT-03 (quatro jogos novos reaproveitando motores).",
     "atualizadoEm": "2026-11-22T23:47:45.979Z",
     "notas": "ESTABILIZACAO HOMOLOGADA (humano APROVADO). EST-00..04 + QG-3. Publicação não autorizada; gaps ops/EST-02 permanecem. E5 UX R2 APROVADA. Catálogos L3 pendentes; E6/E7 fora.",
     "decisaoPendente": {
@@ -2590,52 +2824,28 @@
         "fingerprint": "ef-modulo04-qg3-2026-11-16"
     },
     "demanda": {
-        "id": "ESTABILIZACAO-PRE-USO-20261122",
+        "id": "EVO-CATALOGO-JOGOS-20261122",
         "tipo": "transversal",
-        "origem": "Responsável — preparar plataforma para uso real sem E6/E7 e sem novas funcionalidades",
+        "origem": "Decisão explícita do responsável do Produto, 2026-11-22",
         "estado": "COMPLETED",
         "aprovacao": {
-            "nivel": "L2",
+            "nivel": "L3",
             "status": "APROVADA",
-            "referencia": "Pedido humano ESTABILIZACAO-PRE-USO-20261122; docs/produto/STATUS-E-ESCOPO.md; GOVERNANCA L2 estabilização",
-            "nota": "Estabilização; ADR-015 auth enxuta APROVADA; sem E6/E7; sem publicação automática."
+            "referencia": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
+            "nota": "Oito jogos e catálogo em PostgreSQL antes da primeira publicação."
         },
         "risco": "alto",
-        "escopo": "Reconciliação documental; correção DEF-E3-ANEXO; regressão auth/autorização; consistência histórico/resumo/PDF e E4 residual; prontidão operacional (backup/restore/Docker/health) sem liberar produção. Inclui EST-01-UX visual Resumo/Histórico autorizada pelo responsável.",
-        "impacto": "Cuidados (anexos), Fundação (auth/sessões), Evolução (histórico/resumo/PDF), operação local",
+        "escopo": "Catálogo oficial E4/E5, expansão digital em PostgreSQL, preservação do progresso e homologação da UX.",
         "fora": [
-            "E6",
-            "E7",
-            "novas funcionalidades",
-            "publicação para uso real sem critérios de bloqueio"
-        ],
-        "criteriosAceite": [
-            "EST-00-REC",
-            "EST-01-ANEXO",
-            "EST-02-AUTH",
-            "EST-03-DOCS",
-            "EST-04-OPS",
-            "EST-BLOQ-USO-REAL"
+            "Expansão E4",
+            "E6/E7",
+            "Publicação"
         ],
         "dependencias": [
-            "COR-E5-UX-HOM-R2 homologada APROVADA",
-            "DEF-E3-ANEXO CORRIGIDO TECNICAMENTE (E3-HOM PENDING_HUMAN)",
-            "E4-HOM APROVADA_PARCIALMENTE",
-            "E1/E2 homologações humanas APROVADAS",
-            "ADR-015 DOCUMENTADA",
-            "Sem autorização de publicação"
-        ],
-        "pendenciasForaEscopo": [
-            {
-                "id": "E6-IA-DESENVOLVIMENTO",
-                "estado": "FORA",
-                "tratamento": "NAO_INICIAR"
-            },
-            {
-                "id": "E7-IA-CUIDADOS",
-                "estado": "FORA",
-                "tratamento": "NAO_INICIAR"
-            }
+            "E5 homologada R2",
+            "ADR-006/013/014/015",
+            "ProgressoFaseJogo vigente",
+            "CATEGORIAS_BIBLIOTECA"
         ],
         "fluxo": [
             "task-routing",
@@ -2643,243 +2853,208 @@
             "implementation-workflow",
             "quality-gate"
         ],
+        "criteriosAceite": [
+            "CAT-ACE-01",
+            "CAT-ACE-02",
+            "CAT-ACE-03",
+            "CAT-ACE-04",
+            "CAT-ACE-05",
+            "CAT-HOM"
+        ],
         "planejamento": {
-            "caminho": "docs/esteira/planejamento/estabilizacao-pre-uso.md",
+            "caminho": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
+            "expansaoE4Relacionada": "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
             "incrementos": [
                 {
-                    "id": "EST-00",
+                    "id": "CAT-01",
                     "status": "COMPLETED",
-                    "aceite": "Reconciliação e plano documentados; E5 R2 humana APROVADA registrada"
+                    "aceite": "Migração inicial e carga oficial idempotentes. 24 modelos E4, 3 jogos e 15 fases E5. Banco novo sem dados familiares e progresso existente preservado em ensaio separado."
                 },
                 {
-                    "id": "EST-01",
+                    "id": "CAT-02",
                     "status": "COMPLETED",
-                    "aceite": "Salvar exame com/sem anexo (payload >100KB); download; UX Resumo/Histórico alinhada ao padrão PEF",
-                    "fingerprint": "sha256:8f2ac0f5afe25966"
+                    "aceite": "API lê catálogo do PostgreSQL e o piloto mantém contratos, UX R2, autorização contextual e progresso."
                 },
                 {
-                    "id": "EST-02",
+                    "id": "CAT-03",
                     "status": "COMPLETED",
-                    "aceite": "Sessão/cookie (ADR-015); regressão E1/E2/authz; gaps residuais documentados; sem JWT",
-                    "fingerprint": "sha256:785fd27e1b52924e"
+                    "aceite": "Pares de sombras, Ache o intruso, Palavra e figura e Entrega no jardim jogáveis com componentes reaproveitados."
                 },
                 {
-                    "id": "EST-03",
+                    "id": "CAT-04",
                     "status": "COMPLETED",
-                    "aceite": "Isolamento + cache privado + temDocumento gated; E4 residual tipificada; HOM PENDING",
-                    "fingerprint": "sha256:89d4dae23976eedc"
+                    "aceite": "Histórias em cenas integrado. Oito jogos e 40 fases oficiais, duas variantes curadas por fase nova e Biblioteca validada em celular."
                 },
                 {
-                    "id": "EST-04",
+                    "id": "CAT-05",
                     "status": "COMPLETED",
-                    "aceite": "Backup/restore descartável e /saude evidenciados localmente; bloqueios de uso real aplicados; sem deploy",
-                    "fingerprint": "sha256:393af5ec2b09df78"
+                    "aceite": "QG-3 de regressão e roteiro CAT-HOM. Registrar aceite humano explícito antes de liberar a publicação."
                 }
             ]
         },
         "incrementoAtivo": null,
-        "testesPertinentes": [
-            "Reprodução controlada do upload de anexo com dados fictícios",
-            "smoke:e3 e regressão authz/anexos",
-            "smoke:e1-ent / smoke:e2 / smoke:authz conforme incremento",
-            "smoke:e4 / histórico-resumo/PDF quando EST-03",
-            "Procedimento backup/restore e healthcheck quando EST-04",
-            "Homologação humana E3-HOM após EST-01"
-        ],
-        "bloqueios": [
-            "Backup/restore validado só no Docker local — repetir no ambiente alvo",
-            "Sem prisma/migrations versionado para alvo",
-            "Gaps EST-02: rate-limit login; HTTPS + COOKIE_SECURE + WEB_ORIGIN no alvo",
-            "Sem autorização humana explícita de publicação",
-            "Não usar db reset/push destrutivo em banco compartilhado"
-        ],
-        "reconciliacaoLocal": {
-            "status": "OK",
-            "branch": "develop",
-            "commit": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
-            "workingTree": "dirty_est04_ready",
-            "originDevelop": "up_to_date_base",
-            "nota": "Docs reconciliados de origin/docs/alinhamento-est04-20261122; EST-04 ops local COMPLETED técnico; sem commit/push/deploy.",
-            "divergencias": [
-                "E3-HOM PENDING_HUMAN",
-                "EST-03 HOM PENDING_HUMAN",
-                "COR-UX-HOM PENDING_HUMAN",
-                "E4-HOM APROVADA_PARCIALMENTE (residual)",
-                "EVO-CATALOGO NEEDS_DECISION em demandaPausadaL3",
-                "Restore local não prova VPS",
-                "Sem prisma/migrations versionado",
-                "Gaps EST-02 (login/HTTPS/COOKIE_SECURE/WEB_ORIGIN)",
-                "Sem autorização de publicação"
-            ],
-            "em": "2026-11-22T23:34:24.337Z"
-        },
-        "fingerprintNota": "Fingerprint de produto será recalculado por incremento ao alterar código. EST-00 é documental.",
-        "verificacao": {
-            "qg1": "PASS",
-            "qg2": "PASS",
-            "qg3": "PASS",
-            "verifier": "PASS_COM_ACHADOS",
-            "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b",
-            "nota": "QG-3 PASS + homologação humana APROVADA (E3-HOM, EST-03, E4 residual, COR-UX-HOM). Publicação NÃO autorizada.",
-            "homologacaoHumana": "APROVADA"
-        },
-        "proximaAcao": "Homologação humana APROVADA. Avaliar bloqueios operacionais restantes (restore alvo, migrate, gaps EST-02) e só então decidir pedido explícito de publicação. Sem E6/E7/expansão L3.",
-        "atualizadoEm": "2026-11-22T23:47:45.979Z",
-        "fingerprint": "sha256:393af5ec2b09df78",
-        "fingerprintFull": "sha256:393af5ec2b09df787cb273a21d51dcea19b7770f8ea63bc3314ed3f6b0ac6da1",
-        "arquivos": [
-            "apps/api/scripts/smoke-est-04-ops.mjs",
-            "apps/api/package.json",
-            "docs/esteira/estado/procedimento-est-04-ops.md",
-            "README.md",
-            "docker-compose.yml",
-            "apps/api/src/saude/controlador-saude.ts",
-            "docs/esteira/planejamento/estabilizacao-pre-uso.md",
-            "docs/produto/STATUS-E-ESCOPO.md",
-            "docs/esteira/REGISTRO.md",
-            "docs/esteira/estado/evidencia-est-04-20261122.json"
-        ],
-        "mensagemCommit": "ops(estabilizacao): fechar EST-00..04 tecnicamente com QG-3\\n\\nOps local, privacidade, auth enxuta e anexos evidenciados; homologacao humana e publicacao permanecem pendentes.",
-        "ultimoIncremento": {
-            "id": "EST-04",
-            "status": "COMPLETED",
-            "tipo": "transversal",
-            "requisitos": [
-                "EST-04-OPS",
-                "EST-BLOQ-USO-REAL"
-            ],
-            "aceite": "Ops local: schema sync, backup/restore descartavel, Docker, /saude; sem autorizar publicacao",
-            "fingerprint": "sha256:393af5ec2b09df78",
-            "verifier": "PASS_COM_ACHADOS",
-            "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b"
-        },
+        "estadoExibicao": "HOMOLOGADA",
         "incrementosConcluidos": [
             {
-                "id": "EST-02",
+                "id": "CAT-01",
                 "status": "COMPLETED",
-                "fingerprint": "sha256:785fd27e1b52924e",
-                "em": "2026-11-22T20:56:19.415Z",
-                "verifier": "PASS_COM_ACHADOS"
+                "fingerprint": "sha256:86ff077d89ea019cafb1c2f4b19d55a6fd468ffb5782ad267a653dc029caccf2",
+                "qg1": "PASS",
+                "qg2": "PASS",
+                "verifier": "PASS_COM_ACHADOS",
+                "verifierId": "091e1592-ac82-490b-a4f6-3f0ef17791dd",
+                "evidencias": [
+                    "docs/esteira/estado/qg1-typecheck-cat-01.txt",
+                    "docs/esteira/estado/qg2-cat-01-bancos.txt",
+                    "docs/esteira/estado/evidencia-cat-01-20261122.json"
+                ],
+                "mensagemCommit": "feat(catalogo): versionar migração inicial e carga oficial E4/E5\n\nSepara a carga idempotente (24 modelos, 3 jogos, 15 fases) do seed fictício e preserva o progresso do piloto."
             },
             {
-                "id": "EST-03",
+                "id": "CAT-02",
                 "status": "COMPLETED",
-                "fingerprint": "sha256:89d4dae23976eedc",
-                "em": "2026-11-22T23:12:22.081Z",
-                "verifier": "PASS_COM_ACHADOS"
+                "fingerprint": "sha256:6a82e6eadf99068766df6385881a5f1f7c1bc67d9e8706d7ba254f33df5ff574",
+                "qg1": "PASS",
+                "qg2": "PASS",
+                "verifier": "PASS_COM_ACHADOS",
+                "verifierId": "7ca165dc-e2a9-42f7-a148-d65210c2c1ef",
+                "evidencias": [
+                    "docs/esteira/estado/qg1-typecheck-cat-02.txt",
+                    "docs/esteira/estado/qg1-typecheck-web-cat-02.txt",
+                    "docs/esteira/estado/qg1-check-e5-cat-02.txt",
+                    "docs/esteira/estado/qg2-smoke-e5-cat-02.txt",
+                    "docs/esteira/estado/qg2-smoke-authz-cat-02.txt",
+                    "docs/esteira/estado/qg2-smoke-e4-cat-02.txt",
+                    "docs/esteira/estado/evidencia-cat-02-20261122.json"
+                ],
+                "mensagemCommit": "feat(jogos): ler catálogo digital do PostgreSQL com motores em código\n\nMantém contratos do piloto, authz e progresso; Resumo resolve editorial no banco."
             },
             {
-                "id": "EST-04",
+                "id": "CAT-03",
                 "status": "COMPLETED",
-                "fingerprint": "sha256:393af5ec2b09df78",
-                "em": "2026-11-22T23:34:24.337Z",
-                "verifier": "PASS_COM_ACHADOS"
+                "fingerprint": "sha256:529553854fdd041d7ec185ce2fafc60c26997cbda34d60ed4cb157a753cb1d79",
+                "qg1": "PASS",
+                "qg2": "PASS",
+                "verifier": "PASS_COM_ACHADOS",
+                "verifierId": "3070adbc-f175-4891-9bf7-6654cb965c98",
+                "evidencias": [
+                    "docs/esteira/estado/qg1-typecheck-api-cat-03.txt",
+                    "docs/esteira/estado/qg1-typecheck-web-cat-03.txt",
+                    "docs/esteira/estado/qg1-check-e5-cat-03.txt",
+                    "docs/esteira/estado/qg1-check-cat-03.txt",
+                    "docs/esteira/estado/qg2-smoke-e5-cat-03.txt",
+                    "docs/esteira/estado/qg2-smoke-authz-cat-03.txt",
+                    "docs/esteira/estado/qg2-smoke-e4-cat-03.txt",
+                    "docs/esteira/estado/evidencia-cat-03-20261122.json"
+                ],
+                "mensagemCommit": "feat(jogos): publicar quatro jogos E5 reaproveitando motores\n\nPares de sombras, Ache o intruso, Palavra e figura e Entrega no jardim com 20 fases curadas na carga oficial."
+            },
+            {
+                "id": "CAT-04",
+                "status": "COMPLETED",
+                "fingerprint": "sha256:d0a5de32eb5f954e3e377a5224d56559b9e84144e3e034357a73ab153e562ef7",
+                "qg1": "PASS",
+                "qg2": "PASS",
+                "verifier": "PASS_COM_ACHADOS",
+                "verifierId": "340b7b3d-ce2a-47fc-8d44-2ecfb4d03fc6",
+                "homologacaoHumanaPreviaAteCat03": "APROVADA",
+                "evidencias": [
+                    "docs/esteira/estado/qg1-typecheck-api-cat-04.txt",
+                    "docs/esteira/estado/qg1-typecheck-web-cat-04.txt",
+                    "docs/esteira/estado/qg1-check-cat-04.txt",
+                    "docs/esteira/estado/qg1-check-cat-03-reg-cat-04.txt",
+                    "docs/esteira/estado/qg1-check-e5-cat-04.txt",
+                    "docs/esteira/estado/qg2-carga-oficial-cat-04.txt",
+                    "docs/esteira/estado/qg2-smoke-e5-cat-04.txt",
+                    "docs/esteira/estado/qg2-smoke-authz-cat-04.txt",
+                    "docs/esteira/estado/qg2-smoke-e4-cat-04.txt",
+                    "docs/esteira/estado/evidencia-cat-04-20261122.json"
+                ],
+                "mensagemCommit": "feat(jogos): integrar Histórias em cenas e fechar catálogo E5 8/40\\n\\nMotor de ordenação com toque, teclado e desfazer; cinco fases curadas na carga oficial."
+            },
+            {
+                "id": "CAT-05",
+                "status": "COMPLETED",
+                "fingerprint": "sha256:7b9096782b35d1ae09d5b88c4f678c6c7b88850a0807f4e6ed99666e12cdcb45",
+                "qg1": "PASS",
+                "qg2": "PASS",
+                "qg3": "PASS",
+                "verifier": "PASS_COM_ACHADOS",
+                "verifierId": "a2fdad4b-2406-4045-990e-17ff05d4b17b",
+                "homologacaoHumana": "PENDING_HUMAN",
+                "evidencias": [
+                    "docs/esteira/estado/qg3-typecheck-api-cat-05.txt",
+                    "docs/esteira/estado/qg3-typecheck-web-cat-05.txt",
+                    "docs/esteira/estado/qg3-build-api-cat-05.txt",
+                    "docs/esteira/estado/qg3-build-web-cat-05.txt",
+                    "docs/esteira/estado/qg3-check-cat-04-cat-05.txt",
+                    "docs/esteira/estado/qg3-check-cat-03-cat-05.txt",
+                    "docs/esteira/estado/qg3-check-e5-cat-05.txt",
+                    "docs/esteira/estado/qg3-carga-oficial-cat-05.txt",
+                    "docs/esteira/estado/qg3-smoke-e5-cat-05.txt",
+                    "docs/esteira/estado/qg3-smoke-e4-cat-05.txt",
+                    "docs/esteira/estado/qg3-smoke-authz-cat-05.txt",
+                    "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
+                    "docs/esteira/estado/evidencia-cat-05-20261122.json"
+                ],
+                "mensagemCommit": "chore(catalogo): fechar CAT-05 com QG-3 e roteiro CAT-HOM\\n\\nRegressão E4/E5/authz e builds ok; aceite humano em celular permanece pendente e publicação não autorizada."
             }
         ],
+        "fingerprint": "sha256:7b9096782b35d1ae09d5b88c4f678c6c7b88850a0807f4e6ed99666e12cdcb45",
+        "verificacao": {
+            "qg1": {
+                "status": "PASS",
+                "evidencia": "docs/esteira/estado/qg3-typecheck-api-cat-05.txt"
+            },
+            "qg2": {
+                "status": "PASS",
+                "evidencia": "docs/esteira/estado/qg3-smoke-e5-cat-05.txt"
+            },
+            "qg3": {
+                "status": "PASS",
+                "evidencia": "docs/esteira/estado/evidencia-cat-05-20261122.json"
+            },
+            "verifier": "PASS_COM_ACHADOS",
+            "verifierId": "a2fdad4b-2406-4045-990e-17ff05d4b17b",
+            "homologacaoCelular": "APROVADA",
+            "CAT_HOM": "APROVADA",
+            "homologacaoHumanaAteCat03": "APROVADA"
+        },
+        "arquivos": [
+            "docs/esteira/estado/evidencia-cat-hom-20261122.json",
+            "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
+            "docs/esteira/estado/atual.json",
+            "docs/esteira/REGISTRO.md",
+            "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
+            "docs/produto/STATUS-E-ESCOPO.md"
+        ],
+        "proximaAcao": "CAT-HOM APROVADA. Avaliar bloqueios operacionais restantes (EST-02, restore alvo) e só então pedir autorização explícita de publicação. Sem E6/E7.",
+        "atualizadoEm": "2026-11-23T02:58:22.339Z",
+        "homologacaoHumanaAteCat03": "APROVADA",
         "homologacaoHumana": "APROVADA",
-        "homologacaoParcial": {
-            "resultado": "APROVADA_PARCIALMENTE",
-            "em": "2026-11-22T21:40:28.249Z",
-            "fonte": "Responsável do Produto nesta conversa",
-            "apontamentos": [
-                "Telas sem feedback de carregamento contextual",
-                "Sugestões de Atividades reais acima do catálogo principal",
-                "Renovar sugestões com falha percebida (causa a investigar)",
-                "Conclusão de fase digital sem diálogo de celebração/próxima fase"
-            ],
-            "foraEscopoNestaRodada": [
-                "Expansão de catálogos (Etapa B — só planejamento L3)",
-                "EST-03/EST-04 da estabilização (retomada após COR-UX)"
-            ]
-        },
-        "retomadaPor": "Pedido humano EST-04 em 2026-11-22",
-        "reconciliacaoAnteriorEST03": {
-            "status": "OK",
-            "branch": "develop",
-            "commit": "348a44a",
-            "workingTree": "dirty_est03_ready_commit",
-            "originDevelop": "up_to_date",
-            "divergencias": [
-                "E3-HOM PENDING_HUMAN",
-                "COR-UX-HOM PENDING_HUMAN",
-                "E4-HOM APROVADA_PARCIALMENTE (residual tipificado)",
-                "EVO-CATALOGO NEEDS_DECISION em demandaPausadaL3",
-                "Sem autorização de publicação"
-            ],
-            "em": "2026-11-22T23:12:22.081Z"
-        },
-        "alinhamentoDocumental": {
-            "dataLocal": "2026-11-22",
-            "tipo": "reconciliacao_de_status",
-            "base": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
-            "escopo": "Atualizar encaminhamento e reconciliar fontes existentes; não implementa EST-04 nem homologa jornadas.",
-            "proximaEtapaPlanejada": "EST-04",
-            "estadoEST04Preservado": "PENDING",
-            "fontes": [
-                "docs/produto/STATUS-E-ESCOPO.md",
-                "docs/esteira/planejamento/estabilizacao-pre-uso.md",
-                "docs/esteira/estado/evidencia-est-03-20261122.json"
-            ]
-        },
-        "est04": {
-            "status": "COMPLETED_TECNICO",
-            "procedimento": "docs/esteira/estado/procedimento-est-04-ops.md",
-            "evidencia": "docs/esteira/estado/evidencia-est-04-20261122.json",
-            "smoke": "smoke:est-04-ops",
-            "fingerprint": "sha256:393af5ec2b09df78",
-            "verifierId": "8d107190-9eeb-4eef-b42e-497661fa026b",
+        "CAT_HOM": "APROVADA",
+        "fechamentoTecnico": {
+            "em": "2026-11-23T02:34:25.505Z",
+            "qg3": "PASS",
+            "catalogo": {
+                "e4": 24,
+                "e5Jogos": 8,
+                "e5Fases": 40
+            },
             "publicacao": "NAO_AUTORIZADA"
         },
-        "estadoExibicao": "HOMOLOGADA",
-        "fechamentoTecnico": {
-            "perfil": "QG-3",
-            "status": "PASS",
-            "em": "2026-11-22T23:40:36.285Z",
-            "evidencia": "docs/esteira/estado/evidencia-estabilizacao-fechamento-qg3-20261122.json",
-            "incrementos": [
-                "EST-00",
-                "EST-01",
-                "EST-02",
-                "EST-03",
-                "EST-04"
-            ],
-            "fingerprint": "sha256:393af5ec2b09df78",
-            "verifierEst04": "8d107190-9eeb-4eef-b42e-497661fa026b",
-            "nota": "Fechamento técnico do conjunto; não equivale a aceite humano nem autorização de publicação"
-        },
         "homologacaoHumanaRegistro": {
+            "em": "2026-11-23T02:58:22.339Z",
             "resultado": "APROVADA",
-            "em": "2026-11-22T23:47:45.979Z",
-            "fonte": "Responsável do Produto nesta conversa (aprovado)",
-            "frentes": [
-                {
-                    "id": "E3-HOM",
-                    "resultado": "APROVADA",
-                    "escopo": "Salvar/baixar/abrir anexo fictício após EST-01"
-                },
-                {
-                    "id": "EST-03-HOM",
-                    "resultado": "APROVADA",
-                    "escopo": "Histórico/Resumo/prévia/PDF, privacidade documentos, E4 residual"
-                },
-                {
-                    "id": "E4-HOM-RESIDUAL",
-                    "resultado": "APROVADA",
-                    "escopo": "Revalidação residual Biblioteca no roteiro EST-03/E4"
-                },
-                {
-                    "id": "COR-UX-HOM",
-                    "resultado": "APROVADA",
-                    "escopo": "Loading, sugestões, renovar, celebração — correção UX posterior à E5 R2"
-                }
-            ],
-            "naoAmpliar": [
-                "Publicação para uso real",
-                "EVO-CATALOGO L3",
+            "fonte": "Responsável do Produto nesta conversa (\"aprovado\")",
+            "evidencia": "docs/esteira/estado/evidencia-cat-hom-20261122.json",
+            "roteiro": "docs/esteira/estado/roteiro-homologacao-cat-hom.md",
+            "naoAutorizado": [
+                "publicação",
+                "deploy/push/PR",
                 "E6/E7",
-                "Gaps EST-02 (rate-limit/HTTPS/COOKIE_SECURE/WEB_ORIGIN) e restore VPS"
-            ],
-            "nota": "Aceite humano do conjunto pendente da estabilização; não autoriza publicação nem fecha bloqueios operacionais restantes."
+                "gaps EST-02/restore VPS"
+            ]
         }
     },
     "auditoriaTecnica": {
@@ -2937,114 +3112,5 @@
             "retencaoPreventiva": 29,
             "inventario": "docs/esteira/planejamento/auditoria-tecnica-20261122.md"
         }
-    },
-    "demandaPausadaL3": {
-        "id": "EVO-CATALOGO-JOGOS-20261122",
-        "tipo": "transversal",
-        "origem": "Pedido humano — arquitetura extensível do catálogo digital (aprovação L3)",
-        "estado": "NEEDS_DECISION",
-        "demandaPrecedente": "COR-UX-EST-HOM-20261122",
-        "aprovacao": {
-            "nivel": "L3",
-            "status": "PENDENTE",
-            "referencia": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md; GOVERNANCA L3; Módulo 03 §13",
-            "nota": "Planejamento consolidado. NÃO implementar CAT-01..05 sem aprovação explícita do Produto."
-        },
-        "risco": "alto",
-        "escopo": "Arquitetura 4 camadas (editorial/motor/renderizador/progresso); modelo Prisma aditivo; contratos; migração compatível dos 3 jogos; plano CAT-01..05. Somente documentação/estado nesta etapa.",
-        "fora": [
-            "Implementar novos jogos",
-            "Motor gráfico pesado",
-            "Object storage",
-            "Novas permissões",
-            "Alterar autenticação",
-            "Estrelas digitais",
-            "Rankings",
-            "Avaliações cognitivas",
-            "commit/push/deploy"
-        ],
-        "impacto": "Documentação da esteira e produto (STATUS); preparação para evolução do domínio Desenvolvimento/jogos após L3",
-        "bloqueios": [
-            "Aprovação L3 do Produto pendente"
-        ],
-        "fluxo": [
-            "task-routing",
-            "module-planning"
-        ],
-        "criteriosAceite": [
-            "CAT-ACE-01",
-            "CAT-ACE-02",
-            "CAT-ACE-03",
-            "CAT-ACE-04",
-            "CAT-ACE-05"
-        ],
-        "testesPertinentes": [
-            "N/A nesta etapa (somente planejamento)",
-            "Após L3: check/smoke e5, smoke:authz, typecheck, builds"
-        ],
-        "dependencias": [
-            "E5 homologada R2",
-            "ADR-006/013/014/015",
-            "ProgressoFaseJogo vigente",
-            "CATEGORIAS_BIBLIOTECA"
-        ],
-        "planejamento": {
-            "caminho": "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
-            "expansaoE4Relacionada": "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
-            "incrementos": [
-                {
-                    "id": "CAT-01",
-                    "status": "PENDING_L3",
-                    "aceite": "Schema + seed 3 jogos; progresso legível"
-                },
-                {
-                    "id": "CAT-02",
-                    "status": "PENDING_L3",
-                    "aceite": "ServicoJogos + motores; API motor/renderizador"
-                },
-                {
-                    "id": "CAT-03",
-                    "status": "PENDING_L3",
-                    "aceite": "Metadados biblioteca; capaRef sem storage"
-                },
-                {
-                    "id": "CAT-04",
-                    "status": "PENDING_L3",
-                    "aceite": "Pipeline editorial; capacidade ~20/cat sem jogos novos"
-                },
-                {
-                    "id": "CAT-05",
-                    "status": "PENDING_L3",
-                    "aceite": "QG-3 + docs canônicas; CAT-HOM PENDING_HUMAN"
-                }
-            ]
-        },
-        "reconciliacaoLocal": {
-            "status": "OK",
-            "branch": "develop",
-            "commit": "5e23c7a",
-            "workingTree": "docs_only_pending",
-            "originDevelop": "up_to_date",
-            "divergencias": [
-                "ESTABILIZACAO pausada — EST-03/04 pendentes",
-                "E3-HOM PENDING_HUMAN",
-                "COR-UX-HOM PENDING_HUMAN (técnico COMPLETED)",
-                "Sem autorização de publicação"
-            ],
-            "em": "2026-11-22T22:49:19.883Z"
-        },
-        "arquivos": [
-            "docs/esteira/planejamento/evo-catalogo-jogos-20261122.md",
-            "docs/esteira/planejamento/expansao-catalogos-e4-e5.md",
-            "docs/esteira/estado/atual.json",
-            "docs/esteira/REGISTRO.md",
-            "docs/produto/STATUS-E-ESCOPO.md"
-        ],
-        "proximaAcao": "Aguardar decisão L3 do Produto sobre evo-catalogo-jogos-20261122.md. Sem implementação até aprovação.",
-        "atualizadoEm": "2026-11-22T23:03:43.349Z",
-        "estadoExibicao": "AGUARDANDO_APROVACAO_L3",
-        "incrementosConcluidos": [],
-        "pausadaPor": "ESTABILIZACAO-PRE-USO-20261122 / EST-03",
-        "notaRetomada": "Pausada sem perder L3 PENDENTE; retomável após decisão do Produto. Sem implementação."
     }
 }

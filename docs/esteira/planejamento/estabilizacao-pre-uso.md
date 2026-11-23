@@ -3,7 +3,7 @@
 **Demanda:** `ESTABILIZACAO-PRE-USO-20261122`  
 **Tipo:** transversal · **Risco:** alto (saúde, documentos, auth, operação)  
 **Aprovação:** pedido humano de estabilização sem E6/E7 e sem novas funcionalidades  
-**Base reconciliada:** `develop` @ `1c4c404b5e39beb06a1c37aa6527aad0cc566912` (EST-03 integrada; EST-04 ops local COMPLETED técnico; EVO-CATALOGO L3 permanece pausada sem implementação)
+**Base reconciliada:** `develop` @ `3491646` (EST-00..04 com fechamento técnico e homologação registrados). A expansão digital aprovada segue demanda própria.
 **Estado:** EST-00..04 COMPLETED técnico · QG-3 PASS · **homologação humana APROVADA** · demanda `HOMOLOGADA` · publicação não autorizada
 
 ## Contexto homologado
@@ -114,4 +114,12 @@ Não declarar pronto para uso real enquanto qualquer item abaixo for verdadeiro:
 
 **Homologação humana APROVADA** (2026-11-22) para E3-HOM, EST-03, E4 residual e COR-UX-HOM. Evidência: [evidencia-estabilizacao-hom-20261122.json](../estado/evidencia-estabilizacao-hom-20261122.json). E5 UX R2 permanece APROVADA no seu escopo.
 
-**Ainda bloqueiam uso real:** gaps EST-02 (proteção de login; HTTPS/`COOKIE_SECURE`/`WEB_ORIGIN`); restore/migrate no ambiente alvo; ausência de autorização explícita de publicação. Sem E6/E7, sem expansão L3, sem push/PR/deploy pelos agentes.
+## Preparação da primeira publicação
+
+1. Preparar migração inicial versionada e carga oficial idempotente em CAT-01. Na V1, validar 24 modelos E4, oito jogos E5 e 40 fases, sem dados familiares, contas ou progresso de demonstração.
+2. Fechar gaps EST-02 no alvo. O cadastro inicial é aberto para criar família própria. Homologar duas famílias independentes, convite para ingresso em família existente, proteção de cadastro/login, HTTPS, cookie seguro e origem correta.
+3. Conferir PRs, proteções e consumidores da branch padrão antes de renomear `main` para `master`. Confirmar branch padrão, destino das PRs e filtros da esteira após a mudança. CI na PR `develop` → `master`, com banco descartável. Gerar imagens de versão por SHA e digest.
+4. Após CAT-HOM aprovado, ensaiar instalação, saúde, anexos, restore isolado e rollback de imagem no alvo. O rollback precisa ser compatível com o schema aplicado. Backup de dados exige proteção e cópia fora da VPS.
+5. Com autorização separada, publicar por ação humana, aplicar migrações e carga oficial, validar por consultas de leitura e liberar o onboarding real.
+
+**Estado:** primeira publicação pendente. [Plano CAT](evo-catalogo-jogos-20261122.md).

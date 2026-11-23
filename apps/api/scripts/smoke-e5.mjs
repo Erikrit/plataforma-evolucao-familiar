@@ -88,7 +88,7 @@ try {
   const memoria = antes.dados.jogos?.find((jogo) => jogo.id === "memoria");
   conferir("Catálogo privado e cinco fases abertas sem nascimento", antes.status === 200 && antes.cache === "private, no-store"
     && memoria?.fases.length === 5 && memoria.fases.every((item) => item.estado === "nao_explorada"));
-  conferir("Catálogo completo e destaques distintos na primeira visita", antes.dados.jogos.length === 3
+  conferir("Catálogo completo e destaques distintos na primeira visita", antes.dados.jogos.length === 8
     && new Set(antes.dados.destaques).size === 3 && antes.dados.destaques[0] === "memoria");
   conferir("Conclusão exige início persistido", (await concluir(novaChave(), memoria.versao)).status === 409);
   conferir("Acesso direto a fase inexistente falha", (await iniciar(familia.token, `${catalogo}/memoria/fases/6`)).status === 404);
@@ -151,8 +151,64 @@ try {
   const depois = await lerCatalogo();
   const recente = depois.dados.destaques[0];
   conferir("Último jogo aberto ganha destaque estável com acesso a todos",
-    recente === "labirinto" && depois.dados.jogos.length === 3
+    recente === "labirinto" && depois.dados.jogos.length === 8
     && JSON.stringify(depois.dados.destaques) === JSON.stringify((await lerCatalogo()).dados.destaques));
+
+  const sombra = antes.dados.jogos.find((jogo) => jogo.id === "pares-sombras");
+  const inicioSombra = await iniciar(familia.token, `${catalogo}/pares-sombras/fases/1`);
+  conferir("Pares de sombras abre com faces e chaves de par",
+    sombra?.fases.length === 5 && inicioSombra.status === 201
+    && inicioSombra.dados.conteudo.tipo === "memoria"
+    && inicioSombra.dados.conteudo.cartas.length === 4
+    && inicioSombra.dados.conteudo.cartas.some((carta) => carta.face === "sombra")
+    && inicioSombra.dados.conteudo.cartas.some((carta) => carta.face === "objeto"));
+  const fimSombra = await concluir(novaChave(), sombra.versao, familia.token, `${catalogo}/pares-sombras/fases/1`);
+  conferir("Pares de sombras conclui em progresso próprio",
+    fimSombra.status === 201 && fimSombra.dados.primeiraDescoberta);
+
+  const intruso = antes.dados.jogos.find((jogo) => jogo.id === "ache-intruso");
+  const inicioIntruso = await iniciar(familia.token, `${catalogo}/ache-intruso/fases/3`);
+  conferir("Ache o intruso abre escolha única",
+    intruso?.fases.length === 5 && inicioIntruso.status === 201
+    && inicioIntruso.dados.conteudo.tipo === "escolha"
+    && inicioIntruso.dados.conteudo.opcoes.length >= 3
+    && inicioIntruso.dados.conteudo.opcoes.some((opcao) => opcao.id === inicioIntruso.dados.conteudo.resposta));
+  const fimIntruso = await concluir(novaChave(), intruso.versao, familia.token, `${catalogo}/ache-intruso/fases/3`);
+  conferir("Ache o intruso conclui com descoberta",
+    fimIntruso.status === 201 && fimIntruso.dados.primeiraDescoberta);
+
+  const palavra = antes.dados.jogos.find((jogo) => jogo.id === "palavra-figura");
+  const inicioPalavra = await iniciar(familia.token, `${catalogo}/palavra-figura/fases/2`);
+  conferir("Palavra e figura abre enunciado com opções",
+    palavra?.fases.length === 5 && inicioPalavra.status === 201
+    && inicioPalavra.dados.conteudo.tipo === "escolha"
+    && typeof inicioPalavra.dados.conteudo.enunciado === "string"
+    && inicioPalavra.dados.conteudo.enunciado.length > 0);
+  const fimPalavra = await concluir(novaChave(), palavra.versao, familia.token, `${catalogo}/palavra-figura/fases/2`);
+  conferir("Palavra e figura conclui com descoberta",
+    fimPalavra.status === 201 && fimPalavra.dados.primeiraDescoberta);
+
+  const jardim = antes.dados.jogos.find((jogo) => jogo.id === "entrega-jardim");
+  const inicioJardim = await iniciar(familia.token, `${catalogo}/entrega-jardim/fases/5`);
+  const gradeJardim = inicioJardim.dados.conteudo;
+  conferir("Entrega no jardim abre com pontos de passagem",
+    jardim?.fases.length === 5 && inicioJardim.status === 201 && gradeJardim.tipo === "labirinto"
+    && Array.isArray(gradeJardim.pontos) && gradeJardim.pontos.length === 3
+    && gradeJardim.mapa.join("").includes("P"));
+  const fimJardim = await concluir(novaChave(), jardim.versao, familia.token, `${catalogo}/entrega-jardim/fases/5`);
+  conferir("Entrega no jardim conclui com descoberta",
+    fimJardim.status === 201 && fimJardim.dados.primeiraDescoberta);
+
+  const historias = antes.dados.jogos.find((jogo) => jogo.id === "historias-cenas");
+  const inicioHistorias = await iniciar(familia.token, `${catalogo}/historias-cenas/fases/4`);
+  const cenas = inicioHistorias.dados.conteudo;
+  conferir("Histórias em cenas abre ordenação embaralhada",
+    historias?.fases.length === 5 && inicioHistorias.status === 201 && cenas.tipo === "ordenacao"
+    && cenas.cenas.length === 4 && cenas.ordemCorreta.length === 4
+    && !cenas.cenas.every((cena, indice) => cena.id === cenas.ordemCorreta[indice]));
+  const fimHistorias = await concluir(novaChave(), historias.versao, familia.token, `${catalogo}/historias-cenas/fases/4`);
+  conferir("Histórias em cenas conclui com descoberta",
+    fimHistorias.status === 201 && fimHistorias.dados.primeiraDescoberta);
 
   // Fixture de uma descoberta gravada com outra versão do catálogo.
   const versaoHistorica = memoria.versao + 1;
@@ -173,14 +229,14 @@ try {
   const eventosResposta = await historico();
   const eventos = eventosResposta.dados.eventos.filter((item) => item.tipo === "conclusao_fase_jogo");
   conferir("Histórico deriva uma descoberta por fase com versão da origem", eventosResposta.status === 200
-    && eventos.length === 3 && eventos.some((item) => item.origemId === "memoria/5"
+    && eventos.length === 8 && eventos.some((item) => item.origemId === "memoria/5"
       && item.resumo.includes("Memória de uma edição anterior") && item.detalhe.includes(String(versaoHistorica))));
   const resumoAtual = await resumo();
   conferir("Histórico e Resumo proíbem cache de dados privados",
     eventosResposta.cache === "private, no-store" && resumoAtual.cache === "private, no-store");
   const jogosResumo = resumoAtual.dados.jogos;
   conferir("Resumo deriva jogos e contagens sem misturar participações", resumoAtual.status === 200
-    && jogosResumo.length === 3 && jogosResumo.every((jogo) => jogo.totalFases === 5
+    && jogosResumo.length === 8 && jogosResumo.every((jogo) => jogo.totalFases === 5
       && jogo.concluidasAte === 1 && jogo.concluidasNoPeriodo === 1)
     && resumoAtual.dados.experiencias.length === 0);
   const passado = "de=2000-01-01&ate=2000-01-02";
