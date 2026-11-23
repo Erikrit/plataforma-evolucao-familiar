@@ -1,0 +1,81 @@
+{
+  "incrementoId": "FF-04-FF-05-FF-06",
+  "moduloId": "01-fundacao-familiar",
+  "geradoEm": "2026-11-15T03:51:02.504Z",
+  "checagens": [
+    {
+      "nome": "typecheck",
+      "status": "PASS"
+    },
+    {
+      "nome": "lint",
+      "status": "PASS"
+    },
+    {
+      "nome": "smoke:ff04",
+      "status": "PASS"
+    },
+    {
+      "nome": "smoke:ff05",
+      "status": "PASS"
+    },
+    {
+      "nome": "smoke:modulo-01 / QG-3",
+      "status": "PASS",
+      "saida": {
+        "ok": true,
+        "resultados": [
+          {
+            "script": "smoke:ff02",
+            "label": "ACE-01/02/09",
+            "ok": true,
+            "exit": 0
+          },
+          {
+            "script": "smoke:ff03",
+            "label": "ACE-05/07",
+            "ok": true,
+            "exit": 0
+          },
+          {
+            "script": "smoke:ff04",
+            "label": "ACE-03/04",
+            "ok": true,
+            "exit": 0
+          },
+          {
+            "script": "smoke:ff05",
+            "label": "ACE-06/10",
+            "ok": true,
+            "exit": 0
+          },
+          {
+            "script": "ACE-08-estrutural",
+            "label": "mobile-first CSS + perfil",
+            "ok": true,
+            "exit": 0
+          }
+        ]
+      }
+    },
+    {
+      "nome": "build api/web",
+      "status": "PASS"
+    }
+  ],
+  "aceites": {
+    "ACE-01": "PASS",
+    "ACE-02": "PASS",
+    "ACE-03": "PASS",
+    "ACE-04": "PASS",
+    "ACE-05": "PASS",
+    "ACE-06": "PASS",
+    "ACE-07": "PASS",
+    "ACE-08": "PASS",
+    "ACE-09": "PASS",
+    "ACE-10": "PASS"
+  },
+  "verifier": "PASS",
+  "verifierAgentId": "7aaefaf1-f0fa-43ef-81ce-e3923a1fbd38",
+  "qg3": "PASS"
+}

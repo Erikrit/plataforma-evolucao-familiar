@@ -1,0 +1,43 @@
+﻿
+> @pef/web@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.29
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 21.8s
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/6) ...
+   Generating static pages (1/6) 
+   Generating static pages (2/6) 
+   Generating static pages (4/6) 
+ ✓ Generating static pages (6/6)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                           Size  First Load JS
+┌ ○ /                                              4.32 kB         137 kB
+├ ○ /_not-found                                      988 B         104 kB
+├ ○ /convites/ativar                               1.37 kB         134 kB
+├ ○ /gerenciar-familia                             10.6 kB         174 kB
+├ ƒ /pessoas/[pessoaId]                            1.18 kB         123 kB
+├ ƒ /pessoas/[pessoaId]/cuidados                   7.09 kB         158 kB
+├ ƒ /pessoas/[pessoaId]/cuidados/consultas         6.72 kB         171 kB
+├ ƒ /pessoas/[pessoaId]/cuidados/medicamentos      5.53 kB         186 kB
+├ ƒ /pessoas/[pessoaId]/desenvolvimento             9.8 kB         171 kB
+├ ƒ /pessoas/[pessoaId]/desenvolvimento/cadastros  4.88 kB         171 kB
+├ ƒ /pessoas/[pessoaId]/historico                     3 kB         132 kB
+└ ƒ /pessoas/[pessoaId]/resumo                     3.56 kB         132 kB
++ First Load JS shared by all                       103 kB
+  ├ chunks/18-68d7739dcfa59da4.js                  46.6 kB
+  ├ chunks/87c73c54-24122e7b92478d00.js            54.2 kB
+  └ other shared chunks (total)                    2.01 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

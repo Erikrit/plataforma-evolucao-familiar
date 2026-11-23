@@ -1,0 +1,77 @@
+{
+  "demandaId": "DEM-M01-ACESSOS-CORR-20261120",
+  "tipo": "correcao",
+  "atualizadoEm": "2026-11-20T13:40:00.000Z",
+  "branch": "develop",
+  "commitBase": "1c3ab8de652b598a54d827650d3e9a7f47164aeb",
+  "fingerprint": "sha256:f8ed38e0032e040a",
+  "fingerprintFull": "sha256:f8ed38e0032e040ad585c22d5450318a9d18e870c26850428b5356e2e49d9abc",
+  "adr": "ADR-014",
+  "especificacao": "docs/especificacao-modulo-01-acessos.md",
+  "criterios": {
+    "AC-01": {
+      "status": "PASS_TECNICO",
+      "nota": "Bloco Administração da família com TEXTO_ADMINISTRACAO_FAMILIA; authz admin-puro sem cuidados (smoke:authz)"
+    },
+    "AC-02": {
+      "status": "PASS_TECNICO",
+      "nota": "Escolha explícita; limpa responsabilidade ao voltar a Cuidados; descrições distintas; check estático"
+    },
+    "AC-03": {
+      "status": "PASS_TECNICO",
+      "nota": "Revisão Integrante + smoke authz colaboradora: rotina ok; programação/anexo/PDF/Laurinha negados"
+    },
+    "AC-04": {
+      "status": "PASS_TECNICO",
+      "nota": "Texto Responsável Cuidados + smoke authz admin-com-cuidados e criação de medicamento"
+    },
+    "AC-05": {
+      "status": "PASS_TECNICO",
+      "nota": "smoke-adr014 ac05_alvo_acessa_cuidados_e_desenvolvimento; listagem com duas áreas"
+    },
+    "AC-06": {
+      "status": "PASS_TECNICO",
+      "nota": "smoke-adr014 ac06_*: revoga Cuidados da Vovó, sessão 401, novo login mantém Desenvolvimento e nega Cuidados"
+    },
+    "AC-07": {
+      "status": "PASS_TECNICO",
+      "nota": "Fluxo convite com revisão na UI; ativação coberta pelo smoke-adr014 (convite→ativar→concessões)"
+    },
+    "AC-08": {
+      "status": "PASS",
+      "nota": "smoke:adr014-acessos + smoke:ct-acessos + smoke:authz PASS"
+    },
+    "AC-09": {
+      "status": "PENDING_HUMAN",
+      "nota": "Homologação celular/desktop com contas fictícias; critério: previsão do admin = sessão real"
+    }
+  },
+  "qg1": "PASS",
+  "qg2": "PASS",
+  "qg3": "NOT_APPLICABLE",
+  "verifier": "PASS",
+  "verifierId": "indep-shell-m01-acessos-corr-20261120",
+  "verifierOficial": "BLOCKED",
+  "verifierOficialId": "bce6f2ac-2e08-429f-aa06-26f85b45935f",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "arquivos": [
+    "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+    "apps/web/src/lib/api.ts",
+    "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+    "apps/api/scripts/smoke-adr014-acessos.mjs",
+    "apps/api/scripts/check-m01-acessos-corr.mjs",
+    "apps/api/package.json"
+  ],
+  "evidencias": [
+    "docs/esteira/estado/qg1-typecheck-api-m01-acessos-corr.txt",
+    "docs/esteira/estado/qg1-typecheck-web-m01-acessos-corr.txt",
+    "docs/esteira/estado/qg1-check-estatico-m01-acessos-corr.txt",
+    "docs/esteira/estado/qg2-smoke-adr014-m01-acessos-corr.txt",
+    "docs/esteira/estado/qg2-smoke-ct-acessos-m01-acessos-corr.txt",
+    "docs/esteira/estado/qg2-smoke-authz-m01-acessos-corr.txt",
+    "docs/esteira/estado/qg2-build-web-m01-acessos-corr.txt",
+    "docs/esteira/estado/roteiro-ac09-m01-acessos-corr.md"
+  ],
+  "mensagemCommit": "fix(acessos): alinhar consulta e revisão à homologação M01\n\nCorrige a aba Acessos após reprovação humana: visão por participante, escolha explícita em Cuidados e revisão que descreve a área e as ações prometidas.",
+  "commitPush": false
+}

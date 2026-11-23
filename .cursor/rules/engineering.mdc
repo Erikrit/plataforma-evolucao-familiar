@@ -1,0 +1,42 @@
+---
+description: Regras permanentes da esteira e localização das fontes oficiais do produto
+alwaysApply: true
+---
+
+# Engenharia — esteira PEF
+
+## Fontes oficiais
+
+- Produto: `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md`, `docs/produto/GOVERNANCA.md`
+- Arquitetura/ADRs: `docs/arquitetura/ARQUITETURA.md`, `docs/arquitetura/DECISOES.md`
+- Módulos: `docs/modulos/*/ESPECIFICACAO.md`
+- UX: `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`
+- Esteira: `AGENTS.md`, `docs/esteira/REGISTRO.md`, `docs/esteira/estado/atual.json`
+
+Não duplicar esses documentos em prompts. Ler só o trecho necessário.
+
+## Separação lógica (ADR-012)
+
+Artefatos da esteira (`.cursor/`, `docs/esteira/`, `scripts/esteira/`, `AGENTS.md`) não misturam regras funcionais do produto. Não alterar requisitos aprovados sem autorização humana.
+
+## Fluxo mínimo (desenvolvimento contínuo)
+
+1. Skill `task-routing` ao receber qualquer demanda.
+2. Skill `module-planning` só para novo módulo ou mudança complexa.
+3. Skill `implementation-workflow` para incremento planejado ou demanda delimitada aprovada.
+4. Skill `quality-gate` (QG-1 → verifier → QG-2; QG-3 ao fechar; homologação quando pedida).
+5. Persistir estado em `docs/esteira/estado/atual.json` sem apagar histórico de módulos/demandas.
+
+## Qualidade com evidência real
+
+Aplicação local em `apps/api` e `apps/web`. Não inventar código nem resultados só para “passar” gates. Verificações sem alvo = `PENDING` ou `BLOCKED` (motivo). `NOT_APPLICABLE` só se a verificação realmente não se aplica. Homologação humana/dispositivos = `PENDING_HUMAN`, nunca PASS automático. Auth, autorização, privacidade e persistência tocadas exigem checagens críticas pertinentes.
+
+Fingerprints novos: hash verificável dos arquivos afetados. Evidência antiga não cobre código alterado.
+
+## Segurança operacional
+
+Proibido: commit, push, tag, release, PR, deploy, publish, git destrutivo. Não contornar hooks. Sem segredos/dados reais no repositório. Nomes em português no código do produto (exceto APIs/libs e convenções já estabelecidas).
+
+## Retomada
+
+Antes de continuar: ler estado persistido (`demanda` ou incremento), `git status` (leitura), comparar fingerprint/arquivos. Máximo 3 correções da mesma causa raiz → `BLOCKED`.

@@ -1,0 +1,243 @@
+:root {
+  --fundo: #f6f8fc;
+  --texto: #23344f;
+  --destaque: #3569c8;
+  --destaque-suave: #e8effc;
+  --apoio: #e5a66a;
+  --borda: #d5deeb;
+  --superficie: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  color: var(--texto);
+  background:
+    radial-gradient(circle at top left, var(--destaque-suave) 0%, transparent 42%),
+    linear-gradient(160deg, #f8fafd 0%, var(--fundo) 100%);
+}
+
+main {
+  max-width: 40rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 1rem 0.85rem 2rem;
+  }
+
+  h1 {
+    font-size: 1.45rem;
+  }
+
+  .grade-cartoes {
+    grid-template-columns: 1fr;
+  }
+}
+
+h1 {
+  font-size: clamp(1.6rem, 4vw, 1.75rem);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+  color: var(--texto);
+}
+
+p {
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.status {
+  border: 1px solid var(--borda);
+  border-radius: 0.75rem;
+  padding: 1rem 1.1rem;
+  background: var(--superficie);
+}
+
+.status strong {
+  color: var(--destaque);
+}
+
+code {
+  font-size: 0.9em;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin: 0 0 0.75rem;
+  color: var(--texto);
+}
+
+.formulario {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.formulario label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.formulario input,
+.formulario select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--borda);
+  border-radius: 0.55rem;
+  font: inherit;
+  background: var(--superficie);
+}
+
+button {
+  font: inherit;
+  border: 0;
+  border-radius: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--destaque);
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 2px;
+}
+
+.cabecalho-sessao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lista-pessoas {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.ajuda {
+  color: #5a6b84;
+  font-size: 0.92rem;
+}
+
+.erro {
+  color: #8a2f2f;
+  margin-top: 0.75rem;
+}
+
+.sucesso {
+  color: #1f5c3a;
+  margin-top: 0.75rem;
+}
+
+.mono {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.8rem;
+}
+
+.bloco {
+  margin-top: 1.5rem;
+}
+
+.grade-cartoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cartao-pessoa {
+  border: 1px solid var(--borda);
+  border-radius: 0.7rem;
+  padding: 1rem;
+  background: var(--superficie);
+  display: grid;
+  gap: 0.25rem;
+}
+
+.cartao-pessoa span {
+  color: #5a6b84;
+  font-size: 0.92rem;
+}
+
+@media (min-width: 640px) {
+  .grade-cartoes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cuidados-mobile {
+  max-width: 28rem;
+}
+
+.cartao-dose {
+  width: 100%;
+  text-align: left;
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borda);
+}
+
+.destaque-proximo {
+  border-color: var(--destaque);
+  background: var(--destaque-suave);
+}
+
+.painel-confirmacao {
+  margin-top: 1rem;
+}
+
+.acoes-relato {
+  display: grid;
+  gap: 0.5rem;
+}
+
+button.secundario {
+  background: transparent;
+  color: var(--texto);
+  border: 1px solid var(--borda);
+}
+
+@media (max-width: 480px) {
+  .cuidados-mobile h1 {
+    font-size: 1.35rem;
+  }
+
+  .acoes-relato button {
+    min-height: 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

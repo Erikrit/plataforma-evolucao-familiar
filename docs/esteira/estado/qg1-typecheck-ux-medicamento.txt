@@ -1,0 +1,5 @@
+comando: tsc apps/api + apps/web --noEmit
+exit: 0 (API:0 WEB:0)
+quando: 2026-11-15T17:40Z
+incremento: UX-MEDICAMENTO
+nota: prisma generate + db push OK (schema programacao_medicamento v1.3)

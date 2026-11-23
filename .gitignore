@@ -1,7 +1,10 @@
 node_modules/
 .next/
+.next-qg*/
 dist/
 coverage/
+apps/api/src/generated/
+*.tsbuildinfo
 .env
 .env.*
 !.env.example
@@ -17,3 +20,15 @@ coverage/
 uploads/
 private/
 backups/
+
+# Artefatos locais da esteira (podem conter traces/sensíveis)
+docs/esteira/estado/*.local.json
+docs/esteira/evidencias/
+/docs/esteira/estado/*.local.txt
+/docs/esteira/estado/*.local.png
+.cursor/esteira/tmp/
+.cursor/hooks/state/
+*.ndjson
+reports/
+tmp/
+.turbo/

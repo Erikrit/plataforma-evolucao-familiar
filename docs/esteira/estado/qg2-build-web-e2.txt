@@ -1,0 +1,59 @@
+
+> @pef/web@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.29
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 33.2s
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/8) ...
+   Generating static pages (2/8) 
+   Generating static pages (4/8) 
+   Generating static pages (6/8) 
+ ✓ Generating static pages (8/8)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                    Size  First Load JS
+┌ ○ /                                                         446 B         135 kB
+├ ○ /_not-found                                               124 B         103 kB
+├ ○ /convites/ativar                                        1.57 kB         122 kB
+├ ○ /f                                                        445 B         135 kB
+├ ƒ /f/[slug]                                                5.7 kB         133 kB
+├ ƒ /f/[slug]/convites/ativar                                1.5 kB         137 kB
+├ ƒ /f/[slug]/entrar                                        2.27 kB         138 kB
+├ ƒ /f/[slug]/gerenciar-familia                             11.6 kB         177 kB
+├ ƒ /f/[slug]/pessoas/[pessoaId]                            1.23 kB         125 kB
+├ ƒ /f/[slug]/pessoas/[pessoaId]/cuidados                   7.57 kB         160 kB
+├ ƒ /f/[slug]/pessoas/[pessoaId]/cuidados/consultas         7.22 kB         174 kB
+├ ƒ /f/[slug]/pessoas/[pessoaId]/cuidados/medicamentos      6.03 kB         189 kB
+├ ƒ /f/[slug]/pessoas/[pessoaId]/desenvolvimento            10.3 kB         174 kB
+├ ƒ /f/[slug]/pessoas/[pessoaId]/desenvolvimento/cadastros  5.21 kB         173 kB
+├ ƒ /f/[slug]/pessoas/[pessoaId]/historico                  5.35 kB         136 kB
+├ ƒ /f/[slug]/pessoas/[pessoaId]/resumo                     3.71 kB         134 kB
+├ ○ /f/criar                                                2.85 kB         138 kB
+├ ○ /gerenciar-familia                                      1.57 kB         122 kB
+├ ƒ /pessoas/[pessoaId]                                     1.57 kB         122 kB
+├ ƒ /pessoas/[pessoaId]/cuidados                            1.57 kB         122 kB
+├ ƒ /pessoas/[pessoaId]/cuidados/consultas                  1.57 kB         122 kB
+├ ƒ /pessoas/[pessoaId]/cuidados/medicamentos               1.57 kB         122 kB
+├ ƒ /pessoas/[pessoaId]/desenvolvimento                     1.57 kB         122 kB
+├ ƒ /pessoas/[pessoaId]/desenvolvimento/cadastros           1.57 kB         122 kB
+├ ƒ /pessoas/[pessoaId]/historico                           1.57 kB         122 kB
+└ ƒ /pessoas/[pessoaId]/resumo                              1.58 kB         122 kB
++ First Load JS shared by all                                103 kB
+  ├ chunks/18-68d7739dcfa59da4.js                           46.6 kB
+  ├ chunks/87c73c54-24122e7b92478d00.js                     54.2 kB
+  └ other shared chunks (total)                             2.02 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+EXIT:0

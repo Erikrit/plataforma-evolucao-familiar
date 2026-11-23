@@ -1,0 +1,79 @@
+{
+  "demandaId": "DEM-UX-DL-03-20261119",
+  "tipo": "melhoria_ux",
+  "resultadoTecnico": "PASS",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "branch": "develop",
+  "commitBase": "f498694a391f008f0d244caf2b892832d3c146d7",
+  "fingerprint": "sha256:b284793cde1478f7",
+  "fingerprintFull": "sha256:b284793cde1478f711d916440b94c31740e2d140aaf7e9f1bdac5fa6c43f2567",
+  "fingerprintNota": "Hash via scripts/esteira/simular-retomada.mjs (verifier independente)",
+  "verifier": "PASS",
+  "verifierId": "5f0fd528-2614-49c0-ba3f-3edbf7564f9f",
+  "verifierNota": "Subagente generalPurpose com roteiro verifier.md (tipo verifier ausente do catálogo)",
+  "criterios": {
+    "UX-DL-01": "PASS",
+    "UX-DL-02": "PASS",
+    "UX-DL-03": "PASS",
+    "UX-DL-04": "PASS",
+    "UX-DL-05": "PASS",
+    "UX-DL-06": "PASS",
+    "DEV-F01": "PASS",
+    "DEV-F02": "PASS",
+    "DEV-F03": "PASS",
+    "DEV-F04": "PASS",
+    "DEV-F05": "PASS",
+    "DEV-F06": "PASS",
+    "DEV-F07": "PASS"
+  },
+  "qg": {
+    "qg1": "PASS",
+    "qg2": "PASS",
+    "qg3": "PASS",
+    "verifier": "PASS"
+  },
+  "checagens": [
+    {
+      "nome": "typecheck-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg1-typecheck-web-ux-dl03.txt"
+    },
+    {
+      "nome": "check-estatico",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-check-estatico-ux-dl03.json"
+    },
+    {
+      "nome": "smoke-dl02",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-dl02-ux-dl03.txt"
+    },
+    {
+      "nome": "smoke-dl03",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-dl03-ux-dl03.txt"
+    },
+    {
+      "nome": "smoke-dl04",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-dl04-ux-dl03.txt"
+    },
+    {
+      "nome": "smoke-authz",
+      "status": "PASS_COM_ACHADO",
+      "evidencia": "docs/esteira/estado/qg2-smoke-authz-ux-dl03.txt",
+      "nota": "FAIL residual colab-cartoes-sem-laurinha (Helena vs Vovó) ambient/seed"
+    },
+    {
+      "nome": "build-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-build-web-ux-dl03.txt"
+    }
+  ],
+  "arquivos": [
+    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+    "apps/web/src/lib/rotulos-experiencia.ts"
+  ],
+  "mensagemCommit": "fix(ux): alinhar Desenvolvimento à experiência única aprovada\n\nReorganiza saldo compacto, recompensas secundárias e ações de organização condicionadas à autorização, preservando DEV-F01..F07. Homologação humana permanece pendente.",
+  "atualizadoEm": "2026-11-19T11:20:00.000Z"
+}

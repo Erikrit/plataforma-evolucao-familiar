@@ -1,0 +1,5 @@
+comando: npm run build -w @pef/web
+exit: 0
+quando: 2026-11-15T17:12Z
+incremento: UX-HOME
+nota: Compiled successfully; rotas geradas OK

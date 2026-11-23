@@ -1,0 +1,100 @@
+{
+  "demandaId": "DEM-UX-HOM-20261118",
+  "tipo": "transversal",
+  "resultadoTecnico": "PASS",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "statusUxOficial": "REPROVADA",
+  "branch": "develop",
+  "commitBase": "2d9b7ae3a3f0c071aab6fc8a0464e1a996a86d0c",
+  "fingerprint": "sha256:9f6ab4a42a59c149",
+  "fingerprintFull": "sha256:9f6ab4a42a59c149ac75435af327ac377466c437b1f24d2a61038937351dcfb6",
+  "verifier": "PASS",
+  "verifierId": "e5ccff07-38c8-4231-ac68-7ff4d28d56fe",
+  "criterios": {
+    "UX-HOM-01": "PASS",
+    "UX-HOM-02": "PASS",
+    "UX-HOM-02-SELETOR": "NEEDS_DECISION",
+    "UX-HOM-03": "PASS",
+    "UX-HOM-04": "PASS",
+    "UX-HOM-05": "PASS",
+    "UX-HOM-06": "PASS",
+    "UX-HOM-07": "PASS"
+  },
+  "qg": {
+    "qg1": "PASS",
+    "qg2": "PASS",
+    "qg3": "PASS",
+    "verifier": "PASS"
+  },
+  "checagens": [
+    {
+      "nome": "typecheck-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg1-typecheck-web-ux-hom-20261118.txt"
+    },
+    {
+      "nome": "build-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-build-web-ux-hom-20261118.txt"
+    },
+    {
+      "nome": "check-estatico",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-check-estatico-ux-hom-20261118.json"
+    },
+    {
+      "nome": "smoke-ct-acessos",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-ct-acessos-ux-hom-20261118.txt"
+    },
+    {
+      "nome": "smoke-cv03",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-cv03-ux-hom-20261118.txt"
+    },
+    {
+      "nome": "smoke-url-direta",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-url-direta-ux-hom-20261118.txt"
+    },
+    {
+      "nome": "smoke-authz",
+      "status": "PASS_COM_ACHADO",
+      "evidencia": "docs/esteira/estado/qg2-smoke-authz-ux-hom-20261118.txt",
+      "nota": "Authz crítica 403/revogação PASS; FAIL residual colab-cartoes-sem-laurinha por nome seed Helena Oliveira vs expectativa Vovó (ambient)"
+    },
+    {
+      "nome": "browser-ui",
+      "status": "PASS",
+      "nota": "Admin: perfil enxuto + menu só Perfil sem Rotina; URL /cuidados mostra Acesso negado com dispensa; Gerenciar família exibe Integrante; Responsável: rotina com aria-labels de situação de dose"
+    }
+  ],
+  "pendencias": [
+    {
+      "id": "UX-HOM-02-SELETOR",
+      "status": "NEEDS_DECISION",
+      "nota": "Lista de opções de vínculo e local administrativo de edição aguardam decisão L3/Produto"
+    },
+    {
+      "id": "SEED-NOME-VOVO",
+      "status": "ACHADO_AMBIENTE",
+      "nota": "smoke:authz espera cartão 'Vovó'; seed usa 'Helena Oliveira' — não é regressão desta demanda"
+    }
+  ],
+  "arquivos": [
+    "apps/web/src/app/pessoas/[pessoaId]/page.tsx",
+    "apps/web/src/componentes/feedback.tsx",
+    "apps/web/src/componentes/icones-experiencia.tsx",
+    "apps/web/src/app/page.tsx",
+    "apps/web/src/componentes/painel-fundacao.tsx",
+    "apps/web/src/lib/api.ts",
+    "apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx",
+    "apps/web/src/app/pessoas/[pessoaId]/cuidados/medicamentos/page.tsx",
+    "apps/web/src/app/pessoas/[pessoaId]/cuidados/consultas/page.tsx",
+    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+    "apps/web/src/lib/rotulos-experiencia.ts",
+    "apps/web/src/componentes/navegacao-app.tsx"
+  ],
+  "mensagemCommit": "fix(ux): corrigir achados da homologação humana UX-HOM-01..07\n\nOculta áreas não autorizadas, remove edição de vínculo no perfil cotidiano, melhora estados/ícones e feedback transitório, e reduz microcopy/rótulos legados. Homologação humana permanece pendente.",
+  "atualizadoEm": "2026-11-18T13:10:00.000Z"
+}

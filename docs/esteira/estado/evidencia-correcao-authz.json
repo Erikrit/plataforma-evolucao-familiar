@@ -1,0 +1,33 @@
+{
+  "moduloId": "correcao-auth-autorizacao",
+  "incrementos": ["SA-01", "SA-02", "SA-03", "SA-04"],
+  "atualizadoEm": "2026-11-15T13:10:00.000Z",
+  "qg1": {
+    "status": "PASS",
+    "typecheck": "docs/esteira/estado/qg1-typecheck-authz.txt"
+  },
+  "qg2": {
+    "status": "PASS",
+    "verifier": "PASS",
+    "verifierId": "e313a9af-9b15-4051-8b94-18f1737e38d1",
+    "smokeAuthz": "docs/esteira/estado/smoke-authz-critico-saida.json",
+    "regressaoModulo01": "docs/esteira/estado/smoke-modulo-01-pos-authz.json",
+    "regressaoModulo02": "docs/esteira/estado/smoke-modulo-02-pos-authz.json"
+  },
+  "qg3": {
+    "status": "PASS",
+    "nota": "Correção transversal; regressão 01+02+authz com evidências"
+  },
+  "correcoes": [
+    "Admin sem acesso clínico automático",
+    "Anexos restringidos a responsavel_cuidados / própria pessoa",
+    "Áreas cuidados/histórico condicionadas à autorização",
+    "Token de sessão armazenado como SHA-256; cookie httpOnly; CORS credentials"
+  ],
+  "pendencias": [
+    "Cliente web ainda pode enviar token via header/localStorage (caminho dual)",
+    "Auth IdP definitiva fora do escopo",
+    "ACE-C12 PENDING"
+  ],
+  "commitPush": false
+}

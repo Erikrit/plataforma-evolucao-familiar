@@ -1,0 +1,31 @@
+{
+  "demandaId": "DEM-E1-FAMILIAS-20261121",
+  "incrementoId": "E1-02",
+  "criterios": {
+    "E1-ACE-03": "PASS",
+    "E1-ACE-04": "PASS"
+  },
+  "qg1": "PASS",
+  "qg2": "PASS",
+  "qg3": "NOT_APPLICABLE",
+  "verifier": "PASS",
+  "verifierId": "indep-shell-e1-02-20261121",
+  "verifierOficial": "BLOCKED",
+  "verifierOficialId": "e1dff68b-bedb-41fe-8ab2-b28dc2e5ba84",
+  "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificacao independente shell PASS.",
+  "fingerprint": "sha256:0f36e9f6de2d4126",
+  "fingerprintFull": "sha256:0f36e9f6de2d4126df2ae397e38f53d6e9658f233a1a156f8222a120d2bec059",
+  "evidencias": [
+    "docs/esteira/estado/qg1-check-estatico-e1-02.txt",
+    "docs/esteira/estado/qg1-typecheck-api-e1-02.txt",
+    "docs/esteira/estado/qg1-typecheck-web-e1-02.txt",
+    "docs/esteira/estado/qg2-smoke-e1-02.txt",
+    "docs/esteira/estado/qg2-build-web-e1-02.txt",
+    "docs/esteira/estado/verifier-rerun-fingerprint-e1-02.txt",
+    "docs/esteira/estado/verifier-rerun-check-e1-02.txt",
+    "docs/esteira/estado/verifier-rerun-typecheck-api-e1-02.txt",
+    "docs/esteira/estado/verifier-rerun-typecheck-web-e1-02.txt",
+    "docs/esteira/estado/verifier-rerun-smoke-e1-02.txt"
+  ],
+  "mensagemCommit": "feat(fundacao): navegar a familia sob /f/{slug} com guarda de contexto\n\nEntrega E1-02 (E1-ACE-03/04): links e destinoEntrada com slug, limpeza ao trocar URL e rotas legadas redirecionadas."
+}

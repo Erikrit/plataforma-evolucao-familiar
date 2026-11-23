@@ -1,0 +1,73 @@
+{
+  "demandaId": "DEM-HOMOL-CUI-20261117",
+  "perfil": "homologacao",
+  "branch": "develop",
+  "veredictoTecnico": "PASS",
+  "verifierId": "4ef6dcc6-051d-47d9-802e-2be0cd3fa459",
+  "verifier": "PASS",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "criteriosAceite": [
+    "CUI-VAL-01",
+    "CUI-VAL-02",
+    "CUI-VAL-03",
+    "CUI-VAL-04",
+    "CUI-VAL-05",
+    "CUI-VAL-06",
+    "CUI-VAL-HUMANO"
+  ],
+  "criteriosOk": [
+    "CUI-VAL-01",
+    "CUI-VAL-02",
+    "CUI-VAL-03",
+    "CUI-VAL-04",
+    "CUI-VAL-05",
+    "CUI-VAL-06"
+  ],
+  "criteriosPendentesHumanos": [
+    "CUI-VAL-HUMANO"
+  ],
+  "criteriosFalha": [],
+  "checagens": [
+    {
+      "nome": "typecheck-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-cui-typecheck-web.txt"
+    },
+    {
+      "nome": "smoke-authz",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-cui-smoke-authz.txt"
+    },
+    {
+      "nome": "smoke-cv03",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-cui-smoke-cv03.txt"
+    },
+    {
+      "nome": "smoke-cv04",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-cui-smoke-cv04.txt"
+    },
+    {
+      "nome": "smoke-ct-acessos",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-cui-smoke-ct-acessos.txt"
+    },
+    {
+      "nome": "check-msg-rede",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-cui-check-msg-rede.txt"
+    },
+    {
+      "nome": "inspecao-estatica",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-cui-check-estatico.txt"
+    },
+    {
+      "nome": "dispositivos-familia-produto",
+      "status": "PENDING_HUMAN"
+    }
+  ],
+  "nota": "Validação integrada técnica §5.5 pós FUND/ROTINA/MED/CONS. Não equivale a homologação UX humana nem aceite de uso real.",
+  "geradoEm": "2026-11-17T21:45:00.000Z"
+}

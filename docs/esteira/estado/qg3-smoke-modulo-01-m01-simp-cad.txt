@@ -1,0 +1,39 @@
+﻿
+> @pef/api@0.1.0 smoke:modulo-01
+> node scripts/smoke-modulo-01.mjs
+
+{
+  "ok": true,
+  "resultados": [
+    {
+      "script": "smoke:ff02",
+      "label": "ACE-01/02/09",
+      "ok": true,
+      "exit": 0
+    },
+    {
+      "script": "smoke:ff03",
+      "label": "ACE-05/07",
+      "ok": true,
+      "exit": 0
+    },
+    {
+      "script": "smoke:ff04",
+      "label": "ACE-03/04",
+      "ok": true,
+      "exit": 0
+    },
+    {
+      "script": "smoke:ff05",
+      "label": "ACE-06/10",
+      "ok": true,
+      "exit": 0
+    },
+    {
+      "script": "ACE-08-estrutural",
+      "label": "mobile-first CSS + perfil",
+      "ok": true,
+      "exit": 0
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "demandaId": "DEM-COR-UX-HOMOL-20261116",
+  "perfil": "QG-1+QG-2",
+  "commitBaseProduto": "71c6444d915aa449de9e910f3c9acb1cfe2a8982",
+  "commitWorkspace": "bb73e8bf5b424f15003fb1d141433b0334403668",
+  "branch": "develop",
+  "veredictoTecnico": "PASS",
+  "verifierId": "a6551ef3-2348-4942-a1aa-0e0e09a9684c",
+  "verifier": "PASS",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "criteriosOk": [
+    "UX-ACC-01",
+    "UX-CUI-01"
+  ],
+  "criteriosNaoRegredidos": [
+    "UX-NAV-01",
+    "UX-NAV-02",
+    "UX-ADM-01",
+    "UX-ADM-02",
+    "UX-DES-01",
+    "UX-EVO-01"
+  ],
+  "correcoes": [
+    {
+      "id": "UX-ACC-01-flash",
+      "resumo": "MenuNavegacao aguarda pronto antes de menu Entrar"
+    },
+    {
+      "id": "UX-ACC-01-rede",
+      "resumo": "mensagemErroAmigavel + MensagemFeedback normalizam Failed to fetch"
+    },
+    {
+      "id": "UX-CUI-01-drawer",
+      "resumo": "Drawer cuidados/desenvolvimento: bottom/auto no celular; right/md no desktop"
+    }
+  ],
+  "checagens": [
+    {
+      "nome": "typecheck-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg1-typecheck-web-cor-ux.txt"
+    },
+    {
+      "nome": "build-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-build-web-cor-ux.txt",
+      "nota": "Sem next:dev concorrente; sem EPERM"
+    },
+    {
+      "nome": "smoke-cv03",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-cv03-cor-ux.txt"
+    },
+    {
+      "nome": "smoke-authz",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-authz-cor-ux.txt"
+    },
+    {
+      "nome": "check-msg-rede",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-check-msg-rede-cor-ux.txt"
+    },
+    {
+      "nome": "inspecao-browser-live",
+      "status": "PENDING",
+      "motivo": "MCP browser rejeitado nesta sessão; verifier confirmou por código"
+    },
+    {
+      "nome": "mobile-fisico-familia",
+      "status": "PENDING_HUMAN"
+    }
+  ],
+  "fingerprint": "sha256:46b2078e73b0c6d5",
+  "fingerprintFull": "sha256:46b2078e73b0c6d559ee8aadccbdf286c527329cc160d14befc7f863cb32f5bf",
+  "geradoEm": "2026-11-16T23:53:23.631Z"
+}\n

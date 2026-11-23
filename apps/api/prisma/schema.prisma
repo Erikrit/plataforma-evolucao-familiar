@@ -1,0 +1,506 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Familia {
+  id           String         @id @default(cuid())
+  nome         String
+  /// Identificador legível estável para URL /f/{slug}; não muda ao renomear.
+  slug         String         @unique
+  criadaEm     DateTime       @default(now()) @map("criada_em")
+  pessoas      Pessoa[]
+  autorizacoes Autorizacao[]
+  convites     Convite[]
+  anexos       Anexo[]
+  desafios     Desafio[]
+  progressoJogos ProgressoFaseJogo[]
+
+  @@map("familia")
+}
+
+model Pessoa {
+  id                   String                 @id @default(cuid())
+  familiaId            String                 @map("familia_id")
+  nome                 String
+  dataNascimento       DateTime?              @map("data_nascimento")
+  vinculo              String?
+  criadaEm             DateTime               @default(now()) @map("criada_em")
+  familia              Familia                @relation(fields: [familiaId], references: [id])
+  usuario              Usuario?
+  autorizacoesComoAlvo Autorizacao[]          @relation("PessoaAlvo")
+  convitesComoAlvo     Convite[]              @relation("ConvitePessoaAlvo")
+  convitesComoConta    Convite[]              @relation("ConvitePessoaConta")
+  medicamentos         Medicamento[]
+  consultas            Consulta[]
+  exames               Exame[]
+  atividadesApoio      RegistroAtividade[]
+  anexos               Anexo[]
+  desafiosGuardados    DesafioGuardado[]
+  sugestoesDesafio     SugestaoDesafioPessoa[]
+  disponibilidadesDesafio DisponibilidadeDesafio[]
+  participacoesDesafio ParticipacaoDesafio[]
+  movimentosEstrelas   MovimentoEstrelas[]
+  recompensas          Recompensa[]
+  resgatesRecompensa   ResgateRecompensa[]
+  progressoJogos      ProgressoFaseJogo[]
+
+  @@index([familiaId])
+  @@map("pessoa")
+}
+
+model ProgressoFaseJogo {
+  familiaId             String    @map("familia_id")
+  pessoaId              String    @map("pessoa_id")
+  jogoId                String    @map("jogo_id")
+  fase                  Int
+  primeiraExploracaoEm  DateTime  @map("primeira_exploracao_em")
+  versaoPrimeiraExploracao Int    @map("versao_primeira_exploracao")
+  ultimaAberturaEm      DateTime  @map("ultima_abertura_em")
+  versaoUltimaAbertura  Int      @map("versao_ultima_abertura")
+  concluidaEm           DateTime? @map("concluida_em")
+  versaoConclusao       Int?      @map("versao_conclusao")
+  chaveConclusao        String?   @map("chave_conclusao")
+  nomeNaConclusao      String?   @map("nome_na_conclusao")
+  categoriaNaConclusao String?   @map("categoria_na_conclusao")
+  familia               Familia   @relation(fields: [familiaId], references: [id])
+  pessoa                Pessoa    @relation(fields: [pessoaId], references: [id])
+
+  @@id([familiaId, pessoaId, jogoId, fase])
+  @@index([familiaId, pessoaId, concluidaEm])
+  @@map("progresso_fase_jogo")
+}
+
+/// Catálogo editorial digital (E5). Separado do progresso privado.
+model JogoDigital {
+  id             String            @id
+  nome           String
+  descricao      String
+  categoria      String
+  instrucoes     String
+  tipoMecanica   String            @map("tipo_mecanica")
+  versao         Int               @default(1)
+  faixaEtariaMin Int?              @map("faixa_etaria_min")
+  faixaEtariaMax Int?              @map("faixa_etaria_max")
+  ativo          Boolean           @default(true)
+  publicadoEm    DateTime?         @map("publicado_em")
+  ordemEditorial Int               @default(0) @map("ordem_editorial")
+  capaRef        String?           @map("capa_ref")
+  criadoEm       DateTime          @default(now()) @map("criado_em")
+  atualizadoEm   DateTime          @updatedAt @map("atualizado_em")
+  fases          FaseJogoDigital[]
+
+  @@index([ativo, categoria])
+  @@map("jogo_digital")
+}
+
+model FaseJogoDigital {
+  jogoId       String      @map("jogo_id")
+  numero       Int
+  titulo       String
+  objetivo     String
+  dificuldade  String
+  configuracao Json
+  versao       Int         @default(1)
+  jogo         JogoDigital @relation(fields: [jogoId], references: [id])
+
+  @@id([jogoId, numero])
+  @@map("fase_jogo_digital")
+}
+
+model Usuario {
+  id              String             @id @default(cuid())
+  pessoaId        String             @unique @map("pessoa_id")
+  email           String             @unique
+  senhaHash       String             @map("senha_hash")
+  criadoEm        DateTime           @default(now()) @map("criado_em")
+  pessoa          Pessoa             @relation(fields: [pessoaId], references: [id])
+  sessoes         SessaoProvisoria[]
+  autorizacoes    Autorizacao[]
+  convitesCriados Convite[]          @relation("ConviteCriador")
+  anexosCriados   Anexo[]            @relation("AnexoCriador")
+  desafiosCriados Desafio[]          @relation("DesafioCriador")
+  sugestoesDesafioAtualizadas SugestaoDesafioPessoa[] @relation("SugestaoDesafioAutor")
+  disponibilidadesDesafioAtualizadas DisponibilidadeDesafio[] @relation("DisponibilidadeDesafioAutor")
+  participacoesRegistradas ParticipacaoDesafio[] @relation("ParticipacaoAutor")
+  resgatesFeitos  ResgateRecompensa[] @relation("ResgateAutor")
+
+  @@map("usuario")
+}
+
+model SessaoProvisoria {
+  id        String   @id @default(cuid())
+  /// Armazena SHA-256 do token opaco (não o segredo em claro).
+  token     String   @unique
+  usuarioId String   @map("usuario_id")
+  expiraEm  DateTime @map("expira_em")
+  criadaEm  DateTime @default(now()) @map("criada_em")
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@index([usuarioId])
+  @@map("sessao_provisoria")
+}
+
+model Autorizacao {
+  id               String    @id @default(cuid())
+  familiaId        String    @map("familia_id")
+  usuarioId        String    @map("usuario_id")
+  pessoaAlvoId     String?   @map("pessoa_alvo_id")
+  responsabilidade String
+  ativa            Boolean   @default(true)
+  concedidaEm      DateTime  @default(now()) @map("concedida_em")
+  revogadaEm       DateTime? @map("revogada_em")
+  familia          Familia   @relation(fields: [familiaId], references: [id])
+  usuario          Usuario   @relation(fields: [usuarioId], references: [id])
+  pessoaAlvo       Pessoa?   @relation("PessoaAlvo", fields: [pessoaAlvoId], references: [id])
+
+  @@index([familiaId, usuarioId])
+  @@index([usuarioId, ativa])
+  @@map("autorizacao")
+}
+
+/// Convite com validade e uso único (FUN-03 / FAM-R02).
+model Convite {
+  id               String    @id @default(cuid())
+  token            String    @unique
+  familiaId        String    @map("familia_id")
+  email            String
+  nomeConvidado    String?   @map("nome_convidado")
+  /// Opcional quando só habilita conta em pessoa já cadastrada (M01 v1.5 §11).
+  responsabilidade String?
+  pessoaAlvoId     String?   @map("pessoa_alvo_id")
+  /// Pessoa que receberá a conta; se nulo, ativação cria pessoa nova (convidado externo).
+  pessoaContaId    String?   @map("pessoa_conta_id")
+  criadoPorId      String    @map("criado_por_id")
+  expiraEm         DateTime  @map("expira_em")
+  usadoEm          DateTime? @map("usado_em")
+  criadoEm         DateTime  @default(now()) @map("criado_em")
+  familia          Familia   @relation(fields: [familiaId], references: [id])
+  pessoaAlvo       Pessoa?   @relation("ConvitePessoaAlvo", fields: [pessoaAlvoId], references: [id])
+  pessoaConta      Pessoa?   @relation("ConvitePessoaConta", fields: [pessoaContaId], references: [id])
+  criadoPor        Usuario   @relation("ConviteCriador", fields: [criadoPorId], references: [id])
+
+  @@index([familiaId])
+  @@map("convite")
+}
+
+/// Metadados de arquivo privado (ADR-004); conteúdo via chave, sem URL pública.
+model Anexo {
+  id            String              @id @default(cuid())
+  familiaId     String              @map("familia_id")
+  pessoaId      String?             @map("pessoa_id")
+  chavePrivada  String              @unique @map("chave_privada")
+  nomeArquivo   String              @map("nome_arquivo")
+  mimeTipo      String              @map("mime_tipo")
+  tamanhoBytes  Int                 @map("tamanho_bytes")
+  conteudoBase64 String?            @map("conteudo_base64")
+  criadoPorId   String              @map("criado_por_id")
+  criadoEm      DateTime            @default(now()) @map("criado_em")
+  revogadoEm    DateTime?           @map("revogado_em")
+  familia       Familia             @relation(fields: [familiaId], references: [id])
+  pessoa        Pessoa?             @relation(fields: [pessoaId], references: [id])
+  criadoPor     Usuario             @relation("AnexoCriador", fields: [criadoPorId], references: [id])
+  medicamentos  MedicamentoAnexo[]
+  exames        Exame[]
+
+  @@index([familiaId])
+  @@map("anexo")
+}
+
+model Medicamento {
+  id           String                   @id @default(cuid())
+  pessoaId     String                   @map("pessoa_id")
+  nome         String
+  instrucoes   String?
+  status       String                   @default("rascunho")
+  criadoPorId  String                   @map("criado_por_id")
+  criadoEm     DateTime                 @default(now()) @map("criado_em")
+  ativadoEm    DateTime?                @map("ativado_em")
+  suspensoEm   DateTime?                @map("suspenso_em")
+  encerradoEm  DateTime?                @map("encerrado_em")
+  pessoa       Pessoa                   @relation(fields: [pessoaId], references: [id])
+  programacoes ProgramacaoMedicamento[]
+  anexos       MedicamentoAnexo[]
+  registros    RegistroDose[]
+
+  @@index([pessoaId, status])
+  @@map("medicamento")
+}
+
+model MedicamentoAnexo {
+  medicamentoId String      @map("medicamento_id")
+  anexoId       String      @map("anexo_id")
+  medicamento   Medicamento @relation(fields: [medicamentoId], references: [id])
+  anexo         Anexo       @relation(fields: [anexoId], references: [id])
+
+  @@id([medicamentoId, anexoId])
+  @@map("medicamento_anexo")
+}
+
+/// Programação com vigência; alteração cria nova linha sem sobrescrever o passado (CUI-F04).
+model ProgramacaoMedicamento {
+  id                 String      @id @default(cuid())
+  medicamentoId      String      @map("medicamento_id")
+  horarios           Json
+  frequencia         String      @default("diaria")
+  primeiroHorario    String?     @map("primeiro_horario")
+  dosesPorDia        Int?        @map("doses_por_dia")
+  duracaoTipo        String      @default("continua") @map("duracao_tipo")
+  duracaoDias        Int?        @map("duracao_dias")
+  horariosConferidos Boolean     @default(false) @map("horarios_conferidos")
+  intervaloHoras     Int?        @map("intervalo_horas")
+  vigenciaInicio     DateTime    @map("vigencia_inicio")
+  vigenciaFim        DateTime?   @map("vigencia_fim")
+  criadoPorId        String      @map("criado_por_id")
+  criadoEm           DateTime    @default(now()) @map("criado_em")
+  medicamento        Medicamento @relation(fields: [medicamentoId], references: [id])
+
+  @@index([medicamentoId, vigenciaInicio])
+  @@map("programacao_medicamento")
+}
+
+/// Registro informado da dose; correções preservam versão anterior (CUI-F03).
+model RegistroDose {
+  id              String       @id @default(cuid())
+  medicamentoId   String       @map("medicamento_id")
+  ocorrenciaChave String       @map("ocorrencia_chave")
+  situacao        String
+  horarioEfetivo  DateTime?    @map("horario_efetivo")
+  registradoPorId String       @map("registrado_por_id")
+  registradoEm    DateTime     @default(now()) @map("registrado_em")
+  versaoAtiva     Boolean      @default(true) @map("versao_ativa")
+  substituiId     String?      @map("substitui_id")
+  medicamento     Medicamento  @relation(fields: [medicamentoId], references: [id])
+  substitui       RegistroDose? @relation("CorrecaoDose", fields: [substituiId], references: [id])
+  corrigidoPor    RegistroDose[] @relation("CorrecaoDose")
+
+  @@index([medicamentoId, ocorrenciaChave])
+  @@index([ocorrenciaChave, versaoAtiva])
+  @@map("registro_dose")
+}
+
+model Consulta {
+  id                      String    @id @default(cuid())
+  pessoaId                String    @map("pessoa_id")
+  dataHora                DateTime  @map("data_hora")
+  especialidadeOuDescricao String   @map("especialidade_ou_descricao")
+  profissional            String?
+  local                   String?
+  observacao              String?
+  status                  String    @default("agendada")
+  criadoPorId             String    @map("criado_por_id")
+  criadoEm                DateTime  @default(now()) @map("criado_em")
+  pessoa                  Pessoa    @relation(fields: [pessoaId], references: [id])
+  exames                  Exame[]
+
+  @@index([pessoaId, dataHora])
+  @@map("consulta")
+}
+
+model Exame {
+  id           String    @id @default(cuid())
+  pessoaId     String    @map("pessoa_id")
+  descricao    String
+  data         DateTime?
+  consultaId   String?   @map("consulta_id")
+  anexoId      String?   @map("anexo_id")
+  criadoPorId  String    @map("criado_por_id")
+  criadoEm     DateTime  @default(now()) @map("criado_em")
+  pessoa       Pessoa    @relation(fields: [pessoaId], references: [id])
+  consulta     Consulta? @relation(fields: [consultaId], references: [id])
+  anexo        Anexo?    @relation(fields: [anexoId], references: [id])
+
+  @@index([pessoaId])
+  @@map("exame")
+}
+
+model RegistroAtividade {
+  id               String   @id @default(cuid())
+  pessoaId         String   @map("pessoa_id")
+  descricao        String
+  concluidaEm      DateTime @default(now()) @map("concluida_em")
+  observacao       String?
+  registradoPorId  String   @map("registrado_por_id")
+  criadoEm         DateTime @default(now()) @map("criado_em")
+  pessoa           Pessoa   @relation(fields: [pessoaId], references: [id])
+
+  @@index([pessoaId, concluidaEm])
+  @@map("registro_atividade")
+}
+
+/// Biblioteca curada (familiaId nulo) ou brincadeira personalizada da família (DEV-F01/F02).
+/// Catálogo global: metadados E4 (faixa/origem/versão); máx. 24 ativos publicados.
+model Desafio {
+  id              String              @id @default(cuid())
+  familiaId       String?             @map("familia_id")
+  nome            String
+  instrucao       String?
+  categoria       String?
+  dificuldade     String              @default("simples")
+  materiais       String?
+  duracaoMinutos  Int?                @map("duracao_minutos")
+  /// Idade mínima orientativa (anos); não é diagnóstico nem bloqueio rígido.
+  faixaEtariaMin  Int?                @map("faixa_etaria_min")
+  /// Idade máxima orientativa (anos); nulo = sem teto.
+  faixaEtariaMax  Int?                @map("faixa_etaria_max")
+  /// Procedência do conteúdo curado (ex.: autoral_pef); sem dados pessoais.
+  origemConteudo  String?             @map("origem_conteudo")
+  /// Versão do texto publicado; participações guardam snapshot.
+  versaoConteudo  Int                 @default(1) @map("versao_conteudo")
+  adaptacoes      String?
+  supervisao      String?
+  origem          String              @default("catalogo")
+  ativo           Boolean             @default(true)
+  criadoPorId     String?             @map("criado_por_id")
+  criadoEm        DateTime            @default(now()) @map("criado_em")
+  familia         Familia?            @relation(fields: [familiaId], references: [id])
+  criadoPor       Usuario?            @relation("DesafioCriador", fields: [criadoPorId], references: [id])
+  guardados         DesafioGuardado[]
+  sugestoes         SugestaoDesafioPessoa[]
+  disponibilidades  DisponibilidadeDesafio[]
+  participacoes     ParticipacaoDesafio[]
+
+  @@index([familiaId, ativo])
+  @@index([origem, ativo])
+  @@index([categoria])
+  @@map("desafio")
+}
+
+/// Seleção privada de sugestões da biblioteca (E4). Não é guardado legado nem Explorar/Executadas.
+model SugestaoDesafioPessoa {
+  id              String   @id @default(cuid())
+  pessoaId        String   @map("pessoa_id")
+  desafioId       String   @map("desafio_id")
+  /// Escolha explícita para experimentar; renovar preserva itens com escolhida=true.
+  escolhida       Boolean  @default(false)
+  criadoEm        DateTime @default(now()) @map("criado_em")
+  atualizadoEm    DateTime @default(now()) @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  pessoa          Pessoa   @relation(fields: [pessoaId], references: [id])
+  desafio         Desafio  @relation(fields: [desafioId], references: [id])
+  atualizadoPor   Usuario? @relation("SugestaoDesafioAutor", fields: [atualizadoPorId], references: [id])
+
+  @@unique([pessoaId, desafioId])
+  @@index([pessoaId, escolhida])
+  @@map("sugestao_desafio_pessoa")
+}
+
+/// Guardar para depois, sem prazo (retenção/compatibilidade; não é Executadas — ADR-013).
+model DesafioGuardado {
+  id         String   @id @default(cuid())
+  pessoaId   String   @map("pessoa_id")
+  desafioId  String   @map("desafio_id")
+  guardadoEm DateTime @default(now()) @map("guardado_em")
+  pessoa     Pessoa   @relation(fields: [pessoaId], references: [id])
+  desafio    Desafio  @relation(fields: [desafioId], references: [id])
+
+  @@unique([pessoaId, desafioId])
+  @@index([pessoaId])
+  @@map("desafio_guardado")
+}
+
+/// Estado atual Explorar/Executadas por pessoa+desafio (CT-20261119-001 / ADR-013).
+model DisponibilidadeDesafio {
+  id                              String   @id @default(cuid())
+  pessoaId                        String   @map("pessoa_id")
+  desafioId                       String   @map("desafio_id")
+  disponivelParaNovaParticipacao  Boolean  @map("disponivel_para_nova_participacao")
+  atualizadoEm                    DateTime @default(now()) @updatedAt @map("atualizado_em")
+  atualizadoPorId                 String?  @map("atualizado_por_id")
+  pessoa                          Pessoa   @relation(fields: [pessoaId], references: [id])
+  desafio                         Desafio  @relation(fields: [desafioId], references: [id])
+  atualizadoPor                   Usuario? @relation("DisponibilidadeDesafioAutor", fields: [atualizadoPorId], references: [id])
+
+  @@unique([pessoaId, desafioId])
+  @@index([pessoaId, disponivelParaNovaParticipacao])
+  @@map("disponibilidade_desafio")
+}
+
+/// Participação presencial; estrelas e conteúdo snapshot na própria linha (DEV-F04/F05, E4-ACE-06).
+model ParticipacaoDesafio {
+  id                   String              @id @default(cuid())
+  pessoaId             String              @map("pessoa_id")
+  desafioId            String              @map("desafio_id")
+  resultado            String
+  observacao           String?
+  execucaoChave        String              @map("execucao_chave")
+  dificuldadeAplicada  String              @map("dificuldade_aplicada")
+  estrelasConcedidas   Int                 @map("estrelas_concedidas")
+  /// Snapshot do conteúdo vigente no momento da execução (E4).
+  versaoConteudoAplicada Int?              @map("versao_conteudo_aplicada")
+  nomeAplicado         String?             @map("nome_aplicado")
+  instrucaoAplicada    String?             @map("instrucao_aplicada")
+  categoriaAplicada    String?             @map("categoria_aplicada")
+  registradoPorId      String              @map("registrado_por_id")
+  registradoEm         DateTime            @default(now()) @map("registrado_em")
+  versaoAtiva          Boolean             @default(true) @map("versao_ativa")
+  substituiId          String?             @map("substitui_id")
+  pessoa               Pessoa              @relation(fields: [pessoaId], references: [id])
+  desafio              Desafio             @relation(fields: [desafioId], references: [id])
+  registradoPor        Usuario             @relation("ParticipacaoAutor", fields: [registradoPorId], references: [id])
+  substitui            ParticipacaoDesafio? @relation("CorrecaoParticipacao", fields: [substituiId], references: [id])
+  corrigidaPor         ParticipacaoDesafio[] @relation("CorrecaoParticipacao")
+  movimentos           MovimentoEstrelas[]
+
+  @@unique([execucaoChave])
+  @@index([pessoaId, registradoEm])
+  @@index([desafioId])
+  @@map("participacao_desafio")
+}
+
+model MovimentoEstrelas {
+  id             String               @id @default(cuid())
+  pessoaId       String               @map("pessoa_id")
+  tipo           String
+  quantidade     Int
+  saldoApos      Int                  @map("saldo_apos")
+  participacaoId String?              @map("participacao_id")
+  resgateId      String?              @map("resgate_id")
+  criadoEm       DateTime             @default(now()) @map("criado_em")
+  pessoa         Pessoa               @relation(fields: [pessoaId], references: [id])
+  participacao   ParticipacaoDesafio? @relation(fields: [participacaoId], references: [id])
+  resgate        ResgateRecompensa?   @relation(fields: [resgateId], references: [id])
+
+  @@index([pessoaId, criadoEm])
+  @@map("movimento_estrelas")
+}
+
+model Recompensa {
+  id                       String              @id @default(cuid())
+  pessoaId                 String              @map("pessoa_id")
+  nome                     String
+  custo                    Int
+  ativa                    Boolean             @default(true)
+  disponivelParaResgate    Boolean             @default(true) @map("disponivel_para_resgate")
+  geracaoDisponibilidade   Int                 @default(0) @map("geracao_disponibilidade")
+  criadoEm                 DateTime            @default(now()) @map("criado_em")
+  pessoa                   Pessoa              @relation(fields: [pessoaId], references: [id])
+  resgates                 ResgateRecompensa[]
+
+  @@index([pessoaId, ativa])
+  @@index([pessoaId, disponivelParaResgate])
+  @@map("recompensa")
+}
+
+model ResgateRecompensa {
+  id                     String             @id @default(cuid())
+  recompensaId           String             @map("recompensa_id")
+  pessoaId               String             @map("pessoa_id")
+  custoAplicado          Int                @map("custo_aplicado")
+  geracaoDisponibilidade Int                @default(0) @map("geracao_disponibilidade")
+  solicitacaoChave       String?            @unique @map("solicitacao_chave")
+  resgatadoPorId         String             @map("resgatado_por_id")
+  resgatadoEm            DateTime           @default(now()) @map("resgatado_em")
+  recompensa             Recompensa         @relation(fields: [recompensaId], references: [id])
+  pessoa                 Pessoa             @relation(fields: [pessoaId], references: [id])
+  resgatadoPor           Usuario            @relation("ResgateAutor", fields: [resgatadoPorId], references: [id])
+  movimentos             MovimentoEstrelas[]
+
+  @@unique([recompensaId, geracaoDisponibilidade])
+  @@index([pessoaId, resgatadoEm])
+  @@map("resgate_recompensa")
+}

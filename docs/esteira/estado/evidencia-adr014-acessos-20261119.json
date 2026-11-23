@@ -1,0 +1,111 @@
+{
+  "demandaId": "DEM-ADR014-ACESSOS-20261119",
+  "origem": "humano + CT-20261119-003 + ADR-014 + REVISAO-MODULO-01-ACESSOS",
+  "branch": "develop",
+  "commitBase": "331476ca9355970200a3cd22f21ef8be1435f075",
+  "fingerprint": "sha256:5b3f46d7c53bbe9c",
+  "fingerprintFull": "sha256:5b3f46d7c53bbe9cbaf9c24d0f538c298a572d16f495bf62647de10eec9f86e2",
+  "resultadoTecnico": "PASS",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "criteriosAceite": [
+    "FUN-03",
+    "FUN-04",
+    "FUN-07",
+    "ADR-014-CATALOGO",
+    "ADR-014-ULTIMO-ADMIN",
+    "ADR-014-AREA-LISTAGEM",
+    "ADR-014-UX-CONCESSAO"
+  ],
+  "criteriosOk": [
+    "FUN-03",
+    "FUN-04",
+    "FUN-07",
+    "ADR-014-CATALOGO",
+    "ADR-014-ULTIMO-ADMIN",
+    "ADR-014-AREA-LISTAGEM",
+    "ADR-014-UX-CONCESSAO"
+  ],
+  "foraDeEscopo": [
+    "exclusao-pessoa",
+    "edicao-vinculo",
+    "integrante-desenvolvimento",
+    "sucessao-administrador"
+  ],
+  "dependenciasFuncionaisSeparadas": [
+    {
+      "id": "UX-HOM-02-SELETOR",
+      "status": "NEEDS_DECISION",
+      "nota": "Opções de vínculo e UI administrativa de edição"
+    },
+    {
+      "id": "EXCLUSAO-PESSOA",
+      "status": "FORA",
+      "nota": "Exclusão/desativação de pessoa permanece fora até L3"
+    }
+  ],
+  "checagens": [
+    {
+      "nome": "qg1-typecheck-api",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg1-typecheck-api-adr014.txt"
+    },
+    {
+      "nome": "qg1-typecheck-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg1-typecheck-web-adr014.txt"
+    },
+    {
+      "nome": "qg2-smoke-adr014-acessos",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-adr014-acessos.txt"
+    },
+    {
+      "nome": "qg2-smoke-ct-acessos",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-ct-acessos-adr014.txt"
+    },
+    {
+      "nome": "qg2-smoke-authz",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-authz-adr014.txt"
+    },
+    {
+      "nome": "qg2-smoke-ff05-isolamento",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-ff05-adr014.txt"
+    },
+    {
+      "nome": "qg2-build-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-build-web-adr014.txt"
+    },
+    {
+      "nome": "qg2-check-a11y-mobile-estatico",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-check-a11y-mobile-adr014.json"
+    },
+    {
+      "nome": "homologacao-humana",
+      "status": "PENDING_HUMAN"
+    }
+  ],
+  "arquivos": [
+    "apps/api/src/autorizacoes/responsabilidades.ts",
+    "apps/api/src/autorizacoes/servico-autorizacoes.ts",
+    "apps/api/src/convites/servico-convites.ts",
+    "apps/api/src/pessoas/servico-pessoas.ts",
+    "apps/api/scripts/smoke-adr014-acessos.mjs",
+    "apps/api/scripts/smoke-ct-acessos.mjs",
+    "apps/api/scripts/smoke-authz-critico.mjs",
+    "apps/api/package.json",
+    "apps/web/src/lib/api.ts",
+    "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+    "apps/web/src/componentes/painel-fundacao.tsx"
+  ],
+  "mensagemCommit": "fix(acessos): fechar concessão contextual e proteger último admin\n\nAplica ADR-014: catálogo das três combinações, área na listagem, UX por pessoa acompanhada e recusa transacional de remover o último administrador. Homologação humana permanece pendente.",
+  "verifier": "PASS",
+  "verifierId": "indep-shell-adr014-20261119",
+  "verifierNota": "Verifier oficial BLOCKED (Ask/shell); verificação independente com shell PASS (fingerprint oficial + typecheck já evidenciado + reexecução smoke adr014/authz + critérios).",
+  "verifierOficial": "BLOCKED",
+  "verifierOficialId": "a02013cb-2491-45c3-8a52-6ee4ac317850"
+}

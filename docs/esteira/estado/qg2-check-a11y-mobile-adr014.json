@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "checks": {
+    "labelsSelect": true,
+    "agrupamentoPorPessoa": true,
+    "confirmacaoConcessao": true,
+    "encaminhaConvite": true,
+    "semAdministradorNoSeletor": true,
+    "revogacaoComConfirmacao": true,
+    "areaNaListagem": true,
+    "mobileStack": true,
+    "tabsAcessiveis": true
+  },
+  "mobile": "stack+tabs mantine sem overflow cards",
+  "nota": "checagem estática; homologação humana PENDING_HUMAN"
+}

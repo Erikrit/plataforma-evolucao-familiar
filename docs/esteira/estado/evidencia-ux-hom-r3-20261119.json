@@ -1,0 +1,99 @@
+{
+  "demandaId": "DEM-UX-HOM-R3-20261119",
+  "tipo": "melhoria_ux",
+  "resultadoTecnico": "PASS",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "statusUxOficial": "REPROVADA",
+  "branch": "develop",
+  "commitBase": "7b8348ebbcac12fdc9822fc6d906bfc58bf346f9",
+  "fingerprint": "sha256:f0114d296d15068a",
+  "fingerprintFull": "sha256:f0114d296d15068a8ea9d5747e420ed1893ac9cc16eace6d15c4751ff5c49dc8",
+  "fingerprintNota": "SHA-256 concatenando path UTF-8 + 0x00 + bytes + 0x00 dos 4 arquivos alvo (ordem abaixo)",
+  "verifierOficial": "BLOCKED",
+  "verifierOficialId": "a5e4c37e-8d27-4636-90b7-23212504be44",
+  "verifierOficialNota": "Ask mode sem shell; inspeção estática R3 coerente mas fingerprint não recalculado",
+  "verifier": "PASS",
+  "verifierId": "6c71be97-490f-422a-adbd-06911be180d6",
+  "verifierNota": "generalPurpose + roteiro verifier.md; fingerprint batendo; typecheck + smokes revalidados",
+  "criterios": {
+    "DEV-UX-HOM-R3-01": "PASS",
+    "DEV-UX-HOM-R3-02": "PASS",
+    "DEV-UX-HOM-R3-03": "PASS"
+  },
+  "qg": {
+    "qg1": "PASS",
+    "qg2": "PASS",
+    "qg3": "PASS",
+    "verifier": "PASS"
+  },
+  "checagens": [
+    {
+      "nome": "typecheck-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg1-typecheck-web-ux-hom-r3.txt"
+    },
+    {
+      "nome": "check-estatico-r3",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-check-estatico-ux-hom-r3.json"
+    },
+    {
+      "nome": "check-a11y-estatico",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-check-a11y-ux-hom-r3.json"
+    },
+    {
+      "nome": "check-categoria-authz",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-check-categoria-authz-ux-hom-r3.txt"
+    },
+    {
+      "nome": "smoke-dl02",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-dl02-ux-hom-r3.txt"
+    },
+    {
+      "nome": "smoke-dl03",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-dl03-ux-hom-r3.txt"
+    },
+    {
+      "nome": "smoke-dl-exec",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-dl-exec-ux-hom-r3.txt"
+    },
+    {
+      "nome": "smoke-dl-rec",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-smoke-dl-rec-ux-hom-r3.txt"
+    },
+    {
+      "nome": "smoke-authz",
+      "status": "PASS_COM_ACHADO",
+      "evidencia": "docs/esteira/estado/qg2-smoke-authz-ux-hom-r3.txt",
+      "nota": "FAIL residual colab-cartoes-sem-laurinha (Helena vs Vovó) ambient/seed; Laurinha corretamente excluída; fora de R3"
+    },
+    {
+      "nome": "build-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg2-build-web-ux-hom-r3.txt"
+    },
+    {
+      "nome": "smoke-modulo-03",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/qg3-smoke-modulo-03-ux-hom-r3.txt"
+    },
+    {
+      "nome": "homologacao-humana",
+      "status": "PENDING_HUMAN"
+    }
+  ],
+  "arquivos": [
+    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx",
+    "apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/cadastros/page.tsx",
+    "apps/web/src/componentes/navegacao-app.tsx",
+    "apps/web/src/lib/rotulos-experiencia.ts"
+  ],
+  "mensagemCommit": "fix(ux): estabilizar abas e cadastros do desenvolvimento\n\nPreserva a aba atual após registrar/resgatar/reativar, move formulários para Cadastros no menu lateral e expõe filtro/seleção opcional de categorias sem alterar ADR-013. Homologação humana permanece pendente.",
+  "atualizadoEm": "2026-11-19T21:30:00.000Z"
+}

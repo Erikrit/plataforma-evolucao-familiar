@@ -1,0 +1,76 @@
+{
+  "demandaId": "ESTABILIZACAO-PRE-USO-20261122",
+  "incrementoId": "EST-04",
+  "em": "2026-11-22T23:40:00.000Z",
+  "branch": "develop",
+  "commitBase": "1c4c404b5e39beb06a1c37aa6527aad0cc566912",
+  "workingTreeNota": "alinhamento documental origin/docs/alinhamento-est04-20261122 + preparação operacional EST-04 local",
+  "fingerprint": "sha256:393af5ec2b09df78",
+  "fingerprintFull": "sha256:393af5ec2b09df787cb273a21d51dcea19b7770f8ea63bc3314ed3f6b0ac6da1",
+  "arquivos": [
+    "apps/api/scripts/smoke-est-04-ops.mjs",
+    "apps/api/package.json",
+    "docs/esteira/estado/procedimento-est-04-ops.md",
+    "README.md",
+    "docker-compose.yml",
+    "apps/api/src/saude/controlador-saude.ts"
+  ],
+  "estrategiaSchema": {
+    "migrationsDir": false,
+    "comandoLocal": "npm run db:push",
+    "conferenciaSomenteLeitura": "prisma migrate diff --from-schema-datasource --to-schema-datamodel --exit-code",
+    "resultadoLocal": "No difference detected (exit 0)",
+    "notaPreUso": "Documento Mestre §13 — db push aceitável localmente; histórico migrate ausente bloqueia declaração de produção"
+  },
+  "backupRestore": {
+    "metodo": "pg_dump -Fc no container pef-postgres + pg_restore em pef_restore_est04",
+    "arquivoLocal": "backups/pef-est04-local.dump",
+    "bytes": 265596,
+    "tabelasOrigem": 23,
+    "tabelasRestore": 23,
+    "bancoDescartavelRemovido": true,
+    "limite": "cópia local não comprova recuperação na VPS/alvo"
+  },
+  "docker": {
+    "compose": "somente postgres:16-alpine na 5433",
+    "healthcheckCompose": "pg_isready",
+    "statusAntesDepois": "healthy → stop temporário → start → healthy"
+  },
+  "saude": {
+    "disponivel": { "statusHttp": 200, "banco": "ok" },
+    "indisponivel": { "statusHttp": 503, "banco": "indisponivel", "status": "degradado" },
+    "aposRestaurar": { "statusHttp": 200, "banco": "ok" }
+  },
+  "checagens": [
+    { "nome": "typecheck @pef/api", "status": "PASS", "evidencia": "docs/esteira/estado/qg1-typecheck-api-est-04.txt" },
+    { "nome": "typecheck @pef/web", "status": "PASS", "evidencia": "docs/esteira/estado/qg1-typecheck-web-est-04.txt" },
+    { "nome": "smoke:est-04-ops", "status": "PASS", "checagens": 15, "evidencia": "docs/esteira/estado/qg2-smoke-est-04-ops.txt" },
+    { "nome": "build @pef/api", "status": "PASS", "evidencia": "docs/esteira/estado/qg2-build-api-est-04.txt" },
+    { "nome": "build @pef/web", "status": "NOT_APPLICABLE", "motivo": "sem alteração de código web no incremento" }
+  ],
+  "bloqueiosOperacionaisAindaExistentes": [
+    "Sem histórico prisma/migrations versionado para ambiente alvo",
+    "Backup/restore validado só no Docker local; não prova VPS",
+    "docker-compose cobre apenas PostgreSQL; sem imagens app/CI workflows nesta branch",
+    "Gaps EST-02: rate-limit de login; HTTPS + COOKIE_SECURE + WEB_ORIGIN no alvo",
+    "Homologações humanas PENDING_HUMAN: E3-HOM, EST-03, E4 residual, COR-UX-HOM",
+    "Sem autorização humana explícita de publicação"
+  ],
+  "preservado": [
+    "E5 UX R2 humana APROVADA",
+    "EST-03 COMPLETED técnico + fingerprint",
+    "EVO-CATALOGO NEEDS_DECISION / L3 pendente sem implementação",
+    "Sem E6/E7 / expansão de catálogos",
+    "Sem reset destrutivo no banco compartilhado pef"
+  ],
+  "verifier": {
+    "veredicto": "PASS_COM_ACHADOS",
+    "agentId": "8d107190-9eeb-4eef-b42e-497661fa026b",
+    "achados": [
+      "Shell do verifier em Ask/readonly; fingerprint e smoke revalidados pelo orquestrador",
+      "Restore local não prova VPS; sem prisma/migrations; gaps EST-02 e PENDING_HUMAN preservados"
+    ]
+  },
+  "homologacaoHumanaPublicacao": "NAO_AUTORIZADA",
+  "procedimento": "docs/esteira/estado/procedimento-est-04-ops.md"
+}

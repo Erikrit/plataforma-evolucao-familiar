@@ -1,0 +1,60 @@
+{
+  "demandaId": "DEM-HOMOL-UX-20261116-R2",
+  "perfil": "homologacao",
+  "commit": "bb73e8bf5b424f15003fb1d141433b0334403668",
+  "branch": "develop",
+  "veredictoTecnico": "PASS",
+  "verifierId": "b8945c64-bab2-4726-bac7-f58d3810ac1c",
+  "verifier": "PASS",
+  "homologacaoHumana": "PENDING_HUMAN",
+  "revalidacao": {
+    "flashSessao": "PASS",
+    "mensagemRedePT": "PASS",
+    "drawerDesktopLateral": "PASS",
+    "geometriaDrawer": {
+      "left": 517,
+      "width": 440,
+      "vw": 957
+    }
+  },
+  "checagens": [
+    {
+      "nome": "typecheck-web",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-r2-typecheck-web.txt"
+    },
+    {
+      "nome": "smoke-authz",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-r2-smoke-authz.txt"
+    },
+    {
+      "nome": "smoke-ct-acessos",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-r2-smoke-ct-acessos.txt"
+    },
+    {
+      "nome": "smoke-cv03",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-r2-smoke-cv03.txt"
+    },
+    {
+      "nome": "check-msg-rede",
+      "status": "PASS",
+      "evidencia": "docs/esteira/estado/homol-ux-r2-check-msg-rede.txt"
+    },
+    {
+      "nome": "browser-desktop",
+      "status": "PASS"
+    },
+    {
+      "nome": "mobile-fisico-familia",
+      "status": "PENDING_HUMAN"
+    }
+  ],
+  "residuos": [
+    "Accordion Gerenciar cuidados collapsed pode expor campos no a11y tree",
+    "poluição seed Colab*/Med-Authz*"
+  ],
+  "geradoEm": "2026-11-17T00:13:56.267Z"
+}
