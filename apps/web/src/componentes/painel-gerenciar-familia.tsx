@@ -385,7 +385,6 @@ export function PainelGerenciarFamilia() {
     if (abaAtiva === "convites" && usuario?.pessoa.familiaId) {
       void recarregarConvites();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- só ao abrir a aba
   }, [abaAtiva, usuario?.pessoa.familiaId]);
 
   async function copiarLinkAtivacao() {
