@@ -3089,69 +3089,74 @@
         "qg3": "PASS",
         "fingerprint": "ef-modulo04-qg3-2026-11-16"
     },
-    "demanda": {
+    "demandaAnteriorOpsHomolog": {
         "id": "DEM-OPS-HOMOLOG-DEPLOY-20261123",
-        "tipo": "transversal",
-        "origem": "Responsável pelo Produto, 2026-11-23 — primeiro pacote de deploy de homologação",
+        "estado": "COMPLETED",
+        "fingerprint": "sha256:c3516fdedf55013f9715f8d32a4da23195ffc141d1a53929f36e37e7dc5c3e30",
+        "nota": "Pacote homolog deploy local COMPLETED; VPS ainda PENDING_HUMAN"
+    },
+    "demanda": {
+        "id": "DEM-OPS-CI-PR3-20261123",
+        "tipo": "homologacao",
+        "origem": "Revisão PR #3 (origin/chore/ci-homologacao vs origin/develop) — CI e publicação GHCR",
         "estado": "COMPLETED",
         "aprovacao": {
-            "nivel": "L2",
+            "nivel": "L1",
             "status": "APROVADA",
-            "referencia": "Pedido explícito de preparar pacote de homologação na VPS Hostinger; dados fictícios; sem deploy automático"
+            "referencia": "Pedido explícito de revisar PR #3, reproduzir CI e corrigir só falhas; sem publicar imagens/VPS"
         },
-        "escopo": "Dockerfiles API/web, Compose homolog, migrate+carga oficial, workflow GHCR manual, validação local e comandos VPS /opt/pef-homolog",
-        "impacto": "Operação de homologação; não altera requisitos funcionais de produto",
-        "risco": "medio",
+        "escopo": "Revisar ci.yml e publicar-imagens-homolog.yml; reproduzir npm ci/db:generate/lint/typecheck/build; actionlint; tags GHCR vs Compose; corrigir falhas locais",
+        "impacto": "Ops/CI; não altera requisitos funcionais de produto",
+        "risco": "baixo",
         "fora": [
-            "deploy automático CI→VPS",
-            "publicação para uso real",
-            "seed/fixtures de desenvolvimento",
-            "proxy HTTPS na VPS (fora do pacote de imagens)"
+            "commit/push",
+            "publicação de imagens no GHCR",
+            "conexão/deploy na VPS",
+            "merge da PR"
         ],
         "fluxo": [
             "task-routing",
-            "implementation-workflow",
-            "quality-gate"
+            "quality-gate",
+            "implementation-workflow"
         ],
         "criteriosAceite": [
-            "Dockerfiles multi-stage com workspaces/lockfile",
-            "NEXT_PUBLIC_API_URL validado no build da web",
-            "Compose homolog com imagens por SHA, PG16 sem porta publicada, API/web em 127.0.0.1",
-            "migrate deploy + carga oficial idempotente sem contas",
-            "workflow_dispatch publica api e web no GHCR com o mesmo SHA",
-            "validação local: build, compose config, migrate, web, GET /saude"
+            "Workflows válidos no actionlint",
+            "Pipeline CI reproduzível na ordem do workflow",
+            "Tags GHCR (registry/api|web:SHA lowercase) coincidem com Compose homolog",
+            "Lint da CI passa após correções",
+            "publicar: generate Prisma antes do typecheck"
         ],
         "arquivos": [
-            "apps/api/Dockerfile",
-            "apps/web/Dockerfile",
-            "apps/web/next.config.ts",
-            "docker-compose.homolog.yml",
-            ".dockerignore",
+            ".github/workflows/ci.yml",
             ".github/workflows/publicar-imagens-homolog.yml",
-            "deploy/homolog/migrar-e-carregar.sh",
-            "deploy/homolog/env.example",
-            "docs/esteira/estado/procedimento-homolog-deploy.md",
-            "docs/esteira/estado/evidencia-ops-homolog-deploy-20261123.json"
+            "eslint.config.mjs",
+            "apps/web/src/componentes/painel-gerenciar-familia.tsx"
         ],
-        "fingerprint": "sha256:c3516fdedf55013f9715f8d32a4da23195ffc141d1a53929f36e37e7dc5c3e30",
+        "fingerprint": "sha256:27bfa8bbb2a159c777e3c0a27bbeb1fe240cee9c15bf2466276ecc836adb8967",
         "verificacao": {
             "qg1": {
-                "status": "PASS"
+                "status": "PASS",
+                "nota": "lint+typecheck na reprodução container"
             },
             "qg2": {
-                "status": "PASS"
+                "status": "PASS",
+                "nota": "build API+web PASS; actionlint PASS; tags alinhadas"
             },
-            "verifier": "PASS_COM_ACHADOS",
+            "verifier": "PASS",
+            "verifierId": "28ac18a7-c9ab-4dd2-b33b-dd45e8456851",
             "evidencias": [
-                "docs/esteira/estado/evidencia-ops-homolog-deploy-20261123.json",
-                "docs/esteira/estado/procedimento-homolog-deploy.md"
-            ],
-            "verifierId": "2f507a08-b788-438b-8735-fbb4d265aafc",
-            "verifierNota": "Inspeção estática PASS; runtime não reexecutado no verifier (Ask/shell). Runtime local documentado na evidência pelo agente principal."
+                "docs/esteira/estado/qg-ci-pr3-repro.txt",
+                "https://github.com/Erikrit/plataforma-evolucao-familiar/pull/3",
+                "https://github.com/Erikrit/plataforma-evolucao-familiar/actions/runs/45167961070"
+            ]
         },
-        "proximaAcao": "Merge do workflow na branch padrão (main), disparar workflow_dispatch, pull/up manual em /opt/pef-homolog. Sem deploy automático.",
-        "homologacaoHumanaVps": "PENDING_HUMAN",
-        "mensagemCommit": "ops(homolog): preparar imagens GHCR, Compose e migrate para a VPS\\n\\nPacote de homologação com carga oficial idempotente; deploy automático e publicação para uso real ficam de fora."
+        "proximaAcao": "Revisão humana e push das correções na PR #3 pelo responsável; sem push automático deste agente",
+        "achados": [
+            "CI GH falhou no lint (25 erros: .codex hooks, postcss.cjs, eslint-disable react-hooks sem plugin)",
+            "publicar tinha typecheck antes do Prisma generate",
+            "actionlint SC2129 (style) no step meta — corrigido",
+            "Tags SHA lowercase alinhadas ao Compose; homolog-latest removido (Compose não usa)"
+        ]
     },
     "auditoriaTecnica": {
         "id": "AUDITORIA-TECNICA-20261122",

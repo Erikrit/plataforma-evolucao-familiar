@@ -35,26 +35,28 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20.18"
+          node-version: "20.20"
           cache: npm
 
       - name: Instalar dependências
         run: npm ci
 
+      - name: Gerar Prisma Client
+        run: npm run db:generate
+
       - name: Validar typecheck
         run: npm run typecheck
-
-      - name: Validar Prisma generate
-        run: npm run prisma:generate -w @pef/api
 
       - name: Definir SHA e tags
         id: meta
         run: |
           SHA="$GITHUB_SHA"
           IMAGE_BASE="ghcr.io/${GITHUB_REPOSITORY,,}"
-          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
-          echo "api=${IMAGE_BASE}/api:${SHA}" >> "$GITHUB_OUTPUT"
-          echo "web=${IMAGE_BASE}/web:${SHA}" >> "$GITHUB_OUTPUT"
+          {
+            echo "sha=${SHA}"
+            echo "api=${IMAGE_BASE}/api:${SHA}"
+            echo "web=${IMAGE_BASE}/web:${SHA}"
+          } >> "$GITHUB_OUTPUT"
           echo "Publicando SHA=${SHA}"
           echo "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}"
 

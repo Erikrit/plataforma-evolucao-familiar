@@ -1,5 +1,15 @@
 # Registro da esteira
 
+## DEM-OPS-CI-PR3-20261123 — revisão PR #3 (CI + publicar imagens)
+
+- **Tipo:** homologacao/ops. **Estado técnico:** COMPLETED (correções locais; sem commit/push). Verifier PASS (`28ac18a7-c9ab-4dd2-b33b-dd45e8456851`).
+- **Base:** `origin/chore/ci-homologacao` vs `origin/develop` · [PR #3](https://github.com/Erikrit/plataforma-evolucao-familiar/pull/3).
+- **Achado GH:** job Validar aplicação FAIL no `npm run lint` (25 erros preexistentes).
+- **Correções locais:** ignores ESLint (`.codex/**`, `**/*.cjs`); remoção de `eslint-disable` inválido; ordem Prisma→typecheck no publicar; Node 20.20; SC2129 no meta.
+- **QG local (container node:20.20):** npm ci → db:generate → lint → typecheck → build = **PASS** (`qg-ci-pr3-repro.txt`). actionlint **PASS**. Tags GHCR `ghcr.io/<repo-lower>/api|web:<SHA>` = Compose `${PEF_IMAGE_REGISTRY}/…:${PEF_IMAGE_SHA}`.
+- **Fora:** publicar imagens, VPS, merge/push automático.
+- **Próximo:** revisão humana das alterações locais e push/atualização da PR pelo responsável.
+
 ## DEM-OPS-HOMOLOG-DEPLOY-20261123 — pacote de homologação (VPS)
 
 - **Tipo:** transversal (ops). **Estado técnico:** COMPLETED (local, sem commit/push/deploy automático).
