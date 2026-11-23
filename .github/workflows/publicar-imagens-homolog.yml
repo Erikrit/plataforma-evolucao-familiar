@@ -1,7 +1,7 @@
 # Publica imagens de homologação no GHCR. Disparo manual apenas.
 # Deploy automático na VPS fica fora deste workflow (teste manual primeiro).
 #
-# A primeira execução no GitHub Actions exige o arquivo na branch padrão (main).
+# A primeira execução no GitHub Actions exige o arquivo na branch padrão.
 # Depois, pode-se disparar escolhendo a ref (ex.: develop) no workflow_dispatch.
 name: Publicar imagens homolog
 
@@ -11,11 +11,6 @@ on:
       next_public_api_url:
         description: "URL pública da API para o bundle Next (NEXT_PUBLIC_API_URL)"
         required: true
-        default: "https://api-homolog.exemplo.com"
-      ref_nota:
-        description: "Nota opcional (não altera o SHA do commit checked out)"
-        required: false
-        default: ""
 
 permissions:
   contents: read
@@ -32,7 +27,6 @@ jobs:
     env:
       NEXT_PUBLIC_API_URL: ${{ inputs.next_public_api_url }}
       REGISTRY: ghcr.io
-      IMAGE_BASE: ghcr.io/${{ github.repository }}
 
     steps:
       - name: Checkout
@@ -56,7 +50,8 @@ jobs:
       - name: Definir SHA e tags
         id: meta
         run: |
-          SHA="${GITHUB_SHA}"
+          SHA="$GITHUB_SHA"
+          IMAGE_BASE="ghcr.io/${GITHUB_REPOSITORY,,}"
           echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
           echo "api=${IMAGE_BASE}/api:${SHA}" >> "$GITHUB_OUTPUT"
           echo "web=${IMAGE_BASE}/web:${SHA}" >> "$GITHUB_OUTPUT"
@@ -79,9 +74,7 @@ jobs:
           context: .
           file: apps/api/Dockerfile
           push: true
-          tags: |
-            ${{ steps.meta.outputs.api }}
-            ${{ env.IMAGE_BASE }}/api:homolog-latest
+          tags: ${{ steps.meta.outputs.api }}
           cache-from: type=gha,scope=pef-api
           cache-to: type=gha,mode=max,scope=pef-api
 
@@ -93,9 +86,7 @@ jobs:
           push: true
           build-args: |
             NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
-          tags: |
-            ${{ steps.meta.outputs.web }}
-            ${{ env.IMAGE_BASE }}/web:homolog-latest
+          tags: ${{ steps.meta.outputs.web }}
           cache-from: type=gha,scope=pef-web
           cache-to: type=gha,mode=max,scope=pef-web
 
@@ -106,6 +97,5 @@ jobs:
           - ${{ steps.meta.outputs.api }}
           - ${{ steps.meta.outputs.web }}
           NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-          Nota: ${{ inputs.ref_nota }}
           Próximo passo: pull/migrate/up manual em /opt/pef-homolog (sem deploy automático).
           EOF
