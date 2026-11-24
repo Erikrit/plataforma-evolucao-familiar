@@ -34,7 +34,7 @@ O detalhamento dos requisitos e dos critérios de aceite permanece exclusivament
 - **Notificações Web Push / ACE-C12:** **não integram o aceite de implantação desta V1**; implementar somente após decisão e teste de entrega real. Os horários de medicamentos permanecem consultáveis sem Push.
 - **Implantação:** a existência de deploy para testes não altera a proibição de publicação automática nem concede autorização de uso aberto.
 
-Procedimentos técnicos e evidências: [implantação em homologação](../esteira/estado/procedimento-homolog-deploy.md), [evidência preparatória](../esteira/estado/evidencia-ops-homolog-deploy-20261123.json), [registro da esteira](../esteira/REGISTRO.md).
+Procedimento operacional: [implantação na VPS](../esteira/estado/procedimento-homolog-deploy.md). Marco e retomada: [registro atual da esteira](../esteira/REGISTRO.md). A [evidência preparatória anterior](https://github.com/Erikrit/plataforma-evolucao-familiar/blob/f58d029658499bdfc3807c0488662c0bc4557dae/docs/esteira/estado/evidencia-ops-homolog-deploy-20261123.json) permanece acessível no Git, **não** no contexto ativo.
 
 ## 4. Pendências que realmente permanecem abertas
 
@@ -53,7 +53,7 @@ Procedimentos técnicos e evidências: [implantação em homologação](../estei
 | Qual é o padrão UX? | [Guia de Experiência](../ux-ui/GUIA-DE-EXPERIENCIA.md) |
 | Quais são os contratos/limites técnicos? | [Arquitetura](../arquitetura/ARQUITETURA.md) e [ADRs](../arquitetura/DECISOES.md) |
 | Como transferir uma decisão? | [Governança](GOVERNANCA.md) |
-| Qual foi o resultado de testes/execução? | `docs/esteira/estado/atual.json`, `docs/esteira/REGISTRO.md` e evidência específica |
+| Qual foi o resultado de testes/execução? | `docs/esteira/estado/atual.json` e `docs/esteira/REGISTRO.md`; resultados anteriores à V1 no Git |
 
 **Regra de manutenção:** este documento mostra apenas estado **vigente**, pendências e referências. Não anexar retrospectivas completas, reprovações supersedidas, logs ou cópias de requisitos. Histórico de mudanças permanece no Git; a versão extensa anterior está no commit-base `dcf901d` e em seus ancestrais.
 
