@@ -5,7 +5,7 @@
 
 ## Pré-requisitos
 
-1. Workflow `Publicar imagens homolog` presente na **branch padrão** (`main`) para aparecer em Actions.
+1. Workflow `Publicar imagens homolog` presente na **branch padrão** (`master`) para aparecer em Actions.
 2. Disparo manual (`workflow_dispatch`) na ref desejada (ex.: `develop`), informando `NEXT_PUBLIC_API_URL` pública da API.
 3. VPS com Docker + Compose; hello-world já validado.
 4. Diretório `/opt/pef-homolog` com `docker-compose.homolog.yml` e `.env` (a partir de `deploy/homolog/env.example`).
