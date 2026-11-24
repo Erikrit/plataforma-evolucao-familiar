@@ -1,5 +1,0 @@
-comando: npm run build -w @pef/api; (limpo apps/web/.next) npm run build -w @pef/web
-exit: API 0 / WEB 0
-quando: 2026-11-15T18:15Z
-incremento: CV-PROG-V13
-nota: primeiro build web falhou EPERM em .next/trace (lock ambiente); após remoção de .next, build PASS

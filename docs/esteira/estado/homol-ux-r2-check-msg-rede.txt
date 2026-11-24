@@ -1,5 +1,0 @@
-{
-  "ok": true,
-  "r1": "Não foi possível conectar. Verifique a internet e tente de novo.",
-  "r2": "algo local"
-}

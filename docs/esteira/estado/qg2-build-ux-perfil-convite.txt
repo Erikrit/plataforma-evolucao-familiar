@@ -1,5 +1,0 @@
-comando: npm run build -w @pef/web
-exit: 0
-quando: 2026-11-15T17:18Z
-incremento: UX-PERFIL-CONVITE
-nota: TC:0 e BUILD:0 no mesmo comando; Next compiled successfully
