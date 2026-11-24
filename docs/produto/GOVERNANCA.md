@@ -104,6 +104,15 @@ A governança entrega **especificação aprovada e suas referências** ao fluxo 
 
 A esteira (`.cursor/`, `scripts/esteira/`, `docs/esteira/`, `AGENTS.md`) evolui para receber correções, melhorias, CTs aprovados, módulos e homologação, **sem** criar requisitos novos nem duplicar decisões. Alterações de processo da esteira não substituem aprovação L3 de produto. Nenhum agente/automação deve executar `git commit`, `git push`, merge ou deploy automaticamente. Publicação e integração do material documental exigem ação humana separada.
 
+## Higiene de contexto e evidências — consolidação 2026-11-24
+
+- **Status vigente curto:** manter `STATUS-E-ESCOPO.md` com estado atual, pendências e referências; revisões antigas ficam no histórico Git e evidências da esteira.
+- **Requisitos detalhados:** apenas na especificação do módulo; o Documento Mestre registra visão e limites, não reproduz cada fluxo.
+- **Execução:** preservar `docs/esteira/estado/atual.json` enquanto for consumido por agentes; não truncar, renomear ou apagar evidências referenciadas por checks ou registros sem análise de dependências.
+- **Logs:** saídas extensas de `npm install`, build, lint, smoke e screenshots de ensaio são artefatos de execução. Produzir e manter localmente por padrão; versionar só evidência resumida necessária ao aceite ou incidente, sem dados sensíveis.
+- **Planejamentos encerrados e revisões de UX:** não carregá-los automaticamente na inicialização de novas tarefas. Ler apenas quando o requisito/CT/evidência os referenciar.
+- **Limpeza:** remover documentos e arquivos obsoletos apenas após verificar referências e preservar em Git a revisão anterior, sem reabrir decisões homologadas.
+
 ## 10. Quando revisar a governança
 
 Revisar apenas se houver confusão recorrente de autoridade, decisões contraditórias que escaparam ao fluxo ou excesso comprovado de manutenção. Não exigir cerimônias, reuniões, relatórios ou atualizações periódicas sem necessidade demonstrável.
