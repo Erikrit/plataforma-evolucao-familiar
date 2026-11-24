@@ -19,7 +19,7 @@ Governança deve reduzir retrabalho: **nenhum registro por formalidade, nenhuma 
 | Padrões de UX | `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` e revisões de UX | Alteração de regra funcional |
 | Soluções e decisões técnicas | `docs/arquitetura/ARQUITETURA.md` e `DECISOES.md` | Endpoint candidato sem contrato validado |
 | Estado consolidado, lacunas e homologação | `docs/produto/STATUS-E-ESCOPO.md` | Registro histórico da execução |
-| Execução e evidências locais | `docs/esteira/REGISTRO.md`, `estado/atual.json` e evidências | Homologação familiar ou segurança em produção |
+| Ciclo ativo e evidências novas | `docs/esteira/estado/atual.json` e `docs/esteira/REGISTRO.md` | Arquivos e relatórios de ciclos encerrados, recuperáveis pelo Git |
 | Processo de governança | Este arquivo | Repetição de todas as decisões |
 
 A implementação **é o código da branch e commit inspecionados**. Uma especificação aprovada não comprova código; QG-3 registrado não substitui teste independente, homologação com usuários ou revisão de segurança.
@@ -108,7 +108,7 @@ A esteira (`.cursor/`, `scripts/esteira/`, `docs/esteira/`, `AGENTS.md`) evolui 
 
 - **Status vigente curto:** manter `STATUS-E-ESCOPO.md` com estado atual, pendências e referências; revisões antigas ficam no histórico Git e evidências da esteira.
 - **Requisitos detalhados:** apenas na especificação do módulo; o Documento Mestre registra visão e limites, não reproduz cada fluxo.
-- **Execução:** preservar `docs/esteira/estado/atual.json` enquanto for consumido por agentes; não truncar, renomear ou apagar evidências referenciadas por checks ou registros sem análise de dependências.
+- **Execução:** preservar o formato compatível de `atual.json` para demandas **ativas**. Após uma V1 homologada e com autorização explícita de limpeza, o histórico de demandas concluídas e arquivos brutos pode permanecer exclusivamente no Git. Não eliminar evidência necessária a aceite ainda pendente ou incidente aberto.
 - **Logs:** saídas extensas de `npm install`, build, lint, smoke e screenshots de ensaio são artefatos de execução. Produzir e manter localmente por padrão; versionar só evidência resumida necessária ao aceite ou incidente, sem dados sensíveis.
 - **Planejamentos encerrados e revisões de UX:** não carregá-los automaticamente na inicialização de novas tarefas. Ler apenas quando o requisito/CT/evidência os referenciar.
 - **Limpeza:** remover documentos e arquivos obsoletos apenas após verificar referências e preservar em Git a revisão anterior, sem reabrir decisões homologadas.
