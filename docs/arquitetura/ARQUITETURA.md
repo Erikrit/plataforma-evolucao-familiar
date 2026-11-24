@@ -35,7 +35,7 @@ Módulos lógicos:
 
 Reutilizar a relação vigente Usuario → Pessoa → Familia para a solução mínima, conforme necessário à entrega E1. O detalhamento de rotas, criação de família, convites e sessão deve atender essa cardinalidade. A associação a uma pessoa acompanhada e as autorizações de acompanhamento são resolvidas dentro da mesma família.
 
-A proposta de identidade global com múltiplas participações familiares foi substituída pela decisão explícita do Produto. Validar troca de URL/identificadores, anexos, exportações e rotinas com duas famílias fictícias. Esta nota documenta direção técnica derivada da regra aprovada. Planejamento E1 em `docs/esteira/planejamento/e1-contexto-familiar.md`; implementação e testes continuam pendentes.
+A proposta de identidade global com múltiplas participações familiares foi substituída pela decisão explícita do Produto. Validar troca de URL/identificadores, anexos, exportações e rotinas com duas famílias fictícias. Esta nota documenta direção técnica derivada da regra aprovada. O recorte E1 foi implementado e integrado na V1 homologada para testes; consultar a especificação vigente do Módulo 01. O plano original é recuperável no histórico Git.
 
 ### Cuidados
 
