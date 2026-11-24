@@ -52,7 +52,7 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - Área administrativa com navegação local clara: **Pessoas** (consultar/adicionar), **Acessos e permissões** (entender quem acompanha quem e em qual responsabilidade) e **Convites** (convidar/ativação conforme fluxo existente).
 - Não colocar todas as funções em um único `Accordion` extenso, nem misturá-las com cartões familiares. Usar seções, telas ou subnavegação proporcionais à complexidade real; não introduzir telas vazias ou formulários duplicados.
 - **Acessos:** distinguir pessoa acompanhada, usuário com acesso, responsabilidade e escopo. Identificadores técnicos só para diagnóstico, jamais como principal rótulo. Não prometer listar, editar ou revogar autorizações até confirmar contratos e políticas vigentes.
-- **Dependência transversal:** `CT-20261116-001` na revisão de UX, status `PROPOSTA` para Arquitetura. Refere-se à capacidade de montar visão administrativa segura de acessos; não autoriza nova operação de permissão.
+- **Decisão transversal concluída:** `CT-20261116-001` está **APROVADA e DOCUMENTADA** no Módulo 01 (FUN-04/FUN-07). A gestão mostra quem acompanha quem por pessoa, área/papel e acesso autorizado; não cria matriz granular nem concede novas permissões. O status `PROPOSTA` nos registros antigos pertence à rodada histórica.
 
 ### 4.3 Hierarquia de ações e subnavegação contextual — decisão UX aprovada em 2026-11-16
 
