@@ -1,7 +1,7 @@
 # Módulo 02 — Cuidados da Vovó
 
 **Versão:** especificação funcional v1.7 — E3, download privado de exames, aprovado em 2026-11-22  
-**Status funcional:** especificação aprovada, com revisão UX-01/UX-02 aprovada em 2026-11-24 e pendente de implementação e homologação. Estado do código, evidências, notificações e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.  
+**Status funcional:** especificação aprovada, incluindo a revisão UX-01/UX-02 aprovada em 2026-11-24. Estado do código, evidências, notificações e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Dependência:** Fundação Familiar.
 
 ## 1. Objetivo
@@ -191,7 +191,7 @@ Resumo e sua prévia/PDF continuam de propriedade do Módulo 04 v1.2. A exclusã
 
 ## 11. Decisões de UX — consultas e exames (2026-11-24)
 
-**Aprovadas pelo Produto. Implementação e homologação pendentes.**
+**Aprovadas pelo Produto.** O estado da implementação e da homologação está em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md).
 
 - **UX-01 (CUI-UX-P01):** classificação de consultas e exames em CUI-F05, CUI-F06, §6 e E3-EX-05.
 - **UX-02 (CUI-UX-P02):** seleção e envio de anexo em E3-EX-06. O download privado segue E3-EX-01 a E3-EX-04.

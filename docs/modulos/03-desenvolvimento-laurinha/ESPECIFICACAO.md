@@ -1,7 +1,7 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
 **Versão:** 1.5 — E5, escopo aprovado para a primeira publicação, 2026-11-22\
-**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A revisão UX-03 a UX-05 foi aprovada em 2026-11-24 e aguarda implementação e homologação. Esses estados são registrados em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
+**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A revisão UX-03 a UX-05 foi aprovada em 2026-11-24. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
 
@@ -266,7 +266,7 @@ Jogos breves complementam as atividades presenciais e registram descobertas lúd
 
 ## 14. Decisões UX e propostas de curadoria — testes da V1 (2026-11-24)
 
-**Aprovadas pelo Produto, com implementação e homologação pendentes:**
+**Aprovadas pelo Produto:**
 
 - **UX-03 (DEV-UX-P01):** filtro de Atividades Reais em DEV-F01 e estados em DEV-F03.
 - **UX-04 (DEV-UX-P02):** cabeçalho compartilhado em DEV-F01 e saldo em DEV-F06.

@@ -2,8 +2,8 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "08c890c7c1e5e6a5de1b731259e141bf29286630",
-    "nota": "Baseline com UX-01..05 aprovadas; implementação local concluída aguardando commit humano."
+    "commit": "9320988556c6353c99f5fd6556411b8c35548251",
+    "nota": "Commit da implementação UX-01 a UX-05 na develop, referenciado pelo aceite humano."
   },
   "moduloId": null,
   "incrementoId": null,
@@ -22,12 +22,12 @@
   ],
   "verificacao": {
     "qg1": "PASS — typecheck api+web; check-e3; check-catalogo-visual",
-    "qg2": "PASS — build api+web; smoke e3/e4/e5/authz; verifier PASS (PENDING_HUMAN dispositivos)",
+    "qg2": "PASS — build api+web; smoke e3/e4/e5/authz; verifier PASS",
     "verifier": "PASS",
-    "homologacaoHumana": "PENDING_HUMAN — Android/iPhone e fluxos UX em aparelho real"
+    "homologacaoHumana": "PASS — responsável pelo Produto confirmou a homologação de UX-01 a UX-05 em 2026-11-24 na conversa de aprovação. Não foram informados aparelhos ou cenários individuais."
   },
   "fingerprint": "e60960a1a9bf43b0a3a5abc4555d4ec7",
-  "proximaAcao": "Commit humano da implementação UX-01..05; homologação em Android/iPhone com dados fictícios.",
+  "proximaAcao": "Aguardar nova demanda.",
   "atualizadoEm": "2026-11-24",
   "modulo": {
     "id": "04-evolucao-familiar",
@@ -40,7 +40,7 @@
       "id": "UX-01-05",
       "status": "COMPLETED",
       "fingerprint": "e60960a1a9bf43b0a3a5abc4555d4ec7",
-      "nota": "UX-01..05 implementadas; smokes E3/E4/E5/authz PASS; homologação humana de dispositivos pendente.",
+      "nota": "UX-01 a UX-05 implementadas; smokes E3/E4/E5/authz PASS; homologação humana confirmada pelo responsável pelo Produto em 2026-11-24.",
       "mensagemCommit": "feat(ux): entregar pacote UX-01 a UX-05 aprovado\n\nCategoria em consultas/exames, seletor de anexo, Select nas Atividades Reais, cabeçalho compartilhado com saldo e catálogo de jogos em grade 4×2."
     }
   ],

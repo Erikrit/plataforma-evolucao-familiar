@@ -46,12 +46,12 @@ Procedimento operacional: [implantação na VPS](../esteira/estado/procedimento-
 
 ## 5. Melhorias identificadas nos testes da V1
 
-**UX-01 a UX-05 aprovadas pelo Produto em 2026-11-24.** Implementação concluída na `develop` (working tree local; commit humano pendente). Homologação humana em dispositivos (Android/iPhone) permanece pendente. A baseline funcional da V1 em teste continua homologada.
+**UX-01 a UX-05 aprovadas pelo Produto em 2026-11-24.** Implementação publicada na `develop` em [`9320988`](https://github.com/Erikrit/plataforma-evolucao-familiar/commit/9320988556c6353c99f5fd6556411b8c35548251). O responsável pelo Produto confirmou a homologação humana das cinco correções em 2026-11-24. O aceite está registrado no [estado da esteira](../esteira/estado/atual.json). A baseline funcional da V1 em teste continua homologada.
 
 | IDs | Escopo aprovado | Fonte canônica | Estado |
 |---|---|---|---|
-| UX-01 e UX-02 | Cadastro de consultas/exames e seleção de anexo | [Módulo 02 §11](../modulos/02-cuidados-vovo/ESPECIFICACAO.md#11-decisões-de-ux--consultas-e-exames-2026-11-24) | Código pronto; homologação humana pendente |
-| UX-03, UX-04 e UX-05 | Filtro de Atividades Reais, cabeçalho compartilhado e catálogo de Jogos Digitais | [Módulo 03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#14-decisões-ux-e-propostas-de-curadoria--testes-da-v1-2026-11-24) | Código pronto; homologação humana pendente |
+| UX-01 e UX-02 | Cadastro de consultas/exames e seleção de anexo | [Módulo 02 §11](../modulos/02-cuidados-vovo/ESPECIFICACAO.md#11-decisões-de-ux--consultas-e-exames-2026-11-24) | Implementado e homologado |
+| UX-03, UX-04 e UX-05 | Filtro de Atividades Reais, cabeçalho compartilhado e catálogo de Jogos Digitais | [Módulo 03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#14-decisões-ux-e-propostas-de-curadoria--testes-da-v1-2026-11-24) | Implementado e homologado |
 
 Curadoria, redução da quantidade de sugestões, limite de atividades por categoria e ampliação do número de fases seguem **em análise** no Módulo 03 §14.
 
