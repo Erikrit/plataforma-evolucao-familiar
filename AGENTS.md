@@ -1,68 +1,39 @@
 # Agentes — Plataforma de Evolução Familiar
 
-Esteira inteligente de desenvolvimento contínuo (ADR-012). Não altera requisitos funcionais aprovados.
+## Estado vigente (2026-11-24)
 
-## Fontes oficiais (não duplicar)
+**V1 aprovada e homologada funcionalmente; testes restritos à equipe em VPS HTTPS, conforme o responsável pelo Produto.** Não significa liberação pública, segurança auditada ou autorização para usar dados reais de saúde/crianças. Fonte de estado **sempre atualizável**: `docs/produto/STATUS-E-ESCOPO.md`. Não fixar aqui SHAs, etapas antigas ou conclusões técnicas transitórias.
 
-| Papel | Caminho |
-|---|---|
-| Documento Mestre | `docs/produto/DOCUMENTO-MESTRE.md` |
-| Status e escopo | `docs/produto/STATUS-E-ESCOPO.md` |
-| Governança | `docs/produto/GOVERNANCA.md` |
-| Arquitetura | `docs/arquitetura/ARQUITETURA.md` |
-| Decisões (ADRs) | `docs/arquitetura/DECISOES.md` |
-| Módulo (quando aplicável) | `docs/modulos/<id>/ESPECIFICACAO.md` |
-| UX | `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` |
-| Segurança do repositório | `.github/SECURITY.md` |
-| Registro da esteira | `docs/esteira/REGISTRO.md` |
-| Estado persistido | `docs/esteira/estado/atual.json` |
+Branches: `develop` é a referência de desenvolvimento; `master` é a branch padrão de publicação/homologação. **Conferir refs e commit reais antes de agir**; não assumir sincronia entre elas.
 
-## Agente principal (este chat)
+## Fontes canônicas — carregar só o necessário
 
-Orquestra evolução contínua: **triagem** → (planejar se necessário) → implementar → QG-1 → verificador → QG-2 → corrigir (máx. 3 tentativas/causa) → QG-3 ao fechar módulo/conjunto → homologação quando solicitada.
+1. **Início de tarefa:** `docs/produto/STATUS-E-ESCOPO.md` (estado) e `docs/produto/GOVERNANCA.md` (competência/CT).
+2. **Regra funcional:** `docs/modulos/<id>/ESPECIFICACAO.md`, apenas o trecho da demanda; visão geral em `docs/produto/DOCUMENTO-MESTRE.md`.
+3. **UX / Arquitetura:** `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` ou `docs/arquitetura/DECISOES.md` e `ARQUITETURA.md`, conforme impacto.
+4. **Execução:** arquivos de código/teste afetados; estado ativo em `docs/esteira/estado/atual.json`; evidências **apenas por referência**.
+5. **Histórico:** `docs/esteira/REGISTRO.md`, planejamentos encerrados, revisões antigas de UX e logs `qg*.txt` **somente se forem necessários para uma divergência concreta**.
 
-Skills: `task-routing`, `module-planning`, `implementation-workflow`, `quality-gate`.
+Não ler integralmente o `atual.json` (histórico extenso) nem o `REGISTRO.md` na inicialização: extrair apenas `revisao`, `demanda`, estado ativo, critérios, fingerprint e `proximaAcao` por uma leitura estruturada. **Ao gravar, preservar todos os demais campos existentes**, sem truncar histórico. Não copiar documentos inteiros para prompts.
 
-## Subagente
+## Esteira existente — sem agentes adicionais
 
-- **verifier** (`.cursor/agents/verifier.md`): validação independente, somente leitura. Acionar após QG-1 e antes de declarar demanda/incremento COMPLETED.
+- `task-routing`: classificar e verificar a aprovação (L1/L2/L3).
+- `module-planning`: somente para novo módulo ou impacto transversal complexo.
+- `implementation-workflow`: implementar a demanda aprovada e delimitada.
+- `quality-gate`: QG-1 → verificador independente → QG-2; QG-3/regressão ou homologação conforme risco e impacto.
+- `verifier` é subagente independente de **somente leitura**; definições em `.cursor/agents/verifier.md` e `.codex/agents/verifier.toml`.
 
-## Especialistas consultivos (não são agentes permanentes)
+As skills são espelhadas em `.cursor/skills/` e `.agents/skills/` para os dois ambientes; **manter espelhos equivalentes**. Se uma decisão já consta aprovada na fonte canônica, não solicitar nova aprovação sem conflito material.
 
-Acionar sob demanda, via leitura das fontes oficiais + resumo estruturado:
+## Evidências, limpeza e retomada
 
-1. **Produto** — ambiguidade funcional, critérios de aceite, escopo MVP, aprovações L3.
-2. **Arquitetura** — ADRs, monólito modular, contratos preliminares vs. aprovados.
-3. **UX/UI** — mobile-first, esforço mínimo, organização sem cobrança.
+- Uma demanda concluída precisa de critério verificável, resultado real e fingerprint; log bruto não é decisão nem contexto permanente.
+- Registrar no estado somente caminhos e resumos curtos; preferir saídas detalhadas **locais e ignoradas pelo Git**. Não versionar logs repetitivos ou capturas temporárias por padrão.
+- Roteiros de homologação, evidências estruturadas e logs explicitamente referenciados por um aceite devem continuar acessíveis; limpar apenas após checagem de referências.
+- Retomada: ler estado ativo estruturado; conferir `git status`, branch/commit, alterações locais e fingerprints; revalidar se divergirem.
+- Banco da VPS de testes **não pode ser apagado ou recriado automaticamente**; dispensa de migrações de dados legados em desenvolvimento não é autorização para operação destrutiva.
 
-## Context Engineering (4 camadas)
+## Segurança e autorização
 
-1. Este arquivo + `.cursor/rules/engineering.mdc` (permanente).
-2. Governança + especificação/ADR/UX do assunto (sob demanda).
-3. Código/testes da demanda ou incremento (quando existirem).
-4. Skills e referências técnicas (sob demanda).
-
-Não copiar o Documento Mestre para prompts. Referenciar o caminho e ler só o necessário.
-
-## Fase vigente e dados de desenvolvimento
-
-Consultar `docs/produto/STATUS-E-ESCOPO.md` para a baseline V1 homologada e a fase de evolução pré-uso. Aplicar `docs/produto/DOCUMENTO-MESTRE.md` §13 nas próximas demandas: cadastros atuais de desenvolvimento podem ser recriados, com dispensa de migrações de preservação/compatibilidade desses dados. Regras funcionais, testes e autorização continuam regidos pelas especificações.
-
-## Fluxo de entrada
-
-1. `task-routing` — classificar, verificar aprovação, escolher fluxo mínimo.
-2. `module-planning` — só novo módulo ou mudança complexa que exija decomposição.
-3. `implementation-workflow` — incremento planejado **ou** demanda delimitada aprovada.
-4. `quality-gate` — QG-1/QG-2/QG-3 e perfil de homologação, por impacto/risco.
-
-## Proibições absolutas
-
-Sem `git commit`, `git push`, tags, releases, PRs, deploy ou publicação. Sem credenciais ou dados pessoais reais. Hooks em `.cursor/hooks.json` reforçam isso; não contornar via scripts/MCP.
-
-## Estados
-
-`PENDING` → `READY` → `IN_PROGRESS` → `IN_VALIDATION` → `COMPLETED` | `BLOCKED`
-
-Demanda ativa vive em `atual.json` → `demanda` (histórico de módulos e `demandasConcluidas` preservados).
-
-Retomada: comparar `docs/esteira/estado/atual.json` com o workspace real (incluindo não rastreados) e recalcular fingerprint dos arquivos afetados. Não confiar só no histórico do chat. Evidência antiga não valida código alterado.
+Não inventar regras clínicas, resultados de testes ou permissões; preservar dados de crianças/saúde, isolamento por família e consentimento. Homologação funcional ≠ liberação pública. **Agentes não executam automaticamente `git commit`, `git push`, merge, PR, deploy, tags, releases nem operações destrutivas.** Não contornar hooks/restrições. Operações explícitas do responsável fora da esteira exigem autorização específica; o agente não deve generalizá-las.
