@@ -221,13 +221,13 @@ A entrega funciona com catálogo aprovado e seleção por regras locais. Conteú
 | E4-ACE-07 | Biblioteca móvel permite entender instruções/materiais, escolher e renovar sem excesso de opções; vazio/erro não geram cobrança. |
 | E4-HOM | Homologar escolher → renovar preservando escolha → participar → Executadas → disponibilizar novamente, com duas famílias e regressão de estrelas/histórico. |
 
-**Fora:** jogos digitais (E5), IA com histórico pessoal, publicação automática, ranking, nova tabela de estrelas e correção de anexos. DEF-E3-ANEXO-SALVAR-20261122 permanece aberto e adiado por decisão expressa. Plano: `docs/esteira/planejamento/e4-biblioteca-real.md`.
+**Fora do recorte E4:** jogos digitais (entregues separadamente no E5), IA com histórico pessoal, publicação automática, ranking e nova tabela de estrelas. A correção de anexos foi executada no recorte EST-01; estado vigente em STATUS-E-ESCOPO.
 
 ## 13. E5 — Jogos digitais na Biblioteca de Desenvolvimento
 
-Jogos breves complementam as atividades presenciais e registram descobertas lúdicas. O piloto é composto por **Memória de figuras** (Memória e atenção), **Complete a sequência** e **Caminhos e labirintos** (Raciocínio lógico), com **cinco fases por jogo**. Labirintos também envolvem coordenação na interação. A V1 para a VPS amplia o catálogo para **oito jogos e 40 fases livres**, acrescentando **Pares de sombras** e **Ache o intruso** (Memória e atenção), **Palavra e figura** e **Histórias em cenas** (Linguagem) e **Entrega no jardim** (Coordenação). O [plano de expansão aprovado](../../esteira/planejamento/evo-catalogo-jogos-20261122.md) detalha o conteúdo e a homologação.
+Jogos breves complementam as atividades presenciais e registram descobertas lúdicas. O piloto é composto por **Memória de figuras** (Memória e atenção), **Complete a sequência** e **Caminhos e labirintos** (Raciocínio lógico), com **cinco fases por jogo**. Labirintos também envolvem coordenação na interação. A V1 para a VPS amplia o catálogo para **oito jogos e 40 fases livres**, acrescentando **Pares de sombras** e **Ache o intruso** (Memória e atenção), **Palavra e figura** e **Histórias em cenas** (Linguagem) e **Entrega no jardim** (Coordenação). O conteúdo aprovado é definido nesta especificação e no catálogo versionado do código; o [plano original de expansão](https://github.com/Erikrit/plataforma-evolucao-familiar/blob/f58d029658499bdfc3807c0488662c0bc4557dae/docs/esteira/planejamento/evo-catalogo-jogos-20261122.md) permanece no Git apenas para consulta histórica.
 
-**Origem das decisões.** As decisões funcionais estão registradas no Git na sequência `e00b23b`–`45e1231`. O recorte de três jogos e cinco fases foi fornecido na especificação consolidada indicada pelo responsável em 2026-11-22 para este planejamento. Configurações de fase, controles, ordenação e modelo de persistência são detalhados no [plano E5](../../esteira/planejamento/e5-jogos-digitais.md).
+**Origem das decisões.** As decisões funcionais estão registradas no Git na sequência `e00b23b`–`45e1231`. O recorte de três jogos e cinco fases foi fornecido na especificação consolidada indicada pelo responsável em 2026-11-22 para este planejamento. As fases vigentes e seus controles são definidos no catálogo versionado e nos componentes dos jogos; o [plano E5 histórico](https://github.com/Erikrit/plataforma-evolucao-familiar/blob/f58d029658499bdfc3807c0488662c0bc4557dae/docs/esteira/planejamento/e5-jogos-digitais.md) pode ser consultado no Git, sem funcionar como requisito ativo.
 
 ### Regras funcionais
 
@@ -258,4 +258,4 @@ Jogos breves complementam as atividades presenciais e registram descobertas lúd
 | E5-ACE-12 | Jogo, fase e versão são rastreáveis. Atualizar conteúdo mantém conquistas anteriores e os recursos globais contêm apenas dados editoriais. |
 | E5-HOM | Responsável autorizado e criança avaliam o piloto no celular com dados fictícios, da localização do jogo à escolha livre de fase, dica, conclusão, saída, retorno e leitura da evolução. Registrar o resultado humano explícito. |
 
-**Referências.** [Desenho da Biblioteca](../../ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md#5-biblioteca-de-desenvolvimento) · [Plano e regressões](../../esteira/planejamento/e5-jogos-digitais.md) · [Módulo 04](../04-evolucao-familiar/ESPECIFICACAO.md).
+**Referências vigentes.** [Guia UX](../../ux-ui/GUIA-DE-EXPERIENCIA.md) · [Módulo 04](../04-evolucao-familiar/ESPECIFICACAO.md) · catálogo e componentes de jogos em `apps/api/src/desenvolvimento/jogos/` e `apps/web/src/componentes/desenvolvimento/jogos/`.
