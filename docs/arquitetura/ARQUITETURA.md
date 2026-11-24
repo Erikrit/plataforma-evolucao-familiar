@@ -1,10 +1,10 @@
-# Arquitetura preliminar — Plataforma de Evolução Familiar
+# Arquitetura de referência — Plataforma de Evolução Familiar
 
-**Situação:** arquitetura preliminar e contratos candidatos. Há código dos módulos 01–04 em `develop` e evidências locais registradas, **sem homologação para dados reais**. Para o estado corrente, consultar `docs/produto/STATUS-E-ESCOPO.md`; para contratos realmente existentes, examinar as rotas do commit relevante.
+**Situação (2026-11-24):** V1 aprovada/homologada funcionalmente, disponível para **testes restritos na VPS com HTTPS**, conforme comunicado pelo responsável. O monólito e os módulos 01–04 têm código versionado; isso **não** equivale a segurança auditada ou liberação para dados reais. Esta documentação combina arquitetura implementada com direções ainda propostas: conferir cada contrato no código da branch/commit em análise. Estado atual em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## Estrutura lógica
 
-Web mobile-first (Next.js/React, PWA sob validação) → API NestJS modular → PostgreSQL e armazenamento privado compatível com S3.
+Web mobile-first (Next.js/React/Mantine, **manifesto PWA instalável na V1**) → API NestJS modular → PostgreSQL (**anexos privados persistidos no banco nesta implantação**). Armazenamento compatível com S3 é uma direção futura, **não tecnologia já implantada**. Web Push/lembretes reais ainda não integram a V1 homologada.
 
 Módulos lógicos:
 
