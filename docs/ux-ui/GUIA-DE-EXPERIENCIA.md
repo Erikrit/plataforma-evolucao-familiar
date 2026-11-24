@@ -2,13 +2,13 @@
 
 **Versão:** 2.4 — fluxo de reconhecimento, estrelas e recompensas do Desenvolvimento aprovado em 2026-11-18  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
-**Status:** diretrizes para implementação; NÃO é evidência de tela implementada, teste de acessibilidade ou homologação.  
+**Status:** referência de UX/UI para os quatro módulos existentes da V1; não é, isoladamente, evidência de implementação ou homologação. Consultar `docs/produto/STATUS-E-ESCOPO.md` para o estado de testes vigente.  
 **Revisão integrada de Cuidados para entrega à esteira:** `docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md` (evidências, divergências e proposta incremental, sem alterar regras canônicas).  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
 
 ## 1. Objetivo e limites
 
-Entregar experiência familiar moderna, acolhedora, simples e mobile-first, com **pessoas antes de funcionalidades**, **mínimo esforço de registro** e **organização sem cobrança**. Aplica-se aos módulos 01, 02 e futuros 03 e 04.
+Entregar experiência familiar moderna, acolhedora, simples e mobile-first, com **pessoas antes de funcionalidades**, **mínimo esforço de registro** e **organização sem cobrança**. Aplica-se aos módulos 01, 02, 03 e 04 da V1.
 
 Este guia regula apresentação, navegação, microcopy, interação, componentes e acessibilidade. **Não substitui especificações funcionais**. Uma alteração puramente visual ou interação compatível com as regras aprovadas pode ser decidida em UX; novas regras de negócio, permissões, comportamentos clínicos, obrigações ou tratamento de dados devem ser encaminhados à conversa de Produto por prompt contextualizado. Privacidade e segurança são obrigatórias.
 
