@@ -63,8 +63,8 @@ atualizar estado/STATUS com achados — sem forçar implementação.
 1. Detectar tooling (`package.json`, smokes em `apps/api/scripts`, lint/typecheck).
 2. Selecionar perfil: QG-1 | QG-2 | QG-3 | homologacao (combináveis).
 3. Executar só o pertinente; capturar comando, exit code, trecho de saída.
-4. Gravar evidências referenciadas no estado (sem dados pessoais reais).
-5. Atualizar `docs/esteira/estado/atual.json` (`demanda.verificacao` ou `verificacao`).
+4. Gravar **evidência estruturada curta** (comando, status, saída resumida e caminho). Saída bruta de build/lint/smoke e screenshots temporárias ficam em diretório local ignorado por Git, salvo quando forem imprescindíveis a um aceite identificado. Nunca repetir resultados inteiros no `atual.json` ou no `REGISTRO.md`.
+5. Atualizar apenas os campos ativos em `docs/esteira/estado/atual.json` (`demanda.verificacao` ou `verificacao`), **preservando integralmente as outras seções** e sem gerar novo histórico por log bruto.
 6. Impedir `COMPLETED` se houver `FAIL` aplicável, verifier ≠ `PASS` no QG-2,
    ou se marcar homologação humana como concluída sem evidência humana.
 
@@ -87,4 +87,5 @@ atualizar estado/STATUS com achados — sem forçar implementação.
 - Typecheck: `npm run typecheck`
 - Build: `npm run build`
 - Smokes por incremento/módulo: `apps/api` scripts `smoke:*`
+- Fonte de estado atual e limites de homologação: `docs/produto/STATUS-E-ESCOPO.md`; evidências históricas só sob demanda.
 - Authz crítico: `npm run smoke:authz -w @pef/api` quando auth/autorização for tocada
