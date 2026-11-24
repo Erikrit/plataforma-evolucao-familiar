@@ -6,7 +6,7 @@ alwaysApply: true
 # Engenharia PEF — instruções permanentes
 
 1. **Fonte de verdade:** ler `AGENTS.md` para fluxo e `docs/produto/STATUS-E-ESCOPO.md` para fase vigente. Governança e autoridade: `docs/produto/GOVERNANCA.md`. Não recontar histórico nem usar decisões de chats como regra canônica.
-2. **Contexto mínimo:** na demanda, ler apenas a seção relevante de `docs/modulos/*/ESPECIFICACAO.md`, `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`, ADRs e código afetado. `REGISTRO.md`, `atual.json` completo e logs antigos são históricos, não contexto automático.
+2. **Contexto mínimo:** na demanda, ler apenas a seção relevante de `docs/modulos/*/ESPECIFICACAO.md`, `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`, ADRs e código afetado. `REGISTRO.md` e `atual.json` agora são checkpoints curtos; planos, prints e logs anteriores à V1 ficam apenas no Git e não são contexto automático.
 3. **Fluxo:** `task-routing` → `module-planning` só quando necessário → `implementation-workflow` → `quality-gate` com verificador. Sem aprovação L3/documentação oficial, não inventar regra.
 4. **Validação:** rodar testes pertinentes com saída real. Homologação humana/dispositivos não vira PASS sem evidência. Mudanças em auth, autorização, saúde, crianças e persistência pedem regressões específicas.
 5. **Proteção:** não inserir segredos ou dados reais no repositório, não ampliar acesso por papel e não resetar VPS automaticamente.

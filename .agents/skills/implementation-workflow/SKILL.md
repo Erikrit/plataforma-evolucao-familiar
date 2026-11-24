@@ -43,8 +43,8 @@ Carregar apenas:
 5. Em sucesso QG-1: estado `IN_VALIDATION`; acionar subagente `verifier`.
 6. Rodar QG-2 conforme aplicabilidade e risco.
 7. Se verifier = `PASS` e QG-2 ok: marcar `COMPLETED`, gravar **fingerprint hash**
-   verificável dos arquivos afetados e evidências; arquivar em `demandasConcluidas`
-   ou `incrementosConcluidos` sem apagar histórico anterior; **incluir `mensagemCommit`
+   verificável dos arquivos afetados e evidências; guardar resumo pequeno em `demandasConcluidas`
+   ou `incrementosConcluidos` (máximo 10 itens recentes relevantes ao ciclo; histórico completo no Git), **incluir `mensagemCommit`
    no resumo** (pronta para o humano colar — sem executar commit).
 8. Caso contrário: `FAIL` → correção localizada; `BLOCKED`/`NEEDS_DECISION` → parar e reportar.
 

@@ -1,5 +1,0 @@
-comando: npm run typecheck -w @pef/api; npm run typecheck -w @pef/web
-exit: API 0 / WEB 0
-quando: 2026-11-15T18:10Z
-incremento: CV-PROG-V13
-nota: alterarProgramacao propaga metadados CUI-F01 v1.3; resolverMetadadosProgramacao compartilhado com cadastrar

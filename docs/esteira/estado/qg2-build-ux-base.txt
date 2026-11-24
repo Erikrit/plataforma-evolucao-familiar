@@ -1,8 +1,0 @@
-comando: npm run build -w @pef/web (após limpar apps/web/.next por EPERM em trace)
-exit: 0
-quando: 2026-11-15T17:00Z
-resumo:
-- Next.js 15.5.29 compiled successfully
-- Generating static pages 5/5 OK
-- Rotas: /, /convites/ativar, /pessoas/[pessoaId], cuidados, historico
-- First Load JS shared ~103 kB; home First Load ~120 kB

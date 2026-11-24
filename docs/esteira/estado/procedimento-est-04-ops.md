@@ -56,5 +56,5 @@ O smoke:
 ## Evidência
 
 - Script: `apps/api/scripts/smoke-est-04-ops.mjs`
-- Saída tipicamente em `docs/esteira/estado/qg2-smoke-est-04-ops.txt`
-- Resumo: `docs/esteira/estado/evidencia-est-04-20261122.json`
+- Saídas detalhadas de testes novos em `tmp/esteira/` (não versionadas); registrar comando, código de saída, ambiente e resumo verificável.
+- Evidência EST-04 histórica no [Git antes da consolidação](https://github.com/Erikrit/plataforma-evolucao-familiar/blob/f58d029658499bdfc3807c0488662c0bc4557dae/docs/esteira/estado/evidencia-est-04-20261122.json); não comprova restauração atual na VPS.

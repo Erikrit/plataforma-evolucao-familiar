@@ -12,9 +12,9 @@ Branches: `develop` é a referência de desenvolvimento; `master` é a branch pa
 2. **Regra funcional:** `docs/modulos/<id>/ESPECIFICACAO.md`, apenas o trecho da demanda; visão geral em `docs/produto/DOCUMENTO-MESTRE.md`.
 3. **UX / Arquitetura:** `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` ou `docs/arquitetura/DECISOES.md` e `ARQUITETURA.md`, conforme impacto.
 4. **Execução:** arquivos de código/teste afetados; estado ativo em `docs/esteira/estado/atual.json`; evidências **apenas por referência**.
-5. **Histórico:** `docs/esteira/REGISTRO.md`, planejamentos encerrados, revisões antigas de UX e logs `qg*.txt` **somente se forem necessários para uma divergência concreta**.
+5. **Histórico fechado:** planos, capturas, logs e aprovações técnicas anteriores à consolidação de 24/11/2026 estão no [snapshot Git da V1](https://github.com/Erikrit/plataforma-evolucao-familiar/tree/f58d029658499bdfc3807c0488662c0bc4557dae/docs), **não** na árvore atual. Consultá-los somente para auditoria pontual.
 
-Não ler integralmente o `atual.json` (histórico extenso) nem o `REGISTRO.md` na inicialização: extrair apenas `revisao`, `demanda`, estado ativo, critérios, fingerprint e `proximaAcao` por uma leitura estruturada. **Ao gravar, preservar todos os demais campos existentes**, sem truncar histórico. Não copiar documentos inteiros para prompts.
+O `atual.json` é agora **compacto**, pois o histórico da V1 foi consolidado no Git. Ler seu checkpoint e eventual `demanda` ativa, sem trazer de volta `demandasConcluidas` antigas. Ao gravar, preservar todos os campos correntes e registrar apenas conclusões novas e resumidas. Não copiar documentos inteiros para prompts.
 
 Exemplo local de leitura curta (sem modificar arquivos):
 
@@ -34,7 +34,7 @@ As skills são espelhadas em `.cursor/skills/` e `.agents/skills/` para os dois 
 
 ## Evidências, limpeza e retomada
 
-- Uma demanda concluída precisa de critério verificável, resultado real e fingerprint; log bruto não é decisão nem contexto permanente.
+- Uma demanda concluída precisa de critério verificável, resultado real e fingerprint; **manter no estado somente as últimas demandas resumidas relevantes ao ciclo aberto (máximo 10)**. O histórico permanente é o Git, não arquivos de log.
 - Registrar no estado somente caminhos e resumos curtos; preferir saídas detalhadas **locais e ignoradas pelo Git**. Não versionar logs repetitivos ou capturas temporárias por padrão.
 - Roteiros de homologação, evidências estruturadas e logs explicitamente referenciados por um aceite devem continuar acessíveis; limpar apenas após checagem de referências.
 - Retomada: ler estado ativo estruturado; conferir `git status`, branch/commit, alterações locais e fingerprints; revalidar se divergirem.

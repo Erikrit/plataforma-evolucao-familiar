@@ -236,7 +236,7 @@ Planos/cobrança, envio de mensagens de e-mail, recuperação de acesso por e-ma
 
 ### Execução
 
-Plano e incrementos em `docs/esteira/planejamento/e1-contexto-familiar.md`. Esta aprovação define comportamento, não comprova implementação. Aplicar a política pré-uso do Documento Mestre §13, sem alterar invariantes de histórico, autorização e rastreabilidade durante a execução.
+O detalhamento de execução E1 foi concluído; os requisitos funcionais deste documento prevalecem sobre planos históricos. Aplicar a política pré-uso do Documento Mestre §13, sem alterar invariantes de histórico, autorização e rastreabilidade durante a execução.
 
 ## 14. Boas-vindas, cadastro inicial e endereço de acesso
 
@@ -322,4 +322,4 @@ Retirar acompanhamento bloqueia operações futuras e invalida sessões conforme
 | E2-ACE-07 | Revogação, último administrador, acesso próprio e isolamento entre pessoas/famílias mantêm controles vigentes, inclusive URL/API direta. |
 | E2-ACE-08 | Homologar cadastrar/ativar, conceder e retirar acompanhamento em celular/desktop; DEF-E2-ATIVACAO-20261122 só encerra após validação da jornada afetada. |
 
-**Fora:** envio automático de mensagens, recuperação de senha, papéis novos, ampliação de autorizações, alteração de estrelas/IA e publicação. Plano em `docs/esteira/planejamento/e2-acessos-ativacao.md`.
+**Fora:** envio automático de mensagens, recuperação de senha, papéis novos, ampliação de autorizações, alteração de estrelas/IA e publicação. Implementação E2 homologada na V1; histórico técnico recuperável no Git.

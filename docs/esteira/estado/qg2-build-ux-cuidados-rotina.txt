@@ -1,5 +1,0 @@
-comando: npm run build -w @pef/web
-exit: 0
-quando: 2026-11-15T17:25Z
-incremento: UX-CUIDADOS-ROTINA
-nota: TC:0 BUILD:0

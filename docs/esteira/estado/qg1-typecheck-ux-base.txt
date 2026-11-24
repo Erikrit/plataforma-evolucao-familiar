@@ -1,4 +1,0 @@
-comando: node ./node_modules/typescript/bin/tsc -p ./apps/web/tsconfig.json --noEmit
-exit: 0
-quando: 2026-11-15T16:53Z
-nota: typecheck web PASS após correção mínima HTMLSectionElement -> HTMLElement em cuidados/page.tsx (bloqueio pré-existente no QG-1).
