@@ -38,7 +38,7 @@ Consultar apenas o necessário:
 1. `docs/produto/GOVERNANCA.md` — níveis L1/L2/L3 e CT.
 2. `docs/produto/STATUS-E-ESCOPO.md` — estado consolidado e pendências.
 3. Fonte dona da regra (especificação, guia UX ou ADR) — só o trecho afetado.
-4. `docs/esteira/estado/atual.json` — demanda/módulo em voo; não sobrescrever histórico.
+4. `docs/esteira/estado/atual.json` — extrair **apenas** revisão, demanda ativa, status, próximos passos e fingerprints relevantes; preservar os demais campos ao atualizar. Não carregar o histórico inteiro como contexto.
 
 Regras:
 
@@ -51,7 +51,7 @@ Regras:
 
 ## Passos
 
-1. Ler a demanda do usuário e o estado persistido; reconciliar com `git status` (leitura).
+1. Ler a demanda do usuário e **somente a parte ativa** do estado persistido; reconciliar branch/commit e `git status` (leitura).
 2. Classificar o **tipo** e a **origem** (humano, CT, STATUS, verifier, homologação).
 3. Verificar aprovação: status do CT/decisão, nível L1–L3, destino documental.
 4. Avaliar escopo, impacto, risco (auth/privacidade/criança/saúde = alto).
@@ -59,7 +59,7 @@ Regras:
 6. Selecionar o fluxo mínimo da tabela (não inventar etapas).
 7. Definir critérios de aceite rastreáveis (IDs existentes) e testes pertinentes.
 8. Atualizar `docs/esteira/estado/atual.json` na seção `demanda` (preservar `modulo`/`incrementosConcluidos`/`demandasConcluidas`).
-9. Registrar entrada curta em `docs/esteira/REGISTRO.md`.
+9. Registrar entrada curta em `docs/esteira/REGISTRO.md` **apenas para mudança material de estado, decisão, bloqueio ou aceite**. Não reproduzir o prompt, logs ou todos os testes a cada interação.
 
 ## Saída (resumo estruturado)
 
@@ -95,3 +95,4 @@ Regras:
 - Não duplicar requisitos nem reescrever decisões aprovadas.
 - Não criar agente permanente nem CT-arquivo por demanda.
 - Sem commit/push/deploy.
+- Não gerar logs, capturas ou resumos históricos duplicados como arquivos versionados por padrão.
