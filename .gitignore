@@ -32,3 +32,9 @@ docs/esteira/evidencias/
 reports/
 tmp/
 .turbo/
+
+# Saidas temporarias de verificacao (resumir em evidencia estruturada)
+/docs/esteira/estado/npm-*.txt
+/docs/esteira/estado/*-stdout.txt
+/docs/esteira/estado/*-stderr.txt
+/docs/esteira/estado/*.err.txt
