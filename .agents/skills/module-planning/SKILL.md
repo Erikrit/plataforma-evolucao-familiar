@@ -36,7 +36,7 @@ Não implementar nesta skill.
 4. Classificar riscos (segurança/dados de saúde/criança = alto; UX mobile = médio; cosmético = baixo).
 5. Consultar especialistas (Produto/Arquitetura/UX) só se houver ambiguidade material — ver `AGENTS.md`.
 6. Partir em incrementos **verticais**, pequenos, testáveis, ordenados por dependência.
-7. Atualizar `docs/esteira/estado/atual.json` (`READY` ou `BLOCKED`/`PENDING` com motivo); preservar histórico de módulos/demandas.
+7. Atualizar `docs/esteira/estado/atual.json` (`READY` ou `BLOCKED`/`PENDING` com motivo); preservar o checkpoint corrente; não importar demandas encerradas antes da V1 (histórico em Git).
 8. Registrar resumo em `docs/esteira/REGISTRO.md` (entrada curta).
 
 ## Saída (resumo estruturado)
