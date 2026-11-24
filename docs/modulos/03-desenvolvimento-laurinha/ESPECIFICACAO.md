@@ -259,3 +259,22 @@ Jogos breves complementam as atividades presenciais e registram descobertas lúd
 | E5-HOM | Responsável autorizado e criança avaliam o piloto no celular com dados fictícios, da localização do jogo à escolha livre de fase, dica, conclusão, saída, retorno e leitura da evolução. Registrar o resultado humano explícito. |
 
 **Referências vigentes.** [Guia UX](../../ux-ui/GUIA-DE-EXPERIENCIA.md) · [Módulo 04](../04-evolucao-familiar/ESPECIFICACAO.md) · catálogo e componentes de jogos em `apps/api/src/desenvolvimento/jogos/` e `apps/web/src/componentes/desenvolvimento/jogos/`.
+
+## 14. Propostas de UX, curadoria e jogos — achados dos testes da V1 (2026-11-24)
+
+**Estado: PROPOSTAS EM ANÁLISE, NÃO HOMOLOGADAS NEM APROVADAS COMO SUBSTITUIÇÃO DAS REGRAS VIGENTES.** As frentes UX e Jogos devem usá-las como objeto da análise; não executar automaticamente as mudanças apenas por constarem aqui. A baseline V1 permanece de **24 modelos curados, até 6 sugestões por pessoa, renovação de até 3 e oito jogos/40 fases**. Pontuação, histórico, idempotência e autorizações atuais permanecem intocados até aprovação.
+
+| ID | Proposta para avaliação | Frente e cuidado |
+|---|---|---|
+| DEV-UX-P01 | Trocar chips/controles avulsos de categoria por **Select** em Atividades Reais, coerente com Jogos; preservar Todas, filtros, estados e URL | UX; preferencialmente sem mudança funcional |
+| DEV-UX-P02 | Unificar cabeçalho das duas bibliotecas: **Biblioteca · nome da pessoa** + ícone de estrela e **quantidade de saldo**, sem texto “Saldo:” | UX; reutilizar fonte de saldo, sem alterar regra de estrelas |
+| DEV-JOG-P01 | Revisar a curadoria de atividades reais para faixa orientativa **6–12 anos**, priorizando atividades práticas, materiais acessíveis e diversão presencial | Jogos/Produto; preservar conteúdo e participações utilizados |
+| DEV-JOG-P02 | Exibir **até duas sugestões por vez**, somente elegíveis/ainda não escolhidas ou aplicadas, com renovação e feedback claro | Jogos/Produto; **substitui limites E4 de até 6/renovação 3 se aprovado**; definir elegibilidade e não confundir escolha com participação |
+| DEV-JOG-P03 | Avaliar **máximo de 10 atividades ativas por categoria e pessoa**, com mensagem amigável ao atingir limite, **não** limitar automaticamente o catálogo editorial global | Jogos/Produto e Arquitetura; definir ativas, personalizadas, sem categoria, reativação e concorrência; só validar no backend após aprovação |
+| DEV-JOG-P04 | Catálogo de jogos em **cards com miniatura**, filtros simples e entrada direta na primeira fase disponível; não mostrar lista extensa de fases ao abrir a biblioteca | UX/Jogos; referência de navegação Poki, sem copiar marcas, imagens, anúncios ou jogos; preservar acessibilidade |
+| DEV-JOG-P05 | Conclusão oferece próxima fase ou repetir; ao concluir todas, parabenizar e permitir revisitar fases concluídas | Jogos/Produto; validar contra a regra atual E5 de acesso direto às fases 4/5, sem bloqueio automático silencioso |
+| DEV-JOG-P06 | Estudar ampliação dos **8 jogos para pelo menos 15 fases cada (mínimo 120)**, garantindo variedade real, progressão qualitativa e compatibilidade com o progresso existente | Jogos/Arquitetura/Produto; **mudança de escopo**, distinta do redesenho visual e posterior à estabilidade UX |
+
+**Ordem:** (1) corrigir a experiência da biblioteca e anexo/cabeçalho em conjunto com UX; (2) definir regras de sugestões, limites e catálogo com Produto/Arquitetura; (3) avaliar ampliação de fases em incrementos após estabilização da V1. **Não adicionar** Web Push, IA, novos tipos de estrelas, rankings ou controles de desempenho.
+
+**Critério de encaminhamento:** cada frente apresenta diagnóstico com arquivos reais, experiência proposta, impactos e testes. Propostas que alteram limites, obrigatoriedade, progressão, persistência ou autorização retornam ao Produto para decisão L3 e **somente após aprovação** substituem a regra canônica e são enviadas à esteira.
