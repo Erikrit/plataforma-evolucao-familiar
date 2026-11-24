@@ -184,4 +184,4 @@ Descrição permanece obrigatória; data e arquivo opcionais, consulta relaciona
 | E3-EX-04 | Sem anexo, arquivo indisponível, falha de rede e acesso negado recebem tratamento útil, sem informar sucesso antes de disponibilizar o arquivo. |
 | E3-EX-05 | Cadastro mantém descrição mínima, data/arquivo opcionais; não interpreta resultados nem exige transcrição. |
 
-Resumo e sua prévia/PDF continuam de propriedade do Módulo 04 v1.2. A exclusão do visualizador de exames não remove a conferência da prévia do relatório. Fora: visualizador embutido, IA, OCR, diagnóstico, nova classificação médica e migração de armazenamento como pré-condição. Plano em `docs/esteira/planejamento/e3-exames-resumo.md`.
+Resumo e sua prévia/PDF continuam de propriedade do Módulo 04 v1.2. A exclusão do visualizador de exames não remove a conferência da prévia do relatório. Fora: visualizador embutido, IA, OCR, diagnóstico, nova classificação médica e migração de armazenamento como pré-condição. A implementação E3 integra a V1 homologada; aceites vigentes no STATUS.
