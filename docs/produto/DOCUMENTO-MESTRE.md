@@ -94,7 +94,7 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 
 ## 9. Fora do MVP
 
-Agenda universal, Kanban, rankings de produtividade, gestão trabalhista/financeira da colaboradora, prontuário completo, OCR clínico de receitas, diagnóstico por IA, jogos digitais, SaaS/billing, chat familiar e árvore genealógica complexa.
+Agenda universal, Kanban, rankings de produtividade, gestão trabalhista/financeira da colaboradora, prontuário completo, OCR clínico de receitas, diagnóstico por IA, **Web Push/lembretes automáticos ainda não implementados**, SaaS/billing, chat familiar e árvore genealógica complexa. **Os oito jogos digitais e 40 fases já homologados integram a V1** conforme Módulo 03 §13; as evoluções E6/E7 com IA permanecem fora da V1.
 
 ## 10. Critérios de sucesso
 
@@ -133,7 +133,7 @@ Toda alteração deve registrar: problema resolvido, novo trabalho imposto à fa
 
 **APROVADO expressamente pelo responsável do Produto.** A V1 foi homologada humanamente após as atualizações do Módulo 04. A situação da versão, baseline, evidências e lacunas é mantida em `docs/produto/STATUS-E-ESCOPO.md`.
 
-O produto permanece em desenvolvimento, com disponibilização para uso adiada. A próxima fase evolui a baseline V1 e fecha lacunas já identificadas, preservando os princípios de evolução familiar, esforço mínimo, organização sem cobrança, privacidade e simplicidade.
+Esta seção registra a decisão histórica de pré-uso em 2026-11-21. **Estado posterior (2026-11-24):** V1 aprovada/homologada e disponível para **testes restritos na VPS HTTPS**, conforme informado pelo responsável; sem liberação pública nem dados reais. O estado atual pertence ao `STATUS-E-ESCOPO.md`. A evolução preserva os princípios de evolução familiar, esforço mínimo, organização sem cobrança, privacidade e simplicidade.
 
 **Dados pré-uso:** nas próximas alterações, os cadastros e registros atuais de desenvolvimento podem ser descartados ou recriados quando necessário. A equipe pode evoluir schema e contratos sem implementar migração, conversão, compatibilidade retroativa ou associação de contas apenas para preservar esses dados. Pode ajustar/recriar seeds e aplicar reset no banco de desenvolvimento pertinente à demanda. Mudanças devem continuar executáveis de forma consistente em ambiente novo.
 

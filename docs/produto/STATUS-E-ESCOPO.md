@@ -1,370 +1,63 @@
-# Estado das decisões e escopo
+# Estado atual e escopo — Plataforma de Evolução Familiar
 
-## Estabilização pré-uso — 2026-11-22
+**Atualização:** 2026-11-24  
+**Referência do código versionado:** `develop` e `master` em `dcf901db765aee9106070baa3a7903e492c36140` na abertura desta consolidação (PR #4, primeira entrega de homologação).  
+**Fonte do estado de uso:** declaração do responsável pelo produto em 2026-11-24. **A URL HTTPS e a versão exata em execução na VPS não foram verificadas nesta revisão documental.**
 
-**Estabilização concluída:** `ESTABILIZACAO-PRE-USO-20261122` — **HOMOLOGADA** (EST-00..04 + QG-3 PASS + **homologação humana APROVADA** pelo responsável em 2026-11-22). Fechamento registrado em `develop` @ `3491646`. Publicação **ainda não autorizada** (bloqueios operacionais restantes). `EVO-CATALOGO-JOGOS-20261122`: L3 **APROVADA**; CAT-01..05 **COMPLETED**; **CAT-HOM APROVADA** (2026-11-22) — demanda **HOMOLOGADA** (8 jogos / 40 fases). [HOM](../esteira/estado/evidencia-cat-hom-20261122.json) · [roteiro](../esteira/estado/roteiro-homologacao-cat-hom.md) · [QG-3](../esteira/estado/evidencia-cat-05-20261122.json). Publicação **ainda não** autorizada por este aceite. `COR-UX-EST-HOM-20261122` homologação humana **APROVADA** neste aceite. Expansão de catálogos E4: só planejamento L3 em [`expansao-catalogos-e4-e5.md`](../esteira/planejamento/expansao-catalogos-e4-e5.md). Evidências estabilização: [QG-3](../esteira/estado/evidencia-estabilizacao-fechamento-qg3-20261122.json) · [HOM](../esteira/estado/evidencia-estabilizacao-hom-20261122.json).
+## 1. Situação vigente — leitura prioritária
 
-**Aceite humano (escopo):** E3-HOM, EST-03 (Histórico/Resumo/prévia/PDF/privacidade), E4 residual e COR-UX-HOM. Não amplia a publicação, L3 de catálogos, E6/E7 nem gaps EST-02/restore VPS.
+**V1 APROVADA E HOMOLOGADA funcionalmente, em fase de testes restritos à equipe.** O responsável informa que a aplicação está disponível em uma VPS com HTTPS. **Isso não representa liberação pública nem uso real pela família.** Os ambientes devem usar dados fictícios e acessos controlados.
 
-**EST-04 (ops local):** COMPLETED técnico — schema sync; backup/restore descartável; Docker; `/saude` 200/503. Restore local **não** prova VPS. [Procedimento](../esteira/estado/procedimento-est-04-ops.md) · [Evidência](../esteira/estado/evidencia-est-04-20261122.json).
+Não confundir:
+- **Produto:** escopo V1 e aceites humanos aprovados.
+- **Código:** funcionalidades versionadas nas branches e commits informados.
+- **Ambiente:** VPS HTTPS informada pelo responsável; a saúde, a configuração e o commit efetivo do servidor exigem checagem operacional própria.
+- **Qualidade:** homologação funcional não substitui auditoria de segurança, teste de restauração de backup ou validação de notificações em aparelhos reais.
 
-**EST-03 (docs/privacidade):** COMPLETED técnico + **homologação humana APROVADA**. Evidência técnica `docs/esteira/estado/evidencia-est-03-20261122.json`.
+## 2. Escopo funcional vigente da V1
 
-**EST-02 (auth enxuta):** COMPLETED técnico — ADR-015; gaps residuais (rate-limit de login; HTTPS/`COOKIE_SECURE`/`WEB_ORIGIN` no alvo) **continuam bloqueando uso real**. Evidência `docs/esteira/estado/evidencia-est-02-20261122.json`.
-
-**Publicação para uso real:** ainda **não autorizada**. Critérios de bloqueio no plano EST.
-
-### Alinhamento vigente e próximo encaminhamento — 2026-11-22
-
-Reconciliados nesta rodada STATUS, plano de estabilização e encaminhamentos de `atual.json`. O campo global ainda indicava iniciar EST-02 e a demanda pedia commit EST-03; ambos ficaram superados pela `develop` atual. Nenhum resultado técnico ou aceite humano foi promovido por esta atualização.
-
-| Frente | Estado vigente | Encaminhamento |
+| Frente | Escopo consolidado | Fonte canônica |
 |---|---|---|
-| E1/E2 | Homologadas no escopo registrado | Preservar jornadas e acesso contextual. |
-| E5 e UX R2 | Implementadas; UX R2 humana APROVADA | Preservar partida direta, dica, fase/progresso e menu agrupado. Não reaplicar planejamento/patch E5 antigo sobre essa entrega. |
-| COR-UX-EST-HOM | Homologação humana APROVADA (com a estabilização) | Preservar loading, sugestões, renovar e celebração no escopo aceito. |
-| Anexos E3 / EST-01 | E3-HOM APROVADA | Preservar salvar → baixar → abrir no dispositivo. |
-| EST-02 | COMPLETED técnico, gaps residuais | Preservar ADR-015; fechar rate-limit/HTTPS/cookie/origem no alvo antes do uso real. |
-| EST-03 | Homologação humana APROVADA | Preservar isolamento, cache privado e metadado de anexo gated. |
-| Auditoria técnica | Concluída no recorte registrado | Preservar otimizações; não reabrir varredura genérica. |
-| EST-04 | COMPLETED técnico (ops local) | Repetir backup/restore no ambiente alvo; sem declarar produção. |
-| Catálogo E5 para V1 | HOMOLOGADA (CAT-01..05 + CAT-HOM APROVADA) | Oito jogos e 40 fases em PostgreSQL. Publicação ainda exige autorização explícita e bloqueios ops. |
-| Catálogo E4 | 24 modelos da V1 | Separar a carga oficial do seed de desenvolvimento. Expansão posterior em planejamento. |
-| E6/E7 e publicação | Fora / publicação não autorizada | Decisão explícita de publicação ainda necessária. |
+| 01 — Fundação Familiar | Entrada e cadastro de família, pessoas com/sem conta, convites/ativação, acesso contextual simples e isolamento de famílias | [Módulo 01](../modulos/01-fundacao-familiar/ESPECIFICACAO.md) v1.9 |
+| 02 — Cuidados | Rotina, medicamentos com horários conferidos, relatos sem inferência clínica, consultas, exames e anexos privados, acompanhamento autorizado | [Módulo 02](../modulos/02-cuidados-vovo/ESPECIFICACAO.md) v1.7 |
+| 03 — Desenvolvimento | Biblioteca de atividades presenciais, participações, estrelas/recompensas, catálogo curado de 24 modelos, **8 jogos digitais e 40 fases** | [Módulo 03](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) v1.5 |
+| 04 — Evolução Familiar | Histórico individual, resumos contextuais e PDF sob demanda, respeitando as autorizações | [Módulo 04](../modulos/04-evolucao-familiar/ESPECIFICACAO.md) v1.2 |
+| Experiência | Mobile-first e navegação centrada nas pessoas, com padrões definidos de UX e acessibilidade | [Guia UX](../ux-ui/GUIA-DE-EXPERIENCIA.md) |
 
-**Ordem recomendada:** tratar bloqueios operacionais restantes (gaps EST-02, restore/migrate no alvo) se for rumo a uso real; publicação só com autorização humana explícita. Deploy automático não autorizado. A expansão E5 aprovada e sua homologação são requisitos da primeira publicação.
+O detalhamento dos requisitos e dos critérios de aceite permanece exclusivamente nas especificações, **não neste arquivo**. Marcos anteriores de reprovação/correção foram supersedidos pelos aceites posteriores da V1; consultar Git e o histórico da esteira para auditoria.
 
-**Pacote de homologação (ops) — 2026-11-23:** `DEM-OPS-HOMOLOG-DEPLOY-20261123` preparado na `develop` (Dockerfiles, Compose homolog, migrate + carga oficial, workflow GHCR manual). Primeira subida na VPS é de **homologação com dados fictícios**; não autoriza uso real. Procedimento: [`procedimento-homolog-deploy.md`](../esteira/estado/procedimento-homolog-deploy.md).
+## 3. Tecnologia e ambiente de teste
 
+- **Stack versionada:** Next.js/React/Mantine; API NestJS/Prisma; PostgreSQL; Docker/Compose; GHCR e workflow de publicação de imagens de homologação.
+- **Topologia de homologação documentada:** Web e API atrás de proxy; serviços internos sob `127.0.0.1`, conforme Compose e procedimentos versionados. O responsável informa HTTPS ativo na VPS.
+- **PWA:** manifesto e ícones de instalação presentes no código; instalação no Android aprovada pelo responsável. A confirmação do iPhone não está documentada nesta revisão.
+- **Notificações Web Push / ACE-C12:** **não integram o aceite de implantação desta V1**; implementar somente após decisão e teste de entrega real. Os horários de medicamentos permanecem consultáveis sem Push.
+- **Implantação:** a existência de deploy para testes não altera a proibição de publicação automática nem concede autorização de uso aberto.
 
-## Catálogo digital e primeira publicação — decisão L3, 2026-11-22
+Procedimentos técnicos e evidências: [implantação em homologação](../esteira/estado/procedimento-homolog-deploy.md), [evidência preparatória](../esteira/estado/evidencia-ops-homolog-deploy-20261123.json), [registro da esteira](../esteira/REGISTRO.md).
 
-**Escopo aprovado:** oito jogos, cinco fases livres por jogo, catálogo editorial PostgreSQL e preservação da UX R2 e do progresso. A carga da VPS inclui os 24 modelos oficiais E4 e os jogos aprovados. [Plano CAT](../esteira/planejamento/evo-catalogo-jogos-20261122.md).
+## 4. Pendências que realmente permanecem abertas
 
-**Cadastro aberto** cria uma família própria e sua conta administrativa inicial. Ingressar em família existente depende de convite, com acesso a dados condicionado à autorização contextual. **Branch de publicação:** renomeação de `main` para `master` planejada, CI na PR `develop` → `master` e primeira publicação por ação humana. [Plano operacional](../esteira/planejamento/estabilizacao-pre-uso.md).
+1. **Testes restritos da V1:** registrar achados reais de UX, navegação, acessos, jogos, anexos, estabilidade e comportamento em celulares, sem presumir que a homologação anterior é anulada.
+2. **Segurança antes do uso real:** revisar autenticação, proteção de login, sessão/cookies, limites de acesso a saúde/crianças e ambiente HTTPS, conforme [ADRs](../arquitetura/DECISOES.md) e evidências operacionais; HTTPS isoladamente não basta.
+3. **Operação antes do uso real:** validar backup e restauração no ambiente apropriado, estratégia de recuperação e condições de publicação. A equipe decidiu deixar a robustez de backup e dados para V2/V3 enquanto a V1 operar **sem dados reais**; não declarar essa etapa concluída.
+4. **PWA e notificações:** validar instalação no iPhone quando aplicável; Web Push e ACE-C12 permanecem posteriores.
+5. **Evolução futura:** frentes E6/E7 com IA e demais ampliações são planejamento/direção, **não funcionalidades V1 homologadas**. Ver [Evolução pós-V1](EVOLUCAO-POS-V1.md).
 
-## E5 — Jogos digitais e organização da Biblioteca, 2026-11-22
+## 5. Fontes por responsabilidade (contexto mínimo)
 
-**Homologação humana da correção UX R2 APROVADA em 2026-11-22** pelo responsável do Produto (`COR-E5-UX-HOM-R2-20261122`). Versão homologada: `develop` @ `e050a999b2a040df62860d4ecd113c11b0718ccc` (`fix(ux): refinar dica, fases, progresso e ícone da E5`). Evidências técnicas R2 permanecem as já registradas; este registro não reexecuta testes.
+| Pergunta | Ler primeiro |
+|---|---|
+| Qual é a finalidade e os princípios? | [Documento Mestre](DOCUMENTO-MESTRE.md) |
+| Qual é a regra funcional? | Especificação do módulo correspondente |
+| Qual é o padrão UX? | [Guia de Experiência](../ux-ui/GUIA-DE-EXPERIENCIA.md) |
+| Quais são os contratos/limites técnicos? | [Arquitetura](../arquitetura/ARQUITETURA.md) e [ADRs](../arquitetura/DECISOES.md) |
+| Como transferir uma decisão? | [Governança](GOVERNANCA.md) |
+| Qual foi o resultado de testes/execução? | `docs/esteira/estado/atual.json`, `docs/esteira/REGISTRO.md` e evidência específica |
 
-**Histórico preservado:** homologação R1 `COR-E5-UX-HOM-20261122` **REPROVADA** (funcional aceito; visual/navegação não). Registro intermediário da R2 como REPROVADA até o novo aceite permanece histórico. Não ampliar este aceite a E3, E4 residual, segurança definitiva ou publicação.
+**Regra de manutenção:** este documento mostra apenas estado **vigente**, pendências e referências. Não anexar retrospectivas completas, reprovações supersedidas, logs ou cópias de requisitos. Histórico de mudanças permanece no Git; a versão extensa anterior está no commit-base `dcf901d` e em seus ancestrais.
 
-**Implementada em develop.** A Biblioteca fica no menu contextual de Desenvolvimento, com Atividades reais e Jogos digitais. O piloto entrega Memória de figuras, Complete a sequência e Caminhos e labirintos, com cinco fases de escolha livre por jogo. Histórico e Resumo leem as descobertas da fonte E5 com autorização da pessoa. As estrelas pertencem às participações presenciais.
+## 6. Limite de uso
 
-**Esteira.** E5-01 a E5-05 de `DEM-E5-JOGOS-DIGITAIS-20261122` concluídos tecnicamente; correções UX R1/R2 encerradas no escopo homologado. [Evidências E5](../esteira/estado/evidencia-e5-20261122.json) · [Evidência R2](../esteira/estado/evidencia-cor-e5-ux-hom-r2-20261122.json) · [Roteiro R2](../esteira/estado/roteiro-ux-navegacao-e5-r2.md) · [Módulo 03 v1.4 §13](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento)
-
-## E4 — biblioteca real com homologação humana parcial, 2026-11-22
-
-**Implementação registrada em `0a1055b`.** E4-01 a E4-03 constam como concluídos tecnicamente no registro original. O escopo aprovado para atividades reais consta no [Módulo 03 §12](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#12-e4--biblioteca-de-atividades-reais). [Evidência técnico-histórica](../esteira/estado/evidencia-e4-20261122.json)
-
-**Homologação humana E4-HOM** foi aprovada parcialmente na entrega anterior; a **revalidação residual** no escopo da estabilização foi **APROVADA** em 2026-11-22. A E5-01 deu à Biblioteca um destino contextual. [Roteiro E5](../esteira/estado/roteiro-homologacao-e5.md) · aceite na [evidência HOM](../esteira/estado/evidencia-estabilizacao-hom-20261122.json).
-
-**E3-HOM** **APROVADA** em 2026-11-22 no aceite humano da estabilização, após a correção técnica EST-01 de `DEF-E3-ANEXO-SALVAR-20261122`. O registro original de defeito aberto/adiado permanece histórico.
-
-## Defeito de anexos — correção técnica EST-01, 2026-11-22
-
-**DEF-E3-ANEXO-SALVAR-20261122 — CORRIGIDO TECNICAMENTE em EST-01** (`ESTABILIZACAO-PRE-USO-20261122`). Causa raiz: HTTP 413 (`request entity too large`) no POST de anexos com JSON/base64 acima do limite padrão ~100 KB do Nest/Express. Correção: body JSON até 12 MB, validação explícita de 8 MB, checagem na UI e retry sem reenviar o arquivo. Smoke E3 com 18 checagens (inclui payload >100 KB) PASS.
-
-**E3-HOM** ficou PENDING_HUMAN após a correção técnica e foi **APROVADA** em 2026-11-22 no aceite humano da estabilização (jornada salvar → baixar → abrir, dados fictícios).
-
-**Histórico:** defeito aberto e adiado por Produto ao avançar E4; retomado na estabilização pré-uso. Evidência: `docs/esteira/estado/evidencia-est-01-20261122.json`.
-
-**Publicação para uso segue adiada.**
-
-
-## E3 — implementação técnica registrada; homologação de anexos (atualizado), 2026-11-22
-
-**Decisão APROVADA (desenho):** oferecer **Baixar arquivo** no exame; navegador/aplicativo do dispositivo faz a abertura. Retirados visualizador interno, zoom e paginação. Resumo único por área/período e fluxo de prévia/PDF do relatório.
-
-**Fontes:** Módulo 02 v1.7 §10, Módulo 04 v1.2 §12 e UX PROPOSTA-EVOLUCAO-POS-V1.md §11.
-
-**Esteira:** DEM-E3-EXAMES-RESUMO-20261122 COMPLETED técnico (E3-01..03); E3-HOM **APROVADA** em 2026-11-22 (estabilização). Fingerprint técnico histórico `sha256:2dead837b08ac808`. Plano em `docs/esteira/planejamento/e3-exames-resumo.md`; roteiro em `docs/esteira/estado/roteiro-homologacao-e3.md`.
-
-**Referência de base documental:** develop @ `8a517523319a76740f21ad51da5a6e02cb29f6c1` (implementação local sem commit). Publicação permanece adiada.
-
-## E2 — homologação humana aprovada, 2026-11-22
-
-**APROVADA pelo responsável do Produto** a demanda DEM-E2-ACESSOS-20261122, após informar melhorias feitas e homologação humana aprovada. Critério E2-ACE-08 encerrado; defeito DEF-E2-ATIVACAO-20261122 encerrado no escopo da solução por link manual.
-
-**Escopo:** habilitação/ativação de conta por link compartilhado, estados de pessoas/convites e gestão compreensível de acessos, conforme Módulo 01 v1.9 §15. Envio automático de e-mail continua adiado.
-
-**Referência disponível:** develop @ `e3a75a9fca41c6bd0125ae39af3aa50f1f11d350`. Evidência técnica `docs/esteira/estado/evidencia-e2-20261122.json`: QG-1/2/3 PASS e verificação independente shell PASS. Verifier oficial FAIL (build antigo + Ask/shell), conforme nota de reexecução independente após build OK. Esta anotação não reclassifica o resultado oficial nem equivale a reexecução de testes.
-
-**Próxima etapa (histórico E2):** E3 já implementada tecnicamente; aguarda homologação humana E3-HOM. Publicação para uso segue adiada.
-
-## Defeito conhecido — ativação de acesso de pessoas, 2026-11-22
-
-**ID:** DEF-E2-ATIVACAO-20261122. **Estado:** ENCERRADO em 2026-11-22 após homologação humana da E2. Solução adotada: link compartilhado manualmente; envio automático permanece fora do escopo. Relato e encaminhamento originais abaixo são históricos.
-
-**Relato humano:** após a melhoria da entrada familiar, ao criar pessoas não ocorre o envio de e-mail esperado; isso impede validar a ativação e o acesso dessas novas contas. O acesso inicial ficou mais claro. A causa técnica ainda não foi diagnosticada nem reproduzida nesta atualização.
-
-**Delimitação:** o envio de mensagem dispensado no cadastro inicial de família/primeiro administrador não deve ser confundido com o fluxo de convite/habilitação da conta de outra pessoa. Pessoa acompanhada sem conta continua podendo ser cadastrada apenas com nome. A correção deve conferir como o convite é entregue hoje e oferecer um caminho efetivamente utilizável de ativação; Produto posteriormente aprovou o link compartilhado manualmente na E2 e adiou integração de envio automático. Fonte funcional: Módulo 01 v1.9 §15.
-
-**Decisão de seguimento:** avançar no planejamento da E2 incluindo este defeito, sem exigir sua correção prévia para discutir a evolução. O defeito continua impedindo o aceite da jornada afetada; não constitui aprovação do acesso de novas pessoas. Aceite anterior das correções de entrada preservado no seu escopo.
-
-**Saída esperada para correção:** administrador habilita/convida pessoa; titular recebe ou obtém o link pelo canal definido, ativa a conta sem cadastro duplicado, define sua senha e acessa apenas sua família/pessoas/áreas autorizadas. Verificar convite expirado/usado, e-mail ausente/indisponível e mensagem de sucesso coerente com a entrega real. Não enviar senhas.
-
-**Fonte:** relato do responsável nesta conversa; referência disponível develop @ 0d8ced6957734123a4afc9b8043c55cb042ea2b9. Sem testes ou alteração de código nesta anotação.
-
-
-## E1 — correções de entrada homologadas em 2026-11-22
-
-**Homologação humana APROVADA** pelo responsável do Produto para as correções da demanda `DEM-E1-ENTRADA-20261121`, encerrando a pendência E1-ENT-08. Fonte: comunicação expressa nesta conversa, após informar que as correções foram feitas.
-
-**Escopo do aceite:** boas-vindas, criação da família e primeira conta pela interface, endereço para copiar/acessar e entrada contextual corrigida. E-mail e senha permanecem no cadastro; envio de mensagem continua fora desta etapa. Não ampliar este aceite a funcionalidades futuras ou a dispositivos/casos específicos não descritos pelo responsável.
-
-**Referência disponível:** develop @ `2781c76ec2992976b268d7accadc948e45347b8a`. O código contém as páginas /f e /f/criar e a evidência `docs/esteira/estado/evidencia-e1-ent-20261121.json` registra QG-1/2/3 PASS, verificação independente shell PASS e verifier oficial BLOCKED por ambiente Ask/shell. Esta rodada consulta documentação/código e registra o aceite humano; não reexecuta a aplicação ou os testes.
-
-**Histórico:** a entrega original E1 foi reprovada em 2026-11-21 por entrada sem caminho útil e referências fixas a /f/oliveira. Esse resultado fica preservado no histórico e foi tratado pela demanda corretiva agora homologada. A baseline V1 conserva seu próprio aceite.
-
-**Próximo passo:** detalhar E2 — Gestão compreensível de acessos, conforme sequência aprovada. O bloqueio relativo à entrada E1 está encerrado no escopo corrigido. Publicação para uso segue adiada.
-
-## Situação vigente — V1 homologada em 2026-11-21
-
-**V1 HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO. Publicação para uso adiada por decisão expressa.**
-**Baseline do código:** develop @ `2bafbc560cfedc9483151b4dfaaef12b443c0a94`.
-**Fonte do aceite:** comunicação humana nesta conversa, após atualização e homologação do Módulo 04.
-
-O aceite abrange a V1 existente dos módulos 01–04. A demanda `DEM-M04-EVO-REV-20261121` recebe homologação humana APROVADA nesta data. Os aceites anteriores integram esta baseline, e as lacunas conhecidas seguem na evolução pós-V1. A V1 é referência histórica para comparar mudanças futuras.
-
-**Próxima fase:** evolução pós-V1, com demandas delimitadas para fechar lacunas. A política para os dados de desenvolvimento está no Documento Mestre §13 e dispensa preservação dos cadastros atuais e compatibilidade com esses dados enquanto o sistema permanecer nesta fase pré-uso.
-
-**Evidências:** estado da esteira e `evidencia-m04-evo-rev-20261121.json` registram QG-1/2/3 PASS e verificação independente shell PASS; verifier oficial BLOCKED por ambiente Ask/shell. Esta atualização registra a homologação comunicada pelo responsável. Testes, aplicação, PDF e segurança não foram reexecutados ou auditados nesta atualização.
-
-### Lacunas para evolução
-
-| Frente já registrada | Área responsável | Encaminhamento |
-|---|---|---|
-| Remoção/desativação de pessoas e tratamento do histórico funcional | Produto + Arquitetura + UX | Definir comportamento e jornada antes de implementar |
-| Opções válidas de vínculo e edição administrativa (UX-HOM-02-SELETOR) | Produto + UX | Fechar opções e apresentação no contexto administrativo |
-| Autenticação/sessões (ADR-015: sessão/cookie enxuta; sem JWT) | Arquitetura + Qualidade | EST-02 da estabilização: regressão e gaps residuais; publicação ainda não autorizada |
-| Lembretes reais ACE-C12 e canais/dispositivos | Arquitetura + UX + Qualidade | Validar entrega e comportamento em aparelhos previstos |
-| Contratos, retenção de dados e PWA/alternativa móvel | Arquitetura | Resolver conforme necessidade efetiva de uso e decisões existentes |
-
-A lista consolida pendências registradas. A ordem de execução será definida por demanda. A dispensa de compatibilidade de dados de teste reduz trabalho de migração e não decide automaticamente regras de exclusão de registros durante o uso.
-
-## Nova prioridade de evolução — famílias, áreas, biblioteca e IA, 2026-11-21
-
-O responsável solicitou tratar estas frentes antes da proposta de desativação de pessoas/vínculos. Aquela proposta fica **ADIADA**, com retomada futura. O foco passa à definição da evolução para outras famílias, exames e resumos por área, biblioteca real/digital por categoria e idade, sugestões assistidas e gestão de acessos.
-
-**Direção APROVADA pelo responsável do Produto em 2026-11-21:** `docs/produto/EVOLUCAO-POS-V1.md` v2.1, conforme concordância expressa com a recomendação apresentada sobre a v2.0 (commit `9193f16`). Registro de visão no Documento Mestre v1.7 §15.
-
-**Sequência aprovada:** E1 Contexto familiar e isolamento → E2 Gestão compreensível de acessos → E3 Exames e Resumo factual → E4 Catálogo real → E5 Jogos digitais → E6 IA de desenvolvimento → E7 IA de cuidados.
-
-**Limite do aceite:** direção, limites e ordem de trabalho. Pontuação digital, uso em recompensas, envio de dados pessoais à IA e regras clínicas continuam dependentes de decisão específica. Parâmetros quantitativos, modelos técnicos e protótipos não foram homologados por este aceite.
-
-**E1 atual:** correções de entrada DEM-E1-ENTRADA-20261121 homologadas humanamente em 2026-11-22; E1-ENT-08 aprovado. Recorte funcional no Módulo 01 v1.8 §13–14. Próxima frente: detalhamento da E2.
-
-**Política de dados:** Documento Mestre §13 continua aplicável. A V1 é referência histórica; a aprovação de cadastro pela interface não autoriza publicação para uso.
-
-## Consolidação multidisciplinar da evolução — 2026-11-21
-
-Produto, Análise, Arquitetura, UX/UI, cuidados, desenvolvimento, privacidade e Qualidade foram reconciliados em um plano único. O plano preserva fontes da V1 e explicita a diferença entre visão solicitada, recomendação e decisão aprovada.
-
-Principais alinhamentos:
-
-- Resumo por área evolui o Módulo 04 e não cria histórico paralelo.
-- Visualização de exame e resumo factual entregam valor antes da IA.
-- Catálogo global é finito, versionado e curado; seleção e histórico permanecem privados.
-- Atividades reais e jogos digitais aparecem juntos para a pessoa, com ciclos técnicos distintos.
-- Estrelas preservam sua origem presencial. O recorte E5 formaliza descobertas digitais no [Módulo 03 §13](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#13-e5--jogos-digitais-na-biblioteca-de-desenvolvimento).
-- Gestão mostra quem acompanha quem, área e responsabilidade, sem matriz técnica na interface.
-- IA editorial, IA de desenvolvimento e IA de cuidados são casos separados e entram em fases diferentes.
-- Arquitetura mantém monólito modular e evita infraestrutura nova sem necessidade comprovada.
-
-**Estado da consolidação:** DIREÇÃO DE PRODUTO APROVADA E DOCUMENTADA. Correção da entrada E1 implementada conforme registro técnico e homologada pelo responsável em 2026-11-22; próximos detalhamentos seguem por entrega.
-
-## Conta por família — decisão de Produto documentada em 2026-11-21
-
-**APROVADA e DOCUMENTADA** a regra de uma única família por conta pessoal, com entrada pela URL da família e validação contextual no servidor. Fonte funcional no Módulo 01 v1.6, FUN-08/FAM-R13; visão no Documento Mestre v1.6 §14; diretriz técnica em ARQUITETURA.md.
-
-A proposta anterior de login global com participação em várias famílias foi substituída. A seleção de contextos após autenticação envolve apenas pessoas e áreas da família da conta. Documento EVOLUCAO-POS-V1.md reconciliado com essa decisão.
-
-**Situação E1 atualizada:** conta em uma única família preservada. Correção de entrada/cadastro do Módulo 01 v1.8 §14 encerrada com homologação humana APROVADA na DEM-E1-ENTRADA-20261121. A reprovação original permanece histórica.
-
-## Primeira frente de evolução pós-V1 — 2026-11-21
-
-**Prioridade anterior, agora adiada pelo Produto:** pessoas (remoção/desativação) e organização de vínculos. A inspeção da develop @ 2481f38a9fd259571bd93211ddc5bf5e4475af25 confirma ausência de estado de pessoa e de operação de remoção/desativação; vínculo aceita texto livre e atualização pela própria pessoa ou administrador.
-
-**Proposta em avaliação L3:** desativação reversível, tratamento de conta/sessões e histórico, proteção do último administrador, reativação explícita e vínculo opcional Familiar/Colaborador externo gerido pela administração. Comportamentos, jornada e critérios PES-EVO-01..09 em `docs/ux-ui/REVISAO-MODULO-01-ACESSOS.md`, seção “Evolução pós-V1 — pessoas e vínculos, 2026-11-21”.
-
-**Próximo passo:** decisão de Produto sobre a proposta concreta, seguida de especificação funcional e detalhamento técnico. Código e testes não foram alterados nesta análise.
-
-## Histórico das revisões
-
-Os registros abaixo descrevem as respectivas datas e versões. A situação vigente é a baseline V1 indicada acima.
-
-
-**Revisão documental:** 2026-11-16. **Branch de referência:** `develop` (`6772243862085ea82acfd4596bdba6288377f842`). **Governança:** `docs/produto/GOVERNANCA.md`. O código e as evidências foram inspecionados documentalmente; os testes não foram reexecutados nesta revisão. Se a `develop` evoluir, reconciliar novamente.
-
-## Separação obrigatória de estados
-
-- **Especificado/aprovado:** decisão oficial na especificação funcional; não implica código.
-- **Implementado localmente:** código e rotas identificados no commit de referência; não implica prontidão para uso real.
-- **QG-3 PASS registrado:** evidência produzida pelo desenvolvimento, sem reexecução ou auditoria independente nesta reconciliação.
-- **Homologado:** aceite humano no escopo e versão identificados. O aceite vigente da V1 está na abertura deste documento; validações de segurança, produção e dispositivos têm evidências e critérios próprios.
-
-## Estado por módulo
-
-| Elemento | Decisão funcional | Estado de implementação/evidência | Pendente antes de uso real |
-|---|---|---|---|
-| 01 — Fundação Familiar | Especificação v1.2 aprovada (CT-20261116-001) | FF-01..FF-06 e correções de UX 01/02 presentes; QG-3 local registrado | Homologação e revisão de segurança/autenticação |
-| 02 — Cuidados da Vovó | Especificação v1.3 aprovada | CV-01..CV-06, programação v1.3 e UX 01/02 presentes; QG-3 local registrado | Lembretes reais ACE-C12, UX em dispositivos e segurança |
-| 03 — Desenvolvimento da Laurinha | Especificação v1.1 aprovada | DL-01..DL-06 no código; QG-3 PASS registrado em `evidencia-qg3-modulo-03.json` | Homologação de uso, permissões e experiência |
-| 04 — Evolução Familiar | Especificação v1.1 aprovada | EF-01..EF-06 no código; QG-3 PASS registrado em `evidencia-qg3-modulo-04.json` | Homologação de histórico, resumos, PDFs e privacidade |
-| Autenticação/autorização | Acesso contextual obrigatório; privacidade por padrão | Sessão MVP cookie httpOnly e autorização contextual presentes; correções SA-01..SA-04 registradas | Revisão de autenticação definitiva, segurança e dispositivos |
-| Experiência móvel | Mobile-first, navegação por pessoas e notificações discretas | UX-01..UX-14 com QG-3 e capturas emuladas registradas | Teste com familiares, acessibilidade e aparelhos reais |
-| Publicação | Nenhuma decisão de homologação para uso real encontrada | Há código local; sem evidência de implantação homologada nesta revisão | Não inserir dados familiares reais sensíveis |
-
-## Evidências documentais verificadas
-
-- Estado de execução: `docs/esteira/estado/atual.json` (Módulo 04 COMPLETED, EF-06, QG-3 PASS).
-- Histórico: `docs/esteira/REGISTRO.md` (em 2026-11-16 registra módulos 01–04 e UX 01/02 como COMPLETED localmente).
-- QG-3 dos módulos 03/04: `docs/esteira/estado/evidencia-qg3-modulo-03.json` e `evidencia-qg3-modulo-04.json`.
-- QG-3 UX: `docs/esteira/estado/evidencia-qg3-ux-01-02.json`, com capturas emuladas de 320, 375, 390 e 1280 px.
-- Código identificado: `apps/api/src/`, `apps/web/src/` e scripts smoke em `apps/api/scripts/`.
-
-**Limite:** registros locais de testes não equivalem a resultados independentes nem provam uso seguro com dados sensíveis. A consulta documental não executou a aplicação, testes ou inspeção de dispositivos.
-
-## Decisões vigentes — apenas referência
-
-- Visão e limites: `docs/produto/DOCUMENTO-MESTRE.md`.
-- Regras por módulo: `docs/modulos/*/ESPECIFICACAO.md` (01 v1.2; 02 v1.3; 03/04 v1.1).
-- UX: `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` e revisões específicas.
-- Arquitetura e pendências técnicas: `docs/arquitetura/ARQUITETURA.md`, `docs/arquitetura/DECISOES.md`.
-
-**Não duplicar regras detalhadas aqui.** Este arquivo consolida estado, riscos e encaminhamentos, e não substitui suas fontes.
-
-**CT-20261116-001 — decisão funcional aprovada e documentada:** gestão de acessos no MVP apresenta apenas Administrador, Responsável e Colaborador e relação quem acompanha quem; sem matriz de permissões na UI. O administrador visualiza somente metadados necessários, e a pessoa acompanhada com conta pode saber quem tem acesso ativo aos próprios dados. Fonte: Módulo 01 v1.2, FUN-04/FUN-07. **Implementação local:** demanda `DEM-CT-20261116-001` COMPLETED na esteira (`GET /acessos`, UI e smokes); **não** equivale a homologação familiar nem revisão de segurança em produção.
-
-## Pendências e encaminhamentos abertos
-
-1. **Segurança/autenticação (Arquitetura + Acompanhamento):** validar mecanismo definitivo, política de acesso/sessões e proteção de dados sensíveis antes de inserir dados reais.
-2. **Lembretes ACE-C12 (Arquitetura + UX + Acompanhamento):** validar canais, permissões, dispositivos físicos e limitações reais. Não contar com notificações como único canal seguro para medicamentos.
-3. **Homologação dos módulos 01–04 (UX + Acompanhamento):** executar jornadas com usuários autorizados, acessibilidade, privacidade, correção de estados e falhas de rede; não equiparar QG-3 emulado à homologação familiar.
-4. **Contratos e dados (Arquitetura):** reconciliar rotas reais com o rascunho de API, critérios de segurança e retenção; mudar comportamento funcional somente via Produto.
-5. **PWA/alternativa móvel (Arquitetura):** decidir após validação dos requisitos funcionais nos aparelhos previstos.
-
-**Condução da governança:** mudanças L1 locais, L2 com avaliação de impacto e L3 somente com aprovação explícita do Produto; transferência CT quando necessária. Ver `docs/produto/GOVERNANCA.md`.
-
-## Limites de segurança e execução
-
-O repositório é público. Não incluir imagens de crianças, prescrições, exames, segredos ou dados reais da família. Esta reconciliação é **somente documental**; não altera implementação, estado da esteira, commits, push, merge ou deploy.
-
-## Atualização de homologação UX — 2026-11-16 (posterior à revisão documental acima)
-
-**Referência da inspeção:** `develop` em `e150b70eb4824ea0fedc4679610e254ed02fc5fe`. A homologação técnica R2 `DEM-HOMOL-UX-20261116-R2` registra `PASS` em `docs/esteira/estado/evidencia-homol-ux-r2-20261116.json`; **não equivale ao aceite UX nem à homologação humana**.
-
-**Resultado do teste de uso relatado pelo responsável pelo produto:** **UX REPROVADA**, por falta de identidade visual/ícones, repetição de textos/instruções, confirmação de ações pouco diferenciada e formulários de medicamentos/consultas competindo com a rotina de Cuidados. Trata-se de novo achado humano após os testes técnicos, sem alterar retrospectivamente os resultados automatizados. O escopo e a proposta de organização estão em `docs/ux-ui/REVISAO-MODULOS-01-02.md` e o padrão aprovado em `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` §4.3.
-
-**Próxima ação:** desenhar e validar as jornadas de Cuidados e Desenvolvimento antes de programar; depois implementar alterações UX delimitadas e repetir homologação técnica e de uso. **Status de experiência: NÃO HOMOLOGADA.** Permanecem as pendências de segurança e dispositivos reais descritas acima.
-
-## Reprovação humana de UX — nova rodada relatada em 2026-11-18
-
-**Status: REPROVADA / NÃO HOMOLOGADA (bloqueador de aceite).** O responsável pelo produto realizou nova avaliação humana e comunicou achados que prevalecem sobre quaisquer QG/PASS técnicos. **Referência de inspeção documental do código:** `develop` em `b639f9920d3bbde083c30fb035da413c6e616ede`; trata-se de leitura estática, não de execução independente das telas. A nova avaliação não deve ser confundida com a reprovação anterior de 2026-11-16.
-
-**Problemas humanos relatados:** (1) áreas Cuidados/Desenvolvimento sem acesso continuam visíveis; (2) cartões de medicamentos e atividades de desenvolvimento exibem situação somente em texto, sem ícone semântico claro de confirmação/participação; (3) notificações de resultado permanecem na tela; (4) campo de edição de vínculo aparece no perfil de acompanhamento, digitável, embora deva pertencer à administração autorizada e ter seleção controlada; (5) textos redundantes em home/perfil; (6) terminologia visual antiga “Colaborador”; (7) página de pessoa repete nome, conta, vínculo e “Áreas disponíveis” apesar da navegação contextual.
-
-**Evidências estáticas verificadas:** `apps/web/src/app/pessoas/[pessoaId]/page.tsx` renderiza áreas indisponíveis como cartões desabilitados (linhas 134–182) e `Accordion Editar vínculo e dados` com `TextInput` aberto no perfil (188–212); `apps/web/src/componentes/feedback.tsx` renderiza `Alert` de sucesso/erro enquanto props existirem, sem expiração/fechamento próprios; `apps/web/src/app/page.tsx` e `apps/web/src/componentes/painel-fundacao.tsx` contêm os textos introdutórios relatados; `apps/web/src/componentes/navegacao-app.tsx` já filtra alguns links por áreas autorizadas, mas a página de perfil não aplica a mesma regra de ocultação; `apps/web/src/lib/api.ts` ainda usa o tipo de apresentação `Colaborador`; `apps/web/src/app/pessoas/[pessoaId]/cuidados/page.tsx` usa texto `Med`/`Cons` como marcadores e status textual; Desenvolvimento exige auditoria visual dos cartões/resultados. Nenhuma constatação presume acesso real indevido no backend, que exige teste direto de autorização.
-
-**Encaminhamento:** corrigir primeiro visibilidade/autorização e edição administrativa, depois estados visuais/feedback e redução de conteúdo duplicado, finalmente comparar as três experiências Integrante/Responsável/Administrador em mobile e desktop e repetir **homologação humana**. Não utilizar dados reais sensíveis antes de segurança e homologação pertinentes. Critérios e backlog detalhados em `docs/ux-ui/REVISAO-MODULOS-01-02.md`.
-
-
-## Aceite humano da primeira rodada corretiva de UX — 2026-11-18
-
-**Resultado: HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO, COM ESCOPO DELIMITADO.** Após a implementação documentada da demanda `DEM-UX-HOM-20261118` (QG-1/QG-2/QG-3 e verifier com PASS técnico registrado), o responsável pelo produto avaliou a interface como significativamente melhor e **aprovou expressamente a primeira revisão corretiva de UX**. Este aceite cobre os ajustes de interação e apresentação identificados em `UX-HOM-01..07` como rodada, **sem declarar concluída toda a UX da plataforma** e sem apagar as reprovações históricas de rodadas anteriores.
-
-**Fora desse aceite, para etapa futura de Fundação Familiar:** (a) administrador não consegue remover pessoas cadastradas; distinguir retirada de acesso, desativação e possível exclusão de cadastro sem perda indevida de histórico; (b) gestão de responsabilidades/acessos ainda confusa e com opção limitada de concessão. Esses itens **não integravam o escopo de `DEM-UX-HOM-20261118`**, logo ficam **REGISTRADOS/PENDENTES**, não reprovam retroativamente esta primeira rodada. Também permanece `UX-HOM-02-SELETOR` (`NEEDS_DECISION`) para opções válidas de vínculo em contexto administrativo. Alterações de regras de pessoa/autorização exigem Produto e Arquitetura segundo governança; não presumir autorização para excluir pessoas nem introduzir matriz granular de permissões.
-
-**Escopo explícito do aceite:** apenas a primeira rodada de apresentação/interação validada humanamente; **não equivale a homologação integral dos Módulos 01–04, segurança de dados reais, autorizações auditadas em produção, notificações em dispositivos físicos ou implantação**. Evidências automatizadas documentadas continuam com seu próprio status; não reexecutadas neste registro. O status anterior `REPROVADA` permanece como **histórico da rodada anterior**, superado **somente para o escopo homologado** por este aceite de 2026-11-18.
-
-**Próxima etapa de UX:** aprofundar a experiência do **Módulo 03 — Desenvolvimento da Laurinha** (biblioteca/atividades, participação, estrelas e recompensas), seguida de homologação humana própria. Não retomar as melhorias administrativas antes de concluir a sequência de UX, salvo risco real de segurança.
-
-## Homologação humana reprovada — Módulo 03, rodada de 2026-11-19
-
-**Resultado comunicado pelo responsável do produto: REPROVADA.** A implementação mais recente foi avaliada humanamente, com quatro achados: (1) falta de organização/agrupamento de brincadeiras por categorias de desenvolvimento; (2) criação de brincadeiras e recompensas deveria ficar em área própria de cadastro; (3) substituir aba `Guardadas` por `Executadas`, movimentando atividade após registro e permitindo reativação pelo Responsável; (4) recompensas em submenu com `Disponíveis` e `Resgatadas`, com opção de repetir um resgate legítimo de recompensa já utilizada.
-
-**Referência documental consultada:** `develop` em `f498694a391f008f0d244caf2b892832d3c146d7`. Esta branch ainda não apresenta evidência inequívoca da última implementação informada; **não atribuir as lacunas ao código não sincronizado**. Inspeção documental nesta data identificou contratos antigos com `guardados`, categorias já enumeradas, participações registradas com histórico e resgates com custo histórico; reconciliar com o workspace e a entrega efetivamente homologada antes de planejar implementação.
-
-**Classificação:** organização por categorias e área de cadastro = UX, com validação da taxonomia/contratos; `Guardadas → Executadas` com transição automática e reativação = **mudança funcional DEV-F03/DEV-F04, L3**; repetição e visão de resgates = **revisão funcional DEV-F06, L3**. Não tratar como alteração de texto sem rever persistência, semântica e autorização.
-
-**Acompanhar em:** `docs/ux-ui/REVISAO-MODULO-03.md`, seção `Reprovação humana — 2026-11-19`. **Status de Módulo 03: UX REPROVADA**, mesmo com eventuais testes técnicos verdes. O aceite humano anterior continua válido **somente** para a primeira rodada corretiva transversal `UX-HOM-01..07`; não se estende ao Módulo 03.
-
-**Pendências administrativas do Módulo 01** (remoção de pessoas, gestão de acessos e seletor de vínculos) continuam adiadas para depois da sequência de UX, salvo risco de segurança.
-
-## Aprovação funcional L3 do Módulo 03 — 2026-11-19
-
-**Decisões `CT-20261119-001` e `CT-20261119-002`: APROVADAS PELO PRODUTO e DOCUMENTADAS** na especificação funcional `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md` v1.2. Brincadeiras migram de Explorar para Executadas após participação confirmada e voltam somente com disponibilização autorizada; recompensas migram de Disponíveis para Resgatadas após resgate confirmado e podem voltar para novo resgate **com novo débito**. Histórico, estrelas, custos efetivos e autoria anteriores são preservados. Tentativas repetidas e concorrência exigem idempotência, autorização e ausência de saldo negativo.
-
-**Não significa implementação concluída ou UX homologada.** A reprovação humana de 2026-11-19 segue vigente. A primeira revisão corretiva transversal de UX continua homologada apenas no próprio escopo.
-
-**Arquitetura (2026-11-19):** `ADR-013` registrada em `docs/arquitetura/DECISOES.md` e refletida em `ARQUITETURA.md`.  
-**Implementação técnica (2026-11-19):** demanda `DEM-CT-20261119-001-002` **COMPLETED** na esteira (QG-1/2/3 + verifier PASS; evidência `docs/esteira/estado/evidencia-ct-dl-exec-rec-20261119.json`). Código local ainda **sem commit**. Homologação humana do Módulo 03 permanece **PENDING_HUMAN** / UX **REPROVADA** até novo aceite.
-
-## Nova reprovação humana — Módulo 03, revisão de UX R3 (2026-11-19)
-
-**Status: REPROVADA / NÃO HOMOLOGADA.** Após implementação de Executadas/Resgatadas, o responsável pelo produto identificou: (1) troca indevida de aba depois de marcar brincadeira ou resgatar recompensa — apenas o item deve mudar de lista; (2) Cadastros não foi convertido em submenu do menu lateral contextual; (3) categorias de desenvolvimento não foram disponibilizadas como filtro/campo de criação. **Inspeção de código:** `develop` no commit `28c32fa4038a497fbcb74cf5ecf4047f465c5dee` confirma seleções automáticas de abas, formulário de cadastros na página e ausência de filtro de categorias. Os mecanismos existentes de estados persistidos e dados funcionais não são revogados pela reprovação da UX.
-
-**Correção:** ver `docs/ux-ui/REVISAO-MODULO-03.md`, IDs `DEV-UX-HOM-R3-01..03`. São correções de interação e navegação, preservando DEV-F03/F04/F06 v1.2 e ADR-013. A tarefa técnica só poderá ser declarada pronta após testes; aceite humano exige nova avaliação. Primeira homologação transversal UX continua homologada no escopo próprio; pendências administrativas do Módulo 01 seguem adiadas.
-
-## Homologação humana APROVADA — Desenvolvimento (UX R3), 2026-11-19
-
-**Resultado: HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO no escopo do Módulo 03 — correções R3.** Após a implementação dos itens `DEV-UX-HOM-R3-01..03`, o responsável do produto comunicou expressamente **“alterações feitas, validação humana aprovada”**. Essa decisão **supera a reprovação humana anterior apenas para o escopo UX do Desenvolvimento**; preservam-se os registros de reprovação anteriores como histórico e os aceites de versões anteriores sem retroação.
-
-**Revisão do código disponível na `develop`:** commit `7dad200a85feb5b2534b941ad31581089f941812` — `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/page.tsx` contém filtragem por categoria e fluxo de registro/resgate sem seleção programática automática da aba de destino; `apps/web/src/componentes/navegacao-app.tsx` inclui entrada contextual `Cadastros`; `apps/web/src/app/pessoas/[pessoaId]/desenvolvimento/cadastros/page.tsx` contém formulário de brincadeira com categoria opcional e de recompensa. A esteira registra `DEM-UX-HOM-R3-20261119` tecnicamente `COMPLETED` / QG+verifier `PASS`, evidências locais não reexecutadas neste registro. **O aceite humano foi comunicado pelo responsável**, não inferido de código, screenshots ou testes técnicos.
-
-**Status de UX do Módulo 03: HOMOLOGADA NA RODADA R3.** Não equivale a homologação integral de segurança, autorização em produção, todos os módulos, dispositivos não avaliados ou liberação para dados familiares reais. Pendências administrativas do Módulo 01 continuam postergadas. **Próxima revisão UX planejada:** Módulo 04 — Evolução Familiar (Histórico, Resumo e PDF), orientada pela especificação aprovada, sem iniciar código antes da avaliação.
-
-## Repriorização aprovada — Módulo 01 antes do Módulo 04 (2026-11-19)
-
-O responsável pelo produto solicitou **priorizar a revisão de permissões e a experiência administrativa do Módulo 01 — Fundação Familiar**, diante de falhas percebidas, e **adiar temporariamente a revisão UX do Módulo 04 — Evolução Familiar**. Essa mudança de prioridade não revoga a homologação humana de UX do Módulo 03 nem autoriza mudanças de permissões por inferência.
-
-**Inspeção estática de `develop` em `fe4c8cbc3f529f3a9cdbba1bf73bc84c386c7e24`:** a tela `painel-gerenciar-familia.tsx` oferece uma única concessão direta `responsavel_desenvolvimento` para `usuario.id` (administrador logado), convite predefinido `colaboradora_cuidados` e revogação de acessos; já o serviço `servico-autorizacoes.ts` aceita `usuarioId` de outro usuário da mesma família e responsabilidades técnicas diversas sob verificação de administrador. **Lacuna confirmada de cobertura/clareza da UI; não é prova de bypass de autorização.** O Módulo 01 v1.3 mantém três rótulos de apresentação, autorização contextual, ausência de matriz granular e proibição de acesso automático a dados sensíveis pelo Administrador.
-
-**Próxima etapa prioritária:** revisão conjunta de UX, Produto, Arquitetura e Qualidade com cenários de administrador, responsável, integrante e revogação, começando por relatos concretos do teste humano e comparação com controles do servidor. Não implementar concessões adicionais, alteração de papel ou exclusão de pessoas sem decisão funcional e avaliação de segurança. Registrar achados e propostas em `docs/ux-ui/REVISAO-MODULO-01-ACESSOS.md`. **Módulo 04 permanece próximo na fila após resolução/homologação do Módulo 01.**
-
-**Parecer de Arquitetura (2026-11-19), `develop` @ `efee45267afcfb5f7312b12db268377a1e644dc2`:** `CT-20261119-003` reconciliado na ADR-014. As combinações concedíveis são Cuidados/Responsável, Cuidados/Integrante e Desenvolvimento/Responsável, mapeadas às responsabilidades já existentes. Administrador permanece fora desse fluxo, com preservação do último administrador no servidor. Não há decisão funcional nova para o Produto. Exclusão de pessoa continua pendência própria. Código de produto não foi alterado neste parecer; o Módulo 01 segue sem homologação desta rodada.
-
-## Nova reprovação humana e direção funcional do Módulo 01 — 2026-11-20
-
-**Resultado humano: REPROVADA** após nova implementação das correções administrativas, conforme informado pelo responsável do Produto. Queixa principal: confusão entre cadastro de pessoa, conta de usuário e responsabilidades; proposta de distinção intuitiva entre pessoa acompanhada, participante e acesso, incluindo autoacompanhamento e abertura da rotina após login. **Implementação técnica inspecionada:** `develop` @ `687eb25afd41f519e9e473ef49169008e94ae2e2`. Estado da esteira: `DEM-M01-ACESSOS-CORR-20261120` com QG-1/QG-2/verifier `PASS`, homologação `PENDING_HUMAN` no arquivo de estado; o retorno humano informado nesta conversa é **REPROVADA**, superando esse estado para o escopo examinado, sem alterar indevidamente os resultados técnicos históricos.
-
-**Decisão funcional de Produto:** APROVADA a **direção conceitual** de pessoa acompanhada com/sem conta, conta podendo acompanhar a si/outros/ambos, responsabilidade contextual não exclusiva, cadastro mínimo com eventual convite/ativação de conta e navegação pós-login contextual. Registrada no Documento Mestre v1.3 e Especificação do Módulo 01 v1.4. **Não** foram aprovados novos gates/checkboxes granulares, tipo Ator exclusivo ou exigência de senha/e-mail para toda pessoa. **Ainda pendem** análise de segurança da associação conta↔pessoa existente, poderes de autoacompanhamento além da leitura e detalhamento de navegação para múltiplas áreas. Encaminhar a Arquitetura e UX antes de implementação, sem violar ADR-014.
-
-**Prioridade:** Módulo 01; Módulo 04 permanece pausado. Aceite humano UX do Módulo 03 preservado no escopo já aprovado.
-
-## Fechamento de Produto — cadastro e autoacompanhamento, 2026-11-20
-
-**Decisões APROVADAS e DOCUMENTADAS** no Documento Mestre v1.4 e na especificação do Módulo 01 v1.5, seção 11. O responsável informou que o sistema ainda não foi lançado e não possui usuários em utilização. Tratamento de contas legadas fica dispensado nesta entrega; o fluxo ordinário de cadastro/ativação mantém a identidade Pessoa/Usuario consistente.
-
-**Autoacompanhamento:** manter as capacidades efetivas atuais, inclusive programação e exportação dependentes de responsabilidade contextual. As duas pendências do alinhamento anterior estão encerradas para esta entrega. A entrada pós-login deriva de pessoa/área realmente autorizadas, incluindo acesso próprio. O detalhamento de UX e implementação segue pela esteira, com referência à especificação v1.5 e ao esclarecimento da ADR-014.
-
-**Evidência desta atualização:** decisão expressa do responsável nesta conversa, com autorização explícita de commit documental no GitHub. Base da revisão estática develop @ 89f47d38a5b6e5d05f8145545bfc6b2327f98db8. Esta atualização altera documentação; código e testes não foram executados neste fechamento.
-
-**Próximo passo:** task-routing para executar a simplificação aprovada do Módulo 01, testes pertinentes e nova homologação humana. Estado humano permanece REPROVADA nesta rodada. Módulo 03 conserva o aceite R3 e Módulo 04 permanece pausado.
-
-## Homologação humana APROVADA — simplificação do Módulo 01, 2026-11-20
-
-**Resultado comunicado expressamente pelo responsável do Produto: APROVADA.** O responsável informou nesta conversa “Foi feito a atualização e a homologação foi aprovada.” O aceite corresponde à atualização de cadastro, conta, acessos/autoacompanhamento e entrada contextual do Módulo 01 v1.5, demanda `DEM-M01-SIMP-CAD-20261120`, critério humano `M01-SIMP-HOM`.
-
-**Referência disponível no repositório:** `develop` @ `5260fc672f3b207e659c888ac78e436e0548f8ae`, commit da simplificação do Módulo 01. A vinculação desta comunicação à demanda considera a continuidade da atualização tratada nesta conversa. O aceite foi informado pelo responsável; esta atualização documental não reproduziu a avaliação nem reexecutou testes.
-
-**Situação vigente desta rodada: HOMOLOGADA PELO RESPONSÁVEL DO PRODUTO.** Este registro supera a reprovação e a espera de aceite humano para o escopo desta atualização, preservando os registros históricos. Os resultados técnicos permanecem os registrados pela esteira, inclusive a distinção entre verifier oficial bloqueado e verificação independente via shell registrada como PASS. Pendências de segurança/autenticação, produção e dispositivos mantêm seus próprios critérios.
-
-**Próxima etapa da sequência aprovada:** retomar a revisão UX do Módulo 04 — Evolução Familiar (Histórico, Resumo e PDF). Pendências próprias do Módulo 01, como exclusão/desativação de pessoa e seletor de vínculos, continuam sujeitas ao encaminhamento específico. Aceite R3 do Módulo 03 preservado.
-
-## Retomada da revisão UX do Módulo 04 — 2026-11-20
-
-**Estado desta rodada: EM REVISÃO; proposta de experiência aguardando validação.** Revisão estática na develop @ 64a4a0694d6d370267d8b7ff7d381aa484bec97b, após o aceite humano do Módulo 01. Achados e proposta registrados em docs/ux-ui/REVISAO-MODULO-04.md.
-
-**Achados prioritários** seleção de prévia diferente do PDF, corte de linhas no gerador de página única, limites silenciosos de contagem/listagem, representação da capacidade de exportação e cobertura dos registros previstos no resumo. Troca rápida de contexto e combinação de permissões exigem testes. A aplicação, os testes e os PDFs não foram executados nesta revisão.
-
-**Próximo encaminhamento** Produto valida a composição de Histórico/Resumo/prévia. Arquitetura e Qualidade avaliam as correções de aderência à especificação v1.1; alterações funcionais adicionais seguem governança. Homologações anteriores mantêm seu escopo.
-
-## Direção UX do Módulo 04 APROVADA — 2026-11-20
-
-**APROVADA expressamente pelo responsável do Produto** a organização apresentada de Histórico, Resumo e PDF. Direção e plano de execução documentados em `docs/ux-ui/REVISAO-MODULO-04.md`, seções 1 e 6. Histórico por dia com filtros compactos; Resumo contextual por pessoa/período; preparar PDF, conferir e baixar o conteúdo completo autorizado.
-
-**Próximo passo** rotear e planejar correções EVO-REV-01..08 com a esteira existente, implementar, testar e encaminhar à homologação humana. A especificação funcional v1.1 permanece a fonte dos requisitos. Situação desta rodada é **DIREÇÃO UX APROVADA / IMPLEMENTAÇÃO PENDENTE / HOMOLOGAÇÃO HUMANA PENDENTE**.
-
-Este registro documenta a decisão de Produto, com base na develop @ c75800f0e14090434a71a5f038ec2cf09ac1f9d5. Código e testes não foram executados nesta atualização documental. Aceites anteriores mantêm seus próprios escopos.
+**Liberado:** homologação e testes restritos pela equipe, com dados fictícios.  
+**Não afirmado/liberado:** produção pública, uso real de dados sensíveis, notificações clínicas confiáveis ou segurança auditada.

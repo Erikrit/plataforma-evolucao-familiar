@@ -4,7 +4,7 @@
 **Data de referência:** 2026-11-21, com atualização E5 em 2026-11-22\
 **Base desta aprovação e planejamento:** `develop` @ `9193f1660ec2fa06ebdd19d633cc83b86e3a828e`  
 **Estado:** direção integrada e sequência E1–E7 **APROVADAS pelo responsável do Produto em 2026-11-21**. O recorte E5 está consolidado no Módulo 03 §13 para planejamento. Envio de dados pessoais à IA e regras clínicas exigem decisões próprias. As entregas e os aceites humanos constam em [STATUS-E-ESCOPO.md](STATUS-E-ESCOPO.md).\
-**Baseline:** a V1 homologada permanece preservada em `STATUS-E-ESCOPO.md`; este plano não declara implementação nem homologação das evoluções.
+**Leitura atual (2026-11-24):** este documento preserva o planejamento aprovado em 2026-11-21/22. Os recortes E1–E5 e o catálogo de 8 jogos/40 fases foram incorporados à **V1 homologada para testes restritos**; não reexecutar suas etapas como se fossem futuras. E6/E7 com IA continuam como evolução posterior, sujeita a escopo e aprovações próprias. Estado vigente e pendências: `STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo e condução
 
