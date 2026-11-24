@@ -16,6 +16,12 @@ Branches: `develop` é a referência de desenvolvimento; `master` é a branch pa
 
 Não ler integralmente o `atual.json` (histórico extenso) nem o `REGISTRO.md` na inicialização: extrair apenas `revisao`, `demanda`, estado ativo, critérios, fingerprint e `proximaAcao` por uma leitura estruturada. **Ao gravar, preservar todos os demais campos existentes**, sem truncar histórico. Não copiar documentos inteiros para prompts.
 
+Exemplo local de leitura curta (sem modificar arquivos):
+
+```bash
+node -e 'const s=require("./docs/esteira/estado/atual.json"); console.log(JSON.stringify({revisao:s.revisao,demanda:s.demanda,estado:s.estado,proximaAcao:s.proximaAcao},null,2))'
+```
+
 ## Esteira existente — sem agentes adicionais
 
 - `task-routing`: classificar e verificar a aprovação (L1/L2/L3).
