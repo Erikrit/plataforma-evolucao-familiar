@@ -166,4 +166,4 @@ A pessoa possui uma única entrada **Resumo** e período comum de leitura. Apres
 | E3-RES-05 | Prévia/PDF mantêm a seleção autorizada do tipo escolhido e dados completos; correções/vigências de origem são respeitadas, sem embutir laudos por padrão. |
 | E3-HOM | Homologar baixar exame no celular e compreender o período sem redigitar informação, incluindo navegação, retorno e exportação pertinente. |
 
-Fora da E3: IA, semáforo geral de saúde, metas de uso e formulário adicional para alimentar resumo. Desenho em `docs/ux-ui/PROPOSTA-EVOLUCAO-POS-V1.md`, seção E3; plano em `docs/esteira/planejamento/e3-exames-resumo.md`.
+Fora da E3: IA, semáforo geral de saúde, metas de uso e formulário adicional para alimentar resumo. O desenho de UX vigente consta no Guia de Experiência; implementação e aceite da E3 estão consolidados no STATUS.
