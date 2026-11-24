@@ -1,5 +1,7 @@
 # Revisão de UX — módulos implementados 01 e 02
 
+> **REGISTRO HISTÓRICO — NÃO É DEMANDA ATIVA.** Este arquivo registra uma rodada de análise, correção ou homologação anterior à V1 consolidada. Termos como “pendente”, “reprovada” ou “não implementada” descrevem **aquela rodada**, não o estado atual. A V1 está homologada funcionalmente e em testes restritos; consultar `docs/produto/STATUS-E-ESCOPO.md`, a especificação vigente do módulo e o código antes de reabrir trabalho. Não executar este plano por padrão.
+
 **Referência auditada:** branch `develop` (2026-11-15).  
 **Estado:** correções UX-01..UX-14 implementadas; QG-3 local PASS (capturas emuladas + smokes). Homologação com usuários/dispositivos reais e ACE-C12 ainda pendentes.  
 **Tipo de evidência:** implementação local + typecheck/build + capturas emuladas; não confundir com homologação em aparelho físico do usuário.  
