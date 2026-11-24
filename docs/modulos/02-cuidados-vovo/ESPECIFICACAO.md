@@ -185,3 +185,12 @@ Descrição permanece obrigatória; data e arquivo opcionais, consulta relaciona
 | E3-EX-05 | Cadastro mantém descrição mínima, data/arquivo opcionais; não interpreta resultados nem exige transcrição. |
 
 Resumo e sua prévia/PDF continuam de propriedade do Módulo 04 v1.2. A exclusão do visualizador de exames não remove a conferência da prévia do relatório. Fora: visualizador embutido, IA, OCR, diagnóstico, nova classificação médica e migração de armazenamento como pré-condição. A implementação E3 integra a V1 homologada; aceites vigentes no STATUS.
+
+## 11. Propostas de melhoria UX — consultas e exames (levantamento de testes em 2026-11-24)
+
+**Estado: EM ANÁLISE / NÃO APROVADO COMO NOVA REGRA FUNCIONAL.** Este bloco registra achados da equipe de testes e orienta a frente UX. Até decisão expressa do Produto, **prevalecem CUI-F05, CUI-F06, seção 6 e E3-EX-05**: descrição obrigatória e categorias não obrigatórias; não alterar API, banco, DTOs, validações ou dados por inferência. A homologação funcional da V1 permanece válida.
+
+- **CUI-UX-P01 — Classificação simples:** avaliar categoria **obrigatória** para consultas e exames, com **descrição complementar opcional** e apenas opções frequentes, compreensíveis, eventualmente “Outro”. UX deve propor categorias mínimas adequadas a cada tipo e verificar o significado dos registros sem texto; Produto aprova ou ajusta a regra antes da implementação.
+- **CUI-UX-P02 — Anexo do exame:** revisar o layout do botão de anexar, área de toque, nome do arquivo selecionado, troca/remoção e estados de erro/carregamento. É melhoria de experiência, preservando anexo opcional, download privado e proibição de visualizador interno ou exposição de dados.
+
+**Dependência:** a frente UX apresenta desenho, critérios de aceite e impacto sobre contratos existentes. Se a categoria obrigatória for aprovada, ajustar numa única alteração coerente as regras funcionais conflitantes acima, permissões, validação frontend/backend e testes. Não reclassificar retroativamente exames ou consultas existentes sem decisão.
