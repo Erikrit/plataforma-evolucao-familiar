@@ -3,7 +3,7 @@
 **Versão:** 2.4 — fluxo de reconhecimento, estrelas e recompensas do Desenvolvimento aprovado em 2026-11-18  
 **Referência:** `develop`; decisões de UX validadas em conversa.  
 **Status:** referência de UX/UI para os quatro módulos existentes da V1; não é, isoladamente, evidência de implementação ou homologação. Consultar `docs/produto/STATUS-E-ESCOPO.md` para o estado de testes vigente.  
-**Revisão integrada de Cuidados para entrega à esteira:** `docs/ux-ui/REVISAO-INTEGRADA-CUIDADOS.md` (evidências, divergências e proposta incremental, sem alterar regras canônicas).  
+**Diretrizes atuais de Cuidados:** nesta fonte e no Módulo 02; revisões corretivas anteriores foram homologadas ou supersedidas e permanecem apenas no histórico Git.  
 **Fontes funcionais:** `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md` e `docs/modulos/*/ESPECIFICACAO.md`.
 
 ## 1. Objetivo e limites
@@ -167,7 +167,7 @@ Padrão para cada componente: texto legível, feedback em andamento, estado desa
 - **Autorização e privacidade:** não exibir ações nem dados infantis não autorizados; o rótulo visual Integrante ou o papel Administrador não concede autorização. Colaboradora externa da Vovó não recebe acesso por presunção. A experiência única **não altera o contrato de perfis**, vínculos ou permissões.
 - **Resultado e reconhecimento aprovados em 2026-11-18:** depois da confirmação efetiva do registro de `Concluiu` ou `Participou`, apresentar feedback alegre e discreto com nome da brincadeira, resultado e quantidade **real** de estrelas concedidas pelo servidor. Não inventar pontos antes de persistir, não fazer a animação mascarar erro, não gerar confirmação extra para visualizar estrelas. Diferenciar iconografia de `Concluiu` e `Participou`, sem julgamento de desempenho.
 - **Saldo e recompensas aprovados em 2026-11-18:** saldo visível mas compacto, próximo à experiência de brincadeiras; recompensas acessadas em destino secundário simples, sem sugestão de resgate obrigatório nem bloqueio de brincadeiras. Distinguir **ver/escolher/resgatar** de **cadastrar/gerenciar**; só exibir cada ação se efetivamente autorizada. Resgate pede confirmação proporcional e atualiza saldo após persistência; nunca permitir saldo negativo nem cobrança sobre criança. Não expor matriz de permissões ou trocar perfil para organizar.
-- **Limites de validação:** esta direção de UX foi aprovada, mas **não** é homologação da tela implementada, nem mudança de pontuação, requisitos, autorização ou contrato. As regras funcionais de DEV-F04..F06 continuam prevalecendo. Ver `docs/ux-ui/REVISAO-MODULO-03.md`.
+- **Limites de validação:** esta direção de UX foi aprovada, mas **não** é homologação da tela implementada, nem mudança de pontuação, requisitos, autorização ou contrato. As regras funcionais de DEV-F04..F06 continuam prevalecendo. O estado corrente da V1 é mantido em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 8. Governança de decisões
 
