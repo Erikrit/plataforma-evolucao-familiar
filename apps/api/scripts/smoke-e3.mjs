@@ -166,6 +166,7 @@ try {
       method: "POST",
       headers: hA,
       body: JSON.stringify({
+        categoria: "sangue",
         descricao: `Hemograma E3 ${stamp}`,
         data: new Date(`${isoDia(0)}T12:00:00`).toISOString(),
         anexoId,
@@ -181,6 +182,7 @@ try {
       method: "POST",
       headers: hA,
       body: JSON.stringify({
+        categoria: "urina",
         descricao: `Exame sem arquivo ${stamp}`,
       }),
     }),

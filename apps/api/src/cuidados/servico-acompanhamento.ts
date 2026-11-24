@@ -8,6 +8,7 @@ import { ServicoPrisma } from "../prisma/servico-prisma";
 import { ServicoAutorizacoes } from "../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
 import { chaveOcorrencia } from "./permissoes-cuidados";
+import { tituloConsulta, tituloExame } from "./categorias-compromissos";
 
 @Injectable()
 export class ServicoAcompanhamento {
@@ -116,7 +117,7 @@ export class ServicoAcompanhamento {
           tipo: "consulta",
           dominio: "cuidados" as const,
           quando: c.dataHora,
-          resumo: `${c.especialidadeOuDescricao} (${this.rotuloStatusConsulta(c.status)})`,
+          resumo: `${tituloConsulta(c)} (${this.rotuloStatusConsulta(c.status)})`,
           origemId: c.id,
           detalhe: [
             c.profissional ? `Profissional: ${c.profissional}` : null,
@@ -129,7 +130,7 @@ export class ServicoAcompanhamento {
           tipo: "exame",
           dominio: "cuidados" as const,
           quando: e.criadoEm,
-          resumo: e.descricao,
+          resumo: tituloExame(e),
           origemId: e.id,
           ...(podeAnexos && e.anexoId ? { anexoId: e.anexoId } : {}),
           detalhe:
@@ -340,7 +341,7 @@ export class ServicoAcompanhamento {
       itens.push({
         tipo: "consulta",
         consultaId: c.id,
-        titulo: c.especialidadeOuDescricao,
+        titulo: tituloConsulta(c),
         horario: c.dataHora.toISOString().slice(11, 16),
         estado: "agendada",
         insistente: false,
@@ -547,13 +548,17 @@ export class ServicoAcompanhamento {
       },
       consultas: consultas.map((c) => ({
         id: c.id,
+        categoria: c.categoria,
         especialidadeOuDescricao: c.especialidadeOuDescricao,
+        titulo: tituloConsulta(c),
         dataHora: c.dataHora,
         status: c.status,
       })),
       exames: exames.map((e) => ({
         id: e.id,
+        categoria: e.categoria,
         descricao: e.descricao,
+        titulo: tituloExame(e),
         data: e.data,
         criadoEm: e.criadoEm,
         temDocumento: podeAnexos && Boolean(e.anexoId),
@@ -877,7 +882,7 @@ export class ServicoAcompanhamento {
           ? ["- Nenhuma neste período."]
           : c.consultas.map(
               (x) =>
-                `- ${x.especialidadeOuDescricao} · ${this.formatarQuandoLocal(x.dataHora)} (${this.rotuloStatusConsulta(x.status)})`,
+                `- ${x.titulo} · ${this.formatarQuandoLocal(x.dataHora)} (${this.rotuloStatusConsulta(x.status)})`,
             )),
       );
       if (c.listagens.consultas.limitada) {
@@ -898,7 +903,7 @@ export class ServicoAcompanhamento {
               const doc = e.temDocumento
                 ? " · documento disponível no app (não incluído)"
                 : "";
-              return `- ${e.descricao} · ${quando}${doc}`;
+              return `- ${e.titulo} · ${quando}${doc}`;
             })),
       );
       if (c.listagens.exames.limitada) {

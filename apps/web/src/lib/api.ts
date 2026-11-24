@@ -572,6 +572,7 @@ export async function listarMedicamentos(pessoaId: string) {
 
 export type ConsultaLista = {
   id: string;
+  categoria?: string | null;
   especialidadeOuDescricao: string;
   dataHora: string;
   status: string;
@@ -594,6 +595,7 @@ export async function listarConsultas(pessoaId: string) {
 
 export type ExameLista = {
   id: string;
+  categoria?: string | null;
   descricao: string;
   data: string | null;
   consultaId?: string | null;
@@ -713,7 +715,11 @@ export async function registrarAtividadeApoio(
 
 export async function criarConsulta(
   pessoaId: string,
-  corpo: { especialidadeOuDescricao: string; dataHora: string },
+  corpo: {
+    categoria: string;
+    especialidadeOuDescricao?: string;
+    dataHora: string;
+  },
 ) {
   const resposta = await fetchApi(`/pessoas/${pessoaId}/consultas`, {
     method: "POST",
@@ -744,7 +750,8 @@ export async function atualizarConsulta(
 export async function criarExame(
   pessoaId: string,
   corpo: {
-    descricao: string;
+    categoria: string;
+    descricao?: string;
     data?: string | null;
     consultaId?: string | null;
     anexoId?: string | null;
@@ -1009,13 +1016,17 @@ export type ResumoCuidados = {
   esclarecimento: string;
   consultas: {
     id: string;
+    categoria?: string | null;
     especialidadeOuDescricao: string;
+    titulo?: string;
     dataHora: string;
     status: string;
   }[];
   exames: {
     id: string;
+    categoria?: string | null;
     descricao: string;
+    titulo?: string;
     data?: string | null;
     criadoEm: string;
     temDocumento?: boolean;

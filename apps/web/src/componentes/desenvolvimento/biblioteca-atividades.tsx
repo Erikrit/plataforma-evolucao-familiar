@@ -6,10 +6,10 @@ import {
   Alert,
   Button,
   Card,
-  Chip,
   Drawer,
   Group,
   SegmentedControl,
+  Select,
   Stack,
   Text,
   Textarea,
@@ -30,11 +30,9 @@ import {
   disponibilizarDesafio,
   listarDesafios,
   listarSugestoesDesafio,
-  obterEstrelas,
   registrarParticipacaoDesafio,
   renovarSugestoesDesafio,
   type DesafioResumo,
-  type EstrelasResumo,
   type SugestaoDesafio,
 } from "@/lib/api";
 import { novaChaveOperacao } from "@/lib/chave-operacao";
@@ -57,7 +55,11 @@ const OPCOES_CATEGORIA = [
 
 type FiltroBrincadeira = "explorar" | "executadas";
 
-export function BibliotecaAtividades() {
+export function BibliotecaAtividades({
+  aoSaldoAlterado,
+}: {
+  aoSaldoAlterado?: () => void;
+} = {}) {
   const { pessoaId, caminho, podeOrganizar } = useDesenvolvimento();
   const router = useRouter();
   const parametros = useSearchParams();
@@ -76,7 +78,6 @@ export function BibliotecaAtividades() {
   const [carregandoSugestoes, setCarregandoSugestoes] = useState(true);
   const [renovando, setRenovando] = useState(false);
   const [escolhendoId, setEscolhendoId] = useState<string | null>(null);
-  const [estrelas, setEstrelas] = useState<EstrelasResumo | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [selecionado, setSelecionado] = useState<DesafioResumo | null>(null);
@@ -124,18 +125,9 @@ export function BibliotecaAtividades() {
     }
   }, [pessoaId, filtro, categoria, chaveLista]);
 
-  const carregarSaldo = useCallback(async () => {
-    try {
-      setEstrelas(await obterEstrelas(pessoaId));
-    } catch {
-      setEstrelas(null);
-    }
-  }, [pessoaId]);
-
   useEffect(() => {
     void carregarSugestoes();
-    void carregarSaldo();
-  }, [carregarSugestoes, carregarSaldo]);
+  }, [carregarSugestoes]);
 
   useEffect(() => {
     void carregarDesafios();
@@ -200,11 +192,8 @@ export function BibliotecaAtividades() {
       setChaveExecucao(novaChaveOperacao());
       focarCatalogoAoFechar.current = true;
       setSelecionado(null);
-      await Promise.all([
-        carregarDesafios(),
-        carregarSaldo(),
-        carregarSugestoes(),
-      ]);
+      await Promise.all([carregarDesafios(), carregarSugestoes()]);
+      aoSaldoAlterado?.();
     } catch (e) {
       setErro(
         mensagemErroAmigavel(e, "Não foi possível registrar. Tente de novo."),
@@ -303,11 +292,6 @@ export function BibliotecaAtividades() {
 
   return (
     <Stack gap="lg">
-      {estrelas ? (
-        <Text size="sm" fw={600} c="azul" aria-live="polite">
-          Saldo: {estrelas.saldoDisponivel} {estrelas.saldoDisponivel === 1 ? "estrela" : "estrelas"}
-        </Text>
-      ) : null}
       <MensagemFeedback erro={selecionado ? null : erro} sucesso={sucesso} />
       <SegmentedControl
         fullWidth
@@ -321,19 +305,15 @@ export function BibliotecaAtividades() {
       />
       <Stack gap="sm" id="catalogo-atividades" style={{ scrollMarginTop: "5rem" }}>
         <Title order={2} ref={tituloCatalogo} tabIndex={-1}>{tituloLista}</Title>
-        <Chip.Group
-          multiple={false}
+        <Select
+          label="Categoria"
+          allowDeselect={false}
           value={categoria}
-          onChange={(valor) => atualizarFiltros(filtro, valor || TODAS_CATEGORIAS)}
-        >
-          <Group gap="xs" role="radiogroup" aria-label="Categoria">
-            {OPCOES_CATEGORIA.map((opcao) => (
-              <Chip key={opcao.value} value={opcao.value} size="sm">
-                {opcao.label}
-              </Chip>
-            ))}
-          </Group>
-        </Chip.Group>
+          data={OPCOES_CATEGORIA}
+          onChange={(valor) =>
+            atualizarFiltros(filtro, valor || TODAS_CATEGORIAS)
+          }
+        />
         {erroDesafios ? (
           <Stack align="flex-start">
             <EstadoVazio titulo="Atividades indisponíveis" descricao={erroDesafios} />

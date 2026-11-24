@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useState } from "react";
 import {
-  Badge,
   Button,
   Card,
   Container,
+  Drawer,
   Progress,
   SegmentedControl,
   Select,
@@ -17,13 +17,21 @@ import {
   Title,
   UnstyledButton,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useDesenvolvimento } from "@/componentes/contexto-desenvolvimento";
+import { CabecalhoBiblioteca } from "@/componentes/desenvolvimento/cabecalho-biblioteca";
+import { IconeJogoCatalogo } from "@/componentes/desenvolvimento/icone-jogo-catalogo";
 import { NavegacaoBiblioteca } from "@/componentes/desenvolvimento/navegacao-biblioteca";
 import { CatalogoJogosAutorizado } from "@/componentes/desenvolvimento/jogos/catalogo-jogos";
 import estilosJogos from "@/componentes/desenvolvimento/jogos/jogos.module.css";
 import { EstadoCarregando, EstadoVazio } from "@/componentes/feedback";
 import { coresPef } from "@/tema/mantine";
 import type { FaseJogoResumo, JogoResumo } from "@/lib/api";
+import {
+  jogoComTodasFasesConcluidas,
+  nomeCurtoJogo,
+  primeiraFasePendente,
+} from "@/lib/catalogo-visual-jogos";
 import { ROTULOS_CATEGORIA_DESENVOLVIMENTO } from "@/lib/rotulos-experiencia";
 import {
   categoriaDosJogos,
@@ -88,160 +96,131 @@ function fasesVisiveis(jogo: JogoResumo, filtro: FiltroFasesJogos) {
   return jogo.fases.filter((fase) => faseCorrespondeAoFiltro(fase, filtro));
 }
 
-function faseInicial(fases: FaseJogoResumo[]) {
-  return (
-    fases.find((fase) => fase.estado !== "concluida")?.numero ??
-    fases[0]?.numero ??
-    null
-  );
-}
-
-function BarraProgressoFases({
-  concluidas,
-  total,
+function ItemCatalogoJogo({
+  jogo,
+  consulta,
+  biblioteca,
 }: {
-  concluidas: number;
-  total: number;
+  jogo: JogoResumo;
+  consulta: string;
+  biblioteca: string;
 }) {
+  const router = useRouter();
+  const ehCelular = useMediaQuery("(max-width: 47.99em)", true);
+  const [escolhaAberta, setEscolhaAberta] = useState(false);
+  const concluidas = jogo.fases.filter((fase) => fase.estado === "concluida")
+    .length;
+  const total = jogo.fases.length;
+  const completo = jogoComTodasFasesConcluidas(jogo.fases);
+  const pendente = primeiraFasePendente(jogo.fases);
+  const nomeCurto = nomeCurtoJogo(jogo.id, jogo.nome);
   const percentual = total > 0 ? (concluidas / total) * 100 : 0;
-  const rotulo = `${concluidas} de ${total} fases concluídas`;
+
+  function aoTocarIcone() {
+    if (completo || pendente == null) {
+      setEscolhaAberta(true);
+      return;
+    }
+    router.push(
+      `${biblioteca}/${jogo.id}/fases/${pendente}/jogar${consulta}`,
+    );
+  }
+
   return (
-    <Stack gap={4} className={estilosJogos.barraProgressoJogo}>
+    <Stack gap={6} className={estilosJogos.itemCatalogo}>
+      <UnstyledButton
+        type="button"
+        className={estilosJogos.miniaturaJogo}
+        aria-label={jogo.nome}
+        onClick={aoTocarIcone}
+      >
+        <span className={estilosJogos.miniaturaIcone}>
+          <IconeJogoCatalogo jogoId={jogo.id} />
+        </span>
+        <Text
+          component="span"
+          size="xs"
+          fw={600}
+          ta="center"
+          lineClamp={2}
+          className={estilosJogos.miniaturaNome}
+        >
+          {nomeCurto}
+        </Text>
+      </UnstyledButton>
+      <Text size="xs" c="dimmed" ta="center" aria-live="polite">
+        {concluidas} de {total}
+      </Text>
       <Progress
         value={percentual}
-        size="md"
+        size="sm"
         radius="xl"
-        aria-label={`Progresso do jogo: ${rotulo}`}
+        aria-label={`${concluidas} de ${total} fases concluídas`}
         styles={{
           root: { backgroundColor: "#E6F6EA" },
           section: { backgroundColor: "#8FD6A0" },
         }}
       />
-      <Text size="xs" c="dimmed">
-        {concluidas} de {total}
-      </Text>
-    </Stack>
-  );
-}
-
-function SeletorFases({
-  jogoNome,
-  fases,
-  faseNumero,
-  onChange,
-}: {
-  jogoNome: string;
-  fases: FaseJogoResumo[];
-  faseNumero: number;
-  onChange: (numero: number) => void;
-}) {
-  return (
-    <Stack gap={6}>
-      <Text size="sm" fw={500} component="span" id={`rotulo-fases-${jogoNome}`}>
-        Fase
-      </Text>
-      <div
-        role="radiogroup"
-        aria-labelledby={`rotulo-fases-${jogoNome}`}
-        className={estilosJogos.seletorFases}
-        style={{
-          gridTemplateColumns: `repeat(${Math.min(fases.length, 5)}, minmax(0, 1fr))`,
-        }}
+      <Button
+        type="button"
+        variant="light"
+        size="compact-sm"
+        fullWidth
+        style={{ minHeight: 40 }}
+        onClick={() => setEscolhaAberta(true)}
       >
-        {fases.map((fase) => {
-          const selecionada = fase.numero === faseNumero;
-          const rotuloEstado = ROTULOS_FASE[fase.estado];
-          return (
-            <UnstyledButton
-              key={fase.numero}
-              type="button"
-              role="radio"
-              aria-checked={selecionada}
-              aria-label={`Fase ${fase.numero}, ${fase.titulo}, ${rotuloEstado}`}
-              className={estilosJogos.opcaoFase}
-              data-selecionada={selecionada}
-              data-estado={fase.estado}
-              onClick={() => onChange(fase.numero)}
-            >
-              <IconeEstadoFase estado={fase.estado} />
-              <span className={estilosJogos.numeroFase}>{fase.numero}</span>
-              <span className={estilosJogos.rotuloEstadoFase}>{rotuloEstado}</span>
-            </UnstyledButton>
-          );
-        })}
-      </div>
-    </Stack>
-  );
-}
+        Escolher fase
+      </Button>
 
-function CartaoJogo({
-  jogo,
-  filtroFases,
-  consulta,
-  biblioteca,
-}: {
-  jogo: JogoResumo;
-  filtroFases: FiltroFasesJogos;
-  consulta: string;
-  biblioteca: string;
-}) {
-  const fases = useMemo(
-    () => fasesVisiveis(jogo, filtroFases),
-    [jogo, filtroFases],
-  );
-  const [faseNumero, setFaseNumero] = useState<number | null>(() =>
-    faseInicial(fases),
-  );
-
-  useEffect(() => {
-    setFaseNumero(faseInicial(fases));
-  }, [fases]);
-
-  const concluidas = jogo.fases.filter((fase) => fase.estado === "concluida")
-    .length;
-
-  if (!fases.length || faseNumero == null) {
-    return null;
-  }
-
-  return (
-    <Card withBorder padding="md" radius="md" bg={coresPef.superficie}>
-      <Stack gap="sm" align="stretch">
-        <Stack gap={4}>
-          <Title order={3} size="h4">
-            {jogo.nome}
-          </Title>
-          <Badge variant="light" color="azul" w="fit-content">
-            {ROTULOS_CATEGORIA_DESENVOLVIMENTO[
-              jogo.categoria as keyof typeof ROTULOS_CATEGORIA_DESENVOLVIMENTO
-            ] ?? jogo.categoria}
-          </Badge>
-          <BarraProgressoFases
-            concluidas={concluidas}
-            total={jogo.fases.length}
-          />
-          <Text size="sm">{jogo.descricao}</Text>
+      <Drawer
+        opened={escolhaAberta}
+        onClose={() => setEscolhaAberta(false)}
+        position={ehCelular ? "bottom" : "right"}
+        title={jogo.nome}
+        padding="md"
+        size={ehCelular ? "auto" : "md"}
+      >
+        <Stack gap="sm">
+          <Text size="sm" c="dimmed">
+            {concluidas} de {total} fases concluídas
+          </Text>
+          <div
+            role="list"
+            className={estilosJogos.seletorFases}
+            style={{
+              gridTemplateColumns: `repeat(${Math.min(jogo.fases.length, 5)}, minmax(0, 1fr))`,
+            }}
+          >
+            {jogo.fases.map((fase) => {
+              const rotuloEstado = ROTULOS_FASE[fase.estado];
+              return (
+                <UnstyledButton
+                  key={fase.numero}
+                  type="button"
+                  role="listitem"
+                  component={Link}
+                  href={`${biblioteca}/${jogo.id}/fases/${fase.numero}/jogar${consulta}`}
+                  aria-label={`Fase ${fase.numero}, ${fase.titulo}, ${rotuloEstado}`}
+                  className={estilosJogos.opcaoFase}
+                  data-estado={fase.estado}
+                >
+                  <IconeEstadoFase estado={fase.estado} />
+                  <span className={estilosJogos.numeroFase}>{fase.numero}</span>
+                  <span className={estilosJogos.rotuloEstadoFase}>
+                    {rotuloEstado}
+                  </span>
+                </UnstyledButton>
+              );
+            })}
+          </div>
         </Stack>
-        <SeletorFases
-          jogoNome={jogo.id}
-          fases={fases}
-          faseNumero={faseNumero}
-          onChange={setFaseNumero}
-        />
-        <Button
-          component={Link}
-          href={`${biblioteca}/${jogo.id}/fases/${faseNumero}/jogar${consulta}`}
-          aria-label={`Jogar ${jogo.nome}, fase ${faseNumero}`}
-        >
-          Jogar
-        </Button>
-      </Stack>
-    </Card>
+      </Drawer>
+    </Stack>
   );
 }
 
 function ListaJogos() {
-  const { caminho, nomePessoa } = useDesenvolvimento();
+  const { caminho } = useDesenvolvimento();
   const router = useRouter();
   const busca = useSearchParams();
   const filtroCategoria = categoriaDosJogos(busca.get("categoria"));
@@ -267,15 +246,9 @@ function ListaJogos() {
   }
 
   return (
-    <Container size="md" px={0}>
+    <Container size="sm" px={0}>
       <Stack gap="lg">
-        <Stack gap={4}>
-          <Title order={1}>Jogos digitais</Title>
-          <Text c="dimmed" size="sm">
-            Biblioteca · {nomePessoa}. Escolha a fase e jogue. Ajuda fica na
-            partida.
-          </Text>
-        </Stack>
+        <CabecalhoBiblioteca />
         <NavegacaoBiblioteca atual="jogos" />
         <CatalogoJogosAutorizado>
           {({ jogos, destaques }) => {
@@ -358,12 +331,16 @@ function ListaJogos() {
                     descricao="Ajuste a categoria ou o filtro de fases."
                   />
                 ) : (
-                  <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+                  <SimpleGrid
+                    cols={4}
+                    spacing={{ base: 8, sm: "md" }}
+                    verticalSpacing="md"
+                    className={estilosJogos.gradeCatalogo}
+                  >
                     {filtrados.map((jogo) => (
-                      <CartaoJogo
+                      <ItemCatalogoJogo
                         key={jogo.id}
                         jogo={jogo}
-                        filtroFases={filtroFases}
                         consulta={consulta}
                         biblioteca={biblioteca}
                       />

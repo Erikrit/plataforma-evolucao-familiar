@@ -1,22 +1,24 @@
 "use client";
 
-import { Suspense } from "react";
-import { Container, Stack, Title } from "@mantine/core";
-import { useDesenvolvimento } from "@/componentes/contexto-desenvolvimento";
+import { Suspense, useState } from "react";
+import { Container, Stack } from "@mantine/core";
 import { BibliotecaAtividades } from "@/componentes/desenvolvimento/biblioteca-atividades";
+import { CabecalhoBiblioteca } from "@/componentes/desenvolvimento/cabecalho-biblioteca";
 import { NavegacaoBiblioteca } from "@/componentes/desenvolvimento/navegacao-biblioteca";
 import { EstadoCarregando } from "@/componentes/feedback";
 
 export default function PaginaBiblioteca() {
-  const { nomePessoa } = useDesenvolvimento();
+  const [atualizacaoSaldo, setAtualizacaoSaldo] = useState(0);
 
   return (
     <Container size="sm" px={0}>
       <Stack gap="lg">
-        <Title order={1}>Biblioteca · {nomePessoa}</Title>
+        <CabecalhoBiblioteca atualizacaoSaldo={atualizacaoSaldo} />
         <NavegacaoBiblioteca atual="atividades" />
         <Suspense fallback={<EstadoCarregando rotulo="Abrindo biblioteca…" />}>
-          <BibliotecaAtividades />
+          <BibliotecaAtividades
+            aoSaldoAlterado={() => setAtualizacaoSaldo((n) => n + 1)}
+          />
         </Suspense>
       </Stack>
     </Container>

@@ -18,4 +18,4 @@ Essa referência é para auditoria histórica, **não** para reutilizar um QG-3 
 
 Registrar **somente transições materiais** de demandas novas: ID, tipo, branch/commit, decisão de Produto quando necessária, estado, testes pertinentes, resultado do verificador, aceite humano quando houver e próximo passo. Máximo uma entrada concisa por transição significativa; não colar saídas brutas de npm, builds e smokes.
 
-**Nenhuma demanda de código em andamento neste checkpoint.** Ao receber nova demanda, iniciar por `task-routing`, `STATUS-E-ESCOPO.md` e o trecho da especificação correspondente.
+**2026-11-24 — UX-01..05:** demanda `UX-01-05` (`melhoria_ux`) triada e implementada na `develop` `08c890c` (working tree). QG-1/QG-2 e verifier PASS; fingerprint `e60960a1…`. Homologação humana Android/iPhone: `PENDING_HUMAN`. Commit/push a cargo do responsável.

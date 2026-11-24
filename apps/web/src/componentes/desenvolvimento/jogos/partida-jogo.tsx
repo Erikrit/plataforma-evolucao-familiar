@@ -6,12 +6,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Button,
+  Drawer,
   Group,
   Modal,
   Stack,
   Text,
   Title,
+  UnstyledButton,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useDesenvolvimento } from "@/componentes/contexto-desenvolvimento";
 import { EstadoCarregando, mensagemErroAmigavel } from "@/componentes/feedback";
 import {
@@ -31,6 +34,12 @@ import { TabuleiroEscolha } from "./tabuleiro-escolha";
 import { TabuleiroOrdenacao } from "./tabuleiro-ordenacao";
 import { TabuleiroLabirinto } from "./tabuleiro-labirinto";
 import estilos from "./jogos.module.css";
+
+const ROTULOS_ESTADO_FASE: Record<FaseJogoResumo["estado"], string> = {
+  nao_explorada: "Não explorada",
+  experimentada: "Experimentada",
+  concluida: "Concluída",
+};
 
 type Mesa = InicioPartida & { chave: string };
 type Etapa =
@@ -107,8 +116,10 @@ export function PartidaJogo({
 }) {
   const { pessoaId, caminho } = useDesenvolvimento();
   const busca = useSearchParams();
+  const ehCelular = useMediaQuery("(max-width: 47.99em)", true);
   const [etapa, setEtapa] = useState<Etapa>({ tipo: "abrindo" });
   const [modalDicaAberto, setModalDicaAberto] = useState(false);
+  const [escolhaFaseAberta, setEscolhaFaseAberta] = useState(false);
   const [dicaDaPartida, setDicaDaPartida] = useState<string | null>(null);
   const [dicaPronta, setDicaPronta] = useState(false);
   const requisicao = useRef<AbortController | null>(null);
@@ -128,6 +139,16 @@ export function PartidaJogo({
   const hrefProximaFase = proximaFase
     ? `${caminho}/biblioteca/jogos/${jogo.id}/fases/${proximaFase.numero}/jogar${consultaCatalogo}`
     : null;
+  /** Celebra conclusão do jogo só quando todas as fases estão confirmadas (E5-ACE-13). */
+  const jogoCompletoAposEstaFase = useMemo(
+    () =>
+      jogo.fases.length > 0 &&
+      jogo.fases.every(
+        (item) =>
+          item.numero === fase.numero || item.estado === "concluida",
+      ),
+    [jogo.fases, fase.numero],
+  );
 
   const registrarObterDica = useCallback((obter: ObterDicaPartida | null) => {
     obterDicaRef.current = obter;
@@ -267,14 +288,84 @@ export function PartidaJogo({
             {fase.titulo}
           </Text>
         </Stack>
-        <Button
-          variant="default"
-          onClick={abrirDica}
-          disabled={!podeAbrirDica}
-        >
-          Dica
-        </Button>
+        <Group gap="xs" wrap="wrap">
+          <Button
+            variant="light"
+            onClick={() => setEscolhaFaseAberta(true)}
+            style={{ minHeight: 44 }}
+          >
+            Escolher fase
+          </Button>
+          <Button
+            variant="default"
+            onClick={abrirDica}
+            disabled={!podeAbrirDica}
+            style={{ minHeight: 44 }}
+          >
+            Dica
+          </Button>
+        </Group>
       </Group>
+
+      <Drawer
+        opened={escolhaFaseAberta}
+        onClose={() => setEscolhaFaseAberta(false)}
+        position={ehCelular ? "bottom" : "right"}
+        title="Escolher fase"
+        padding="md"
+        size={ehCelular ? "auto" : "md"}
+      >
+        <Stack gap="xs">
+          {jogo.fases.map((item) => {
+            const atual = item.numero === fase.numero;
+            const href = `${caminho}/biblioteca/jogos/${jogo.id}/fases/${item.numero}/jogar${consultaCatalogo}`;
+            const conteudo = (
+              <>
+                <Text fw={600} size="sm">
+                  Fase {item.numero} · {item.titulo}
+                </Text>
+                <Text size="xs" c="dimmed">
+                  {ROTULOS_ESTADO_FASE[item.estado]}
+                  {atual ? " · atual" : ""}
+                </Text>
+              </>
+            );
+            const estilo = {
+              display: "block" as const,
+              minHeight: 44,
+              padding: "0.65rem 0.75rem",
+              borderRadius: 8,
+              border: "1px solid #C9D8F2",
+              opacity: atual ? 0.7 : 1,
+            };
+            if (atual) {
+              return (
+                <div
+                  key={item.numero}
+                  aria-current="page"
+                  aria-label={`Fase ${item.numero}, ${item.titulo}, ${ROTULOS_ESTADO_FASE[item.estado]}`}
+                  style={estilo}
+                >
+                  {conteudo}
+                </div>
+              );
+            }
+            return (
+              <UnstyledButton
+                key={item.numero}
+                type="button"
+                component={Link}
+                href={href}
+                aria-label={`Fase ${item.numero}, ${item.titulo}, ${ROTULOS_ESTADO_FASE[item.estado]}`}
+                onClick={() => setEscolhaFaseAberta(false)}
+                style={estilo}
+              >
+                {conteudo}
+              </UnstyledButton>
+            );
+          })}
+        </Stack>
+      </Drawer>
 
       <Modal
         opened={modalDicaAberto}
@@ -375,18 +466,18 @@ export function PartidaJogo({
               ref={focoCelebracao}
               tabIndex={-1}
             >
-              {hrefProximaFase
-                ? "Fase concluída!"
-                : "Parabéns — todas as fases!"}
+              {jogoCompletoAposEstaFase
+                ? "Parabéns — todas as fases!"
+                : "Fase concluída!"}
             </Title>
             <Text id="texto-celebracao-fase" role="status">
-              {hrefProximaFase
+              {jogoCompletoAposEstaFase
                 ? etapa.descoberta
-                  ? "Primeira descoberta registrada. Que tal a próxima fase?"
-                  : "Progresso confirmado. Você pode seguir ou escolher outra fase."
+                  ? "Você concluiu todas as fases deste jogo. Primeira descoberta registrada!"
+                  : "Você concluiu todas as fases deste jogo. Progresso confirmado."
                 : etapa.descoberta
-                  ? "Você concluiu a última fase deste jogo. Primeira descoberta registrada!"
-                  : "Você concluiu a última fase deste jogo. Progresso confirmado."}
+                  ? "Primeira descoberta registrada. Que tal outra fase?"
+                  : "Progresso confirmado. Você pode seguir ou escolher outra fase."}
             </Text>
             <Stack gap="sm">
               {hrefProximaFase ? (

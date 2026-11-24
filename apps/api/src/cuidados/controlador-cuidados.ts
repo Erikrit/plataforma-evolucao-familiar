@@ -157,6 +157,7 @@ export class ControladorCuidados {
     @Body()
     corpo: {
       dataHora?: string;
+      categoria?: string;
       especialidadeOuDescricao?: string;
       profissional?: string;
       local?: string;
@@ -205,6 +206,7 @@ export class ControladorCuidados {
     @Param("pessoaId") pessoaId: string,
     @Body()
     corpo: {
+      categoria?: string;
       descricao?: string;
       data?: string | null;
       consultaId?: string | null;

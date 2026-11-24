@@ -32,6 +32,7 @@ import {
   registrarAtividadeApoio,
   registrarDose,
 } from "@/lib/api";
+import { tituloConsulta } from "@/lib/categorias-compromissos";
 import { podeRegistrarRelatoCuidados } from "@/lib/rotulos-experiencia";
 
 type CartaoDose = {
@@ -45,6 +46,7 @@ type CartaoDose = {
 
 type CompromissoDia = {
   id: string;
+  categoria?: string | null;
   especialidadeOuDescricao: string;
   dataHora: string;
 };
@@ -212,7 +214,7 @@ export default function PaginaRotinaCuidados() {
                         <Text size="sm" c="dimmed">
                           Consulta
                         </Text>
-                        <Text fw={600}>{c.especialidadeOuDescricao}</Text>
+                        <Text fw={600}>{tituloConsulta(c)}</Text>
                         <Text size="sm" c="dimmed">
                           {formatarQuando(c.dataHora)}
                         </Text>

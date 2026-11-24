@@ -31,6 +31,7 @@ import {
   EstadoVazio,
   MensagemFeedback,
 } from "@/componentes/feedback";
+import { tituloConsulta, tituloExame } from "@/lib/categorias-compromissos";
 import { coresPef } from "@/tema/mantine";
 
 function CartaoMetrica({ rotulo, valor }: { rotulo: string; valor: number }) {
@@ -436,7 +437,7 @@ export default function PaginaResumo() {
                           resumoCuidados.consultas.map((c) => (
                             <Card key={c.id} withBorder padding="sm" radius="md">
                               <Text size="sm" fw={600}>
-                                {c.especialidadeOuDescricao}
+                                {c.titulo ?? tituloConsulta(c)}
                               </Text>
                               <Text size="xs" c="dimmed">
                                 {formatarQuando(c.dataHora)} · {c.status}
@@ -454,7 +455,7 @@ export default function PaginaResumo() {
                             return (
                               <Card key={e.id} withBorder padding="sm" radius="md">
                                 <Text size="sm" fw={600}>
-                                  {e.descricao}
+                                  {e.titulo ?? tituloExame(e)}
                                 </Text>
                                 <Text size="xs" c="dimmed">
                                   {dataConhecida

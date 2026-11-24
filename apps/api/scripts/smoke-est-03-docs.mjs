@@ -149,6 +149,7 @@ try {
       method: "POST",
       headers: hA,
       body: JSON.stringify({
+        categoria: "sangue",
         descricao: `Exame EST03 ${stamp}`,
         anexoId: anexo.corpo.id,
       }),

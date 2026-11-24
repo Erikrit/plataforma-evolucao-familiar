@@ -9,7 +9,9 @@ import {
   Checkbox,
   Container,
   Drawer,
+  FileButton,
   Group,
+  Loader,
   Select,
   Stack,
   Text,
@@ -38,6 +40,12 @@ import {
   type ConsultaLista,
   type ExameLista,
 } from "@/lib/api";
+import {
+  OPCOES_CATEGORIA_CONSULTA,
+  OPCOES_CATEGORIA_EXAME,
+  tituloConsulta,
+  tituloExame,
+} from "@/lib/categorias-compromissos";
 import {
   podeOrganizarConsultasExames,
   podeVerAnexosCuidados,
@@ -84,6 +92,9 @@ export default function PaginaConsultasExames() {
   } | null>(null);
 
   const [mostrarAgenda, setMostrarAgenda] = useState(false);
+  const [consultaCategoria, setConsultaCategoria] = useState<string | null>(
+    null,
+  );
   const [consultaDesc, setConsultaDesc] = useState("");
   const [consultaData, setConsultaData] = useState("");
   const [modoHorario, setModoHorario] = useState<"cheia" | "exato">("cheia");
@@ -91,10 +102,15 @@ export default function PaginaConsultasExames() {
   const [horaExata, setHoraExata] = useState("09:00");
 
   const [mostrarExame, setMostrarExame] = useState(false);
+  const [exameCategoria, setExameCategoria] = useState<string | null>(null);
   const [exameDesc, setExameDesc] = useState("");
   const [exameData, setExameData] = useState("");
   const [exameArquivo, setExameArquivo] = useState<File | null>(null);
   const [anexoPendenteId, setAnexoPendenteId] = useState<string | null>(null);
+  const [erroCampoAnexo, setErroCampoAnexo] = useState<string | null>(null);
+  const [etapaEnvio, setEtapaEnvio] = useState<
+    null | "anexo" | "exame"
+  >(null);
 
   const podeOrganizar = podeOrganizarConsultasExames(
     params.pessoaId,
@@ -184,15 +200,21 @@ export default function PaginaConsultasExames() {
   async function aoCriarConsulta(evento: FormEvent) {
     evento.preventDefault();
     if (!podeOrganizar || enviandoForm) return;
+    if (!consultaCategoria) {
+      setErro("Selecione a categoria da consulta.");
+      return;
+    }
     setEnviandoForm(true);
     setErro(null);
     setSucesso(null);
     try {
       const dataHora = montarDataHoraConsulta();
       await criarConsulta(params.pessoaId, {
+        categoria: consultaCategoria,
         especialidadeOuDescricao: consultaDesc.trim(),
         dataHora: dataHora.toISOString(),
       });
+      setConsultaCategoria(null);
       setConsultaDesc("");
       setConsultaData("");
       setModoHorario("cheia");
@@ -210,26 +232,47 @@ export default function PaginaConsultasExames() {
     }
   }
 
+  function selecionarArquivoExame(arquivo: File | null) {
+    setErroCampoAnexo(null);
+    setAnexoPendenteId(null);
+    if (!arquivo) {
+      setExameArquivo(null);
+      return;
+    }
+    if (arquivo.size > LIMITE_BYTES_ANEXO) {
+      setExameArquivo(null);
+      setErroCampoAnexo(
+        `Escolha um arquivo de até ${Math.floor(LIMITE_BYTES_ANEXO / (1024 * 1024))} MB.`,
+      );
+      return;
+    }
+    if (arquivo.size <= 0) {
+      setExameArquivo(null);
+      setErroCampoAnexo("Arquivo vazio não pode ser anexado.");
+      return;
+    }
+    setExameArquivo(arquivo);
+  }
+
   async function aoCriarExame(evento: FormEvent) {
     evento.preventDefault();
     if (!podeOrganizar || enviandoForm) return;
+    if (!exameCategoria) {
+      setErro("Selecione a categoria do exame.");
+      return;
+    }
     setEnviandoForm(true);
     setErro(null);
     setSucesso(null);
+    setErroCampoAnexo(null);
+    setEtapaEnvio(null);
     try {
       let anexoId = anexoPendenteId;
       if (exameArquivo && !anexoId) {
         if (!podeAnexos || !familiaId) {
           throw new Error("Sem autorização para anexar documento.");
         }
-        if (exameArquivo.size > LIMITE_BYTES_ANEXO) {
-          throw new Error(
-            `Escolha um arquivo de até ${Math.floor(LIMITE_BYTES_ANEXO / (1024 * 1024))} MB.`,
-          );
-        }
-        if (exameArquivo.size <= 0) {
-          throw new Error("Arquivo vazio não pode ser anexado.");
-        }
+        setEtapaEnvio("anexo");
         const base64 = await lerArquivoBase64(exameArquivo);
         const anexo = await criarAnexo(familiaId, {
           pessoaId: params.pessoaId,
@@ -240,23 +283,32 @@ export default function PaginaConsultasExames() {
         anexoId = anexo.id;
         setAnexoPendenteId(anexo.id);
       }
+      setEtapaEnvio("exame");
       await criarExame(params.pessoaId, {
+        categoria: exameCategoria,
         descricao: exameDesc.trim(),
         data: exameData ? new Date(`${exameData}T12:00:00`).toISOString() : null,
         anexoId,
       });
+      setExameCategoria(null);
       setExameDesc("");
       setExameData("");
       setExameArquivo(null);
       setAnexoPendenteId(null);
+      setErroCampoAnexo(null);
       setMostrarExame(false);
       await carregar(params.pessoaId);
       setSucesso("Exame registrado.");
     } catch (e) {
-      setErro(
-        e instanceof Error ? e.message : "Não foi possível registrar o exame.",
-      );
+      const mensagem =
+        e instanceof Error ? e.message : "Não foi possível registrar o exame.";
+      if (exameArquivo || anexoPendenteId) {
+        setErroCampoAnexo(mensagem);
+      } else {
+        setErro(mensagem);
+      }
     } finally {
+      setEtapaEnvio(null);
       setEnviandoForm(false);
     }
   }
@@ -365,7 +417,7 @@ export default function PaginaConsultasExames() {
                         <IconeConsulta />
                         <Stack gap={2}>
                           <Text fw={600}>
-                            {item.consulta.especialidadeOuDescricao}
+                            {tituloConsulta(item.consulta)}
                           </Text>
                           <Text size="sm" c="dimmed">
                             {rotuloStatusConsulta(item.consulta.status)} ·{" "}
@@ -406,7 +458,7 @@ export default function PaginaConsultasExames() {
                       <Group gap="sm" wrap="nowrap" align="flex-start">
                         <IconeExame />
                         <Stack gap={2}>
-                          <Text fw={600}>{item.exame.descricao}</Text>
+                          <Text fw={600}>{tituloExame(item.exame)}</Text>
                           <Text size="sm" c="dimmed">
                             Exame
                             {item.exame.data
@@ -456,11 +508,19 @@ export default function PaginaConsultasExames() {
                   <form onSubmit={aoCriarConsulta}>
                     <Stack gap="sm">
                       <Title order={2}>Agendar consulta</Title>
+                      <Select
+                        label="Categoria"
+                        placeholder="Selecione"
+                        data={OPCOES_CATEGORIA_CONSULTA}
+                        value={consultaCategoria}
+                        onChange={setConsultaCategoria}
+                        clearable
+                        required
+                      />
                       <TextInput
-                        label="Especialidade ou descrição"
+                        label="Descrição complementar (opcional)"
                         value={consultaDesc}
                         onChange={(e) => setConsultaDesc(e.currentTarget.value)}
-                        required
                       />
                       <TextInput
                         label="Data"
@@ -521,11 +581,19 @@ export default function PaginaConsultasExames() {
                   <form onSubmit={aoCriarExame}>
                     <Stack gap="sm">
                       <Title order={2}>Registrar exame</Title>
+                      <Select
+                        label="Categoria"
+                        placeholder="Selecione"
+                        data={OPCOES_CATEGORIA_EXAME}
+                        value={exameCategoria}
+                        onChange={setExameCategoria}
+                        clearable
+                        required
+                      />
                       <TextInput
-                        label="Descrição"
+                        label="Descrição complementar (opcional)"
                         value={exameDesc}
                         onChange={(e) => setExameDesc(e.currentTarget.value)}
-                        required
                       />
                       <TextInput
                         label="Data (opcional)"
@@ -534,24 +602,87 @@ export default function PaginaConsultasExames() {
                         onChange={(e) => setExameData(e.currentTarget.value)}
                       />
                       {podeAnexos ? (
-                        <Stack gap={4}>
-                          <TextInput
-                            label="Documento (opcional)"
-                            type="file"
-                            accept="image/*,.pdf,application/pdf"
-                            onChange={(e) => {
-                              const arquivo = e.currentTarget.files?.[0] ?? null;
-                              setExameArquivo(arquivo);
-                              setAnexoPendenteId(null);
-                            }}
-                          />
+                        <Stack gap="xs">
+                          <Text size="sm" fw={500}>
+                            Documento (opcional)
+                          </Text>
+                          {!exameArquivo && !anexoPendenteId ? (
+                            <FileButton
+                              onChange={selecionarArquivoExame}
+                              accept="image/*,.pdf,application/pdf"
+                            >
+                              {(props) => (
+                                <Button
+                                  {...props}
+                                  variant="default"
+                                  size="md"
+                                  style={{ minHeight: 44 }}
+                                >
+                                  Anexar arquivo
+                                </Button>
+                              )}
+                            </FileButton>
+                          ) : (
+                            <Stack gap={6}>
+                              <Text size="sm">
+                                {exameArquivo
+                                  ? `${exameArquivo.name} · ${rotuloMime(exameArquivo.type || "application/octet-stream")} · ${formatarTamanhoArquivo(exameArquivo.size)}`
+                                  : "Documento já enviado — será reutilizado nesta tentativa."}
+                              </Text>
+                              <Group gap="sm" wrap="wrap">
+                                <FileButton
+                                  onChange={selecionarArquivoExame}
+                                  accept="image/*,.pdf,application/pdf"
+                                >
+                                  {(props) => (
+                                    <Button
+                                      {...props}
+                                      variant="default"
+                                      size="sm"
+                                      style={{ minHeight: 44 }}
+                                      disabled={enviandoForm}
+                                    >
+                                      Trocar arquivo
+                                    </Button>
+                                  )}
+                                </FileButton>
+                                <Button
+                                  type="button"
+                                  variant="subtle"
+                                  color="red"
+                                  size="sm"
+                                  style={{ minHeight: 44 }}
+                                  disabled={enviandoForm}
+                                  onClick={() => {
+                                    setExameArquivo(null);
+                                    setAnexoPendenteId(null);
+                                    setErroCampoAnexo(null);
+                                  }}
+                                >
+                                  Remover
+                                </Button>
+                              </Group>
+                            </Stack>
+                          )}
                           <Text size="xs" c="dimmed">
                             PDF ou imagem, até{" "}
                             {Math.floor(LIMITE_BYTES_ANEXO / (1024 * 1024))} MB.
-                            {anexoPendenteId
-                              ? " Documento já enviado — ao tentar de novo, só registra o exame."
-                              : ""}
                           </Text>
+                          {etapaEnvio ? (
+                            <Group gap="xs" aria-live="polite">
+                              <Loader size="sm" type="oval" />
+                              <Text size="sm">
+                                {etapaEnvio === "anexo"
+                                  ? "Enviando arquivo…"
+                                  : "Registrando exame…"}
+                              </Text>
+                            </Group>
+                          ) : null}
+                          {erroCampoAnexo ? (
+                            <Text size="sm" c="red" role="alert">
+                              {erroCampoAnexo}
+                            </Text>
+                          ) : null}
                         </Stack>
                       ) : null}
                       <Button type="submit" loading={enviandoForm}>
@@ -562,8 +693,11 @@ export default function PaginaConsultasExames() {
                         variant="subtle"
                         onClick={() => {
                           setMostrarExame(false);
+                          setExameCategoria(null);
                           setExameArquivo(null);
                           setAnexoPendenteId(null);
+                          setErroCampoAnexo(null);
+                          setEtapaEnvio(null);
                         }}
                         disabled={enviandoForm}
                       >
@@ -601,7 +735,7 @@ export default function PaginaConsultasExames() {
           {selecionado?.kind === "consulta" ? (
             <Stack gap="sm">
               <Text fw={600} size="lg">
-                {selecionado.consulta.especialidadeOuDescricao}
+                {tituloConsulta(selecionado.consulta)}
               </Text>
               <Text size="sm" c="dimmed">
                 {rotuloStatusConsulta(selecionado.consulta.status)}
@@ -671,7 +805,7 @@ export default function PaginaConsultasExames() {
                 </Text>
               ) : null}
               <Text fw={600} size="lg">
-                {selecionado.exame.descricao}
+                {tituloExame(selecionado.exame)}
               </Text>
               <Text size="sm" c="dimmed">
                 Exame
@@ -784,6 +918,12 @@ function rotuloMime(mime: string) {
   if (m.startsWith("image/")) return "Imagem";
   if (m) return m;
   return "Arquivo";
+}
+
+function formatarTamanhoArquivo(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function normalizarHora(valor: string) {

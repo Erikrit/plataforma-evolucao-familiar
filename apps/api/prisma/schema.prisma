@@ -284,18 +284,19 @@ model RegistroDose {
 }
 
 model Consulta {
-  id                      String    @id @default(cuid())
-  pessoaId                String    @map("pessoa_id")
-  dataHora                DateTime  @map("data_hora")
-  especialidadeOuDescricao String   @map("especialidade_ou_descricao")
-  profissional            String?
-  local                   String?
-  observacao              String?
-  status                  String    @default("agendada")
-  criadoPorId             String    @map("criado_por_id")
-  criadoEm                DateTime  @default(now()) @map("criado_em")
-  pessoa                  Pessoa    @relation(fields: [pessoaId], references: [id])
-  exames                  Exame[]
+  id                       String    @id @default(cuid())
+  pessoaId                 String    @map("pessoa_id")
+  dataHora                 DateTime  @map("data_hora")
+  categoria                String?
+  especialidadeOuDescricao String    @map("especialidade_ou_descricao")
+  profissional             String?
+  local                    String?
+  observacao               String?
+  status                   String    @default("agendada")
+  criadoPorId              String    @map("criado_por_id")
+  criadoEm                 DateTime  @default(now()) @map("criado_em")
+  pessoa                   Pessoa    @relation(fields: [pessoaId], references: [id])
+  exames                   Exame[]
 
   @@index([pessoaId, dataHora])
   @@map("consulta")
@@ -304,6 +305,7 @@ model Consulta {
 model Exame {
   id           String    @id @default(cuid())
   pessoaId     String    @map("pessoa_id")
+  categoria    String?
   descricao    String
   data         DateTime?
   consultaId   String?   @map("consulta_id")

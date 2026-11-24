@@ -7,6 +7,10 @@ import {
 import { ServicoPrisma } from "../prisma/servico-prisma";
 import { ServicoAutorizacoes } from "../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
+import {
+  ehCategoriaConsulta,
+  ehCategoriaExame,
+} from "./categorias-compromissos";
 
 @Injectable()
 export class ServicoCompromissos {
@@ -28,6 +32,7 @@ export class ServicoCompromissos {
     usuario: UsuarioAutenticado,
     entrada: {
       dataHora?: string;
+      categoria?: string;
       especialidadeOuDescricao?: string;
       profissional?: string;
       local?: string;
@@ -36,17 +41,19 @@ export class ServicoCompromissos {
   ) {
     const pessoa = await this.exigirOrganizacao(pessoaId, usuario);
     const dataHora = entrada.dataHora ? new Date(entrada.dataHora) : null;
+    const categoria = (entrada.categoria ?? "").trim();
     const descricao = (entrada.especialidadeOuDescricao ?? "").trim();
     if (!dataHora || Number.isNaN(dataHora.getTime())) {
       throw new BadRequestException("dataHora é obrigatória.");
     }
-    if (!descricao) {
-      throw new BadRequestException("especialidadeOuDescricao é obrigatória.");
+    if (!ehCategoriaConsulta(categoria)) {
+      throw new BadRequestException("categoria de consulta inválida.");
     }
     return this.prisma.consulta.create({
       data: {
         pessoaId: pessoa.id,
         dataHora,
+        categoria,
         especialidadeOuDescricao: descricao,
         profissional: entrada.profissional?.trim() || null,
         local: entrada.local?.trim() || null,
@@ -107,6 +114,7 @@ export class ServicoCompromissos {
     pessoaId: string,
     usuario: UsuarioAutenticado,
     entrada: {
+      categoria?: string;
       descricao?: string;
       data?: string | null;
       consultaId?: string | null;
@@ -114,8 +122,11 @@ export class ServicoCompromissos {
     },
   ) {
     const pessoa = await this.exigirOrganizacao(pessoaId, usuario);
+    const categoria = (entrada.categoria ?? "").trim();
     const descricao = (entrada.descricao ?? "").trim();
-    if (!descricao) throw new BadRequestException("Descrição do exame é obrigatória.");
+    if (!ehCategoriaExame(categoria)) {
+      throw new BadRequestException("categoria de exame inválida.");
+    }
 
     if (entrada.anexoId) {
       const anexo = await this.prisma.anexo.findFirst({
@@ -131,6 +142,7 @@ export class ServicoCompromissos {
     return this.prisma.exame.create({
       data: {
         pessoaId: pessoa.id,
+        categoria,
         descricao,
         data: entrada.data ? new Date(entrada.data) : null,
         consultaId: entrada.consultaId || null,
@@ -147,6 +159,7 @@ export class ServicoCompromissos {
       orderBy: { criadoEm: "desc" },
       select: {
         id: true,
+        categoria: true,
         descricao: true,
         data: true,
         consultaId: true,

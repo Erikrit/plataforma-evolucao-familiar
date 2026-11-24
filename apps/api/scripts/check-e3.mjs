@@ -65,10 +65,20 @@ reg(
 reg(
   "E3-EX-05-cadastro",
   consultas.includes("Registrar exame") &&
-    consultas.includes("exameArquivo") &&
+    consultas.includes("OPCOES_CATEGORIA_EXAME") &&
+    consultas.includes("categoria") &&
     !consultas.includes("transcrição") &&
     !consultas.includes("resultado do exame"),
-  "Cadastro mínimo preservado",
+  "Cadastro com categoria e campos opcionais",
+);
+reg(
+  "E3-EX-06-seletor-anexo",
+  consultas.includes("Anexar arquivo") &&
+    consultas.includes("Trocar arquivo") &&
+    consultas.includes("Remover") &&
+    consultas.includes("anexoPendenteId") &&
+    consultas.includes("etapaEnvio"),
+  "Seletor de anexo com metadados, etapas e reuso",
 );
 reg(
   "E3-RES-01-entrada-unica",
@@ -83,10 +93,10 @@ reg(
   "E3-RES-02-cuidados",
   resumo.includes("tomadasInformadas") &&
     resumo.includes("semConfirmacao") &&
-    resumo.includes("sem confirmação") &&
+    resumo.includes("Sem confirmação") &&
     resumo.includes("temDocumento") &&
     resumo.includes("documento disponível no app") &&
-    acompanhamento.includes("temDocumento: Boolean(e.anexoId)"),
+    acompanhamento.includes("temDocumento: podeAnexos && Boolean(e.anexoId)"),
   "Cuidados com estados e exames factuais",
 );
 reg(

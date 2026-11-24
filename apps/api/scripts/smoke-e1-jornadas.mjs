@@ -130,6 +130,7 @@ async function jornadaFamilia({ slug, email, senha, nomePessoaCuidado, nomePesso
       method: "POST",
       headers: h,
       body: JSON.stringify({
+        categoria: "clinica_geral",
         especialidadeOuDescricao: `Consulta ${slug}`,
         dataHora: new Date().toISOString(),
       }),

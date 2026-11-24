@@ -2,20 +2,32 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "f58d029658499bdfc3807c0488662c0bc4557dae",
-    "nota": "Checkpoint da V1 homologada antes da limpeza documental de 2026-11-24. Consultar o HEAD da branch para trabalho novo."
+    "commit": "08c890c7c1e5e6a5de1b731259e141bf29286630",
+    "nota": "Baseline com UX-01..05 aprovadas; implementação local concluída aguardando commit humano."
   },
-  "moduloId": "04-evolucao-familiar",
-  "incrementoId": "EF-06",
-  "requisitos": [],
-  "estado": "READY",
+  "moduloId": null,
+  "incrementoId": null,
+  "requisitos": ["UX-01", "UX-02", "UX-03", "UX-04", "UX-05"],
+  "estado": "COMPLETED",
   "dependencias": [],
-  "arquivos": [],
+  "arquivos": [
+    "apps/api/prisma/schema.prisma",
+    "apps/api/prisma/migrations/20261124180000_categoria_consulta_exame/",
+    "apps/api/src/cuidados/",
+    "apps/web/src/lib/categorias-compromissos.ts",
+    "apps/web/src/lib/catalogo-visual-jogos.ts",
+    "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/cuidados/",
+    "apps/web/src/componentes/desenvolvimento/",
+    "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/desenvolvimento/biblioteca/"
+  ],
   "verificacao": {
-    "nota": "Sem demanda de implementação ativa. Aceites históricos da V1 no STATUS; resultados brutos recuperáveis pelo Git na revisão-base."
+    "qg1": "PASS — typecheck api+web; check-e3; check-catalogo-visual",
+    "qg2": "PASS — build api+web; smoke e3/e4/e5/authz; verifier PASS (PENDING_HUMAN dispositivos)",
+    "verifier": "PASS",
+    "homologacaoHumana": "PENDING_HUMAN — Android/iPhone e fluxos UX em aparelho real"
   },
-  "fingerprint": null,
-  "proximaAcao": "Aguardar demanda de teste/UX da V1; classificar por task-routing antes de implementar.",
+  "fingerprint": "e60960a1a9bf43b0a3a5abc4555d4ec7",
+  "proximaAcao": "Commit humano da implementação UX-01..05; homologação em Android/iPhone com dados fictícios.",
   "atualizadoEm": "2026-11-24",
   "modulo": {
     "id": "04-evolucao-familiar",
@@ -23,7 +35,15 @@
     "qg3": "PASS registrado na homologação V1; evidências históricas no Git"
   },
   "demanda": null,
-  "demandasConcluidas": [],
+  "demandasConcluidas": [
+    {
+      "id": "UX-01-05",
+      "status": "COMPLETED",
+      "fingerprint": "e60960a1a9bf43b0a3a5abc4555d4ec7",
+      "nota": "UX-01..05 implementadas; smokes E3/E4/E5/authz PASS; homologação humana de dispositivos pendente.",
+      "mensagemCommit": "feat(ux): entregar pacote UX-01 a UX-05 aprovado\n\nCategoria em consultas/exames, seletor de anexo, Select nas Atividades Reais, cabeçalho compartilhado com saldo e catálogo de jogos em grade 4×2."
+    }
+  ],
   "incrementosConcluidos": [
     {
       "id": "BASELINE-V1-20261124",
