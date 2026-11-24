@@ -65,7 +65,7 @@ A experiência funcional v1.1 **aprovada** possui **Histórico individual** e **
 
 ## Direção técnica pós-V1 — proposta para E1–E7
 
-**Estado:** direção de Produto aprovada em `docs/produto/EVOLUCAO-POS-V1.md` v2.1; desenho técnico abaixo continua candidato por entrega. O recorte E1 está no Módulo 01 v1.7 §13 e em `docs/esteira/planejamento/e1-contexto-familiar.md`. A aprovação da visão não aprova automaticamente todos os modelos propostos.
+**Estado:** direção de Produto aprovada em `docs/produto/EVOLUCAO-POS-V1.md` v2.1; desenho técnico abaixo continua candidato por entrega. O recorte E1 vigente está na especificação do Módulo 01, seções 13–14; o planejamento histórico permanece na revisão Git anterior à consolidação da V1. A aprovação da visão não aprova automaticamente todos os modelos propostos.
 
 ### Fronteiras no monólito modular
 
