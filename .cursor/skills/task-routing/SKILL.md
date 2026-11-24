@@ -38,7 +38,7 @@ Consultar apenas o necessário:
 1. `docs/produto/GOVERNANCA.md` — níveis L1/L2/L3 e CT.
 2. `docs/produto/STATUS-E-ESCOPO.md` — estado consolidado e pendências.
 3. Fonte dona da regra (especificação, guia UX ou ADR) — só o trecho afetado.
-4. `docs/esteira/estado/atual.json` — extrair **apenas** revisão, demanda ativa, status, próximos passos e fingerprints relevantes; preservar os demais campos ao atualizar. Não carregar o histórico inteiro como contexto.
+4. `docs/esteira/estado/atual.json` — ler checkpoint e demanda ativa; preservar os campos atuais ao atualizar. Demandas concluídas antes da V1 estão exclusivamente no histórico Git; não recriá-las.
 
 Regras:
 
@@ -58,7 +58,7 @@ Regras:
 5. Listar dependências e decisões pendentes; bloquear se L3 sem aprovação.
 6. Selecionar o fluxo mínimo da tabela (não inventar etapas).
 7. Definir critérios de aceite rastreáveis (IDs existentes) e testes pertinentes.
-8. Atualizar `docs/esteira/estado/atual.json` na seção `demanda` (preservar `modulo`/`incrementosConcluidos`/`demandasConcluidas`).
+8. Atualizar `docs/esteira/estado/atual.json` na seção `demanda` (preservar o checkpoint atual e as conclusões novas; manter no máximo 10 resumos recentes por ciclo, sem restaurar o histórico pré-V1).
 9. Registrar entrada curta em `docs/esteira/REGISTRO.md` **apenas para mudança material de estado, decisão, bloqueio ou aceite**. Não reproduzir o prompt, logs ou todos os testes a cada interação.
 
 ## Saída (resumo estruturado)
