@@ -44,19 +44,16 @@ Procedimento operacional: [implantação na VPS](../esteira/estado/procedimento-
 4. **PWA e notificações:** validar instalação no iPhone quando aplicável; Web Push e ACE-C12 permanecem posteriores.
 5. **Evolução futura:** frentes E6/E7 com IA e demais ampliações são planejamento/direção, **não funcionalidades V1 homologadas**. Ver [Evolução pós-V1](EVOLUCAO-POS-V1.md).
 
-## 5. Melhorias em análise pela equipe de testes (não alteram a baseline homologada)
+## 5. Melhorias identificadas nos testes da V1
 
-**Levantamento registrado em 2026-11-24; estado: EM ANÁLISE.** Estas demandas são insumos para as conversas especializadas de UX e Jogos, **não** decisões funcionais já aprovadas nem implementação liberada. Manter os requisitos homologados até resolução na governança.
+**UX-01 a UX-05 aprovadas pelo Produto em 2026-11-24.** A implementação e a homologação dessas melhorias estão pendentes. A baseline funcional da V1 em teste continua homologada.
 
-| Frente | Melhoria solicitada | Regra vigente e dependência |
+| IDs | Escopo aprovado | Fonte canônica |
 |---|---|---|
-| UX — Cuidados | Categoria obrigatória e descrição complementar opcional em consulta/exame; poucas categorias usuais | **Hoje:** descrição obrigatória, categoria não requerida. Necessita decisão de Produto e análise de impacto em API/validações; [detalhes M02 §11](../modulos/02-cuidados-vovo/ESPECIFICACAO.md) |
-| UX — Cuidados | Melhorar botão/fluxo de anexar arquivo em exames | Preservar anexo opcional e download privado; [M02 §11](../modulos/02-cuidados-vovo/ESPECIFICACAO.md) |
-| UX — Biblioteca | Categoria por `Select` nas atividades reais e cabeçalho compartilhado com nome, ícone e quantidade de estrelas | Preferir reutilização da UI, sem alterar pontuação; [M03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) |
-| Jogos — Atividades reais | Curadoria prática para 6–12 anos; 2 sugestões elegíveis por vez; estudar limite de 10 atividades ativas por categoria/pessoa | **Hoje:** até 24 modelos, até 6 sugestões e renovação de até 3. Limites novos exigem decisão funcional e regras de elegibilidade; [M03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) |
-| Jogos — Digitais | Catálogo com miniaturas e jogo iniciado diretamente; ampliar para pelo menos 15 fases por jogo | **Hoje:** 8 jogos/40 fases, inclusive seleção/acesso direto a fases conforme E5. 15 fases por jogo = mínimo 120, requer aprovação de escopo e revisão de progressão; [M03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) |
+| UX-01 e UX-02 | Cadastro de consultas/exames e seleção de anexo | [Módulo 02 §11](../modulos/02-cuidados-vovo/ESPECIFICACAO.md#11-decisões-de-ux--consultas-e-exames-2026-11-24) |
+| UX-03, UX-04 e UX-05 | Filtro de Atividades Reais, cabeçalho compartilhado e catálogo de Jogos Digitais | [Módulo 03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#14-decisões-ux-e-propostas-de-curadoria--testes-da-v1-2026-11-24) |
 
-**Próximo passo:** UX e Jogos inspecionam código/fluxos e entregam diagnóstico, proposta e impactos. Somente alterações compatíveis com o comportamento homologado podem seguir como UX local; novas obrigatoriedades, limites e regras de progressão requerem decisão explícita do Produto antes da implementação. Não reabrir a homologação da V1 por registrar estas propostas.
+Curadoria, redução da quantidade de sugestões, limite de atividades por categoria e ampliação do número de fases seguem **em análise** no Módulo 03 §14. O próximo passo para os itens aprovados é a entrada pela esteira e a verificação dos critérios por demanda.
 
 ## 6. Fontes por responsabilidade (contexto mínimo)
 

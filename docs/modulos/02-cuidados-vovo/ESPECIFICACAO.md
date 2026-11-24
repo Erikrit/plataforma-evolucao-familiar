@@ -1,7 +1,7 @@
 # Módulo 02 — Cuidados da Vovó
 
 **Versão:** especificação funcional v1.7 — E3, download privado de exames, aprovado em 2026-11-22  
-**Status funcional:** especificação aprovada. Estado do código, evidências, notificações e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.  
+**Status funcional:** especificação aprovada, com revisão UX-01/UX-02 aprovada em 2026-11-24 e pendente de implementação e homologação. Estado do código, evidências, notificações e pendências de homologação em `docs/produto/STATUS-E-ESCOPO.md`.  
 **Dependência:** Fundação Familiar.
 
 ## 1. Objetivo
@@ -50,11 +50,13 @@ Programação com vigência; novo horário não altera o passado. Encerramento/s
 
 ### CUI-F05 — Consultas
 
-Data/hora e especialidade/descrição; profissional, local, observação e documentos opcionais. Permitir editar, cancelar e marcar realizada preservando histórico relevante. Lembretes discretos a destinatários autorizados.
+Na criação, exigir data, horário e seleção de categoria, sem opção pré-selecionada. Categorias de consulta: **Clínica geral, Cardiologia, Oftalmologia, Odontologia e Outro**. Descrição complementar, profissional, local, observação e documentos são opcionais, inclusive para **Outro**. Permitir editar, cancelar e marcar realizada preservando histórico relevante. Lembretes discretos a destinatários autorizados.
 
 ### CUI-F06 — Exames
 
-Descrição; data se conhecida; arquivo opcional. Possível vínculo a consulta. Não interpretar resultados ou diagnosticar.
+Na criação, exigir seleção de categoria, sem opção pré-selecionada. Categorias de exame: **Sangue, Urina, Imagem, Cardíaco e Outro**. Descrição complementar, data e arquivo são opcionais, inclusive para **Outro**. Possível vínculo a consulta. Não interpretar resultados ou diagnosticar.
+
+Para consultas e exames, validar a categoria aplicável também no servidor. Registros anteriores podem permanecer sem categoria, com o texto original preservado e sem recategorização automática. Para registros novos sem descrição, usar tipo e categoria para identificação na lista, no detalhe, na Rotina, no Histórico e no Resumo.
 
 ### CUI-F07 — Apoio e companhia
 
@@ -128,8 +130,8 @@ Período selecionável; distinguir previstas, informadas como tomadas, informada
 
 - Medicamento: **informado** nome, primeiro horário, doses por dia, duração contínua ou em dias e horários conferidos; **opcional** receita, observação, frequência especial/intervalo quando aplicável; **automático** sugestão matemática de horários quando segura, autor, vigências e identificadores.
 - Dose: **informada** situação e eventual horário efetivo; **automático** ocorrência, autor, momento e trilha de correções.
-- Consulta: **informado** data/hora e descrição; restantes opcionais.
-- Exame: **informado** descrição; data/documento opcionais.
+- Consulta: **informado** data, horário e categoria; descrição complementar e demais campos opcionais (CUI-F05).
+- Exame: **informado** categoria; descrição complementar, data e documento opcionais (CUI-F06).
 - Apoio: conclusão rápida; observação opcional.
 
 ## 7. Exceções
@@ -172,9 +174,9 @@ Prontuário clínico, diagnóstico, recomendação de doses, OCR de receitas, fa
 
 **APROVADO pelo Produto em 2026-11-22:** simplificar a proposta anterior para apenas baixar o arquivo. O usuário abre o documento no navegador/aplicativo do próprio dispositivo. O restante do desenho E3 foi aprovado; E3-UX-00 encerrado. Substitui a proposta de visualizador interno da v1.6. Complementa CUI-F06/F10/F11, preservando permissões e cadastro mínimo.
 
-Em Consultas e exames, mostrar **Baixar arquivo** no detalhe de exame com anexo, somente quando autorizado. Manter pessoa, descrição e data conhecida visíveis. Não criar visualizador, zoom, paginação ou dependência de biblioteca de leitura. A plataforma disponibiliza o arquivo; a abertura externa segue o comportamento do dispositivo e não pode ser prometida como automática.
+Em Consultas e exames, mostrar **Baixar arquivo** no detalhe de exame com anexo, somente quando autorizado. Manter pessoa, identificação do registro conforme CUI-F06 e data conhecida visíveis. Não criar visualizador, zoom, paginação ou dependência de biblioteca de leitura. A plataforma disponibiliza o arquivo; a abertura externa segue o comportamento do dispositivo e não pode ser prometida como automática.
 
-Descrição permanece obrigatória; data e arquivo opcionais, consulta relacionada quando existir. Não exigir transcrição, especialidade ou resultados. Prever sem anexo, preparando download, arquivo indisponível, falha de rede e permissão revogada, sem sucesso fictício. Não transferir bytes sem autorização do servidor nem criar URL pública permanente.
+Os campos do cadastro seguem CUI-F06, com anexo opcional e consulta relacionada quando existir. Não exigir transcrição, especialidade ou resultados. Prever sem anexo, preparando download, arquivo indisponível, falha de rede e permissão revogada, sem sucesso fictício. Não transferir bytes sem autorização do servidor nem criar URL pública permanente.
 
 | ID | Aceite |
 |---|---|
@@ -182,15 +184,14 @@ Descrição permanece obrigatória; data e arquivo opcionais, consulta relaciona
 | E3-EX-02 | Download é acionável no celular/desktop e preserva o contexto do exame; interface informa que o documento pode ser aberto no aplicativo do dispositivo, sem prometer sua abertura automática. |
 | E3-EX-03 | Download exige autorização contextual, inclusive API/URL direta, sessão revogada e família diferente; administrador e integrante não ganham acesso clínico por presunção. |
 | E3-EX-04 | Sem anexo, arquivo indisponível, falha de rede e acesso negado recebem tratamento útil, sem informar sucesso antes de disponibilizar o arquivo. |
-| E3-EX-05 | Cadastro mantém descrição mínima, data/arquivo opcionais; não interpreta resultados nem exige transcrição. |
+| E3-EX-05 | Cadastro valida a categoria de exame, aceita descrição, data e arquivo opcionais e mantém legíveis os registros anteriores. Não interpreta resultados nem exige transcrição. |
+| E3-EX-06 | O seletor de anexo mostra nome, tipo conhecido e tamanho, permite trocar ou remover antes do envio e informa a etapa em andamento e falhas junto ao campo. Se o upload foi confirmado e o registro do exame falhou, reutiliza o anexo na tentativa seguinte. |
 
 Resumo e sua prévia/PDF continuam de propriedade do Módulo 04 v1.2. A exclusão do visualizador de exames não remove a conferência da prévia do relatório. Fora: visualizador embutido, IA, OCR, diagnóstico, nova classificação médica e migração de armazenamento como pré-condição. A implementação E3 integra a V1 homologada; aceites vigentes no STATUS.
 
-## 11. Propostas de melhoria UX — consultas e exames (levantamento de testes em 2026-11-24)
+## 11. Decisões de UX — consultas e exames (2026-11-24)
 
-**Estado: EM ANÁLISE / NÃO APROVADO COMO NOVA REGRA FUNCIONAL.** Este bloco registra achados da equipe de testes e orienta a frente UX. Até decisão expressa do Produto, **prevalecem CUI-F05, CUI-F06, seção 6 e E3-EX-05**: descrição obrigatória e categorias não obrigatórias; não alterar API, banco, DTOs, validações ou dados por inferência. A homologação funcional da V1 permanece válida.
+**Aprovadas pelo Produto. Implementação e homologação pendentes.**
 
-- **CUI-UX-P01 — Classificação simples:** avaliar categoria **obrigatória** para consultas e exames, com **descrição complementar opcional** e apenas opções frequentes, compreensíveis, eventualmente “Outro”. UX deve propor categorias mínimas adequadas a cada tipo e verificar o significado dos registros sem texto; Produto aprova ou ajusta a regra antes da implementação.
-- **CUI-UX-P02 — Anexo do exame:** revisar o layout do botão de anexar, área de toque, nome do arquivo selecionado, troca/remoção e estados de erro/carregamento. É melhoria de experiência, preservando anexo opcional, download privado e proibição de visualizador interno ou exposição de dados.
-
-**Dependência:** a frente UX apresenta desenho, critérios de aceite e impacto sobre contratos existentes. Se a categoria obrigatória for aprovada, ajustar numa única alteração coerente as regras funcionais conflitantes acima, permissões, validação frontend/backend e testes. Não reclassificar retroativamente exames ou consultas existentes sem decisão.
+- **UX-01 (CUI-UX-P01):** classificação de consultas e exames em CUI-F05, CUI-F06, §6 e E3-EX-05.
+- **UX-02 (CUI-UX-P02):** seleção e envio de anexo em E3-EX-06. O download privado segue E3-EX-01 a E3-EX-04.

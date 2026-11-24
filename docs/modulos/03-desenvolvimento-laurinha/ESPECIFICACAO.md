@@ -1,7 +1,7 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
 **Versão:** 1.5 — E5, escopo aprovado para a primeira publicação, 2026-11-22\
-**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
+**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A revisão UX-03 a UX-05 foi aprovada em 2026-11-24 e aguarda implementação e homologação. Esses estados são registrados em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
 
@@ -32,7 +32,9 @@ Não exigir uso diário, planejamento, cronômetro, foto de prova ou avaliaçõe
 
 ### DEV-F01 — Biblioteca de atividades
 
-Cada atividade da biblioteca oferece nome, instrução curta, categoria, dificuldade e materiais quando necessários. Duração aproximada é opcional. Filtros simples por categoria e apresentação adequada a celular. As orientações priorizam a atividade presencial e não exigem manter a tela aberta.
+Cada atividade da biblioteca oferece nome, instrução curta, categoria, dificuldade e materiais quando necessários. Duração aproximada é opcional. Usar um **Select** para categoria, no padrão de Jogos Digitais. Preservar **Todas**, os filtros existentes e os parâmetros da URL. Alternar **Explorar** e **Executadas** mantém a categoria selecionada. As orientações priorizam a atividade presencial e não exigem manter a tela aberta.
+
+Nas duas modalidades, usar o cabeçalho **Biblioteca · Nome da pessoa**, com ícone de estrela e quantidade de saldo disponível. Compartilhar a consulta de saldo, inclusive ao alternar modalidades. Mostrar zero quando confirmado, atualizar após participação confirmada e respeitar a autorização contextual. Fornecer rótulo acessível, como “12 estrelas disponíveis”.
 
 A biblioteca será curada, pequena e apropriada para a idade; não inclui testes diagnósticos nem promessas clínicas.
 
@@ -232,9 +234,10 @@ Jogos breves complementam as atividades presenciais e registram descobertas lúd
 ### Regras funcionais
 
 - **E5-F01 — Descoberta.** Integrar **Jogos digitais** à Biblioteca de Desenvolvimento da pessoa. Exibir até três destaques automáticos, com continuidade e variedade por regras locais estáveis, seguidos do catálogo completo com **Todas** e filtros pelas categorias vigentes. Todos os jogos disponíveis à pessoa aparecem no catálogo, inclusive quando a data de nascimento está ausente. Faixa etária é orientativa. Sugestões renováveis e limites da seção 12 pertencem às atividades reais.
+  - Na grade do catálogo, mostrar **quatro ícones quadrados por linha, inclusive no celular**, com o nome abaixo de cada ícone. É permitido abreviar nomes longos, mantendo o nome completo para leitores de tela. Cada item apresenta somente o ícone e o nome, com foco visível e acionamento por toque e teclado. O retorno ao catálogo preserva os filtros.
 - **E5-F02 — Fases.** Cada jogo oferece cinco fases com objetivo, instrução breve e dificuldade progressiva predefinida. Qualquer fase pode ser aberta no primeiro acesso e repetida livremente. A interface pode indicar uma próxima fase a experimentar. Dificuldade é atributo da fase, sem ajuste adaptativo ou seletor adicional.
 - **E5-F03 — Conteúdo.** Usar conteúdo próprio ou licenciado, curado e versionado. Memória varia pares aprovados e posições. Sequência varia padrões verificáveis. Labirinto usa mapas revisados e variações que preservam caminho válido. A versão e a dificuldade são rastreáveis. A partida opera com conteúdo aprovado e lógica hospedada na plataforma, sem serviços externos, IA durante o jogo, anúncios ou rastreadores de terceiros.
-- **E5-F04 — Partida.** Jogar inicia a fase diretamente. Objetivo e controles ficam acessíveis em Como jogar durante a partida. A seleção de fase oferece Todas, Concluídas e Não concluídas a partir do progresso persistido. Dica e saída são sempre acessíveis durante a partida. Alcançar o objetivo conclui a fase, inclusive com dica ou ajuda de adulto. A celebração breve é acessível, respeita movimento reduzido e usa som somente de forma opcional. Partidas e repetições ficam livres de relógio, limite de vidas e contagem de erros.
+- **E5-F04 — Partida.** Acionar o ícone abre diretamente a primeira fase ainda não concluída conforme o progresso persistido. **Escolher fase** fica dentro do jogo e pode ser acionado desde a primeira visita. Se todas as fases já estiverem concluídas, o ícone abre a escolha de fase. Objetivo e controles ficam acessíveis em Como jogar durante a partida. A seleção de fase oferece Todas, Concluídas e Não concluídas a partir do progresso persistido. Dica e saída são sempre acessíveis durante a partida. Alcançar o objetivo conclui a fase, inclusive com dica ou ajuda de adulto. A celebração breve é acessível, respeita movimento reduzido e usa som somente de forma opcional. Concluir uma fase celebra aquela fase após a confirmação do servidor. A celebração de conclusão do jogo depende de todas as fases confirmadas, inclusive quando a última fase numerada é jogada primeiro. Partidas e repetições ficam livres de relógio, limite de vidas e contagem de erros.
 - **E5-F05 — Progresso.** **Não explorada** indica fase ainda não iniciada, **Experimentada** indica início registrado e **Concluída** indica objetivo atingido e confirmação persistida. Uma fase concluída mantém esse estado em novas partidas, reenvios e acessos simultâneos. Voltar após interrupção inicia uma nova partida desde o começo da fase e mantém as descobertas confirmadas. A interface confirma o salvamento após resposta confiável do servidor.
 - **E5-F06 — Reconhecimento.** A primeira conclusão gera um reconhecimento breve e um único registro de descoberta. A pessoa vê as próprias fases experimentadas e concluídas. Estrelas, saldo e resgates pertencem às atividades reais e seguem DEV-F03 a DEV-F06. A experiência digital restringe o reconhecimento ao progresso pessoal, sem metas, ranking, notificações de retorno ou comparação.
 - **E5-F07 — Evolução.** Histórico e Resumo leem jogos experimentados e conclusões diretamente da fonte E5, conforme as regras de período e autorização do Módulo 04. Mostrar fatos como “3 de 5 fases concluídas”. Cada primeira conclusão pode produzir um evento datado no Histórico com jogo, fase e versão. Os registros descrevem experiências lúdicas. A inclusão em prévia/PDF depende de avaliação de UX e testes de privacidade com as regras do Módulo 04.
@@ -256,25 +259,28 @@ Jogos breves complementam as atividades presenciais e registram descobertas lúd
 | E5-ACE-10 | Celular e desktop permitem uso por toque e teclado, saída disponível, foco e contraste perceptíveis, áudio opcional e movimento reduzido. |
 | E5-ACE-11 | Histórico e Resumo derivam descobertas da E5. As regras de Explorar, Executadas, recompensas e estrelas continuam verificáveis nos percursos reais. |
 | E5-ACE-12 | Jogo, fase e versão são rastreáveis. Atualizar conteúdo mantém conquistas anteriores e os recursos globais contêm apenas dados editoriais. |
+| E5-ACE-13 | A grade mantém quatro ícones com nome por linha a partir de 320 px, sem rolagem horizontal. O ícone abre a primeira fase pendente ou a escolha quando o jogo está completo. O retorno mantém os filtros. Concluir a fase 5 primeiro não celebra a conclusão do jogo. |
 | E5-HOM | Responsável autorizado e criança avaliam o piloto no celular com dados fictícios, da localização do jogo à escolha livre de fase, dica, conclusão, saída, retorno e leitura da evolução. Registrar o resultado humano explícito. |
 
 **Referências vigentes.** [Guia UX](../../ux-ui/GUIA-DE-EXPERIENCIA.md) · [Módulo 04](../04-evolucao-familiar/ESPECIFICACAO.md) · catálogo e componentes de jogos em `apps/api/src/desenvolvimento/jogos/` e `apps/web/src/componentes/desenvolvimento/jogos/`.
 
-## 14. Propostas de UX, curadoria e jogos — achados dos testes da V1 (2026-11-24)
+## 14. Decisões UX e propostas de curadoria — testes da V1 (2026-11-24)
 
-**Estado: PROPOSTAS EM ANÁLISE, NÃO HOMOLOGADAS NEM APROVADAS COMO SUBSTITUIÇÃO DAS REGRAS VIGENTES.** As frentes UX e Jogos devem usá-las como objeto da análise; não executar automaticamente as mudanças apenas por constarem aqui. A baseline V1 permanece de **24 modelos curados, até 6 sugestões por pessoa, renovação de até 3 e oito jogos/40 fases**. Pontuação, histórico, idempotência e autorizações atuais permanecem intocados até aprovação.
+**Aprovadas pelo Produto, com implementação e homologação pendentes:**
+
+- **UX-03 (DEV-UX-P01):** filtro de Atividades Reais em DEV-F01 e estados em DEV-F03.
+- **UX-04 (DEV-UX-P02):** cabeçalho compartilhado em DEV-F01 e saldo em DEV-F06.
+- **UX-05 (DEV-JOG-P04/P05, interação e confirmação visual):** catálogo, entrada e escolha de fase em E5-F01 a E5-F05 e E5-ACE-13.
+
+**Propostas ainda em análise:** as linhas abaixo exigem decisão própria. A baseline V1 permanece de **24 modelos curados, até 6 sugestões por pessoa, renovação de até 3 e oito jogos/40 fases**.
 
 | ID | Proposta para avaliação | Frente e cuidado |
 |---|---|---|
-| DEV-UX-P01 | Trocar chips/controles avulsos de categoria por **Select** em Atividades Reais, coerente com Jogos; preservar Todas, filtros, estados e URL | UX; preferencialmente sem mudança funcional |
-| DEV-UX-P02 | Unificar cabeçalho das duas bibliotecas: **Biblioteca · nome da pessoa** + ícone de estrela e **quantidade de saldo**, sem texto “Saldo:” | UX; reutilizar fonte de saldo, sem alterar regra de estrelas |
 | DEV-JOG-P01 | Revisar a curadoria de atividades reais para faixa orientativa **6–12 anos**, priorizando atividades práticas, materiais acessíveis e diversão presencial | Jogos/Produto; preservar conteúdo e participações utilizados |
 | DEV-JOG-P02 | Exibir **até duas sugestões por vez**, somente elegíveis/ainda não escolhidas ou aplicadas, com renovação e feedback claro | Jogos/Produto; **substitui limites E4 de até 6/renovação 3 se aprovado**; definir elegibilidade e não confundir escolha com participação |
 | DEV-JOG-P03 | Avaliar **máximo de 10 atividades ativas por categoria e pessoa**, com mensagem amigável ao atingir limite, **não** limitar automaticamente o catálogo editorial global | Jogos/Produto e Arquitetura; definir ativas, personalizadas, sem categoria, reativação e concorrência; só validar no backend após aprovação |
-| DEV-JOG-P04 | Catálogo de jogos em **cards com miniatura**, filtros simples e entrada direta na primeira fase disponível; não mostrar lista extensa de fases ao abrir a biblioteca | UX/Jogos; referência de navegação Poki, sem copiar marcas, imagens, anúncios ou jogos; preservar acessibilidade |
-| DEV-JOG-P05 | Conclusão oferece próxima fase ou repetir; ao concluir todas, parabenizar e permitir revisitar fases concluídas | Jogos/Produto; validar contra a regra atual E5 de acesso direto às fases 4/5, sem bloqueio automático silencioso |
 | DEV-JOG-P06 | Estudar ampliação dos **8 jogos para pelo menos 15 fases cada (mínimo 120)**, garantindo variedade real, progressão qualitativa e compatibilidade com o progresso existente | Jogos/Arquitetura/Produto; **mudança de escopo**, distinta do redesenho visual e posterior à estabilidade UX |
 
-**Ordem:** (1) corrigir a experiência da biblioteca e anexo/cabeçalho em conjunto com UX; (2) definir regras de sugestões, limites e catálogo com Produto/Arquitetura; (3) avaliar ampliação de fases em incrementos após estabilização da V1. **Não adicionar** Web Push, IA, novos tipos de estrelas, rankings ou controles de desempenho.
+**Ordem:** encaminhar as melhorias UX aprovadas à esteira. Avaliar curadoria, sugestões e limites com Produto e Arquitetura. Avaliar ampliação de fases em incrementos após a estabilização da V1. **Não adicionar** Web Push, IA, novos tipos de estrelas, rankings ou controles de desempenho.
 
 **Critério de encaminhamento:** cada frente apresenta diagnóstico com arquivos reais, experiência proposta, impactos e testes. Propostas que alteram limites, obrigatoriedade, progressão, persistência ou autorização retornam ao Produto para decisão L3 e **somente após aprovação** substituem a regra canônica e são enviadas à esteira.
