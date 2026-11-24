@@ -1,7 +1,7 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
-**Versão:** 1.5 — E5, escopo aprovado para a primeira publicação, 2026-11-22\
-**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A revisão UX-03 a UX-05 foi aprovada em 2026-11-24. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
+**Versão:** 1.6 — evolução de Atividades Reais aprovada em 2026-11-24\
+**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A seção 14 registra as decisões UX-03 a UX-05 e a aprovação do recorte de Atividades Reais. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
 
@@ -182,7 +182,7 @@ Planejamento com calendário obrigatório; declaração de atividade não realiz
 
 ## 12. E4 — Biblioteca de atividades reais
 
-**APROVADO pelo responsável do Produto em 2026-11-22**, por concordância com a proposta: catálogo curado, seleção pequena e renovação de sugestões antes de automatizar sua alimentação. Limites iniciais aprovados: **até 24 modelos publicados ativos, até 6 sugestões por pessoa e renovação de até 3 opções por solicitação**.
+**APROVADO pelo responsável do Produto em 2026-11-22**, por concordância com a proposta: catálogo curado, seleção pequena e renovação de sugestões antes de automatizar sua alimentação. A evolução de Atividades Reais de 2026-11-24 (DEV-JOG-P01 a P03) mantém até 24 modelos publicados ativos no catálogo global. Os limites por pessoa e por renovação passam a seguir as regras abaixo depois da implementação.
 
 ### Conteúdo e privacidade
 
@@ -192,36 +192,39 @@ Usar categorias existentes, incluindo Todas e tratamento vigente de atividades p
 
 O limite de 24 aplica-se aos modelos publicados ativos do catálogo global, não ao histórico, modelos arquivados nem atividades personalizadas da família. Alterar/arquivar modelo não reescreve instruções relevantes, dificuldade ou estrelas de execuções anteriores: preservar a versão executada.
 
-### Sugestões e escolha
+### Sugestões e escolha (DEV-JOG-P02)
 
-Oferecer até 6 sugestões elegíveis no contexto da pessoa. Excluir as indisponíveis para nova participação conforme DEV-F03; diversificar categorias sem diagnosticar necessidades ou impor metas. Com poucas alternativas, mostrar menos opções e explicar de forma neutra. Não duplicar itens para completar a quantidade.
+- A Biblioteca mostra **até duas sugestões elegíveis por pessoa**. Sugerir modelos publicados ativos, disponíveis para nova participação e ainda inéditos para a pessoa. Excluir atividades já escolhidas ou com participação registrada, inclusive após disponibilização novamente. Priorizar a faixa orientativa quando conhecida e diversificar categorias quando houver opções. Sem idade, oferecer opções gerais. Uma categoria sem vaga de escolha fica fora das sugestões enquanto estiver cheia.
+- O responsável com organização de Desenvolvimento autorizada pode escolher para experimentar e renovar sugestões. A escolha é privada por pessoa, compartilhada entre responsáveis autorizados e independente do navegador. Após confirmação, mover a atividade da lista de sugestões para **Escolhidas para experimentar**, dentro de Explorar. Manter as sugestões restantes. Repor ou trocar somente ao acionar **Renovar sugestões**, após a oferta inicial.
+- Renovar oferece até duas opções inéditas, preenchendo vagas e substituindo as opções anteriores quando houver alternativas. Com renovação parcial, manter as opções ainda elegíveis que não puderem ser substituídas. Evitar alternância repetitiva entre os mesmos cartões durante a rotação. Ao esgotar as alternativas, informar “Não há novas sugestões disponíveis por agora” e manter acesso à Biblioteca. Em falha de gravação, preservar o último estado confirmado e permitir nova tentativa.
+- Escolher ou renovar não registra participação, não gera estrelas e não altera a disponibilidade conforme DEV-F03. Uma participação legítima, escolhida antes ou registrada diretamente, retira a atividade das escolhas disponíveis e das sugestões. Após registrar Concluiu ou Participou, a atividade passa a Executadas. **Disponibilizar novamente** a retorna a Explorar com o histórico intacto e sem crédito. Após a reativação, se o responsável quiser mantê-la na lista de escolhidas, faz uma escolha explícita sujeita ao limite.
 
-Responsável com organização de Desenvolvimento autorizada pode escolher/manter uma atividade para experimentar e solicitar **Renovar sugestões**. A seleção é privada por pessoa, compartilhada entre seus responsáveis autorizados; não depende do navegador individual.
+### Limite de escolhas (DEV-JOG-P03)
 
-Renovar substitui **até 3 alternativas ainda não escolhidas** por outras do catálogo curado, conforme disponibilidade. Preserva atividades escolhidas, personalizadas, participações e versões históricas. Sem alternativas, manter a seleção e informar “Não há novas sugestões disponíveis no momento”. Não há garantia de novidade infinita.
-
-### Ciclos que permanecem distintos
-
-Escolher ou renovar não registra participação, não gera estrelas e não altera Explorar/Executadas. Após Concluiu/Participou persistido, a atividade continua indo para Executadas; nova participação depende da disponibilização autorizada já existente. Renovar nunca reabre uma atividade executada. A tabela de estrelas e recompensas permanece vigente.
-
-A interface aproveita Biblioteca e Explorar/Executadas. “Sugestões para esta pessoa”, “Renovar sugestões” e acesso a “Ver biblioteca” ficam no contexto da pessoa, sem novo menu global. Registros e estados operacionais usam os contratos de origem, sem histórico duplicado.
+- **Até dez atividades escolhidas e disponíveis por categoria por pessoa acompanhada.** Cada atividade conta uma vez. Atividades personalizadas categorizadas contam quando explicitamente escolhidas para a pessoa. Personalizadas sem categoria continuam cadastráveis e utilizáveis e ficam fora da contagem.
+- Modelos globais apenas disponíveis para descoberta, sugestões e atividades em Executadas ficam fora da contagem. Registrar uma participação de atividade escolhida libera uma vaga. Consultar, registrar participação e disponibilizar novamente uma atividade existente continuam possíveis com a categoria cheia.
+- Ao atingir dez, uma nova escolha naquela categoria recebe a mensagem “Você já tem dez atividades escolhidas nesta categoria. Que tal experimentar alguma delas?”. Aplicar o limite no servidor às operações que efetivamente colocam uma atividade no conjunto contado, incluindo mudança de categoria de uma atividade já escolhida. Tratar concorrência e reenvio com isolamento por pessoa e família. Se houver excedente anterior, preservar escolhas e bloquear novas inclusões na categoria até haver vaga.
+- A interface reaproveita Biblioteca, cabeçalho compartilhado, filtro de categoria e Explorar/Executadas. O grupo de escolhidas representa organização para experimentar. Histórico, participações, estrelas e resgates continuam com suas fontes e regras vigentes.
 
 ### Alimentação inicial
 
 A entrega funciona com catálogo aprovado e seleção por regras locais. Conteúdo inicial pode ser mantido de forma versionada no repositório/seed, com revisão de qualidade antes de publicação. Internet/IA podem futuramente preparar candidatos para curadoria; pesquisa automática, geração em tempo real e publicação automática não integram E4. A manutenção do catálogo global não é poder do administrador de família.
+
+A primeira rodada de curadoria aprovada está na seção 14. Antes da publicação, conferir por ID sugestões, escolhas, guardados, disponibilidades e participações. Preservar as versões executadas e os vínculos. Manter o limite global e a oferta intergeracional.
 
 ### Critérios de aceite
 
 | ID | Critério |
 |---|---|
 | E4-ACE-01 | Catálogo contém no máximo 24 modelos ativos publicados, com metadados necessários e curadoria registrada; personalizadas/histórico não entram nesse limite. |
-| E4-ACE-02 | Pessoa recebe até 6 sugestões elegíveis, sem exigir novos dados pessoais; faixa orientativa não é diagnóstico nem bloqueio rígido. |
-| E4-ACE-03 | Renovar troca até 3 opções não escolhidas, sem duplicar itens, sem apagar escolhas/personalizadas e com retorno útil se faltarem alternativas. |
+| E4-ACE-02 | Pessoa recebe de zero a duas sugestões elegíveis, sem exigir novos dados pessoais. Escolher remove o cartão após confirmação e mantém a outra opção sem reposição automática. |
+| E4-ACE-03 | Renovar oferece até duas alternativas e preserva as escolhas. Testar troca parcial, esgotamento sem rotação repetitiva e ausência de atividades já escolhidas ou executadas, inclusive após reativação. |
 | E4-ACE-04 | Seleção persiste por pessoa e respeita família/operação; responsáveis da mesma pessoa veem estado consistente, inclusive retry e concorrência. |
 | E4-ACE-05 | Escolher/renovar não concede pontos nem reabre Executadas; participação, reativação e resgates mantêm DEV-F03..06. |
 | E4-ACE-06 | Atualização/arquivamento não altera conteúdo e créditos de execuções históricas; dados pessoais nunca são publicados no catálogo global. |
 | E4-ACE-07 | Biblioteca móvel permite entender instruções/materiais, escolher e renovar sem excesso de opções; vazio/erro não geram cobrança. |
-| E4-HOM | Homologar escolher → renovar preservando escolha → participar → Executadas → disponibilizar novamente, com duas famílias e regressão de estrelas/histórico. |
+| E4-ACE-08 | Com nove escolhas de uma categoria, duas novas escolhas concorrentes permitem só a décima. Testar personalizadas categorizadas e sem categoria, reativação, execução com limite cheio, alteração de categoria, excedente anterior e escopo entre pessoas. |
+| E4-HOM | Homologar escolher → renovar preservando escolha → participar → Executadas → disponibilizar novamente em celular, com duas famílias e regressão de histórico e estrelas. Testar o limite e o cenário sem novas sugestões. |
 
 **Fora do recorte E4:** jogos digitais (entregues separadamente no E5), IA com histórico pessoal, publicação automática, ranking e nova tabela de estrelas. A correção de anexos foi executada no recorte EST-01; estado vigente em STATUS-E-ESCOPO.
 
@@ -264,7 +267,7 @@ Jogos breves complementam as atividades presenciais e registram descobertas lúd
 
 **Referências vigentes.** [Guia UX](../../ux-ui/GUIA-DE-EXPERIENCIA.md) · [Módulo 04](../04-evolucao-familiar/ESPECIFICACAO.md) · catálogo e componentes de jogos em `apps/api/src/desenvolvimento/jogos/` e `apps/web/src/componentes/desenvolvimento/jogos/`.
 
-## 14. Decisões UX e propostas de curadoria — testes da V1 (2026-11-24)
+## 14. Decisões de UX e Atividades Reais — 2026-11-24
 
 **Aprovadas pelo Produto:**
 
@@ -272,15 +275,24 @@ Jogos breves complementam as atividades presenciais e registram descobertas lúd
 - **UX-04 (DEV-UX-P02):** cabeçalho compartilhado em DEV-F01 e saldo em DEV-F06.
 - **UX-05 (DEV-JOG-P04/P05, interação e confirmação visual):** catálogo, entrada e escolha de fase em E5-F01 a E5-F05 e E5-ACE-13.
 
-**Propostas ainda em análise:** as linhas abaixo exigem decisão própria. A baseline V1 permanece de **24 modelos curados, até 6 sugestões por pessoa, renovação de até 3 e oito jogos/40 fases**.
+**Atividades Reais — aprovação de Produto em 2026-11-24.** O responsável aprovou as opções **1A · 2A · 3A** após a apresentação do protótipo. Isso aprova a reposição manual de sugestões (DEV-JOG-P02), o limite por pessoa e categoria (DEV-JOG-P03) e a rodada de curadoria (DEV-JOG-P01). As regras do E4 estão na seção 12. Jogos Digitais seguem conforme E5, com oito jogos e 40 fases. A ampliação de fases (DEV-JOG-P06) permanece estudo de escopo.
 
-| ID | Proposta para avaliação | Frente e cuidado |
-|---|---|---|
-| DEV-JOG-P01 | Revisar a curadoria de atividades reais para faixa orientativa **6–12 anos**, priorizando atividades práticas, materiais acessíveis e diversão presencial | Jogos/Produto; preservar conteúdo e participações utilizados |
-| DEV-JOG-P02 | Exibir **até duas sugestões por vez**, somente elegíveis/ainda não escolhidas ou aplicadas, com renovação e feedback claro | Jogos/Produto; **substitui limites E4 de até 6/renovação 3 se aprovado**; definir elegibilidade e não confundir escolha com participação |
-| DEV-JOG-P03 | Avaliar **máximo de 10 atividades ativas por categoria e pessoa**, com mensagem amigável ao atingir limite, **não** limitar automaticamente o catálogo editorial global | Jogos/Produto e Arquitetura; definir ativas, personalizadas, sem categoria, reativação e concorrência; só validar no backend após aprovação |
-| DEV-JOG-P06 | Estudar ampliação dos **8 jogos para pelo menos 15 fases cada (mínimo 120)**, garantindo variedade real, progressão qualitativa e compatibilidade com o progresso existente | Jogos/Arquitetura/Produto; **mudança de escopo**, distinta do redesenho visual e posterior à estabilidade UX |
+### Primeira rodada de curadoria (DEV-JOG-P01)
 
-**Ordem:** encaminhar as melhorias UX aprovadas à esteira. Avaliar curadoria, sugestões e limites com Produto e Arquitetura. Avaliar ampliação de fases em incrementos após a estabilização da V1. **Não adicionar** Web Push, IA, novos tipos de estrelas, rankings ou controles de desempenho.
+Faixa orientativa de **6 a 12 anos**, com instrução curta para o adulto e prioridade à experiência de seis anos. As fichas são para consulta antes da brincadeira.
 
-**Critério de encaminhamento:** cada frente apresenta diagnóstico com arquivos reais, experiência proposta, impactos e testes. Propostas que alteram limites, obrigatoriedade, progressão, persistência ou autorização retornam ao Produto para decisão L3 e **somente após aprovação** substituem a regra canônica e são enviadas à esteira.
+| Brincadeira | Categoria · dificuldade | Duração | Como brincar e materiais |
+|---|---|---|---|
+| O que sumiu? | Memória e atenção · simples | 5–8 min | Escolham três objetos da casa. Uma pessoa esconde um e a outra diz o que mudou. Troquem os papéis. Usem um pano ou virem de costas. |
+| Mapa do tesouro | Raciocínio · média | 10–15 min | Criem duas pistas até um objeto escondido. Quem encontra escolhe o próximo esconderijo. As pistas podem ser faladas ou desenhadas em papel. |
+| História em turnos | Linguagem · simples | 5–10 min | Inventem uma história em turnos, com fala, desenho ou gesto. Escolham juntos o final. Nenhum material obrigatório. |
+| Orquestra de casa | Criatividade · simples | 5–10 min | Inventem um ritmo curto e respondam em turnos. A criança conduz a rodada seguinte. Usem palmas suaves, gestos ou pote plástico e colher de madeira. |
+| Alvo cooperativo | Coordenação · simples | 5–10 min | Lancem em turnos e ajustem juntos a distância. Usem papel amassado ou meias, com um cesto ou alvo no chão. Dá para jogar sentado. |
+| Piquenique em casa | Autonomia · média | 10–15 min | A criança escolhe o lugar e combina com o adulto quem prepara cada parte. Usem o lanche da casa ou façam um piquenique imaginário. |
+
+### Incrementos para a esteira
+
+1. **Sugestões e escolhas:** adaptar os contratos existentes, preservar escolhas anteriores e cobrir geração, reposição manual, elegibilidade, escassez e isolamento. Validar E4-ACE-02 a 05.
+2. **Limite de escolhas:** aplicar a regra no domínio e testar registro de participação, reativação, alterações de categoria, reenvio e concorrência. Validar E4-ACE-08.
+3. **Biblioteca de Atividades Reais:** montar a lista de escolhidas, ligar as ações às respostas confirmadas, preservar o filtro e validar vazio, erros, aviso de limite e navegação no celular. Validar E4-ACE-07 e E4-HOM.
+4. **Curadoria:** verificar vínculos e slots ativos, validar versão e publicação repetível, disponibilizar as seis fichas aprovadas e conferir a experiência presencial em celular. Validar E4-ACE-01, E4-ACE-06 e E4-HOM.

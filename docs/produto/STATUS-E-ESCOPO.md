@@ -53,7 +53,7 @@ Procedimento operacional: [implantação na VPS](../esteira/estado/procedimento-
 | UX-01 e UX-02 | Cadastro de consultas/exames e seleção de anexo | [Módulo 02 §11](../modulos/02-cuidados-vovo/ESPECIFICACAO.md#11-decisões-de-ux--consultas-e-exames-2026-11-24) | Implementado e homologado |
 | UX-03, UX-04 e UX-05 | Filtro de Atividades Reais, cabeçalho compartilhado e catálogo de Jogos Digitais | [Módulo 03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#14-decisões-ux-e-propostas-de-curadoria--testes-da-v1-2026-11-24) | Implementado e homologado |
 
-Curadoria, redução da quantidade de sugestões, limite de atividades por categoria e ampliação do número de fases seguem **em análise** no Módulo 03 §14.
+**Atividades Reais (DEV-JOG-P01 a P03) aprovadas pelo Produto em 2026-11-24**, com implementação e homologação pendentes. A decisão cobre a curadoria de seis brincadeiras, duas sugestões com reposição manual e o limite de dez escolhas por categoria e pessoa. Consulte o [Módulo 03 §12 e §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#14-decisões-de-ux-e-atividades-reais--2026-11-24). A ampliação de fases dos Jogos Digitais permanece em estudo.
 
 ## 6. Fontes por responsabilidade (contexto mínimo)
 
