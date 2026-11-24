@@ -1,5 +1,7 @@
 # Plano corretivo de UX — homologação humana reprovada em 2026-11-18
 
+> **REGISTRO HISTÓRICO — NÃO É DEMANDA ATIVA.** Este arquivo registra uma rodada de análise, correção ou homologação anterior à V1 consolidada. Termos como “pendente”, “reprovada” ou “não implementada” descrevem **aquela rodada**, não o estado atual. A V1 está homologada funcionalmente e em testes restritos; consultar `docs/produto/STATUS-E-ESCOPO.md`, a especificação vigente do módulo e o código antes de reabrir trabalho. Não executar este plano por padrão.
+
 **Estado:** demanda de correção aprovada pelo responsável pelo produto; **executar pela esteira existente, sem commit/push/merge/deploy automáticos**.  
 **Base de análise:** `develop` no commit `bed022447e3535b1cc24aac1c16f4ccff01ba90e`; antes de executar, reconciliar com a branch, o workspace e `docs/esteira/estado/atual.json`.  
 **Identificador sugerido:** `DEM-UX-HOM-20261118`.  

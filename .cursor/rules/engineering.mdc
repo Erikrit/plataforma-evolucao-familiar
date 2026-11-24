@@ -1,42 +1,15 @@
 ---
-description: Regras permanentes da esteira e localização das fontes oficiais do produto
+description: Regras permanentes da esteira PEF — entrada mínima, fontes oficiais e segurança
 alwaysApply: true
 ---
 
-# Engenharia — esteira PEF
+# Engenharia PEF — instruções permanentes
 
-## Fontes oficiais
+1. **Fonte de verdade:** ler `AGENTS.md` para fluxo e `docs/produto/STATUS-E-ESCOPO.md` para fase vigente. Governança e autoridade: `docs/produto/GOVERNANCA.md`. Não recontar histórico nem usar decisões de chats como regra canônica.
+2. **Contexto mínimo:** na demanda, ler apenas a seção relevante de `docs/modulos/*/ESPECIFICACAO.md`, `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`, ADRs e código afetado. `REGISTRO.md`, `atual.json` completo e logs antigos são históricos, não contexto automático.
+3. **Fluxo:** `task-routing` → `module-planning` só quando necessário → `implementation-workflow` → `quality-gate` com verificador. Sem aprovação L3/documentação oficial, não inventar regra.
+4. **Validação:** rodar testes pertinentes com saída real. Homologação humana/dispositivos não vira PASS sem evidência. Mudanças em auth, autorização, saúde, crianças e persistência pedem regressões específicas.
+5. **Proteção:** não inserir segredos ou dados reais no repositório, não ampliar acesso por papel e não resetar VPS automaticamente.
+6. **Proibições:** agentes não fazem commit, push, PR, merge, release, deploy ou Git destrutivo automaticamente e não contornam hooks. Seguir `AGENTS.md`.
 
-- Produto: `docs/produto/DOCUMENTO-MESTRE.md`, `docs/produto/STATUS-E-ESCOPO.md`, `docs/produto/GOVERNANCA.md`
-- Arquitetura/ADRs: `docs/arquitetura/ARQUITETURA.md`, `docs/arquitetura/DECISOES.md`
-- Módulos: `docs/modulos/*/ESPECIFICACAO.md`
-- UX: `docs/ux-ui/GUIA-DE-EXPERIENCIA.md`
-- Esteira: `AGENTS.md`, `docs/esteira/REGISTRO.md`, `docs/esteira/estado/atual.json`
-
-Não duplicar esses documentos em prompts. Ler só o trecho necessário.
-
-## Separação lógica (ADR-012)
-
-Artefatos da esteira (`.cursor/`, `docs/esteira/`, `scripts/esteira/`, `AGENTS.md`) não misturam regras funcionais do produto. Não alterar requisitos aprovados sem autorização humana.
-
-## Fluxo mínimo (desenvolvimento contínuo)
-
-1. Skill `task-routing` ao receber qualquer demanda.
-2. Skill `module-planning` só para novo módulo ou mudança complexa.
-3. Skill `implementation-workflow` para incremento planejado ou demanda delimitada aprovada.
-4. Skill `quality-gate` (QG-1 → verifier → QG-2; QG-3 ao fechar; homologação quando pedida).
-5. Persistir estado em `docs/esteira/estado/atual.json` sem apagar histórico de módulos/demandas.
-
-## Qualidade com evidência real
-
-Aplicação local em `apps/api` e `apps/web`. Não inventar código nem resultados só para “passar” gates. Verificações sem alvo = `PENDING` ou `BLOCKED` (motivo). `NOT_APPLICABLE` só se a verificação realmente não se aplica. Homologação humana/dispositivos = `PENDING_HUMAN`, nunca PASS automático. Auth, autorização, privacidade e persistência tocadas exigem checagens críticas pertinentes.
-
-Fingerprints novos: hash verificável dos arquivos afetados. Evidência antiga não cobre código alterado.
-
-## Segurança operacional
-
-Proibido: commit, push, tag, release, PR, deploy, publish, git destrutivo. Não contornar hooks. Sem segredos/dados reais no repositório. Nomes em português no código do produto (exceto APIs/libs e convenções já estabelecidas).
-
-## Retomada
-
-Antes de continuar: ler estado persistido (`demanda` ou incremento), `git status` (leitura), comparar fingerprint/arquivos. Máximo 3 correções da mesma causa raiz → `BLOCKED`.
+As skills completas e os contratos de saída estão em `.cursor/skills/`; manter equivalentes os espelhos em `.agents/skills/` para Codex.

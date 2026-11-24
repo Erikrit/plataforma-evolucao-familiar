@@ -1,5 +1,7 @@
 # Módulo 01 — Gestão e visualização de acessos
 
+> **REGISTRO HISTÓRICO — NÃO É DEMANDA ATIVA.** Este arquivo registra uma rodada de análise, correção ou homologação anterior à V1 consolidada. Termos como “pendente”, “reprovada” ou “não implementada” descrevem **aquela rodada**, não o estado atual. A V1 está homologada funcionalmente e em testes restritos; consultar `docs/produto/STATUS-E-ESCOPO.md`, a especificação vigente do módulo e o código antes de reabrir trabalho. Não executar este plano por padrão.
+
 **Projeto:** Plataforma de Evolução Familiar  
 **Destinatários:** Desenvolvimento, UX e QA  
 **Estado:** especificação de correção após reprovação na homologação humana  

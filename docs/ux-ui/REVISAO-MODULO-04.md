@@ -1,5 +1,7 @@
 # Revisão UX do Módulo 04 — Histórico, Resumo e PDF
 
+> **REGISTRO HISTÓRICO — NÃO É DEMANDA ATIVA.** Este arquivo registra uma rodada de análise, correção ou homologação anterior à V1 consolidada. Termos como “pendente”, “reprovada” ou “não implementada” descrevem **aquela rodada**, não o estado atual. A V1 está homologada funcionalmente e em testes restritos; consultar `docs/produto/STATUS-E-ESCOPO.md`, a especificação vigente do módulo e o código antes de reabrir trabalho. Não executar este plano por padrão.
+
 **Data** 2026-11-20. **Estado** direção de UX APROVADA pelo responsável do Produto em 2026-11-20; encaminhada para planejamento e implementação.
 **Referência** develop @ 64a4a0694d6d370267d8b7ff7d381aa484bec97b.
 **Fonte funcional** docs/modulos/04-evolucao-familiar/ESPECIFICACAO.md v1.1.

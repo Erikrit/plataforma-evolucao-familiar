@@ -1,5 +1,7 @@
 # Revisão de UX — Módulo 03: Desenvolvimento da Laurinha
 
+> **REGISTRO HISTÓRICO — NÃO É DEMANDA ATIVA.** Este arquivo registra uma rodada de análise, correção ou homologação anterior à V1 consolidada. Termos como “pendente”, “reprovada” ou “não implementada” descrevem **aquela rodada**, não o estado atual. A V1 está homologada funcionalmente e em testes restritos; consultar `docs/produto/STATUS-E-ESCOPO.md`, a especificação vigente do módulo e o código antes de reabrir trabalho. Não executar este plano por padrão.
+
 **Referência:** `develop` em `47eb820cbe870fb2694c8d1616189d0392b283bc`; direção de UX aprovada pelo responsável do produto em 2026-11-18.  
 **Status:** **APROVADA COMO DIREÇÃO DE DESIGN**, não implementada/homologada por esta revisão.  
 **Fonte funcional:** `docs/modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md` v1.1; **padrão de UX:** `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` § Desenvolvimento.  

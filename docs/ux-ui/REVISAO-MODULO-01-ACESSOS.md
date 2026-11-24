@@ -1,5 +1,7 @@
 # Revisão prioritária — Módulo 01: acessos e permissões
 
+> **REGISTRO HISTÓRICO — NÃO É DEMANDA ATIVA.** Este arquivo registra uma rodada de análise, correção ou homologação anterior à V1 consolidada. Termos como “pendente”, “reprovada” ou “não implementada” descrevem **aquela rodada**, não o estado atual. A V1 está homologada funcionalmente e em testes restritos; consultar `docs/produto/STATUS-E-ESCOPO.md`, a especificação vigente do módulo e o código antes de reabrir trabalho. Não executar este plano por padrão.
+
 **Data da priorização:** 2026-11-19  
 **Referência de inspeção:** `develop` em `fe4c8cbc3f529f3a9cdbba1bf73bc84c386c7e24`  
 **Estado:** revisão preliminar, **NÃO HOMOLOGADA** quanto aos achados novos; requer cenários humanos concretos e auditoria de autorização.  

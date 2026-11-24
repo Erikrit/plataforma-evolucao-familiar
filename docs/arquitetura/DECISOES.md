@@ -1,13 +1,13 @@
 # Registro de decisões arquiteturais
 
-Decisões abaixo são direções preliminares aprovadas conceitualmente, não prova de implementação.
+Registro histórico de decisões arquiteturais. **A V1 já possui arquitetura implementada e está em testes restritos na VPS**, mas algumas ADRs permanecem direcionamentos ou foram supersedidas. Este registro não comprova sozinho a implementação: confirmar código, revisões e estado vigente em `docs/produto/STATUS-E-ESCOPO.md`.
 
 | ID | Decisão | Justificativa |
 |---|---|---|
 | ADR-001 | Monólito modular | Menor operação e acoplamento distribuído |
 | ADR-002 | Um PostgreSQL | Modelo relacional e histórico consistente |
-| ADR-003 | Next.js + NestJS + Prisma, preliminares | Aderência à experiência tecnológica existente |
-| ADR-004 | Arquivos privados compatíveis com S3 | Proteger exames/receitas e não depender de arquivos locais |
+| ADR-003 | Next.js + NestJS + Prisma, adotados na V1 | Monólito modular implementado; verificar contratos no código |
+| ADR-004 | Direção futura: arquivos privados compatíveis com S3 | A V1 de homologação persiste anexos no PostgreSQL; migração para S3 não está implementada |
 | ADR-005 | Pessoas separadas de contas | Pessoas acompanhadas não precisam de login |
 | ADR-006 | Autorizações por pessoa/contexto | Restringir colaboradora a dados da Vovó |
 | ADR-007 | Prescrição como anexo + horários estruturados | Mínimo preenchimento e lembretes úteis |

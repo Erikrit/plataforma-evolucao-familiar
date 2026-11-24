@@ -90,7 +90,7 @@ Pessoas e vínculos, participação externa, conta e convite, papéis funcionais
 - **Autonomia e proteção:** a Vovó compreende quem acompanha seus cuidados e pode participar das escolhas legítimas; administrador não herda acesso clínico irrestrito; dados infantis e documentos sensíveis permanecem protegidos.
 - **Notificações discretas por padrão:** detalhamento sensível apenas mediante escolha e autorização, sem exposição indevida em telas bloqueadas.
 - **Estado de gravação confiável:** diante de falha de conexão, não afirmar que um registro foi salvo.
-- PWA ou aplicativo nativo ainda depende de avaliação técnica e testes reais de notificações, sem ampliar requisitos funcionais por conveniência da tecnologia.
+- **PWA instalável integra a V1 em homologação** (manifesto e ícones, com instalação Android aprovada); testes em outros dispositivos podem continuar. **Web Push e lembretes automáticos reais são incrementos posteriores**, sujeitos à validação de confiabilidade e privacidade; não confundir instalação da PWA com entrega de notificações.
 
 ## 9. Fora do MVP
 
