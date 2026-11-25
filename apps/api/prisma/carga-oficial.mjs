@@ -65,6 +65,7 @@ export async function carregarCatalogosOficiais(prisma) {
 
   await prisma.$transaction(async (tx) => {
     for (const item of CATALOGO_BIBLIOTECA_E4) {
+      const versaoConteudo = item.versaoConteudo ?? 1;
       await tx.desafio.upsert({
         where: { id: item.id },
         create: {
@@ -79,7 +80,7 @@ export async function carregarCatalogosOficiais(prisma) {
           faixaEtariaMin: item.faixaEtariaMin,
           faixaEtariaMax: item.faixaEtariaMax,
           origemConteudo: "autoral_pef",
-          versaoConteudo: 1,
+          versaoConteudo,
           adaptacoes: item.adaptacoes,
           supervisao: item.supervisao,
           origem: "catalogo",
@@ -95,7 +96,7 @@ export async function carregarCatalogosOficiais(prisma) {
           faixaEtariaMin: item.faixaEtariaMin,
           faixaEtariaMax: item.faixaEtariaMax,
           origemConteudo: "autoral_pef",
-          versaoConteudo: 1,
+          versaoConteudo,
           adaptacoes: item.adaptacoes,
           supervisao: item.supervisao,
           origem: "catalogo",

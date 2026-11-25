@@ -54,8 +54,7 @@ export function podeVerAnexosCuidados(
 
 /**
  * Espelha `podeVerDesenvolvimento` do backend (própria pessoa ou
- * responsavel_desenvolvimento). No contrato atual, ver e organizar usam a
- * mesma responsabilidade — não inventar permissão granular.
+ * responsavel_desenvolvimento).
  */
 export function podeAcompanharDesenvolvimento(
   pessoaId: string,
@@ -80,15 +79,18 @@ export const ROTULOS_CATEGORIA_DESENVOLVIMENTO: Record<string, string> = {
   autonomia: "Autonomia",
 };
 
-/** Criar brincadeira / gerenciar recompensas — mesma authz do backend atual. */
+/**
+ * Espelha a organização do backend (sugerir/escolher/retirar/cadastros):
+ * exige `responsavel_desenvolvimento` — não basta ser a própria pessoa.
+ */
 export function podeOrganizarDesenvolvimento(
   pessoaId: string,
-  usuarioPessoaId: string | null | undefined,
+  _usuarioPessoaId: string | null | undefined,
   autorizacoes: AutorizacaoResumo[],
 ): boolean {
-  return podeAcompanharDesenvolvimento(
-    pessoaId,
-    usuarioPessoaId,
-    autorizacoes,
+  return autorizacoes.some(
+    (a) =>
+      a.responsabilidade === "responsavel_desenvolvimento" &&
+      (a.pessoaAlvoId === pessoaId || a.pessoaAlvoId == null),
   );
 }

@@ -1,5 +1,5 @@
 /**
- * Checagem estática DEM-E4-BIBLIOTECA (E4-ACE).
+ * Checagem estática DEM-E4-BIBLIOTECA (E4-ACE + DEV-JOG-P01..P03).
  * Não substitui smoke nem homologação humana (E4-HOM).
  */
 import { readFileSync } from "node:fs";
@@ -53,6 +53,14 @@ const acompanhamento = readFileSync(
 
 const idsCatalogo = [...catalogo.matchAll(/id:\s*"([^"]+)"/g)].map((m) => m[1]);
 const idsUnicos = new Set(idsCatalogo);
+const fichasCuradoria = [
+  "O que sumiu?",
+  "Mapa do tesouro",
+  "História em turnos",
+  "Orquestra de casa",
+  "Alvo cooperativo",
+  "Piquenique em casa",
+];
 
 reg(
   "E4-ACE-01-limite-constante",
@@ -68,24 +76,34 @@ reg(
     schema.includes("origemConteudo") &&
     schema.includes("versaoConteudo") &&
     schema.includes("model SugestaoDesafioPessoa") &&
+    schema.includes("retiradaSemParticipacao") &&
+    schema.includes("candidata") &&
     !schema.includes("model ModeloAtividade"),
-  "Extensão de Desafio + seleção privada (sem segunda tabela global)",
+  "Extensão de Desafio + seleção privada com candidata/exposta/retirada",
+);
+reg(
+  "DEV-JOG-P01-curadoria",
+  fichasCuradoria.every((nome) => catalogo.includes(nome)) &&
+    idsCatalogo.length === 24,
+  "Seis fichas aprovadas no catálogo de 24",
 );
 reg(
   "E4-ACE-02-sugestoes",
-  constantes.includes("LIMITE_SUGESTOES_PESSOA = 6") &&
+  constantes.includes("LIMITE_SUGESTOES_PESSOA = 2") &&
     sugestoes.includes("LIMITE_SUGESTOES_PESSOA") &&
-    sugestoes.includes("gerarSelecaoInicial") &&
-    sugestoes.includes("diversificarPorCategoria"),
-  "Até 6 sugestões elegíveis com diversificação",
+    !sugestoes.includes("gerarSelecaoInicial") &&
+    sugestoes.includes("diversificarPorCategoria") &&
+    sugestoes.includes("carregarCandidatas"),
+  "Até 2 sugestões sob demanda, sem geração automática na listagem",
 );
 reg(
   "E4-ACE-03-renovar",
-  constantes.includes("LIMITE_RENOVAR_SUGESTOES = 3") &&
-    sugestoes.includes("Não há novas sugestões disponíveis no momento") &&
-    sugestoes.includes("!s.escolhida") &&
+  constantes.includes("LIMITE_RENOVAR_SUGESTOES = 2") &&
+    (sugestoes.includes("Não há novas sugestões disponíveis por agora") ||
+      constantes.includes("MENSAGEM_SEM_NOVAS_SUGESTOES")) &&
+    sugestoes.includes("retiradaSemParticipacao") &&
     controlador.includes("sugestoes/renovar"),
-  "Renovar até 3 não escolhidas com mensagem de escassez",
+  "Renovar até 2 com prioridade a inéditas e retiradas",
 );
 reg(
   "E4-ACE-04-persistencia",
@@ -101,7 +119,7 @@ reg(
     !sugestoes.includes("movimentoEstrelas") &&
     !sugestoes.includes("disponibilidadeDesafio.upsert") &&
     !sugestoes.includes("participacaoDesafio.create"),
-  "Escolher/renovar não concede estrelas nem reabre Executadas",
+  "Escolher/renovar/retirar não concede estrelas nem reabre Executadas",
 );
 reg(
   "E4-ACE-06-snapshot",
@@ -111,16 +129,28 @@ reg(
   "Snapshot de conteúdo na participação e no histórico",
 );
 reg(
-  "E4-ACE-07-ui",
+  "E4-ACE-08-limite-dez",
+  constantes.includes("LIMITE_ATIVAS_POR_CATEGORIA = 10") &&
+    constantes.includes("MENSAGEM_LIMITE_ATIVAS") &&
+    sugestoes.includes("LIMITE_ATIVAS_CATEGORIA") &&
+    controlador.includes("sugestoes/:desafioId/retirar"),
+  "Limite de 10 ativas por categoria com retirada autorizada",
+);
+reg(
+  "E4-ACE-09-ui-fluxo",
   entradaDesenvolvimento.includes("redirect(rotaFamilia") &&
     entradaDesenvolvimento.includes("/desenvolvimento/biblioteca") &&
-    biblioteca.includes("Sugestões para esta pessoa") &&
+    biblioteca.includes("Sugerir brincadeiras") &&
     biblioteca.includes("Renovar sugestões") &&
-    biblioteca.includes("Escolher para experimentar") &&
-    biblioteca.includes("Sem sugestões agora") &&
+    biblioteca.includes("Quero experimentar") &&
+    biblioteca.includes("Retirar das ativas") &&
+    biblioteca.includes("Ver atividades ativas") &&
+    biblioteca.includes("Atividades ativas") &&
     api.includes("listarSugestoesDesafio") &&
-    api.includes("renovarSugestoesDesafio"),
-  "UI móvel com sugestões, renovar e biblioteca existente",
+    api.includes("renovarSugestoesDesafio") &&
+    api.includes("retirarAtividadeAtiva") &&
+    api.includes("ErroLimiteAtivas"),
+  "UI móvel: descoberta sob demanda, ativas, limite e retirada",
 );
 
 const falhas = resultados.filter((r) => !r.ok);

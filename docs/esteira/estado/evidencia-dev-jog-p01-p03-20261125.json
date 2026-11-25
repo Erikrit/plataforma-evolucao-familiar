@@ -1,0 +1,20 @@
+{
+  "demandaId": "DEV-JOG-P01-P03",
+  "branch": "develop",
+  "baseCommit": "3becc90ce183a4db437ea5584c34643f53d18e43",
+  "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
+  "atualizadoEm": "2026-11-25",
+  "checagens": [
+    { "nome": "prisma migrate deploy", "status": "PASS", "nota": "20261125010000_atividades_reais_escolha" },
+    { "nome": "check-e4", "status": "PASS", "nota": "10/10" },
+    { "nome": "typecheck api", "status": "PASS" },
+    { "nome": "typecheck web", "status": "PASS" },
+    { "nome": "carga-oficial", "status": "PASS", "nota": "e4=24 e5Jogos=8 e5Fases=40; idempotente" },
+    { "nome": "build api", "status": "PASS" },
+    { "nome": "build web", "status": "PASS" },
+    { "nome": "smoke-e4", "status": "PASS", "nota": "20/20; concorrência décima 201+409; isolamento 404" },
+    { "nome": "smoke:authz", "status": "PASS" },
+    { "nome": "smoke:e5", "status": "PASS", "nota": "40/40" }
+  ],
+  "homologacaoHumana": "PASS — responsável pelo Produto em 2026-11-25"
+}

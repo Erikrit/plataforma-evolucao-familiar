@@ -13,9 +13,15 @@ export type CategoriaBiblioteca = (typeof CATEGORIAS_BIBLIOTECA)[number];
 
 /** Limites E4 (Módulo 03 §12) — aplicados no servidor. */
 export const LIMITE_CATALOGO_ATIVO = 24;
-export const LIMITE_SUGESTOES_PESSOA = 6;
-export const LIMITE_RENOVAR_SUGESTOES = 3;
+export const LIMITE_SUGESTOES_PESSOA = 2;
+export const LIMITE_RENOVAR_SUGESTOES = 2;
+export const LIMITE_ATIVAS_POR_CATEGORIA = 10;
 export const ORIGEM_CONTEUDO_AUTORAL = "autoral_pef";
+
+export const MENSAGEM_LIMITE_ATIVAS =
+  "Você já tem 10 atividades ativas nesta categoria. Para adicionar outra, finalize ou retire uma delas.";
+export const MENSAGEM_SEM_NOVAS_SUGESTOES =
+  "Não há novas sugestões disponíveis por agora";
 
 export const RESULTADOS_PARTICIPACAO = ["concluiu", "participou"] as const;
 export type ResultadoParticipacao = (typeof RESULTADOS_PARTICIPACAO)[number];

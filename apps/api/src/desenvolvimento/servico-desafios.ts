@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -10,6 +11,8 @@ import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
 import {
   ehCategoriaBiblioteca,
   ehDificuldade,
+  LIMITE_ATIVAS_POR_CATEGORIA,
+  MENSAGEM_LIMITE_ATIVAS,
   type Dificuldade,
 } from "./constantes-desenvolvimento";
 
@@ -57,7 +60,7 @@ export class ServicoDesafios {
       return { pessoaId: pessoa.id, total: 0, desafios: [] as const };
     }
 
-    const [guardados, disponibilidades, ultimasParticipacoes] =
+    const [guardados, disponibilidades, ultimasParticipacoes, escolhas] =
       await Promise.all([
         this.prisma.desafioGuardado.findMany({
           where: { pessoaId: pessoa.id },
@@ -82,8 +85,13 @@ export class ServicoDesafios {
             estrelasConcedidas: true,
           },
         }),
+        this.prisma.sugestaoDesafioPessoa.findMany({
+          where: { pessoaId: pessoa.id, escolhida: true },
+          select: { desafioId: true },
+        }),
       ]);
     const idsGuardados = new Set(guardados.map((g) => g.desafioId));
+    const idsEscolhidos = new Set(escolhas.map((e) => e.desafioId));
     const mapaDisponibilidade = new Map(
       disponibilidades.map((d) => [d.desafioId, d]),
     );
@@ -143,6 +151,7 @@ export class ServicoDesafios {
         return {
           ...d,
           guardado: idsGuardados.has(d.id),
+          escolhida: idsEscolhidos.has(d.id),
           disponivelParaNovaParticipacao,
           estadoDisponibilidade: disponivelParaNovaParticipacao
             ? ("explorar" as const)
@@ -159,7 +168,10 @@ export class ServicoDesafios {
       })
       .filter((d) => {
         if (filtro?.disponibilidade === "explorar") {
-          return d.disponivelParaNovaParticipacao;
+          // Ativas: escolhidas disponíveis + personalizadas sem categoria utilizáveis.
+          if (!d.disponivelParaNovaParticipacao) return false;
+          if (d.escolhida) return true;
+          return d.origem === "personalizada" && !d.categoria;
         }
         if (filtro?.disponibilidade === "executadas") {
           return !d.disponivelParaNovaParticipacao;
@@ -323,6 +335,18 @@ export class ServicoDesafios {
       data.duracaoMinutos = this.numeroOpcional(entrada.duracaoMinutos);
     }
 
+    if (
+      data.categoria !== undefined &&
+      data.categoria !== desafio.categoria &&
+      data.categoria
+    ) {
+      await this.garantirVagaCategoriaParaEscolhidas(
+        desafio.id,
+        desafio.familiaId!,
+        data.categoria,
+      );
+    }
+
     return this.prisma.desafio.update({
       where: { id: desafio.id },
       data,
@@ -338,6 +362,45 @@ export class ServicoDesafios {
         familiaId: true,
       },
     });
+  }
+
+  /**
+   * Mudança de categoria de personalizada já escolhida conta no limite (DEV-JOG-P03).
+   */
+  private async garantirVagaCategoriaParaEscolhidas(
+    desafioId: string,
+    familiaId: string,
+    novaCategoria: string,
+  ) {
+    const escolhas = await this.prisma.sugestaoDesafioPessoa.findMany({
+      where: { desafioId, escolhida: true },
+      select: { pessoaId: true },
+    });
+    for (const escolha of escolhas) {
+      const ativas = await this.prisma.sugestaoDesafioPessoa.count({
+        where: {
+          pessoaId: escolha.pessoaId,
+          escolhida: true,
+          desafioId: { not: desafioId },
+          desafio: {
+            ativo: true,
+            categoria: novaCategoria,
+            OR: [
+              { origem: "catalogo", familiaId: null },
+              { familiaId },
+            ],
+          },
+        },
+      });
+      if (ativas >= LIMITE_ATIVAS_POR_CATEGORIA) {
+        throw new ConflictException({
+          codigo: "LIMITE_ATIVAS_CATEGORIA",
+          message: MENSAGEM_LIMITE_ATIVAS,
+          mensagem: MENSAGEM_LIMITE_ATIVAS,
+          categoria: novaCategoria,
+        });
+      }
+    }
   }
 
   /**

@@ -372,13 +372,19 @@ model Desafio {
   @@map("desafio")
 }
 
-/// Seleção privada de sugestões da biblioteca (E4). Não é guardado legado nem Explorar/Executadas.
+/// Seleção privada de sugestões/ativas da biblioteca (E4). Não é guardado legado nem Executadas.
 model SugestaoDesafioPessoa {
   id              String   @id @default(cuid())
   pessoaId        String   @map("pessoa_id")
   desafioId       String   @map("desafio_id")
-  /// Escolha explícita para experimentar; renovar preserva itens com escolhida=true.
+  /// Escolha explícita nas Atividades ativas; renovar não a remove.
   escolhida       Boolean  @default(false)
+  /// Candidata atualmente apresentada (até 2); só nasce por Sugerir/Renovar.
+  candidata       Boolean  @default(false)
+  /// Já foi apresentada em alguma oferta (prioriza inéditas).
+  exposta         Boolean  @default(false)
+  /// Retirada das ativas sem participação; pode voltar depois das inéditas.
+  retiradaSemParticipacao Boolean @default(false) @map("retirada_sem_participacao")
   criadoEm        DateTime @default(now()) @map("criado_em")
   atualizadoEm    DateTime @default(now()) @updatedAt @map("atualizado_em")
   atualizadoPorId String?  @map("atualizado_por_id")
@@ -388,6 +394,7 @@ model SugestaoDesafioPessoa {
 
   @@unique([pessoaId, desafioId])
   @@index([pessoaId, escolhida])
+  @@index([pessoaId, candidata])
   @@map("sugestao_desafio_pessoa")
 }
 

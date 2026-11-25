@@ -164,6 +164,19 @@ export class ServicoParticipacoes {
           },
         });
 
+        await tx.sugestaoDesafioPessoa.updateMany({
+          where: {
+            pessoaId: pessoa.id,
+            desafioId: desafio.id,
+          },
+          data: {
+            escolhida: false,
+            candidata: false,
+            retiradaSemParticipacao: false,
+            atualizadoPorId: usuario.id,
+          },
+        });
+
         return participacao;
       });
 

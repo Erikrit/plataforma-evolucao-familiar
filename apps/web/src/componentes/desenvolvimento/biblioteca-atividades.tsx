@@ -26,12 +26,13 @@ import {
 } from "@/componentes/feedback";
 import { IconeBrincadeira, IconeConcluiu, IconeParticipou } from "@/componentes/icones-experiencia";
 import {
+  ErroLimiteAtivas,
   escolherSugestaoDesafio,
   disponibilizarDesafio,
   listarDesafios,
-  listarSugestoesDesafio,
   registrarParticipacaoDesafio,
   renovarSugestoesDesafio,
+  retirarAtividadeAtiva,
   type DesafioResumo,
   type SugestaoDesafio,
 } from "@/lib/api";
@@ -55,6 +56,23 @@ const OPCOES_CATEGORIA = [
 
 type FiltroBrincadeira = "explorar" | "executadas";
 
+function faixaEtariaTexto(desafio: {
+  faixaEtariaMin?: number | null;
+  faixaEtariaMax?: number | null;
+}) {
+  if (desafio.faixaEtariaMin == null && desafio.faixaEtariaMax == null) return null;
+  if (desafio.faixaEtariaMin != null && desafio.faixaEtariaMax != null) {
+    return `${desafio.faixaEtariaMin}–${desafio.faixaEtariaMax} anos`;
+  }
+  if (desafio.faixaEtariaMin != null) return `a partir de ${desafio.faixaEtariaMin} anos`;
+  return `até ${desafio.faixaEtariaMax} anos`;
+}
+
+function duracaoTexto(minutos: number | null | undefined) {
+  if (minutos == null || minutos <= 0) return null;
+  return `${minutos} min`;
+}
+
 export function BibliotecaAtividades({
   aoSaldoAlterado,
 }: {
@@ -63,23 +81,32 @@ export function BibliotecaAtividades({
   const { pessoaId, caminho, podeOrganizar } = useDesenvolvimento();
   const router = useRouter();
   const parametros = useSearchParams();
-  const filtro: FiltroBrincadeira = parametros.get("lista") === "executadas" ? "executadas" : "explorar";
+  const filtro: FiltroBrincadeira =
+    parametros.get("lista") === "executadas" ? "executadas" : "explorar";
   const categoriaUrl = parametros.get("categoria");
-  const categoria = OPCOES_CATEGORIA.find((opcao) => opcao.value === categoriaUrl)?.value ?? TODAS_CATEGORIAS;
+  const categoria =
+    OPCOES_CATEGORIA.find((opcao) => opcao.value === categoriaUrl)?.value ??
+    TODAS_CATEGORIAS;
   const chaveLista = filtro + "/" + categoria;
   const [lista, setLista] = useState<{ chave: string; dados: DesafioResumo[] } | null>(null);
   const [erroLista, setErroLista] = useState<{ chave: string; mensagem: string } | null>(null);
   const desafios = lista?.chave === chaveLista ? lista.dados : null;
   const erroDesafios = erroLista?.chave === chaveLista ? erroLista.mensagem : null;
+  const [sugestoesAbertas, setSugestoesAbertas] = useState(false);
   const [sugestoes, setSugestoes] = useState<SugestaoDesafio[] | null>(null);
   const [mensagemSugestoes, setMensagemSugestoes] = useState<string | null>(null);
   const [erroSugestoes, setErroSugestoes] = useState<string | null>(null);
   const [statusRenovacao, setStatusRenovacao] = useState<string | null>(null);
-  const [carregandoSugestoes, setCarregandoSugestoes] = useState(true);
+  const [carregandoSugestoes, setCarregandoSugestoes] = useState(false);
   const [renovando, setRenovando] = useState(false);
   const [escolhendoId, setEscolhendoId] = useState<string | null>(null);
+  const [retirando, setRetirando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
+  const [avisoLimite, setAvisoLimite] = useState<{
+    mensagem: string;
+    categoria: string | null;
+  } | null>(null);
   const [selecionado, setSelecionado] = useState<DesafioResumo | null>(null);
   const [observacao, setObservacao] = useState("");
   const [chaveExecucao, setChaveExecucao] = useState("");
@@ -87,27 +114,43 @@ export function BibliotecaAtividades({
   const [disponibilizando, setDisponibilizando] = useState(false);
   const requisicaoDesafios = useRef(0);
   const requisicaoSugestoes = useRef(0);
+  const sugerindoTrava = useRef(false);
+  const feedbackRef = useRef<HTMLDivElement>(null);
   const tituloCatalogo = useRef<HTMLHeadingElement>(null);
   const focarCatalogoAoFechar = useRef(false);
+  const pessoaAnterior = useRef(pessoaId);
   const ehCelular = useMediaQuery("(max-width: 47.99em)", true);
 
-  const carregarSugestoes = useCallback(async () => {
-    const requisicao = ++requisicaoSugestoes.current;
-    setCarregandoSugestoes(true);
-    setErroSugestoes(null);
-    try {
-      const lista = await listarSugestoesDesafio(pessoaId);
-      if (requisicao !== requisicaoSugestoes.current) return;
-      setSugestoes(lista.sugestoes);
-      setMensagemSugestoes(lista.mensagem);
-    } catch (erro) {
-      if (requisicao === requisicaoSugestoes.current) {
-        setErroSugestoes(mensagemErroAmigavel(erro, "Não foi possível carregar sugestões."));
-      }
-    } finally {
-      if (requisicao === requisicaoSugestoes.current) setCarregandoSugestoes(false);
-    }
-  }, [pessoaId]);
+  function anunciarFeedback() {
+    window.requestAnimationFrame(() => {
+      feedbackRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      feedbackRef.current?.focus();
+    });
+  }
+
+  function sugestaoParaDesafio(item: SugestaoDesafio): DesafioResumo {
+    return {
+      id: item.id,
+      nome: item.nome,
+      instrucao: item.instrucao,
+      categoria: item.categoria,
+      dificuldade: item.dificuldade,
+      materiais: item.materiais,
+      duracaoMinutos: item.duracaoMinutos,
+      faixaEtariaMin: item.faixaEtariaMin,
+      faixaEtariaMax: item.faixaEtariaMax,
+      origemConteudo: item.origemConteudo,
+      versaoConteudo: item.versaoConteudo,
+      adaptacoes: item.adaptacoes,
+      supervisao: item.supervisao,
+      origem: item.origem,
+      familiaId: null,
+      guardado: false,
+      escolhida: false,
+      disponivelParaNovaParticipacao: true,
+      estadoDisponibilidade: "explorar",
+    };
+  }
 
   const carregarDesafios = useCallback(async () => {
     const requisicao = ++requisicaoDesafios.current;
@@ -117,35 +160,120 @@ export function BibliotecaAtividades({
         disponibilidade: filtro,
         categoria: categoria === TODAS_CATEGORIAS ? undefined : categoria,
       });
-      if (requisicao === requisicaoDesafios.current) setLista({ chave: chaveLista, dados: lista.desafios });
+      if (requisicao === requisicaoDesafios.current) {
+        setLista({ chave: chaveLista, dados: lista.desafios });
+      }
     } catch (erro) {
       if (requisicao === requisicaoDesafios.current) {
-        setErroLista({ chave: chaveLista, mensagem: mensagemErroAmigavel(erro, "Não foi possível carregar atividades.") });
+        setErroLista({
+          chave: chaveLista,
+          mensagem: mensagemErroAmigavel(erro, "Não foi possível carregar atividades."),
+        });
       }
     }
   }, [pessoaId, filtro, categoria, chaveLista]);
 
   useEffect(() => {
-    void carregarSugestoes();
-  }, [carregarSugestoes]);
-
-  useEffect(() => {
     void carregarDesafios();
-    return () => { requisicaoDesafios.current += 1; };
+    return () => {
+      requisicaoDesafios.current += 1;
+    };
   }, [carregarDesafios]);
 
-  function atualizarFiltros(proximoFiltro: FiltroBrincadeira, proximaCategoria: string) {
+  useEffect(() => {
+    if (pessoaAnterior.current !== pessoaId) {
+      pessoaAnterior.current = pessoaId;
+      setSugestoesAbertas(false);
+      setSugestoes(null);
+      setMensagemSugestoes(null);
+      setStatusRenovacao(null);
+      setErroSugestoes(null);
+      setAvisoLimite(null);
+      setSucesso(null);
+      setErro(null);
+    }
+  }, [pessoaId]);
+
+  function atualizarFiltros(
+    proximoFiltro: FiltroBrincadeira,
+    proximaCategoria: string,
+    fecharSugestoes = true,
+  ) {
     const consulta = new URLSearchParams(parametros.toString());
     if (proximoFiltro === "explorar") consulta.delete("lista");
     else consulta.set("lista", proximoFiltro);
     if (proximaCategoria === TODAS_CATEGORIAS) consulta.delete("categoria");
     else consulta.set("categoria", proximaCategoria);
     const query = consulta.toString();
-    router.replace(caminho + "/biblioteca" + (query ? "?" + query : ""), { scroll: false });
+    router.replace(caminho + "/biblioteca" + (query ? "?" + query : ""), {
+      scroll: false,
+    });
+    if (fecharSugestoes) {
+      setSugestoesAbertas(false);
+      setSugestoes(null);
+      setMensagemSugestoes(null);
+      setStatusRenovacao(null);
+      setAvisoLimite(null);
+    }
   }
 
   const filtrandoCategoria = categoria !== TODAS_CATEGORIAS;
-  const tituloLista = filtro === "executadas" ? "Brincadeiras executadas" : "Brincadeiras para explorar";
+  const tituloLista =
+    filtro === "executadas" ? "Executadas" : "Atividades ativas";
+
+  async function pedirSugestoes(renovar: boolean) {
+    if (!podeOrganizar) {
+      setErro(
+        "É necessário ser responsável de desenvolvimento para sugerir brincadeiras.",
+      );
+      anunciarFeedback();
+      return;
+    }
+    if (sugerindoTrava.current || escolhendoId) return;
+    sugerindoTrava.current = true;
+    const requisicao = ++requisicaoSugestoes.current;
+    setRenovando(true);
+    setCarregandoSugestoes(true);
+    setErro(null);
+    setSucesso(null);
+    setErroSugestoes(null);
+    setStatusRenovacao(null);
+    setAvisoLimite(null);
+    // Abre a área de sugestões já na tentativa, para o erro/sucesso ficar visível.
+    setSugestoesAbertas(true);
+    try {
+      const resp = await renovarSugestoesDesafio(pessoaId, {
+        categoria: categoria === TODAS_CATEGORIAS ? undefined : categoria,
+      });
+      if (requisicao !== requisicaoSugestoes.current) return;
+      setSugestoes(resp.sugestoes);
+      setMensagemSugestoes(resp.mensagem);
+      if (resp.trocadas === 0) {
+        setStatusRenovacao(
+          resp.mensagem ?? "Não há novas sugestões disponíveis por agora",
+        );
+      } else if (renovar) {
+        setStatusRenovacao(
+          resp.mensagem ??
+            `Renovamos ${resp.trocadas} sugest${resp.trocadas === 1 ? "ão" : "ões"}.`,
+        );
+      }
+      anunciarFeedback();
+    } catch (e) {
+      if (requisicao === requisicaoSugestoes.current) {
+        const mensagem = mensagemErroAmigavel(e, "Não foi possível sugerir");
+        setErroSugestoes(mensagem);
+        setErro(mensagem);
+        setStatusRenovacao(null);
+        setSugestoes([]);
+        anunciarFeedback();
+      }
+    } finally {
+      sugerindoTrava.current = false;
+      setRenovando(false);
+      setCarregandoSugestoes(false);
+    }
+  }
 
   async function aoDisponibilizarDesafio() {
     if (!selecionado || !podeOrganizar || disponibilizando) return;
@@ -154,7 +282,9 @@ export function BibliotecaAtividades({
     setSucesso(null);
     try {
       await disponibilizarDesafio(pessoaId, selecionado.id);
-      setSucesso(`“${selecionado.nome}” voltou para Explorar.`);
+      setSucesso(
+        `“${selecionado.nome}” voltou a ficar disponível. Adicione às ativas se quiser experimentar de novo.`,
+      );
       focarCatalogoAoFechar.current = true;
       setSelecionado(null);
       await carregarDesafios();
@@ -192,7 +322,7 @@ export function BibliotecaAtividades({
       setChaveExecucao(novaChaveOperacao());
       focarCatalogoAoFechar.current = true;
       setSelecionado(null);
-      await Promise.all([carregarDesafios(), carregarSugestoes()]);
+      await carregarDesafios();
       aoSaldoAlterado?.();
     } catch (e) {
       setErro(
@@ -200,6 +330,24 @@ export function BibliotecaAtividades({
       );
     } finally {
       setRegistrando(false);
+    }
+  }
+
+  async function aoRetirarDasAtivas() {
+    if (!selecionado || !podeOrganizar || retirando || registrando) return;
+    setRetirando(true);
+    setErro(null);
+    setSucesso(null);
+    try {
+      await retirarAtividadeAtiva(pessoaId, selecionado.id);
+      setSucesso("Atividade retirada. A vaga foi liberada.");
+      focarCatalogoAoFechar.current = true;
+      setSelecionado(null);
+      await carregarDesafios();
+    } catch (e) {
+      setErro(mensagemErroAmigavel(e, "Não foi possível retirar"));
+    } finally {
+      setRetirando(false);
     }
   }
 
@@ -212,99 +360,140 @@ export function BibliotecaAtividades({
   }
 
   function abrirSugestao(item: SugestaoDesafio) {
-    abrirDesafio({
-      id: item.id,
-      nome: item.nome,
-      instrucao: item.instrucao,
-      categoria: item.categoria,
-      dificuldade: item.dificuldade,
-      materiais: item.materiais,
-      duracaoMinutos: item.duracaoMinutos,
-      faixaEtariaMin: item.faixaEtariaMin,
-      faixaEtariaMax: item.faixaEtariaMax,
-      origemConteudo: item.origemConteudo,
-      versaoConteudo: item.versaoConteudo,
-      adaptacoes: item.adaptacoes,
-      supervisao: item.supervisao,
-      origem: item.origem,
-      familiaId: null,
-      guardado: false,
-      disponivelParaNovaParticipacao: true,
-      estadoDisponibilidade: "explorar",
-    });
+    abrirDesafio(sugestaoParaDesafio(item));
   }
 
   async function aoEscolherSugestao(item: SugestaoDesafio) {
-    if (!podeOrganizar || escolhendoId || renovando || carregandoSugestoes) return;
+    if (!podeOrganizar) {
+      setErro("É necessário ser responsável de desenvolvimento para escolher.");
+      anunciarFeedback();
+      return;
+    }
+    if (escolhendoId || renovando || sugerindoTrava.current) return;
     setEscolhendoId(item.id);
     setErro(null);
     setSucesso(null);
     setStatusRenovacao(null);
+    setAvisoLimite(null);
     try {
       const resp = await escolherSugestaoDesafio(pessoaId, item.id);
-      requisicaoSugestoes.current += 1;
-      setCarregandoSugestoes(false);
       setErroSugestoes(null);
-      setSugestoes(resp.sugestoes);
-      setSucesso(
-        resp.jaEstavaEscolhida
-          ? `“${item.nome}” já estava escolhida.`
-          : `“${item.nome}” marcada para experimentar.`,
-      );
+      setSugestoes(resp.sugestoes ?? []);
+      const mensagem = resp.jaEstavaEscolhida
+        ? `“${item.nome}” já estava nas atividades ativas.`
+        : `“${item.nome}” está nas atividades ativas.`;
+      setSucesso(mensagem);
+      // Atualização imediata da lista Ativas (não depende só do refetch).
+      if (filtro === "explorar") {
+        const ativo = {
+          ...sugestaoParaDesafio(item),
+          escolhida: true,
+        };
+        const entraNoFiltro =
+          categoria === TODAS_CATEGORIAS || ativo.categoria === categoria;
+        if (entraNoFiltro) {
+          setLista((atual) => {
+            const base = atual?.chave === chaveLista ? atual.dados : [];
+            if (base.some((d) => d.id === ativo.id)) {
+              return { chave: chaveLista, dados: base };
+            }
+            return { chave: chaveLista, dados: [ativo, ...base] };
+          });
+        }
+      }
+      anunciarFeedback();
+      await carregarDesafios();
     } catch (e) {
-      setErro(mensagemErroAmigavel(e, "Não foi possível escolher"));
+      if (e instanceof ErroLimiteAtivas) {
+        setAvisoLimite({
+          mensagem: e.message,
+          categoria: e.categoria,
+        });
+      } else {
+        setErro(mensagemErroAmigavel(e, "Não foi possível escolher"));
+      }
+      anunciarFeedback();
     } finally {
       setEscolhendoId(null);
     }
   }
 
-  async function aoRenovarSugestoes() {
-    if (!podeOrganizar || renovando || escolhendoId || carregandoSugestoes) return;
-    setRenovando(true);
-    setErro(null);
-    setSucesso(null);
+  function verAtividadesAtivasDaCategoria() {
+    const cat = avisoLimite?.categoria;
+    setAvisoLimite(null);
+    setSugestoesAbertas(false);
+    setSugestoes(null);
+    setMensagemSugestoes(null);
     setStatusRenovacao(null);
-    try {
-      const resp = await renovarSugestoesDesafio(pessoaId);
-      requisicaoSugestoes.current += 1;
-      setCarregandoSugestoes(false);
-      setErroSugestoes(null);
-      setSugestoes(resp.sugestoes);
-      setMensagemSugestoes(resp.mensagem);
-      // Feedback junto da seção (não no topo), para permanecer visível após o catálogo.
-      if (resp.trocadas === 0) {
-        setStatusRenovacao(
-          resp.mensagem ?? "Não há novas sugestões disponíveis no momento",
-        );
-      } else {
-        setStatusRenovacao(
-          resp.mensagem ??
-            `Renovamos ${resp.trocadas} sugest${resp.trocadas === 1 ? "ão" : "ões"}. Escolhas mantidas.`,
-        );
-      }
-    } catch (e) {
-      setErro(mensagemErroAmigavel(e, "Não foi possível renovar"));
-      setStatusRenovacao(null);
-    } finally {
-      setRenovando(false);
+    if (cat && OPCOES_CATEGORIA.some((o) => o.value === cat)) {
+      atualizarFiltros("explorar", cat, true);
+    } else {
+      atualizarFiltros("explorar", categoria, true);
     }
   }
 
+  const metaSelecionado = selecionado
+    ? [
+        ROTULOS_DIFICULDADE[selecionado.dificuldade] ?? selecionado.dificuldade,
+        selecionado.categoria
+          ? ROTULOS_CATEGORIA_DESENVOLVIMENTO[selecionado.categoria] ??
+            selecionado.categoria
+          : null,
+        faixaEtariaTexto(selecionado),
+        duracaoTexto(selecionado.duracaoMinutos),
+      ]
+        .filter(Boolean)
+        .join(" · ")
+    : "";
+
+  const sugestaoSelecionada =
+    selecionado &&
+    sugestoesAbertas &&
+    (sugestoes ?? []).some((item) => item.id === selecionado.id)
+      ? selecionado
+      : null;
+
   return (
     <Stack gap="lg">
-      <MensagemFeedback erro={selecionado ? null : erro} sucesso={sucesso} />
+      <div ref={feedbackRef} tabIndex={-1} style={{ outline: "none" }}>
+        <MensagemFeedback
+          erro={selecionado ? null : erro}
+          sucesso={sucesso}
+          duracaoSucessoMs={8000}
+        />
+      </div>
+      {avisoLimite && !selecionado ? (
+        <Alert
+          color="yellow"
+          variant="light"
+          role="status"
+          aria-live="polite"
+          title="Limite de ativas"
+        >
+          <Stack gap="sm">
+            <Text size="sm">{avisoLimite.mensagem}</Text>
+            <Button variant="light" size="sm" onClick={verAtividadesAtivasDaCategoria}>
+              Ver atividades ativas
+            </Button>
+          </Stack>
+        </Alert>
+      ) : null}
       <SegmentedControl
         fullWidth
         aria-label="Lista de atividades"
         value={filtro}
-        onChange={(valor) => atualizarFiltros(valor as FiltroBrincadeira, categoria)}
+        onChange={(valor) =>
+          atualizarFiltros(valor as FiltroBrincadeira, categoria)
+        }
         data={[
-          { label: "Explorar", value: "explorar" },
+          { label: "Ativas", value: "explorar" },
           { label: "Executadas", value: "executadas" },
         ]}
       />
       <Stack gap="sm" id="catalogo-atividades" style={{ scrollMarginTop: "5rem" }}>
-        <Title order={2} ref={tituloCatalogo} tabIndex={-1}>{tituloLista}</Title>
+        <Title order={2} ref={tituloCatalogo} tabIndex={-1}>
+          {tituloLista}
+        </Title>
         <Select
           label="Categoria"
           allowDeselect={false}
@@ -317,7 +506,9 @@ export function BibliotecaAtividades({
         {erroDesafios ? (
           <Stack align="flex-start">
             <EstadoVazio titulo="Atividades indisponíveis" descricao={erroDesafios} />
-            <Button variant="light" onClick={() => void carregarDesafios()}>Tentar novamente</Button>
+            <Button variant="light" onClick={() => void carregarDesafios()}>
+              Tentar novamente
+            </Button>
           </Stack>
         ) : desafios === null ? (
           <EsqueletoLista rotulo="Carregando brincadeiras…" linhas={4} />
@@ -325,10 +516,10 @@ export function BibliotecaAtividades({
           <EstadoVazio
             titulo={
               filtrandoCategoria
-                ? "Nada nesta categoria"
+                ? "Nenhuma atividade ativa nesta categoria"
                 : filtro === "executadas"
                   ? "Nenhuma executada ainda"
-                  : "Nenhuma brincadeira disponível"
+                  : "Vocês ainda não escolheram uma brincadeira."
             }
             descricao={
               filtrandoCategoria
@@ -336,8 +527,8 @@ export function BibliotecaAtividades({
                 : filtro === "executadas"
                   ? "Depois de registrar uma participação, ela aparece aqui."
                   : podeOrganizar
-                    ? "Crie uma em Cadastros ou aguarde a biblioteca da família."
-                    : "Quando houver brincadeiras disponíveis, elas aparecem aqui."
+                    ? "Toque em Sugerir brincadeiras para ver opções."
+                    : "Quando houver brincadeiras escolhidas, elas aparecem aqui."
             }
           />
         ) : (
@@ -364,16 +555,12 @@ export function BibliotecaAtividades({
                 <Stack gap={4}>
                   <Text fw={600}>{desafio.nome}</Text>
                   <Text size="sm" c="dimmed">
-                    {ROTULOS_DIFICULDADE[desafio.dificuldade] ??
-                      desafio.dificuldade}
+                    {ROTULOS_DIFICULDADE[desafio.dificuldade] ?? desafio.dificuldade}
                     {desafio.categoria
                       ? ` · ${ROTULOS_CATEGORIA_DESENVOLVIMENTO[desafio.categoria] ?? desafio.categoria}`
-                      : ""}
-                    {desafio.origem === "personalizada"
-                      ? " · Sua família"
-                      : ""}
-                    {filtro === "executadas" &&
-                    desafio.ultimaParticipacao
+                      : " · Sem categoria"}
+                    {desafio.origem === "personalizada" ? " · Sua família" : ""}
+                    {filtro === "executadas" && desafio.ultimaParticipacao
                       ? ` · Última: ${desafio.ultimaParticipacao.resultado}`
                       : ""}
                   </Text>
@@ -382,38 +569,63 @@ export function BibliotecaAtividades({
             </Card>
           ))
         )}
+        {filtro === "explorar" && podeOrganizar && !sugestoesAbertas ? (
+          <Button
+            loading={renovando}
+            disabled={Boolean(escolhendoId)}
+            onClick={() => void pedirSugestoes(false)}
+          >
+            Sugerir brincadeiras
+          </Button>
+        ) : null}
       </Stack>
-      {filtro === "explorar" ? (
+
+      {filtro === "explorar" && sugestoesAbertas ? (
         <Stack gap="sm" id="sugestoes-pessoa">
           <Group justify="space-between" align="center" gap="xs">
-            <Title order={2}>Sugestões para esta pessoa</Title>
+            <Title order={2}>Sugestões</Title>
             {podeOrganizar ? (
               <Button
                 variant="light"
                 size="sm"
                 loading={renovando}
                 disabled={Boolean(escolhendoId) || carregandoSugestoes}
-                onClick={() => void aoRenovarSugestoes()}
+                onClick={() => void pedirSugestoes(true)}
               >
                 Renovar sugestões
               </Button>
             ) : null}
           </Group>
-          {mensagemSugestoes ? <Text size="sm" c="dimmed">{mensagemSugestoes}</Text> : null}
+          {mensagemSugestoes ? (
+            <Text size="sm" c="dimmed">
+              {mensagemSugestoes}
+            </Text>
+          ) : null}
           {statusRenovacao ? (
-            <Alert color="azul" variant="light" role="status" aria-live="polite" title="Sugestões">
+            <Alert
+              color="azul"
+              variant="light"
+              role="status"
+              aria-live="polite"
+              title="Sugestões"
+            >
               <Text size="sm">{statusRenovacao}</Text>
             </Alert>
           ) : null}
           {erroSugestoes ? (
             <Stack align="flex-start">
               <EstadoVazio titulo="Sugestões indisponíveis" descricao={erroSugestoes} />
-              <Button variant="light" onClick={() => void carregarSugestoes()}>Tentar novamente</Button>
+              <Button variant="light" onClick={() => void pedirSugestoes(true)}>
+                Tentar novamente
+              </Button>
             </Stack>
-          ) : sugestoes === null || carregandoSugestoes ? (
-            <EsqueletoLista rotulo="Carregando sugestões…" linhas={3} />
-          ) : sugestoes.length === 0 ? (
-            <EstadoVazio titulo="Sem sugestões agora" />
+          ) : carregandoSugestoes && sugestoes === null ? (
+            <EsqueletoLista rotulo="Carregando sugestões…" linhas={2} />
+          ) : !sugestoes || sugestoes.length === 0 ? (
+            <EstadoVazio
+              titulo="Nenhuma sugestão nesta lista"
+              descricao="Toque em Renovar sugestões para procurar outra."
+            />
           ) : (
             sugestoes.map((item) => (
               <Card key={item.id} withBorder padding="md" radius="md">
@@ -422,24 +634,42 @@ export function BibliotecaAtividades({
                     <Group gap="sm" wrap="nowrap" align="flex-start">
                       <IconeBrincadeira />
                       <Stack gap={4}>
-                        <Text fw={600}>{item.nome}{item.escolhida ? " · Escolhida" : ""}</Text>
+                        <Text fw={600}>{item.nome}</Text>
                         <Text size="sm" c="dimmed">
                           {ROTULOS_DIFICULDADE[item.dificuldade] ?? item.dificuldade}
-                          {item.categoria ? " · " + (ROTULOS_CATEGORIA_DESENVOLVIMENTO[item.categoria] ?? item.categoria) : ""}
+                          {item.categoria
+                            ? " · " +
+                              (ROTULOS_CATEGORIA_DESENVOLVIMENTO[item.categoria] ??
+                                item.categoria)
+                            : ""}
+                          {duracaoTexto(item.duracaoMinutos)
+                            ? " · " + duracaoTexto(item.duracaoMinutos)
+                            : ""}
                         </Text>
-                        {item.instrucao ? <Text size="sm" lineClamp={ehCelular ? 2 : 3}>{item.instrucao}</Text> : null}
+                        {item.instrucao ? (
+                          <Text size="sm" lineClamp={ehCelular ? 2 : 3}>
+                            {item.instrucao}
+                          </Text>
+                        ) : null}
                       </Stack>
                     </Group>
                   </UnstyledButton>
-                  {podeOrganizar && !item.escolhida ? (
+                  {podeOrganizar ? (
                     <Button
-                      variant="light"
+                      type="button"
                       size="sm"
                       loading={escolhendoId === item.id}
-                      disabled={carregandoSugestoes || renovando || (escolhendoId !== null && escolhendoId !== item.id)}
-                      onClick={() => void aoEscolherSugestao(item)}
+                      disabled={
+                        renovando ||
+                        (escolhendoId !== null && escolhendoId !== item.id)
+                      }
+                      onClick={(evento) => {
+                        evento.preventDefault();
+                        evento.stopPropagation();
+                        void aoEscolherSugestao(item);
+                      }}
                     >
-                      Escolher para experimentar
+                      Quero experimentar
                     </Button>
                   ) : null}
                 </Stack>
@@ -449,17 +679,17 @@ export function BibliotecaAtividades({
         </Stack>
       ) : null}
 
-    <Drawer
-      opened={Boolean(selecionado)}
-      onClose={() => {
-        if (!registrando && !disponibilizando) setSelecionado(null);
-      }}
-      position={ehCelular ? "bottom" : "right"}
-      size={ehCelular ? "auto" : "md"}
-      title={selecionado?.nome ?? "Brincadeira"}
-      padding="md"
-      closeOnEscape={!registrando && !disponibilizando}
-      closeOnClickOutside={!registrando && !disponibilizando}
+      <Drawer
+        opened={Boolean(selecionado)}
+        onClose={() => {
+          if (!registrando && !disponibilizando && !retirando) setSelecionado(null);
+        }}
+        position={ehCelular ? "bottom" : "right"}
+        size={ehCelular ? "auto" : "md"}
+        title={selecionado?.nome ?? "Brincadeira"}
+        padding="md"
+        closeOnEscape={!registrando && !disponibilizando && !retirando}
+        closeOnClickOutside={!registrando && !disponibilizando && !retirando}
         returnFocus={!focarCatalogoAoFechar.current}
         onExitTransitionEnd={() => {
           if (focarCatalogoAoFechar.current) {
@@ -467,100 +697,143 @@ export function BibliotecaAtividades({
             focarCatalogoAoFechar.current = false;
           }
         }}
-    >
-      {selecionado ? (
-        <Stack gap="md" pb="md">
-          <MensagemFeedback erro={erro} />
-          <Text size="sm" c="dimmed">
-            {ROTULOS_DIFICULDADE[selecionado.dificuldade] ??
-              selecionado.dificuldade}
-            {selecionado.categoria
-              ? ` · ${ROTULOS_CATEGORIA_DESENVOLVIMENTO[selecionado.categoria] ?? selecionado.categoria}`
-              : ""}
-          </Text>
-          {selecionado.instrucao ? (
-            <Text size="sm">{selecionado.instrucao}</Text>
-          ) : (
+      >
+        {selecionado ? (
+          <Stack gap="md" pb="md">
+            <MensagemFeedback erro={erro} />
+            {avisoLimite ? (
+              <Alert color="yellow" variant="light" role="status">
+                <Stack gap="sm">
+                  <Text size="sm">{avisoLimite.mensagem}</Text>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    onClick={verAtividadesAtivasDaCategoria}
+                  >
+                    Ver atividades ativas
+                  </Button>
+                </Stack>
+              </Alert>
+            ) : null}
             <Text size="sm" c="dimmed">
-              Sem instrução escrita — brinquem do jeito que fizer sentido.
+              {metaSelecionado}
             </Text>
-          )}
-          {selecionado.materiais ? (
-            <Text size="sm">Materiais: {selecionado.materiais}</Text>
-          ) : null}
-          {selecionado.adaptacoes ? (
-            <Text size="sm" c="dimmed">
-              Adaptações: {selecionado.adaptacoes}
-            </Text>
-          ) : null}
-          {selecionado.supervisao ? (
-            <Text size="sm" c="dimmed">
-              Supervisão: {selecionado.supervisao}
-            </Text>
-          ) : null}
+            {selecionado.instrucao ? (
+              <Text size="sm">{selecionado.instrucao}</Text>
+            ) : (
+              <Text size="sm" c="dimmed">
+                Sem instrução escrita — brinquem do jeito que fizer sentido.
+              </Text>
+            )}
+            {selecionado.materiais ? (
+              <Text size="sm">Materiais: {selecionado.materiais}</Text>
+            ) : null}
+            {selecionado.adaptacoes ? (
+              <Text size="sm" c="dimmed">
+                Adaptações: {selecionado.adaptacoes}
+              </Text>
+            ) : null}
+            {selecionado.supervisao ? (
+              <Text size="sm" c="dimmed">
+                Supervisão: {selecionado.supervisao}
+              </Text>
+            ) : null}
 
-          {filtro === "executadas" ||
-          selecionado.disponivelParaNovaParticipacao === false ? (
-            <>
-              {selecionado.ultimaParticipacao ? (
+            {filtro === "executadas" ||
+            selecionado.disponivelParaNovaParticipacao === false ? (
+              <>
+                {selecionado.ultimaParticipacao ? (
+                  <Text size="sm" c="dimmed">
+                    Última: {selecionado.ultimaParticipacao.resultado} ·{" "}
+                    {selecionado.ultimaParticipacao.estrelasConcedidas} estrelas
+                  </Text>
+                ) : null}
+                {podeOrganizar ? (
+                  <Button
+                    loading={disponibilizando}
+                    disabled={registrando || retirando}
+                    onClick={() => void aoDisponibilizarDesafio()}
+                  >
+                    Disponibilizar novamente
+                  </Button>
+                ) : (
+                  <Text size="sm" c="dimmed">
+                    Já registrada. Um responsável pode disponibilizar de novo.
+                  </Text>
+                )}
+              </>
+            ) : sugestaoSelecionada && podeOrganizar ? (
+              <>
                 <Text size="sm" c="dimmed">
-                  Última: {selecionado.ultimaParticipacao.resultado} ·{" "}
-                  {selecionado.ultimaParticipacao.estrelasConcedidas} estrelas
+                  Ainda não está nas ativas. Escolha para experimentar ou feche a ficha.
                 </Text>
-              ) : null}
-              {podeOrganizar ? (
                 <Button
-                  loading={disponibilizando}
-                  disabled={registrando}
-                  onClick={() => void aoDisponibilizarDesafio()}
+                  type="button"
+                  loading={escolhendoId === selecionado.id}
+                  disabled={renovando || (escolhendoId !== null && escolhendoId !== selecionado.id)}
+                  onClick={() => {
+                    const item = (sugestoes ?? []).find((s) => s.id === selecionado.id);
+                    if (!item) return;
+                    void aoEscolherSugestao(item).then(() => {
+                      focarCatalogoAoFechar.current = true;
+                      setSelecionado(null);
+                    });
+                  }}
                 >
-                  Disponibilizar novamente
+                  Quero experimentar
                 </Button>
-              ) : (
-                <Text size="sm" c="dimmed">
-                  Já registrada. Um responsável pode disponibilizar de novo.
-                </Text>
-              )}
-            </>
-          ) : (
-            <>
-              <Textarea
-                label="Observação"
-                description="Opcional"
-                value={observacao}
-                onChange={(e) => setObservacao(e.currentTarget.value)}
-                minRows={2}
-                autosize
-                disabled={registrando}
-              />
+              </>
+            ) : (
+              <>
+                <Textarea
+                  label="Observação"
+                  description="Opcional"
+                  value={observacao}
+                  onChange={(e) => setObservacao(e.currentTarget.value)}
+                  minRows={2}
+                  autosize
+                  disabled={registrando || retirando}
+                />
 
-              <Button
-                loading={registrando}
-                leftSection={<IconeConcluiu compacto />}
-                onClick={() => void aoRegistrar("concluiu")}
-              >
-                Concluiu
-              </Button>
-              <Button
-                variant="light"
-                loading={registrando}
-                leftSection={<IconeParticipou compacto />}
-                onClick={() => void aoRegistrar("participou")}
-              >
-                Participou
-              </Button>
-            </>
-          )}
-          <Button
-            variant="subtle"
-            disabled={registrando || disponibilizando}
-            onClick={() => setSelecionado(null)}
-          >
-            Fechar
-          </Button>
-        </Stack>
-      ) : null}
-    </Drawer>
+                <Button
+                  loading={registrando}
+                  disabled={retirando}
+                  leftSection={<IconeConcluiu compacto />}
+                  onClick={() => void aoRegistrar("concluiu")}
+                >
+                  Concluiu
+                </Button>
+                <Button
+                  variant="light"
+                  loading={registrando}
+                  disabled={retirando}
+                  leftSection={<IconeParticipou compacto />}
+                  onClick={() => void aoRegistrar("participou")}
+                >
+                  Participou
+                </Button>
+                {podeOrganizar && selecionado.escolhida ? (
+                  <Button
+                    variant="subtle"
+                    loading={retirando}
+                    disabled={registrando}
+                    onClick={() => void aoRetirarDasAtivas()}
+                  >
+                    Retirar das ativas
+                  </Button>
+                ) : null}
+              </>
+            )}
+            <Button
+              variant="subtle"
+              disabled={registrando || disponibilizando || retirando}
+              onClick={() => setSelecionado(null)}
+            >
+              Fechar
+            </Button>
+          </Stack>
+        ) : null}
+      </Drawer>
     </Stack>
   );
 }

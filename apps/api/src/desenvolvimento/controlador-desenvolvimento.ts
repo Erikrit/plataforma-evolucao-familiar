@@ -131,9 +131,13 @@ export class ControladorDesenvolvimento {
   @Post("pessoas/:pessoaId/sugestoes/renovar")
   renovarSugestoes(
     @Param("pessoaId") pessoaId: string,
+    @Body() corpo: { categoria?: string } | undefined,
+    @Query("categoria") categoriaQuery: string | undefined,
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
-    return this.sugestoes.renovar(pessoaId, requisicao.usuario!);
+    return this.sugestoes.renovar(pessoaId, requisicao.usuario!, {
+      categoria: corpo?.categoria ?? categoriaQuery,
+    });
   }
 
   @Post("pessoas/:pessoaId/sugestoes/:desafioId/escolher")
@@ -143,6 +147,19 @@ export class ControladorDesenvolvimento {
     @Req() requisicao: Request & RequisicaoComUsuario,
   ) {
     return this.sugestoes.escolher(
+      pessoaId,
+      desafioId,
+      requisicao.usuario!,
+    );
+  }
+
+  @Post("pessoas/:pessoaId/sugestoes/:desafioId/retirar")
+  retirarSugestao(
+    @Param("pessoaId") pessoaId: string,
+    @Param("desafioId") desafioId: string,
+    @Req() requisicao: Request & RequisicaoComUsuario,
+  ) {
+    return this.sugestoes.retirar(
       pessoaId,
       desafioId,
       requisicao.usuario!,

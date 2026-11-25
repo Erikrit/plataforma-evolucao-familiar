@@ -273,28 +273,44 @@ async function lerErroDetalhado(resposta: Response): Promise<{
   mensagem: string;
   codigo?: string;
   alternativa?: string;
+  categoria?: string;
 }> {
   const texto = await resposta.text();
   try {
     const json = JSON.parse(texto) as {
-      message?: string | string[] | { message?: string; codigo?: string; alternativa?: string };
+      message?:
+        | string
+        | string[]
+        | {
+            message?: string;
+            mensagem?: string;
+            codigo?: string;
+            alternativa?: string;
+            categoria?: string;
+          };
       codigo?: string;
       alternativa?: string;
+      categoria?: string;
+      mensagem?: string;
     };
     if (Array.isArray(json.message)) {
       return { mensagem: json.message.join("; ") };
     }
     if (json.message && typeof json.message === "object") {
       return {
-        mensagem: json.message.message ?? texto,
+        mensagem:
+          json.message.mensagem ?? json.message.message ?? texto,
         codigo: json.message.codigo ?? json.codigo,
         alternativa: json.message.alternativa ?? json.alternativa,
+        categoria: json.message.categoria ?? json.categoria,
       };
     }
     return {
-      mensagem: (json.message as string | undefined) ?? texto,
+      mensagem:
+        (json.message as string | undefined) ?? json.mensagem ?? texto,
       codigo: json.codigo,
       alternativa: json.alternativa,
+      categoria: json.categoria,
     };
   } catch {
     return { mensagem: texto || `HTTP ${resposta.status}` };
@@ -894,6 +910,7 @@ export type DesafioResumo = {
   origem: string;
   familiaId: string | null;
   guardado: boolean;
+  escolhida?: boolean;
   disponivelParaNovaParticipacao?: boolean;
   estadoDisponibilidade?: "explorar" | "executadas";
   ultimaParticipacao?: {
@@ -903,6 +920,17 @@ export type DesafioResumo = {
     estrelasConcedidas: number;
   } | null;
 };
+
+export class ErroLimiteAtivas extends Error {
+  codigo = "LIMITE_ATIVAS_CATEGORIA";
+  categoria: string | null;
+
+  constructor(mensagem: string, categoria: string | null) {
+    super(mensagem);
+    this.name = "ErroLimiteAtivas";
+    this.categoria = categoria;
+  }
+}
 
 export type SugestaoDesafio = {
   id: string;
@@ -1233,20 +1261,41 @@ export async function escolherSugestaoDesafio(
     { method: "POST" },
   );
   if (!resposta.ok) {
+    const detalhe = await lerErroDetalhado(resposta);
+    if (
+      resposta.status === 409 &&
+      detalhe.codigo === "LIMITE_ATIVAS_CATEGORIA"
+    ) {
+      throw new ErroLimiteAtivas(
+        detalhe.mensagem,
+        detalhe.categoria ?? null,
+      );
+    }
     throw new Error(
-      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+      erroDesenvolvimento(resposta.status, detalhe.mensagem),
     );
   }
   return resposta.json() as Promise<{
     escolhida: boolean;
     jaEstavaEscolhida?: boolean;
+    categoria?: string | null;
     sugestoes: SugestaoDesafio[];
   }>;
 }
 
-export async function renovarSugestoesDesafio(pessoaId: string) {
+export async function renovarSugestoesDesafio(
+  pessoaId: string,
+  filtro?: { categoria?: string },
+) {
   const resposta = await fetchApi(`/pessoas/${pessoaId}/sugestoes/renovar`, {
     method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      categoria:
+        filtro?.categoria && filtro.categoria !== "todas"
+          ? filtro.categoria
+          : undefined,
+    }),
   });
   if (!resposta.ok) {
     throw new Error(
@@ -1257,6 +1306,26 @@ export async function renovarSugestoesDesafio(pessoaId: string) {
     trocadas: number;
     mensagem: string | null;
     preservadas: number;
+    sugestoes: SugestaoDesafio[];
+  }>;
+}
+
+export async function retirarAtividadeAtiva(
+  pessoaId: string,
+  desafioId: string,
+) {
+  const resposta = await fetchApi(
+    `/pessoas/${pessoaId}/sugestoes/${desafioId}/retirar`,
+    { method: "POST" },
+  );
+  if (!resposta.ok) {
+    throw new Error(
+      erroDesenvolvimento(resposta.status, await lerErro(resposta)),
+    );
+  }
+  return resposta.json() as Promise<{
+    escolhida: boolean;
+    jaEstavaRetirada?: boolean;
     sugestoes: SugestaoDesafio[];
   }>;
 }

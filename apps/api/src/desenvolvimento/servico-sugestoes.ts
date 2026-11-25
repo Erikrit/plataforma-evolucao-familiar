@@ -9,9 +9,12 @@ import { ServicoPrisma } from "../prisma/servico-prisma";
 import { ServicoAutorizacoes } from "../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
 import {
+  LIMITE_ATIVAS_POR_CATEGORIA,
   LIMITE_CATALOGO_ATIVO,
   LIMITE_RENOVAR_SUGESTOES,
   LIMITE_SUGESTOES_PESSOA,
+  MENSAGEM_LIMITE_ATIVAS,
+  MENSAGEM_SEM_NOVAS_SUGESTOES,
 } from "./constantes-desenvolvimento";
 
 type DesafioCatalogo = {
@@ -30,6 +33,24 @@ type DesafioCatalogo = {
   supervisao: string | null;
   origem: string;
 };
+
+const SELECT_DESAFIO = {
+  id: true,
+  nome: true,
+  instrucao: true,
+  categoria: true,
+  dificuldade: true,
+  materiais: true,
+  duracaoMinutos: true,
+  faixaEtariaMin: true,
+  faixaEtariaMax: true,
+  origemConteudo: true,
+  versaoConteudo: true,
+  adaptacoes: true,
+  supervisao: true,
+  origem: true,
+  ativo: true,
+} as const;
 
 @Injectable()
 export class ServicoSugestoes {
@@ -55,164 +76,119 @@ export class ServicoSugestoes {
   }
 
   /**
-   * Lista sugestões da pessoa; se vazio, monta até 6 elegíveis e persiste.
-   * E4-ACE-02/04 — sem exigir novos dados pessoais.
+   * Lista só as candidatas atuais. Não gera oferta nem grava exposição.
+   * E4-ACE-02/09 — descoberta sob demanda.
    */
   async listarParaPessoa(pessoaId: string, usuario: UsuarioAutenticado) {
     const pessoa = await this.exigirDesenvolvimento(pessoaId, usuario);
-    let linhas = await this.carregarLinhas(pessoa.id);
-    if (linhas.length === 0) {
-      await this.gerarSelecaoInicial(pessoa.id, usuario.id, pessoa.dataNascimento);
-      linhas = await this.carregarLinhas(pessoa.id);
-    }
-
-    const mensagem =
-      linhas.length === 0
-        ? "Não há sugestões elegíveis no momento."
-        : linhas.length < LIMITE_SUGESTOES_PESSOA
-          ? "Poucas opções elegíveis agora; mostramos as disponíveis."
-          : null;
-
+    const linhas = await this.carregarCandidatas(pessoa.id);
     return {
       pessoaId: pessoa.id,
       limite: LIMITE_SUGESTOES_PESSOA,
       total: linhas.length,
-      mensagem,
+      mensagem: null as string | null,
       sugestoes: linhas.map((l) => this.formatarItem(l)),
     };
   }
 
   /**
-   * Marca escolha explícita (não é guardado legado nem participação).
-   * E4-ACE-04/05 — exige organização de desenvolvimento.
+   * Monta ou renova até duas candidatas elegíveis.
+   * E4-ACE-02/03 — reposição apenas sob ação explícita.
    */
-  async escolher(
+  async renovar(
     pessoaId: string,
-    desafioId: string,
     usuario: UsuarioAutenticado,
+    filtro?: { categoria?: string },
   ) {
     const pessoa = await this.exigirOrganizacao(pessoaId, usuario);
-    const id = desafioId.trim();
-    const linha = await this.prisma.sugestaoDesafioPessoa.findUnique({
-      where: {
-        pessoaId_desafioId: { pessoaId: pessoa.id, desafioId: id },
-      },
-      include: { desafio: true },
-    });
-    if (!linha || !linha.desafio.ativo) {
-      throw new NotFoundException("Sugestão não encontrada para esta pessoa.");
-    }
-    if (linha.escolhida) {
-      return {
-        pessoaId: pessoa.id,
-        desafioId: id,
-        escolhida: true,
-        jaEstavaEscolhida: true,
-        sugestoes: (await this.listarParaPessoa(pessoa.id, usuario)).sugestoes,
-      };
-    }
-
-    const atualizado = await this.prisma.sugestaoDesafioPessoa.update({
-      where: { id: linha.id },
-      data: { escolhida: true, atualizadoPorId: usuario.id },
-    });
-
-    return {
-      pessoaId: pessoa.id,
-      desafioId: id,
-      escolhida: true,
-      jaEstavaEscolhida: false,
-      atualizadoEm: atualizado.atualizadoEm,
-      sugestoes: (await this.listarParaPessoa(pessoa.id, usuario)).sugestoes,
-    };
-  }
-
-  /**
-   * Substitui até 3 não escolhidas. Preserva escolhidas/personalizadas/histórico.
-   * E4-ACE-03/05 — sem pontos nem reabertura de Executadas.
-   */
-  async renovar(pessoaId: string, usuario: UsuarioAutenticado) {
-    const pessoa = await this.exigirOrganizacao(pessoaId, usuario);
+    const categoriaFiltro = filtro?.categoria?.trim() || undefined;
 
     try {
       const resultado = await this.prisma.$transaction(
         async (tx) => {
           const atuais = await tx.sugestaoDesafioPessoa.findMany({
-            where: { pessoaId: pessoa.id },
-            include: {
-              desafio: {
-                select: {
-                  id: true,
-                  nome: true,
-                  instrucao: true,
-                  categoria: true,
-                  dificuldade: true,
-                  materiais: true,
-                  duracaoMinutos: true,
-                  faixaEtariaMin: true,
-                  faixaEtariaMax: true,
-                  origemConteudo: true,
-                  versaoConteudo: true,
-                  adaptacoes: true,
-                  supervisao: true,
-                  origem: true,
-                  ativo: true,
-                },
-              },
-            },
-            orderBy: [{ escolhida: "desc" }, { criadoEm: "asc" }, { id: "asc" }],
+            where: { pessoaId: pessoa.id, candidata: true, escolhida: false },
+            include: { desafio: { select: SELECT_DESAFIO } },
+            orderBy: [{ criadoEm: "asc" }, { id: "asc" }],
           });
-
-          const substituiveis = atuais
-            .filter((s) => !s.escolhida)
-            .slice(0, LIMITE_RENOVAR_SUGESTOES);
-          if (substituiveis.length === 0) {
-            return {
-              trocadas: 0,
-              mensagem:
-                atuais.length === 0
-                  ? "Não há sugestões para renovar."
-                  : "Não há novas sugestões disponíveis no momento",
-              preservadas: atuais.filter((s) => s.escolhida).length,
-            };
-          }
 
           const idsAtuais = new Set(atuais.map((s) => s.desafioId));
           const candidatos = await this.buscarCandidatos(tx, {
             pessoaId: pessoa.id,
+            familiaId: pessoa.familiaId,
             dataNascimento: pessoa.dataNascimento,
             excluirIds: idsAtuais,
-            limite: substituiveis.length,
+            limite: LIMITE_RENOVAR_SUGESTOES,
+            categoriaFiltro,
           });
 
           if (candidatos.length === 0) {
+            const elegiveisAtuais = await this.filtrarAindaElegiveis(
+              tx,
+              pessoa.id,
+              pessoa.familiaId,
+              atuais,
+              categoriaFiltro,
+            );
+            if (elegiveisAtuais.length === 0 && atuais.length > 0) {
+              await tx.sugestaoDesafioPessoa.updateMany({
+                where: { id: { in: atuais.map((s) => s.id) } },
+                data: { candidata: false, atualizadoPorId: usuario.id },
+              });
+            }
             return {
               trocadas: 0,
-              mensagem: "Não há novas sugestões disponíveis no momento",
-              preservadas: atuais.filter((s) => s.escolhida).length,
+              mensagem: MENSAGEM_SEM_NOVAS_SUGESTOES,
+              preservadas: elegiveisAtuais.length,
             };
           }
 
-          const aRemover = substituiveis.slice(0, candidatos.length);
-          await tx.sugestaoDesafioPessoa.deleteMany({
-            where: { id: { in: aRemover.map((s) => s.id) } },
-          });
-          await tx.sugestaoDesafioPessoa.createMany({
-            data: candidatos.map((c) => ({
-              pessoaId: pessoa.id,
-              desafioId: c.id,
-              escolhida: false,
-              atualizadoPorId: usuario.id,
-            })),
-          });
+          const aRemover = atuais.slice(0, candidatos.length);
+          if (aRemover.length > 0) {
+            await tx.sugestaoDesafioPessoa.updateMany({
+              where: { id: { in: aRemover.map((s) => s.id) } },
+              data: {
+                candidata: false,
+                exposta: true,
+                atualizadoPorId: usuario.id,
+              },
+            });
+          }
+
+          for (const c of candidatos) {
+            await tx.sugestaoDesafioPessoa.upsert({
+              where: {
+                pessoaId_desafioId: {
+                  pessoaId: pessoa.id,
+                  desafioId: c.id,
+                },
+              },
+              create: {
+                pessoaId: pessoa.id,
+                desafioId: c.id,
+                escolhida: false,
+                candidata: true,
+                exposta: true,
+                retiradaSemParticipacao: false,
+                atualizadoPorId: usuario.id,
+              },
+              update: {
+                escolhida: false,
+                candidata: true,
+                exposta: true,
+                retiradaSemParticipacao: false,
+                atualizadoPorId: usuario.id,
+              },
+            });
+          }
 
           return {
             trocadas: candidatos.length,
             mensagem:
-              candidatos.length < aRemover.length
+              candidatos.length < LIMITE_RENOVAR_SUGESTOES && atuais.length > 0
                 ? "Renovamos o que havia de novo; algumas opções foram mantidas."
                 : null,
-            preservadas: atuais.filter((s) => s.escolhida).length,
+            preservadas: Math.max(0, atuais.length - aRemover.length),
           };
         },
         { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
@@ -222,6 +198,7 @@ export class ServicoSugestoes {
       return {
         pessoaId: pessoa.id,
         ...resultado,
+        mensagem: resultado.mensagem ?? listagem.mensagem,
         sugestoes: listagem.sugestoes,
       };
     } catch (erro: unknown) {
@@ -234,75 +211,311 @@ export class ServicoSugestoes {
     }
   }
 
-  private async gerarSelecaoInicial(
+  /**
+   * Move candidata (ou desafio elegível) para Ativas após confirmação do servidor.
+   * E4-ACE-04/05/08 — limite 10/categoria, idempotência e concorrência.
+   */
+  async escolher(
     pessoaId: string,
-    usuarioId: string,
-    dataNascimento: Date | null,
+    desafioId: string,
+    usuario: UsuarioAutenticado,
   ) {
-    await this.prisma.$transaction(
-      async (tx) => {
-        const existentes = await tx.sugestaoDesafioPessoa.count({
-          where: { pessoaId },
-        });
-        if (existentes > 0) return;
+    const pessoa = await this.exigirOrganizacao(pessoaId, usuario);
+    const id = desafioId.trim();
 
-        const candidatos = await this.buscarCandidatos(tx, {
-          pessoaId,
-          dataNascimento,
-          excluirIds: new Set(),
-          limite: LIMITE_SUGESTOES_PESSOA,
-        });
-        if (candidatos.length === 0) return;
+    try {
+      const resultado = await this.prisma.$transaction(
+        async (tx) => {
+          const desafio = await tx.desafio.findFirst({
+            where: {
+              id,
+              ativo: true,
+              OR: [
+                { origem: "catalogo", familiaId: null },
+                { familiaId: pessoa.familiaId },
+              ],
+            },
+            select: SELECT_DESAFIO,
+          });
+          if (!desafio) {
+            throw new NotFoundException("Sugestão não encontrada para esta pessoa.");
+          }
 
-        await tx.sugestaoDesafioPessoa.createMany({
-          data: candidatos.map((c) => ({
-            pessoaId,
-            desafioId: c.id,
-            escolhida: false,
-            atualizadoPorId: usuarioId,
-          })),
-        });
+          const linha = await tx.sugestaoDesafioPessoa.findUnique({
+            where: {
+              pessoaId_desafioId: { pessoaId: pessoa.id, desafioId: id },
+            },
+          });
+
+          if (linha?.escolhida) {
+            return {
+              escolhida: true as const,
+              jaEstavaEscolhida: true,
+              categoria: desafio.categoria,
+              atualizadoEm: linha.atualizadoEm,
+            };
+          }
+
+          const disponivel = await this.estaDisponivel(
+            tx,
+            pessoa.id,
+            desafio.id,
+          );
+          if (!disponivel) {
+            throw new ConflictException(
+              "Brincadeira em Executadas. Disponibilize novamente antes de escolher.",
+            );
+          }
+
+          if (desafio.categoria) {
+            const contagem = await this.contarAtivasNaCategoria(
+              tx,
+              pessoa.id,
+              pessoa.familiaId,
+              desafio.categoria,
+            );
+            if (contagem >= LIMITE_ATIVAS_POR_CATEGORIA) {
+              throw new ConflictException({
+                codigo: "LIMITE_ATIVAS_CATEGORIA",
+                message: MENSAGEM_LIMITE_ATIVAS,
+                mensagem: MENSAGEM_LIMITE_ATIVAS,
+                categoria: desafio.categoria,
+              });
+            }
+          }
+
+          const atualizado = await tx.sugestaoDesafioPessoa.upsert({
+            where: {
+              pessoaId_desafioId: { pessoaId: pessoa.id, desafioId: id },
+            },
+            create: {
+              pessoaId: pessoa.id,
+              desafioId: id,
+              escolhida: true,
+              candidata: false,
+              exposta: true,
+              retiradaSemParticipacao: false,
+              atualizadoPorId: usuario.id,
+            },
+            update: {
+              escolhida: true,
+              candidata: false,
+              exposta: true,
+              retiradaSemParticipacao: false,
+              atualizadoPorId: usuario.id,
+            },
+          });
+
+          return {
+            escolhida: true as const,
+            jaEstavaEscolhida: false,
+            categoria: desafio.categoria,
+            atualizadoEm: atualizado.atualizadoEm,
+          };
+        },
+        { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      );
+
+      const listagem = await this.listarParaPessoa(pessoa.id, usuario);
+      return {
+        pessoaId: pessoa.id,
+        desafioId: id,
+        ...resultado,
+        sugestoes: listagem.sugestoes,
+      };
+    } catch (erro: unknown) {
+      if (this.ehConflitoSerializacao(erro)) {
+        throw new ConflictException(
+          "Outra escolha está em andamento. Tente novamente.",
+        );
+      }
+      throw erro;
+    }
+  }
+
+  /**
+   * Retira das ativas: libera vaga, preserva saldo/histórico, sem Executadas.
+   * E4-ACE-09 — reenvio idempotente.
+   */
+  async retirar(
+    pessoaId: string,
+    desafioId: string,
+    usuario: UsuarioAutenticado,
+  ) {
+    const pessoa = await this.exigirOrganizacao(pessoaId, usuario);
+    const id = desafioId.trim();
+
+    const linha = await this.prisma.sugestaoDesafioPessoa.findUnique({
+      where: {
+        pessoaId_desafioId: { pessoaId: pessoa.id, desafioId: id },
       },
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    });
+
+    if (!linha || !linha.escolhida) {
+      return {
+        pessoaId: pessoa.id,
+        desafioId: id,
+        escolhida: false,
+        jaEstavaRetirada: true,
+        sugestoes: (await this.listarParaPessoa(pessoa.id, usuario)).sugestoes,
+      };
+    }
+
+    const teveParticipacao = await this.prisma.participacaoDesafio.findFirst({
+      where: { pessoaId: pessoa.id, desafioId: id, versaoAtiva: true },
+      select: { id: true },
+    });
+
+    const atualizado = await this.prisma.sugestaoDesafioPessoa.update({
+      where: { id: linha.id },
+      data: {
+        escolhida: false,
+        candidata: false,
+        retiradaSemParticipacao: !teveParticipacao,
+        atualizadoPorId: usuario.id,
+      },
+    });
+
+    return {
+      pessoaId: pessoa.id,
+      desafioId: id,
+      escolhida: false,
+      jaEstavaRetirada: false,
+      atualizadoEm: atualizado.atualizadoEm,
+      sugestoes: (await this.listarParaPessoa(pessoa.id, usuario)).sugestoes,
+    };
+  }
+
+  private async contarAtivasNaCategoria(
+    tx: Prisma.TransactionClient | ServicoPrisma,
+    pessoaId: string,
+    familiaId: string,
+    categoria: string,
+  ): Promise<number> {
+    const escolhidas = await tx.sugestaoDesafioPessoa.findMany({
+      where: {
+        pessoaId,
+        escolhida: true,
+        desafio: {
+          ativo: true,
+          categoria,
+          OR: [
+            { origem: "catalogo", familiaId: null },
+            { familiaId },
+          ],
+        },
+      },
+      select: { desafioId: true },
+    });
+    if (escolhidas.length === 0) return 0;
+
+    const ids = escolhidas.map((e) => e.desafioId);
+    const disponibilidades = await tx.disponibilidadeDesafio.findMany({
+      where: { pessoaId, desafioId: { in: ids } },
+      select: { desafioId: true, disponivelParaNovaParticipacao: true },
+    });
+    const mapaDisp = new Map(
+      disponibilidades.map((d) => [d.desafioId, d.disponivelParaNovaParticipacao]),
     );
+    const participacoes = await tx.participacaoDesafio.findMany({
+      where: { pessoaId, desafioId: { in: ids }, versaoAtiva: true },
+      select: { desafioId: true },
+      distinct: ["desafioId"],
+    });
+    const comParticipacao = new Set(participacoes.map((p) => p.desafioId));
+
+    let total = 0;
+    for (const id of ids) {
+      const row = mapaDisp.get(id);
+      const disponivel = row !== undefined ? row : !comParticipacao.has(id);
+      if (disponivel) total += 1;
+    }
+    return total;
   }
 
   private async buscarCandidatos(
     tx: Prisma.TransactionClient,
     opts: {
       pessoaId: string;
+      familiaId: string;
       dataNascimento: Date | null;
       excluirIds: Set<string>;
       limite: number;
+      categoriaFiltro?: string;
     },
   ): Promise<DesafioCatalogo[]> {
+    const escolhidas = await tx.sugestaoDesafioPessoa.findMany({
+      where: { pessoaId: opts.pessoaId, escolhida: true },
+      select: { desafioId: true },
+    });
+    const idsEscolhidos = new Set(escolhidas.map((e) => e.desafioId));
+
+    const contagemPorCategoria = new Map<string, number>();
+    if (!opts.categoriaFiltro) {
+      for (const cat of [
+        "memoria_atencao",
+        "raciocinio",
+        "linguagem",
+        "criatividade",
+        "coordenacao",
+        "autonomia",
+      ]) {
+        contagemPorCategoria.set(
+          cat,
+          await this.contarAtivasNaCategoria(
+            tx,
+            opts.pessoaId,
+            opts.familiaId,
+            cat,
+          ),
+        );
+      }
+    } else {
+      contagemPorCategoria.set(
+        opts.categoriaFiltro,
+        await this.contarAtivasNaCategoria(
+          tx,
+          opts.pessoaId,
+          opts.familiaId,
+          opts.categoriaFiltro,
+        ),
+      );
+    }
+
     const catalogo = await tx.desafio.findMany({
       where: {
         origem: "catalogo",
         familiaId: null,
         ativo: true,
-        ...(opts.excluirIds.size
-          ? { id: { notIn: [...opts.excluirIds] } }
+        ...(opts.categoriaFiltro ? { categoria: opts.categoriaFiltro } : {}),
+        ...(opts.excluirIds.size || idsEscolhidos.size
+          ? {
+              id: {
+                notIn: [...new Set([...opts.excluirIds, ...idsEscolhidos])],
+              },
+            }
           : {}),
       },
-      select: {
-        id: true,
-        nome: true,
-        instrucao: true,
-        categoria: true,
-        dificuldade: true,
-        materiais: true,
-        duracaoMinutos: true,
-        faixaEtariaMin: true,
-        faixaEtariaMax: true,
-        origemConteudo: true,
-        versaoConteudo: true,
-        adaptacoes: true,
-        supervisao: true,
-        origem: true,
-      },
+      select: SELECT_DESAFIO,
       orderBy: [{ categoria: "asc" }, { nome: "asc" }, { id: "asc" }],
     });
+
+    const historico = await tx.sugestaoDesafioPessoa.findMany({
+      where: { pessoaId: opts.pessoaId },
+      select: {
+        desafioId: true,
+        exposta: true,
+        retiradaSemParticipacao: true,
+      },
+    });
+    const expostas = new Set(
+      historico.filter((h) => h.exposta).map((h) => h.desafioId),
+    );
+    const retiradas = new Set(
+      historico
+        .filter((h) => h.retiradaSemParticipacao)
+        .map((h) => h.desafioId),
+    );
 
     const disponibilidades = await tx.disponibilidadeDesafio.findMany({
       where: { pessoaId: opts.pessoaId },
@@ -320,8 +533,14 @@ export class ServicoSugestoes {
 
     const elegiveis = catalogo.filter((d) => {
       const row = mapaDisp.get(d.id);
-      if (row !== undefined) return row;
-      return !comParticipacao.has(d.id);
+      const disponivel = row !== undefined ? row : !comParticipacao.has(d.id);
+      if (!disponivel) return false;
+      if (comParticipacao.has(d.id)) return false;
+      if (d.categoria) {
+        const qtd = contagemPorCategoria.get(d.categoria) ?? 0;
+        if (qtd >= LIMITE_ATIVAS_POR_CATEGORIA) return false;
+      }
+      return true;
     });
 
     const idade = this.idadeEmAnos(opts.dataNascimento);
@@ -331,7 +550,63 @@ export class ServicoSugestoes {
         : elegiveis.filter((d) => this.combinaFaixa(d, idade));
     const base = preferidos.length > 0 ? preferidos : elegiveis;
 
-    return this.diversificarPorCategoria(base, opts.limite);
+    const ineditas = base.filter((d) => !expostas.has(d.id));
+    const retornos = base.filter(
+      (d) => retiradas.has(d.id) && expostas.has(d.id),
+    );
+    const demais = base.filter(
+      (d) => !ineditas.includes(d) && !retornos.includes(d),
+    );
+    const ordenados = [...ineditas, ...retornos, ...demais];
+
+    return this.diversificarPorCategoria(ordenados, opts.limite);
+  }
+
+  private async filtrarAindaElegiveis(
+    tx: Prisma.TransactionClient,
+    pessoaId: string,
+    familiaId: string,
+    atuais: Array<{ desafioId: string; desafio: DesafioCatalogo & { ativo: boolean } }>,
+    categoriaFiltro?: string,
+  ) {
+    const elegiveis: typeof atuais = [];
+    for (const item of atuais) {
+      if (!item.desafio.ativo) continue;
+      if (categoriaFiltro && item.desafio.categoria !== categoriaFiltro) continue;
+      if (item.desafio.categoria) {
+        const qtd = await this.contarAtivasNaCategoria(
+          tx,
+          pessoaId,
+          familiaId,
+          item.desafio.categoria,
+        );
+        if (qtd >= LIMITE_ATIVAS_POR_CATEGORIA) continue;
+      }
+      const disponivel = await this.estaDisponivel(tx, pessoaId, item.desafioId);
+      const participou = await tx.participacaoDesafio.findFirst({
+        where: { pessoaId, desafioId: item.desafioId, versaoAtiva: true },
+        select: { id: true },
+      });
+      if (disponivel && !participou) elegiveis.push(item);
+    }
+    return elegiveis;
+  }
+
+  private async estaDisponivel(
+    tx: Prisma.TransactionClient,
+    pessoaId: string,
+    desafioId: string,
+  ): Promise<boolean> {
+    const row = await tx.disponibilidadeDesafio.findUnique({
+      where: { pessoaId_desafioId: { pessoaId, desafioId } },
+      select: { disponivelParaNovaParticipacao: true },
+    });
+    if (row) return row.disponivelParaNovaParticipacao;
+    const temParticipacao = await tx.participacaoDesafio.findFirst({
+      where: { pessoaId, desafioId, versaoAtiva: true },
+      select: { id: true },
+    });
+    return !temParticipacao;
   }
 
   private diversificarPorCategoria(
@@ -378,35 +653,22 @@ export class ServicoSugestoes {
     return idade >= 0 ? idade : null;
   }
 
-  private async carregarLinhas(pessoaId: string) {
+  private async carregarCandidatas(pessoaId: string) {
     return this.prisma.sugestaoDesafioPessoa.findMany({
-      where: { pessoaId, desafio: { ativo: true } },
-      include: {
-        desafio: {
-          select: {
-            id: true,
-            nome: true,
-            instrucao: true,
-            categoria: true,
-            dificuldade: true,
-            materiais: true,
-            duracaoMinutos: true,
-            faixaEtariaMin: true,
-            faixaEtariaMax: true,
-            origemConteudo: true,
-            versaoConteudo: true,
-            adaptacoes: true,
-            supervisao: true,
-            origem: true,
-          },
-        },
+      where: {
+        pessoaId,
+        candidata: true,
+        escolhida: false,
+        desafio: { ativo: true },
       },
-      orderBy: [{ escolhida: "desc" }, { criadoEm: "asc" }, { id: "asc" }],
+      include: { desafio: { select: SELECT_DESAFIO } },
+      orderBy: [{ criadoEm: "asc" }, { id: "asc" }],
+      take: LIMITE_SUGESTOES_PESSOA,
     });
   }
 
   private formatarItem(
-    linha: Awaited<ReturnType<ServicoSugestoes["carregarLinhas"]>>[number],
+    linha: Awaited<ReturnType<ServicoSugestoes["carregarCandidatas"]>>[number],
   ) {
     const d = linha.desafio;
     return {
