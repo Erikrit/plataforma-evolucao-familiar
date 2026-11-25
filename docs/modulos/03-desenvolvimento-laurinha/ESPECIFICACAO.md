@@ -1,6 +1,6 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
-**Versão:** 1.6 — evolução de Atividades Reais aprovada em 2026-11-24\
+**Versão:** 1.7 — evolução de Atividades Reais aprovada em 2026-11-24\
 **Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A seção 14 registra as decisões UX-03 a UX-05 e a aprovação do recorte de Atividades Reais. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
@@ -48,7 +48,7 @@ A dificuldade determina as estrelas segundo regra simples. Nenhuma categoria obr
 
 **Decisão L3 aprovada pelo responsável do Produto em 2026-11-19 (CT-20261119-001).** As abas **Explorar** e **Executadas** são mutuamente exclusivas quanto à **disponibilidade atual da atividade para nova participação**, no contexto da pessoa acompanhada:
 
-- **Explorar:** lista atividades ativas e atualmente disponíveis, organizadas por categorias de desenvolvimento compreensíveis. O catálogo preserva uma opção “Todas”; atividades sem categoria permanecem encontráveis.
+- **Explorar:** a entrada apresenta somente as atividades escolhidas e disponíveis da pessoa em **Atividades ativas**. Descobrir outras brincadeiras requer acionar **Sugerir brincadeiras**, conforme a seção 12. O catálogo preserva uma opção “Todas”; atividades sem categoria permanecem encontráveis.
 - **Executadas:** lista uma vez cada atividade cuja última execução legítima foi confirmada e que ainda não foi disponibilizada novamente. Mostrar, quando útil, a última realização; outras ocorrências continuam no Histórico do Módulo 04.
 - Após persistir **Concluiu** ou **Participou**, a atividade sai de Explorar e aparece em Executadas. Erro de gravação ou confirmação incerta não autoriza mudança visual definitiva.
 - Somente um adulto **com operação de organização/reativação efetivamente autorizada** pode escolher **Disponibilizar novamente**, fazendo a atividade voltar a Explorar. Reativar **não** apaga participações, autoria, datas, estrelas ou registros anteriores e não cria pontos. Uma nova execução legítima posterior cria **outro registro** e volta a colocá-la em Executadas.
@@ -194,16 +194,18 @@ O limite de 24 aplica-se aos modelos publicados ativos do catálogo global, não
 
 ### Sugestões e escolha (DEV-JOG-P02)
 
-- A Biblioteca mostra **até duas sugestões elegíveis por pessoa**. Sugerir modelos publicados ativos, disponíveis para nova participação e ainda inéditos para a pessoa. Excluir atividades já escolhidas ou com participação registrada, inclusive após disponibilização novamente. Priorizar a faixa orientativa quando conhecida e diversificar categorias quando houver opções. Sem idade, oferecer opções gerais. Uma categoria sem vaga de escolha fica fora das sugestões enquanto estiver cheia.
-- O responsável com organização de Desenvolvimento autorizada pode escolher para experimentar e renovar sugestões. A escolha é privada por pessoa, compartilhada entre responsáveis autorizados e independente do navegador. Após confirmação, mover a atividade da lista de sugestões para **Escolhidas para experimentar**, dentro de Explorar. Manter as sugestões restantes. Repor ou trocar somente ao acionar **Renovar sugestões**, após a oferta inicial.
+- Ao abrir Atividades Reais pela primeira vez sem escolhas, mostrar **Atividades ativas** vazia e o botão **Sugerir brincadeiras**. Não exibir modelos do catálogo nem sugestões automaticamente. Em visitas seguintes, carregar as escolhas ativas da pessoa. Ao tocar no botão, apresentar **até duas sugestões elegíveis por pessoa**. Sugerir modelos publicados ativos, disponíveis para nova participação com prioridade para os que a pessoa ainda não viu. Excluir atividades atualmente escolhidas e todas as que tenham participação registrada, inclusive após reativação. Um modelo retirado das ativas antes de qualquer participação pode voltar em pedido futuro, depois dos inéditos. Priorizar a faixa orientativa quando conhecida e diversificar categorias quando houver opções. Sem idade, oferecer opções gerais. Uma categoria sem vaga de escolha fica fora das sugestões enquanto estiver cheia.
+- O responsável com organização de Desenvolvimento autorizada pode escolher para experimentar e renovar sugestões. A escolha é privada por pessoa, compartilhada entre responsáveis autorizados e independente do navegador. Ao confirmar **Quero experimentar**, mover a atividade das sugestões para **Atividades ativas** da pessoa. Manter as sugestões restantes. Repor ou trocar somente ao acionar **Renovar sugestões**, após a oferta inicial.
 - Renovar oferece até duas opções inéditas, preenchendo vagas e substituindo as opções anteriores quando houver alternativas. Com renovação parcial, manter as opções ainda elegíveis que não puderem ser substituídas. Evitar alternância repetitiva entre os mesmos cartões durante a rotação. Ao esgotar as alternativas, informar “Não há novas sugestões disponíveis por agora” e manter acesso à Biblioteca. Em falha de gravação, preservar o último estado confirmado e permitir nova tentativa.
 - Escolher ou renovar não registra participação, não gera estrelas e não altera a disponibilidade conforme DEV-F03. Uma participação legítima, escolhida antes ou registrada diretamente, retira a atividade das escolhas disponíveis e das sugestões. Após registrar Concluiu ou Participou, a atividade passa a Executadas. **Disponibilizar novamente** a retorna a Explorar com o histórico intacto e sem crédito. Após a reativação, se o responsável quiser mantê-la na lista de escolhidas, faz uma escolha explícita sujeita ao limite.
+
+- Na ficha de uma atividade ativa, oferecer **Retirar das ativas** ao responsável autorizado. A retirada confirmada libera a vaga da categoria e preserva histórico e saldo. Não registrar participação nem mover a atividade para Executadas. Reenviar a mesma retirada não produz efeito adicional. Participou e Concluiu continuam reservados à experiência presencial realizada.
 
 ### Limite de escolhas (DEV-JOG-P03)
 
 - **Até dez atividades escolhidas e disponíveis por categoria por pessoa acompanhada.** Cada atividade conta uma vez. Atividades personalizadas categorizadas contam quando explicitamente escolhidas para a pessoa. Personalizadas sem categoria continuam cadastráveis e utilizáveis e ficam fora da contagem.
 - Modelos globais apenas disponíveis para descoberta, sugestões e atividades em Executadas ficam fora da contagem. Registrar uma participação de atividade escolhida libera uma vaga. Consultar, registrar participação e disponibilizar novamente uma atividade existente continuam possíveis com a categoria cheia.
-- Ao atingir dez, uma nova escolha naquela categoria recebe a mensagem “Você já tem dez atividades escolhidas nesta categoria. Que tal experimentar alguma delas?”. Aplicar o limite no servidor às operações que efetivamente colocam uma atividade no conjunto contado, incluindo mudança de categoria de uma atividade já escolhida. Tratar concorrência e reenvio com isolamento por pessoa e família. Se houver excedente anterior, preservar escolhas e bloquear novas inclusões na categoria até haver vaga.
+- Ao atingir dez, uma nova escolha naquela categoria recebe a mensagem “Você já tem 10 atividades ativas nesta categoria. Para adicionar outra, finalize ou retire uma delas.” Oferecer **Ver atividades ativas** com a categoria correspondente selecionada. Aplicar o limite no servidor às operações que efetivamente colocam uma atividade no conjunto contado, incluindo mudança de categoria de uma atividade já escolhida. Tratar concorrência e reenvio com isolamento por pessoa e família. Se houver excedente anterior, preservar escolhas e bloquear novas inclusões na categoria até haver vaga.
 - A interface reaproveita Biblioteca, cabeçalho compartilhado, filtro de categoria e Explorar/Executadas. O grupo de escolhidas representa organização para experimentar. Histórico, participações, estrelas e resgates continuam com suas fontes e regras vigentes.
 
 ### Alimentação inicial
@@ -218,12 +220,13 @@ A primeira rodada de curadoria aprovada está na seção 14. Antes da publicaç�
 |---|---|
 | E4-ACE-01 | Catálogo contém no máximo 24 modelos ativos publicados, com metadados necessários e curadoria registrada; personalizadas/histórico não entram nesse limite. |
 | E4-ACE-02 | Pessoa recebe de zero a duas sugestões elegíveis, sem exigir novos dados pessoais. Escolher remove o cartão após confirmação e mantém a outra opção sem reposição automática. |
-| E4-ACE-03 | Renovar oferece até duas alternativas e preserva as escolhas. Testar troca parcial, esgotamento sem rotação repetitiva e ausência de atividades já escolhidas ou executadas, inclusive após reativação. |
+| E4-ACE-03 | Renovar oferece até duas alternativas e preserva as escolhas. Testar troca parcial, esgotamento sem rotação repetitiva e exclusão de atividades ativas ou já executadas e retorno de retiradas nunca realizadas somente depois das inéditas. |
 | E4-ACE-04 | Seleção persiste por pessoa e respeita família/operação; responsáveis da mesma pessoa veem estado consistente, inclusive retry e concorrência. |
 | E4-ACE-05 | Escolher/renovar não concede pontos nem reabre Executadas; participação, reativação e resgates mantêm DEV-F03..06. |
 | E4-ACE-06 | Atualização/arquivamento não altera conteúdo e créditos de execuções históricas; dados pessoais nunca são publicados no catálogo global. |
 | E4-ACE-07 | Biblioteca móvel permite entender instruções/materiais, escolher e renovar sem excesso de opções; vazio/erro não geram cobrança. |
 | E4-ACE-08 | Com nove escolhas de uma categoria, duas novas escolhas concorrentes permitem só a décima. Testar personalizadas categorizadas e sem categoria, reativação, execução com limite cheio, alteração de categoria, excedente anterior e escopo entre pessoas. |
+| E4-ACE-09 | Testar primeiro acesso vazio, descoberta por botão, retorno com as escolhas anteriores e retirada com categoria cheia. Confirmar vaga liberada, saldo e histórico preservados, ausência em Executadas e prioridade de inéditas ao pedir sugestões novamente. |
 | E4-HOM | Homologar escolher → renovar preservando escolha → participar → Executadas → disponibilizar novamente em celular, com duas famílias e regressão de histórico e estrelas. Testar o limite e o cenário sem novas sugestões. |
 
 **Fora do recorte E4:** jogos digitais (entregues separadamente no E5), IA com histórico pessoal, publicação automática, ranking e nova tabela de estrelas. A correção de anexos foi executada no recorte EST-01; estado vigente em STATUS-E-ESCOPO.
@@ -294,5 +297,5 @@ Faixa orientativa de **6 a 12 anos**, com instrução curta para o adulto e prio
 
 1. **Sugestões e escolhas:** adaptar os contratos existentes, preservar escolhas anteriores e cobrir geração, reposição manual, elegibilidade, escassez e isolamento. Validar E4-ACE-02 a 05.
 2. **Limite de escolhas:** aplicar a regra no domínio e testar registro de participação, reativação, alterações de categoria, reenvio e concorrência. Validar E4-ACE-08.
-3. **Biblioteca de Atividades Reais:** montar a lista de escolhidas, ligar as ações às respostas confirmadas, preservar o filtro e validar vazio, erros, aviso de limite e navegação no celular. Validar E4-ACE-07 e E4-HOM.
+3. **Biblioteca de Atividades Reais:** validar em protótipo a entrada vazia, a descoberta por botão, a lista de ativas e a ação Retirar das ativas. Na implementação, ligar as ações às respostas confirmadas, preservar o filtro e validar vazio, erros, aviso de limite e navegação no celular. Validar E4-ACE-07, E4-ACE-09 e E4-HOM.
 4. **Curadoria:** verificar vínculos e slots ativos, validar versão e publicação repetível, disponibilizar as seis fichas aprovadas e conferir a experiência presencial em celular. Validar E4-ACE-01, E4-ACE-06 e E4-HOM.
