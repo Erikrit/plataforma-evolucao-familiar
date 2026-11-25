@@ -31,6 +31,13 @@ Resumo; a regra está em `docs/produto/GOVERNANCA.md` §4–6.
 - Decisão `APROVADA` ou `DOCUMENTADA` vale até surgir conflito material novo.
 - Incerteza de autorização, saúde ou criança: `NEEDS_DECISION`; seguir só com o trabalho independente.
 
+## Divisão do trabalho
+
+Decisão do responsável pelo Produto em 2026-11-25:
+
+- **Conversas de planejamento** (fora do Claude Code): diagnóstico, decisões, especificação e tickets. Publicam somente documentos: especificações dos módulos, spec e tickets em `docs/esteira/tickets/<demanda>/`, com a seção "Execução no Claude Code".
+- **Claude Code com esteira v2**: implementação, portões de qualidade, verificador e entrega, ticket a ticket, a partir dessa seção.
+
 ## Estados da demanda
 
 `PENDING → READY → IN_PROGRESS → IN_VALIDATION → COMPLETED | BLOCKED | NEEDS_DECISION`

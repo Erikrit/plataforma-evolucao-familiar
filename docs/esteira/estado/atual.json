@@ -87,7 +87,7 @@
       "esteira.config.json"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável: rodar verificar-dev-cat-m1.sh com Docker (qg.mjs qg1/qg2 com authz) e homologar no celular tickets 04 e 08. Depois: decidir D1 a D3; próximos tickets 02 e 06.",
+    "proximaAcao": "No Claude Code: qg1/qg2 com Docker e /homologar DEV-CAT-M1 (tickets 04 e 08); depois /implementar dos tickets 02 e 06, conforme a seção Execução no Claude Code da spec.",
     "verificacao": {
       "qg1": {
         "status": "FAIL",

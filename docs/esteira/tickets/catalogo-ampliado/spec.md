@@ -74,3 +74,25 @@ Custos de bundle e desempenho do 2D só serão medidos no teste posterior ao Mar
 ## Fora do escopo
 
 Os 12 jogos novos e as 60 atividades do Marco 1 (próxima demanda), 2D, narração por voz, ranking, metas, notificações, avaliação cognitiva, IA na partida, anúncios e multijogador.
+
+## Execução no Claude Code
+
+A implementação desta demanda roda no Claude Code com a esteira v2. As conversas de planejamento só atualizam esta spec, os tickets e as especificações. Cada ticket começa em sessão nova, na `develop` atualizada.
+
+| Ticket | Status | Comando | Observação |
+|---|---|---|---|
+| 01 | COMPLETED | — | Verificador sobre o catálogo carregado |
+| 04 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Antes, rodar `npm run esteira:qg -- --perfil qg1 --demanda DEV-CAT-M1` e `--perfil qg2` com Docker para registrar `authz` e smokes; depois homologar no celular |
+| 08 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Celular: andar dois passos no labirinto e pedir a dica de novo |
+| 02 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/02-regua-de-qualidade-automatica.md` | Começar em modo relatório; as falhas conhecidas estão listadas no ticket |
+| 06 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/06-area-numeros.md` | Independente do 02 |
+| 03 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/03-tres-trilhas-no-labirinto.md` | Depois do 02 |
+| 09 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/09-oito-jogos-com-tres-trilhas.md` | Depois do 03 e do 08 |
+| 05, 07, 10 | NEEDS_DECISION | `/sabatina` com o Produto | Aguardam D1, D2 e D3 |
+
+Lembretes para quem executa:
+
+- Falhas anteriores à demanda, iguais na base: `check:e2` (`boas_vindas_sem_envio`) e `smoke:e1-ent` (`E1-ENT-02-colisao-slug`). Não as trate como regressão desta demanda.
+- `EST-V2-CLAUDE-CODE` foi movida para `demandasConcluidas` com estado `IN_VALIDATION`, aguardando aceite. Não reabra sem pedido do Produto.
+- Dados sempre fictícios. Os bancos locais de teste podem ser recriados; o banco da VPS nunca.
+- Ao concluir cada ticket, entregar a `mensagemCommit` (skill `entrega`) e atualizar o status no arquivo do ticket.
