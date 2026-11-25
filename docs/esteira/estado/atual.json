@@ -1,306 +1,306 @@
 {
- "schemaVersao": 2,
- "revisao": {
-  "branch": "develop",
-  "commit": "3df3a4c7cf9f97ef20eb76093cb09c3e28006f28",
-  "nota": "Commit da implementação DEV-JOG-P01..P03 na develop (base 3becc90), referenciado pelo aceite humano de 2026-11-25."
- },
- "moduloId": "03-desenvolvimento-laurinha",
- "incrementoId": null,
- "requisitos": [
-  "DEV-JOG-P01",
-  "DEV-JOG-P02",
-  "DEV-JOG-P03",
-  "E4-ACE-01",
-  "E4-ACE-02",
-  "E4-ACE-03",
-  "E4-ACE-04",
-  "E4-ACE-05",
-  "E4-ACE-08",
-  "E4-ACE-09",
-  "E4-HOM"
- ],
- "estado": "COMPLETED",
- "dependencias": [],
- "arquivos": [
-  "apps/api/prisma/schema.prisma",
-  "apps/api/prisma/migrations/20261125010000_atividades_reais_escolha/",
-  "apps/api/prisma/catalogo-biblioteca-e4.mjs",
-  "apps/api/prisma/carga-oficial.mjs",
-  "apps/api/src/desenvolvimento/constantes-desenvolvimento.ts",
-  "apps/api/src/desenvolvimento/servico-sugestoes.ts",
-  "apps/api/src/desenvolvimento/servico-desafios.ts",
-  "apps/api/src/desenvolvimento/servico-participacoes.ts",
-  "apps/api/src/desenvolvimento/controlador-desenvolvimento.ts",
-  "apps/api/scripts/check-e4.mjs",
-  "apps/api/scripts/smoke-e4.mjs",
-  "apps/web/src/lib/api.ts",
-  "apps/web/src/lib/rotulos-experiencia.ts",
-  "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx"
- ],
- "verificacao": {
-  "qg1": "PASS — migrate; check-e4 10/10; typecheck api+web",
-  "qg2": "PASS — build api+web; carga 24/8/40; smoke-e4 20/20; smoke:authz; smoke:e5 40/40; verifier PASS",
-  "verifier": "PASS",
-  "homologacaoHumana": "PASS — responsável pelo Produto confirmou a homologação humana de DEV-JOG-P01..P03 / E4-HOM em 2026-11-25 na conversa de aceite."
- },
- "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
- "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
- "atualizadoEm": "2026-11-25",
- "modulo": {
-  "id": "04-evolucao-familiar",
-  "status": "COMPLETED",
-  "qg3": "PASS registrado na homologação V1; evidências históricas no Git"
- },
- "demanda": {
-  "id": "DEV-CAT-M1",
-  "tipo": "transversal",
-  "origem": "humano",
-  "estado": "IN_VALIDATION",
-  "aprovacao": {
-   "nivel": "L3",
-   "status": "APROVADA",
-   "referencia": "Módulo 03 §15 (DEV-CAT-P01 a P09) e Módulo 01 §16; divisão de tickets aprovada pelo responsável pelo Produto em 2026-11-25"
+  "schemaVersao": 2,
+  "revisao": {
+    "branch": "develop",
+    "commit": "3df3a4c7cf9f97ef20eb76093cb09c3e28006f28",
+    "nota": "Commit da implementação DEV-JOG-P01..P03 na develop (base 3becc90), referenciado pelo aceite humano de 2026-11-25."
   },
-  "fluxo": [
-   "docs/esteira/tickets/catalogo-ampliado/spec.md",
-   "tickets 01, 08 e 04 nesta rodada"
+  "moduloId": "03-desenvolvimento-laurinha",
+  "incrementoId": null,
+  "requisitos": [
+    "DEV-JOG-P01",
+    "DEV-JOG-P02",
+    "DEV-JOG-P03",
+    "E4-ACE-01",
+    "E4-ACE-02",
+    "E4-ACE-03",
+    "E4-ACE-04",
+    "E4-ACE-05",
+    "E4-ACE-08",
+    "E4-ACE-09",
+    "E4-HOM"
   ],
-  "escopo": "Marco 1, fundação: tickets 01 (verificador sobre o catálogo carregado), 08 (contrato de tabuleiro e dica recalculada) e 04 (data de nascimento para Desenvolvimento). Tickets 05, 07 e 10 em NEEDS_DECISION (D1 a D3).",
-  "criteriosAceite": [
-   "E5-ACE-03 e E5-ACE-12 (ticket 01)",
-   "E5-F04, E5-ACE-02 e E5-ACE-10 (ticket 08)",
-   "FF-NASC-ACE-01 a 04 (ticket 04)"
-  ],
+  "estado": "COMPLETED",
+  "dependencias": [],
   "arquivos": [
-   "apps/api/scripts/check-e5.mjs",
-   "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts (removido)",
-   "apps/web/src/componentes/desenvolvimento/jogos/",
-   "apps/api/src/pessoas/",
-   "apps/api/src/autorizacoes/",
-   "apps/api/src/convites/",
-   "apps/web/src/componentes/contexto-desenvolvimento.tsx",
-   "apps/web/src/componentes/painel-gerenciar-familia.tsx",
-   "apps/web/src/componentes/campo-data-nascimento.tsx",
-   "apps/web/src/lib/api.ts",
-   "apps/api/scripts/smoke-ff-nasc.mjs",
-   "esteira.config.json"
+    "apps/api/prisma/schema.prisma",
+    "apps/api/prisma/migrations/20261125010000_atividades_reais_escolha/",
+    "apps/api/prisma/catalogo-biblioteca-e4.mjs",
+    "apps/api/prisma/carga-oficial.mjs",
+    "apps/api/src/desenvolvimento/constantes-desenvolvimento.ts",
+    "apps/api/src/desenvolvimento/servico-sugestoes.ts",
+    "apps/api/src/desenvolvimento/servico-desafios.ts",
+    "apps/api/src/desenvolvimento/servico-participacoes.ts",
+    "apps/api/src/desenvolvimento/controlador-desenvolvimento.ts",
+    "apps/api/scripts/check-e4.mjs",
+    "apps/api/scripts/smoke-e4.mjs",
+    "apps/web/src/lib/api.ts",
+    "apps/web/src/lib/rotulos-experiencia.ts",
+    "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx"
   ],
-  "risco": "alto",
-  "proximaAcao": "Responsável: rodar verificar-dev-cat-m1.sh com Docker (qg.mjs qg1/qg2 com authz) e homologar no celular tickets 04 e 08. Depois: decidir D1 a D3; próximos tickets 02 e 06.",
   "verificacao": {
-   "qg1": {
-    "status": "FAIL",
-    "integral": false,
-    "em": "2026-11-25T23:00:02.908Z",
-    "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
-    "head": "514b0494ddf31548966dc1d68a328488471b0cd2",
+    "qg1": "PASS — migrate; check-e4 10/10; typecheck api+web",
+    "qg2": "PASS — build api+web; carga 24/8/40; smoke-e4 20/20; smoke:authz; smoke:e5 40/40; verifier PASS",
+    "verifier": "PASS",
+    "homologacaoHumana": "PASS — responsável pelo Produto confirmou a homologação humana de DEV-JOG-P01..P03 / E4-HOM em 2026-11-25 na conversa de aceite."
+  },
+  "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
+  "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
+  "atualizadoEm": "2026-11-25",
+  "modulo": {
+    "id": "04-evolucao-familiar",
+    "status": "COMPLETED",
+    "qg3": "PASS registrado na homologação V1; evidências históricas no Git"
+  },
+  "demanda": {
+    "id": "DEV-CAT-M1",
+    "tipo": "transversal",
+    "origem": "humano",
+    "estado": "IN_VALIDATION",
+    "aprovacao": {
+      "nivel": "L3",
+      "status": "APROVADA",
+      "referencia": "Módulo 03 §15 (DEV-CAT-P01 a P09) e Módulo 01 §16; divisão de tickets aprovada pelo responsável pelo Produto em 2026-11-25"
+    },
+    "fluxo": [
+      "docs/esteira/tickets/catalogo-ampliado/spec.md",
+      "tickets 01, 08 e 04 nesta rodada"
+    ],
+    "escopo": "Marco 1, fundação: tickets 01 (verificador sobre o catálogo carregado), 08 (contrato de tabuleiro e dica recalculada) e 04 (data de nascimento para Desenvolvimento). Tickets 05, 07 e 10 em NEEDS_DECISION (D1 a D3).",
+    "criteriosAceite": [
+      "E5-ACE-03 e E5-ACE-12 (ticket 01)",
+      "E5-F04, E5-ACE-02 e E5-ACE-10 (ticket 08)",
+      "FF-NASC-ACE-01 a 04 (ticket 04)"
+    ],
+    "arquivos": [
+      "apps/api/scripts/check-e5.mjs",
+      "apps/api/src/desenvolvimento/jogos/catalogo-jogos.ts (removido)",
+      "apps/web/src/componentes/desenvolvimento/jogos/",
+      "apps/api/src/pessoas/",
+      "apps/api/src/autorizacoes/",
+      "apps/api/src/convites/",
+      "apps/web/src/componentes/contexto-desenvolvimento.tsx",
+      "apps/web/src/componentes/painel-gerenciar-familia.tsx",
+      "apps/web/src/componentes/campo-data-nascimento.tsx",
+      "apps/web/src/lib/api.ts",
+      "apps/api/scripts/smoke-ff-nasc.mjs",
+      "esteira.config.json"
+    ],
+    "risco": "alto",
+    "proximaAcao": "Responsável: rodar verificar-dev-cat-m1.sh com Docker (qg.mjs qg1/qg2 com authz) e homologar no celular tickets 04 e 08. Depois: decidir D1 a D3; próximos tickets 02 e 06.",
+    "verificacao": {
+      "qg1": {
+        "status": "FAIL",
+        "integral": false,
+        "em": "2026-11-25T23:00:02.908Z",
+        "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
+        "head": "514b0494ddf31548966dc1d68a328488471b0cd2",
+        "fingerprint": "sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9",
+        "checagens": [
+          {
+            "nome": "lint",
+            "status": "PASS",
+            "comando": "npm run lint",
+            "exit": 0
+          },
+          {
+            "nome": "typecheck",
+            "status": "PASS",
+            "comando": "npm run typecheck",
+            "exit": 0
+          },
+          {
+            "nome": "testes-afetados",
+            "status": "NOT_APPLICABLE",
+            "comando": "npm run test:afetados",
+            "exit": null,
+            "motivo": "script ainda não existe"
+          },
+          {
+            "nome": "authz",
+            "status": "BLOCKED",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": null,
+            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+          },
+          {
+            "nome": "check-e1-isolamento",
+            "status": "PASS",
+            "comando": "npm run check:e1-03 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "check-e4",
+            "status": "PASS",
+            "comando": "npm run check:e4 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "check-e2",
+            "status": "FAIL",
+            "comando": "npm run check:e2 -w @pef/api",
+            "exit": 1
+          },
+          {
+            "nome": "check-e5",
+            "status": "PASS",
+            "comando": "npm run check:e5 -w @pef/api",
+            "exit": 0
+          }
+        ],
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-25T23-00-02-908Z.json"
+      },
+      "qg2": {
+        "status": "BLOCKED",
+        "integral": false,
+        "em": "2026-11-25T23:00:46.531Z",
+        "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
+        "head": "514b0494ddf31548966dc1d68a328488471b0cd2",
+        "fingerprint": "sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9",
+        "checagens": [
+          {
+            "nome": "build",
+            "status": "PASS",
+            "comando": "npm run build",
+            "exit": 0
+          },
+          {
+            "nome": "testes",
+            "status": "NOT_APPLICABLE",
+            "comando": "npm run test",
+            "exit": null,
+            "motivo": "script ainda não existe"
+          },
+          {
+            "nome": "authz",
+            "status": "BLOCKED",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": null,
+            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+          },
+          {
+            "nome": "smoke-ff-nasc",
+            "status": "BLOCKED",
+            "comando": "npm run smoke:ff-nasc -w @pef/api",
+            "exit": null,
+            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+          },
+          {
+            "nome": "smoke-historico-resumo",
+            "status": "BLOCKED",
+            "comando": "npm run smoke:est-03-docs -w @pef/api",
+            "exit": null,
+            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+          },
+          {
+            "nome": "smoke-e1-isolamento",
+            "status": "BLOCKED",
+            "comando": "npm run smoke:e1-03 -w @pef/api",
+            "exit": null,
+            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+          },
+          {
+            "nome": "smoke-e2-acessos",
+            "status": "BLOCKED",
+            "comando": "npm run smoke:e2 -w @pef/api",
+            "exit": null,
+            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+          },
+          {
+            "nome": "smoke-e4-atividades",
+            "status": "BLOCKED",
+            "comando": "npm run smoke:e4 -w @pef/api",
+            "exit": null,
+            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+          },
+          {
+            "nome": "smoke-e5-jogos",
+            "status": "BLOCKED",
+            "comando": "npm run smoke:e5 -w @pef/api",
+            "exit": null,
+            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+          }
+        ],
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-25T23-00-46-531Z.json"
+      },
+      "ambienteAlternativo": {
+        "status": "PASS",
+        "em": "2026-11-25",
+        "nota": "Sem Docker e sem engines binários do Prisma no ambiente do agente: smokes executados em worktree com PostgreSQL 16 local descartável e driver adapter pg injetado por preload (não versionado).",
+        "checagens": [
+          {
+            "nome": "smoke:ff-nasc",
+            "resultado": "16/16; vermelho na 2ª checagem antes da mudança"
+          },
+          {
+            "nome": "smoke:authz",
+            "resultado": "exit 0"
+          },
+          {
+            "nome": "smoke:e2",
+            "resultado": "16/16"
+          },
+          {
+            "nome": "smoke:e4",
+            "resultado": "20/20"
+          },
+          {
+            "nome": "smoke:e5",
+            "resultado": "40/40"
+          },
+          {
+            "nome": "smoke:est-03-docs",
+            "resultado": "15/15"
+          },
+          {
+            "nome": "smoke:e1-03",
+            "resultado": "exit 0"
+          }
+        ],
+        "falhasAnteriores": [
+          "check:e2 boas_vindas_sem_envio (igual na base)",
+          "smoke:e1-ent E1-ENT-02-colisao-slug (igual na base)"
+        ]
+      },
+      "verificador": {
+        "status": "BLOCKED",
+        "em": "2026-11-25",
+        "nota": "Sem defeito objetivo no código. BLOCKED só porque authz e smokes ficaram BLOCKED no qg.mjs (sem Docker). Achados de convite pendente, transação e cobertura E5-ACE-08 corrigidos e reexecutados em ambiente alternativo. Fingerprint atual após as correções: sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9.",
+        "fingerprint": "sha256:4b304fe8888768fc923b4d9f138369c4e847032a053d4b90f87437e5c2402575"
+      }
+    },
     "fingerprint": "sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9",
-    "checagens": [
-     {
-      "nome": "lint",
-      "status": "PASS",
-      "comando": "npm run lint",
-      "exit": 0
-     },
-     {
-      "nome": "typecheck",
-      "status": "PASS",
-      "comando": "npm run typecheck",
-      "exit": 0
-     },
-     {
-      "nome": "testes-afetados",
-      "status": "NOT_APPLICABLE",
-      "comando": "npm run test:afetados",
-      "exit": null,
-      "motivo": "script ainda não existe"
-     },
-     {
-      "nome": "authz",
-      "status": "BLOCKED",
-      "comando": "npm run smoke:authz -w @pef/api",
-      "exit": null,
-      "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
-     },
-     {
-      "nome": "check-e1-isolamento",
-      "status": "PASS",
-      "comando": "npm run check:e1-03 -w @pef/api",
-      "exit": 0
-     },
-     {
-      "nome": "check-e4",
-      "status": "PASS",
-      "comando": "npm run check:e4 -w @pef/api",
-      "exit": 0
-     },
-     {
-      "nome": "check-e2",
-      "status": "FAIL",
-      "comando": "npm run check:e2 -w @pef/api",
-      "exit": 1
-     },
-     {
-      "nome": "check-e5",
-      "status": "PASS",
-      "comando": "npm run check:e5 -w @pef/api",
-      "exit": 0
-     }
-    ],
-    "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-25T23-00-02-908Z.json"
-   },
-   "qg2": {
-    "status": "BLOCKED",
-    "integral": false,
-    "em": "2026-11-25T23:00:46.531Z",
-    "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
-    "head": "514b0494ddf31548966dc1d68a328488471b0cd2",
-    "fingerprint": "sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9",
-    "checagens": [
-     {
-      "nome": "build",
-      "status": "PASS",
-      "comando": "npm run build",
-      "exit": 0
-     },
-     {
-      "nome": "testes",
-      "status": "NOT_APPLICABLE",
-      "comando": "npm run test",
-      "exit": null,
-      "motivo": "script ainda não existe"
-     },
-     {
-      "nome": "authz",
-      "status": "BLOCKED",
-      "comando": "npm run smoke:authz -w @pef/api",
-      "exit": null,
-      "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
-     },
-     {
-      "nome": "smoke-ff-nasc",
-      "status": "BLOCKED",
-      "comando": "npm run smoke:ff-nasc -w @pef/api",
-      "exit": null,
-      "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
-     },
-     {
-      "nome": "smoke-historico-resumo",
-      "status": "BLOCKED",
-      "comando": "npm run smoke:est-03-docs -w @pef/api",
-      "exit": null,
-      "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
-     },
-     {
-      "nome": "smoke-e1-isolamento",
-      "status": "BLOCKED",
-      "comando": "npm run smoke:e1-03 -w @pef/api",
-      "exit": null,
-      "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
-     },
-     {
-      "nome": "smoke-e2-acessos",
-      "status": "BLOCKED",
-      "comando": "npm run smoke:e2 -w @pef/api",
-      "exit": null,
-      "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
-     },
-     {
-      "nome": "smoke-e4-atividades",
-      "status": "BLOCKED",
-      "comando": "npm run smoke:e4 -w @pef/api",
-      "exit": null,
-      "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
-     },
-     {
-      "nome": "smoke-e5-jogos",
-      "status": "BLOCKED",
-      "comando": "npm run smoke:e5 -w @pef/api",
-      "exit": null,
-      "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
-     }
-    ],
-    "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-25T23-00-46-531Z.json"
-   },
-   "ambienteAlternativo": {
-    "status": "PASS",
-    "em": "2026-11-25",
-    "nota": "Sem Docker e sem engines binários do Prisma no ambiente do agente: smokes executados em worktree com PostgreSQL 16 local descartável e driver adapter pg injetado por preload (não versionado).",
-    "checagens": [
-     {
-      "nome": "smoke:ff-nasc",
-      "resultado": "16/16; vermelho na 2ª checagem antes da mudança"
-     },
-     {
-      "nome": "smoke:authz",
-      "resultado": "exit 0"
-     },
-     {
-      "nome": "smoke:e2",
-      "resultado": "16/16"
-     },
-     {
-      "nome": "smoke:e4",
-      "resultado": "20/20"
-     },
-     {
-      "nome": "smoke:e5",
-      "resultado": "40/40"
-     },
-     {
-      "nome": "smoke:est-03-docs",
-      "resultado": "15/15"
-     },
-     {
-      "nome": "smoke:e1-03",
-      "resultado": "exit 0"
-     }
-    ],
-    "falhasAnteriores": [
-     "check:e2 boas_vindas_sem_envio (igual na base)",
-     "smoke:e1-ent E1-ENT-02-colisao-slug (igual na base)"
-    ]
-   },
-   "verificador": {
-    "status": "BLOCKED",
-    "em": "2026-11-25",
-    "nota": "Sem defeito objetivo no código. BLOCKED só porque authz e smokes ficaram BLOCKED no qg.mjs (sem Docker). Achados de convite pendente, transação e cobertura E5-ACE-08 corrigidos e reexecutados em ambiente alternativo. Fingerprint atual após as correções: sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9.",
-    "fingerprint": "sha256:4b304fe8888768fc923b4d9f138369c4e847032a053d4b90f87437e5c2402575"
-   }
+    "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc."
   },
-  "fingerprint": "sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9",
-  "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc."
- },
- "demandasConcluidas": [
-  {
-   "id": "EST-V2-CLAUDE-CODE",
-   "status": "IN_VALIDATION",
-   "fingerprint": "sha256:6f01b39e5f3f909c728cf614543e1ae569af6d2eab71723b203ac7237763f3be",
-   "commit": "3af08c06ed96f4accf6cb16f480f65030016b1b6",
-   "nota": "Esteira v2 integrada na develop (3af08c0). Pendente: aceite humano, Fase 5.2 e check:e2 anterior. Movida da demanda ativa em 2026-11-25 para abrir DEV-CAT-M1; detalhes no REGISTRO e no Git."
-  },
-  {
-   "id": "DEV-JOG-P01-P03",
-   "status": "COMPLETED",
-   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
-   "commit": "3df3a4c7cf9f97ef20eb76093cb09c3e28006f28",
-   "nota": "Atividades Reais implementadas e homologadas pelo responsável pelo Produto em 2026-11-25 (descoberta sob demanda, ativas/retirada, limite 10, curadoria).",
-   "mensagemCommit": "feat(desenvolvimento): entregar fluxo aprovado de Atividades Reais\n\nDescoberta sob demanda com até duas sugestões, ativas com retirada, limite de dez por categoria e curadoria das seis fichas, sem alterar Jogos Digitais."
-  },
-  {
-   "id": "UX-01-05",
-   "status": "COMPLETED",
-   "fingerprint": "e60960a1a9bf43b0a3a5abc4555d4ec7",
-   "nota": "UX-01 a UX-05 implementadas; smokes E3/E4/E5/authz PASS; homologação humana confirmada pelo responsável pelo Produto em 2026-11-24.",
-   "mensagemCommit": "feat(ux): entregar pacote UX-01 a UX-05 aprovado\n\nCategoria em consultas/exames, seletor de anexo, Select nas Atividades Reais, cabeçalho compartilhado com saldo e catálogo de jogos em grade 4×2."
-  }
- ],
- "incrementosConcluidos": [
-  {
-   "id": "BASELINE-V1-20261124",
-   "status": "COMPLETED",
-   "nota": "Marco de V1 aprovada, homologada funcionalmente e disponível na VPS HTTPS para testes restritos; histórico completo preservado em Git no commit f58d029658499bdfc3807c0488662c0bc4557dae."
-  }
- ]
+  "demandasConcluidas": [
+    {
+      "id": "EST-V2-CLAUDE-CODE",
+      "status": "IN_VALIDATION",
+      "fingerprint": "sha256:6f01b39e5f3f909c728cf614543e1ae569af6d2eab71723b203ac7237763f3be",
+      "commit": "3af08c06ed96f4accf6cb16f480f65030016b1b6",
+      "nota": "Esteira v2 integrada na develop (3af08c0). Pendente: aceite humano, Fase 5.2 e check:e2 anterior. Movida da demanda ativa em 2026-11-25 para abrir DEV-CAT-M1; detalhes no REGISTRO e no Git."
+    },
+    {
+      "id": "DEV-JOG-P01-P03",
+      "status": "COMPLETED",
+      "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
+      "commit": "3df3a4c7cf9f97ef20eb76093cb09c3e28006f28",
+      "nota": "Atividades Reais implementadas e homologadas pelo responsável pelo Produto em 2026-11-25 (descoberta sob demanda, ativas/retirada, limite 10, curadoria).",
+      "mensagemCommit": "feat(desenvolvimento): entregar fluxo aprovado de Atividades Reais\n\nDescoberta sob demanda com até duas sugestões, ativas com retirada, limite de dez por categoria e curadoria das seis fichas, sem alterar Jogos Digitais."
+    },
+    {
+      "id": "UX-01-05",
+      "status": "COMPLETED",
+      "fingerprint": "e60960a1a9bf43b0a3a5abc4555d4ec7",
+      "nota": "UX-01 a UX-05 implementadas; smokes E3/E4/E5/authz PASS; homologação humana confirmada pelo responsável pelo Produto em 2026-11-24.",
+      "mensagemCommit": "feat(ux): entregar pacote UX-01 a UX-05 aprovado\n\nCategoria em consultas/exames, seletor de anexo, Select nas Atividades Reais, cabeçalho compartilhado com saldo e catálogo de jogos em grade 4×2."
+    }
+  ],
+  "incrementosConcluidos": [
+    {
+      "id": "BASELINE-V1-20261124",
+      "status": "COMPLETED",
+      "nota": "Marco de V1 aprovada, homologada funcionalmente e disponível na VPS HTTPS para testes restritos; histórico completo preservado em Git no commit f58d029658499bdfc3807c0488662c0bc4557dae."
+    }
+  ]
 }
