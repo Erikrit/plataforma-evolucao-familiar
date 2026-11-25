@@ -18,6 +18,8 @@ Essa referência é para auditoria histórica, **não** para reutilizar um QG-3 
 
 Registrar **somente transições materiais** de demandas novas: ID, tipo, branch/commit, decisão de Produto quando necessária, estado, testes pertinentes, resultado do verificador, aceite humano quando houver e próximo passo. Máximo uma entrada concisa por transição significativa; não colar saídas brutas de npm, builds e smokes.
 
+**2026-11-25 — EST-V2-CLAUDE-CODE:** esteira v2 (`transversal`, origem humano) em `chore/esteira-claude-code`, base `a07f830`. Núcleo de skills, adaptador, política única, QG determinístico e kit. QG-1, QG-2 e verificador PASS (`sha256:6f01b39e…`); revisão em dois eixos feita. Pendentes: Fase 5.2 (runner de testes), `check:e2` (falha anterior), aceite humano, ADR-016 e glossário (`PROPOSTA`). Estado em `atual.json`.
+
 **2026-11-25 — DEV-JOG-P01..P03:** demanda `DEV-JOG-P01-P03` implementada na `develop` (base `3becc90`). QG-1/QG-2 e verifier PASS; fingerprint `82436f72…`; evidência em `docs/esteira/estado/evidencia-dev-jog-p01-p03-20261125.json`. Homologação humana da aplicação: **PASS** (aceite do responsável pelo Produto em 2026-11-25).
 
 **2026-11-24 — DEV-JOG-P01..P03:** demanda `DEV-JOG-P01-P03` (`melhoria_funcional`) triada na `develop` @ `3becc90` (protótipo v2 e §12/§14 aprovados). Escopo: Atividades Reais (descoberta sob demanda, limite 10, retirada, curadoria). Homologação humana da implementação permanece pendente. Jogos Digitais fora.

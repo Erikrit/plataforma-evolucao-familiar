@@ -4,7 +4,7 @@ import {
   avaliarComandoShell,
   respostaNegar,
   respostaPermitir,
-} from "./lib/politica-proibida.mjs";
+} from "../../scripts/esteira/politica/politica-proibida.mjs";
 
 async function lerStdin() {
   const chunks = [];

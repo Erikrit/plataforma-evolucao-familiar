@@ -1,6 +1,6 @@
 # Agentes — Plataforma de Evolução Familiar
 
-## Estado vigente (2026-11-24)
+## Estado vigente
 
 **V1 aprovada e homologada funcionalmente; testes restritos à equipe em VPS HTTPS, conforme o responsável pelo Produto.** Não significa liberação pública, segurança auditada ou autorização para usar dados reais de saúde/crianças. Fonte de estado **sempre atualizável**: `docs/produto/STATUS-E-ESCOPO.md`. Não fixar aqui SHAs, etapas antigas ou conclusões técnicas transitórias.
 
@@ -8,36 +8,33 @@ Branches: `develop` é a referência de desenvolvimento; `master` é a branch pa
 
 ## Fontes canônicas — carregar só o necessário
 
-1. **Início de tarefa:** `docs/produto/STATUS-E-ESCOPO.md` (estado) e `docs/produto/GOVERNANCA.md` (competência/CT).
-2. **Regra funcional:** `docs/modulos/<id>/ESPECIFICACAO.md`, apenas o trecho da demanda; visão geral em `docs/produto/DOCUMENTO-MESTRE.md`.
-3. **UX / Arquitetura:** `docs/ux-ui/GUIA-DE-EXPERIENCIA.md` ou `docs/arquitetura/DECISOES.md` e `ARQUITETURA.md`, conforme impacto.
-4. **Execução:** arquivos de código/teste afetados; estado ativo em `docs/esteira/estado/atual.json`; evidências **apenas por referência**.
-5. **Histórico fechado:** planos, capturas, logs e aprovações técnicas anteriores à consolidação de 24/11/2026 estão no [snapshot Git da V1](https://github.com/Erikrit/plataforma-evolucao-familiar/tree/f58d029658499bdfc3807c0488662c0bc4557dae/docs), **não** na árvore atual. Consultá-los somente para auditoria pontual.
+A tabela de fontes, a governança L1–L3/CT, os estados e as proibições estão em `docs/agents/projeto.md`. Ler o estado e a governança no início da tarefa e, depois, só o trecho da demanda.
 
-O `atual.json` é agora **compacto**, pois o histórico da V1 foi consolidado no Git. Ler seu checkpoint e eventual `demanda` ativa, sem trazer de volta `demandasConcluidas` antigas. Ao gravar, preservar todos os campos correntes e registrar apenas conclusões novas e resumidas. Não copiar documentos inteiros para prompts.
+O histórico fechado está no [snapshot Git da V1](https://github.com/Erikrit/plataforma-evolucao-familiar/tree/f58d029658499bdfc3807c0488662c0bc4557dae/docs), **não** na árvore atual; consultar somente para auditoria pontual.
 
-Exemplo local de leitura curta (sem modificar arquivos):
+O `atual.json` é **compacto**. Ler o checkpoint e a `demanda` ativa, sem trazer de volta demandas antigas. Ao gravar, preservar os campos correntes e registrar apenas conclusões novas e resumidas. Não copiar documentos inteiros para prompts.
 
-```bash
-node -e 'const s=require("./docs/esteira/estado/atual.json"); console.log(JSON.stringify({revisao:s.revisao,demanda:s.demanda,estado:s.estado,proximaAcao:s.proximaAcao},null,2))'
-```
+## Esteira v2
 
-## Esteira existente — sem agentes adicionais
+Fonte única em `.claude/`; espelhos em `.agents/skills`, `.codex/agents` e `.cursor/agents` são **gerados** por `npm run esteira:sincronizar`. O Cursor lê `.claude/skills` diretamente. Guia: `docs/esteira/COMO-USAR.md`.
 
-- `task-routing`: classificar e verificar a aprovação (L1/L2/L3).
-- `module-planning`: somente para novo módulo ou impacto transversal complexo.
-- `implementation-workflow`: implementar a demanda aprovada e delimitada.
-- `quality-gate`: QG-1 → verificador independente → QG-2; QG-3/regressão ou homologação conforme risco e impacto.
-- `verifier` é subagente independente de **somente leitura**; definições em `.cursor/agents/verifier.md` e `.codex/agents/verifier.toml`.
+Fluxo: `triagem` → `sabatina` e `planejar` quando necessário → `implementar` → `homologar` conforme impacto.
 
-As skills são espelhadas em `.cursor/skills/` e `.agents/skills/` para os dois ambientes; **manter espelhos equivalentes**. Se uma decisão já consta aprovada na fonte canônica, não solicitar nova aprovação sem conflito material.
+- **Implementar:** `tdd` nas costuras → QG-1 → `verificador` → QG-2 → `revisao-codigo` → conclusão com fingerprint e `mensagemCommit`.
+- **Portões:** `node scripts/esteira/qg.mjs` gera os status; o agente interpreta. Configuração em `esteira.config.json`.
+- **Subagentes, somente leitura:** `verificador`, `revisor-padroes`, `revisor-especificacao`.
+- **Entrada humana:** `/esteira`, `/sabatina`, `/planejar`, `/implementar`, `/homologar`, `/melhorar-arquitetura`, `/retro`, `/passagem`, `/configurar-esteira`.
+
+Estados: `PENDING → READY → IN_PROGRESS → IN_VALIDATION → COMPLETED | BLOCKED | NEEDS_DECISION`.
+
+Se uma decisão já consta aprovada na fonte canônica, não solicitar nova aprovação sem conflito material. Nomes anteriores (`task-routing` etc.): tabela em `docs/agents/projeto.md`.
 
 ## Evidências, limpeza e retomada
 
 - Uma demanda concluída precisa de critério verificável, resultado real e fingerprint; **manter no estado somente as últimas demandas resumidas relevantes ao ciclo aberto (máximo 10)**. O histórico permanente é o Git, não arquivos de log.
 - Registrar no estado somente caminhos e resumos curtos; preferir saídas detalhadas **locais e ignoradas pelo Git**. Não versionar logs repetitivos ou capturas temporárias por padrão.
 - Roteiros de homologação, evidências estruturadas e logs explicitamente referenciados por um aceite devem continuar acessíveis; limpar apenas após checagem de referências.
-- Retomada: ler estado ativo estruturado; conferir `git status`, branch/commit, alterações locais e fingerprints; revalidar se divergirem.
+- Retomada: ler o estado ativo; conferir `git status`, branch/commit, alterações locais e fingerprints; revalidar se divergirem.
 - Banco da VPS de testes **não pode ser apagado ou recriado automaticamente**; dispensa de migrações de dados legados em desenvolvimento não é autorização para operação destrutiva.
 
 ## Segurança e autorização

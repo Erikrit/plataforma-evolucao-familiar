@@ -28,6 +28,8 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - run: npm run esteira:validar
+      - run: npm run esteira:testar
       - run: npm run db:generate
       - run: npm run lint
       - run: npm run typecheck

@@ -18,11 +18,10 @@
     "db:seed": "npm run db:seed -w @pef/api",
     "db:reset": "npm run db:reset -w @pef/api",
     "db:ping": "npm run db:ping -w @pef/api",
-    "smoke:ff02": "npm run smoke:ff02 -w @pef/api",
-    "smoke:ff03": "npm run smoke:ff03 -w @pef/api",
-    "smoke:ff04": "npm run smoke:ff04 -w @pef/api",
-    "smoke:ff05": "npm run smoke:ff05 -w @pef/api",
-    "smoke:modulo-01": "npm run smoke:modulo-01 -w @pef/api"
+    "esteira:qg": "node scripts/esteira/qg.mjs",
+    "esteira:validar": "node scripts/esteira/validar-esteira.mjs",
+    "esteira:sincronizar": "node scripts/esteira/sincronizar-agentes.mjs",
+    "esteira:testar": "node scripts/esteira/testar-hooks.mjs && node --test scripts/esteira/qg.test.mjs scripts/esteira/validar-esteira.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

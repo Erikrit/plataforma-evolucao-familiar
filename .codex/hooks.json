@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node 'D:\\projeto develop\\Plataforma de evolução familiar\\plataforma-evolucao-familiar\\.codex\\hooks\\bloquear-pretool.mjs'",
+            "command": "node -e \"let p=require('path'),f=require('fs'),d=process.cwd(),h;while(!f.existsSync(h=p.join(d,'.codex/hooks/bloquear-pretool.mjs'))&&d!==p.dirname(d))d=p.dirname(d);import(require('url').pathToFileURL(h).href).catch(()=>process.exit(2))\"",
             "timeout": 15
           }
         ]

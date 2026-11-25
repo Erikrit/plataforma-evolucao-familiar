@@ -19,6 +19,28 @@ Registro histórico de decisões arquiteturais. **A V1 já possui arquitetura im
 | ADR-013 | Disponibilidade atual de brincadeiras/recompensas separada do histórico | Atende CT-20261119-001/002 (DEV-F03/F04/F06 v1.2) com menor adaptação segura sobre o modelo vigente |
 | ADR-014 | Gestão de acessos reutiliza as três responsabilidades contextuais | Atende CT-20261119-003 sem matriz nova, sem papel inédito e com fechamento dos controles de administrador |
 | ADR-015 | Autenticação enxuta por sessão/cookie (uso familiar privado) | Fecha a lacuna de “auth definitiva” sem JWT nem arquitetura empresarial; corrige só falhas comprovadas |
+| ADR-016 | **PROPOSTA** — Esteira v2 no Claude Code com skills componíveis (estende ADR-012) | Separar núcleo reutilizável do adaptador e gerar evidência por script |
+
+## ADR-016 — Esteira v2 no Claude Code com skills componíveis
+
+**Status:** PROPOSTA (2026-11-25); aguarda aprovação do responsável pelo Produto.  
+**Estende** a ADR-012. Não altera requisitos funcionais nem a arquitetura da aplicação.
+
+### Decisão proposta
+
+1. `.claude/` é a fonte única de skills, subagentes e hooks; os espelhos de Codex e Cursor são gerados.
+2. O núcleo é genérico; o que é do projeto fica em `docs/agents/*` e `esteira.config.json`, com separação verificada por script.
+3. `scripts/esteira/qg.mjs` gera status e fingerprint (SHA-256, finais de linha LF); o agente só interpreta.
+4. Uma política única bloqueia commit, publicação e operações destrutivas nos três ambientes.
+5. A revisão usa dois subagentes novos, além do verificador, todos instruídos a somente ler.
+
+### Alternativas
+
+Instalar o plugin externo (gatilhos duplicados, sem governança L1–L3) ou manter duas cópias manuais das skills (divergência).
+
+### Consequências
+
+A política é heurística textual e não garante segurança absoluta. O uso em Codex e Cursor depende de conferência humana nesses produtos.
 
 ## ADR-015 — Autenticação enxuta por sessão/cookie (pré-uso / uso familiar privado)
 

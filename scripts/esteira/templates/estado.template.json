@@ -1,0 +1,7 @@
+{
+  "schemaVersao": 2,
+  "estado": "READY",
+  "proximaAcao": "Rodar /esteira com a primeira demanda.",
+  "demanda": null,
+  "demandasConcluidas": []
+}

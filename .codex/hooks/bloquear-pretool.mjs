@@ -1,56 +1,28 @@
 #!/usr/bin/env node
-/**
- * Camada extra: preToolUse para Shell e ferramentas cujo nome sugere publicação.
- * Complementa beforeShellExecution / beforeMCPExecution (não substitui).
- */
-import { stdin } from "node:process";
-import {
-  avaliarComandoShell,
-  avaliarMcp,
-  respostaNegar,
-  respostaPermitir,
-} from "./lib/politica-proibida.mjs";
-
-async function lerStdin() {
-  const chunks = [];
-  for await (const c of stdin) chunks.push(c);
-  return Buffer.concat(chunks).toString("utf8");
-}
-
-const bruto = await lerStdin();
-let entrada = {};
+// PreToolUse do Codex: bloqueia operações proibidas pela esteira (exit 2 = bloqueio).
+let avaliarFerramenta;
 try {
-  entrada = bruto.trim() ? JSON.parse(bruto) : {};
+  ({ avaliarFerramenta } = await import("../../scripts/esteira/politica/politica-proibida.mjs"));
 } catch {
-  process.stdout.write(
-    JSON.stringify(respostaNegar("entrada JSON inválida no preToolUse", "")),
+  console.error("Esteira: política de bloqueio indisponível — bloqueando por segurança.");
+  process.exit(2);
+}
+
+const partes = [];
+for await (const parte of process.stdin) partes.push(parte);
+
+let resultado;
+try {
+  const evento = JSON.parse(Buffer.concat(partes).toString("utf8"));
+  resultado = avaliarFerramenta({ toolName: evento.tool_name, toolInput: evento.tool_input ?? {} });
+} catch {
+  console.error("Esteira: entrada do hook ilegível — bloqueando por segurança.");
+  process.exit(2);
+}
+
+if (!resultado.permitido) {
+  console.error(
+    `Bloqueado pela esteira: ${resultado.motivo}. ${resultado.detalhe ?? ""} Não contorne; peça intervenção humana se necessário.`,
   );
-  process.exit(0);
+  process.exit(2);
 }
-
-const toolName = String(entrada.tool_name ?? entrada.toolName ?? "");
-const toolInput = entrada.tool_input ?? entrada.arguments ?? entrada.input ?? {};
-
-if (/^shell$/i.test(toolName) || toolName === "Shell") {
-  const comando = toolInput.command ?? entrada.command ?? "";
-  const veredito = avaliarComandoShell(comando);
-  if (!veredito.permitido) {
-    process.stdout.write(
-      JSON.stringify(respostaNegar(veredito.motivo, veredito.detalhe)),
-    );
-    process.exit(0);
-  }
-}
-
-if (/^MCP:/i.test(toolName) || /commit|push|deploy|publish|pull_request|release/i.test(toolName)) {
-  const veredito = avaliarMcp({ toolName, toolInput });
-  if (!veredito.permitido) {
-    process.stdout.write(
-      JSON.stringify(respostaNegar(veredito.motivo, veredito.detalhe)),
-    );
-    process.exit(0);
-  }
-}
-
-process.stdout.write(JSON.stringify(respostaPermitir()));
-process.exit(0);

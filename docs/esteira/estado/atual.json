@@ -7,7 +7,19 @@
   },
   "moduloId": "03-desenvolvimento-laurinha",
   "incrementoId": null,
-  "requisitos": ["DEV-JOG-P01", "DEV-JOG-P02", "DEV-JOG-P03", "E4-ACE-01", "E4-ACE-02", "E4-ACE-03", "E4-ACE-04", "E4-ACE-05", "E4-ACE-08", "E4-ACE-09", "E4-HOM"],
+  "requisitos": [
+    "DEV-JOG-P01",
+    "DEV-JOG-P02",
+    "DEV-JOG-P03",
+    "E4-ACE-01",
+    "E4-ACE-02",
+    "E4-ACE-03",
+    "E4-ACE-04",
+    "E4-ACE-05",
+    "E4-ACE-08",
+    "E4-ACE-09",
+    "E4-HOM"
+  ],
   "estado": "COMPLETED",
   "dependencias": [],
   "arquivos": [
@@ -40,7 +52,117 @@
     "status": "COMPLETED",
     "qg3": "PASS registrado na homologação V1; evidências históricas no Git"
   },
-  "demanda": null,
+  "demanda": {
+    "id": "EST-V2-CLAUDE-CODE",
+    "tipo": "transversal",
+    "origem": "humano",
+    "estado": "IN_VALIDATION",
+    "aprovacao": {
+      "nivel": "L2",
+      "status": "APROVADA",
+      "referencia": "Sabatina da Fase 0 em 2026-11-25 (Q1 a Q13 aceitas pelo responsável)"
+    },
+    "fluxo": [
+      "docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md (F0 a F7)"
+    ],
+    "escopo": "Esteira v2: núcleo de skills, adaptador, hooks, QG determinístico e kit. Sem código de produto, salvo infraestrutura de testes após novo checkpoint.",
+    "criteriosAceite": [
+      "F0 — Conclusão em docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md",
+      "F1 — Conclusão em docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md",
+      "F2 — Conclusão em docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md",
+      "F3 — Conclusão em docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md",
+      "F4 — Conclusão em docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md",
+      "F5 (exceto 5.2) — Conclusão em docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md",
+      "F6 — Conclusão em docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md",
+      "F7 — Conclusão em docs/esteira/PROMPT-ESTEIRA-CLAUDE-CODE.md"
+    ],
+    "decisoes": "Q3: gerar só .agents/skills; Q7: política endurecida; Q9: smokes só com destinos locais; Q10: SHA-256 com LF; Q13: smoke avulso pede confirmação.",
+    "arquivos": [
+      ".claude/",
+      ".agents/skills/",
+      ".codex/",
+      ".cursor/",
+      "scripts/esteira/",
+      "docs/agents/",
+      "docs/esteira/COMO-USAR.md",
+      "docs/arquitetura/DECISOES.md",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "GLOSSARIO.md",
+      "esteira.config.json",
+      "eslint.config.mjs",
+      "package.json",
+      ".github/workflows/ci.yml"
+    ],
+    "verificacao": {
+      "qg1": {
+        "status": "PASS",
+        "integral": false,
+        "em": "2026-11-25T21:32:44.293Z",
+        "base": "a07f8303edd9b83ab68a7851b1334fe16a5bee06",
+        "head": "dc4eb8e68136aea14ba78cbe730d51b313a106cc",
+        "fingerprint": "sha256:6f01b39e5f3f909c728cf614543e1ae569af6d2eab71723b203ac7237763f3be",
+        "checagens": [
+          {
+            "nome": "lint",
+            "status": "PASS",
+            "comando": "npm run lint",
+            "exit": 0
+          },
+          {
+            "nome": "typecheck",
+            "status": "PASS",
+            "comando": "npm run typecheck",
+            "exit": 0
+          },
+          {
+            "nome": "testes-afetados",
+            "status": "NOT_APPLICABLE",
+            "comando": "npm run test:afetados",
+            "exit": null,
+            "motivo": "script ainda não existe"
+          }
+        ],
+        "evidencia": "docs/esteira/evidencias/EST-V2-CLAUDE-CODE/qg1-2026-11-25T21-32-44-293Z.json"
+      },
+      "qg2": {
+        "status": "PASS",
+        "integral": false,
+        "em": "2026-11-25T21:36:09.234Z",
+        "base": "a07f8303edd9b83ab68a7851b1334fe16a5bee06",
+        "head": "dc4eb8e68136aea14ba78cbe730d51b313a106cc",
+        "fingerprint": "sha256:6f01b39e5f3f909c728cf614543e1ae569af6d2eab71723b203ac7237763f3be",
+        "checagens": [
+          {
+            "nome": "build",
+            "status": "PASS",
+            "comando": "npm run build",
+            "exit": 0
+          },
+          {
+            "nome": "testes",
+            "status": "NOT_APPLICABLE",
+            "comando": "npm run test",
+            "exit": null,
+            "motivo": "script ainda não existe"
+          }
+        ],
+        "evidencia": "docs/esteira/evidencias/EST-V2-CLAUDE-CODE/qg2-2026-11-25T21-36-09-234Z.json"
+      },
+      "verificador": {
+        "status": "PASS",
+        "em": "2026-11-25",
+        "fingerprint": "sha256:6f01b39e5f3f909c728cf614543e1ae569af6d2eab71723b203ac7237763f3be"
+      },
+      "revisao": {
+        "status": "FEITA",
+        "nota": "Dois eixos; achados objetivos corrigidos, julgamentos de estrutura relatados ao humano."
+      }
+    },
+    "fingerprint": "sha256:6f01b39e5f3f909c728cf614543e1ae569af6d2eab71723b203ac7237763f3be",
+    "proximaAcao": "Aceite humano; decidir Fase 5.2; triar check:e2 (boas_vindas_sem_envio), falha anterior à branch.",
+    "risco": "medio"
+  },
   "demandasConcluidas": [
     {
       "id": "DEV-JOG-P01-P03",

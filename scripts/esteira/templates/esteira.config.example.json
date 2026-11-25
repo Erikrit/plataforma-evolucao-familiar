@@ -1,0 +1,32 @@
+{
+  "versao": 1,
+  "projeto": "<nome>",
+  "referenciaBase": "origin/main",
+  "estado": "docs/esteira/estado/atual.json",
+  "evidencias": "docs/esteira/evidencias",
+  "glossario": "GLOSSARIO.md",
+  "espelhos": { "skills": [".agents/skills"], "agentes": {} },
+  "limiteDemandasConcluidas": 10,
+  "fingerprint": {
+    "ignorar": ["^docs/esteira/estado/", "^docs/esteira/evidencias/", "^docs/esteira/tickets/"]
+  },
+  "ambiente": {},
+  "perfis": {
+    "qg1": [
+      { "nome": "lint", "cmd": "npm run lint" },
+      { "nome": "testes-afetados", "cmd": "npm run test:afetados", "seExistir": true }
+    ],
+    "qg2": [
+      { "nome": "build", "cmd": "npm run build" },
+      { "nome": "testes", "cmd": "npm run test", "seExistir": true }
+    ],
+    "qg3": [
+      { "nome": "lint", "cmd": "npm run lint" },
+      { "nome": "build", "cmd": "npm run build" },
+      { "nome": "testes", "cmd": "npm run test", "seExistir": true }
+    ]
+  },
+  "criticos": [],
+  "smokesPorArea": [],
+  "termosDoProjeto": []
+}

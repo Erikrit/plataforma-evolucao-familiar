@@ -9,7 +9,7 @@ import {
   avaliarMcp,
   respostaNegar,
   respostaPermitir,
-} from "./lib/politica-proibida.mjs";
+} from "../../scripts/esteira/politica/politica-proibida.mjs";
 
 async function lerStdin() {
   const chunks = [];
@@ -31,7 +31,7 @@ try {
 const toolName = String(entrada.tool_name ?? entrada.toolName ?? "");
 const toolInput = entrada.tool_input ?? entrada.arguments ?? entrada.input ?? {};
 
-if (/^shell$/i.test(toolName) || toolName === "Shell") {
+if (/^(?:shell|bash|powershell)$/i.test(toolName)) {
   const comando = toolInput.command ?? entrada.command ?? "";
   const veredito = avaliarComandoShell(comando);
   if (!veredito.permitido) {
