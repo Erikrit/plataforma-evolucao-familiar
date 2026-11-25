@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Group, Stack, Text, UnstyledButton } from "@mantine/core";
 import type { ConteudoEscolha, FiguraEscolha } from "@/lib/api";
+import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import estilos from "./jogos.module.css";
 
 export function TabuleiroEscolha({
@@ -11,9 +12,7 @@ export function TabuleiroEscolha({
   registrarObterDica,
 }: {
   conteudo: ConteudoEscolha;
-  aoConcluir: () => void;
-  registrarObterDica: (obter: (() => string | null) | null) => void;
-}) {
+} & ContratoTabuleiro) {
   const [mensagem, setMensagem] = useState("");
   const foco = useRef<HTMLDivElement>(null);
 

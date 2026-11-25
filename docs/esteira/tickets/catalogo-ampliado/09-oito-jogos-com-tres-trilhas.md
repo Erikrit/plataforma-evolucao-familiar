@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 03, 08
 
-**Status:** PENDING
+**Status:** READY
 
 **Costura:** verificador de catálogo, carga oficial e homologação
 
@@ -15,3 +15,4 @@
 - [ ] DEV-CAT-P01 e P03 — 8 jogos, 120 fases, todas aprovadas pela régua
 - [ ] E5-ACE-12 — conquistas anteriores preservadas após a troca de versão
 - [ ] E5-HOM — homologação humana no celular, pelas três faixas
+- [ ] Régua de qualidade (Dica) — dica de escolha, sequência e memória não entrega a resposta no primeiro nível (achado do verificador em 2026-11-25)

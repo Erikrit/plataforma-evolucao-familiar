@@ -1,4 +1,8 @@
 import {
+  RESPONSABILIDADE_DESENVOLVIMENTO,
+  resolverDataParaDesenvolvimento,
+} from "../pessoas/data-nascimento";
+import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
@@ -85,6 +89,8 @@ export class ServicoConvites {
       responsabilidade?: string;
       pessoaAlvoId?: string;
       pessoaContaId?: string;
+      /** M01 §16: data informada no mesmo fluxo para convite de Desenvolvimento. */
+      dataNascimentoAlvo?: string | null;
     },
   ) {
     await this.autorizacoes.exigirAdministrador(familiaId, admin);
@@ -132,6 +138,15 @@ export class ServicoConvites {
         where: { id: pessoaAlvoId, familiaId },
       });
       if (!alvo) throw new NotFoundException("Pessoa-alvo não encontrada.");
+      if (responsabilidadeBruta === RESPONSABILIDADE_DESENVOLVIMENTO) {
+        const dataNova = resolverDataParaDesenvolvimento(alvo, entrada.dataNascimentoAlvo);
+        if (dataNova) {
+          await this.prisma.pessoa.updateMany({
+            where: { id: alvo.id, familiaId, dataNascimento: null },
+            data: { dataNascimento: dataNova },
+          });
+        }
+      }
       responsabilidade = responsabilidadeBruta;
     } else if (!pessoaContaId) {
       throw new BadRequestException(

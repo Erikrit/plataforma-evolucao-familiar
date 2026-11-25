@@ -169,6 +169,8 @@ try {
       body: JSON.stringify({
         usuarioId: adminAId,
         responsabilidade: "responsavel_desenvolvimento",
+        // M01 §16: data fictícia exigida para Desenvolvimento.
+        dataNascimentoAlvo: "2018-05-10",
         pessoaAlvoId: pessoaAId,
       }),
     }),
@@ -182,6 +184,8 @@ try {
       body: JSON.stringify({
         usuarioId: sessB.corpo.usuario?.id,
         responsabilidade: "responsavel_desenvolvimento",
+        // M01 §16: data fictícia exigida para Desenvolvimento.
+        dataNascimentoAlvo: "2018-05-10",
         pessoaAlvoId: pessoaBId,
       }),
     }),

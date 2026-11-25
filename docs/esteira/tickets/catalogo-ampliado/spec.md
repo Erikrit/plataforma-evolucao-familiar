@@ -1,6 +1,6 @@
 # Catálogo ampliado — Marco 1, fundação
 
-**Demanda:** `DEV-CAT-M1` · **Tipo:** transversal · **Origem:** humano · **Status:** PENDING, aguarda aprovação da divisão de tickets e das decisões D1 a D3.
+**Demanda:** `DEV-CAT-M1` · **Tipo:** transversal · **Origem:** humano · **Status:** READY — divisão aprovada pelo responsável pelo Produto em 2026-11-25; tickets 05, 07 e 10 em NEEDS_DECISION até D1 a D3.
 
 ## Problema
 

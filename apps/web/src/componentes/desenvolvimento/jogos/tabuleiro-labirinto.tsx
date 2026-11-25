@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { Button, Stack, Text } from "@mantine/core";
 import type { ConteudoLabirinto, PosicaoLabirinto } from "@/lib/api";
+import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import estilos from "./jogos.module.css";
 
 const DIRECOES = [
@@ -89,9 +90,7 @@ export function TabuleiroLabirinto({
   registrarObterDica,
 }: {
   conteudo: ConteudoLabirinto;
-  aoConcluir: () => void;
-  registrarObterDica: (obter: (() => string | null) | null) => void;
-}) {
+} & ContratoTabuleiro) {
   const pontos = conteudo.pontos ?? [];
   const [posicao, setPosicao] = useState(conteudo.inicio);
   const [coletados, setColetados] = useState<string[]>([]);

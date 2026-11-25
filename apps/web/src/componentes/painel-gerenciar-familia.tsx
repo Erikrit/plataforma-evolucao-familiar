@@ -16,6 +16,10 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
+import {
+  CampoDataNascimento,
+  CODIGO_DATA_NASCIMENTO_OBRIGATORIA,
+} from "@/componentes/campo-data-nascimento";
 import { useSessao } from "@/componentes/contexto-sessao";
 import {
   EstadoCarregando,
@@ -28,6 +32,7 @@ import {
   concederAutorizacao,
   criarConvite,
   criarPessoa,
+  ErroApi,
   formatarValidadeConvite,
   listarConvites,
   resumoAcoesCombinacao,
@@ -168,6 +173,9 @@ export function PainelGerenciarFamilia() {
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
+  // M01 §16: a API pede a data de nascimento ao liberar Desenvolvimento.
+  const [dataNascimentoConcessao, setDataNascimentoConcessao] = useState<string | null>(null);
+  const [dataNascimentoConvite, setDataNascimentoConvite] = useState<string | null>(null);
 
   const pessoasUnicas = useMemo(() => {
     const mapa = new Map(cartoes.map((c) => [c.pessoaId, c]));
@@ -447,6 +455,7 @@ export function PainelGerenciarFamilia() {
   function aoTrocarAreaConcessao(proxima: AreaConcessao | null) {
     setAreaConcessao(proxima);
     setEtapaConfirmacao(false);
+    setDataNascimentoConcessao(null);
     if (proxima === "Desenvolvimento") {
       setResponsabilidadeConcessao("responsavel_desenvolvimento");
     } else {
@@ -457,6 +466,7 @@ export function PainelGerenciarFamilia() {
   function aoTrocarAreaConvite(proxima: AreaConcessao | null) {
     setAreaConvite(proxima);
     setEtapaConfirmacaoConvite(false);
+    setDataNascimentoConvite(null);
     if (proxima === "Desenvolvimento") {
       setResponsabilidadeConvite("responsavel_desenvolvimento");
     } else {
@@ -544,9 +554,11 @@ export function PainelGerenciarFamilia() {
         nomeConvidado: "Participante convidado",
         responsabilidade: responsabilidadeConvite,
         pessoaAlvoId: pessoaAlvoConviteId,
+        ...(dataNascimentoConvite ? { dataNascimentoAlvo: dataNascimentoConvite } : {}),
       });
       registrarConviteGerado(convite);
       setEtapaConfirmacaoConvite(false);
+      setDataNascimentoConvite(null);
       setSucesso(
         `${MENSAGEM_CONVITE_CRIADO}. ${textoRevisaoAcesso({
           participanteNome: emailConvite.trim() || "a pessoa convidada",
@@ -560,6 +572,9 @@ export function PainelGerenciarFamilia() {
       );
       await recarregarConvites();
     } catch (e) {
+      if (e instanceof ErroApi && e.codigo === CODIGO_DATA_NASCIMENTO_OBRIGATORIA) {
+        setDataNascimentoConvite((atual) => atual ?? "");
+      }
       setErro(e instanceof Error ? e.message : "Não foi possível gerar o convite");
     } finally {
       setCarregando(false);
@@ -584,9 +599,11 @@ export function PainelGerenciarFamilia() {
         usuarioId: participanteUsuarioId,
         responsabilidade: responsabilidadeConcessao,
         pessoaAlvoId: pessoaAlvoConcessaoId,
+        ...(dataNascimentoConcessao ? { dataNascimentoAlvo: dataNascimentoConcessao } : {}),
       });
       await recarregarInicio();
       setEtapaConfirmacao(false);
+      setDataNascimentoConcessao(null);
       setSucesso(
         `Acesso concedido. ${textoRevisaoAcesso({
           participanteNome: participanteSelecionado?.label ?? "",
@@ -598,6 +615,9 @@ export function PainelGerenciarFamilia() {
         })}`,
       );
     } catch (e) {
+      if (e instanceof ErroApi && e.codigo === CODIGO_DATA_NASCIMENTO_OBRIGATORIA) {
+        setDataNascimentoConcessao((atual) => atual ?? "");
+      }
       setErro(e instanceof Error ? e.message : "Não foi possível conceder o acesso");
     } finally {
       setCarregando(false);
@@ -1031,6 +1051,7 @@ export function PainelGerenciarFamilia() {
                       return;
                     }
                     setErro(null);
+                    setDataNascimentoConcessao(null);
                     setEtapaConfirmacao(true);
                   }}
                 >
@@ -1111,6 +1132,14 @@ export function PainelGerenciarFamilia() {
                       nomePessoa: pessoaAlvoSelecionada?.nome ?? "",
                     })}
                   </Text>
+                  {dataNascimentoConcessao !== null ? (
+                    <CampoDataNascimento
+                      nomePessoa={pessoaAlvoSelecionada?.nome ?? "a pessoa"}
+                      valor={dataNascimentoConcessao}
+                      aoMudar={setDataNascimentoConcessao}
+                      disabled={carregando}
+                    />
+                  ) : null}
                   <Group gap="sm">
                     <Button
                       variant="default"
@@ -1121,6 +1150,7 @@ export function PainelGerenciarFamilia() {
                     </Button>
                     <Button
                       loading={carregando}
+                      disabled={dataNascimentoConcessao === ""}
                       onClick={() => void aoConfirmarConcessao()}
                     >
                       Confirmar concessão
@@ -1150,6 +1180,7 @@ export function PainelGerenciarFamilia() {
                     return;
                   }
                   setErro(null);
+                  setDataNascimentoConvite(null);
                   setEtapaConfirmacaoConvite(true);
                 }}
               >
@@ -1238,6 +1269,14 @@ export function PainelGerenciarFamilia() {
                     convite: true,
                   })}
                 </Text>
+                {dataNascimentoConvite !== null ? (
+                  <CampoDataNascimento
+                    nomePessoa={pessoaAlvoConvite?.nome ?? "a pessoa"}
+                    valor={dataNascimentoConvite}
+                    aoMudar={setDataNascimentoConvite}
+                    disabled={carregando}
+                  />
+                ) : null}
                 <Group gap="sm">
                   <Button
                     variant="default"
@@ -1248,6 +1287,7 @@ export function PainelGerenciarFamilia() {
                   </Button>
                   <Button
                     loading={carregando}
+                    disabled={dataNascimentoConvite === ""}
                     onClick={() => void aoConfirmarConvite()}
                   >
                     Gerar convite

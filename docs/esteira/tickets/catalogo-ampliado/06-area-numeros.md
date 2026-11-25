@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** PENDING
+**Status:** READY
 
 **Costura:** check:e4, smoke:e4 e smoke de Histórico
 

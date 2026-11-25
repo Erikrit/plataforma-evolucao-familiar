@@ -1,4 +1,8 @@
 import {
+  RESPONSABILIDADE_DESENVOLVIMENTO,
+  resolverDataParaDesenvolvimento,
+} from "../pessoas/data-nascimento";
+import {
   BadRequestException,
   ForbiddenException,
   Injectable,
@@ -101,6 +105,8 @@ export class ServicoAutorizacoes {
       usuarioId?: string;
       responsabilidade?: string;
       pessoaAlvoId?: string | null;
+      /** M01 §16: informada no mesmo fluxo quando a pessoa ainda não tem data. */
+      dataNascimentoAlvo?: string | null;
     },
   ) {
     await this.garantirFamilia(familiaId, concedente);
@@ -126,6 +132,7 @@ export class ServicoAutorizacoes {
     }
 
     let pessoaAlvoId: string | null = entrada.pessoaAlvoId ?? null;
+    let dataNascimentoNova: Date | null = null;
     if (escopoFamilia(responsabilidade)) {
       pessoaAlvoId = null;
     } else if (!pessoaAlvoId) {
@@ -139,30 +146,44 @@ export class ServicoAutorizacoes {
       if (!pessoa) {
         throw new NotFoundException("Pessoa-alvo não encontrada.");
       }
+      if (responsabilidade === RESPONSABILIDADE_DESENVOLVIMENTO) {
+        dataNascimentoNova = resolverDataParaDesenvolvimento(
+          pessoa,
+          entrada.dataNascimentoAlvo,
+        );
+      }
     }
-
-    const existente = await this.prisma.autorizacao.findFirst({
-      where: {
-        familiaId,
-        usuarioId,
-        responsabilidade,
-        pessoaAlvoId,
-        ativa: true,
-      },
+    // Data e autorização na mesma transação: um PATCH paralelo não abre janela
+    // para Desenvolvimento ativo sem data (M01 §16).
+    const id = await this.prisma.$transaction(async (tx) => {
+      if (dataNascimentoNova && pessoaAlvoId) {
+        // Grava só se ainda estiver vazia: não sobrescreve data informada em paralelo.
+        await tx.pessoa.updateMany({
+          where: { id: pessoaAlvoId, familiaId, dataNascimento: null },
+          data: { dataNascimento: dataNascimentoNova },
+        });
+      }
+      const existente = await tx.autorizacao.findFirst({
+        where: {
+          familiaId,
+          usuarioId,
+          responsabilidade,
+          pessoaAlvoId,
+          ativa: true,
+        },
+      });
+      if (existente) return existente.id;
+      const criada = await tx.autorizacao.create({
+        data: {
+          familiaId,
+          usuarioId,
+          responsabilidade,
+          pessoaAlvoId,
+        },
+      });
+      return criada.id;
     });
-    if (existente) {
-      return this.formatar(existente.id);
-    }
-
-    const criada = await this.prisma.autorizacao.create({
-      data: {
-        familiaId,
-        usuarioId,
-        responsabilidade,
-        pessoaAlvoId,
-      },
-    });
-    return this.formatar(criada.id);
+    return this.formatar(id);
   }
 
   async ehAdministradorFamilia(

@@ -29,6 +29,7 @@
     "smoke:est-03-docs": "node scripts/smoke-est-03-docs.mjs",
     "smoke:est-04-ops": "node scripts/smoke-est-04-ops.mjs",
     "smoke:authz": "node scripts/smoke-e1-authz.mjs",
+    "smoke:ff-nasc": "node scripts/smoke-ff-nasc.mjs",
     "check:e1-01": "node scripts/check-e1-01.mjs",
     "check:e1-02": "node scripts/check-e1-02.mjs",
     "check:e1-03": "node scripts/check-e1-03.mjs",

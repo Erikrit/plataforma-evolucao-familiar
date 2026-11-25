@@ -19,6 +19,7 @@ type CorpoConvite = {
   pessoaAlvoId?: string;
   /** Pessoa já cadastrada que receberá a conta (M01 v1.5 §11). */
   pessoaContaId?: string;
+  dataNascimentoAlvo?: string | null;
 };
 
 type CorpoAtivacao = {

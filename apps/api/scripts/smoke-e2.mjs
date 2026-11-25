@@ -288,6 +288,8 @@ try {
       body: JSON.stringify({
         usuarioId: usuarioTitular?.id,
         responsabilidade: "responsavel_desenvolvimento",
+        // M01 §16: data fictícia exigida para Desenvolvimento.
+        dataNascimentoAlvo: "2018-05-10",
         pessoaAlvoId,
       }),
     }),

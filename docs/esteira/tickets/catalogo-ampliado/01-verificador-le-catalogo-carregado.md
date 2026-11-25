@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** PENDING
+**Status:** COMPLETED
 
 **Costura:** verificador de catálogo
 
@@ -12,5 +12,5 @@
 
 ## Critérios
 
-- [ ] E5-ACE-03 — editar o catálogo carregado e quebrar uma fase faz `check:e5` falhar
-- [ ] E5-ACE-12 — jogo, fase e versão continuam rastreáveis; `check:cat-03` e `check:cat-04` continuam PASS
+- [x] E5-ACE-03 — editar o catálogo carregado e quebrar uma fase faz `check:e5` falhar
+- [x] E5-ACE-12 — jogo, fase e versão continuam rastreáveis; `check:cat-03` e `check:cat-04` continuam PASS

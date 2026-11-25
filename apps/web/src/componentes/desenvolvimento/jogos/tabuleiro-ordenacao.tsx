@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { Button, Group, Stack, Text, UnstyledButton } from "@mantine/core";
 import type { CenaOrdenacao, ConteudoOrdenacao } from "@/lib/api";
+import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import estilos from "./jogos.module.css";
 
 function mesmaOrdem(a: readonly string[], b: readonly string[]) {
@@ -15,9 +16,7 @@ export function TabuleiroOrdenacao({
   registrarObterDica,
 }: {
   conteudo: ConteudoOrdenacao;
-  aoConcluir: () => void;
-  registrarObterDica: (obter: (() => string | null) | null) => void;
-}) {
+} & ContratoTabuleiro) {
   const [fila, setFila] = useState<CenaOrdenacao[]>([]);
   const [mensagem, setMensagem] = useState("");
   const [focoDisponivel, setFocoDisponivel] = useState(0);

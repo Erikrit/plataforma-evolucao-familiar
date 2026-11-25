@@ -1,4 +1,9 @@
 import {
+  CODIGO_DATA_NASCIMENTO_OBRIGATORIA,
+  RESPONSABILIDADE_DESENVOLVIMENTO,
+  validarDataNascimento,
+} from "./data-nascimento";
+import {
   BadRequestException,
   ForbiddenException,
   Injectable,
@@ -132,15 +137,51 @@ export class ServicoPessoas {
     const admin = await this.autorizacoes.podeGerirPessoas(familiaId, usuario);
     const propria = usuario.pessoa.id === pessoaId;
     if (!admin && !propria) {
-      throw new ForbiddenException("Sem permissão para editar este perfil.");
+      // M01 §16: quem acompanha Desenvolvimento pode informar só a data de nascimento.
+      const somenteData = entrada.vinculo === undefined && entrada.dataNascimento !== undefined;
+      const responsavelDesenvolvimento =
+        somenteData
+        && (await this.autorizacoes.podeVerDesenvolvimento(familiaId, pessoaId, usuario));
+      if (!responsavelDesenvolvimento) {
+        throw new ForbiddenException("Sem permissão para editar este perfil.");
+      }
     }
 
-    const dataNascimento =
-      entrada.dataNascimento === undefined
-        ? undefined
-        : entrada.dataNascimento
-          ? new Date(entrada.dataNascimento)
-          : null;
+    let dataNascimento: Date | null | undefined;
+    if (entrada.dataNascimento === undefined) {
+      dataNascimento = undefined;
+    } else if (entrada.dataNascimento) {
+      dataNascimento = validarDataNascimento(entrada.dataNascimento);
+    } else {
+      const [comDesenvolvimento, convitesPendentes] = await Promise.all([
+        this.prisma.autorizacao.count({
+          where: {
+            familiaId,
+            pessoaAlvoId: pessoaId,
+            responsabilidade: RESPONSABILIDADE_DESENVOLVIMENTO,
+            ativa: true,
+          },
+        }),
+        // Convite de Desenvolvimento ainda não aceito também conta (a aceitação cria o acesso).
+        this.prisma.convite.count({
+          where: {
+            familiaId,
+            pessoaAlvoId: pessoaId,
+            responsabilidade: RESPONSABILIDADE_DESENVOLVIMENTO,
+            usadoEm: null,
+            expiraEm: { gt: new Date() },
+          },
+        }),
+      ]);
+      if (comDesenvolvimento + convitesPendentes > 0) {
+        throw new BadRequestException({
+          statusCode: 400,
+          message: "Quem é acompanhado em Desenvolvimento precisa manter a data de nascimento.",
+          codigo: CODIGO_DATA_NASCIMENTO_OBRIGATORIA,
+        });
+      }
+      dataNascimento = null;
+    }
 
     return this.prisma.pessoa.update({
       where: { id: pessoaId },

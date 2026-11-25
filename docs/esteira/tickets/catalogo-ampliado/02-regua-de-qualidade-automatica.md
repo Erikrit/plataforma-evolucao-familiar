@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 01
 
-**Status:** PENDING
+**Status:** READY
 
 **Costura:** verificador de catálogo
 

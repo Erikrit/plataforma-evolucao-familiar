@@ -53,7 +53,11 @@ async function criarFamilia(rotulo) {
 async function autorizar(familia, pessoaId, responsabilidade) {
   const resposta = await chamar(`/familias/${familia.familiaId}/autorizacoes`, {
     metodo: "POST", token: familia.token,
-    corpo: { usuarioId: familia.usuarioId, pessoaAlvoId: pessoaId, responsabilidade },
+    corpo: {
+      usuarioId: familia.usuarioId, pessoaAlvoId: pessoaId, responsabilidade,
+      // M01 §16: data fictícia exigida para Desenvolvimento.
+      ...(responsabilidade === "responsavel_desenvolvimento" ? { dataNascimentoAlvo: "2018-05-10" } : {}),
+    },
   });
   assert.equal(resposta.status, 201);
   return resposta.dados.id;
@@ -83,6 +87,8 @@ try {
   conferir("Outra família sem leitura ou escrita direta", (await lerCatalogo(outra.token)).status === 404
     && (await iniciar(outra.token)).status === 404 && (await concluir(novaChave(), 1, outra.token)).status === 404);
   const acesso = await autorizar(familia, pessoaId, "responsavel_desenvolvimento");
+  // E5-ACE-08 segue vigente até o ticket 05: simula pessoa anterior à regra do M01 §16, sem data.
+  await prisma.pessoa.update({ where: { id: pessoaId }, data: { dataNascimento: null } });
 
   const antes = await lerCatalogo();
   const memoria = antes.dados.jogos?.find((jogo) => jogo.id === "memoria");

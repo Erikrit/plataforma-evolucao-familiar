@@ -33,6 +33,7 @@ import { TabuleiroSequencia } from "./tabuleiro-sequencia";
 import { TabuleiroEscolha } from "./tabuleiro-escolha";
 import { TabuleiroOrdenacao } from "./tabuleiro-ordenacao";
 import { TabuleiroLabirinto } from "./tabuleiro-labirinto";
+import type { ContratoTabuleiro, ObterDica } from "./contrato-tabuleiro";
 import estilos from "./jogos.module.css";
 
 const ROTULOS_ESTADO_FASE: Record<FaseJogoResumo["estado"], string> = {
@@ -50,17 +51,13 @@ type Etapa =
   | { tipo: "salva"; descoberta: boolean }
   | { tipo: "indisponivel" };
 
-type ObterDicaPartida = () => string | null;
-
 function Tabuleiro({
   conteudo,
   aoConcluir,
   registrarObterDica,
 }: {
   conteudo: ConteudoPartida;
-  aoConcluir: () => void;
-  registrarObterDica: (obter: ObterDicaPartida | null) => void;
-}) {
+} & ContratoTabuleiro) {
   switch (conteudo.tipo) {
     case "memoria":
       return (
@@ -123,7 +120,7 @@ export function PartidaJogo({
   const [dicaDaPartida, setDicaDaPartida] = useState<string | null>(null);
   const [dicaPronta, setDicaPronta] = useState(false);
   const requisicao = useRef<AbortController | null>(null);
-  const obterDicaRef = useRef<ObterDicaPartida | null>(null);
+  const obterDicaRef = useRef<ObterDica | null>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const focoEstado = useRef<HTMLHeadingElement>(null);
   const focoCelebracao = useRef<HTMLHeadingElement>(null);
@@ -150,7 +147,7 @@ export function PartidaJogo({
     [jogo.fases, fase.numero],
   );
 
-  const registrarObterDica = useCallback((obter: ObterDicaPartida | null) => {
+  const registrarObterDica = useCallback((obter: ObterDica | null) => {
     obterDicaRef.current = obter;
     setDicaPronta(obter != null);
   }, []);
@@ -265,11 +262,14 @@ export function PartidaJogo({
   }
 
   function abrirDica() {
-    if (dicaDaPartida == null) {
-      if (etapa.tipo !== "jogando" || !obterDicaRef.current) return;
+    // Recalcula a cada pedido: no labirinto, na entrega e na memória a dica
+    // depende da posição atual (E5-F04). Sem dica nova, mantém a anterior.
+    if (etapa.tipo === "jogando" && obterDicaRef.current) {
       const gerada = obterDicaRef.current();
-      if (!gerada) return;
-      setDicaDaPartida(gerada);
+      if (gerada) setDicaDaPartida(gerada);
+      else if (dicaDaPartida == null) return;
+    } else if (dicaDaPartida == null) {
+      return;
     }
     setModalDicaAberto(true);
   }

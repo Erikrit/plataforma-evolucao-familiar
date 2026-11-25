@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 02, D3
 
-**Status:** PENDING
+**Status:** NEEDS_DECISION
 
 **Costura:** verificador de catálogo e roteiro no celular
 

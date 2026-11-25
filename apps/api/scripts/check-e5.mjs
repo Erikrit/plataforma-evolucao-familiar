@@ -1,15 +1,33 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { CATALOGO_JOGOS_PILOTO_E5 } from "../prisma/catalogo-jogos-piloto-e5.mjs";
 
 const require = createRequire(import.meta.url);
 require("ts-node").register({
   project: fileURLToPath(new URL("../tsconfig.json", import.meta.url)),
   transpileOnly: true,
 });
-const { CATALOGO_JOGOS, montarConteudoFase } = require("../src/desenvolvimento/jogos/catalogo-jogos");
+const { montarConteudoMotor } = require("../src/desenvolvimento/jogos/motores-jogos");
 const { selecionarDestaquesJogos } = require("../src/desenvolvimento/jogos/destaques-jogos");
 const { CATEGORIAS_BIBLIOTECA } = require("../src/desenvolvimento/constantes-desenvolvimento");
+
+// Valida o catálogo que a carga oficial publica (DEV-CAT-M1, ticket 01).
+const CATALOGO_JOGOS = CATALOGO_JOGOS_PILOTO_E5.map((jogo) => ({
+  ...jogo,
+  fases: jogo.fases.map((fase) => ({
+    numero: fase.numero,
+    titulo: fase.titulo,
+    objetivo: fase.objetivo,
+    tipo: jogo.tipoMecanica,
+    configuracao: fase.configuracao,
+    ...fase.configuracao,
+  })),
+}));
+
+function montarConteudoFase(fase, sortear) {
+  return montarConteudoMotor(fase.tipo, fase.configuracao, sortear);
+}
 
 assert.equal(new Set(CATALOGO_JOGOS.map((jogo) => jogo.id)).size, CATALOGO_JOGOS.length);
 assert.deepEqual(CATALOGO_JOGOS.map((jogo) => jogo.id), ["memoria", "sequencia", "labirinto"]);

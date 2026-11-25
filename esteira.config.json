@@ -57,6 +57,7 @@
     { "nome": "check-e2", "padroes": ["^apps/api/src/(convites|autorizacoes)/", "^apps/web/src/.*(convite|gerenciar-familia)"], "cmd": "npm run check:e2 -w @pef/api", "perfis": ["qg1"] },
     { "nome": "check-e3", "padroes": ["^apps/api/src/(cuidados|anexos)/"], "cmd": "npm run check:e3 -w @pef/api", "perfis": ["qg1"] },
     { "nome": "check-e5", "padroes": ["^apps/api/src/desenvolvimento/", "^apps/web/src/componentes/desenvolvimento/jogos/"], "cmd": "npm run check:e5 -w @pef/api", "perfis": ["qg1"] },
+    { "nome": "smoke-ff-nasc", "padroes": ["^apps/api/src/(pessoas|autorizacoes|convites)/"], "cmd": "npm run smoke:ff-nasc -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
     { "nome": "smoke-e1-entrada", "padroes": ["^apps/api/src/(auth|familias)/"], "cmd": "npm run smoke:e1-ent -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
     { "nome": "smoke-historico-resumo", "padroes": ["^apps/api/src/(anexos|cuidados|desenvolvimento|pessoas)/"], "cmd": "npm run smoke:est-03-docs -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
     { "nome": "smoke-e1-isolamento", "padroes": ["^apps/api/src/(auth|familias|pessoas)/"], "cmd": "npm run smoke:e1-03 -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },

@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** PENDING
+**Status:** IN_VALIDATION
 
 **Costura:** check:e5 e roteiro no celular
 
@@ -13,5 +13,9 @@
 ## Critérios
 
 - [ ] E5-F04 — no labirinto, andar dois passos e pedir a dica de novo mostra a direção atual
-- [ ] E5-ACE-02 — concluir com dica produz o mesmo resultado
+- [x] E5-ACE-02 — concluir com dica produz o mesmo resultado
 - [ ] E5-ACE-10 — toque, teclado e movimento reduzido preservados
+
+## Pendências
+
+- E5-F04 e E5-ACE-10: confirmar no celular (andar dois passos e pedir a dica de novo; toque, teclado e movimento reduzido).

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Stack, Text, UnstyledButton } from "@mantine/core";
 import type { FiguraMemoria } from "@/lib/api";
+import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import estilos from "./jogos.module.css";
 
 export function TabuleiroMemoria({
@@ -11,9 +12,7 @@ export function TabuleiroMemoria({
   registrarObterDica,
 }: {
   cartas: readonly FiguraMemoria[];
-  aoConcluir: () => void;
-  registrarObterDica: (obter: (() => string | null) | null) => void;
-}) {
+} & ContratoTabuleiro) {
   const [viradas, setViradas] = useState<number[]>([]);
   const [encontradas, setEncontradas] = useState<number[]>([]);
   const [dica, setDica] = useState<number[]>([]);

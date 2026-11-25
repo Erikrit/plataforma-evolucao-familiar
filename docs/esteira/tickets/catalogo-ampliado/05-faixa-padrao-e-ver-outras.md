@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 03, 04, D1
 
-**Status:** PENDING
+**Status:** NEEDS_DECISION
 
 **Costura:** smoke:e5 e smoke:authz
 

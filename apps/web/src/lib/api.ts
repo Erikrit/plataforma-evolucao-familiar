@@ -264,6 +264,16 @@ export class ErroApi extends Error {
   }
 }
 
+/** Erro com código estável da API, para a tela reagir (ex.: pedir a data de nascimento). */
+async function erroComCodigo(resposta: Response): Promise<ErroApi> {
+  const detalhe = await lerErroDetalhado(resposta);
+  return new ErroApi(detalhe.mensagem, {
+    codigo: detalhe.codigo,
+    alternativa: detalhe.alternativa,
+    status: resposta.status,
+  });
+}
+
 async function lerErro(resposta: Response): Promise<string> {
   const detalhe = await lerErroDetalhado(resposta);
   return detalhe.mensagem;
@@ -454,7 +464,7 @@ export async function obterPessoa(familiaId: string, pessoaId: string) {
 export async function atualizarPessoa(
   familiaId: string,
   pessoaId: string,
-  corpo: { vinculo?: string },
+  corpo: { vinculo?: string; dataNascimento?: string | null },
 ) {
   const resposta = await fetchApi(
     `/familias/${familiaId}/pessoas/${pessoaId}`,
@@ -464,7 +474,7 @@ export async function atualizarPessoa(
       body: JSON.stringify(corpo),
     },
   );
-  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  if (!resposta.ok) throw await erroComCodigo(resposta);
   return resposta.json();
 }
 
@@ -483,6 +493,8 @@ export async function criarConvite(
     pessoaAlvoId?: string;
     /** Habilita conta na pessoa já cadastrada (sem criar segunda pessoa). */
     pessoaContaId?: string;
+    /** M01 §16: data da pessoa acompanhada, pedida quando falta. */
+    dataNascimentoAlvo?: string;
   },
 ): Promise<ConviteCriado> {
   const resposta = await fetchApi(`/familias/${familiaId}/convites`, {
@@ -490,7 +502,7 @@ export async function criarConvite(
     headers: { "content-type": "application/json" },
     body: JSON.stringify(corpo),
   });
-  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  if (!resposta.ok) throw await erroComCodigo(resposta);
   return (await resposta.json()) as ConviteCriado;
 }
 
@@ -519,6 +531,8 @@ export async function concederAutorizacao(
     usuarioId: string;
     responsabilidade: string;
     pessoaAlvoId?: string | null;
+    /** M01 §16: data da pessoa acompanhada, pedida quando falta. */
+    dataNascimentoAlvo?: string;
   },
 ) {
   const resposta = await fetchApi(`/familias/${familiaId}/autorizacoes`, {
@@ -526,7 +540,7 @@ export async function concederAutorizacao(
     headers: { "content-type": "application/json" },
     body: JSON.stringify(corpo),
   });
-  if (!resposta.ok) throw new Error(await lerErro(resposta));
+  if (!resposta.ok) throw await erroComCodigo(resposta);
   return resposta.json();
 }
 

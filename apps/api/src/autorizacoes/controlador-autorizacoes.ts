@@ -17,6 +17,7 @@ type CorpoConcessao = {
   usuarioId?: string;
   responsabilidade?: string;
   pessoaAlvoId?: string | null;
+  dataNascimentoAlvo?: string | null;
 };
 
 @Controller("familias/:familiaId")
