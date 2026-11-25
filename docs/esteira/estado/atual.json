@@ -2,8 +2,8 @@
   "schemaVersao": 2,
   "revisao": {
     "branch": "develop",
-    "commit": "3becc90ce183a4db437ea5584c34643f53d18e43",
-    "nota": "Base do protótipo v2; commit da implementação DEV-JOG-P01..P03 a registrar nesta entrega."
+    "commit": "3df3a4c7cf9f97ef20eb76093cb09c3e28006f28",
+    "nota": "Commit da implementação DEV-JOG-P01..P03 na develop (base 3becc90), referenciado pelo aceite humano de 2026-11-25."
   },
   "moduloId": "03-desenvolvimento-laurinha",
   "incrementoId": null,
@@ -46,6 +46,7 @@
       "id": "DEV-JOG-P01-P03",
       "status": "COMPLETED",
       "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
+      "commit": "3df3a4c7cf9f97ef20eb76093cb09c3e28006f28",
       "nota": "Atividades Reais implementadas e homologadas pelo responsável pelo Produto em 2026-11-25 (descoberta sob demanda, ativas/retirada, limite 10, curadoria).",
       "mensagemCommit": "feat(desenvolvimento): entregar fluxo aprovado de Atividades Reais\n\nDescoberta sob demanda com até duas sugestões, ativas com retirada, limite de dez por categoria e curadoria das seis fichas, sem alterar Jogos Digitais."
     },

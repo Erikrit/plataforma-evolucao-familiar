@@ -1,7 +1,7 @@
 # Estado atual e escopo — Plataforma de Evolução Familiar
 
-**Atualização:** 2026-11-24  
-**Referência do código versionado:** `develop` e `master` em `dcf901db765aee9106070baa3a7903e492c36140` na abertura desta consolidação (PR #4, primeira entrega de homologação).  
+**Atualização:** 2026-11-25  
+**Referência do código versionado:** `develop` em `3df3a4c7cf9f97ef20eb76093cb09c3e28006f28` (Atividades Reais); `master` permanece em `dcf901db765aee9106070baa3a7903e492c36140` (PR #4). **As branches não estão sincronizadas**: a promoção da `develop` para a `master` depende de autorização do responsável pelo Produto.  
 **Fonte do estado de uso:** declaração do responsável pelo produto em 2026-11-24. **A URL HTTPS e a versão exata em execução na VPS não foram verificadas nesta revisão documental.**
 
 ## 1. Situação vigente — leitura prioritária
@@ -20,7 +20,7 @@ Não confundir:
 |---|---|---|
 | 01 — Fundação Familiar | Entrada e cadastro de família, pessoas com/sem conta, convites/ativação, acesso contextual simples e isolamento de famílias | [Módulo 01](../modulos/01-fundacao-familiar/ESPECIFICACAO.md) v1.9 |
 | 02 — Cuidados | Rotina, medicamentos com horários conferidos, relatos sem inferência clínica, consultas, exames e anexos privados, acompanhamento autorizado | [Módulo 02](../modulos/02-cuidados-vovo/ESPECIFICACAO.md) v1.7 |
-| 03 — Desenvolvimento | Biblioteca de atividades presenciais, participações, estrelas/recompensas, catálogo curado de 24 modelos, **8 jogos digitais e 40 fases** | [Módulo 03](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) v1.5 |
+| 03 — Desenvolvimento | Biblioteca de atividades presenciais, participações, estrelas/recompensas, catálogo curado de 24 modelos, **8 jogos digitais e 40 fases** | [Módulo 03](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md) v1.7 |
 | 04 — Evolução Familiar | Histórico individual, resumos contextuais e PDF sob demanda, respeitando as autorizações | [Módulo 04](../modulos/04-evolucao-familiar/ESPECIFICACAO.md) v1.2 |
 | Experiência | Mobile-first e navegação centrada nas pessoas, com padrões definidos de UX e acessibilidade | [Guia UX](../ux-ui/GUIA-DE-EXPERIENCIA.md) |
 
@@ -51,7 +51,7 @@ Procedimento operacional: [implantação na VPS](../esteira/estado/procedimento-
 | IDs | Escopo aprovado | Fonte canônica | Estado |
 |---|---|---|---|
 | UX-01 e UX-02 | Cadastro de consultas/exames e seleção de anexo | [Módulo 02 §11](../modulos/02-cuidados-vovo/ESPECIFICACAO.md#11-decisões-de-ux--consultas-e-exames-2026-11-24) | Implementado e homologado |
-| UX-03, UX-04 e UX-05 | Filtro de Atividades Reais, cabeçalho compartilhado e catálogo de Jogos Digitais | [Módulo 03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#14-decisões-ux-e-propostas-de-curadoria--testes-da-v1-2026-11-24) | Implementado e homologado |
+| UX-03, UX-04 e UX-05 | Filtro de Atividades Reais, cabeçalho compartilhado e catálogo de Jogos Digitais | [Módulo 03 §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#14-decisões-de-ux-e-atividades-reais--2026-11-24) | Implementado e homologado |
 
 **Atividades Reais (DEV-JOG-P01 a P03) aprovadas pelo Produto em 2026-11-24**, com protótipo v2 aprovado pelo responsável pelo Produto. A implementação na `develop` foi entregue e a **homologação humana da aplicação foi confirmada pelo responsável pelo Produto em 2026-11-25**. A decisão cobre a curadoria de seis brincadeiras, descoberta por botão, até duas sugestões com reposição manual, retirada das ativas e o limite de dez escolhas por categoria e pessoa. Consulte o [Módulo 03 §12 e §14](../modulos/03-desenvolvimento-laurinha/ESPECIFICACAO.md#14-decisões-de-ux-e-atividades-reais--2026-11-24). A ampliação de fases dos Jogos Digitais permanece em estudo.
 
