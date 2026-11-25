@@ -293,9 +293,38 @@ Faixa orientativa de **6 a 12 anos**, com instrução curta para o adulto e prio
 | Alvo cooperativo | Coordenação · simples | 5–10 min | Lancem em turnos e ajustem juntos a distância. Usem papel amassado ou meias, com um cesto ou alvo no chão. Dá para jogar sentado. |
 | Piquenique em casa | Autonomia · média | 10–15 min | A criança escolhe o lugar e combina com o adulto quem prepara cada parte. Usem o lanche da casa ou façam um piquenique imaginário. |
 
-### Incrementos para a esteira
+### Aceite do protótipo e entrega para desenvolvimento
 
-1. **Sugestões e escolhas:** adaptar os contratos existentes, preservar escolhas anteriores e cobrir geração, reposição manual, elegibilidade, escassez e isolamento. Validar E4-ACE-02 a 05.
-2. **Limite de escolhas:** aplicar a regra no domínio e testar registro de participação, reativação, alterações de categoria, reenvio e concorrência. Validar E4-ACE-08.
-3. **Biblioteca de Atividades Reais:** validar em protótipo a entrada vazia, a descoberta por botão, a lista de ativas e a ação Retirar das ativas. Na implementação, ligar as ações às respostas confirmadas, preservar o filtro e validar vazio, erros, aviso de limite e navegação no celular. Validar E4-ACE-07, E4-ACE-09 e E4-HOM.
-4. **Curadoria:** verificar vínculos e slots ativos, validar versão e publicação repetível, disponibilizar as seis fichas aprovadas e conferir a experiência presencial em celular. Validar E4-ACE-01, E4-ACE-06 e E4-HOM.
+**Protótipo v2 aprovado pelo responsável de Produto em 24/11/2026.** Usar o [protótipo navegável](prototipo-atividades-reais-v2.html) para reproduzir o primeiro uso e a disputa pela décima vaga. A aprovação é do desenho. A aplicação integrada terá homologação própria. Os dados, o seletor de cenários, o botão de reinício e o armazenamento local do HTML servem à demonstração.
+
+#### 1. Estado por pessoa e contratos da API
+
+Revisar `servico-sugestoes.ts`, `servico-desafios.ts`, `servico-participacoes.ts`, o controlador de Desenvolvimento e o esquema Prisma. Reutilizar as rotas de sugestões, escolha, participação e disponibilidade. Definir a menor operação autorizada de retirada e seu contrato. A resposta de cada mutação deve permitir reconciliar a tela com o estado confirmado.
+
+- A lista inicial consulta as escolhas ativas da pessoa. Abrir a Biblioteca, trocar de pessoa ou recarregar a página não deve gerar sugestões nem gravar exposição. A descoberta ocorre mediante ação explícita. Separar as candidatas apresentadas, a escolha ativa, a disponibilidade para nova participação e os fatos históricos.
+- Persistir o necessário para priorizar inéditas e identificar retiradas nunca realizadas. Conferir as linhas legadas antes da migração: preservar escolhas ativas válidas, participações, favoritos legados e versões. Linhas antigas de sugestões não escolhidas não são atividades ativas. Quando o histórico de exposição anterior for desconhecido, documentar o tratamento adotado.
+- Autorizar leitura e mutação no servidor por pessoa, família e operação. Revalidar elegibilidade e contagem ao escolher, inclusive quando outro responsável já ocupou a última vaga. Reenvio da mesma escolha não consome outra vaga. Retirada repetida não altera saldo ou histórico. Testar escolha e retirada concorrentes com participação, respeitando as operações efetivamente confirmadas.
+
+#### 2. Experiência no celular
+
+| Situação | Resultado verificável |
+|---|---|
+| Primeiro acesso e retorno | Exibir cabeçalho compartilhado, Ativas, Executadas, filtro e Sugerir brincadeiras. Com zero escolhas, mostrar estado vazio sem cartões editoriais. No retorno, carregar as ativas da pessoa e manter as sugestões fechadas. |
+| Descoberta e escolha | Sugerir brincadeiras abre até duas opções elegíveis no filtro selecionado. Quero experimentar move somente a escolhida para Ativas após o sucesso. A outra continua visível. A presença de uma vaga na área de sugestões não dispara reposição. |
+| Renovação e escassez | Renovar sugestões substitui até duas opções e respeita a ordem da seção 12. Com poucas alternativas, preservar cartões elegíveis que não puderem ser trocados. Com zero alternativas, informar o resultado e manter acesso às ativas. |
+| Ficha da ativa | Apresentar instrução, materiais, dificuldade e, quando disponíveis, idade e duração. Participou e Concluiu registram a experiência e o crédito calculado pelo servidor. Retirar das ativas devolve a vaga sem criar execução ou movimentação de estrelas. |
+| Limite e recuperação | Com dez, bloquear somente a nova inclusão na mesma categoria e pessoa. Informar a categoria no aviso e oferecer Ver atividades ativas, abrindo a lista filtrada. Após retirar ou finalizar uma atividade, uma nova escolha explícita pode ocupar a vaga. |
+| Rede, navegação e troca de pessoa | Preservar o último estado confirmado em falha de rede, permitir retentar e descartar respostas atrasadas do contexto anterior. Manter os filtros previstos no módulo e anunciar o resultado das ações de forma acessível. |
+
+#### 3. Curadoria e regressão
+
+Aplicar as seis fichas da seção 14 na carga oficial após verificar IDs, versões e vínculos. Reexecutar a carga para comprovar idempotência e teto editorial de 24. Preservar a experiência de atividades personalizadas, inclusive cadastro por nome e uso sem categoria, a reativação autorizada de Executadas e o histórico do Módulo 04.
+
+#### 4. Testes e homologação da implementação
+
+1. **Fluxo principal:** começar com zero, pedir duas sugestões, escolher uma, recarregar e consultar a mesma pessoa em outra sessão. A escolha persiste e a lista de sugestões só reabre por ação explícita.
+2. **Retirada:** retirar a atividade nunca realizada. Conferir vaga, histórico e saldo antes e depois. Pedir novas sugestões até esgotar as inéditas elegíveis do filtro e verificar que a retirada pode voltar. Uma atividade já realizada segue excluída da rotação de novidades mesmo após reativação.
+3. **Participação:** exercitar Participou e Concluiu, resposta incerta, reenvio e nova execução legítima após reativação. Conferir uma ocorrência e o crédito devido por execução confirmada.
+4. **Capacidade:** partir de nove escolhas, tentar incluir duas atividades distintas simultaneamente em duas sessões autorizadas e confirmar dez no servidor. Verificar aviso, filtro, liberação de vaga, outras categorias, personalizadas, sem categoria e dados legados acima do teto.
+5. **Isolamento e regressão:** usar duas pessoas e duas famílias fictícias. Verificar acesso revogado e chamadas diretas. Rodar checagens estáticas, smokes E4, regressão de autorização, histórico, estrelas e E5 conforme o impacto. Atualizar testes que ainda exigem seis sugestões ou devolvem a escolhida na lista de sugestões.
+6. **Homologação humana:** entregar roteiro móvel reproduzível para primeiro uso, retorno, retirada e 11ª escolha, com dados fictícios. Registrar testes executados, resultados e pendências da implementação separadamente do aceite do protótipo.

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atividades Reais · Protótipo</title>
+<style>
+  :root { color-scheme: light; --ink: #242633; --muted: #5e606d; --border: #dddce7; --paper: #fff; --back: #f6f5f9; --brand: #524097; --soft: #eeebfb; --ok: #265a43; --green: #eaf6ee; --warning: #783f17; --amber: #fff3dd; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--back); color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
+  main { max-width: 920px; padding: 28px 22px 48px; margin: auto; }
+  h1,h2,h3,p { margin: 0; }
+  h1 { font-size: clamp(1.45rem, 4.5vw, 2.2rem); letter-spacing: -.045em; line-height: 1.16; }
+  h2 { font-size: 1.15rem; } h3 { font-size: 1rem; }
+  button,select { font: inherit; }
+  button { cursor: pointer; }
+  button, select, a { touch-action: manipulation; }
+  button:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+  button:disabled { cursor: default; opacity: .65; }
+  .bar,.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .bar { margin: 28px 0 18px; }
+  .saldo { background: var(--amber); color: #694717; border-radius: 50px; padding: 6px 13px; font-weight: 750; white-space: nowrap; }
+  .controls, .panel, .filters { border: 1px solid var(--border); border-radius: 16px; background: var(--paper); }
+  .controls { display: flex; gap: 8px 12px; flex-wrap: wrap; align-items: center; padding: 12px; }
+  .controls label, .filters label { color: var(--muted); font-size: .9rem; font-weight: 650; }
+  .prototype-label { margin-right: auto; font-weight: 700; font-size: .86rem; color: var(--brand); }
+  select, .btn { padding: 7px 12px; border: 1px solid var(--border); border-radius: 9px; background: white; color: var(--ink); min-height: 44px; }
+  .btn { font-size: .9rem; font-weight: 680; }
+  .btn.primary { background: var(--brand); color: white; border-color: var(--brand); }
+  .btn.secondary { color: var(--brand); background: var(--soft); border-color: transparent; }
+  .btn.plain { border-color: transparent; color: var(--brand); background: transparent; }
+  .filters { padding: 10px 12px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: center; }
+  .tabs { display: flex; gap: 4px; }
+  .tabs button[aria-current="page"] { background: var(--soft); color: var(--brand); }
+  .panel { padding: 17px; margin-top: 14px; }
+  .panel > .row { margin-bottom: 10px; }
+  .subtle { color: var(--muted); font-size: .89rem; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .card { padding: 13px; border: 1px solid var(--border); border-radius: 12px; display: grid; gap: 7px; align-content: space-between; }
+  .card .actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 3px; }
+  .list { display: grid; gap: 0; }
+  .line { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 57px; border-top: 1px solid var(--border); padding: 8px 0; }
+  .line:first-child { border-top: 0; }
+  .line-title { overflow-wrap: anywhere; }
+  .choice-list { margin-bottom: 4px; }
+  details summary { list-style-position: inside; cursor: pointer; color: var(--brand); font-weight: 700; min-height: 44px; display: list-item; padding: 9px 0; }
+  .empty { color: var(--muted); padding: 8px 0; }
+  .status { padding: 10px 13px; border-radius: 10px; background: var(--green); color: var(--ok); margin-top: 12px; }
+  .status.warning { background: var(--amber); color: var(--warning); }
+  .status:empty { display: none; }
+  .count { color: var(--muted); font-size: .86rem; text-align: right; }
+  dialog { max-width: 470px; width: calc(100vw - 32px); max-height: 85dvh; overflow: auto; border: 1px solid var(--border); border-radius: 18px; padding: 19px; color: var(--ink); }
+  dialog::backdrop { background: #20203066; }
+  dialog p + p { margin-top: 8px; }
+  dialog .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .dialog-title { margin-bottom: 9px; }
+  @media (max-width: 540px) {
+    main { padding: 14px 12px 28px; }
+    .grid { grid-template-columns: 1fr; }
+    .panel { padding: 13px; }
+    .controls select, .filters select { max-width: 100%; }
+    .bar { margin-top: 22px; }
+    .prototype-label { flex-basis: 100%; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <section class="controls" aria-label="Controles do protótipo">
+    <p class="prototype-label">Atividades Reais · protótipo</p>
+    <label for="cenario">Cenário</label>
+    <select id="cenario">
+      <option value="comum">Primeiro uso</option>
+      <option value="limite">11ª escolha · dois responsáveis</option>
+    </select>
+    <button type="button" id="reset" class="btn">Reiniciar cenário</button>
+  </section>
+
+  <header class="bar">
+    <h1>Biblioteca · Laurinha</h1>
+    <span class="saldo" id="saldo"></span>
+  </header>
+  <nav class="filters" aria-label="Biblioteca de Atividades Reais">
+    <div class="tabs">
+      <button type="button" class="btn plain" data-tab="explorar" aria-current="page">Ativas</button>
+      <button type="button" class="btn plain" data-tab="executadas">Executadas</button>
+    </div>
+    <div>
+      <label for="categoria">Categoria</label>
+      <select id="categoria"></select>
+    </div>
+  </nav>
+
+  <p class="status" id="feedback" role="status" aria-live="polite" tabindex="-1"></p>
+  <div id="conteudo"></div>
+</main>
+<dialog id="ficha" aria-labelledby="titulo-ficha">
+  <div class="row dialog-title">
+    <h2 id="titulo-ficha"></h2>
+    <form method="dialog"><button type="submit" class="btn plain" aria-label="Fechar ficha">Fechar</button></form>
+  </div>
+  <div id="ficha-corpo"></div>
+</dialog>
+<script>
+  const categorias = {
+    memoria: 'Memória e atenção', raciocinio: 'Raciocínio', linguagem: 'Linguagem',
+    criatividade: 'Criatividade', coordenacao: 'Coordenação', autonomia: 'Autonomia',
+    sem: 'Sem categoria'
+  };
+  const atividades = [
+    { id: 'sumiu', nome: 'O que sumiu?', cat: 'memoria', tempo: '5–8 min', idade: '6–12 anos', nivel: 'Simples', texto: 'Escolham três objetos. Uma pessoa esconde um e a outra diz o que mudou. Depois, troquem os papéis.', materiais: 'Três objetos da casa. Para esconder, virem de costas ou usem um pano.' },
+    { id: 'mapa', nome: 'Mapa do tesouro', cat: 'raciocinio', tempo: '10–15 min', idade: '6–12 anos', nivel: 'Média', texto: 'Façam duas pistas até um objeto escondido. Quem encontra escolhe o próximo esconderijo.', materiais: 'Papel opcional. As pistas também podem ser faladas.' },
+    { id: 'historia', nome: 'História em turnos', cat: 'linguagem', tempo: '5–10 min', idade: '6–12 anos', nivel: 'Simples', texto: 'Uma pessoa começa com uma frase ou gesto. A outra acrescenta um acontecimento. Inventem juntas o final.', materiais: 'Nenhum. Vale falar, fazer gestos ou desenhar.' },
+    { id: 'orquestra', nome: 'Orquestra de casa', cat: 'criatividade', tempo: '5–10 min', idade: '6–12 anos', nivel: 'Simples', texto: 'Inventem um ritmo curto e respondam em turnos. Deixem a criança conduzir a rodada seguinte.', materiais: 'Pote plástico e colher de madeira, se quiserem. Palmas suaves ou gestos também funcionam.' },
+    { id: 'alvo', nome: 'Alvo cooperativo', cat: 'coordenacao', tempo: '5–10 min', idade: '6–12 anos', nivel: 'Simples', texto: 'Lancem em turnos e mudem a distância juntos. Dá para aproximar o alvo ou jogar sentados.', materiais: 'Papel amassado ou meias. Usem um cesto ou marquem um alvo no chão.' },
+    { id: 'piquenique', nome: 'Piquenique em casa', cat: 'autonomia', tempo: '10–15 min', idade: '6–12 anos', nivel: 'Média', texto: 'A criança escolhe o lugar e ajuda a montar o piquenique. Combinem juntos quem faz cada parte.', materiais: 'Usem o lanche que já têm em casa ou façam um piquenique imaginário.' },
+    { id: 'cabaninha', nome: 'Cabana de lençol', cat: 'sem', nivel: 'Simples', texto: 'Montem uma cabana com o que tiverem e escolham juntos o que brincar lá dentro.', materiais: 'Um lençol ou outro tecido que já tenham.', personalizada: true },
+    { id: 'sons', nome: 'Sons da varanda', cat: 'memoria', nivel: 'Simples', texto: 'Escutem por um momento e contem um para o outro que sons reconheceram.', materiais: 'Nenhum.', personalizada: true }
+  ];
+  const exemplosLimite = [
+    ['Cores da sala', 'Escolham uma cor e lembrem juntos onde ela apareceu.'],
+    ['Eco de palmas', 'Façam um ritmo curto e repitam em turnos.'],
+    ['Caça aos detalhes', 'Uma pessoa descreve um detalhe e a outra tenta localizá-lo.'],
+    ['Três pistas', 'Uma pessoa dá três pistas sobre um objeto da casa.'],
+    ['O som que mudou', 'Faça dois sons e troque um na rodada seguinte.'],
+    ['Objetos na bandeja', 'Olhem alguns itens, cubram e descrevam o que lembram.'],
+    ['Espelho de gestos', 'Uma pessoa faz dois gestos curtos e a outra os imita.'],
+    ['Caminho lembrado', 'Façam um trajeto curto e contem por onde passaram.'],
+    ['Quem fez o som?', 'Inventem sons de animais e troquem quem dá a pista.'],
+    ['Passeio de olhos atentos', 'Procurem três coisas diferentes e conversem depois do passeio.']
+  ].map(([nome, texto], indice) => ({ id: 'exemplo-' + indice, nome, cat: 'memoria', nivel: 'Simples', texto }));
+  const anteriores = { id: 'rimas', nome: 'Rimas da casa', cat: 'linguagem', nivel: 'Simples', texto: 'Escolham uma palavra da casa e brinquem de inventar rimas em turnos.' };
+
+  const ordem = ['sumiu', 'mapa', 'historia', 'orquestra', 'alvo', 'piquenique'];
+  const cenario = document.querySelector('#cenario');
+  const categoria = document.querySelector('#categoria');
+  const conteudo = document.querySelector('#conteudo');
+  const feedback = document.querySelector('#feedback');
+  const ficha = document.querySelector('#ficha');
+  categoria.innerHTML = '<option value="todas">Todas</option>' + Object.entries(categorias).map(([id, nome]) => '<option value="' + id + '">' + nome + '</option>').join('');
+
+  const chave = 'prototipo-atividades-reais-v2.1';
+  const itens = [...atividades, ...exemplosLimite];
+  const obter = id => itens.find(item => item.id === id);
+  const fila = atividades.filter(item => !item.personalizada).map(item => item.id);
+  let estado;
+  const escapar = texto => String(texto).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
+  function salvar() {
+    try { localStorage.setItem(chave, JSON.stringify(estado)); } catch {}
+  }
+  function inicial(limite) {
+    return { limite, aba:'explorar', filtro:'todas', ativas:limite ? exemplosLimite.map(x=>x.id) : [],
+      exibidas:limite ? ['sumiu','mapa'] : [], vistas:limite ? ['sumiu','mapa'] : [],
+      retiradas:[], feitas:{}, saldo:0, abriu:limite, aviso:'', categoriaCheia:'' };
+  }
+  function quantidade(cat) { return estado.ativas.filter(id=>obter(id).cat===cat).length; }
+  function botao(acao,id,nome,classe='secondary') {
+    return '<button class="btn '+classe+'" data-acao="'+acao+'" data-id="'+escapar(id)+'">'+nome+'</button>';
+  }
+  function linhas(ids) {
+    return ids.filter(id=>estado.filtro==='todas'||obter(id).cat===estado.filtro).map(id=>{
+      const item=obter(id);
+      return '<div class="line"><div><h3>'+item.nome+'</h3><p class="subtle">'+categorias[item.cat]+'</p></div>'+botao('ficha',id,'Ver atividade','plain')+'</div>';
+    }).join('');
+  }
+  function desenhar() {
+    cenario.value=estado.limite?'limite':'comum'; categoria.value=estado.filtro;
+    const saldo=document.querySelector('#saldo');
+    saldo.textContent='★ '+estado.saldo; saldo.setAttribute('aria-label',estado.saldo+' estrelas disponíveis');
+    document.querySelectorAll('[data-tab]').forEach(b=>{if(b.dataset.tab===estado.aba)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+    feedback.textContent=estado.aviso;
+    feedback.classList.toggle('warning',Boolean(estado.categoriaCheia));
+    if(estado.categoriaCheia) feedback.insertAdjacentHTML('beforeend',' '+botao('verAtivas','','Ver atividades ativas'));
+    if(estado.aba==='executadas'){
+      conteudo.innerHTML='<section class="panel"><h2>Executadas</h2>'+(linhas(Object.keys(estado.feitas))||'<p class="empty">As brincadeiras realizadas aparecem aqui.</p>')+'</section>';salvar();return;
+    }
+    const cards=estado.exibidas.map(id=>{const i=obter(id);return '<article class="card"><h3>'+i.nome+'</h3><p class="subtle">'+categorias[i.cat]+' · '+i.tempo+'</p><p>'+i.texto+'</p><div class="actions">'+botao('escolher',id,'Quero experimentar','primary')+botao('ficha',id,'Ver materiais','plain')+'</div></article>';}).join('');
+    const lista=linhas(estado.ativas);
+    conteudo.innerHTML='<section class="panel"><div class="row"><h2>Atividades ativas</h2></div>'+
+      (lista||'<p class="empty">'+(estado.ativas.length?'Nenhuma atividade ativa nesta categoria.':'Vocês ainda não escolheram uma brincadeira.')+'</p>')+
+      (!estado.abriu?botao('sugerir','','Sugerir brincadeiras','primary'):'')+'</section>'+
+      (estado.abriu?'<section class="panel"><div class="row"><h2>Sugestões</h2>'+botao('sugerir','','Renovar sugestões')+'</div>'+
+      (cards?'<div class="grid">'+cards+'</div>':'<p class="empty">Nenhuma sugestão nesta lista. Toque em Renovar sugestões para procurar outra.</p>')+'</section>':'');salvar();
+  }
+  function sugestoes(){
+    const disponiveis=fila.filter(id=>!estado.ativas.includes(id)&&!estado.feitas[id]&&!estado.exibidas.includes(id)&&quantidade(obter(id).cat)<10&&(estado.filtro==='todas'||obter(id).cat===estado.filtro));
+    const novas=disponiveis.filter(id=>!estado.vistas.includes(id));
+    const retornos=estado.retiradas.filter(id=>disponiveis.includes(id));
+    const lote=[...new Set([...novas,...retornos])].slice(0,2);
+    const anteriores=estado.exibidas.filter(id=>quantidade(obter(id).cat)<10 && (estado.filtro==='todas'||obter(id).cat===estado.filtro));
+    estado.exibidas=[...lote,...anteriores].slice(0,2);
+    estado.vistas=[...new Set([...estado.vistas,...lote])];
+    estado.retiradas=estado.retiradas.filter(id=>!lote.includes(id));
+    estado.abriu=true;
+    estado.aviso=lote.length?'':'Não há novas sugestões disponíveis por agora.';
+  }
+  function mostrarFicha(id){
+    const i=obter(id),ativa=estado.ativas.includes(id);
+    document.querySelector('#titulo-ficha').textContent=i.nome;
+    document.querySelector('#ficha-corpo').innerHTML='<p class="subtle">'+[categorias[i.cat],i.nivel,i.idade,i.tempo].filter(Boolean).join(' · ')+'</p><p>'+i.texto+'</p>'+(i.materiais?'<p>'+i.materiais+'</p>':'')+
+      (estado.feitas[id]?'<p>Participações registradas: '+estado.feitas[id]+'.</p>':'')+
+      (ativa?'<div class="actions">'+botao('participou',id,'Participou')+botao('concluiu',id,'Concluiu','primary')+botao('retirar',id,'Retirar das ativas','plain')+'</div>':'');
+    ficha.showModal();
+  }
+  function agir(acao,id){
+    estado.aviso='';estado.categoriaCheia='';
+    if(acao==='sugerir') sugestoes();
+    if(acao==='escolher' && estado.exibidas.includes(id)){
+      const i=obter(id);
+      if(quantidade(i.cat)>=10){
+        estado.aviso='Você já tem 10 atividades ativas em '+categorias[i.cat]+'. Para adicionar outra, finalize ou retire uma delas.';
+        estado.categoriaCheia=i.cat;
+      } else {
+        estado.ativas.push(id);estado.exibidas=estado.exibidas.filter(a=>a!==id);
+        estado.aviso='“'+i.nome+'” está nas atividades ativas.';
+      }
+    }
+    if(['retirar','participou','concluiu'].includes(acao)&&estado.ativas.includes(id)){
+      estado.ativas=estado.ativas.filter(a=>a!==id);
+      if(acao==='retirar'){
+        if(!estado.feitas[id]) estado.retiradas.push(id);
+        estado.aviso='Atividade retirada. A vaga foi liberada.';
+      } else {
+        estado.feitas[id]=(estado.feitas[id]||0)+1;
+        const media=obter(id).nivel==='Média';
+        const ganho=acao==='concluiu'?(media?10:5):(media?5:3);
+        estado.saldo+=ganho;estado.aviso='Participação registrada. +'+ganho+' estrelas.';
+      }
+      if(ficha.open) ficha.close();
+    }
+    desenhar();if(estado.aviso) feedback.focus();
+  }
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.tab){estado.aba=b.dataset.tab;estado.aviso='';estado.categoriaCheia='';desenhar();return;}
+    const acao=b.dataset.acao;if(!acao)return;
+    if(acao==='ficha'){mostrarFicha(b.dataset.id);return;}
+    if(acao==='verAtivas'){estado.filtro=estado.categoriaCheia;estado.aba='explorar';estado.exibidas=[];estado.abriu=false;estado.aviso='';estado.categoriaCheia='';desenhar();return;}
+    agir(acao,b.dataset.id);
+  });
+  categoria.onchange=()=>{estado.filtro=categoria.value;estado.exibidas=[];estado.abriu=false;estado.aviso='';estado.categoriaCheia='';desenhar();};
+  function reiniciar(){estado=inicial(cenario.value==='limite');if(estado.limite)estado.aviso='Simulação: a sugestão “O que sumiu?” já estava aberta quando outro responsável ocupou a décima vaga de Memória e atenção.';desenhar();}
+  cenario.onchange=reiniciar;document.querySelector('#reset').onclick=reiniciar;
+  try{estado=JSON.parse(localStorage.getItem(chave));}catch{}
+  if(!estado) reiniciar();else {estado.exibidas=[];estado.abriu=false;estado.aviso='';estado.categoriaCheia='';desenhar();}
+</script></body></html>
