@@ -1,6 +1,6 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.9 — E2, ativação por link e gestão compreensível de acessos, aprovada em 2026-11-22  
+**Versão:** especificação funcional v1.10 — data de nascimento para Desenvolvimento (seção 16) aprovada em 2026-11-25, texto em revisão; v1.9 (E2) aprovada em 2026-11-22  
 **Status funcional:** regras anteriores e recorte E2 v1.9 aprovados pelo Produto; estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
@@ -323,3 +323,20 @@ Retirar acompanhamento bloqueia operações futuras e invalida sessões conforme
 | E2-ACE-08 | Homologar cadastrar/ativar, conceder e retirar acompanhamento em celular/desktop; DEF-E2-ATIVACAO-20261122 só encerra após validação da jornada afetada. |
 
 **Fora:** envio automático de mensagens, recuperação de senha, papéis novos, ampliação de autorizações, alteração de estrelas/IA e publicação. Implementação E2 homologada na V1; histórico técnico recuperável no Git.
+
+## 16. Data de nascimento para Desenvolvimento (aprovada em 2026-11-25)
+
+**Decisão L3 aprovada pelo responsável do Produto em 2026-11-25**, ligada ao catálogo ampliado do [Módulo 03, seção 15](../03-desenvolvimento-laurinha/ESPECIFICACAO.md) (DEV-CAT-P05). Vigora a partir da implementação homologada.
+
+- O cadastro de pessoa continua exigindo somente o nome (seções 3 e 11). A data de nascimento continua opcional para quem não usa Desenvolvimento.
+- Conceder acompanhamento em Desenvolvimento exige que a pessoa acompanhada tenha data de nascimento. Se faltar, a concessão pede a data no mesmo fluxo, sem criar etapa separada.
+- Pessoa que já tem Desenvolvimento e não tem data de nascimento: ao abrir Desenvolvimento, o responsável autorizado informa a data antes de continuar. Nenhum dado existente é apagado.
+- A data é dado pessoal da família: segue o isolamento por família e não aparece para quem não tem acesso à pessoa. Corrigir a data recalcula a faixa padrão sem alterar descobertas ou participações já registradas.
+- Cuidados não muda.
+
+| ID | Critério |
+|---|---|
+| FF-NASC-ACE-01 | Criar pessoa só com nome continua possível. |
+| FF-NASC-ACE-02 | Conceder Desenvolvimento sem data de nascimento pede a data e só conclui após persistir; API direta aplica a mesma regra. |
+| FF-NASC-ACE-03 | Pessoa com Desenvolvimento e sem data é orientada a informar a data; progresso e histórico continuam preservados. |
+| FF-NASC-ACE-04 | Corrigir a data muda a faixa padrão do Módulo 03 sem reescrever registros anteriores. |

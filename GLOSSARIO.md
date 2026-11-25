@@ -55,7 +55,11 @@ Fontes: **M01** a **M04** são `docs/modulos/<id>/ESPECIFICACAO.md`.
 | Saldo | Estrelas disponíveis para resgate | M03 DEV-F06 |
 | Recompensa | Item opcional com nome e custo em estrelas | M03 DEV-F06 |
 | Resgate | Ocorrência que debita o custo da recompensa e o preserva no histórico | M03 DEV-F06 |
-| Jogo digital | Jogo da Biblioteca, distinto da atividade real | M03 §13 |
+| Jogo digital | Jogo da Biblioteca, distinto da atividade real; jogo novo exige regra e objetivo próprios, não só tema | M03 §13, DEV-CAT-P01 |
+| Motor | Mecânica técnica reaproveitada por vários jogos, como memória ou labirinto | M03 §15 (PROPOSTA) |
+| Faixa etária | Pequenos (5–6), Médios (7–9) ou Grandes (10–12), calculada pela data de nascimento; limites a confirmar | M03 DEV-CAT-P02 (PROPOSTA) |
+| Trilha | Conjunto de cinco fases de um jogo para uma faixa etária; cada jogo tem três | M03 DEV-CAT-P03 (PROPOSTA) |
+| Marco do catálogo | Lote de jogos e atividades publicado só depois de verificação e homologação | M03 §15 (PROPOSTA) |
 
 ## Evolução
 

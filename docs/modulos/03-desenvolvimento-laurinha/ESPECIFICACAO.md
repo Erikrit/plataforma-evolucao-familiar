@@ -1,7 +1,7 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
-**Versão:** 1.7 — evolução de Atividades Reais aprovada em 2026-11-24\
-**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A seção 14 registra as decisões UX-03 a UX-05 e a aprovação do recorte de Atividades Reais. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
+**Versão:** 1.8 — direção do catálogo ampliado (Jogos Digitais e Atividades Reais) aprovada em 2026-11-25; texto em revisão\
+**Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A seção 14 registra as decisões UX-03 a UX-05 e a aprovação do recorte de Atividades Reais. A seção 15 registra a direção aprovada para o catálogo ampliado; as regras das seções 12 e 13 continuam vigentes até a implementação de cada incremento. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
 
@@ -328,3 +328,59 @@ Aplicar as seis fichas da seção 14 na carga oficial após verificar IDs, vers�
 4. **Capacidade:** partir de nove escolhas, tentar incluir duas atividades distintas simultaneamente em duas sessões autorizadas e confirmar dez no servidor. Verificar aviso, filtro, liberação de vaga, outras categorias, personalizadas, sem categoria e dados legados acima do teto.
 5. **Isolamento e regressão:** usar duas pessoas e duas famílias fictícias. Verificar acesso revogado e chamadas diretas. Rodar checagens estáticas, smokes E4, regressão de autorização, histórico, estrelas e E5 conforme o impacto. Atualizar testes que ainda exigem seis sugestões ou devolvem a escolhida na lista de sugestões.
 6. **Homologação humana:** entregar roteiro móvel reproduzível para primeiro uso, retorno, retirada e 11ª escolha, com dados fictícios. Registrar testes executados, resultados e pendências da implementação separadamente do aceite do protótipo.
+
+## 15. Catálogo ampliado — Jogos Digitais e Atividades Reais (direção aprovada em 2026-11-25)
+
+**Decisão L3 aprovada pelo responsável do Produto em 2026-11-25** (DEV-CAT-P01 a P09). Esta seção define a direção e as regras-alvo. **As seções 12 e 13 continuam vigentes até a implementação homologada de cada incremento.** Ao entrar em vigor, cada regra abaixo substitui expressamente o trecho indicado.
+
+**Motivação.** O catálogo atual (24 atividades, 8 jogos e 40 fases) tem pouca variedade, progressão curta e falhas de curadoria. A meta de longo prazo é de **pelo menos 200 Atividades Reais e 100 Jogos Digitais** para crianças de **5 a 12 anos**, com qualidade verificável. A meta é atingida em marcos; cada marco só avança após homologação.
+
+### Regras-alvo
+
+- **DEV-CAT-P01 — O que conta como jogo.** Um jogo é uma regra e um objetivo que a criança reconhece como diferentes. Mudar apenas o tema ou as figuras não cria jogo novo: o tema é conteúdo dentro do jogo. Exemplo: *Caminhos e labirintos* e *Entrega no jardim* são jogos distintos; um “labirinto da floresta” com a mesma regra não é. Vários jogos podem compartilhar o mesmo motor técnico.
+- **DEV-CAT-P02 — Faixas etárias.** O público dos jogos e das atividades curadas é de **5 a 12 anos**, em três faixas: **Pequenos (5–6)**, **Médios (7–9)** e **Grandes (10–12)**. *Os limites internos das faixas aguardam confirmação de Produto.* A faixa orienta a oferta e não representa capacidade.
+- **DEV-CAT-P03 — Trilhas e fases.** Cada jogo tem **três trilhas, uma por faixa, com cinco fases cada (15 fases)**. A dificuldade cresce dentro da trilha e entre as trilhas. Qualquer fase continua livre para abrir e repetir, sem ajuste adaptativo. *Substitui E5-F02 e E5-ACE-01 (cinco fases por jogo).*
+- **DEV-CAT-P04 — Visibilidade por idade.** A Biblioteca abre na faixa calculada pela data de nascimento da pessoa, tanto no catálogo de jogos quanto nas trilhas. O responsável autorizado pode acionar **Ver outras faixas** para abrir as demais. *Substitui o trecho de E5-F01 e E5-ACE-08 que mostra todo o catálogo inclusive sem data de nascimento.*
+- **DEV-CAT-P05 — Data de nascimento.** Habilitar e usar Desenvolvimento exige data de nascimento da pessoa acompanhada (ver Módulo 01, seção 16). Cuidados não muda. *Substitui, para Desenvolvimento, o trecho da seção 12 “Não exigir nascimento”.*
+- **DEV-CAT-P06 — Mudança de faixa.** Quando a idade muda de faixa, a nova faixa passa a ser a padrão. Progresso e descobertas da faixa anterior continuam preservados no Histórico e acessíveis por Ver outras faixas.
+- **DEV-CAT-P07 — Leitura.** Instruções e enunciados são curtos e pensados para leitura pelo adulto junto da criança, sobretudo na faixa Pequenos. Não há narração por voz neste recorte; o som continua opcional.
+- **DEV-CAT-P08 — Áreas.** Mantêm-se as seis áreas vigentes e entra **Números** (contagem, quantidades, formas e ordem), para jogos e atividades. A inclusão exige compatibilidade com filtros, Histórico, Resumo e atividades personalizadas sem categoria.
+- **DEV-CAT-P09 — Sugestões de Atividades Reais.** **Sugerir brincadeiras** passa a apresentar **até cinco** opções elegíveis, priorizando a faixa da pessoa. Renovar oferece até cinco. As demais regras da seção 12 (descoberta por botão, sem reposição automática, prioridade de inéditas, limite de dez por categoria e pessoa) permanecem. *Substitui “até duas” em DEV-JOG-P02, E4-ACE-02 e E4-ACE-03.* O teto editorial de 24 modelos (E4-ACE-01) deixa de valer quando o primeiro marco for publicado.
+
+### Qualidade do conteúdo
+
+Todo jogo, fase e atividade passa pela mesma régua antes de publicar:
+
+| Item | Exigência verificável |
+|---|---|
+| Objetivo | Uma frase clara; título coerente com o que a fase pede |
+| Solução | Cada fase tem solução e, quando aplicável, uma única resposta defensável, conferidas por verificador automático |
+| Progressão | Métrica de dificuldade do motor (passos, pares, opções, período, cenas etc.) cresce dentro da trilha e entre as trilhas |
+| Rótulos | Nenhum texto visível entrega a resposta; nome e figura correspondem |
+| Variedade | Variantes de uma fase não repetem a mesma solução nem são só espelhamento |
+| Celular | Legível e tocável a partir de 320 px, sem rolagem horizontal |
+| Dica | Útil no estado atual da partida e não revela a resposta no primeiro nível |
+| Atividade real | Ficha padrão: objetivo lúdico, até três passos, materiais comuns de casa, variação mais fácil e mais difícil, adaptação para brincar sentado, duração e checklist de segurança por faixa |
+| Origem | Conteúdo e ilustrações próprios ou licenciados, com origem registrada |
+
+O conteúdo é produzido em formato versionado e pode ser rascunhado com apoio de ferramentas, inclusive IA, **fora da plataforma**. A publicação exige revisão humana. A partida continua sem IA, sem serviços externos, sem anúncios e sem telemetria (E5-F03 e E5-F08). Atividades reais são distribuídas numa matriz de cobertura (faixa × área × duração × lugar × número de pessoas) para evitar repetição.
+
+### Marcos
+
+| Marco | Conteúdo | Condição para avançar |
+|---|---|---|
+| 1 | **20 jogos** (os 8 atuais refeitos com três trilhas e 12 novos) e **60 Atividades Reais** (cerca de 20 por faixa) | Verificadores automáticos aprovados e homologação humana no celular |
+| 2 em diante | Lotes de cerca de 10 jogos e 40 atividades | Mesma régua e homologação por lote |
+| Jogos 2D | Teste com um jogo 2D somente após o Marco 1 | Desempenho em celular simples, toque e teclado, movimento reduzido e saída sempre visível |
+
+Proposta de 12 jogos novos do Marco 1, sujeita à curadoria: Conte e toque, Qual tem mais?, Do menor ao maior (Números); Sudoku de figuras, Robô com setas (Raciocínio); Mãe e filhote, Metades (Memória e atenção); Letra inicial, Adivinha pela pista (Linguagem); Separar o lixo, Animais por habitat (Autonomia); Caminho de cores (Coordenação). Três motores novos: contagem, sudoku e classificar em caixas.
+
+### Fora deste recorte
+
+Ranking, metas, notificações de retorno, avaliação cognitiva, IA durante o jogo, anúncios, chat, multijogador e narração por voz. A oferta de Atividades Reais para adultos e idosos prevista na seção 12 *aguarda decisão de Produto* sobre permanecer fora da curadoria 5–12.
+
+### Pendências de decisão
+
+1. Confirmar os limites das faixas (5–6, 7–9, 10–12).
+2. Confirmar se as atividades para adultos e idosos continuam no catálogo, fora das faixas infantis.
+3. Aprovar a lista de jogos do Marco 1 após a curadoria.
