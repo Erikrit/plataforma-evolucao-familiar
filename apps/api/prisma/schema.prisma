@@ -101,6 +101,8 @@ model JogoDigital {
 model FaseJogoDigital {
   jogoId       String      @map("jogo_id")
   numero       Int
+  /// Editorial: pequenos (1–5), medios (6–10) ou grandes (11–15), conferida contra o número.
+  trilha       String
   titulo       String
   objetivo     String
   dificuldade  String

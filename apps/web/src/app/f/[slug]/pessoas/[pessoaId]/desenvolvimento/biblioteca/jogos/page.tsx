@@ -27,6 +27,7 @@ import estilosJogos from "@/componentes/desenvolvimento/jogos/jogos.module.css";
 import { EstadoCarregando, EstadoVazio } from "@/componentes/feedback";
 import { coresPef } from "@/tema/mantine";
 import type { FaseJogoResumo, JogoResumo } from "@/lib/api";
+import { agruparPorTrilha } from "@/lib/trilhas-jogos";
 import {
   jogoComTodasFasesConcluidas,
   nomeCurtoJogo,
@@ -115,6 +116,7 @@ function ItemCatalogoJogo({
   const pendente = primeiraFasePendente(jogo.fases);
   const nomeCurto = nomeCurtoJogo(jogo.id, jogo.nome);
   const percentual = total > 0 ? (concluidas / total) * 100 : 0;
+  const trilhas = agruparPorTrilha(jogo.fases);
 
   function aoTocarIcone() {
     if (completo || pendente == null) {
@@ -184,35 +186,47 @@ function ItemCatalogoJogo({
           <Text size="sm" c="dimmed">
             {concluidas} de {total} fases concluídas
           </Text>
-          <div
-            role="list"
-            className={estilosJogos.seletorFases}
-            style={{
-              gridTemplateColumns: `repeat(${Math.min(jogo.fases.length, 5)}, minmax(0, 1fr))`,
-            }}
-          >
-            {jogo.fases.map((fase) => {
-              const rotuloEstado = ROTULOS_FASE[fase.estado];
-              return (
-                <UnstyledButton
-                  key={fase.numero}
-                  type="button"
-                  role="listitem"
-                  component={Link}
-                  href={`${biblioteca}/${jogo.id}/fases/${fase.numero}/jogar${consulta}`}
-                  aria-label={`Fase ${fase.numero}, ${fase.titulo}, ${rotuloEstado}`}
-                  className={estilosJogos.opcaoFase}
-                  data-estado={fase.estado}
-                >
-                  <IconeEstadoFase estado={fase.estado} />
-                  <span className={estilosJogos.numeroFase}>{fase.numero}</span>
-                  <span className={estilosJogos.rotuloEstadoFase}>
-                    {rotuloEstado}
-                  </span>
-                </UnstyledButton>
-              );
-            })}
-          </div>
+          {trilhas.map((grupo) => (
+            <Stack key={grupo.trilha} gap={6}>
+              {trilhas.length > 1 ? (
+                <Title order={3} size="sm" id={`trilha-${jogo.id}-${grupo.trilha}`}>
+                  {grupo.nome}
+                </Title>
+              ) : null}
+              <div
+                role="list"
+                aria-labelledby={
+                  trilhas.length > 1 ? `trilha-${jogo.id}-${grupo.trilha}` : undefined
+                }
+                className={estilosJogos.seletorFases}
+                style={{
+                  gridTemplateColumns: `repeat(${Math.min(grupo.fases.length, 5)}, minmax(0, 1fr))`,
+                }}
+              >
+                {grupo.fases.map((fase) => {
+                  const rotuloEstado = ROTULOS_FASE[fase.estado];
+                  return (
+                    <UnstyledButton
+                      key={fase.numero}
+                      type="button"
+                      role="listitem"
+                      component={Link}
+                      href={`${biblioteca}/${jogo.id}/fases/${fase.numero}/jogar${consulta}`}
+                      aria-label={`Fase ${fase.numero}, ${fase.titulo}, ${rotuloEstado}`}
+                      className={estilosJogos.opcaoFase}
+                      data-estado={fase.estado}
+                    >
+                      <IconeEstadoFase estado={fase.estado} />
+                      <span className={estilosJogos.numeroFase}>{fase.numero}</span>
+                      <span className={estilosJogos.rotuloEstadoFase}>
+                        {rotuloEstado}
+                      </span>
+                    </UnstyledButton>
+                  );
+                })}
+              </div>
+            </Stack>
+          ))}
         </Stack>
       </Drawer>
     </Stack>

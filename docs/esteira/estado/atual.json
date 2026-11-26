@@ -46,7 +46,7 @@
   },
   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
   "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
-  "atualizadoEm": "2026-11-25",
+  "atualizadoEm": "2026-11-26T12:20:09.282Z",
   "modulo": {
     "id": "04-evolucao-familiar",
     "status": "COMPLETED",
@@ -84,18 +84,29 @@
       "apps/web/src/componentes/campo-data-nascimento.tsx",
       "apps/web/src/lib/api.ts",
       "apps/api/scripts/smoke-ff-nasc.mjs",
-      "esteira.config.json"
+      "esteira.config.json",
+      "apps/api/scripts/lib-regua-jogos.mjs",
+      "apps/api/scripts/regua-jogos.mjs",
+      "apps/api/scripts/regua-jogos.test.mjs",
+      "apps/api/package.json",
+      "apps/api/prisma/schema.prisma",
+      "apps/api/prisma/migrations/20261126120000_trilha_fase_jogo/",
+      "apps/api/prisma/trilhas-jogos.mjs",
+      "apps/api/prisma/carga-oficial.mjs",
+      "apps/api/prisma/catalogo-jogos-piloto-e5.mjs",
+      "apps/api/scripts/qg-cat-trilhas.mjs",
+      "apps/web/src/lib/trilhas-jogos.ts"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável executa H1 a H9 do roteiro e informa os retornos; em paralelo, /implementar dos tickets 02 e 06.",
+    "proximaAcao": "Responsável executa H1 a H10 e informa os retornos; tickets 02 e 03 COMPLETED (commits separados, 02 primeiro); próximo /implementar: ticket 06 (09 depois do 08 homologado).",
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T01:47:08.712Z",
-        "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
-        "head": "60aa1960ca697a3368e47cd3518aa71fd8f10245",
-        "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+        "em": "2026-11-26T12:16:09.632Z",
+        "base": "ea5c65dfcd655ebd114410ed80c5cd2cdd40c0b5",
+        "head": "ea5c65dfcd655ebd114410ed80c5cd2cdd40c0b5",
+        "fingerprint": "sha256:372b7d61bd529118852c0d9d6892b98bc68ae4ab4c71f95b30d3b419f508540f",
         "checagens": [
           {
             "nome": "lint",
@@ -123,21 +134,9 @@
             "exit": 0
           },
           {
-            "nome": "check-e1-isolamento",
-            "status": "PASS",
-            "comando": "npm run check:e1-03 -w @pef/api",
-            "exit": 0
-          },
-          {
             "nome": "check-e4",
             "status": "PASS",
             "comando": "npm run check:e4 -w @pef/api",
-            "exit": 0
-          },
-          {
-            "nome": "check-e2",
-            "status": "PASS",
-            "comando": "npm run check:e2 -w @pef/api",
             "exit": 0
           },
           {
@@ -145,17 +144,23 @@
             "status": "PASS",
             "comando": "npm run check:e5 -w @pef/api",
             "exit": 0
+          },
+          {
+            "nome": "regua-jogos",
+            "status": "PASS",
+            "comando": "npm run test:regua -w @pef/api",
+            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T01-47-08-712Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T12-16-09-632Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T01:49:32.214Z",
-        "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
-        "head": "60aa1960ca697a3368e47cd3518aa71fd8f10245",
-        "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+        "em": "2026-11-26T12:18:52.918Z",
+        "base": "ea5c65dfcd655ebd114410ed80c5cd2cdd40c0b5",
+        "head": "ea5c65dfcd655ebd114410ed80c5cd2cdd40c0b5",
+        "fingerprint": "sha256:372b7d61bd529118852c0d9d6892b98bc68ae4ab4c71f95b30d3b419f508540f",
         "checagens": [
           {
             "nome": "build",
@@ -177,27 +182,15 @@
             "exit": 0
           },
           {
-            "nome": "smoke-ff-nasc",
+            "nome": "carga-trilhas",
             "status": "PASS",
-            "comando": "npm run smoke:ff-nasc -w @pef/api",
+            "comando": "npm run qg:cat-trilhas -w @pef/api",
             "exit": 0
           },
           {
             "nome": "smoke-historico-resumo",
             "status": "PASS",
             "comando": "npm run smoke:est-03-docs -w @pef/api",
-            "exit": 0
-          },
-          {
-            "nome": "smoke-e1-isolamento",
-            "status": "PASS",
-            "comando": "npm run smoke:e1-03 -w @pef/api",
-            "exit": 0
-          },
-          {
-            "nome": "smoke-e2-acessos",
-            "status": "PASS",
-            "comando": "npm run smoke:e2 -w @pef/api",
             "exit": 0
           },
           {
@@ -213,7 +206,7 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T01-49-32-214Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T12-18-52-918Z.json"
       },
       "ambienteAlternativo": {
         "status": "PASS",
@@ -364,9 +357,44 @@
         "pendente": "FF-NASC-ACE-04, mudança de faixa: ticket 05 (D1)",
         "roteiro": "docs/esteira/tickets/catalogo-ampliado/homologacao.md",
         "verificador": "FAIL na primeira versão do relatório; corrigido (H8, E5-ACE-02, marcações dos tickets 04 e 08)"
+      },
+      "rodadaTickets04e08": {
+        "nota": "Registros de QG-1 e QG-2 dos tickets 04 e 08, preservados porque qg.mjs grava por demanda e a rodada do ticket 02 os substituiu.",
+        "qg1": {
+          "status": "PASS",
+          "em": "2026-11-26T01:47:08.712Z",
+          "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+          "checagens": "lint:PASS, typecheck:PASS, testes-afetados:NOT_APPLICABLE, authz:PASS, check-e1-isolamento:PASS, check-e4:PASS, check-e2:PASS, check-e5:PASS",
+          "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T01-47-08-712Z.json"
+        },
+        "qg2": {
+          "status": "PASS",
+          "em": "2026-11-26T01:49:32.214Z",
+          "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+          "checagens": "build:PASS, testes:NOT_APPLICABLE, authz:PASS, smoke-ff-nasc:PASS, smoke-historico-resumo:PASS, smoke-e1-isolamento:PASS, smoke-e2-acessos:PASS, smoke-e4-atividades:PASS, smoke-e5-jogos:PASS",
+          "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T01-49-32-214Z.json"
+        }
+      },
+      "ticket02": {
+        "estado": "COMPLETED",
+        "fingerprint": "sha256:90515d994760d4af7e8b10ab3cccb5943639747621d7ba40e79447967a1fa34a",
+        "verificador": "PASS (2026-11-26, após FAIL corrigido: rótulo de sombras)",
+        "revisao": "Padrões: CRLF corrigido, 5 julgamentos ao humano; Especificação: resposta única em memória/ordenação corrigida",
+        "decisao": "Empate da métrica principal sem secundária crescer é falha (responsável, 2026-11-26)"
+      },
+      "ticket03": {
+        "estado": "COMPLETED",
+        "fingerprint": "sha256:372b7d61bd529118852c0d9d6892b98bc68ae4ab4c71f95b30d3b419f508540f",
+        "verificador": "PASS (2026-11-26)",
+        "revisao": "Padrões: sem violações, 7 julgamentos; Especificação: completa; faixaEtariaMax revertida a 8 (fora do escopo, D1)",
+        "migracao": "20261126120000_trilha_fase_jogo aplicada só no banco local",
+        "pendencias": [
+          "H10 no celular",
+          "Histórico com 'de 15'? (pergunta ao responsável)"
+        ]
       }
     },
-    "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+    "fingerprint": "sha256:372b7d61bd529118852c0d9d6892b98bc68ae4ab4c71f95b30d3b419f508540f",
     "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc.",
     "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25."
   },

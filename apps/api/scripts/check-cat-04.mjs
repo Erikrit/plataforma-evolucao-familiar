@@ -27,10 +27,9 @@ const oficial = [
   ...CATALOGO_JOGOS_HISTORIAS_E5,
 ];
 assert.equal(oficial.length, 8);
-assert.equal(
-  oficial.reduce((acc, jogo) => acc + jogo.fases.length, 0),
-  40,
-);
+// Sem total fixo (DEV-CAT-M1, ticket 03): cada jogo tem trilhas completas de cinco fases.
+assert.ok(oficial.every((jogo) => [5, 10, 15].includes(jogo.fases.length)));
+const totalFasesOficial = oficial.reduce((acc, jogo) => acc + jogo.fases.length, 0);
 assert.deepEqual(
   [...oficial.map((jogo) => jogo.id)].sort(),
   [
@@ -98,4 +97,4 @@ for (const jogo of CATALOGO_JOGOS_HISTORIAS_E5) {
   }
 }
 
-console.log("check-cat-04: Histórias em cenas, 5 fases, variantes e ordenação validados; oficial 8/40");
+console.log(`check-cat-04: Histórias em cenas, 5 fases, variantes e ordenação validados; oficial 8/${totalFasesOficial}`);

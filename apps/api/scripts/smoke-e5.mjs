@@ -143,11 +143,17 @@ try {
     fimSequencia.status === 201 && fimSequencia.dados.primeiraDescoberta
     && await prisma.progressoFaseJogo.count({ where: { pessoaId, concluidaEm: { not: null } } }) === 2);
   const labirinto = antes.dados.jogos.find((jogo) => jogo.id === "labirinto");
-  const faseLabirinto = `${catalogo}/labirinto/fases/5`;
+  // DEV-CAT-P03: 15 fases em três trilhas; a última abre já na primeira visita.
+  const trilhas = labirinto?.fases.map((fase) => fase.trilha).join(",");
+  conferir("Labirinto devolve 15 fases com a trilha de cada uma",
+    labirinto?.fases.length === 15
+    && trilhas === [...Array(5).fill("pequenos"), ...Array(5).fill("medios"), ...Array(5).fill("grandes")].join(",")
+    && antes.dados.jogos.every((jogo) => jogo.fases.every((fase) => typeof fase.trilha === "string")));
+  const faseLabirinto = `${catalogo}/labirinto/fases/15`;
   const inicioLabirinto = await iniciar(familia.token, faseLabirinto);
   const grade = inicioLabirinto.dados.conteudo;
-  conferir("Labirinto abre fase avançada com início e chegada válidos",
-    labirinto?.fases.length === 5 && inicioLabirinto.status === 201 && grade.tipo === "labirinto"
+  conferir("Labirinto abre a fase 15 na primeira visita com início e chegada válidos",
+    inicioLabirinto.status === 201 && grade.tipo === "labirinto"
     && grade.mapa[grade.inicio.linha][grade.inicio.coluna] === "I"
     && grade.mapa[grade.chegada.linha][grade.chegada.coluna] === "F");
   const fimLabirinto = await concluir(novaChave(), labirinto.versao, familia.token, faseLabirinto);
@@ -235,14 +241,16 @@ try {
   const eventosResposta = await historico();
   const eventos = eventosResposta.dados.eventos.filter((item) => item.tipo === "conclusao_fase_jogo");
   conferir("Histórico deriva uma descoberta por fase com versão da origem", eventosResposta.status === 200
-    && eventos.length === 8 && eventos.some((item) => item.origemId === "memoria/5"
+    && eventos.length === 8 && eventos.some((item) => item.origemId === "labirinto/15")
+    && eventos.some((item) => item.origemId === "memoria/5"
       && item.resumo.includes("Memória de uma edição anterior") && item.detalhe.includes(String(versaoHistorica))));
   const resumoAtual = await resumo();
   conferir("Histórico e Resumo proíbem cache de dados privados",
     eventosResposta.cache === "private, no-store" && resumoAtual.cache === "private, no-store");
   const jogosResumo = resumoAtual.dados.jogos;
   conferir("Resumo deriva jogos e contagens sem misturar participações", resumoAtual.status === 200
-    && jogosResumo.length === 8 && jogosResumo.every((jogo) => jogo.totalFases === 5
+    && jogosResumo.length === 8
+    && jogosResumo.every((jogo) => jogo.totalFases === (jogo.id === "labirinto" ? 15 : 5)
       && jogo.concluidasAte === 1 && jogo.concluidasNoPeriodo === 1)
     && resumoAtual.dados.experiencias.length === 0);
   const passado = "de=2000-01-01&ate=2000-01-02";

@@ -1,6 +1,6 @@
 /**
  * CAT-01 — validação em bancos descartáveis.
- * 1) Banco novo: migrate + carga ×2 (24 E4, 8 jogos, 40 fases; sem família/progresso).
+ * 1) Banco novo: migrate + carga ×2 (24 E4, 8 jogos, fases contadas do catálogo; sem família/progresso).
  * 2) Banco com progresso piloto: transição aditiva preserva chaves/conclusões.
  * Não toca o banco compartilhado `pef` de forma destrutiva.
  */
@@ -9,6 +9,9 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PrismaClient } from "@prisma/client";
+import { CATALOGO_CARREGADO } from "./lib-regua-jogos.mjs";
+
+const TOTAL_FASES = CATALOGO_CARREGADO.reduce((total, jogo) => total + jogo.fases.length, 0);
 
 const raizApi = join(dirname(fileURLToPath(import.meta.url)), "..");
 const raizRepo = join(raizApi, "..", "..");
@@ -294,7 +297,7 @@ async function main() {
   registrar("contagens_banco_novo", 
     contNovo.e4 === 24 &&
       contNovo.jogos === 8 &&
-      contNovo.fases === 40 &&
+      contNovo.fases === TOTAL_FASES &&
       contNovo.idsJogos.join(",") === "labirinto,memoria,sequencia" &&
       contNovo.familias === 0 &&
       contNovo.usuarios === 0 &&
@@ -391,6 +394,7 @@ async function main() {
     'CREATE TABLE IF NOT EXISTS "fase_jogo_digital" (',
     '    "jogo_id" TEXT NOT NULL,',
     '    "numero" INTEGER NOT NULL,',
+    '    "trilha" TEXT NOT NULL,',
     '    "titulo" TEXT NOT NULL,',
     '    "objetivo" TEXT NOT NULL,',
     '    "dificuldade" TEXT NOT NULL,',
@@ -453,7 +457,7 @@ async function main() {
 
   registrar(
     "catalogo_piloto_apos_carga",
-    contPiloto.e4 === 24 && contPiloto.jogos === 8 && contPiloto.fases === 40,
+    contPiloto.e4 === 24 && contPiloto.jogos === 8 && contPiloto.fases === TOTAL_FASES,
     { contagens: contPiloto },
   );
 

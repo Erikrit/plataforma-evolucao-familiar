@@ -49,6 +49,7 @@ export class ServicoJogos {
           const progressoFase = porFase.get(`${jogo.id}/${fase.numero}`);
           return {
             numero: fase.numero,
+            trilha: fase.trilha,
             titulo: fase.titulo,
             objetivo: fase.objetivo,
             estado: progressoFase?.concluidaEm

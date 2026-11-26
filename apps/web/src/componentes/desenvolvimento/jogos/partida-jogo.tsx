@@ -28,6 +28,7 @@ import {
 } from "@/lib/api";
 import { novaChaveOperacao } from "@/lib/chave-operacao";
 import { consultaCatalogoJogos } from "@/lib/filtros-jogos";
+import { agruparPorTrilha } from "@/lib/trilhas-jogos";
 import { TabuleiroMemoria } from "./tabuleiro-memoria";
 import { TabuleiroSequencia } from "./tabuleiro-sequencia";
 import { TabuleiroEscolha } from "./tabuleiro-escolha";
@@ -315,55 +316,64 @@ export function PartidaJogo({
         padding="md"
         size={ehCelular ? "auto" : "md"}
       >
-        <Stack gap="xs">
-          {jogo.fases.map((item) => {
-            const atual = item.numero === fase.numero;
-            const href = `${caminho}/biblioteca/jogos/${jogo.id}/fases/${item.numero}/jogar${consultaCatalogo}`;
-            const conteudo = (
-              <>
-                <Text fw={600} size="sm">
-                  Fase {item.numero} · {item.titulo}
-                </Text>
-                <Text size="xs" c="dimmed">
-                  {ROTULOS_ESTADO_FASE[item.estado]}
-                  {atual ? " · atual" : ""}
-                </Text>
-              </>
-            );
-            const estilo = {
-              display: "block" as const,
-              minHeight: 44,
-              padding: "0.65rem 0.75rem",
-              borderRadius: 8,
-              border: "1px solid #C9D8F2",
-              opacity: atual ? 0.7 : 1,
-            };
-            if (atual) {
-              return (
-                <div
-                  key={item.numero}
-                  aria-current="page"
-                  aria-label={`Fase ${item.numero}, ${item.titulo}, ${ROTULOS_ESTADO_FASE[item.estado]}`}
-                  style={estilo}
-                >
-                  {conteudo}
-                </div>
-              );
-            }
-            return (
-              <UnstyledButton
-                key={item.numero}
-                type="button"
-                component={Link}
-                href={href}
-                aria-label={`Fase ${item.numero}, ${item.titulo}, ${ROTULOS_ESTADO_FASE[item.estado]}`}
-                onClick={() => setEscolhaFaseAberta(false)}
-                style={estilo}
-              >
-                {conteudo}
-              </UnstyledButton>
-            );
-          })}
+        <Stack gap="md">
+          {agruparPorTrilha(jogo.fases).map((grupo, _indice, grupos) => (
+            <Stack key={grupo.trilha} gap="xs">
+              {grupos.length > 1 ? (
+                <Title order={3} size="sm">
+                  {grupo.nome}
+                </Title>
+              ) : null}
+              {grupo.fases.map((item) => {
+                const atual = item.numero === fase.numero;
+                const href = `${caminho}/biblioteca/jogos/${jogo.id}/fases/${item.numero}/jogar${consultaCatalogo}`;
+                const conteudo = (
+                  <>
+                    <Text fw={600} size="sm">
+                      Fase {item.numero} · {item.titulo}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      {ROTULOS_ESTADO_FASE[item.estado]}
+                      {atual ? " · atual" : ""}
+                    </Text>
+                  </>
+                );
+                const estilo = {
+                  display: "block" as const,
+                  minHeight: 44,
+                  padding: "0.65rem 0.75rem",
+                  borderRadius: 8,
+                  border: "1px solid #C9D8F2",
+                  opacity: atual ? 0.7 : 1,
+                };
+                if (atual) {
+                  return (
+                    <div
+                      key={item.numero}
+                      aria-current="page"
+                      aria-label={`Fase ${item.numero}, ${item.titulo}, ${ROTULOS_ESTADO_FASE[item.estado]}`}
+                      style={estilo}
+                    >
+                      {conteudo}
+                    </div>
+                  );
+                }
+                return (
+                  <UnstyledButton
+                    key={item.numero}
+                    type="button"
+                    component={Link}
+                    href={href}
+                    aria-label={`Fase ${item.numero}, ${item.titulo}, ${ROTULOS_ESTADO_FASE[item.estado]}`}
+                    onClick={() => setEscolhaFaseAberta(false)}
+                    style={estilo}
+                  >
+                    {conteudo}
+                  </UnstyledButton>
+                );
+              })}
+            </Stack>
+          ))}
         </Stack>
       </Drawer>
 

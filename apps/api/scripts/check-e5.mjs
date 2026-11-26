@@ -82,6 +82,9 @@ function conferirSequencia(fase) {
   }
 }
 
+/** Menor distância do início à chegada por fase; tem de crescer de uma fase para outra. */
+const passosLabirinto = new Map();
+
 function conferirLabirinto(fase) {
   assert.ok(fase.mapas.length >= 2);
   assert.equal(new Set(fase.mapas.map((mapa) => mapa.join("/"))).size, fase.mapas.length);
@@ -105,7 +108,8 @@ function conferirLabirinto(fase) {
         fila.push([l, c, passos + 1]);
       }
     }
-    assert.equal(distancia, [6, 8, 10, 16, 19][fase.numero - 1]);
+    assert.ok(distancia > 0, "O mapa tem de ter caminho até a chegada.");
+    passosLabirinto.set(fase.numero, Math.min(passosLabirinto.get(fase.numero) ?? Infinity, distancia));
     assert.equal(visitados.size, [...mapa.join("")].filter((celula) => celula !== "#").length);
   }
 }
@@ -113,7 +117,8 @@ function conferirLabirinto(fase) {
 for (const jogo of CATALOGO_JOGOS) {
   assert.ok(CATEGORIAS_BIBLIOTECA.includes(jogo.categoria));
   assert.ok(jogo.versao > 0);
-  assert.deepEqual(jogo.fases.map((fase) => fase.numero), [1, 2, 3, 4, 5]);
+  const totalFases = jogo.id === "labirinto" ? 15 : 5;
+  assert.deepEqual(jogo.fases.map((fase) => fase.numero), Array.from({ length: totalFases }, (_, i) => i + 1));
   for (const fase of jogo.fases) {
     assert.ok(fase.objetivo && fase.titulo);
     if (fase.tipo === "memoria") conferirMemoria(fase);
@@ -121,6 +126,10 @@ for (const jogo of CATALOGO_JOGOS) {
     if (fase.tipo === "labirinto") conferirLabirinto(fase);
   }
 }
+
+const passos = [...passosLabirinto.values()];
+assert.equal(passos.length, 15);
+assert.ok(passos.every((valor, i) => i === 0 || valor > passos[i - 1]), `Passos do labirinto devem crescer: ${passos.join(",")}`);
 
 const editorial = [...CATALOGO_JOGOS, { id: "outro", categoria: "autonomia" }];
 assert.deepEqual(selecionarDestaquesJogos([], []), []);
@@ -138,4 +147,4 @@ const todosExplorados = editorial.map((item, indice) => ({ jogoId: item.id, ulti
 assert.deepEqual(selecionarDestaquesJogos(editorial, todosExplorados), ["outro", "memoria", "sequencia"]);
 assert.deepEqual(selecionarDestaquesJogos(editorial, editorial.map((item) => ({ jogoId: item.id, ultimaAberturaEm: new Date(5000) }))), ["memoria", "sequencia", "labirinto"]);
 
-console.log("check-e5: três jogos, 15 fases, variantes e destaques determinísticos validados");
+console.log("check-e5: três jogos, 25 fases (labirinto com 15 em três trilhas), variantes e destaques determinísticos validados");

@@ -1528,6 +1528,7 @@ export async function criarRecompensa(
 
 export type FaseJogoResumo = {
   numero: number;
+  trilha: "pequenos" | "medios" | "grandes";
   titulo: string;
   objetivo: string;
   estado: "nao_explorada" | "experimentada" | "concluida";

@@ -1,5 +1,5 @@
 /**
- * Carga oficial de catálogos (E4 + E5 piloto, CAT-03 e CAT-04).
+ * Carga oficial de catálogos (E4 + E5 piloto, CAT-03 e CAT-04; trilhas do DEV-CAT-M1).
  * Idempotente por chaves estáveis; sem famílias, contas, cuidados ou progresso.
  * Separada do seed fictício de desenvolvimento.
  */
@@ -9,6 +9,7 @@ import { CATALOGO_BIBLIOTECA_E4 } from "./catalogo-biblioteca-e4.mjs";
 import { CATALOGO_JOGOS_PILOTO_E5 } from "./catalogo-jogos-piloto-e5.mjs";
 import { CATALOGO_JOGOS_EXPANSAO_E5 } from "./catalogo-jogos-expansao-e5.mjs";
 import { CATALOGO_JOGOS_HISTORIAS_E5 } from "./catalogo-jogos-historias-e5.mjs";
+import { trilhaDaFase } from "./trilhas-jogos.mjs";
 
 const PUBLICADO_EM = new Date("2026-11-22T00:00:00.000Z");
 const CATALOGO_JOGOS_E5 = [
@@ -23,28 +24,21 @@ export async function carregarCatalogosOficiais(prisma) {
       `Catálogo E4 deve ter 24 modelos; encontrado ${CATALOGO_BIBLIOTECA_E4.length}.`,
     );
   }
-  if (CATALOGO_JOGOS_PILOTO_E5.length !== 3) {
-    throw new Error(
-      `Piloto E5 deve ter 3 jogos; encontrado ${CATALOGO_JOGOS_PILOTO_E5.length}.`,
-    );
-  }
-  if (CATALOGO_JOGOS_EXPANSAO_E5.length !== 4) {
-    throw new Error(
-      `Expansão E5 CAT-03 deve ter 4 jogos; encontrado ${CATALOGO_JOGOS_EXPANSAO_E5.length}.`,
-    );
-  }
-  if (CATALOGO_JOGOS_HISTORIAS_E5.length !== 1) {
-    throw new Error(
-      `Histórias E5 CAT-04 deve ter 1 jogo; encontrado ${CATALOGO_JOGOS_HISTORIAS_E5.length}.`,
-    );
-  }
-
-  const totalFases = CATALOGO_JOGOS_E5.reduce(
-    (acc, jogo) => acc + jogo.fases.length,
-    0,
-  );
-  if (totalFases !== 40) {
-    throw new Error(`E5 oficial (piloto+CAT-03+CAT-04) deve ter 40 fases; encontrado ${totalFases}.`);
+  // As contagens vêm do catálogo (DEV-CAT-M1, ticket 03): cada jogo numera as fases
+  // de 1 a N, sem lacunas, e a trilha declarada confere com o número.
+  const fasesComTrilha = new Map();
+  for (const jogo of CATALOGO_JOGOS_E5) {
+    const numeros = jogo.fases.map((fase) => fase.numero);
+    if (numeros.length === 0 || numeros.some((numero, indice) => numero !== indice + 1)) {
+      throw new Error(`Jogo ${jogo.id}: fases devem ser numeradas de 1 a N; encontrado ${numeros.join(",")}.`);
+    }
+    for (const fase of jogo.fases) {
+      const trilha = trilhaDaFase(fase.numero);
+      if (fase.trilha != null && fase.trilha !== trilha) {
+        throw new Error(`Jogo ${jogo.id}, fase ${fase.numero}: trilha ${fase.trilha} não confere com ${trilha}.`);
+      }
+      fasesComTrilha.set(fase, trilha);
+    }
   }
 
   const idsEsperados = [
@@ -148,6 +142,7 @@ export async function carregarCatalogosOficiais(prisma) {
           create: {
             jogoId: jogo.id,
             numero: fase.numero,
+            trilha: fasesComTrilha.get(fase),
             titulo: fase.titulo,
             objetivo: fase.objetivo,
             dificuldade: fase.dificuldade,
@@ -155,6 +150,7 @@ export async function carregarCatalogosOficiais(prisma) {
             versao: jogo.versao,
           },
           update: {
+            trilha: fasesComTrilha.get(fase),
             titulo: fase.titulo,
             objetivo: fase.objetivo,
             dificuldade: fase.dificuldade,

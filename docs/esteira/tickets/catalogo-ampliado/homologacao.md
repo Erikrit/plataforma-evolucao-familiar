@@ -90,3 +90,11 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 ## Fora do alcance local
 - Mudança de faixa padrão (FF-NASC-ACE-04, parte 2): ticket 05, aguarda D1.
 - Versão efetivamente publicada na VPS: conferir o commit implantado antes de homologar lá.
+
+### H10 — Ticket 03: trilhas no labirinto (DEV-CAT-P03)
+- **Preparação:** pessoa fictícia com Desenvolvimento; ambiente com a migração `20261126120000_trilha_fase_jogo` e a carga oficial aplicadas.
+- **Aparelho:** celular de 320 a 360 px de largura; informar modelo e navegador.
+- **Passos:** 1. Biblioteca → Jogos → Caminhos e labirintos → Escolher fase. 2. Abrir a fase 15 direto. 3. Jogar até a chegada. 4. Abrir Escolher fase de dentro da partida.
+- **Esperado:** fases agrupadas em Pequenos, Médios e Grandes; a fase 15 abre na primeira visita; o mapa cabe na largura sem rolagem horizontal e as setas são tocáveis; conquistas anteriores do labirinto continuam visíveis.
+- **Status:** PENDING_HUMAN
+- **Retorno:**

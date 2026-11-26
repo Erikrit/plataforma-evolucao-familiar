@@ -84,9 +84,9 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | 01 | COMPLETED | — | Verificador sobre o catálogo carregado |
 | 04 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Antes, rodar a verificação local abaixo para registrar `authz` e smokes; depois homologar no celular |
 | 08 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Celular: andar dois passos no labirinto e pedir a dica de novo |
-| 02 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/02-regua-de-qualidade-automatica.md` | Começar em modo relatório; as falhas conhecidas estão listadas no ticket |
+| 02 | COMPLETED | — | Régua em modo relatório: `npm run regua:jogos -w @pef/api` (46 falhas, meta do 09) |
 | 06 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/06-area-numeros.md` | Independente do 02 |
-| 03 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/03-tres-trilhas-no-labirinto.md` | Depois do 02 |
+| 03 | COMPLETED | — | Labirinto com 15 fases em três trilhas; migração `20261126120000_trilha_fase_jogo` a aplicar na publicação; H10 no roteiro |
 | 09 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/09-oito-jogos-com-tres-trilhas.md` | Depois do 03 e do 08 |
 | 05, 07, 10 | NEEDS_DECISION | `/sabatina` com o Produto | Aguardam D1, D2 e D3 |
 
