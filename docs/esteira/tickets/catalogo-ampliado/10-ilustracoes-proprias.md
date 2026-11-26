@@ -1,10 +1,10 @@
 # 10: Ilustrações próprias no lugar de emoji
 
-**O que entregar:** Conjunto SVG servido pela plataforma, com origem e licença registradas, começando pelas figuras dos oito jogos. Silhuetas passam a usar contorno próprio.
+**O que entregar:** Conjunto SVG do Twemoji (CC-BY 4.0) servido pela plataforma, com crédito visível, com origem e licença registradas, começando pelas figuras dos oito jogos. Silhuetas passam a usar contorno próprio.
 
-**Bloqueado por:** 02, D3
+**Bloqueado por:** 02 (D3 decidida em 2026-11-26: Twemoji, CC-BY 4.0, com atribuição)
 
-**Status:** NEEDS_DECISION
+**Status:** READY
 
 **Costura:** verificador de catálogo e roteiro no celular
 

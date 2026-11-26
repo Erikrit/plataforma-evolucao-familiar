@@ -46,7 +46,7 @@
   },
   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
   "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
-  "atualizadoEm": "2026-11-26T17:12:20.006Z",
+  "atualizadoEm": "2026-11-26T18:09:54.136Z",
   "modulo": {
     "id": "04-evolucao-familiar",
     "status": "COMPLETED",
@@ -107,7 +107,7 @@
       "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-robo.tsx"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável faz o commit (tickets 09, 12 e 13) e homologa H12 a H14; depois o agente implementa o ticket 11.",
+    "proximaAcao": "Agente implementa, pela fronteira: 05, 07, 10, 11 e 14.",
     "verificacao": {
       "qg1": {
         "status": "PASS",
@@ -426,7 +426,7 @@
         "homologacao": "H6, H7, H8 e H9 PASS (responsável, 2026-11-26)"
       },
       "ticket09": {
-        "estado": "IN_VALIDATION",
+        "estado": "COMPLETED",
         "decisoes": [
           "Progressão: empate da métrica principal passa só se a semelhança (figuras do mesmo grupo) crescer; em Histórias, se a pista sair",
           "Palavra e figura: nomes ocultos nos botões, leitor de tela anuncia 'Figura N', nome aparece após o acerto; Pares de sombras: carta de sombra diz só 'Sombra'",
@@ -434,27 +434,29 @@
         ],
         "fingerprint": "sha256:94895ba3563d051fd050e278367d78798b80612f5d65fe39bb1fd04743530b4f",
         "verificador": "PASS (após FAIL corrigido)",
-        "pendencias": [
-          "H12 no celular (E5-HOM)"
-        ]
+        "pendencias": []
       },
       "tickets12e13": {
-        "estado": "IN_VALIDATION",
+        "estado": "COMPLETED",
         "fingerprint": "sha256:94895ba3563d051fd050e278367d78798b80612f5d65fe39bb1fd04743530b4f",
         "decisoes": [
           "Desafio misto: Sudoku de figuras, Forme a palavra, Do menor ao maior, Robô com setas no lugar de 4 jogos arquivados",
           "Histórias em três degraus: com nome, só figura, com intrusa"
         ],
         "verificador": "PASS após FAIL corrigido",
-        "pendencias": [
-          "H12, H13 e H14 no celular",
-          "Leitor de tela a partir de Médios em Histórias (decisão)"
-        ]
+        "pendencias": [],
+        "homologacao": "H12, H13 e H14 PASS (responsável, 2026-11-26); commit 33af7ea"
       }
     },
     "fingerprint": "sha256:94895ba3563d051fd050e278367d78798b80612f5d65fe39bb1fd04743530b4f",
     "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc.",
-    "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25."
+    "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25.",
+    "decisoes": [
+      "D1 (2026-11-26): faixas 5–6, 7–9, 10–12",
+      "D2 (2026-11-26): atividades de adultos e idosos arquivadas; só 5 a 12 anos",
+      "D3 (2026-11-26): ilustrações Twemoji CC-BY 4.0 com atribuição",
+      "Leitor de tela em Histórias diz o objeto da figura (ticket 14)"
+    ]
   },
   "demandasConcluidas": [
     {

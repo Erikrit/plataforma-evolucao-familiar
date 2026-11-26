@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 03, 08
 
-**Status:** IN_VALIDATION
+**Status:** COMPLETED
 
 **Costura:** verificador de catálogo, carga oficial e homologação
 
@@ -14,7 +14,7 @@
 
 - [x] DEV-CAT-P01 e P03 — 8 jogos, 120 fases, todas aprovadas pela régua
 - [x] E5-ACE-12 — conquistas anteriores preservadas após a troca de versão
-- [ ] E5-HOM — homologação humana no celular, pelas três faixas
+- [x] E5-HOM — homologação humana no celular, pelas três faixas (PASS, responsável, 2026-11-26)
 - [x] Régua de qualidade (Dica) — dica de escolha, sequência e memória não entrega a resposta no primeiro nível (achado do verificador em 2026-11-25)
 
 ## Implementação (2026-11-26)
@@ -35,3 +35,5 @@ Os sete jogos restantes ganham 15 fases em três trilhas (v2), com dificuldade
 crescente medida pela régua, nomes ocultos em Palavra e figura, sombras sem nome,
 histórias de ordem única e dicas em dois níveis (DEV-CAT-M1, ticket 09).
 ```
+
+- **Homologação (2026-11-26):** aprovada pelo responsável; commit `33af7ea`.

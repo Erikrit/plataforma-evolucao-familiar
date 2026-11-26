@@ -120,8 +120,8 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
   - a 1ª dica orienta sem entregar e a 2ª mostra a resposta;
   - a Memória com 10 pares e as Histórias com 9 cenas cabem e são tocáveis;
   - as conquistas antigas continuam no Histórico.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: homologação aprovada.
 
 > Observação (2026-11-26): depois do H12, Palavra e figura, Pares de sombras, Ache o intruso e Complete a sequência foram arquivados a pedido do responsável (ticket 12). No H12, confira só os jogos que continuam ativos.
 
@@ -134,8 +134,8 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
   - **Do menor ao maior:** os números crescem até dezenas de milhar.
   - **Robô com setas:** dá para montar, executar, tirar um comando do meio e corrigir.
   - A dificuldade sobe de verdade entre as trilhas, e o conteúdo é adequado para 5 a 12 anos.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: homologação aprovada.
 
 ### H14 — Ticket 13: Histórias em três degraus
 - **Aparelho:** celular.
@@ -145,5 +145,5 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
   - nas fases 11 a 15, a cena intrusa claramente não pertence à história e precisa ficar de fora;
   - a dificuldade sobe a cada degrau;
   - a 1ª dica orienta e a 2ª diz a próxima cena.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: homologação aprovada.

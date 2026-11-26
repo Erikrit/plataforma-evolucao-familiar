@@ -338,7 +338,7 @@ Aplicar as seis fichas da seção 14 na carga oficial após verificar IDs, vers�
 ### Regras-alvo
 
 - **DEV-CAT-P01 — O que conta como jogo.** Um jogo é uma regra e um objetivo que a criança reconhece como diferentes. Mudar apenas o tema ou as figuras não cria jogo novo: o tema é conteúdo dentro do jogo. Exemplo: *Caminhos e labirintos* e *Entrega no jardim* são jogos distintos; um “labirinto da floresta” com a mesma regra não é. Vários jogos podem compartilhar o mesmo motor técnico.
-- **DEV-CAT-P02 — Faixas etárias.** O público dos jogos e das atividades curadas é de **5 a 12 anos**, em três faixas: **Pequenos (5–6)**, **Médios (7–9)** e **Grandes (10–12)**. *Os limites internos das faixas aguardam confirmação de Produto.* A faixa orienta a oferta e não representa capacidade.
+- **DEV-CAT-P02 — Faixas etárias.** O público dos jogos e das atividades curadas é de **5 a 12 anos**, em três faixas: **Pequenos (5–6)**, **Médios (7–9)** e **Grandes (10–12)**. *Limites confirmados pelo responsável do Produto em 2026-11-26 (D1).* A faixa orienta a oferta e não representa capacidade.
 - **DEV-CAT-P03 — Trilhas e fases.** Cada jogo tem **três trilhas, uma por faixa, com cinco fases cada (15 fases)**. A dificuldade cresce dentro da trilha e entre as trilhas. Qualquer fase continua livre para abrir e repetir, sem ajuste adaptativo. *Substitui E5-F02 e E5-ACE-01 (cinco fases por jogo).*
 - **DEV-CAT-P04 — Visibilidade por idade.** A Biblioteca abre na faixa calculada pela data de nascimento da pessoa, tanto no catálogo de jogos quanto nas trilhas. O responsável autorizado pode acionar **Ver outras faixas** para abrir as demais. *Substitui o trecho de E5-F01 e E5-ACE-08 que mostra todo o catálogo inclusive sem data de nascimento.*
 - **DEV-CAT-P05 — Data de nascimento.** Habilitar e usar Desenvolvimento exige data de nascimento da pessoa acompanhada (ver Módulo 01, seção 16). Cuidados não muda. *Substitui, para Desenvolvimento, o trecho da seção 12 “Não exigir nascimento”.*
@@ -361,7 +361,7 @@ Todo jogo, fase e atividade passa pela mesma régua antes de publicar:
 | Celular | Legível e tocável a partir de 320 px, sem rolagem horizontal |
 | Dica | Útil no estado atual da partida e não revela a resposta no primeiro nível |
 | Atividade real | Ficha padrão: objetivo lúdico, até três passos, materiais comuns de casa, variação mais fácil e mais difícil, adaptação para brincar sentado, duração e checklist de segurança por faixa |
-| Origem | Conteúdo e ilustrações próprios ou licenciados, com origem registrada |
+| Origem | Conteúdo e ilustrações próprios ou licenciados, com origem registrada. Ilustrações: Twemoji, licença CC-BY 4.0, servidas pela própria plataforma e com atribuição (decisão de 2026-11-26, D3) |
 
 O conteúdo é produzido em formato versionado e pode ser rascunhado com apoio de ferramentas, inclusive IA, **fora da plataforma**. A publicação exige revisão humana. A partida continua sem IA, sem serviços externos, sem anúncios e sem telemetria (E5-F03 e E5-F08). Atividades reais são distribuídas numa matriz de cobertura (faixa × área × duração × lugar × número de pessoas) para evitar repetição.
 
@@ -377,7 +377,7 @@ Proposta de 12 jogos novos do Marco 1, sujeita à curadoria: Conte e toque, Qual
 
 ### Fora deste recorte
 
-Ranking, metas, notificações de retorno, avaliação cognitiva, IA durante o jogo, anúncios, chat, multijogador e narração por voz. A oferta de Atividades Reais para adultos e idosos prevista na seção 12 *aguarda decisão de Produto* sobre permanecer fora da curadoria 5–12.
+Ranking, metas, notificações de retorno, avaliação cognitiva, IA durante o jogo, anúncios, chat, multijogador e narração por voz. As Atividades Reais para adultos e idosos previstas na seção 12 saem do catálogo (decisão do responsável do Produto em 2026-11-26, D2): ficam arquivadas, sem oferta nem sugestão, e as participações anteriores continuam no Histórico. *Substitui, na seção 12, a oferta para adultos e idosos.*
 
 ### Pendências de decisão
 

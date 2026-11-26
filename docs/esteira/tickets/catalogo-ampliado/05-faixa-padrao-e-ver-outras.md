@@ -2,9 +2,9 @@
 
 **O que entregar:** A faixa é calculada no servidor pela data de nascimento. Catálogo de jogos e trilhas abrem na faixa da pessoa; Ver outras faixas abre as demais. Mudança de faixa preserva descobertas. Retorno ao catálogo preserva o filtro.
 
-**Bloqueado por:** 03, 04, D1
+**Bloqueado por:** 03, 04 (D1 decidida em 2026-11-26: 5–6, 7–9, 10–12)
 
-**Status:** NEEDS_DECISION
+**Status:** READY
 
 **Costura:** smoke:e5 e smoke:authz
 

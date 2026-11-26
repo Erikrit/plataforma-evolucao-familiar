@@ -24,11 +24,12 @@ A Biblioteca abre na faixa etária da pessoa (Pequenos, Médios ou Grandes). Cad
 - Régua de qualidade — M03 §15 — APROVADO
 - E5-F01 a F08 e E5-ACE-02 a 12 não substituídos — M03 §13 — vigentes
 
-## Decisões pendentes
+## Decisões (responsável do Produto, 2026-11-26)
 
-- **D1:** limites das faixas (proposta 5–6, 7–9, 10–12). Bloqueia o ticket 05.
-- **D2:** atividades para adultos e idosos permanecem no catálogo fora das faixas infantis? Bloqueia o ticket 07.
-- **D3:** origem das ilustrações (SVG próprio ou base licenciada, como Twemoji CC-BY ou OpenMoji CC-BY-SA, após conferir a licença). Bloqueia o ticket 10.
+- **D1:** faixas Pequenos 5–6, Médios 7–9 e Grandes 10–12. Libera o ticket 05.
+- **D2:** as Atividades Reais para adultos e idosos saem do catálogo (arquivadas, participações preservadas no Histórico); ficam só as de 5 a 12 anos. Libera o ticket 07.
+- **D3:** ilustrações do Twemoji (CC-BY 4.0), servidas pela plataforma, com atribuição e origem registradas. Libera o ticket 10.
+- **Leitor de tela em Histórias:** a partir de Médios, o leitor diz o que a figura mostra (o objeto), sem o texto da ação. Ticket 14.
 
 ## Decisões de implementação
 
@@ -87,11 +88,14 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | 02 | COMPLETED | — | Régua em modo relatório: `npm run regua:jogos -w @pef/api` (46 falhas, meta do 09) |
 | 06 | COMPLETED | — | Área Números em filtros, Histórico e Resumo; H11 no roteiro |
 | 03 | COMPLETED | — | Labirinto com 15 fases em três trilhas; migração `20261126120000_trilha_fase_jogo` a aplicar na publicação; H10 no roteiro |
-| 09 | IN_VALIDATION | `/homologar DEV-CAT-M1` | 8 jogos, 120 fases aprovadas pela régua; H12 no celular |
+| 09 | COMPLETED | — | 8 jogos ativos com 15 fases; H12 homologado |
 | 11 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/11-ordem-dos-campos-de-acesso.md` | Ordem dos campos (pedido do H1) |
-| 12 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Sudoku, Forme a palavra, Do menor ao maior e Robô com setas no lugar de 4 jogos arquivados; H13 |
-| 13 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Histórias em três degraus (com nome, só figura, com intrusa); H14 |
-| 05, 07, 10 | NEEDS_DECISION | `/sabatina` com o Produto | Aguardam D1, D2 e D3 |
+| 12 | COMPLETED | — | Sudoku, Forme a palavra, Do menor ao maior e Robô com setas; H13 homologado |
+| 13 | COMPLETED | — | Histórias em três degraus; H14 homologado |
+| 05 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/05-faixa-padrao-e-ver-outras.md` | D1: 5–6, 7–9, 10–12 |
+| 07 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/07-cinco-sugestoes.md` | D2: arquivar atividades de adultos e idosos |
+| 10 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/10-ilustracoes-proprias.md` | D3: Twemoji CC-BY 4.0 |
+| 14 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/14-leitor-de-tela-nas-historias.md` | Leitor de tela diz o objeto da figura |
 
 ### Verificação local pendente (tickets 04 e 08)
 
