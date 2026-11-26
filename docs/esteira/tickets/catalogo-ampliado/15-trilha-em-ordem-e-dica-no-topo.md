@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** IN_VALIDATION
+**Status:** COMPLETED
 
 **Costura:** smoke:e5 e homologação no celular
 
@@ -14,7 +14,7 @@
 
 - [x] Trilha em ordem — com a fase 1 pendente, a fase 2 é recusada; concluída a fase 1, a fase 2 abre; concluídas todas, qualquer fase abre
 - [x] Escolher fase só aparece depois de concluir a trilha inteira (pedido do responsável); antes disso, tocar no jogo abre a próxima fase pendente
-- [ ] Dica no topo, ao lado de Sair; o título do jogo não quebra a 320 px
+- [x] Dica no topo, ao lado de Sair; o título do jogo não quebra a 320 px
 
 ## Implementação (2026-11-26)
 
@@ -33,3 +33,5 @@ Os jogos deixam de filtrar por faixa de idade (H15 reprovado): a criança segue
 a trilha, só a próxima fase pendente abre e Escolher fase aparece ao concluir
 tudo; o botão Dica sobe para a barra, ao lado de Sair (DEV-CAT-M1, tickets 05 e 15).
 ```
+
+- **Homologação (2026-11-26):** H16 aprovado; commit feito pelo responsável.

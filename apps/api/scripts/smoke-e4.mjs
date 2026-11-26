@@ -63,7 +63,7 @@ async function garantirCatalogo() {
         adaptacoes: item.adaptacoes,
         supervisao: item.supervisao,
         origem: "catalogo",
-        ativo: true,
+        ativo: item.ativo !== false,
       },
       update: {
         nome: item.nome,
@@ -79,7 +79,7 @@ async function garantirCatalogo() {
         adaptacoes: item.adaptacoes,
         supervisao: item.supervisao,
         origem: "catalogo",
-        ativo: true,
+        ativo: item.ativo !== false,
         familiaId: null,
       },
     });
@@ -225,12 +225,14 @@ try {
   );
   const idsSug = (sugerir.corpo?.sugestoes ?? []).map((s) => s.id);
   reg(
-    "E4-ACE-02-ate-2",
+    "DEV-CAT-P09-ate-5",
     sugerir.status < 300 &&
       Array.isArray(sugerir.corpo?.sugestoes) &&
-      sugerir.corpo.sugestoes.length > 0 &&
-      sugerir.corpo.sugestoes.length <= 2 &&
-      (sugerir.corpo?.trocadas ?? 0) <= 2,
+      sugerir.corpo.sugestoes.length > 2 &&
+      sugerir.corpo.sugestoes.length <= 5 &&
+      (sugerir.corpo?.trocadas ?? 0) <= 5 &&
+      // D2: atividades de adultos e idosos arquivadas nunca são sugeridas.
+      !sugerir.corpo.sugestoes.some((s) => ["desafio_cat_fotos_lembranca", "desafio_cat_alongar_ombro", "desafio_cat_lista_compras_mental", "desafio_cat_calendario_semana"].includes(s.id)),
     { status: sugerir.status, total: sugerir.corpo?.total, trocadas: sugerir.corpo?.trocadas },
   );
 
@@ -296,7 +298,7 @@ try {
   reg(
     "E4-ACE-03-renovar",
     renovar.status < 300 &&
-      (renovar.corpo?.trocadas ?? 0) <= 2 &&
+      (renovar.corpo?.trocadas ?? 0) <= 5 &&
       !aposRenovar.some((s) => s.id === alvoEscolha.id),
     {
       status: renovar.status,
@@ -444,7 +446,8 @@ try {
 
   // Limite 10: nove ativas + duas concorrentes → só a décima.
   const memoriaIds = CATALOGO_BIBLIOTECA_E4.filter(
-    (d) => d.categoria === "memoria_atencao" && d.id !== alvoEscolha.id,
+    // D2: arquivadas não podem ser escolhidas.
+    (d) => d.categoria === "memoria_atencao" && d.id !== alvoEscolha.id && d.ativo !== false,
   ).map((d) => d.id);
   // Criar personalizadas categorizadas para completar 9 se catálogo insuficiente.
   const personalizadas = [];

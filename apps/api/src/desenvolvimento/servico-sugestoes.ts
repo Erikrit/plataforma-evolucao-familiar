@@ -537,12 +537,10 @@ export class ServicoSugestoes {
       return true;
     });
 
-    const idade = this.idadeEmAnos(opts.dataNascimento);
-    const preferidos =
-      idade === null
-        ? elegiveis
-        : elegiveis.filter((d) => this.combinaFaixa(d, idade));
-    const base = preferidos.length > 0 ? preferidos : elegiveis;
+    // DEV-CAT-P09 (D1/D2): primeiro as atividades da faixa da pessoa; depois as demais elegíveis.
+    const faixa = this.faixaDaPessoa(opts.dataNascimento);
+    const daFaixa = faixa ? elegiveis.filter((d) => this.combinaFaixa(d, faixa)) : elegiveis;
+    const base = [...daFaixa, ...elegiveis.filter((d) => !daFaixa.includes(d))];
 
     const ineditas = base.filter((d) => !expostas.has(d.id));
     const retornos = base.filter(
@@ -627,13 +625,23 @@ export class ServicoSugestoes {
     return escolhidos;
   }
 
+  /** A faixa da atividade se sobrepõe à faixa da pessoa. */
   private combinaFaixa(
     d: { faixaEtariaMin: number | null; faixaEtariaMax: number | null },
-    idade: number,
+    faixa: readonly [number, number],
   ): boolean {
     const min = d.faixaEtariaMin ?? 0;
     const max = d.faixaEtariaMax ?? 200;
-    return idade >= min && idade <= max;
+    return min <= faixa[1] && max >= faixa[0];
+  }
+
+  /** D1 (2026-11-26): Pequenos 5–6, Médios 7–9, Grandes 10–12; sem data, sem prioridade. */
+  private faixaDaPessoa(dataNascimento: Date | null): readonly [number, number] | null {
+    const idade = this.idadeEmAnos(dataNascimento);
+    if (idade === null) return null;
+    if (idade <= 6) return [5, 6];
+    if (idade <= 9) return [7, 9];
+    return [10, 12];
   }
 
   private idadeEmAnos(dataNascimento: Date | null): number | null {

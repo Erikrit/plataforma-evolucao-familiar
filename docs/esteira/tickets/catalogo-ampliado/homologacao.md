@@ -166,5 +166,20 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 - **Aparelho:** celular de 320 a 360 px.
 - **Passos:** 1. Em um jogo novo para a pessoa, tocar no jogo e conferir que abre a fase 1. 2. Concluir a fase 1 e ver que a próxima é a 2. 3. Conferir que "Escolher fase" não aparece enquanto a trilha não termina. 4. Em um jogo com todas as fases concluídas, tocar no jogo e escolher qualquer fase. 5. Na partida, conferir o botão Dica ao lado de Sair e o título do jogo inteiro, sem quebra.
 - **Esperado:** a trilha segue em ordem; "Escolher fase" só aparece com a trilha concluída; Dica no topo funciona nos dois níveis; o título não quebra.
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: homologação aprovada.
+
+### H17 — Ticket 07: até cinco sugestões de Atividades Reais
+- **Preparação:** pessoas fictícias de 6, 8 e 11 anos com Desenvolvimento.
+- **Passos:**
+  1. Em Atividades Reais, tocar em Sugerir brincadeiras.
+  2. Renovar sugestões.
+  3. Escolher uma sugestão.
+  4. Conferir as atividades ativas.
+- **Esperado:**
+  - aparecem até cinco sugestões, adequadas à idade;
+  - renovar troca até cinco;
+  - não aparecem "Lembrete em três fotos", "Alongar ombros sentados", "Lista mental da feira" nem "Semana em ordem";
+  - se alguma delas já estava escolhida antes, ela sai das ativas, mas as participações continuam no Histórico.
 - **Status:** PENDING_HUMAN
 - **Retorno:**

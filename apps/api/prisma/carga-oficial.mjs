@@ -81,7 +81,7 @@ export async function carregarCatalogosOficiais(prisma) {
           adaptacoes: item.adaptacoes,
           supervisao: item.supervisao,
           origem: "catalogo",
-          ativo: true,
+          ativo: item.ativo !== false,
         },
         update: {
           nome: item.nome,
@@ -97,7 +97,7 @@ export async function carregarCatalogosOficiais(prisma) {
           adaptacoes: item.adaptacoes,
           supervisao: item.supervisao,
           origem: "catalogo",
-          ativo: true,
+          ativo: item.ativo !== false,
           familiaId: null,
         },
       });

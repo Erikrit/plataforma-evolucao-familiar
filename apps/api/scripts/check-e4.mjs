@@ -87,23 +87,33 @@ reg(
     idsCatalogo.length === 24,
   "Seis fichas aprovadas no catálogo de 24",
 );
+// D2 (2026-11-26): atividades de adultos e idosos arquivadas; as demais ficam em 5 a 12 anos.
+const ARQUIVADAS_D2 = ["desafio_cat_fotos_lembranca", "desafio_cat_alongar_ombro", "desafio_cat_lista_compras_mental", "desafio_cat_calendario_semana"];
+const { CATALOGO_BIBLIOTECA_E4 } = await import("../prisma/catalogo-biblioteca-e4.mjs");
+reg(
+  "D2-catalogo-5-a-12",
+  CATALOGO_BIBLIOTECA_E4.filter((a) => a.ativo === false).map((a) => a.id).sort().join() === [...ARQUIVADAS_D2].sort().join() &&
+    CATALOGO_BIBLIOTECA_E4.filter((a) => a.ativo !== false).every((a) => a.faixaEtariaMin >= 5 && a.faixaEtariaMax <= 12) &&
+    sugestoes.includes("faixaDaPessoa"),
+  "Quatro atividades de adultos e idosos arquivadas; 20 ativas em 5 a 12 anos; sugestões priorizam a faixa",
+);
 reg(
   "E4-ACE-02-sugestoes",
-  constantes.includes("LIMITE_SUGESTOES_PESSOA = 2") &&
+  constantes.includes("LIMITE_SUGESTOES_PESSOA = 5") &&
     sugestoes.includes("LIMITE_SUGESTOES_PESSOA") &&
     !sugestoes.includes("gerarSelecaoInicial") &&
     sugestoes.includes("diversificarPorCategoria") &&
     sugestoes.includes("carregarCandidatas"),
-  "Até 2 sugestões sob demanda, sem geração automática na listagem",
+  "Até 5 sugestões sob demanda (DEV-CAT-P09), sem geração automática na listagem",
 );
 reg(
   "E4-ACE-03-renovar",
-  constantes.includes("LIMITE_RENOVAR_SUGESTOES = 2") &&
+  constantes.includes("LIMITE_RENOVAR_SUGESTOES = 5") &&
     (sugestoes.includes("Não há novas sugestões disponíveis por agora") ||
       constantes.includes("MENSAGEM_SEM_NOVAS_SUGESTOES")) &&
     sugestoes.includes("retiradaSemParticipacao") &&
     controlador.includes("sugestoes/renovar"),
-  "Renovar até 2 com prioridade a inéditas e retiradas",
+  "Renovar até 5 com prioridade a inéditas e retiradas",
 );
 reg(
   "E4-ACE-04-persistencia",

@@ -15,8 +15,9 @@ export type CategoriaBiblioteca = (typeof CATEGORIAS_BIBLIOTECA)[number];
 
 /** Limites E4 (Módulo 03 §12) — aplicados no servidor. */
 export const LIMITE_CATALOGO_ATIVO = 24;
-export const LIMITE_SUGESTOES_PESSOA = 2;
-export const LIMITE_RENOVAR_SUGESTOES = 2;
+/** DEV-CAT-P09: até cinco sugestões e cinco renovações. */
+export const LIMITE_SUGESTOES_PESSOA = 5;
+export const LIMITE_RENOVAR_SUGESTOES = 5;
 export const LIMITE_ATIVAS_POR_CATEGORIA = 10;
 export const ORIGEM_CONTEUDO_AUTORAL = "autoral_pef";
 
