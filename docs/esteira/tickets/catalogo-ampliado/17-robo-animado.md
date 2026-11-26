@@ -6,7 +6,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** IN_VALIDATION
+**Status:** COMPLETED
 
 **Costura:** typecheck, check:e5 e homologação no celular
 
@@ -34,3 +34,5 @@ O robô percorre o programa casa por casa à vista da criança; em Histórias co
 ocultos o leitor de tela diz o objeto da figura; na concessão e no convite a data
 vem logo após a área (DEV-CAT-M1, tickets 11, 14 e 17).
 ```
+
+- **Homologação (2026-11-26):** H22 aprovado no reteste.

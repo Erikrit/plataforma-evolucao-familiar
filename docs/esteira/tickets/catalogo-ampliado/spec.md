@@ -99,7 +99,7 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | 14 | COMPLETED | — | Leitor de tela diz o objeto da figura; H21 homologado |
 | 15 | COMPLETED | — | Trilha em ordem e Dica ao lado de Sair; H16 homologado |
 | 16 | COMPLETED | — | Licença discreta, ícones novos e peças legíveis; H19 homologado |
-| 17 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Robô anda passo a passo (sem explosão); reteste H22 |
+| 17 | COMPLETED | — | Robô anda passo a passo (sem explosão); H22 homologado |
 
 ### Verificação local pendente (tickets 04 e 08)
 
@@ -117,3 +117,7 @@ Lembretes para quem executa:
 - `EST-V2-CLAUDE-CODE` foi movida para `demandasConcluidas` com estado `IN_VALIDATION`, aguardando aceite. Não reabra sem pedido do Produto.
 - Dados sempre fictícios. Os bancos locais de teste podem ser recriados; o banco da VPS nunca.
 - Ao concluir cada ticket, entregar a `mensagemCommit` (skill `entrega`) e atualizar o status no arquivo do ticket.
+
+## Encerramento (2026-11-26)
+
+Marco 1 atingido. Todos os tickets homologados (05 descartado). QG-1, QG-2 e QG-3 PASS sobre `master..1cbe2b9`, fingerprint `sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860`. Publicação na VPS a cargo do responsável.

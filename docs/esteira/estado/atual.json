@@ -46,7 +46,7 @@
   },
   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
   "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
-  "atualizadoEm": "2026-11-26T23:31:26.777Z",
+  "atualizadoEm": "2026-11-26T23:47:53.348Z",
   "modulo": {
     "id": "04-evolucao-familiar",
     "status": "COMPLETED",
@@ -56,7 +56,7 @@
     "id": "DEV-CAT-M1",
     "tipo": "transversal",
     "origem": "humano",
-    "estado": "IN_VALIDATION",
+    "estado": "COMPLETED",
     "aprovacao": {
       "nivel": "L3",
       "status": "APROVADA",
@@ -110,15 +110,15 @@
       "apps/web/src/componentes/desenvolvimento/jogos/figura.tsx"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável faz o commit (tickets 11, 14 e 17) e reteste H22. Depois: QG-3 de Marco 1 antes de subir na VPS.",
+    "proximaAcao": "Marco 1 atingido. Responsável decide a publicação na VPS (merge develop → master e deploy são do humano; banco da VPS não pode ser apagado nem recriado).",
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T23:23:57.659Z",
-        "base": "c2d1c7ffcf404d2fc212a6f09ad982735f6a4b0d",
-        "head": "c2d1c7ffcf404d2fc212a6f09ad982735f6a4b0d",
-        "fingerprint": "sha256:6e3eb0294f57aaf92301009ba3688ce60724998b70c7012529be104bf3f39c9d",
+        "em": "2026-11-26T23:41:00.966Z",
+        "base": "dcf901db765aee9106070baa3a7903e492c36140",
+        "head": "1cbe2b904e1f2829873da2f83d51296f43439ce9",
+        "fingerprint": "sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860",
         "checagens": [
           {
             "nome": "lint",
@@ -140,6 +140,12 @@
             "motivo": "script ainda não existe"
           },
           {
+            "nome": "authz",
+            "status": "PASS",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": 0
+          },
+          {
             "nome": "check-e1-isolamento",
             "status": "PASS",
             "comando": "npm run check:e1-03 -w @pef/api",
@@ -158,21 +164,33 @@
             "exit": 0
           },
           {
+            "nome": "check-e3",
+            "status": "PASS",
+            "comando": "npm run check:e3 -w @pef/api",
+            "exit": 0
+          },
+          {
             "nome": "check-e5",
             "status": "PASS",
             "comando": "npm run check:e5 -w @pef/api",
             "exit": 0
+          },
+          {
+            "nome": "regua-jogos",
+            "status": "PASS",
+            "comando": "npm run test:regua -w @pef/api",
+            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T23-23-57-659Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T23-41-00-966Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T23:26:04.161Z",
-        "base": "c2d1c7ffcf404d2fc212a6f09ad982735f6a4b0d",
-        "head": "c2d1c7ffcf404d2fc212a6f09ad982735f6a4b0d",
-        "fingerprint": "sha256:6e3eb0294f57aaf92301009ba3688ce60724998b70c7012529be104bf3f39c9d",
+        "em": "2026-11-26T23:44:07.372Z",
+        "base": "dcf901db765aee9106070baa3a7903e492c36140",
+        "head": "1cbe2b904e1f2829873da2f83d51296f43439ce9",
+        "fingerprint": "sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860",
         "checagens": [
           {
             "nome": "build",
@@ -188,13 +206,61 @@
             "motivo": "script ainda não existe"
           },
           {
+            "nome": "authz",
+            "status": "PASS",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "carga-trilhas",
+            "status": "PASS",
+            "comando": "npm run qg:cat-trilhas -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-ff-nasc",
+            "status": "PASS",
+            "comando": "npm run smoke:ff-nasc -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-historico-resumo",
+            "status": "PASS",
+            "comando": "npm run smoke:est-03-docs -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e1-isolamento",
+            "status": "PASS",
+            "comando": "npm run smoke:e1-03 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e2-acessos",
+            "status": "PASS",
+            "comando": "npm run smoke:e2 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e3-cuidados",
+            "status": "PASS",
+            "comando": "npm run smoke:e3 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e4-atividades",
+            "status": "PASS",
+            "comando": "npm run smoke:e4 -w @pef/api",
+            "exit": 0
+          },
+          {
             "nome": "smoke-e5-jogos",
             "status": "PASS",
             "comando": "npm run smoke:e5 -w @pef/api",
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T23-26-04-161Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T23-44-07-372Z.json"
       },
       "ambienteAlternativo": {
         "status": "PASS",
@@ -243,11 +309,11 @@
       },
       "qg3": {
         "status": "PASS",
-        "integral": true,
-        "em": "2026-11-26T01:57:05.907Z",
-        "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
-        "head": "60aa1960ca697a3368e47cd3518aa71fd8f10245",
-        "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+        "integral": false,
+        "em": "2026-11-26T23:47:33.477Z",
+        "base": "dcf901db765aee9106070baa3a7903e492c36140",
+        "head": "1cbe2b904e1f2829873da2f83d51296f43439ce9",
+        "fingerprint": "sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860",
         "checagens": [
           {
             "nome": "lint",
@@ -281,15 +347,15 @@
             "exit": 0
           },
           {
-            "nome": "smoke-ff-nasc",
+            "nome": "carga-trilhas",
             "status": "PASS",
-            "comando": "npm run smoke:ff-nasc -w @pef/api",
+            "comando": "npm run qg:cat-trilhas -w @pef/api",
             "exit": 0
           },
           {
-            "nome": "smoke-e1-entrada",
+            "nome": "smoke-ff-nasc",
             "status": "PASS",
-            "comando": "npm run smoke:e1-ent -w @pef/api",
+            "comando": "npm run smoke:ff-nasc -w @pef/api",
             "exit": 0
           },
           {
@@ -335,7 +401,7 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg3-2026-11-26T01-57-05-907Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg3-2026-11-26T23-47-33-477Z.json"
       },
       "homologacao": {
         "status": "PENDING_HUMAN",
@@ -472,15 +538,26 @@
         "pendencias": []
       },
       "ticket17": {
-        "estado": "IN_VALIDATION",
+        "estado": "COMPLETED",
         "fingerprint": "sha256:6e3eb0294f57aaf92301009ba3688ce60724998b70c7012529be104bf3f39c9d",
         "verificador": "PASS",
-        "pendencias": [
-          "Reteste H22 sem explosão"
+        "pendencias": []
+      },
+      "marco1": {
+        "qg1": "PASS",
+        "qg2": "PASS",
+        "qg3": "PASS",
+        "base": "master (dcf901d)",
+        "head": "1cbe2b9",
+        "fingerprint": "sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860",
+        "evidencias": [
+          "qg1-2026-11-26T23-41-00-966Z.json",
+          "qg2-2026-11-26T23-44-07-372Z.json",
+          "qg3-2026-11-26T23-47-33-477Z.json"
         ]
       }
     },
-    "fingerprint": "sha256:6e3eb0294f57aaf92301009ba3688ce60724998b70c7012529be104bf3f39c9d",
+    "fingerprint": "sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860",
     "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc.",
     "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25.",
     "decisoes": [
@@ -515,6 +592,13 @@
       "fingerprint": "e60960a1a9bf43b0a3a5abc4555d4ec7",
       "nota": "UX-01 a UX-05 implementadas; smokes E3/E4/E5/authz PASS; homologação humana confirmada pelo responsável pelo Produto em 2026-11-24.",
       "mensagemCommit": "feat(ux): entregar pacote UX-01 a UX-05 aprovado\n\nCategoria em consultas/exames, seletor de anexo, Select nas Atividades Reais, cabeçalho compartilhado com saldo e catálogo de jogos em grade 4×2."
+    },
+    {
+      "id": "DEV-CAT-M1",
+      "concluidaEm": "2026-11-26",
+      "fingerprint": "sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860",
+      "resumo": "Catálogo ampliado de jogos (Marco 1): régua de qualidade, 8 jogos ativos com 120 fases, trilha em ordem, dicas em dois níveis, até 5 sugestões pela faixa, Twemoji, acessibilidade e robô animado. Tickets 01–04, 06–17 concluídos; 05 descartado.",
+      "mensagemCommit": "docs(esteira): encerra DEV-CAT-M1 com QG-3 do Marco 1"
     }
   ],
   "incrementosConcluidos": [

@@ -221,5 +221,5 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 ### H22 — Ticket 17: robô anda passo a passo
 - **Passos:** jogar Robô. Montar um programa que bata na parede e tocar Executar. Depois corrigir e executar até chegar. Repetir numa segunda fase.
 - **Esperado:** o robô anda casa por casa. Na parede, ele para e aparece a mensagem com o número do comando, sem explosão. Ao corrigir, volta ao início, e na chegada a fase termina normalmente.
-- **Status:** PENDING_HUMAN
-- **Retorno:** 1º teste (2026-11-26): caminhada aprovada. A explosão causou uma fase que não terminou e foi retirada. Falta retestar a versão sem explosão.
+- **Status:** PASS
+- **Retorno:** 1º teste (2026-11-26): caminhada aprovada. A explosão causou uma fase que não terminou e foi retirada. Falta retestar a versão sem explosão. Reteste (2026-11-26): aprovado pelo responsável.
