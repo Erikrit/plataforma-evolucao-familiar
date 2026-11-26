@@ -11,6 +11,10 @@ const CORES: Record<string, { fundo: string; traço: string }> = {
   "palavra-figura": { fundo: "#E6F7F5", traço: "#0F6E66" },
   "historias-cenas": { fundo: "#FFF0F6", traço: "#A61E4D" },
   "entrega-jardim": { fundo: "#F3F8E8", traço: "#5C7A1A" },
+  "sudoku-figuras": { fundo: "#E7F5EC", traço: "#2F6B4F" },
+  "forme-palavra": { fundo: "#E6F7F5", traço: "#0F6E66" },
+  "menor-maior": { fundo: "#FDF3E1", traço: "#8A5A00" },
+  "robo-setas": { fundo: "#F0E8FA", traço: "#5B3A8C" },
 };
 
 type Props = {
@@ -106,6 +110,35 @@ function desenho(jogoId: string) {
         <>
           <path d="M32 14c8 10 14 16 14 24a14 14 0 1 1-28 0c0-8 6-14 14-24Z" />
           <path d="M32 28v18" />
+        </>
+      );
+    case "sudoku-figuras":
+      return (
+        <>
+          <rect x="14" y="14" width="36" height="36" rx="2" />
+          <path d="M32 14v36M14 32h36M23 14v36M41 14v36M14 23h36M14 41h36" />
+        </>
+      );
+    case "forme-palavra":
+      return (
+        <>
+          <rect x="10" y="24" width="12" height="16" rx="2" />
+          <rect x="26" y="24" width="12" height="16" rx="2" />
+          <rect x="42" y="24" width="12" height="16" rx="2" />
+        </>
+      );
+    case "menor-maior":
+      return (
+        <>
+          <path d="M14 46h8M28 46V34M28 46h8M42 46V22M42 46h8" />
+          <path d="M18 46V40" />
+        </>
+      );
+    case "robo-setas":
+      return (
+        <>
+          <rect x="20" y="20" width="24" height="20" rx="4" />
+          <path d="M28 30h0M36 30h0M32 14v6M24 46l-6 4M40 46l6 4" />
         </>
       );
     default:

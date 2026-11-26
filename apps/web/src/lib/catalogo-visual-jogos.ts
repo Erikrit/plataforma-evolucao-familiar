@@ -8,6 +8,10 @@ export const NOMES_CURTOS_JOGOS: Record<string, string> = {
   "palavra-figura": "Palavra",
   "historias-cenas": "Histórias",
   "entrega-jardim": "Entrega",
+  "sudoku-figuras": "Sudoku",
+  "forme-palavra": "Palavras",
+  "menor-maior": "Números",
+  "robo-setas": "Robô",
 };
 
 export function nomeCurtoJogo(id: string, nomeCompleto: string) {

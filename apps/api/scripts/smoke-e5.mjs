@@ -92,19 +92,19 @@ try {
 
   const antes = await lerCatalogo();
   const memoria = antes.dados.jogos?.find((jogo) => jogo.id === "memoria");
-  conferir("Catálogo privado e cinco fases abertas sem nascimento", antes.status === 200 && antes.cache === "private, no-store"
-    && memoria?.fases.length === 5 && memoria.fases.every((item) => item.estado === "nao_explorada"));
+  conferir("Catálogo privado e quinze fases abertas sem nascimento", antes.status === 200 && antes.cache === "private, no-store"
+    && memoria?.fases.length === 15 && memoria.fases.every((item) => item.estado === "nao_explorada"));
   conferir("Catálogo completo e destaques distintos na primeira visita", antes.dados.jogos.length === 8
     && new Set(antes.dados.destaques).size === 3 && antes.dados.destaques[0] === "memoria");
   conferir("Conclusão exige início persistido", (await concluir(novaChave(), memoria.versao)).status === 409);
-  conferir("Acesso direto a fase inexistente falha", (await iniciar(familia.token, `${catalogo}/memoria/fases/6`)).status === 404);
+  conferir("Acesso direto a fase inexistente falha", (await iniciar(familia.token, `${catalogo}/memoria/fases/16`)).status === 404);
   const antesSaldo = (await saldo()).dados.saldoDisponivel;
 
   const sessoes = await entrar(familia);
   const iniciadas = await Promise.all([iniciar(), iniciar(sessoes.token), iniciar()]);
   const primeira = iniciadas[0];
   conferir("Início concorrente da fase 5 fornece rodada íntegra", iniciadas.every((r) => r.status === 201)
-    && primeira.dados.conteudo.tipo === "memoria" && primeira.dados.conteudo.cartas.length === 12);
+    && primeira.dados.conteudo.tipo === "memoria" && primeira.dados.conteudo.cartas.length === 8);
   const linha = { familiaId: familia.familiaId, pessoaId, jogoId: "memoria", fase: 5 };
   conferir("Aberturas simultâneas geram um progresso experimentado",
     await prisma.progressoFaseJogo.count({ where: linha }) === 1
@@ -130,18 +130,22 @@ try {
   conferir("Reabertura e repetição preservam conclusão", repetida.status === 201 && !repetida.dados.primeiraDescoberta
     && repetida.dados.concluidaEm === dataPrimeira
     && (await lerCatalogo()).dados.jogos.find((item) => item.id === "memoria").fases[4].estado === "concluida");
-  const sequencia = antes.dados.jogos.find((jogo) => jogo.id === "sequencia");
-  const faseSequencia = `${catalogo}/sequencia/fases/4`;
-  const inicioSequencia = await iniciar(familia.token, faseSequencia);
-  const conteudoSequencia = inicioSequencia.dados.conteudo;
-  conferir("Sequência abre fase 4 no primeiro acesso", sequencia?.fases.length === 5
-    && inicioSequencia.status === 201 && conteudoSequencia.tipo === "sequencia"
-    && conteudoSequencia.sequencia.filter((peca) => peca === null).length === 1
-    && conteudoSequencia.alternativas.filter((peca) => peca.id === conteudoSequencia.resposta).length === 1);
-  const fimSequencia = await concluir(novaChave(), sequencia.versao, familia.token, faseSequencia);
-  conferir("Conclusão de Sequência usa progresso separado da Memória",
-    fimSequencia.status === 201 && fimSequencia.dados.primeiraDescoberta
+  // Ticket 12: Sudoku de figuras no lugar de Complete a sequência (arquivado).
+  const sudoku = antes.dados.jogos.find((jogo) => jogo.id === "sudoku-figuras");
+  const faseSudoku = `${catalogo}/sudoku-figuras/fases/4`;
+  const inicioSudoku = await iniciar(familia.token, faseSudoku);
+  const gradeSudoku = inicioSudoku.dados.conteudo;
+  conferir("Sudoku abre fase 4 com grade, casas vazias e solução coerente", sudoku?.fases.length === 15
+    && inicioSudoku.status === 201 && gradeSudoku.tipo === "sudoku" && gradeSudoku.tamanho === 4
+    && gradeSudoku.inicial.flat().filter((v) => v === 0).length === 7
+    && gradeSudoku.inicial.every((linha, l) => linha.every((v, c) => v === 0 || v === gradeSudoku.solucao[l][c])));
+  const fimSudoku = await concluir(novaChave(), sudoku.versao, familia.token, faseSudoku);
+  conferir("Conclusão do Sudoku usa progresso separado da Memória",
+    fimSudoku.status === 201 && fimSudoku.dados.primeiraDescoberta
     && await prisma.progressoFaseJogo.count({ where: { pessoaId, concluidaEm: { not: null } } }) === 2);
+  conferir("Jogo arquivado sai do catálogo e não abre",
+    !antes.dados.jogos.some((jogo) => ["sequencia", "pares-sombras", "ache-intruso", "palavra-figura"].includes(jogo.id))
+    && (await iniciar(familia.token, `${catalogo}/sequencia/fases/1`)).status === 404);
   const labirinto = antes.dados.jogos.find((jogo) => jogo.id === "labirinto");
   // DEV-CAT-P03: 15 fases em três trilhas; a última abre já na primeira visita.
   const trilhas = labirinto?.fases.map((fase) => fase.trilha).join(",");
@@ -166,46 +170,41 @@ try {
     recente === "labirinto" && depois.dados.jogos.length === 8
     && JSON.stringify(depois.dados.destaques) === JSON.stringify((await lerCatalogo()).dados.destaques));
 
-  const sombra = antes.dados.jogos.find((jogo) => jogo.id === "pares-sombras");
-  const inicioSombra = await iniciar(familia.token, `${catalogo}/pares-sombras/fases/1`);
-  conferir("Pares de sombras abre com faces e chaves de par",
-    sombra?.fases.length === 5 && inicioSombra.status === 201
-    && inicioSombra.dados.conteudo.tipo === "memoria"
-    && inicioSombra.dados.conteudo.cartas.length === 4
-    && inicioSombra.dados.conteudo.cartas.some((carta) => carta.face === "sombra")
-    && inicioSombra.dados.conteudo.cartas.some((carta) => carta.face === "objeto"));
-  const fimSombra = await concluir(novaChave(), sombra.versao, familia.token, `${catalogo}/pares-sombras/fases/1`);
-  conferir("Pares de sombras conclui em progresso próprio",
-    fimSombra.status === 201 && fimSombra.dados.primeiraDescoberta);
+  const forme = antes.dados.jogos.find((jogo) => jogo.id === "forme-palavra");
+  const inicioForme = await iniciar(familia.token, `${catalogo}/forme-palavra/fases/1`);
+  const letras = inicioForme.dados.conteudo;
+  conferir("Forme a palavra abre letras embaralhadas da palavra",
+    forme?.fases.length === 15 && inicioForme.status === 201 && letras.tipo === "ordenacao"
+    && letras.cenas.length === 3 && letras.cenas.every((peca) => peca.nome === peca.simbolo));
+  const fimForme = await concluir(novaChave(), forme.versao, familia.token, `${catalogo}/forme-palavra/fases/1`);
+  conferir("Forme a palavra conclui em progresso próprio", fimForme.status === 201 && fimForme.dados.primeiraDescoberta);
 
-  const intruso = antes.dados.jogos.find((jogo) => jogo.id === "ache-intruso");
-  const inicioIntruso = await iniciar(familia.token, `${catalogo}/ache-intruso/fases/3`);
-  conferir("Ache o intruso abre escolha única",
-    intruso?.fases.length === 5 && inicioIntruso.status === 201
-    && inicioIntruso.dados.conteudo.tipo === "escolha"
-    && inicioIntruso.dados.conteudo.opcoes.length >= 3
-    && inicioIntruso.dados.conteudo.opcoes.some((opcao) => opcao.id === inicioIntruso.dados.conteudo.resposta));
-  const fimIntruso = await concluir(novaChave(), intruso.versao, familia.token, `${catalogo}/ache-intruso/fases/3`);
-  conferir("Ache o intruso conclui com descoberta",
-    fimIntruso.status === 201 && fimIntruso.dados.primeiraDescoberta);
+  const menor = antes.dados.jogos.find((jogo) => jogo.id === "menor-maior");
+  const inicioMenor = await iniciar(familia.token, `${catalogo}/menor-maior/fases/3`);
+  const numeros = inicioMenor.dados.conteudo;
+  const ordem = numeros.ordemCorreta.map((id) => Number(numeros.cenas.find((c) => c.id === id).simbolo));
+  conferir("Do menor ao maior abre números com ordem crescente",
+    menor?.fases.length === 15 && menor.categoria === "numeros" && inicioMenor.status === 201
+    && numeros.cenas.length === 4 && ordem.every((v, i) => i === 0 || v > ordem[i - 1]));
+  const fimMenor = await concluir(novaChave(), menor.versao, familia.token, `${catalogo}/menor-maior/fases/3`);
+  conferir("Do menor ao maior conclui com descoberta", fimMenor.status === 201 && fimMenor.dados.primeiraDescoberta);
 
-  const palavra = antes.dados.jogos.find((jogo) => jogo.id === "palavra-figura");
-  const inicioPalavra = await iniciar(familia.token, `${catalogo}/palavra-figura/fases/2`);
-  conferir("Palavra e figura abre enunciado com opções",
-    palavra?.fases.length === 5 && inicioPalavra.status === 201
-    && inicioPalavra.dados.conteudo.tipo === "escolha"
-    && typeof inicioPalavra.dados.conteudo.enunciado === "string"
-    && inicioPalavra.dados.conteudo.enunciado.length > 0);
-  const fimPalavra = await concluir(novaChave(), palavra.versao, familia.token, `${catalogo}/palavra-figura/fases/2`);
-  conferir("Palavra e figura conclui com descoberta",
-    fimPalavra.status === 201 && fimPalavra.dados.primeiraDescoberta);
+  const robo = antes.dados.jogos.find((jogo) => jogo.id === "robo-setas");
+  const inicioRobo = await iniciar(familia.token, `${catalogo}/robo-setas/fases/2`);
+  const mapaRobo = inicioRobo.dados.conteudo;
+  conferir("Robô com setas abre mapa com início e chegada",
+    robo?.fases.length === 15 && inicioRobo.status === 201 && mapaRobo.tipo === "robo"
+    && mapaRobo.mapa[mapaRobo.inicio.linha][mapaRobo.inicio.coluna] === "I"
+    && mapaRobo.mapa[mapaRobo.chegada.linha][mapaRobo.chegada.coluna] === "F");
+  const fimRobo = await concluir(novaChave(), robo.versao, familia.token, `${catalogo}/robo-setas/fases/2`);
+  conferir("Robô com setas conclui com descoberta", fimRobo.status === 201 && fimRobo.dados.primeiraDescoberta);
 
   const jardim = antes.dados.jogos.find((jogo) => jogo.id === "entrega-jardim");
   const inicioJardim = await iniciar(familia.token, `${catalogo}/entrega-jardim/fases/5`);
   const gradeJardim = inicioJardim.dados.conteudo;
   conferir("Entrega no jardim abre com pontos de passagem",
-    jardim?.fases.length === 5 && inicioJardim.status === 201 && gradeJardim.tipo === "labirinto"
-    && Array.isArray(gradeJardim.pontos) && gradeJardim.pontos.length === 3
+    jardim?.fases.length === 15 && inicioJardim.status === 201 && gradeJardim.tipo === "labirinto"
+    && Array.isArray(gradeJardim.pontos) && gradeJardim.pontos.length === 2
     && gradeJardim.mapa.join("").includes("P"));
   const fimJardim = await concluir(novaChave(), jardim.versao, familia.token, `${catalogo}/entrega-jardim/fases/5`);
   conferir("Entrega no jardim conclui com descoberta",
@@ -215,7 +214,7 @@ try {
   const inicioHistorias = await iniciar(familia.token, `${catalogo}/historias-cenas/fases/4`);
   const cenas = inicioHistorias.dados.conteudo;
   conferir("Histórias em cenas abre ordenação embaralhada",
-    historias?.fases.length === 5 && inicioHistorias.status === 201 && cenas.tipo === "ordenacao"
+    historias?.fases.length === 15 && inicioHistorias.status === 201 && cenas.tipo === "ordenacao"
     && cenas.cenas.length === 4 && cenas.ordemCorreta.length === 4
     && !cenas.cenas.every((cena, indice) => cena.id === cenas.ordemCorreta[indice]));
   const fimHistorias = await concluir(novaChave(), historias.versao, familia.token, `${catalogo}/historias-cenas/fases/4`);
@@ -250,7 +249,7 @@ try {
   const jogosResumo = resumoAtual.dados.jogos;
   conferir("Resumo deriva jogos e contagens sem misturar participações", resumoAtual.status === 200
     && jogosResumo.length === 8
-    && jogosResumo.every((jogo) => jogo.totalFases === (jogo.id === "labirinto" ? 15 : 5)
+    && jogosResumo.every((jogo) => jogo.totalFases === 15
       && jogo.concluidasAte === 1 && jogo.concluidasNoPeriodo === 1)
     && resumoAtual.dados.experiencias.length === 0);
   const passado = "de=2000-01-01&ate=2000-01-02";
@@ -265,6 +264,22 @@ try {
 
   conferir("Jogo não movimenta estrelas", antesSaldo === (await saldo()).dados.saldoDisponivel
     && await prisma.movimentoEstrelas.count({ where: { pessoaId } }) === 0);
+
+  // E5-ACE-12 (ticket 12): conquista de jogo arquivado continua no Histórico e no Resumo.
+  const quando = new Date();
+  await prisma.progressoFaseJogo.create({
+    data: {
+      familiaId: familia.familiaId, pessoaId, jogoId: "pares-sombras", fase: 1,
+      primeiraExploracaoEm: quando, versaoPrimeiraExploracao: 1, ultimaAberturaEm: quando, versaoUltimaAbertura: 1,
+      concluidaEm: quando, versaoConclusao: 1, chaveConclusao: "a".repeat(32),
+      nomeNaConclusao: "Pares de sombras", categoriaNaConclusao: "memoria_atencao",
+    },
+  });
+  const historicoArquivado = await historico();
+  const resumoArquivado = await resumo();
+  conferir("Conquista de jogo arquivado continua no Histórico e no Resumo",
+    historicoArquivado.dados.eventos.some((e) => e.origemId === "pares-sombras/1" && e.resumo.includes("Pares de sombras"))
+    && resumoArquivado.dados.jogos.some((jogo) => jogo.id === "pares-sombras" && jogo.concluidasAte === 1));
 
   const revogacao = await chamar(`/familias/${familia.familiaId}/autorizacoes/${acesso}`, {
     metodo: "DELETE", token: familia.token,

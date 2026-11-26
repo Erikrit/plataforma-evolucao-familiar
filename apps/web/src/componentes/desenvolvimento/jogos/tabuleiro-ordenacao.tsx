@@ -1,10 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
-import { Button, Group, Stack, Text, UnstyledButton } from "@mantine/core";
+import { Button, Group, Stack, Text, UnstyledButton, VisuallyHidden } from "@mantine/core";
 import type { CenaOrdenacao, ConteudoOrdenacao } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
+import { dicaOrdenacao } from "./dicas-jogos";
 import estilos from "./jogos.module.css";
+
+/** Letra ou número: a peça já mostra o próprio nome (Forme a palavra, Do menor ao maior). */
+function autodescritiva(cena: CenaOrdenacao) {
+  return cena.nome === cena.simbolo;
+}
 
 function mesmaOrdem(a: readonly string[], b: readonly string[]) {
   return a.length === b.length && a.every((id, indice) => id === b[indice]);
@@ -23,6 +29,11 @@ export function TabuleiroOrdenacao({
   const raiz = useRef<HTMLDivElement>(null);
   const concluiu = useRef(false);
 
+  const pecas = conteudo.cenas.every(autodescritiva);
+  const rotuloCena = (cena: CenaOrdenacao) =>
+    conteudo.ocultarNomes ? `Cena ${conteudo.cenas.findIndex((c) => c.id === cena.id) + 1}` : cena.nome;
+  const mostrarNome = (cena: CenaOrdenacao) => !conteudo.ocultarNomes && !autodescritiva(cena);
+
   const disponiveis = useMemo(
     () => conteudo.cenas.filter((cena) => !fila.some((item) => item.id === cena.id)),
     [conteudo.cenas, fila],
@@ -38,16 +49,19 @@ export function TabuleiroOrdenacao({
     }
   }, [disponiveis.length, focoDisponivel]);
 
+  // Dica em dois níveis (ticket 09): o nível volta ao 1º quando a fila muda.
+  const filaAtual = useRef(fila);
+  filaAtual.current = fila;
+  const pedidosDica = useRef({ chave: "", nivel: 0 });
+
   useEffect(() => {
     registrarObterDica(() => {
-      if (conteudo.dica) {
-        setMensagem(conteudo.dica);
-        return conteudo.dica;
-      }
-      const nomes = conteudo.ordemCorreta
-        .map((id) => conteudo.cenas.find((cena) => cena.id === id)?.nome)
-        .filter(Boolean);
-      const texto = `Uma ordem possível começa com ${nomes[0]?.toLowerCase() ?? "a primeira cena"}.`;
+      const colocadas = filaAtual.current.map((cena) => cena.id);
+      const chave = colocadas.join(",");
+      const pedidos = pedidosDica.current;
+      pedidos.nivel = pedidos.chave === chave ? pedidos.nivel + 1 : 1;
+      pedidos.chave = chave;
+      const texto = dicaOrdenacao(conteudo, colocadas, pedidos.nivel);
       setMensagem(texto);
       return texto;
     });
@@ -55,7 +69,11 @@ export function TabuleiroOrdenacao({
   }, [conteudo, registrarObterDica]);
 
   function colocar(cena: CenaOrdenacao) {
-    if (concluiu.current || fila.some((item) => item.id === cena.id)) return;
+    // Com intrusas sobra peça: a fila não passa do número de espaços.
+    if (concluiu.current || fila.length >= conteudo.ordemCorreta.length || fila.some((item) => item.id === cena.id)) {
+      if (fila.length >= conteudo.ordemCorreta.length) setMensagem("Todos os espaços estão ocupados. Use Desfazer para trocar.");
+      return;
+    }
     const proxima = [...fila, cena];
     setFila(proxima);
     setMensagem("");
@@ -106,9 +124,9 @@ export function TabuleiroOrdenacao({
 
       <Stack gap="xs">
         <Text size="sm" fw={600}>
-          Sua história
+          {pecas ? "Sua resposta" : "Sua história"}
         </Text>
-        <ol className={estilos.filaOrdenacao} aria-label="Cenas na ordem escolhida">
+        <ol className={estilos.filaOrdenacao} aria-label={pecas ? "Peças na ordem escolhida" : "Cenas na ordem escolhida"}>
           {conteudo.ordemCorreta.map((_, indice) => {
             const cena = fila[indice];
             return (
@@ -116,10 +134,11 @@ export function TabuleiroOrdenacao({
                 <span className={estilos.numeroCarta}>{indice + 1}</span>
                 {cena ? (
                   <>
-                    <span className={estilos.figura} aria-hidden="true">
+                    <span className={estilos.figura} aria-hidden={!pecas}>
                       {cena.simbolo}
                     </span>
-                    <span className={estilos.nomeFigura}>{cena.nome}</span>
+                    {mostrarNome(cena) ? <span className={estilos.nomeFigura}>{cena.nome}</span> : null}
+                    {conteudo.ocultarNomes ? <VisuallyHidden>{rotuloCena(cena)}</VisuallyHidden> : null}
                   </>
                 ) : (
                   <span className={estilos.nomeFigura}>Espaço livre</span>
@@ -132,9 +151,20 @@ export function TabuleiroOrdenacao({
 
       <Stack gap="xs">
         <Text size="sm" fw={600}>
-          Cenas disponíveis
+          {pecas ? "Peças disponíveis" : "Cenas disponíveis"}
         </Text>
-        <Group gap="xs" role="group" aria-label="Cenas para ordenar">
+        {conteudo.intrusas ? (
+          <Text size="sm" c="dimmed">
+            {pecas
+              ? conteudo.intrusas === 1
+                ? "Atenção: uma peça sobra e fica de fora."
+                : `Atenção: ${conteudo.intrusas} peças sobram e ficam de fora.`
+              : conteudo.intrusas === 1
+                ? "Atenção: uma cena não faz parte da história e fica de fora."
+                : `Atenção: ${conteudo.intrusas} cenas não fazem parte da história e ficam de fora.`}
+          </Text>
+        ) : null}
+        <Group gap="xs" role="group" aria-label={pecas ? "Peças para ordenar" : "Cenas para ordenar"}>
           {disponiveis.map((cena, indice) => (
             <UnstyledButton
               key={cena.id}
@@ -144,17 +174,17 @@ export function TabuleiroOrdenacao({
                 setFocoDisponivel(indice);
                 colocar(cena);
               }}
-              aria-label={`Colocar ${cena.nome}`}
+              aria-label={`Colocar ${rotuloCena(cena)}`}
             >
               <span className={estilos.figura} aria-hidden="true">
                 {cena.simbolo}
               </span>
-              <span className={estilos.nomeFigura}>{cena.nome}</span>
+              {mostrarNome(cena) ? <span className={estilos.nomeFigura}>{cena.nome}</span> : null}
             </UnstyledButton>
           ))}
           {disponiveis.length === 0 ? (
             <Text size="sm" c="dimmed">
-              Todas as cenas já estão na história.
+              {pecas ? "Todas as peças já estão na resposta." : "Todas as cenas já estão na história."}
             </Text>
           ) : null}
         </Group>

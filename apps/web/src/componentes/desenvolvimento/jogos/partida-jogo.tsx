@@ -34,6 +34,8 @@ import { TabuleiroSequencia } from "./tabuleiro-sequencia";
 import { TabuleiroEscolha } from "./tabuleiro-escolha";
 import { TabuleiroOrdenacao } from "./tabuleiro-ordenacao";
 import { TabuleiroLabirinto } from "./tabuleiro-labirinto";
+import { TabuleiroSudoku } from "./tabuleiro-sudoku";
+import { TabuleiroRobo } from "./tabuleiro-robo";
 import type { ContratoTabuleiro, ObterDica } from "./contrato-tabuleiro";
 import estilos from "./jogos.module.css";
 
@@ -95,6 +97,22 @@ function Tabuleiro({
     case "labirinto":
       return (
         <TabuleiroLabirinto
+          conteudo={conteudo}
+          aoConcluir={aoConcluir}
+          registrarObterDica={registrarObterDica}
+        />
+      );
+    case "sudoku":
+      return (
+        <TabuleiroSudoku
+          conteudo={conteudo}
+          aoConcluir={aoConcluir}
+          registrarObterDica={registrarObterDica}
+        />
+      );
+    case "robo":
+      return (
+        <TabuleiroRobo
           conteudo={conteudo}
           aoConcluir={aoConcluir}
           registrarObterDica={registrarObterDica}

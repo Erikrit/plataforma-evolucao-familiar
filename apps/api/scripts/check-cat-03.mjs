@@ -21,7 +21,8 @@ assert.deepEqual(
 );
 
 const totalFases = CATALOGO_JOGOS_EXPANSAO_E5.reduce((acc, jogo) => acc + jogo.fases.length, 0);
-assert.equal(totalFases, 20);
+// Ticket 09: 15 fases por jogo, em três trilhas; a dificuldade é medida pela régua (test:regua).
+assert.equal(totalFases, 60);
 
 function rodada(tipo, config, indice) {
   let sorteios = 0;
@@ -67,7 +68,7 @@ for (const jogo of CATALOGO_JOGOS_EXPANSAO_E5) {
   assert.ok(CATEGORIAS_BIBLIOTECA.includes(jogo.categoria));
   assert.ok(jogo.tipoMecanica);
   obterMotor(jogo.tipoMecanica);
-  assert.deepEqual(jogo.fases.map((fase) => fase.numero), [1, 2, 3, 4, 5]);
+  assert.deepEqual(jogo.fases.map((fase) => fase.numero), Array.from({ length: 15 }, (_, i) => i + 1));
   for (const fase of jogo.fases) {
     assert.ok(fase.titulo && fase.objetivo);
     const config = obterMotor(jogo.tipoMecanica).validarConfiguracao(fase.configuracao);
@@ -75,7 +76,7 @@ for (const jogo of CATALOGO_JOGOS_EXPANSAO_E5) {
 
     if (jogo.tipoMecanica === "memoria") {
       assert.ok(fase.configuracao.conjuntos.length >= 2);
-      const esperados = [2, 3, 4, 5, 6][fase.numero - 1];
+      const esperados = fase.configuracao.conjuntos[0].length;
       for (const [indice, conjunto] of fase.configuracao.conjuntos.entries()) {
         assert.equal(conjunto.length, esperados);
         const conteudo = rodada("memoria", fase.configuracao, indice);
@@ -105,8 +106,8 @@ for (const jogo of CATALOGO_JOGOS_EXPANSAO_E5) {
     }
 
     if (jogo.tipoMecanica === "labirinto") {
-      const esperados = [1, 1, 2, 2, 3][fase.numero - 1];
-      assert.ok(fase.configuracao.mapas.length >= 2);
+      const esperados = [...fase.configuracao.mapas[0].join("")].filter((c) => c === "P").length;
+      assert.ok(esperados >= 1 && fase.configuracao.mapas.length >= 2);
       for (const [indice, mapa] of fase.configuracao.mapas.entries()) {
         const conteudo = rodada("labirinto", fase.configuracao, indice);
         assert.equal(conteudo.tipo, "labirinto");
@@ -117,4 +118,4 @@ for (const jogo of CATALOGO_JOGOS_EXPANSAO_E5) {
   }
 }
 
-console.log("check-cat-03: quatro jogos, 20 fases, variantes e motores validados");
+console.log("check-cat-03: quatro jogos, 60 fases, variantes e motores validados");

@@ -9,12 +9,14 @@
 import { CATALOGO_JOGOS_PILOTO_E5 } from "../prisma/catalogo-jogos-piloto-e5.mjs";
 import { CATALOGO_JOGOS_EXPANSAO_E5 } from "../prisma/catalogo-jogos-expansao-e5.mjs";
 import { CATALOGO_JOGOS_HISTORIAS_E5 } from "../prisma/catalogo-jogos-historias-e5.mjs";
+import { CATALOGO_JOGOS_MARCO1_E5 } from "../prisma/catalogo-jogos-marco1-e5.mjs";
 
 /** Mesma composição que a carga oficial publica (`prisma/carga-oficial.mjs`). */
 export const CATALOGO_CARREGADO = [
   ...CATALOGO_JOGOS_PILOTO_E5,
   ...CATALOGO_JOGOS_EXPANSAO_E5,
   ...CATALOGO_JOGOS_HISTORIAS_E5,
+  ...CATALOGO_JOGOS_MARCO1_E5,
 ];
 
 /**
@@ -42,8 +44,166 @@ export const VOCABULARIO_FIGURAS = {
   "🪥": ["escova", "dente"], "🛏️": ["cama", "dorm", "acord", "deit"], "⏰": ["despertador", "relogio", "acord"],
   "🚶": ["caminh", "andar", "passe"], "📄": ["papel", "folha"], "✏️": ["lapis", "desenh"], "✍️": ["escrev"],
   "💌": ["carta", "cartao", "envelope", "bilhete"],
+  // Ticket 09: figuras novas do Marco 1 (termos = palavras do nome; revisão humana na homologação).
+  "🐶": ["cachorro"],
+  "🐢": ["tartaruga"],
+  "🐸": ["sapo"],
+  "🐄": ["vaca"],
+  "🐖": ["porco"],
+  "🐑": ["ovelha"],
+  "🐴": ["cavalo"],
+  "🐘": ["elefante"],
+  "🦒": ["girafa"],
+  "🐒": ["macaco"],
+  "🦁": ["leao"],
+  "🐧": ["pinguim"],
+  "🦆": ["pato"],
+  "🐌": ["caracol"],
+  "🐞": ["joaninha"],
+  "🦀": ["caranguejo"],
+  "🐙": ["polvo"],
+  "🐳": ["baleia"],
+  "🐔": ["galinha"],
+  "🐭": ["rato"],
+  "🌻": ["girassol"],
+  "🍄": ["cogumelo"],
+  "🌷": ["tulipa"],
+  "🥝": ["kiwi"],
+  "🥥": ["coco"],
+  "🍋": ["limao"],
+  "🥭": ["manga"],
+  "🌽": ["milho"],
+  "🥦": ["brocolis"],
+  "🥔": ["batata"],
+  "🍞": ["pao"],
+  "🧀": ["queijo"],
+  "🥚": ["ovo"],
+  "🍪": ["biscoito"],
+  "🌈": ["arco", "iris"],
+  "❄️": ["floco", "neve"],
+  "⚡": ["raio"],
+  "🚁": ["helicoptero"],
+  "🚜": ["trator"],
+  "🚀": ["foguete"],
+  "🛴": ["patinete"],
+  "🪑": ["cadeira"],
+  "🕯️": ["vela"],
+  "🧸": ["ursinho"],
+  "🎈": ["balao"],
+  "🎲": ["dado"],
+  "🧦": ["meia"],
+  "🧢": ["bone"],
+  "🖍️": ["giz", "cera"],
+  "📏": ["regua"],
+  "✂️": ["tesoura"],
   "🔵": ["circulo"], "🟢": ["circulo"], "🟥": ["quadrado"], "🔺": ["triangulo"], "🔻": ["triangulo"],
 };
+
+/**
+ * Termos de ação das cenas de Histórias (ticket 09): somados aos do vocabulário,
+ * porque a cena nomeia a ação feita com a figura (ex.: "Assar no forno" com 🔥).
+ */
+const TERMOS_CENAS = {
+  "🐣": ["pintinho"],
+  "🧵": ["linha"],
+  "☂️": ["guarda"],
+  "📮": ["correio"],
+  "🎉": ["festa", "cantar"],
+  "🎁": ["presente", "embrulh"],
+  "🌬️": ["vento"],
+  "🪣": ["balde"],
+  "🧽": ["esponja", "molhar", "lavar"],
+  "🚪": ["porta", "sair"],
+  "🍯": ["mel"],
+  "🐝": ["abelha"],
+  "🌻": ["girassol"],
+  "🍽️": ["prato", "comer", "servir"],
+  "🎈": ["balao", "encher"],
+  "🚗": ["carro"],
+  "🍞": ["pao"],
+  "🧀": ["queijo"],
+  "🥪": ["sanduiche"],
+  "🌈": ["arco"],
+  "🌧️": ["chuva"],
+  "🍎": ["maca"],
+  "🥕": ["cenoura"],
+  "🔥": ["fogo", "forno", "assar", "cozinh"],
+  "💧": ["gota", "agua", "enxagu", "molh"],
+  "🧼": ["sabao", "sabonete", "lavar"],
+  "☀️": ["sol"],
+  "🌳": ["arvore", "parque", "passear"],
+  "📘": ["livro"],
+  "✏️": ["lapis", "desenh"],
+  "✂️": ["tesoura", "recort"],
+  "🖍️": ["giz", "pintar"],
+  "💌": ["carta", "cartao", "envelope", "bilhete"],
+  "🏠": ["casa"],
+  "🪥": ["escova", "dente"],
+  "🎒": ["mochila"],
+  "🚌": ["onibus"],
+  "🏫": ["escola"],
+  "⏰": ["despertador", "relogio", "acord"],
+  "👕": ["camiseta", "roupa", "vest"],
+  "🧺": ["cesto", "cesta"],
+  "👟": ["tenis", "sapato"],
+  "☁️": ["nuvem"],
+  "🪁": ["pipa"],
+  "🕯️": ["vela"],
+  "🎂": ["bolo"],
+  "🥣": ["tigela", "misturar", "massa"],
+  "🥚": ["ovo"],
+  "🐔": ["galinha"],
+  "🌸": ["flor"],
+  "🌱": ["semente", "broto", "plant"],
+  "🪴": ["vaso", "planta", "terra"],
+  "😋": ["fome", "gostoso", "delicia"],
+  "📄": ["papel", "folha"],
+  "🚿": ["chuveiro", "banho", "ducha"],
+  "🚶": ["caminh", "andar", "passe"],
+};
+for (const [simbolo, termos] of Object.entries(TERMOS_CENAS)) {
+  VOCABULARIO_FIGURAS[simbolo] = [...new Set([...(VOCABULARIO_FIGURAS[simbolo] ?? []), ...termos])];
+}
+
+/**
+ * Grupo de cada figura (ticket 09): figuras do mesmo grupo se confundem mais.
+ * Usado para desempatar a progressão por semelhança (decisão de 2026-11-26).
+ */
+const GRUPOS_FIGURAS = {
+  animais: "🐈🐶🐟🐝🐇🐦🦋🦅🪰🐢🐸🐄🐖🐑🐴🐘🦒🐒🦁🐧🦆🐌🐞🦀🐙🐳🐔🐭",
+  plantas: "🌳🌸🍃🌵🌻🍄🌱🪴🌷",
+  frutas: "🍎🍐🍌🍊🍓🍇🍒🍉🍍🍑🥝🥥🍋🥭",
+  comidas: "🥕🌽🥦🍅🥔🍞🧀🥚🍪🎂🥪🥣",
+  ceu: "☀️🌙⭐☁️☄️🌈❄️⚡🌧️",
+  transportes: "⛵🚂🚲🚗🚌🛵✈️🚁🚜🚀🛴",
+  casa: "🔑📘☕🏠🪑🛏️🕯️⏰🧼🧺🚿🪥",
+  brinquedos: "⚽🏀🪁🧸🎈🎲",
+  roupas: "👟👕🧦🧢🎒",
+  escola: "✏️🖍️📏✂️📄🏫",
+  lugares: "🏰⛪⛺",
+  formas: "🔵🟢🟥🔺🔻🟦🟡🔶",
+};
+const SUPERGRUPOS = {
+  animais: "seres vivos", plantas: "seres vivos", frutas: "alimentos", comidas: "alimentos",
+  ceu: "natureza", casa: "objetos", brinquedos: "objetos", roupas: "objetos", escola: "objetos",
+  transportes: "transportes", lugares: "lugares", formas: "formas",
+};
+const grupoDe = (simbolo) =>
+  Object.entries(GRUPOS_FIGURAS).find(([, simbolos]) => [...new Intl.Segmenter().segment(simbolos)].some((p) => p.segment === simbolo))?.[0] ?? null;
+
+/** 2 por distrator do mesmo grupo da resposta, 1 se só do mesmo supergrupo. */
+function semelhancaComResposta(resposta, distratores) {
+  const g = grupoDe(resposta.simbolo);
+  if (!g) return 0;
+  return distratores.reduce((total, d) => {
+    const gd = grupoDe(d.simbolo);
+    return total + (gd === g ? 2 : gd && SUPERGRUPOS[gd] === SUPERGRUPOS[g] ? 1 : 0);
+  }, 0);
+}
+
+/** Letra (Forme a palavra) ou número (Do menor ao maior): a peça mostra o próprio nome. */
+const ehNumero = (simbolo) => /^\d+$/.test(simbolo);
+const ehAutodescritiva = (simbolo) => ehNumero(simbolo) || /^\p{Lu}$/u.test(simbolo);
 
 const NOME_FORMA = { circulo: "circulo", quadrado: "quadrado", triangulo: "triangulo", losango: "losango" };
 
@@ -54,10 +214,14 @@ const NOME_FORMA = { circulo: "circulo", quadrado: "quadrado", triangulo: "trian
  */
 const METRICAS = {
   labirinto: { principal: "decisoes", secundarias: [], naoCaem: ["passos"], extras: ["juncoes", "becos"] },
-  memoria: { principal: "pares", secundarias: [] },
-  escolha: { principal: "opcoes", secundarias: [] },
+  memoria: { principal: "pares", secundarias: ["semelhanca"] },
+  escolha: { principal: "opcoes", secundarias: ["semelhanca"] },
   sequencia: { principal: "periodo", secundarias: ["comprimento", "lacunaNoMeio"] },
-  ordenacao: { principal: "cenas", secundarias: [] },
+  // Ticket 13: Pequenos com nome, Médios sem nome, Grandes com intrusas; a pista sai nos empates.
+  ordenacao: { principal: "cenas", secundarias: ["semNomes", "intrusas", "semPista"] },
+  // Ticket 12: Sudoku cresce em casas vazias; Robô com setas, em curvas (comandos a planejar).
+  sudoku: { principal: "vazias", secundarias: ["tamanho"] },
+  robo: { principal: "curvas", secundarias: [], naoCaem: ["passos"], extras: ["decisoes"] },
 };
 
 const normalizar = (texto) =>
@@ -163,6 +327,65 @@ function avaliarMapa(mapa) {
   };
 }
 
+/** Mudanças de direção ao longo do percurso (Robô com setas). */
+function contarCurvas(celulas) {
+  let curvas = 0;
+  for (let i = 2; i < celulas.length; i += 1) {
+    const [a, b, c] = [celulas[i - 2], celulas[i - 1], celulas[i]];
+    if (b[0] - a[0] !== c[0] - b[0] || b[1] - a[1] !== c[1] - b[1]) curvas += 1;
+  }
+  return curvas;
+}
+
+// ---------- Sudoku ----------
+
+const CAIXAS = { 4: [2, 2], 6: [2, 3] };
+
+function gradeValida(grade, n) {
+  const [bl, bc] = CAIXAS[n] ?? [0, 0];
+  const conjuntos = [];
+  for (let i = 0; i < n; i += 1) {
+    conjuntos.push(grade[i]);
+    conjuntos.push(grade.map((linha) => linha[i]));
+  }
+  for (let l = 0; l < n; l += bl) {
+    for (let c = 0; c < n; c += bc) {
+      conjuntos.push(grade.slice(l, l + bl).flatMap((linha) => linha.slice(c, c + bc)));
+    }
+  }
+  return conjuntos.every((v) => v.length === n && new Set(v).size === n && v.every((x) => x >= 1 && x <= n));
+}
+
+/** Conta soluções até `limite` (backtracking). */
+function contarSolucoes(grade, n, limite = 2) {
+  const [bl, bc] = CAIXAS[n];
+  const g = grade.map((linha) => [...linha]);
+  let total = 0;
+  const pode = (l, c, v) => {
+    for (let i = 0; i < n; i += 1) if (g[l][i] === v || g[i][c] === v) return false;
+    const l0 = l - (l % bl);
+    const c0 = c - (c % bc);
+    for (let i = l0; i < l0 + bl; i += 1) for (let j = c0; j < c0 + bc; j += 1) if (g[i][j] === v) return false;
+    return true;
+  };
+  const resolver = (pos) => {
+    if (total >= limite) return;
+    if (pos === n * n) { total += 1; return; }
+    const [l, c] = [Math.floor(pos / n), pos % n];
+    if (g[l][c]) { resolver(pos + 1); return; }
+    for (let v = 1; v <= n; v += 1) {
+      if (!pode(l, c, v)) continue;
+      g[l][c] = v;
+      resolver(pos + 1);
+      g[l][c] = 0;
+    }
+  };
+  resolver(0);
+  return total;
+}
+
+const lerGrade = (linhas) => linhas.map((linha) => [...linha].map((x) => (x === "." ? 0 : Number(x))));
+
 const espelhoHorizontal = (mapa) => mapa.map((linha) => [...linha].reverse().join(""));
 const espelhoVertical = (mapa) => [...mapa].reverse();
 
@@ -179,6 +402,42 @@ const MOTORES = {
       const semMarcos = mapa.map((linha) => linha.replace(/[IFP]/g, "."));
       return [semMarcos, espelhoHorizontal(semMarcos), espelhoVertical(semMarcos)].map((m) => m.join("/"));
     },
+  },
+  robo: {
+    variantes: (config) => config.mapas ?? [],
+    avaliar(mapa) {
+      const base = avaliarMapa(mapa);
+      const celulas = menorPercurso(mapa);
+      return { ...base, metricas: { ...base.metricas, curvas: celulas ? contarCurvas(celulas) : 0 } };
+    },
+    chave: (mapa) => mapa.join("/"),
+    espelhos: (mapa) => [espelhoHorizontal(mapa), espelhoVertical(mapa)].map((m) => m.join("/")),
+    paredes: (mapa) => {
+      const semMarcos = mapa.map((linha) => linha.replace(/[IFP]/g, "."));
+      return [semMarcos, espelhoHorizontal(semMarcos), espelhoVertical(semMarcos)].map((m) => m.join("/"));
+    },
+  },
+  sudoku: {
+    variantes: (config) => (config.grades ?? []).map((grade) => ({ grade, config })),
+    avaliar({ grade, config }) {
+      const falhas = [];
+      const n = config.tamanho;
+      const inicial = lerGrade(grade.inicial ?? []);
+      const solucao = lerGrade(grade.solucao ?? []);
+      if (!CAIXAS[n] || (config.simbolos ?? []).length !== n || !gradeValida(solucao, n)) {
+        falhas.push(["solucao", "solução que não é um sudoku válido"]);
+      } else if (inicial.some((linha, l) => linha.some((v, c) => v && v !== solucao[l][c]))) {
+        falhas.push(["solucao", "casa dada diferente da solução"]);
+      } else if (contarSolucoes(inicial, n) !== 1) {
+        falhas.push(["resposta-unica", "a grade admite mais de uma solução"]);
+      }
+      for (const simbolo of config.simbolos ?? []) {
+        const erro = conferirFigura(simbolo);
+        if (erro) falhas.push(["nome-figura", erro]);
+      }
+      return { metricas: { vazias: inicial.flat().filter((v) => !v).length, tamanho: n }, falhas };
+    },
+    chave: ({ grade }) => `${(grade.inicial ?? []).join("/")}=${(grade.solucao ?? []).join("/")}`,
   },
   memoria: {
     variantes: (config) => config.conjuntos ?? [],
@@ -212,7 +471,9 @@ const MOTORES = {
         const nomes = vazamentos.map((nome) => `“${nome}”`).join(", ");
         falhas.push(["rotulo", `a sombra mostra o nome do objeto (${nomes})`]);
       }
-      return { metricas: { pares: contagem.size }, falhas };
+      // Semelhança: pares menos grupos distintos (mais pares do mesmo grupo, mais difícil).
+      const grupos = new Set(objetos.map((o, i) => grupoDe(o.simbolo) ?? `sem-grupo-${i}`));
+      return { metricas: { pares: contagem.size, semelhanca: contagem.size - grupos.size }, falhas };
     },
     chave: (conjunto) => conjunto.map((item) => item.id).sort().join(","),
   },
@@ -228,20 +489,27 @@ const MOTORES = {
         const gemeas = opcoes.filter((opcao) => opcao !== correta && igualVisivel(opcao, correta));
         if (gemeas.length) falhas.push(["resposta-unica", `${gemeas.length + 1} opções iguais a “${correta.nome}”`]);
         const motivos = [];
-        if (normalizar(conjunto.enunciado) === normalizar(correta.nome)) motivos.push("o nome da resposta repete o enunciado");
+        // Com nomes ocultos nos botões, o rótulo não aparece e não entrega a resposta.
+        const visiveis = !conjunto.ocultarNomes;
+        if (visiveis && normalizar(conjunto.enunciado) === normalizar(correta.nome)) motivos.push("o nome da resposta repete o enunciado");
         const nomes = opcoes.map((opcao) => normalizar(opcao.nome));
         const vezes = (nome) => nomes.filter((n) => n === nome).length;
         const distratoras = opcoes.filter((opcao) => opcao !== correta).map((opcao) => normalizar(opcao.nome));
-        if (vezes(normalizar(correta.nome)) === 1 && distratoras.every((nome) => vezes(nome) >= 2)) {
+        if (visiveis && vezes(normalizar(correta.nome)) === 1 && distratoras.every((nome) => vezes(nome) >= 2)) {
           motivos.push(`só a resposta tem nome diferente (“${correta.nome}”)`);
         }
         if (motivos.length) falhas.push(["rotulo", motivos.join("; ")]);
+        // Dica de primeiro nível não pode dizer o nome da resposta.
+        if (conjunto.dica && ` ${palavras(conjunto.dica).join(" ")} `.includes(` ${palavras(correta.nome).join(" ")} `)) {
+          falhas.push(["dica", `a dica entrega a resposta (“${correta.nome}”)`]);
+        }
       }
       for (const opcao of opcoes) {
         const erro = conferirFigura(opcao);
         if (erro) falhas.push(["nome-figura", erro]);
       }
-      return { metricas: { opcoes: opcoes.length }, falhas };
+      const semelhanca = correta ? semelhancaComResposta(correta, opcoes.filter((o) => o !== correta)) : 0;
+      return { metricas: { opcoes: opcoes.length, semelhanca }, falhas };
     },
     chave: (conjunto) => `${conjunto.resposta}:${(conjunto.opcoes ?? []).map((o) => o.id).sort().join(",")}`,
   },
@@ -273,17 +541,34 @@ const MOTORES = {
     avaliar(conjunto) {
       const falhas = [];
       const cenas = conjunto.cenas ?? [];
-      if (cenas.length < 2 || new Set(cenas.map((cena) => cena.id)).size !== cenas.length) {
+      const intrusas = conjunto.intrusas ?? [];
+      const todas = [...cenas, ...intrusas];
+      if (cenas.length < 2 || new Set(todas.map((cena) => cena.id)).size !== todas.length) {
         falhas.push(["solucao", "cenas insuficientes ou com ids repetidos"]);
       }
-      if (cenas.some((cena, i) => cenas.some((outra, j) => j > i && igualVisivel(cena, outra)))) {
-        falhas.push(["resposta-unica", "duas cenas iguais admitem mais de uma ordem"]);
+      if (todas.some((cena, i) => todas.some((outra, j) => j > i && igualVisivel(cena, outra)))) {
+        falhas.push(["resposta-unica", "duas peças iguais admitem mais de uma ordem"]);
       }
-      for (const cena of cenas) {
-        const erro = conferirFigura(cena);
+      // Do menor ao maior (ticket 12): a ordem certa é a crescente.
+      if (cenas.every((cena) => ehNumero(cena.simbolo))) {
+        const valores = cenas.map((cena) => Number(cena.simbolo));
+        if (valores.some((v, i) => i > 0 && v <= valores[i - 1])) falhas.push(["solucao", "números fora da ordem crescente"]);
+      }
+      for (const cena of todas) {
+        const erro = ehAutodescritiva(cena.simbolo)
+          ? normalizar(cena.nome) === normalizar(cena.simbolo) ? null : `“${cena.nome}” não corresponde a ${cena.simbolo}`
+          : conferirFigura(cena);
         if (erro) falhas.push(["nome-figura", erro]);
       }
-      return { metricas: { cenas: cenas.length }, falhas };
+      return {
+        metricas: {
+          cenas: cenas.length,
+          semNomes: conjunto.ocultarNomes ? 1 : 0,
+          intrusas: intrusas.length,
+          semPista: conjunto.dica ? 0 : 1,
+        },
+        falhas,
+      };
     },
     chave: (conjunto) => (conjunto.cenas ?? []).map((cena) => cena.id).join(","),
   },

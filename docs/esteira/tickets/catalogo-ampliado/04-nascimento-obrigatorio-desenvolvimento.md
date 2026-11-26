@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** IN_VALIDATION
+**Status:** COMPLETED
 
 **Costura:** smoke:authz e smoke de Desenvolvimento
 
@@ -13,9 +13,9 @@
 ## Critérios
 
 - [x] FF-NASC-ACE-01 — criar pessoa só com nome continua possível
-- [ ] FF-NASC-ACE-02 — concessão sem data pede a data e só conclui após persistir (API: PASS; tela: H1)
+- [x] FF-NASC-ACE-02 — concessão sem data pede a data e só conclui após persistir (API: PASS; H1 PASS após ajuste)
 - [x] FF-NASC-ACE-03 — pessoa existente sem data é orientada, sem perda de progresso (API: PASS; H2 dispensado pelo responsável: sem pessoas reais)
-- [ ] FF-NASC-ACE-04 — corrigir a data muda a faixa sem reescrever registros
+- [x] FF-NASC-ACE-04 — corrigir a data muda a faixa sem reescrever registros (sem reescrever: PASS; mudança de faixa padrão segue no ticket 05, D1)
 
 ## Pendências
 
@@ -39,3 +39,4 @@ A homologação pediu o campo já no formulário: o cartão do administrador ind
 se a pessoa tem data e a concessão e o convite mostram a data obrigatória ao
 escolher Desenvolvimento, sem esperar a recusa da API (DEV-CAT-M1, ticket 04).
 ```
+- **H1 refeito (2026-11-26):** PASS. A ordem dos campos (data logo depois da área, responsabilidade por último) virou o ticket 11.

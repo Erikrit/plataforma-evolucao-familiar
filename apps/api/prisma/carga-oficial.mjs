@@ -9,6 +9,7 @@ import { CATALOGO_BIBLIOTECA_E4 } from "./catalogo-biblioteca-e4.mjs";
 import { CATALOGO_JOGOS_PILOTO_E5 } from "./catalogo-jogos-piloto-e5.mjs";
 import { CATALOGO_JOGOS_EXPANSAO_E5 } from "./catalogo-jogos-expansao-e5.mjs";
 import { CATALOGO_JOGOS_HISTORIAS_E5 } from "./catalogo-jogos-historias-e5.mjs";
+import { CATALOGO_JOGOS_MARCO1_E5 } from "./catalogo-jogos-marco1-e5.mjs";
 import { trilhaDaFase } from "./trilhas-jogos.mjs";
 
 const PUBLICADO_EM = new Date("2026-11-22T00:00:00.000Z");
@@ -16,6 +17,7 @@ const CATALOGO_JOGOS_E5 = [
   ...CATALOGO_JOGOS_PILOTO_E5,
   ...CATALOGO_JOGOS_EXPANSAO_E5,
   ...CATALOGO_JOGOS_HISTORIAS_E5,
+  ...CATALOGO_JOGOS_MARCO1_E5,
 ];
 
 export async function carregarCatalogosOficiais(prisma) {
@@ -41,18 +43,19 @@ export async function carregarCatalogosOficiais(prisma) {
     }
   }
 
+  // Ticket 12: jogos ativos do Marco 1; os arquivados seguem na carga com ativo: false.
   const idsEsperados = [
     "memoria",
-    "sequencia",
     "labirinto",
-    "pares-sombras",
-    "ache-intruso",
-    "palavra-figura",
     "historias-cenas",
     "entrega-jardim",
+    "sudoku-figuras",
+    "forme-palavra",
+    "menor-maior",
+    "robo-setas",
   ];
   for (const id of idsEsperados) {
-    if (!CATALOGO_JOGOS_E5.some((jogo) => jogo.id === id)) {
+    if (!CATALOGO_JOGOS_E5.some((jogo) => jogo.id === id && jogo.ativo !== false)) {
       throw new Error(`E5 oficial sem jogo obrigatório: ${id}`);
     }
   }
@@ -113,7 +116,7 @@ export async function carregarCatalogosOficiais(prisma) {
           versao: jogo.versao,
           faixaEtariaMin: jogo.faixaEtariaMin,
           faixaEtariaMax: jogo.faixaEtariaMax,
-          ativo: true,
+          ativo: jogo.ativo !== false,
           publicadoEm: PUBLICADO_EM,
           ordemEditorial: jogo.ordemEditorial,
           capaRef: null,
@@ -127,7 +130,7 @@ export async function carregarCatalogosOficiais(prisma) {
           versao: jogo.versao,
           faixaEtariaMin: jogo.faixaEtariaMin,
           faixaEtariaMax: jogo.faixaEtariaMax,
-          ativo: true,
+          ativo: jogo.ativo !== false,
           publicadoEm: PUBLICADO_EM,
           ordemEditorial: jogo.ordemEditorial,
           capaRef: null,

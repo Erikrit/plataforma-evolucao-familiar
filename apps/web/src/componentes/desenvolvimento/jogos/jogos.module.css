@@ -352,3 +352,29 @@
   overflow-wrap: anywhere;
   line-height: 1.2;
 }
+
+/* Dica de 2º nível (ticket 09): destaca a opção certa. */
+.pecaAcao[data-dica="true"] {
+  outline: 3px dashed #725000;
+  outline-offset: 2px;
+}
+
+/* Sudoku de figuras (ticket 12). */
+.sudoku {
+  display: grid;
+  max-width: 26rem;
+  border: 3px solid #304470;
+}
+.casaSudoku {
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid #c9d4e6;
+  font-size: clamp(1rem, 5vw, 1.6rem);
+  min-height: 2.75rem;
+}
+.casaSudoku[data-dada="true"] { background: #eef2f7; cursor: default; }
+.casaSudoku[aria-pressed="true"] { outline: 3px solid #244e95; outline-offset: -3px; }
+.casaSudoku[data-dica="true"] { outline: 3px dashed #725000; outline-offset: -5px; }
+.casaSudoku[data-borda-direita="true"] { border-right: 3px solid #304470; }
+.casaSudoku[data-borda-baixo="true"] { border-bottom: 3px solid #304470; }

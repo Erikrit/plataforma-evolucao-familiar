@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Stack, Text, UnstyledButton } from "@mantine/core";
 import type { FiguraMemoria } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
+import { dicaMemoria } from "./dicas-jogos";
 import estilos from "./jogos.module.css";
 
 export function TabuleiroMemoria({
@@ -18,6 +19,8 @@ export function TabuleiroMemoria({
   const [dica, setDica] = useState<number[]>([]);
   const primeiraCarta = useRef<HTMLButtonElement>(null);
   const estado = useRef({ viradas, encontradas });
+  // Nível da dica: volta ao 1º sempre que o tabuleiro muda (ticket 09).
+  const pedidosDica = useRef({ chave: "", nivel: 0 });
   estado.current = { viradas, encontradas };
 
   useEffect(() => {
@@ -27,23 +30,20 @@ export function TabuleiroMemoria({
   useEffect(() => {
     registrarObterDica(() => {
       const { viradas: abertas, encontradas: pares } = estado.current;
-      const primeira =
-        abertas.length === 1
-          ? abertas[0]
-          : cartas.findIndex((_, indice) => !pares.includes(indice));
-      if (primeira === -1) return null;
-      const par = cartas.findIndex(
-        (carta, indice) =>
-          indice !== primeira && carta.id === cartas[primeira].id,
-      );
-      if (par === -1) return null;
+      const chave = `${abertas.join(",")}|${pares.length}`;
+      const pedidos = pedidosDica.current;
+      pedidos.nivel = pedidos.chave === chave ? pedidos.nivel + 1 : 1;
+      pedidos.chave = chave;
       if (abertas.length === 2) setViradas([]);
-      if (abertas.length === 1) {
-        setDica([par]);
-        return `Agora vire a carta ${par + 1}.`;
-      }
-      setDica([primeira, par]);
-      return `Tente as cartas ${primeira + 1} e ${par + 1}.`;
+      const dicaAtual = dicaMemoria({
+        cartas,
+        viradas: abertas.length === 1 ? abertas : [],
+        encontradas: pares,
+        nivel: pedidos.nivel,
+      });
+      if (!dicaAtual) return null;
+      setDica(dicaAtual.indicar);
+      return dicaAtual.texto;
     });
     return () => registrarObterDica(null);
   }, [cartas, registrarObterDica]);

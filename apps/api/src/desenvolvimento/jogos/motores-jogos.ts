@@ -31,6 +31,8 @@ export type ConfigEscolha = Readonly<{
     opcoes: readonly FiguraEscolha[];
     resposta: string;
     dica?: string;
+    /** Palavra e figura (ticket 09): o nome da opção só aparece depois do acerto. */
+    ocultarNomes?: boolean;
   }>[];
 }>;
 export type CenaOrdenacao = Readonly<{ id: string; nome: string; simbolo: string }>;
@@ -39,6 +41,10 @@ export type ConfigOrdenacao = Readonly<{
     enunciado: string;
     cenas: readonly CenaOrdenacao[];
     dica?: string;
+    /** Ticket 13: Médios e Grandes mostram só a figura. */
+    ocultarNomes?: boolean;
+    /** Ticket 13: cenas que não fazem parte da resposta e devem ficar de fora. */
+    intrusas?: readonly CenaOrdenacao[];
   }>[];
 }>;
 
@@ -341,11 +347,15 @@ const motorEscolha: MotorJogo<ConfigEscolha> = {
       if (item.dica != null && typeof item.dica !== "string") {
         throw new BadRequestException("Dica de escolha inválida.");
       }
+      if (item.ocultarNomes != null && typeof item.ocultarNomes !== "boolean") {
+        throw new BadRequestException("Configuração de nomes da escolha inválida.");
+      }
       return {
         enunciado: item.enunciado,
         opcoes,
         resposta: item.resposta,
         ...(typeof item.dica === "string" ? { dica: item.dica } : {}),
+        ...(item.ocultarNomes === true ? { ocultarNomes: true } : {}),
       };
     });
     return { conjuntos };
@@ -358,6 +368,7 @@ const motorEscolha: MotorJogo<ConfigEscolha> = {
       opcoes: embaralhar([...conjunto.opcoes], sortear),
       resposta: conjunto.resposta,
       ...(conjunto.dica ? { dica: conjunto.dica } : {}),
+      ...(conjunto.ocultarNomes ? { ocultarNomes: true } : {}),
     };
   },
 };
@@ -396,16 +407,26 @@ const motorOrdenacao: MotorJogo<ConfigOrdenacao> = {
         throw new BadRequestException("Ordenação precisa de ao menos duas cenas.");
       }
       const cenas = item.cenas.map(validarCenaOrdenacao);
-      if (new Set(cenas.map((cena) => cena.id)).size !== cenas.length) {
+      if (item.intrusas != null && !Array.isArray(item.intrusas)) {
+        throw new BadRequestException("Cenas intrusas inválidas.");
+      }
+      const intrusas = (item.intrusas ?? []).map(validarCenaOrdenacao);
+      const todas = [...cenas, ...intrusas];
+      if (new Set(todas.map((cena) => cena.id)).size !== todas.length) {
         throw new BadRequestException("Cenas de ordenação com ids duplicados.");
       }
       if (item.dica != null && typeof item.dica !== "string") {
         throw new BadRequestException("Dica de ordenação inválida.");
       }
+      if (item.ocultarNomes != null && typeof item.ocultarNomes !== "boolean") {
+        throw new BadRequestException("Configuração de nomes da ordenação inválida.");
+      }
       return {
         enunciado: item.enunciado,
         cenas,
         ...(typeof item.dica === "string" ? { dica: item.dica } : {}),
+        ...(item.ocultarNomes === true ? { ocultarNomes: true } : {}),
+        ...(intrusas.length ? { intrusas } : {}),
       };
     });
     return { conjuntos };
@@ -413,7 +434,7 @@ const motorOrdenacao: MotorJogo<ConfigOrdenacao> = {
   montarConteudo(config, sortear = randomInt) {
     const conjunto = config.conjuntos[sortear(config.conjuntos.length)];
     const ordemCorreta = conjunto.cenas.map((cena) => cena.id);
-    let cenas = embaralhar([...conjunto.cenas], sortear);
+    let cenas = embaralhar([...conjunto.cenas, ...(conjunto.intrusas ?? [])], sortear);
     if (cenas.every((cena, indice) => cena.id === ordemCorreta[indice])) {
       cenas = [...cenas.slice(1), cenas[0]];
     }
@@ -423,7 +444,91 @@ const motorOrdenacao: MotorJogo<ConfigOrdenacao> = {
       cenas,
       ordemCorreta,
       ...(conjunto.dica ? { dica: conjunto.dica } : {}),
+      ...(conjunto.ocultarNomes ? { ocultarNomes: true } : {}),
+      ...(conjunto.intrusas?.length ? { intrusas: conjunto.intrusas.length } : {}),
     };
+  },
+};
+
+// ---------- Sudoku de figuras (DEV-CAT-M1, ticket 12) ----------
+
+export type ConfigSudoku = Readonly<{
+  tamanho: 4 | 6;
+  simbolos: readonly FiguraEscolha[];
+  grades: readonly Readonly<{ inicial: readonly string[]; solucao: readonly string[] }>[];
+}>;
+
+const CAIXAS_SUDOKU: Record<number, readonly [number, number]> = { 4: [2, 2], 6: [2, 3] };
+
+function lerGradeSudoku(linhas: unknown, tamanho: number, permiteVazio: boolean): number[][] {
+  if (!Array.isArray(linhas) || linhas.length !== tamanho) {
+    throw new BadRequestException("Grade de sudoku inválida.");
+  }
+  return linhas.map((linha) => {
+    if (typeof linha !== "string" || linha.length !== tamanho) {
+      throw new BadRequestException("Grade de sudoku inválida.");
+    }
+    return [...linha].map((x) => {
+      if (x === "." && permiteVazio) return 0;
+      const v = Number(x);
+      if (!Number.isInteger(v) || v < 1 || v > tamanho) throw new BadRequestException("Grade de sudoku inválida.");
+      return v;
+    });
+  });
+}
+
+const motorSudoku: MotorJogo<ConfigSudoku> = {
+  id: "sudoku",
+  validarConfiguracao(config) {
+    const bruto = exigirObjeto(config, "sudoku");
+    const tamanho = bruto.tamanho;
+    if (tamanho !== 4 && tamanho !== 6) throw new BadRequestException("Tamanho de sudoku inválido.");
+    if (!Array.isArray(bruto.simbolos) || bruto.simbolos.length !== tamanho) {
+      throw new BadRequestException("Símbolos de sudoku inválidos.");
+    }
+    const simbolos = bruto.simbolos.map(validarFiguraEscolha);
+    if (!Array.isArray(bruto.grades) || bruto.grades.length === 0) {
+      throw new BadRequestException("Configuração de sudoku sem grades.");
+    }
+    const grades = bruto.grades.map((grade) => {
+      const item = exigirObjeto(grade, "sudoku");
+      const inicial = lerGradeSudoku(item.inicial, tamanho, true);
+      const solucao = lerGradeSudoku(item.solucao, tamanho, false);
+      if (inicial.some((linha, l) => linha.some((v, c) => v !== 0 && v !== solucao[l][c]))) {
+        throw new BadRequestException("Grade de sudoku incoerente com a solução.");
+      }
+      return { inicial: item.inicial as string[], solucao: item.solucao as string[] };
+    });
+    return { tamanho, simbolos, grades };
+  },
+  montarConteudo(config, sortear = randomInt) {
+    const grade = config.grades[sortear(config.grades.length)];
+    const [linhasCaixa, colunasCaixa] = CAIXAS_SUDOKU[config.tamanho];
+    return {
+      tipo: "sudoku",
+      tamanho: config.tamanho,
+      caixa: { linhas: linhasCaixa, colunas: colunasCaixa },
+      simbolos: config.simbolos,
+      inicial: lerGradeSudoku(grade.inicial, config.tamanho, true),
+      solucao: lerGradeSudoku(grade.solucao, config.tamanho, false),
+    };
+  },
+};
+
+// ---------- Robô com setas (DEV-CAT-M1, ticket 12): mapa do labirinto, sem pontos ----------
+
+const motorRobo: MotorJogo<ConfigLabirinto> = {
+  id: "robo",
+  validarConfiguracao(config) {
+    const validado = motorLabirinto.validarConfiguracao(config);
+    if (validado.mapas.some((mapa) => localizarTodos(mapa, "P").length > 0)) {
+      throw new BadRequestException("O robô não usa pontos de entrega.");
+    }
+    return validado;
+  },
+  montarConteudo(config, sortear = randomInt) {
+    const mapa = config.mapas[sortear(config.mapas.length)];
+    return { tipo: "robo", mapa, inicio: localizar(mapa, "I"), chegada: localizar(mapa, "F") };
   },
 };
 
@@ -433,6 +538,8 @@ const MOTORES: Record<string, MotorJogo> = {
   labirinto: motorLabirinto as MotorJogo,
   escolha: motorEscolha as MotorJogo,
   ordenacao: motorOrdenacao as MotorJogo,
+  sudoku: motorSudoku as MotorJogo,
+  robo: motorRobo as MotorJogo,
 };
 
 export function obterMotor(tipoMecanica: string): MotorJogo {

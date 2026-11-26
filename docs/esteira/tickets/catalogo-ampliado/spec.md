@@ -82,12 +82,15 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | Ticket | Status | Comando | Observação |
 |---|---|---|---|
 | 01 | COMPLETED | — | Verificador sobre o catálogo carregado |
-| 04 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Antes, rodar a verificação local abaixo para registrar `authz` e smokes; depois homologar no celular |
-| 08 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Celular: andar dois passos no labirinto e pedir a dica de novo |
+| 04 | COMPLETED | — | H1 a H5 homologados (H2 dispensado); mudança de faixa padrão segue no 05 |
+| 08 | COMPLETED | — | H6 a H9 homologados |
 | 02 | COMPLETED | — | Régua em modo relatório: `npm run regua:jogos -w @pef/api` (46 falhas, meta do 09) |
 | 06 | COMPLETED | — | Área Números em filtros, Histórico e Resumo; H11 no roteiro |
 | 03 | COMPLETED | — | Labirinto com 15 fases em três trilhas; migração `20261126120000_trilha_fase_jogo` a aplicar na publicação; H10 no roteiro |
-| 09 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/09-oito-jogos-com-tres-trilhas.md` | Depois do 03 e do 08 |
+| 09 | IN_VALIDATION | `/homologar DEV-CAT-M1` | 8 jogos, 120 fases aprovadas pela régua; H12 no celular |
+| 11 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/11-ordem-dos-campos-de-acesso.md` | Ordem dos campos (pedido do H1) |
+| 12 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Sudoku, Forme a palavra, Do menor ao maior e Robô com setas no lugar de 4 jogos arquivados; H13 |
+| 13 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Histórias em três degraus (com nome, só figura, com intrusa); H14 |
 | 05, 07, 10 | NEEDS_DECISION | `/sabatina` com o Produto | Aguardam D1, D2 e D3 |
 
 ### Verificação local pendente (tickets 04 e 08)

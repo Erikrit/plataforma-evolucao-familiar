@@ -31,8 +31,8 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 - **Aparelho:** celular, informar modelo e navegador.
 - **Passos:** 1. Gerenciar família → acessos. 2. Conceder Desenvolvimento para "Teste Sem Data". 3. Fechar sem informar a data. 4. Repetir e informar a data.
 - **Esperado:** no passo 3, o acesso não aparece como concedido. No passo 4, só aparece concedido depois de salvar, com a data visível no perfil.
-- **Status:** PENDING_HUMAN (refazer após o ajuste: ao escolher Desenvolvimento o campo de data já aparece obrigatório, na concessão e no convite)
-- **Retorno:** responsável, 2026-11-26: concessão funciona, mas a data só aparecia depois de tentar conceder. Esperado: ao selecionar Desenvolvimento, o campo de data aparece já como obrigatório; preencher e confirmar. Ajustado na mesma data; refazer o H1.
+- **Status:** PASS (após o ajuste)
+- **Retorno:** responsável, 2026-11-26: concessão funciona, mas a data só aparecia depois de tentar conceder. Esperado: ao selecionar Desenvolvimento, o campo de data aparece já como obrigatório; preencher e confirmar. Ajustado na mesma data; refazer o H1. Refeito em 2026-11-26: aprovado. Pedido novo (ticket 11): a data deve vir logo depois da área e a responsabilidade por último.
 
 ### H2 — FF-NASC-ACE-03: pessoa existente sem data é orientada
 - **Preparação:** pessoa fictícia que já tinha Desenvolvimento e progresso antes desta versão, sem data de nascimento (preparada pela equipe).
@@ -107,3 +107,43 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 - **Esperado:** "Números" aparece nos dois filtros; o filtro mostra estado vazio (ainda não há conteúdo de catálogo em Números, isso não é erro). No Histórico, a conclusão mostra "Área: Números". No Resumo, as áreas aparecem com o nome legível ("Números", "Memória e atenção"). A personalizada sem área continua funcionando.
 - **Status:** PASS
 - **Retorno:** responsável, 2026-11-26: aprovado; a área Números aparece.
+
+### H12 — Ticket 09: os oito jogos com três trilhas (E5-HOM)
+- **Preparação:** banco local com a carga oficial nova (120 fases); pessoa fictícia com Desenvolvimento.
+- **Aparelho:** celular de 320 a 360 px.
+- **Passos:** em cada jogo, jogar uma fase de cada trilha (por exemplo 2, 7 e 12) e pedir a dica duas vezes em uma delas.
+- **Esperado:**
+  - a dificuldade sobe de verdade de uma trilha para outra;
+  - Palavra e figura: as opções aparecem sem nome e o nome surge depois do acerto;
+  - Pares de sombras: a carta de sombra mostra só "Sombra";
+  - Histórias: cada história tem uma ordem só, e ela faz sentido;
+  - a 1ª dica orienta sem entregar e a 2ª mostra a resposta;
+  - a Memória com 10 pares e as Histórias com 9 cenas cabem e são tocáveis;
+  - as conquistas antigas continuam no Histórico.
+- **Status:** PENDING_HUMAN
+- **Retorno:**
+
+> Observação (2026-11-26): depois do H12, Palavra e figura, Pares de sombras, Ache o intruso e Complete a sequência foram arquivados a pedido do responsável (ticket 12). No H12, confira só os jogos que continuam ativos.
+
+### H13 — Ticket 12: jogos novos (Sudoku, Forme a palavra, Do menor ao maior, Robô com setas)
+- **Aparelho:** celular de 320 a 360 px.
+- **Passos:** em cada jogo novo, jogar uma fase de cada trilha (por exemplo 2, 7 e 12) e pedir a dica duas vezes em uma delas; conferir que os quatro jogos antigos não aparecem mais na Biblioteca e que conquistas antigas deles continuam no Histórico.
+- **Esperado:**
+  - **Sudoku:** grade 4×4 e depois 6×6 cabe e é tocável; a fase só conclui com a grade certa.
+  - **Forme a palavra:** a figura indica a palavra; nas fases maiores sobram letras.
+  - **Do menor ao maior:** os números crescem até dezenas de milhar.
+  - **Robô com setas:** dá para montar, executar, tirar um comando do meio e corrigir.
+  - A dificuldade sobe de verdade entre as trilhas, e o conteúdo é adequado para 5 a 12 anos.
+- **Status:** PENDING_HUMAN
+- **Retorno:**
+
+### H14 — Ticket 13: Histórias em três degraus
+- **Aparelho:** celular.
+- **Passos:** jogar as fases 3 (com nome), 8 (só figura) e 13 (só figura, com intrusa).
+- **Esperado:**
+  - nas fases 6 a 10, as cenas aparecem sem texto e dá para deduzir a ordem pelas figuras;
+  - nas fases 11 a 15, a cena intrusa claramente não pertence à história e precisa ficar de fora;
+  - a dificuldade sobe a cada degrau;
+  - a 1ª dica orienta e a 2ª diz a próxima cena.
+- **Status:** PENDING_HUMAN
+- **Retorno:**

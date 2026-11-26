@@ -19,7 +19,7 @@ const { CATEGORIAS_BIBLIOTECA } = require("../src/desenvolvimento/constantes-des
 assert.equal(CATALOGO_JOGOS_HISTORIAS_E5.length, 1);
 assert.equal(CATALOGO_JOGOS_HISTORIAS_E5[0].id, "historias-cenas");
 assert.equal(CATALOGO_JOGOS_HISTORIAS_E5[0].tipoMecanica, "ordenacao");
-assert.equal(CATALOGO_JOGOS_HISTORIAS_E5[0].fases.length, 5);
+assert.equal(CATALOGO_JOGOS_HISTORIAS_E5[0].fases.length, 15);
 
 const oficial = [
   ...CATALOGO_JOGOS_PILOTO_E5,
@@ -52,8 +52,6 @@ assert.equal(
   8,
 );
 
-const esperadosPorFase = [2, 3, 3, 4, 4];
-
 function rodada(config, indice) {
   let sorteios = 0;
   return montarConteudoMotor("ordenacao", config, () => (sorteios++ === 0 ? indice : 0));
@@ -62,19 +60,17 @@ function rodada(config, indice) {
 for (const jogo of CATALOGO_JOGOS_HISTORIAS_E5) {
   assert.ok(CATEGORIAS_BIBLIOTECA.includes(jogo.categoria));
   obterMotor(jogo.tipoMecanica);
-  assert.deepEqual(jogo.fases.map((fase) => fase.numero), [1, 2, 3, 4, 5]);
+  assert.deepEqual(jogo.fases.map((fase) => fase.numero), Array.from({ length: 15 }, (_, i) => i + 1));
   for (const fase of jogo.fases) {
     assert.ok(fase.titulo && fase.objetivo);
-    const esperados = esperadosPorFase[fase.numero - 1];
+    // Ticket 09: cenas de 2 a 9; empate de cenas passa só quando a pista sai (régua).
+    const esperados = fase.configuracao.conjuntos[0].cenas.length;
     assert.ok(fase.configuracao.conjuntos.length >= 2);
     const assinaturas = new Set();
     for (const [indice, conjunto] of fase.configuracao.conjuntos.entries()) {
       assert.equal(conjunto.cenas.length, esperados);
       assert.equal(new Set(conjunto.cenas.map((cena) => cena.id)).size, esperados);
       assert.ok(conjunto.enunciado);
-      if (fase.numero === 5) {
-        assert.ok(typeof conjunto.dica === "string" && conjunto.dica.length > 0);
-      }
       const config = obterMotor("ordenacao").validarConfiguracao({
         conjuntos: [conjunto],
       });
@@ -82,7 +78,11 @@ for (const jogo of CATALOGO_JOGOS_HISTORIAS_E5) {
       const conteudo = rodada(fase.configuracao, indice);
       assert.equal(conteudo.tipo, "ordenacao");
       assert.equal(conteudo.ordemCorreta.length, esperados);
-      assert.equal(conteudo.cenas.length, esperados);
+      // Ticket 13: as intrusas aparecem junto e ficam fora da ordem certa.
+      const intrusas = (conjunto.intrusas ?? []).length;
+      assert.equal(conteudo.cenas.length, esperados + intrusas);
+      assert.equal(conteudo.intrusas ?? 0, intrusas);
+      assert.equal(Boolean(conteudo.ocultarNomes), fase.numero >= 6);
       assert.deepEqual(
         conteudo.ordemCorreta,
         conjunto.cenas.map((cena) => cena.id),
@@ -97,4 +97,4 @@ for (const jogo of CATALOGO_JOGOS_HISTORIAS_E5) {
   }
 }
 
-console.log(`check-cat-04: Histórias em cenas, 5 fases, variantes e ordenação validados; oficial 8/${totalFasesOficial}`);
+console.log(`check-cat-04: Histórias em cenas, 15 fases, variantes e ordenação validados; oficial 8/${totalFasesOficial}`);

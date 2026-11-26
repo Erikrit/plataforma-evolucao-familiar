@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Group, Stack, Text, UnstyledButton } from "@mantine/core";
 import type { ConteudoSequencia, FiguraSequencia } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
+import { dicaSequencia } from "./dicas-jogos";
 import estilos from "./jogos.module.css";
 
 function Peca({ figura }: { figura: FiguraSequencia }) {
@@ -28,6 +29,8 @@ export function TabuleiroSequencia({
   conteudo: ConteudoSequencia;
 } & ContratoTabuleiro) {
   const [mensagem, setMensagem] = useState("");
+  const [destacada, setDestacada] = useState<string | null>(null);
+  const pedidosDica = useRef(0);
   const foco = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,14 +38,14 @@ export function TabuleiroSequencia({
   }, []);
 
   useEffect(() => {
+    pedidosDica.current = 0;
     registrarObterDica(() => {
-      const peca = conteudo.alternativas.find(
-        (item) => item.id === conteudo.resposta,
-      );
-      if (!peca) return null;
-      const texto = `Para completar o padrão, escolha ${peca.nome.toLowerCase()}.`;
-      setMensagem(texto);
-      return texto;
+      pedidosDica.current += 1;
+      const dica = dicaSequencia(conteudo, pedidosDica.current);
+      if (!dica) return null;
+      setMensagem(dica.texto);
+      setDestacada(dica.destacar ?? null);
+      return dica.texto;
     });
     return () => registrarObterDica(null);
   }, [conteudo, registrarObterDica]);
@@ -87,6 +90,7 @@ export function TabuleiroSequencia({
             key={figura.id}
             className={estilos.pecaAcao}
             onClick={() => escolher(figura)}
+            data-dica={destacada === figura.id}
           >
             <Peca figura={figura} />
           </UnstyledButton>

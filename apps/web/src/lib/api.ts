@@ -1575,6 +1575,8 @@ export type ConteudoEscolha = {
   opcoes: FiguraEscolha[];
   resposta: string;
   dica?: string;
+  /** Ticket 09: nomes só aparecem depois do acerto. */
+  ocultarNomes?: boolean;
 };
 export type ConteudoOrdenacao = {
   tipo: "ordenacao";
@@ -1582,8 +1584,28 @@ export type ConteudoOrdenacao = {
   cenas: CenaOrdenacao[];
   ordemCorreta: string[];
   dica?: string;
+  /** Ticket 13: só a figura, sem o nome. */
+  ocultarNomes?: boolean;
+  /** Ticket 13: quantas peças ficam de fora. */
+  intrusas?: number;
 };
 export type PosicaoLabirinto = { linha: number; coluna: number };
+/** Ticket 12: Sudoku de figuras. */
+export type ConteudoSudoku = {
+  tipo: "sudoku";
+  tamanho: 4 | 6;
+  caixa: { linhas: number; colunas: number };
+  simbolos: FiguraEscolha[];
+  inicial: number[][];
+  solucao: number[][];
+};
+/** Ticket 12: Robô com setas. */
+export type ConteudoRobo = {
+  tipo: "robo";
+  mapa: string[];
+  inicio: PosicaoLabirinto;
+  chegada: PosicaoLabirinto;
+};
 export type ConteudoLabirinto = {
   tipo: "labirinto";
   mapa: string[];
@@ -1596,7 +1618,9 @@ export type ConteudoPartida =
   | ConteudoSequencia
   | ConteudoEscolha
   | ConteudoOrdenacao
-  | ConteudoLabirinto;
+  | ConteudoLabirinto
+  | ConteudoSudoku
+  | ConteudoRobo;
 export type InicioPartida = {
   versao: number;
   tipoMecanica?: string;
