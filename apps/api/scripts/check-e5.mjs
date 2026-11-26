@@ -11,7 +11,6 @@ require("ts-node").register({
 const { montarConteudoMotor } = require("../src/desenvolvimento/jogos/motores-jogos");
 const { selecionarDestaquesJogos } = require("../src/desenvolvimento/jogos/destaques-jogos");
 const { CATEGORIAS_BIBLIOTECA } = require("../src/desenvolvimento/constantes-desenvolvimento");
-const { faixaPadrao, idadeEm, lerFaixaPedida } = require("../src/desenvolvimento/jogos/faixas");
 const { dicaEscolha, dicaSequencia, dicaMemoria, dicaOrdenacao, dicaSudoku, dicaRobo, comandosDoCaminho } = require("../../web/src/componentes/desenvolvimento/jogos/dicas-jogos");
 
 // Valida o catálogo que a carga oficial publica (DEV-CAT-M1, ticket 01).
@@ -197,23 +196,6 @@ assert.ok(passos.every((valor, i) => i === 0 || valor >= passos[i - 1]), `Passos
   const r1 = dicaRobo({ mapa, inicio: { linha: 1, coluna: 1 }, chegada: { linha: 3, coluna: 1 } }, [], 1);
   assert.ok(!/direita|baixo|esquerda/i.test(r1), `1º nível do robô não entrega: ${r1}`);
   assert.match(dicaRobo({ mapa, inicio: { linha: 1, coluna: 1 }, chegada: { linha: 3, coluna: 1 } }, [{ direcao: "direita", passos: 2 }], 2), /baixo.*2/i);
-}
-
-// Ticket 05 (D1, 2026-11-26): Pequenos 5–6, Médios 7–9, Grandes 10–12, pela idade na data da consulta.
-{
-  const hoje = new Date("2026-11-26T12:00:00.000Z");
-  const nascido = (iso) => new Date(`${iso}T00:00:00.000Z`);
-  assert.equal(idadeEm(nascido("2018-11-26"), hoje), 8);
-  assert.equal(idadeEm(nascido("2018-11-27"), hoje), 7, "véspera do aniversário");
-  assert.equal(faixaPadrao(nascido("2020-01-01"), hoje), "pequenos");
-  assert.equal(faixaPadrao(nascido("2019-11-27"), hoje), "pequenos", "6 anos");
-  assert.equal(faixaPadrao(nascido("2019-11-26"), hoje), "medios", "7 anos");
-  assert.equal(faixaPadrao(nascido("2016-11-27"), hoje), "medios", "9 anos");
-  assert.equal(faixaPadrao(nascido("2016-11-26"), hoje), "grandes", "10 anos");
-  assert.equal(faixaPadrao(null, hoje), null);
-  assert.equal(lerFaixaPedida(undefined), undefined);
-  assert.equal(lerFaixaPedida("todas"), "todas");
-  assert.throws(() => lerFaixaPedida("adultos"));
 }
 
 const editorial = [...CATALOGO_JOGOS, { id: "outro", categoria: "autonomia" }];

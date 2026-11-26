@@ -1530,6 +1530,8 @@ export async function criarRecompensa(
 
 export type FaseJogoResumo = {
   numero: number;
+  /** Ticket 15: só a próxima fase pendente abre até a trilha terminar. */
+  liberada: boolean;
   trilha: "pequenos" | "medios" | "grandes";
   titulo: string;
   objetivo: string;
@@ -1547,15 +1549,7 @@ export type JogoResumo = {
   fases: FaseJogoResumo[];
 };
 
-/** Ticket 05: faixas etárias (D1) — Pequenos 5–6, Médios 7–9, Grandes 10–12. */
-export type FaixaJogos = "pequenos" | "medios" | "grandes";
-export type CatalogoJogos = {
-  jogos: JogoResumo[];
-  destaques: string[];
-  /** Faixa pela data de nascimento; null sem data. */
-  faixaPadrao: FaixaJogos | null;
-  faixa: FaixaJogos | "todas";
-};
+export type CatalogoJogos = { jogos: JogoResumo[]; destaques: string[] };
 
 export type FiguraMemoria = {
   id: string;
@@ -1647,9 +1641,8 @@ async function requisitarJogo<T>(caminho: string, init: RequestInit): Promise<T>
   return resposta.json() as Promise<T>;
 }
 
-export function listarJogos(pessoaId: string, signal: AbortSignal, faixa?: FaixaJogos | "todas") {
-  const consulta = faixa ? `?faixa=${faixa}` : "";
-  return requisitarJogo<CatalogoJogos>(`/pessoas/${encodeURIComponent(pessoaId)}/jogos${consulta}`, { signal });
+export function listarJogos(pessoaId: string, signal: AbortSignal) {
+  return requisitarJogo<CatalogoJogos>(`/pessoas/${encodeURIComponent(pessoaId)}/jogos`, { signal });
 }
 
 function caminhoFaseJogo(pessoaId: string, jogoId: string, fase: number) {

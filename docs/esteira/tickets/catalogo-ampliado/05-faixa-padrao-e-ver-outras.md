@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 03, 04 (D1 decidida em 2026-11-26: 5–6, 7–9, 10–12)
 
-**Status:** IN_VALIDATION
+**Status:** BLOCKED — descartado pelo responsável em 2026-11-26
 
 **Costura:** smoke:e5 e smoke:authz
 
@@ -32,3 +32,7 @@ A faixa (5–6, 7–9, 10–12) é calculada no servidor pela data de nascimento
 "Ver outras faixas" abre as demais e o catálogo sem data pede a data, com as
 descobertas preservadas na mudança de faixa (DEV-CAT-M1, ticket 05).
 ```
+
+## Descartado (2026-11-26)
+
+H15 reprovado. Decisão do responsável: os jogos voltam ao comportamento anterior (a criança segue a trilha até o fim e depois escolhe qualquer fase); a faixa de idade fica só na recomendação de Atividades Reais (ticket 07). O código deste ticket não chegou a commit e é desfeito pelo responsável; M03 §15 P04 e P06 foram revistos.

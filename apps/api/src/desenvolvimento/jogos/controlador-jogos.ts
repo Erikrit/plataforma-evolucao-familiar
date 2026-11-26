@@ -1,5 +1,5 @@
 import {
-  Body, Controller, Get, Header, Param, ParseIntPipe, Post, Query, Req, UseGuards,
+  Body, Controller, Get, Header, Param, ParseIntPipe, Post, Req, UseGuards,
 } from "@nestjs/common";
 import type { Request } from "express";
 import { GuardaSessao } from "../../auth/guarda-sessao";
@@ -15,10 +15,9 @@ export class ControladorJogos {
   @Header("Cache-Control", "private, no-store")
   listar(
     @Param("pessoaId") pessoaId: string,
-    @Query("faixa") faixa: string | undefined,
     @Req() req: Request & RequisicaoComUsuario,
   ) {
-    return this.jogos.listar(pessoaId, req.usuario!, faixa);
+    return this.jogos.listar(pessoaId, req.usuario!);
   }
 
   @Post(":jogoId/fases/:fase/iniciar")

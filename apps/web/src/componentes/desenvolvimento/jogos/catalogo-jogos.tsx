@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Button, Stack } from "@mantine/core";
 import { useDesenvolvimento } from "@/componentes/contexto-desenvolvimento";
 import { EsqueletoLista, EstadoVazio, mensagemErroAmigavel } from "@/componentes/feedback";
-import { ErroApi, listarJogos, type CatalogoJogos, type FaixaJogos } from "@/lib/api";
+import { ErroApi, listarJogos, type CatalogoJogos } from "@/lib/api";
 
 type Consulta =
   | { estado: "carregando" }
@@ -13,11 +13,8 @@ type Consulta =
 
 export function CatalogoJogosAutorizado({
   children,
-  faixa,
 }: {
   children: (catalogo: CatalogoJogos) => ReactNode;
-  /** Ticket 05: sem faixa, a API usa a faixa da pessoa. */
-  faixa?: FaixaJogos | "todas";
 }) {
   const { pessoaId } = useDesenvolvimento();
   const [consulta, setConsulta] = useState<Consulta>({ estado: "carregando" });
@@ -25,7 +22,7 @@ export function CatalogoJogosAutorizado({
 
   useEffect(() => {
     const controle = new AbortController();
-    void listarJogos(pessoaId, controle.signal, faixa)
+    void listarJogos(pessoaId, controle.signal)
       .then((catalogo) => {
         if (!controle.signal.aborted) setConsulta({ estado: "pronta", catalogo });
       })
@@ -41,7 +38,7 @@ export function CatalogoJogosAutorizado({
         });
       });
     return () => controle.abort();
-  }, [pessoaId, tentativa, faixa]);
+  }, [pessoaId, tentativa]);
 
   if (consulta.estado === "pronta") return children(consulta.catalogo);
 

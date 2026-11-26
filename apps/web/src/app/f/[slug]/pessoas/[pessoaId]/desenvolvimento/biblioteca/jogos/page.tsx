@@ -41,7 +41,6 @@ import {
   filtroFasesDosJogos,
   TODAS_CATEGORIAS_JOGOS,
   type FiltroFasesJogos,
-  faixaDosJogos,
 } from "@/lib/filtros-jogos";
 
 const CATEGORIAS = [
@@ -50,14 +49,6 @@ const CATEGORIAS = [
     value,
     label,
   })),
-];
-
-/** Ticket 05 (D1, 2026-11-26). */
-const OPCOES_FAIXA = [
-  { value: "pequenos", label: "Pequenos (5 a 6 anos)" },
-  { value: "medios", label: "Médios (7 a 9 anos)" },
-  { value: "grandes", label: "Grandes (10 a 12 anos)" },
-  { value: "todas", label: "Todas as faixas" },
 ];
 
 const ROTULOS_FASE: Record<FaseJogoResumo["estado"], string> = {
@@ -172,16 +163,19 @@ function ItemCatalogoJogo({
           section: { backgroundColor: "#8FD6A0" },
         }}
       />
-      <Button
-        type="button"
-        variant="light"
-        size="compact-sm"
-        fullWidth
-        style={{ minHeight: 40 }}
-        onClick={() => setEscolhaAberta(true)}
-      >
-        Escolher fase
-      </Button>
+      {/* Ticket 15: Escolher fase só aparece depois de concluir a trilha inteira. */}
+      {completo ? (
+        <Button
+          type="button"
+          variant="light"
+          size="compact-sm"
+          fullWidth
+          style={{ minHeight: 40 }}
+          onClick={() => setEscolhaAberta(true)}
+        >
+          Escolher fase
+        </Button>
+      ) : null}
 
       <Drawer
         opened={escolhaAberta}
@@ -214,6 +208,23 @@ function ItemCatalogoJogo({
               >
                 {grupo.fases.map((fase) => {
                   const rotuloEstado = ROTULOS_FASE[fase.estado];
+                  // Ticket 15: até concluir a trilha, só a próxima fase pendente abre.
+                  if (!fase.liberada) {
+                    return (
+                      <div
+                        key={fase.numero}
+                        role="listitem"
+                        aria-disabled="true"
+                        aria-label={`Fase ${fase.numero}, ${fase.titulo}, bloqueada até concluir as anteriores`}
+                        className={estilosJogos.opcaoFase}
+                        data-estado="bloqueada"
+                      >
+                        <span aria-hidden="true">🔒</span>
+                        <span className={estilosJogos.numeroFase}>{fase.numero}</span>
+                        <span className={estilosJogos.rotuloEstadoFase}>Bloqueada</span>
+                      </div>
+                    );
+                  }
                   return (
                     <UnstyledButton
                       key={fase.numero}
@@ -248,25 +259,21 @@ function ListaJogos() {
   const busca = useSearchParams();
   const filtroCategoria = categoriaDosJogos(busca.get("categoria"));
   const filtroFases = filtroFasesDosJogos(busca.get("fases"));
-  const filtroFaixa = faixaDosJogos(busca.get("faixa"));
   const biblioteca = caminho + "/biblioteca/jogos";
   const consulta = consultaCatalogoJogos({
     categoria: filtroCategoria,
     fases: filtroFases,
-    faixa: filtroFaixa,
   });
 
   function atualizarConsulta(parcial: {
     categoria?: string;
     fases?: string;
-    faixa?: string;
   }) {
     router.replace(
       biblioteca +
         consultaCatalogoJogos({
           categoria: parcial.categoria ?? filtroCategoria,
           fases: parcial.fases ?? filtroFases,
-          faixa: parcial.faixa ?? filtroFaixa,
         }),
       { scroll: false },
     );
@@ -277,8 +284,8 @@ function ListaJogos() {
       <Stack gap="lg">
         <CabecalhoBiblioteca />
         <NavegacaoBiblioteca atual="jogos" />
-        <CatalogoJogosAutorizado faixa={filtroFaixa}>
-          {({ jogos, destaques, faixa, faixaPadrao }) => {
+        <CatalogoJogosAutorizado>
+          {({ jogos, destaques }) => {
             if (jogos.length === 0) {
               return <EstadoVazio titulo="Nenhum jogo disponível" />;
             }
@@ -297,23 +304,6 @@ function ListaJogos() {
 
             return (
               <Stack gap="md">
-                {faixaPadrao ? (
-                  <Select
-                    label="Ver outras faixas"
-                    description={
-                      faixa === faixaPadrao
-                        ? "Mostrando a faixa desta pessoa. Escolha outra para ver mais jogos."
-                        : "Ver outras faixas: a faixa desta pessoa continua marcada como padrão."
-                    }
-                    allowDeselect={false}
-                    value={faixa}
-                    data={OPCOES_FAIXA.map((opcao) => ({
-                      ...opcao,
-                      label: opcao.value === faixaPadrao ? `${opcao.label} (desta pessoa)` : opcao.label,
-                    }))}
-                    onChange={(valor) => atualizarConsulta({ faixa: valor ?? faixaPadrao })}
-                  />
-                ) : null}
                 <Select
                   label="Categoria"
                   allowDeselect={false}

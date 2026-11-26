@@ -10,9 +10,16 @@ import { ServicoAutorizacoes } from "../../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../../comum/tipos-requisicao";
 import { ServicoPrisma } from "../../prisma/servico-prisma";
 import { selecionarDestaquesJogos } from "./destaques-jogos";
-import { faixaPadrao, lerFaixaPedida } from "./faixas";
-import { CODIGO_DATA_NASCIMENTO_OBRIGATORIA } from "../../pessoas/data-nascimento";
 import { obterMotor } from "./motores-jogos";
+
+/**
+ * Trilha em ordem (ticket 15): antes de concluir todas as fases, só a primeira
+ * pendente abre; com a trilha concluída, qualquer fase abre para repetir.
+ */
+export function faseLiberada(numero: number, numeros: readonly number[], concluidas: ReadonlySet<number>) {
+  const pendente = [...numeros].sort((a, b) => a - b).find((n) => !concluidas.has(n));
+  return pendente === undefined || numero === pendente;
+}
 
 @Injectable()
 export class ServicoJogos {
@@ -21,27 +28,8 @@ export class ServicoJogos {
     private readonly autorizacoes: ServicoAutorizacoes,
   ) {}
 
-  /**
-   * Catálogo na faixa pedida (ticket 05): sem pedido, a faixa padrão da pessoa.
-   * Sem data de nascimento, recusa e pede a data. Abrir e concluir fases não depende da faixa.
-   */
-  async listar(pessoaId: string, usuario: UsuarioAutenticado, faixaConsulta?: unknown) {
+  async listar(pessoaId: string, usuario: UsuarioAutenticado) {
     const escopo = await this.exigirDesenvolvimento(pessoaId, usuario);
-    const pedida = lerFaixaPedida(faixaConsulta);
-    const pessoa = await this.prisma.pessoa.findUniqueOrThrow({
-      where: { id: escopo.pessoaId },
-      select: { nome: true, dataNascimento: true },
-    });
-    // DEV-CAT-P04/P05: sem data não há faixa; a interface orienta a informar (M01 §16).
-    if (!pessoa.dataNascimento) {
-      throw new ConflictException({
-        statusCode: 409,
-        message: `Informe a data de nascimento de ${pessoa.nome} para abrir os jogos.`,
-        codigo: CODIGO_DATA_NASCIMENTO_OBRIGATORIA,
-      });
-    }
-    const padrao = faixaPadrao(pessoa.dataNascimento);
-    const faixa = pedida ?? padrao;
     const [progresso, catalogo] = await Promise.all([
       this.prisma.progressoFaseJogo.findMany({
         where: escopo,
@@ -57,8 +45,6 @@ export class ServicoJogos {
     ]);
     const porFase = new Map(progresso.map((item) => [`${item.jogoId}/${item.fase}`, item]));
     return {
-      faixaPadrao: padrao,
-      faixa,
       destaques: selecionarDestaquesJogos(catalogo, progresso),
       jogos: catalogo.map((jogo) => ({
         id: jogo.id,
@@ -68,9 +54,13 @@ export class ServicoJogos {
         instrucoes: jogo.instrucoes,
         versao: jogo.versao,
         tipoMecanica: jogo.tipoMecanica,
-        fases: jogo.fases.filter((fase) => faixa === "todas" || fase.trilha === faixa).map((fase) => {
+        fases: jogo.fases.map((fase) => {
           const progressoFase = porFase.get(`${jogo.id}/${fase.numero}`);
+          const concluidas = new Set(
+            jogo.fases.filter((f) => porFase.get(`${jogo.id}/${f.numero}`)?.concluidaEm).map((f) => f.numero),
+          );
           return {
+            liberada: faseLiberada(fase.numero, jogo.fases.map((f) => f.numero), concluidas),
             numero: fase.numero,
             trilha: fase.trilha,
             titulo: fase.titulo,
@@ -89,6 +79,7 @@ export class ServicoJogos {
   async iniciar(pessoaId: string, jogoId: string, numero: number, usuario: UsuarioAutenticado) {
     const escopo = await this.exigirDesenvolvimento(pessoaId, usuario);
     const { jogo, fase } = await this.exigirFase(jogoId, numero, { exigirAtivo: true });
+    await this.exigirFaseLiberada(escopo, jogoId, numero);
     const motor = obterMotor(jogo.tipoMecanica);
     const configuracao = motor.validarConfiguracao(fase.configuracao);
     const identidade = { ...escopo, jogoId, fase: numero };
@@ -161,6 +152,30 @@ export class ServicoJogos {
       }
       return this.confirmacao(salvo, chave, versao);
     });
+  }
+
+  private async exigirFaseLiberada(
+    escopo: { familiaId: string; pessoaId: string },
+    jogoId: string,
+    numero: number,
+  ) {
+    const [fases, concluidas] = await Promise.all([
+      this.prisma.faseJogoDigital.findMany({ where: { jogoId }, select: { numero: true } }),
+      this.prisma.progressoFaseJogo.findMany({
+        where: { ...escopo, jogoId, concluidaEm: { not: null } },
+        select: { fase: true },
+      }),
+    ]);
+    const numeros = fases.map((f) => f.numero);
+    const feitas = new Set(concluidas.map((c) => c.fase));
+    if (!faseLiberada(numero, numeros, feitas)) {
+      const pendente = [...numeros].sort((a, b) => a - b).find((n) => !feitas.has(n));
+      throw new ConflictException({
+        statusCode: 409,
+        message: `Siga a trilha: conclua a fase ${pendente} antes desta.`,
+        codigo: "FASE_BLOQUEADA",
+      });
+    }
   }
 
   private confirmacao(registro: ProgressoFaseJogo, chave: string, versao: number) {

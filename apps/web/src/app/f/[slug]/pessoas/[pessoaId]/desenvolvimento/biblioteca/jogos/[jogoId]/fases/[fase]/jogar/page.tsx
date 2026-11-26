@@ -20,14 +20,12 @@ function FaseDoJogo() {
     consultaCatalogoJogos({
       categoria: busca.get("categoria"),
       fases: busca.get("fases"),
-      faixa: busca.get("faixa"),
     });
 
   return (
     <div className={estilos.partida}>
       <Container size="sm">
-        {/* A partida precisa de todas as fases do jogo, em qualquer faixa. */}
-        <CatalogoJogosAutorizado faixa="todas">
+        <CatalogoJogosAutorizado>
           {({ jogos }) => {
             const jogo = jogos.find((item) => item.id === params.jogoId);
             const fase = jogo?.fases.find(

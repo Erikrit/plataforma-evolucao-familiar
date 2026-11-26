@@ -94,7 +94,7 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 ### H10 — Ticket 03: trilhas no labirinto (DEV-CAT-P03)
 - **Preparação:** pessoa fictícia com Desenvolvimento; ambiente com a migração `20261126120000_trilha_fase_jogo` e a carga oficial aplicadas.
 - **Aparelho:** celular de 320 a 360 px de largura; informar modelo e navegador.
-- **Passos:** 1. Biblioteca → Jogos → Caminhos e labirintos → Escolher fase. 2. Abrir a fase 15 direto. 3. Jogar até a chegada. 4. Abrir Escolher fase de dentro da partida.
+- **Passos:** 1. Biblioteca → Jogos → Caminhos e labirintos → Escolher fase. 2. (Revisto pelo ticket 15: a trilha segue em ordem e a fase 15 só abre depois das anteriores.) 3. Jogar até a chegada. 4. Abrir Escolher fase de dentro da partida.
 - **Esperado:** fases agrupadas em Pequenos, Médios e Grandes; a fase 15 abre na primeira visita; o mapa cabe na largura sem rolagem horizontal e as setas são tocáveis; conquistas anteriores do labirinto continuam visíveis.
 - **Status:** PASS (v3)
 - **Retorno anterior (v2, FAIL de dificuldade):** responsável, 2026-11-26: o jogo funcionou até a fase 15 e as marcações de fase funcionaram; porém a dificuldade quase não muda, o mapa só fica maior. Medição confirmou: as decisões no caminho ficam entre 0 e 4 da fase 1 à 15; a régua media só passos.
@@ -159,5 +159,12 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
   - as fases mostradas são só as da faixa, 5 por jogo;
   - a faixa escolhida continua depois de voltar da partida;
   - conquistas de outras faixas continuam visíveis ao abri-las.
+- **Status:** FAIL — ticket 05 descartado
+- **Retorno:** responsável, 2026-11-26: reprovado; a faixa de idade não deve filtrar os jogos, só priorizar as sugestões de Atividades Reais. Os jogos voltam ao comportamento anterior.
+
+### H16 — Ticket 15: trilha em ordem e Dica no topo
+- **Aparelho:** celular de 320 a 360 px.
+- **Passos:** 1. Em um jogo novo para a pessoa, tocar no jogo e conferir que abre a fase 1. 2. Concluir a fase 1 e ver que a próxima é a 2. 3. Conferir que "Escolher fase" não aparece enquanto a trilha não termina. 4. Em um jogo com todas as fases concluídas, tocar no jogo e escolher qualquer fase. 5. Na partida, conferir o botão Dica ao lado de Sair e o título do jogo inteiro, sem quebra.
+- **Esperado:** a trilha segue em ordem; "Escolher fase" só aparece com a trilha concluída; Dica no topo funciona nos dois níveis; o título não quebra.
 - **Status:** PENDING_HUMAN
 - **Retorno:**

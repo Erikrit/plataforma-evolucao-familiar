@@ -1,5 +1,6 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -37,6 +38,7 @@ import { TabuleiroLabirinto } from "./tabuleiro-labirinto";
 import { TabuleiroSudoku } from "./tabuleiro-sudoku";
 import { TabuleiroRobo } from "./tabuleiro-robo";
 import type { ContratoTabuleiro, ObterDica } from "./contrato-tabuleiro";
+import { ID_ACOES_PARTIDA } from "@/lib/acoes-partida";
 import estilos from "./jogos.module.css";
 
 const ROTULOS_ESTADO_FASE: Record<FaseJogoResumo["estado"], string> = {
@@ -147,7 +149,6 @@ export function PartidaJogo({
   const consultaCatalogo = consultaCatalogoJogos({
     categoria: busca.get("categoria"),
     fases: busca.get("fases"),
-    faixa: busca.get("faixa"),
   });
   const proximaFase = useMemo(
     () => jogo.fases.find((item) => item.numero === fase.numero + 1) ?? null,
@@ -166,6 +167,11 @@ export function PartidaJogo({
       ),
     [jogo.fases, fase.numero],
   );
+
+  const [alvoAcoes, setAlvoAcoes] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    setAlvoAcoes(document.getElementById(ID_ACOES_PARTIDA));
+  }, []);
 
   const registrarObterDica = useCallback((obter: ObterDica | null) => {
     obterDicaRef.current = obter;
@@ -297,35 +303,42 @@ export function PartidaJogo({
   const podeAbrirDica =
     dicaDaPartida != null || (etapa.tipo === "jogando" && dicaPronta);
 
+  const botaoDica = (
+    <Button
+      variant="default"
+      onClick={abrirDica}
+      disabled={!podeAbrirDica}
+      style={{ minHeight: 44 }}
+    >
+      Dica
+    </Button>
+  );
+
   return (
     <Stack gap="lg">
-      <Group justify="space-between" align="flex-start" wrap="wrap">
-        <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
-          <Title order={1} ref={titulo} tabIndex={-1} size="h2">
-            {jogo.nome} · Fase {fase.numero}
-          </Title>
-          <Text size="sm" c="dimmed">
-            {fase.titulo}
-          </Text>
-        </Stack>
+      {/* Ticket 15: Dica sobe para a barra, ao lado de Sair; o título fica com a largura toda. */}
+      {alvoAcoes ? createPortal(botaoDica, alvoAcoes) : null}
+      <Stack gap={4}>
+        <Title order={1} ref={titulo} tabIndex={-1} size="h2">
+          {jogo.nome} · Fase {fase.numero}
+        </Title>
+        <Text size="sm" c="dimmed">
+          {fase.titulo}
+        </Text>
         <Group gap="xs" wrap="wrap">
-          <Button
-            variant="light"
-            onClick={() => setEscolhaFaseAberta(true)}
-            style={{ minHeight: 44 }}
-          >
-            Escolher fase
-          </Button>
-          <Button
-            variant="default"
-            onClick={abrirDica}
-            disabled={!podeAbrirDica}
-            style={{ minHeight: 44 }}
-          >
-            Dica
-          </Button>
+          {/* Ticket 15: Escolher fase só aparece depois de concluir a trilha inteira. */}
+          {jogo.fases.length > 0 && jogo.fases.every((item) => item.estado === "concluida") ? (
+            <Button
+              variant="light"
+              onClick={() => setEscolhaFaseAberta(true)}
+              style={{ minHeight: 44 }}
+            >
+              Escolher fase
+            </Button>
+          ) : null}
+          {alvoAcoes ? null : botaoDica}
         </Group>
-      </Group>
+      </Stack>
 
       <Drawer
         opened={escolhaFaseAberta}
@@ -365,6 +378,21 @@ export function PartidaJogo({
                   border: "1px solid #C9D8F2",
                   opacity: atual ? 0.7 : 1,
                 };
+                if (!atual && !item.liberada) {
+                  return (
+                    <div
+                      key={item.numero}
+                      aria-disabled="true"
+                      aria-label={`Fase ${item.numero}, ${item.titulo}, bloqueada até concluir as anteriores`}
+                      style={{ ...estilo, opacity: 0.5 }}
+                    >
+                      {conteudo}
+                      <Text size="xs" c="dimmed">
+                        Bloqueada: siga a trilha
+                      </Text>
+                    </div>
+                  );
+                }
                 if (atual) {
                   return (
                     <div

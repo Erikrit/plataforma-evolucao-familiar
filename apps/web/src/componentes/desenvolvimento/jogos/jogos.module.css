@@ -378,3 +378,10 @@
 .casaSudoku[data-dica="true"] { outline: 3px dashed #725000; outline-offset: -5px; }
 .casaSudoku[data-borda-direita="true"] { border-right: 3px solid #304470; }
 .casaSudoku[data-borda-baixo="true"] { border-bottom: 3px solid #304470; }
+
+/* Ticket 15: fase bloqueada até concluir as anteriores. */
+.opcaoFase[data-estado="bloqueada"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  border-style: dashed;
+}

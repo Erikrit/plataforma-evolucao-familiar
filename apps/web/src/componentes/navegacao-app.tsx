@@ -1,5 +1,6 @@
 "use client";
 
+import { ID_ACOES_PARTIDA } from "@/lib/acoes-partida";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
@@ -611,7 +612,9 @@ export function NavegacaoApp({ children }: { children: ReactNode }) {
     return (
       <main style={{ background: coresPef.fundo, minHeight: "100vh" }}>
         <Container size="sm" pt="md">
-          <Group justify="flex-end">
+          <Group justify="flex-end" gap="xs">
+            {/* Ticket 15: a partida coloca o botão Dica aqui, ao lado de Sair. */}
+            <div id={ID_ACOES_PARTIDA} style={{ display: "contents" }} />
             <Suspense
               fallback={
                 <Button
