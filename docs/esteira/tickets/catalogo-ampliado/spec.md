@@ -29,6 +29,7 @@ A Biblioteca abre na faixa etária da pessoa (Pequenos, Médios ou Grandes). Cad
 - **D1:** faixas Pequenos 5–6, Médios 7–9 e Grandes 10–12, usadas para priorizar as sugestões de Atividades Reais (ticket 07). A Biblioteca de jogos não filtra por faixa (ticket 05 descartado após o H15).
 - **D2:** as Atividades Reais para adultos e idosos saem do catálogo (arquivadas, participações preservadas no Histórico); ficam só as de 5 a 12 anos. Libera o ticket 07.
 - **D3:** ilustrações do Twemoji (CC-BY 4.0), servidas pela plataforma, com atribuição e origem registradas. Libera o ticket 10.
+- **Padrão visual (2026-11-26, H19):** todo jogo novo tem no cartão uma figura Twemoji grande sobre placa colorida (`FIGURA_JOGO` em `icone-jogo-catalogo.tsx`), figuras dos tabuleiros via `<Figura>` e peças de seleção em `.gradePecas`.
 - **Leitor de tela em Histórias:** a partir de Médios, o leitor diz o que a figura mostra (o objeto), sem o texto da ação. Ticket 14.
 
 ## Decisões de implementação
@@ -89,15 +90,16 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | 06 | COMPLETED | — | Área Números em filtros, Histórico e Resumo; H11 no roteiro |
 | 03 | COMPLETED | — | Labirinto com 15 fases em três trilhas; migração `20261126120000_trilha_fase_jogo` a aplicar na publicação; H10 no roteiro |
 | 09 | COMPLETED | — | 8 jogos ativos com 15 fases; H12 homologado |
-| 11 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/11-ordem-dos-campos-de-acesso.md` | Ordem dos campos (pedido do H1) |
+| 11 | COMPLETED | — | Data após a área, responsabilidade por último; H20 homologado |
 | 12 | COMPLETED | — | Sudoku, Forme a palavra, Do menor ao maior e Robô com setas; H13 homologado |
 | 13 | COMPLETED | — | Histórias em três degraus; H14 homologado |
 | 05 | BLOCKED | — | Descartado (H15 reprovado): jogos sem faixa; a faixa fica nas sugestões do 07 |
 | 07 | COMPLETED | — | Até 5 sugestões pela faixa; H17 homologado |
 | 10 | COMPLETED | — | Twemoji 17.0.3 local; H18 homologado |
-| 14 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/14-leitor-de-tela-nas-historias.md` | Leitor de tela diz o objeto da figura |
+| 14 | COMPLETED | — | Leitor de tela diz o objeto da figura; H21 homologado |
 | 15 | COMPLETED | — | Trilha em ordem e Dica ao lado de Sair; H16 homologado |
-| 16 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Licença discreta, ícones novos e peças legíveis; H19 |
+| 16 | COMPLETED | — | Licença discreta, ícones novos e peças legíveis; H19 homologado |
+| 17 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Robô anda passo a passo (sem explosão); reteste H22 |
 
 ### Verificação local pendente (tickets 04 e 08)
 

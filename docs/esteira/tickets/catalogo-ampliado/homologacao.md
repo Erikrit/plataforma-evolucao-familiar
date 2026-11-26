@@ -202,5 +202,24 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
   - o crédito da licença aparece bem pequeno e o link funciona;
   - os cartões mostram figuras nítidas em placas coloridas;
   - as peças de seleção mostram a figura inteira e quebram em linhas em vez de espremer.
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado; os ícones ficaram muito bons e os próximos jogos devem seguir o mesmo padrão.
+
+### H20 — Ticket 11: ordem dos campos de acesso
+- **Passos:** em Gerenciar família, abrir a concessão de acesso e o convite; escolher a área Desenvolvimento.
+- **Esperado:** a data de nascimento aparece logo abaixo da Área, e as opções de responsabilidade ficam por último, antes do botão.
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
+
+### H21 — Ticket 14: leitor de tela em Histórias
+- **Aparelho:** celular com TalkBack (Android) ou VoiceOver (iPhone).
+- **Passos:** jogar Histórias numa fase de Médios (6 a 10) e numa de Difíceis (11 a 15); passar o foco pelas cenas.
+- **Esperado:** o leitor diz o objeto da figura ("Colocar despertador", "Colocar mochila"), nunca o texto da ação nem "Cena 1".
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado; pedido de animação do Robô virou o ticket 17.
+
+### H22 — Ticket 17: robô anda passo a passo
+- **Passos:** jogar Robô. Montar um programa que bata na parede e tocar Executar. Depois corrigir e executar até chegar. Repetir numa segunda fase.
+- **Esperado:** o robô anda casa por casa. Na parede, ele para e aparece a mensagem com o número do comando, sem explosão. Ao corrigir, volta ao início, e na chegada a fase termina normalmente.
 - **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Retorno:** 1º teste (2026-11-26): caminhada aprovada. A explosão causou uma fase que não terminou e foi retirada. Falta retestar a versão sem explosão.

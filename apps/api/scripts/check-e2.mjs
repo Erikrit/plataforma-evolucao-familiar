@@ -111,6 +111,19 @@ reg(
   "Boas-vindas sem expectativa de e-mail",
 );
 
+// Ticket 11 (pedido do H1): área, data de nascimento e, por último, a responsabilidade.
+const ordemCampos = (data, responsabilidade) => {
+  const i = painel.indexOf(data);
+  const j = painel.indexOf(responsabilidade);
+  return i > 0 && j > 0 && i < j;
+};
+reg(
+  "ticket-11-ordem-dos-campos",
+  ordemCampos("{pedeDataConcessao ? (", "combinacoesAreaConcessao,") &&
+    ordemCampos("{pedeDataConvite ? (", "combinacoesAreaConvite,"),
+  "Data logo depois da área e responsabilidade por último, na concessão e no convite",
+);
+
 const falhas = resultados.filter((r) => !r.ok);
 for (const r of resultados) {
   console.log(`${r.ok ? "PASS" : "FAIL"} ${r.nome} — ${r.detalhe}`);

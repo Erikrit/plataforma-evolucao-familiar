@@ -1104,6 +1104,16 @@ export function PainelGerenciarFamilia() {
                       }
                       required
                     />
+                    {pedeDataConcessao ? (
+                      <CampoDataNascimento
+                        nomePessoa={pessoaAlvoSelecionada?.nome ?? "a pessoa"}
+                        valor={dataNascimentoConcessao ?? ""}
+                        aoMudar={(v) => {
+                          setDataNascimentoConcessao(v);
+                          setEtapaConfirmacao(false);
+                        }}
+                      />
+                    ) : null}
                     {areaConcessao
                       ? renderOpcoesResponsabilidade(
                           combinacoesAreaConcessao,
@@ -1115,16 +1125,6 @@ export function PainelGerenciarFamilia() {
                           pessoaAlvoSelecionada?.nome ?? "",
                         )
                       : null}
-                    {pedeDataConcessao ? (
-                      <CampoDataNascimento
-                        nomePessoa={pessoaAlvoSelecionada?.nome ?? "a pessoa"}
-                        valor={dataNascimentoConcessao ?? ""}
-                        aoMudar={(v) => {
-                          setDataNascimentoConcessao(v);
-                          setEtapaConfirmacao(false);
-                        }}
-                      />
-                    ) : null}
                     <Button
                       type="submit"
                       variant="light"
@@ -1254,6 +1254,16 @@ export function PainelGerenciarFamilia() {
                     }
                     required
                   />
+                  {pedeDataConvite ? (
+                    <CampoDataNascimento
+                      nomePessoa={pessoaAlvoConvite?.nome ?? "a pessoa"}
+                      valor={dataNascimentoConvite ?? ""}
+                      aoMudar={(v) => {
+                        setDataNascimentoConvite(v);
+                        setEtapaConfirmacaoConvite(false);
+                      }}
+                    />
+                  ) : null}
                   {areaConvite
                     ? renderOpcoesResponsabilidade(
                         combinacoesAreaConvite,
@@ -1265,16 +1275,6 @@ export function PainelGerenciarFamilia() {
                         pessoaAlvoConvite?.nome ?? "",
                       )
                     : null}
-                  {pedeDataConvite ? (
-                    <CampoDataNascimento
-                      nomePessoa={pessoaAlvoConvite?.nome ?? "a pessoa"}
-                      valor={dataNascimentoConvite ?? ""}
-                      aoMudar={(v) => {
-                        setDataNascimentoConvite(v);
-                        setEtapaConfirmacaoConvite(false);
-                      }}
-                    />
-                  ) : null}
                   <Button
                     type="submit"
                     variant="light"

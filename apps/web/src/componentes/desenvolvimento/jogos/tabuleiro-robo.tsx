@@ -15,6 +15,9 @@ const SETAS: readonly { id: Direcao; nome: string; icone: string }[] = [
   { id: "direita", nome: "direita", icone: "→" },
 ];
 const ICONE: Record<Direcao, string> = { cima: "↑", baixo: "↓", esquerda: "←", direita: "→" };
+/** Ticket 17: ritmo da animação, por casa (mais rápido com "reduzir movimento"). */
+const PASSO_MS = 350;
+const PASSO_REDUZIDO_MS = 120;
 
 /**
  * Robô com setas (DEV-CAT-M1, ticket 12): a criança monta o programa inteiro
@@ -30,7 +33,9 @@ export function TabuleiroRobo({
   const [programa, setPrograma] = useState<Comando[]>([]);
   const [robo, setRobo] = useState(conteudo.inicio);
   const [mensagem, setMensagem] = useState("");
+  const [animando, setAnimando] = useState(false);
   const concluiu = useRef(false);
+  const temporizadores = useRef<number[]>([]);
   const programaAtual = useRef(programa);
   programaAtual.current = programa;
   const pedidosDica = useRef({ chave: "", nivel: 0 });
@@ -39,6 +44,12 @@ export function TabuleiroRobo({
   useEffect(() => {
     foco.current?.focus();
   }, []);
+
+  useEffect(() => () => temporizadores.current.forEach((id) => window.clearTimeout(id)), []);
+
+  function agendar(acao: () => void, atrasoMs: number) {
+    temporizadores.current.push(window.setTimeout(acao, atrasoMs));
+  }
 
   useEffect(() => {
     registrarObterDica(() => {
@@ -54,7 +65,7 @@ export function TabuleiroRobo({
   }, [conteudo, registrarObterDica]);
 
   function acrescentar(direcao: Direcao) {
-    if (concluiu.current) return;
+    if (concluiu.current || animando) return;
     setRobo(conteudo.inicio);
     setMensagem("");
     setPrograma((atual) => {
@@ -67,7 +78,7 @@ export function TabuleiroRobo({
   }
 
   function apagar() {
-    if (concluiu.current) return;
+    if (concluiu.current || animando) return;
     setRobo(conteudo.inicio);
     setMensagem("");
     setPrograma((atual) => {
@@ -81,35 +92,56 @@ export function TabuleiroRobo({
 
   /** Tira um comando do meio do programa sem desmontar o resto. */
   function remover(indice: number) {
-    if (concluiu.current) return;
+    if (concluiu.current || animando) return;
     setRobo(conteudo.inicio);
     setMensagem(`Comando ${indice + 1} removido.`);
     setPrograma((atual) => atual.filter((_, i) => i !== indice));
   }
 
+  /**
+   * Ticket 17: o robô anda casa por casa. Ao bater ou parar antes da chegada, fica onde
+   * parou (sem explosão, decisão de 2026-11-26) e volta ao início quando o programa muda.
+   */
   function executar() {
-    if (concluiu.current || programa.length === 0) return;
+    if (concluiu.current || animando || programa.length === 0) return;
+    const caminho: { linha: number; coluna: number }[] = [];
+    let bateuNoComando: number | null = null;
     let { linha, coluna } = conteudo.inicio;
-    for (const [indice, comando] of programa.entries()) {
+    percurso: for (const [indice, comando] of programa.entries()) {
       const [dl, dc] = DESLOCAMENTOS[comando.direcao];
       for (let passo = 0; passo < comando.passos; passo += 1) {
         const celula = conteudo.mapa[linha + dl]?.[coluna + dc];
         if (!celula || celula === "#") {
-          setRobo({ linha, coluna });
-          setMensagem(`O robô bateu na parede no comando ${indice + 1}. Ajuste e execute de novo.`);
-          return;
+          bateuNoComando = indice;
+          break percurso;
         }
         linha += dl;
         coluna += dc;
+        caminho.push({ linha, coluna });
       }
     }
-    setRobo({ linha, coluna });
-    if (linha === conteudo.chegada.linha && coluna === conteudo.chegada.coluna) {
-      concluiu.current = true;
-      aoConcluir();
-      return;
-    }
-    setMensagem("O robô parou antes da chegada. Acrescente ou ajuste comandos.");
+    const chegou =
+      bateuNoComando === null && linha === conteudo.chegada.linha && coluna === conteudo.chegada.coluna;
+    const reduzido = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    const ritmo = reduzido ? PASSO_REDUZIDO_MS : PASSO_MS;
+    setAnimando(true);
+    setRobo(conteudo.inicio);
+    setMensagem("O robô está andando…");
+    caminho.forEach((posicao, i) => agendar(() => setRobo(posicao), (i + 1) * ritmo));
+    agendar(() => {
+      setAnimando(false);
+      if (chegou) {
+        concluiu.current = true;
+        setMensagem("");
+        aoConcluir();
+        return;
+      }
+      setMensagem(
+        bateuNoComando !== null
+          ? `O robô bateu na parede no comando ${bateuNoComando + 1}. Ajuste e execute de novo.`
+          : "O robô parou antes da chegada. Acrescente ou ajuste comandos.",
+      );
+    }, (caminho.length + 1) * ritmo);
   }
 
   return (
@@ -141,6 +173,7 @@ export function TabuleiroRobo({
             variant="light"
             aria-label={`Acrescentar seta para ${seta.nome}`}
             onClick={() => acrescentar(seta.id)}
+            disabled={animando}
           >
             <span aria-hidden="true">{seta.icone}</span>
           </Button>
@@ -159,6 +192,7 @@ export function TabuleiroRobo({
               variant="outline"
               aria-label={`Comando ${indice + 1}: ${comando.direcao}, ${comando.passos} ${comando.passos === 1 ? "casa" : "casas"}. Tocar para tirar.`}
               onClick={() => remover(indice)}
+              disabled={animando}
             >
               {indice + 1}) {ICONE[comando.direcao]} {comando.passos}
             </Button>
@@ -166,10 +200,10 @@ export function TabuleiroRobo({
         </Group>
       </Stack>
       <Group gap="xs">
-        <Button variant="default" onClick={apagar} disabled={programa.length === 0}>
+        <Button variant="default" onClick={apagar} disabled={programa.length === 0 || animando}>
           Apagar
         </Button>
-        <Button onClick={executar} disabled={programa.length === 0}>
+        <Button onClick={executar} disabled={programa.length === 0 || animando} loading={animando}>
           Executar
         </Button>
       </Group>

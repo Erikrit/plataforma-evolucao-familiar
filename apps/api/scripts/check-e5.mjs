@@ -226,6 +226,29 @@ assert.ok(passos.every((valor, i) => i === 0 || valor >= passos[i - 1]), `Passos
   assert.ok([...figuras].every((g) => modulo.includes(`"${codigo(g)}"`)), "lista de figuras do web desatualizada");
 }
 
+// Ticket 14: com nomes ocultos, toda cena (e intrusa) de Histórias tem objeto para o leitor de tela,
+// e o objeto não repete o texto da ação.
+{
+  const { readFileSync } = await import("node:fs");
+  const { CATALOGO_JOGOS_HISTORIAS_E5 } = await import("../prisma/catalogo-jogos-historias-e5.mjs");
+  const mapa = readFileSync(fileURLToPath(new URL("../../web/src/lib/objetos-figuras.ts", import.meta.url)), "utf8");
+  const objetos = new Map([...mapa.matchAll(/"([^"]+)": "([^"]+)"/g)].map((m) => [m[1], m[2]]));
+  const semObjeto = new Set();
+  const repetem = [];
+  for (const fase of CATALOGO_JOGOS_HISTORIAS_E5[0].fases) {
+    for (const conjunto of fase.configuracao.conjuntos ?? [fase.configuracao]) {
+      if (!conjunto.ocultarNomes) continue;
+      for (const cena of [...conjunto.cenas, ...(conjunto.intrusas ?? [])]) {
+        const objeto = objetos.get(cena.simbolo);
+        if (!objeto) semObjeto.add(cena.simbolo);
+        else if (objeto.toLowerCase() === cena.nome.toLowerCase()) repetem.push(cena.nome);
+      }
+    }
+  }
+  assert.deepEqual([...semObjeto], [], `Cenas sem objeto para o leitor de tela: ${[...semObjeto].join(" ")}`);
+  assert.deepEqual(repetem, [], `Objeto igual ao nome da ação: ${repetem.join(", ")}`);
+}
+
 const editorial = [...CATALOGO_JOGOS, { id: "outro", categoria: "autonomia" }];
 assert.deepEqual(selecionarDestaquesJogos([], []), []);
 assert.deepEqual(selecionarDestaquesJogos(editorial.slice(0, 1), []), ["memoria"]);

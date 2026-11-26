@@ -6,6 +6,7 @@ import type { CenaOrdenacao, ConteudoOrdenacao } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import { dicaOrdenacao } from "./dicas-jogos";
 import { Figura, TextoComFiguras } from "./figura";
+import { objetoDaFigura } from "@/lib/objetos-figuras";
 import estilos from "./jogos.module.css";
 
 /** Letra ou número: a peça já mostra o próprio nome (Forme a palavra, Do menor ao maior). */
@@ -32,7 +33,9 @@ export function TabuleiroOrdenacao({
 
   const pecas = conteudo.cenas.every(autodescritiva);
   const rotuloCena = (cena: CenaOrdenacao) =>
-    conteudo.ocultarNomes ? `Cena ${conteudo.cenas.findIndex((c) => c.id === cena.id) + 1}` : cena.nome;
+    conteudo.ocultarNomes
+      ? (objetoDaFigura(cena.simbolo) ?? `Cena ${conteudo.cenas.findIndex((c) => c.id === cena.id) + 1}`)
+      : cena.nome;
   const mostrarNome = (cena: CenaOrdenacao) => !conteudo.ocultarNomes && !autodescritiva(cena);
 
   const disponiveis = useMemo(

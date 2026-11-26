@@ -46,7 +46,7 @@
   },
   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
   "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
-  "atualizadoEm": "2026-11-26T21:41:15.586Z",
+  "atualizadoEm": "2026-11-26T23:31:26.777Z",
   "modulo": {
     "id": "04-evolucao-familiar",
     "status": "COMPLETED",
@@ -110,15 +110,15 @@
       "apps/web/src/componentes/desenvolvimento/jogos/figura.tsx"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável faz o commit (tickets 10 e 16) e homologa H19; agente segue com 11 e 14.",
+    "proximaAcao": "Responsável faz o commit (tickets 11, 14 e 17) e reteste H22. Depois: QG-3 de Marco 1 antes de subir na VPS.",
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T21:35:20.669Z",
-        "base": "99451747eedc301fce161f7350fb9a56a46b72d6",
-        "head": "99451747eedc301fce161f7350fb9a56a46b72d6",
-        "fingerprint": "sha256:2a67dc3e06ab7f67e63fa200d60f445a018c426a29efff45404ce8f6a017d481",
+        "em": "2026-11-26T23:23:57.659Z",
+        "base": "c2d1c7ffcf404d2fc212a6f09ad982735f6a4b0d",
+        "head": "c2d1c7ffcf404d2fc212a6f09ad982735f6a4b0d",
+        "fingerprint": "sha256:6e3eb0294f57aaf92301009ba3688ce60724998b70c7012529be104bf3f39c9d",
         "checagens": [
           {
             "nome": "lint",
@@ -140,9 +140,21 @@
             "motivo": "script ainda não existe"
           },
           {
+            "nome": "check-e1-isolamento",
+            "status": "PASS",
+            "comando": "npm run check:e1-03 -w @pef/api",
+            "exit": 0
+          },
+          {
             "nome": "check-e4",
             "status": "PASS",
             "comando": "npm run check:e4 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "check-e2",
+            "status": "PASS",
+            "comando": "npm run check:e2 -w @pef/api",
             "exit": 0
           },
           {
@@ -152,15 +164,15 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T21-35-20-669Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T23-23-57-659Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T21:37:42.147Z",
-        "base": "99451747eedc301fce161f7350fb9a56a46b72d6",
-        "head": "99451747eedc301fce161f7350fb9a56a46b72d6",
-        "fingerprint": "sha256:2a67dc3e06ab7f67e63fa200d60f445a018c426a29efff45404ce8f6a017d481",
+        "em": "2026-11-26T23:26:04.161Z",
+        "base": "c2d1c7ffcf404d2fc212a6f09ad982735f6a4b0d",
+        "head": "c2d1c7ffcf404d2fc212a6f09ad982735f6a4b0d",
+        "fingerprint": "sha256:6e3eb0294f57aaf92301009ba3688ce60724998b70c7012529be104bf3f39c9d",
         "checagens": [
           {
             "nome": "build",
@@ -182,7 +194,7 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T21-37-42-147Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T23-26-04-161Z.json"
       },
       "ambienteAlternativo": {
         "status": "PASS",
@@ -442,15 +454,33 @@
         "pendencias": []
       },
       "ticket16": {
-        "estado": "IN_VALIDATION",
+        "estado": "COMPLETED",
         "fingerprint": "sha256:2a67dc3e06ab7f67e63fa200d60f445a018c426a29efff45404ce8f6a017d481",
         "verificador": "PASS",
+        "pendencias": []
+      },
+      "ticket11": {
+        "estado": "COMPLETED",
+        "fingerprint": "sha256:de48f5c1f035205c2d71badaeec9d733184b8359826a05ab7f14bf0dda1d1ed7",
+        "verificador": "PASS",
+        "pendencias": []
+      },
+      "ticket14": {
+        "estado": "COMPLETED",
+        "fingerprint": "sha256:de48f5c1f035205c2d71badaeec9d733184b8359826a05ab7f14bf0dda1d1ed7",
+        "verificador": "PASS",
+        "pendencias": []
+      },
+      "ticket17": {
+        "estado": "IN_VALIDATION",
+        "fingerprint": "sha256:6e3eb0294f57aaf92301009ba3688ce60724998b70c7012529be104bf3f39c9d",
+        "verificador": "PASS",
         "pendencias": [
-          "H19 no celular"
+          "Reteste H22 sem explosão"
         ]
       }
     },
-    "fingerprint": "sha256:2a67dc3e06ab7f67e63fa200d60f445a018c426a29efff45404ce8f6a017d481",
+    "fingerprint": "sha256:6e3eb0294f57aaf92301009ba3688ce60724998b70c7012529be104bf3f39c9d",
     "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc.",
     "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25.",
     "decisoes": [
@@ -458,7 +488,9 @@
       "D2 (2026-11-26): atividades de adultos e idosos arquivadas; só 5 a 12 anos",
       "D3 (2026-11-26): ilustrações Twemoji CC-BY 4.0 com atribuição",
       "Leitor de tela em Histórias diz o objeto da figura (ticket 14)",
-      "2026-11-26: faixa de idade só nas sugestões de Atividades Reais; jogos sem filtro por faixa (ticket 05 descartado)"
+      "2026-11-26: faixa de idade só nas sugestões de Atividades Reais; jogos sem filtro por faixa (ticket 05 descartado)",
+      "2026-11-26 (H19): padrão visual dos jogos — figura Twemoji grande sobre placa colorida no cartão; peças em grade",
+      "2026-11-26: Robô sem explosão na parede (risco de bug); só a caminhada passo a passo"
     ]
   },
   "demandasConcluidas": [

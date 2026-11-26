@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** IN_VALIDATION
+**Status:** COMPLETED
 
 **Costura:** typecheck, check:e5 e homologação no celular
 
@@ -12,9 +12,9 @@
 
 ## Critérios
 
-- [ ] Crédito da licença em letra bem menor, ainda legível e com o link
-- [ ] Cartões da Biblioteca com figura Twemoji grande sobre placa colorida, uma por jogo
-- [ ] Peças de seleção em grade com tamanho mínimo; a figura aparece inteira a 320 px, mesmo com 10 opções
+- [x] Crédito da licença em letra bem menor, ainda legível e com o link
+- [x] Cartões da Biblioteca com figura Twemoji grande sobre placa colorida, uma por jogo
+- [x] Peças de seleção em grade com tamanho mínimo; a figura aparece inteira a 320 px, mesmo com 10 opções
 
 ## Implementação (2026-11-26)
 
@@ -34,3 +34,5 @@ com crédito discreto e link para a licença; os cartões ganham figura sobre pl
 colorida e as peças de seleção passam a uma grade que não espreme a figura
 (DEV-CAT-M1, tickets 10 e 16).
 ```
+
+- **Homologação (2026-11-26):** H19 aprovado. Padrão para os próximos jogos: figura Twemoji grande sobre placa colorida no cartão e peças em grade.
