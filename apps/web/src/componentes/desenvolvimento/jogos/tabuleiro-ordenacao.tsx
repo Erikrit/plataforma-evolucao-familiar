@@ -5,6 +5,7 @@ import { Button, Group, Stack, Text, UnstyledButton, VisuallyHidden } from "@man
 import type { CenaOrdenacao, ConteudoOrdenacao } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import { dicaOrdenacao } from "./dicas-jogos";
+import { Figura, TextoComFiguras } from "./figura";
 import estilos from "./jogos.module.css";
 
 /** Letra ou número: a peça já mostra o próprio nome (Forme a palavra, Do menor ao maior). */
@@ -119,7 +120,7 @@ export function TabuleiroOrdenacao({
   return (
     <Stack gap="md" ref={raiz} tabIndex={0} onKeyDown={aoTeclado} className={estilos.ordenacao}>
       <Text fw={600} size="lg">
-        {conteudo.enunciado}
+        <TextoComFiguras texto={conteudo.enunciado} />
       </Text>
 
       <Stack gap="xs">
@@ -135,7 +136,7 @@ export function TabuleiroOrdenacao({
                 {cena ? (
                   <>
                     <span className={estilos.figura} aria-hidden={!pecas}>
-                      {cena.simbolo}
+                      <Figura simbolo={cena.simbolo} />
                     </span>
                     {mostrarNome(cena) ? <span className={estilos.nomeFigura}>{cena.nome}</span> : null}
                     {conteudo.ocultarNomes ? <VisuallyHidden>{rotuloCena(cena)}</VisuallyHidden> : null}
@@ -164,7 +165,7 @@ export function TabuleiroOrdenacao({
                 : `Atenção: ${conteudo.intrusas} cenas não fazem parte da história e ficam de fora.`}
           </Text>
         ) : null}
-        <Group gap="xs" role="group" aria-label={pecas ? "Peças para ordenar" : "Cenas para ordenar"}>
+        <div className={estilos.gradePecas} role="group" aria-label={pecas ? "Peças para ordenar" : "Cenas para ordenar"}>
           {disponiveis.map((cena, indice) => (
             <UnstyledButton
               key={cena.id}
@@ -177,7 +178,7 @@ export function TabuleiroOrdenacao({
               aria-label={`Colocar ${rotuloCena(cena)}`}
             >
               <span className={estilos.figura} aria-hidden="true">
-                {cena.simbolo}
+                <Figura simbolo={cena.simbolo} />
               </span>
               {mostrarNome(cena) ? <span className={estilos.nomeFigura}>{cena.nome}</span> : null}
             </UnstyledButton>
@@ -187,7 +188,7 @@ export function TabuleiroOrdenacao({
               {pecas ? "Todas as peças já estão na resposta." : "Todas as cenas já estão na história."}
             </Text>
           ) : null}
-        </Group>
+        </div>
       </Stack>
 
       <Group>

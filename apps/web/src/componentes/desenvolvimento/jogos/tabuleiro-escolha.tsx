@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Group, Stack, Text, UnstyledButton } from "@mantine/core";
+import { Stack, Text, UnstyledButton } from "@mantine/core";
 import type { ConteudoEscolha, FiguraEscolha } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import { dicaEscolha } from "./dicas-jogos";
+import { Figura } from "./figura";
 import estilos from "./jogos.module.css";
 
 export function TabuleiroEscolha({
@@ -57,13 +58,7 @@ export function TabuleiroEscolha({
       <Text fw={600} size="lg">
         {conteudo.enunciado}
       </Text>
-      <Group
-        grow
-        align="stretch"
-        gap="xs"
-        role="group"
-        aria-label="Opções para escolher"
-      >
+      <div className={estilos.gradePecas} role="group" aria-label="Opções para escolher">
         {conteudo.opcoes.map((figura, indice) => (
           <UnstyledButton
             key={figura.id}
@@ -73,14 +68,14 @@ export function TabuleiroEscolha({
             data-dica={destacada === figura.id}
           >
             <span className={estilos.figura} aria-hidden="true">
-              {figura.simbolo}
+              <Figura simbolo={figura.simbolo} />
             </span>
             {mostrarNomes ? (
               <span className={estilos.nomeFigura}>{figura.nome}</span>
             ) : null}
           </UnstyledButton>
         ))}
-      </Group>
+      </div>
       <Text size="sm" role="status">
         {mensagem}
       </Text>

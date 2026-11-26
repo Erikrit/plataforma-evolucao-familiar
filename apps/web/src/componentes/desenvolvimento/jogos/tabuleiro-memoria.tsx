@@ -5,6 +5,7 @@ import { Stack, Text, UnstyledButton } from "@mantine/core";
 import type { FiguraMemoria } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import { dicaMemoria } from "./dicas-jogos";
+import { Figura } from "./figura";
 import estilos from "./jogos.module.css";
 
 export function TabuleiroMemoria({
@@ -105,7 +106,7 @@ export function TabuleiroMemoria({
                     data-face={figura.face ?? "objeto"}
                     aria-hidden="true"
                   >
-                    {figura.simbolo}
+                    <Figura simbolo={figura.simbolo} />
                   </span>
                   <span className={estilos.nomeFigura}>{figura.nome}</span>
                 </>

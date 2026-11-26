@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 04 (D2 decidida em 2026-11-26: atividades de adultos e idosos arquivadas; ficam só as de 5 a 12 anos)
 
-**Status:** IN_VALIDATION
+**Status:** COMPLETED
 
 **Costura:** smoke:e4 e smoke:authz
 
@@ -33,3 +33,5 @@ Sugerir e renovar oferecem até cinco Atividades Reais, primeiro as da faixa
 (5–6, 7–9, 10–12); as quatro atividades de adultos e idosos ficam arquivadas e
 as demais passam a 5–12 anos, com o histórico preservado (DEV-CAT-M1, ticket 07).
 ```
+
+- **Homologação (2026-11-26):** aprovada pelo responsável.

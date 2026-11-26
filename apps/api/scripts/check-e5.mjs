@@ -198,6 +198,34 @@ assert.ok(passos.every((valor, i) => i === 0 || valor >= passos[i - 1]), `Passos
   assert.match(dicaRobo({ mapa, inicio: { linha: 1, coluna: 1 }, chegada: { linha: 3, coluna: 1 } }, [{ direcao: "direita", passos: 2 }], 2), /baixo.*2/i);
 }
 
+// Ticket 10 (D3, 2026-11-26): toda figura de jogo ativo tem SVG Twemoji local e origem registrada.
+{
+  const { readFileSync, existsSync } = await import("node:fs");
+  const { CATALOGO_CARREGADO } = await import("./lib-regua-jogos.mjs");
+  const pasta = fileURLToPath(new URL("../../web/public/figuras/twemoji/", import.meta.url));
+  const segmentador = new Intl.Segmenter("pt", { granularity: "grapheme" });
+  const codigo = (g) => {
+    const pontos = [...g].map((c) => c.codePointAt(0).toString(16));
+    return (pontos.includes("200d") ? pontos : pontos.filter((p) => p !== "fe0f")).join("-");
+  };
+  const figuras = new Set();
+  const visitar = (x) => {
+    if (Array.isArray(x)) x.forEach(visitar);
+    else if (x && typeof x === "object") Object.values(x).forEach(visitar);
+    else if (typeof x === "string") {
+      for (const { segment } of segmentador.segment(x)) if (/\p{Extended_Pictographic}/u.test(segment)) figuras.add(segment);
+    }
+  };
+  visitar(CATALOGO_CARREGADO.filter((jogo) => jogo.ativo !== false));
+  ["🤖", "🔒"].forEach((g) => figuras.add(g));
+  const faltando = [...figuras].filter((g) => !existsSync(`${pasta}${codigo(g)}.svg`));
+  assert.deepEqual(faltando, [], `Figuras sem SVG local: ${faltando.join(" ")}`);
+  const origem = readFileSync(`${pasta}ORIGEM.md`, "utf8");
+  assert.ok(/CC-BY 4\.0/.test(origem) && /17\.0\.3/.test(origem) && existsSync(`${pasta}LICENSE-GRAPHICS.txt`));
+  const modulo = readFileSync(fileURLToPath(new URL("../../web/src/lib/figuras-twemoji.ts", import.meta.url)), "utf8");
+  assert.ok([...figuras].every((g) => modulo.includes(`"${codigo(g)}"`)), "lista de figuras do web desatualizada");
+}
+
 const editorial = [...CATALOGO_JOGOS, { id: "outro", categoria: "autonomia" }];
 assert.deepEqual(selecionarDestaquesJogos([], []), []);
 assert.deepEqual(selecionarDestaquesJogos(editorial.slice(0, 1), []), ["memoria"]);

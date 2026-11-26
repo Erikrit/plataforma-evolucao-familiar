@@ -28,6 +28,8 @@ import { EstadoCarregando, EstadoVazio } from "@/componentes/feedback";
 import { coresPef } from "@/tema/mantine";
 import type { FaseJogoResumo, JogoResumo } from "@/lib/api";
 import { agruparPorTrilha } from "@/lib/trilhas-jogos";
+import { Figura } from "@/componentes/desenvolvimento/jogos/figura";
+import { CREDITO_TWEMOJI } from "@/lib/figuras-twemoji";
 import {
   jogoComTodasFasesConcluidas,
   nomeCurtoJogo,
@@ -219,7 +221,7 @@ function ItemCatalogoJogo({
                         className={estilosJogos.opcaoFase}
                         data-estado="bloqueada"
                       >
-                        <span aria-hidden="true">🔒</span>
+                        <span aria-hidden="true"><Figura simbolo="🔒" /></span>
                         <span className={estilosJogos.numeroFase}>{fase.numero}</span>
                         <span className={estilosJogos.rotuloEstadoFase}>Bloqueada</span>
                       </div>
@@ -385,6 +387,13 @@ function ListaJogos() {
             );
           }}
         </CatalogoJogosAutorizado>
+        {/* D3 (2026-11-26): atribuição exigida pela licença CC-BY 4.0. */}
+        <Text c="dimmed" ta="center" className={estilosJogos.creditoLicenca}>
+          {CREDITO_TWEMOJI}{" "}
+          <a href="/figuras/twemoji/LICENSE-GRAPHICS.txt" target="_blank" rel="noopener">
+            Ver licença
+          </a>
+        </Text>
       </Stack>
     </Container>
   );

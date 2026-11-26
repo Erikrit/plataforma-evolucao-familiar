@@ -181,5 +181,26 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
   - renovar troca até cinco;
   - não aparecem "Lembrete em três fotos", "Alongar ombros sentados", "Lista mental da feira" nem "Semana em ordem";
   - se alguma delas já estava escolhida antes, ela sai das ativas, mas as participações continuam no Histórico.
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
+
+### H18 — Ticket 10: ilustrações Twemoji
+- **Aparelho:** celular Android e, se possível, iPhone.
+- **Passos:** abrir um jogo de cada (Memória, Labirinto, Entrega, Histórias, Sudoku, Forme a palavra, Do menor ao maior, Robô) e a Biblioteca de jogos.
+- **Esperado:** as figuras têm o mesmo desenho nos dois aparelhos e são nítidas; nenhuma figura aparece quebrada; o crédito "Ilustrações: Twemoji…" aparece no fim da Biblioteca e "Ver licença" abre o texto da licença.
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado; pedidos de acabamento viraram o ticket 16.
+
+### H19 — Ticket 16: acabamento visual
+- **Aparelho:** celular de 320 a 360 px.
+- **Passos:**
+  1. Abrir a Biblioteca de jogos.
+  2. No Sudoku, olhar a paleta ao lado de Apagar.
+  3. Jogar uma fase com muitas opções: Ache o intruso já saiu, então use Do menor ao maior na fase 13 ou mais.
+  4. Jogar Histórias e Forme a palavra.
+- **Esperado:**
+  - o crédito da licença aparece bem pequeno e o link funciona;
+  - os cartões mostram figuras nítidas em placas coloridas;
+  - as peças de seleção mostram a figura inteira e quebram em linhas em vez de espremer.
 - **Status:** PENDING_HUMAN
 - **Retorno:**

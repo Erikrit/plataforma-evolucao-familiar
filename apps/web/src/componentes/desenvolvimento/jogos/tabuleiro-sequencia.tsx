@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Group, Stack, Text, UnstyledButton } from "@mantine/core";
+import { Stack, Text, UnstyledButton } from "@mantine/core";
 import type { ConteudoSequencia, FiguraSequencia } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import { dicaSequencia } from "./dicas-jogos";
@@ -78,13 +78,7 @@ export function TabuleiroSequencia({
           </li>
         ))}
       </ol>
-      <Group
-        grow
-        align="stretch"
-        gap="xs"
-        role="group"
-        aria-label="Peças para escolher"
-      >
+      <div className={estilos.gradePecas} role="group" aria-label="Peças para escolher">
         {conteudo.alternativas.map((figura) => (
           <UnstyledButton
             key={figura.id}
@@ -95,7 +89,7 @@ export function TabuleiroSequencia({
             <Peca figura={figura} />
           </UnstyledButton>
         ))}
-      </Group>
+      </div>
       <Text size="sm" role="status">
         {mensagem}
       </Text>

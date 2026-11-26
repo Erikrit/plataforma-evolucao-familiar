@@ -5,6 +5,7 @@ import { Button, Group, Stack, Text } from "@mantine/core";
 import type { ConteudoRobo } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import { DESLOCAMENTOS, dicaRobo, type Comando, type Direcao } from "./dicas-jogos";
+import { Figura } from "./figura";
 import estilos from "./jogos.module.css";
 
 const SETAS: readonly { id: Direcao; nome: string; icone: string }[] = [
@@ -125,7 +126,7 @@ export function TabuleiroRobo({
             const tipo = aqui ? "jogador" : celula === "#" ? "parede" : celula === "F" ? "chegada" : "caminho";
             return (
               <span className={estilos.celula} key={`${i}/${j}`} data-tipo={tipo}>
-                {aqui ? "🤖" : celula === "F" ? "⚑" : ""}
+                {aqui ? <Figura simbolo="🤖" /> : celula === "F" ? "⚑" : ""}
               </span>
             );
           }),

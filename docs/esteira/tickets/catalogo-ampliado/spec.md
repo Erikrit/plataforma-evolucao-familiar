@@ -93,10 +93,11 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | 12 | COMPLETED | — | Sudoku, Forme a palavra, Do menor ao maior e Robô com setas; H13 homologado |
 | 13 | COMPLETED | — | Histórias em três degraus; H14 homologado |
 | 05 | BLOCKED | — | Descartado (H15 reprovado): jogos sem faixa; a faixa fica nas sugestões do 07 |
-| 07 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Até 5 sugestões pela faixa; 4 atividades de adultos arquivadas; H17 |
-| 10 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/10-ilustracoes-proprias.md` | D3: Twemoji CC-BY 4.0 |
+| 07 | COMPLETED | — | Até 5 sugestões pela faixa; H17 homologado |
+| 10 | COMPLETED | — | Twemoji 17.0.3 local; H18 homologado |
 | 14 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/14-leitor-de-tela-nas-historias.md` | Leitor de tela diz o objeto da figura |
 | 15 | COMPLETED | — | Trilha em ordem e Dica ao lado de Sair; H16 homologado |
+| 16 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Licença discreta, ícones novos e peças legíveis; H19 |
 
 ### Verificação local pendente (tickets 04 e 08)
 

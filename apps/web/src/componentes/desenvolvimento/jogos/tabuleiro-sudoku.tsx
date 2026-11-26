@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, Group, Stack, Text, UnstyledButton } from "@mantine/core";
+import { Button, Stack, Text, UnstyledButton } from "@mantine/core";
 import type { ConteudoSudoku } from "@/lib/api";
 import type { ContratoTabuleiro } from "./contrato-tabuleiro";
 import { dicaSudoku } from "./dicas-jogos";
+import { Figura } from "./figura";
 import estilos from "./jogos.module.css";
 
 /**
@@ -101,12 +102,12 @@ export function TabuleiroSudoku({
               data-borda-baixo={(l + 1) % conteudo.caixa.linhas === 0 && l + 1 < n}
               onClick={() => !dada(l, c) && setSelecionada([l, c])}
             >
-              <span aria-hidden="true">{v ? conteudo.simbolos[v - 1].simbolo : ""}</span>
+              <span aria-hidden="true">{v ? <Figura simbolo={conteudo.simbolos[v - 1].simbolo} /> : ""}</span>
             </UnstyledButton>
           )),
         )}
       </div>
-      <Group gap="xs" role="group" aria-label="Figuras para colocar">
+      <div className={estilos.gradePecas} role="group" aria-label="Figuras para colocar">
         {conteudo.simbolos.map((figura, i) => (
           <UnstyledButton
             key={figura.id}
@@ -115,14 +116,14 @@ export function TabuleiroSudoku({
             onClick={() => colocar(i + 1)}
           >
             <span className={estilos.figura} aria-hidden="true">
-              {figura.simbolo}
+              <Figura simbolo={figura.simbolo} />
             </span>
           </UnstyledButton>
         ))}
         <Button variant="default" onClick={() => colocar(0)} disabled={!selecionada}>
           Apagar
         </Button>
-      </Group>
+      </div>
       <Text size="sm" role="status">
         {mensagem}
       </Text>

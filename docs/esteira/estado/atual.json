@@ -46,7 +46,7 @@
   },
   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
   "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
-  "atualizadoEm": "2026-11-26T20:29:25.796Z",
+  "atualizadoEm": "2026-11-26T21:41:15.586Z",
   "modulo": {
     "id": "04-evolucao-familiar",
     "status": "COMPLETED",
@@ -104,18 +104,21 @@
       "apps/api/prisma/catalogo-jogos-historias-e5.mjs",
       "apps/api/prisma/catalogo-jogos-marco1-e5.mjs",
       "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-sudoku.tsx",
-      "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-robo.tsx"
+      "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-robo.tsx",
+      "apps/web/public/figuras/twemoji/",
+      "apps/web/src/lib/figuras-twemoji.ts",
+      "apps/web/src/componentes/desenvolvimento/jogos/figura.tsx"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável faz o commit do ticket 07 e homologa H17; agente segue com o ticket 10 (Twemoji).",
+    "proximaAcao": "Responsável faz o commit (tickets 10 e 16) e homologa H19; agente segue com 11 e 14.",
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T20:24:25.071Z",
-        "base": "68635eb8da0908538d347ce3c14d4c0b66452b19",
-        "head": "68635eb8da0908538d347ce3c14d4c0b66452b19",
-        "fingerprint": "sha256:999e48ae60e4fd94715b9e26133f2b480650d49293a8f0c8ebab3a79513582b8",
+        "em": "2026-11-26T21:35:20.669Z",
+        "base": "99451747eedc301fce161f7350fb9a56a46b72d6",
+        "head": "99451747eedc301fce161f7350fb9a56a46b72d6",
+        "fingerprint": "sha256:2a67dc3e06ab7f67e63fa200d60f445a018c426a29efff45404ce8f6a017d481",
         "checagens": [
           {
             "nome": "lint",
@@ -137,12 +140,6 @@
             "motivo": "script ainda não existe"
           },
           {
-            "nome": "authz",
-            "status": "PASS",
-            "comando": "npm run smoke:authz -w @pef/api",
-            "exit": 0
-          },
-          {
             "nome": "check-e4",
             "status": "PASS",
             "comando": "npm run check:e4 -w @pef/api",
@@ -155,15 +152,15 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T20-24-25-071Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T21-35-20-669Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T20:26:49.936Z",
-        "base": "68635eb8da0908538d347ce3c14d4c0b66452b19",
-        "head": "68635eb8da0908538d347ce3c14d4c0b66452b19",
-        "fingerprint": "sha256:999e48ae60e4fd94715b9e26133f2b480650d49293a8f0c8ebab3a79513582b8",
+        "em": "2026-11-26T21:37:42.147Z",
+        "base": "99451747eedc301fce161f7350fb9a56a46b72d6",
+        "head": "99451747eedc301fce161f7350fb9a56a46b72d6",
+        "fingerprint": "sha256:2a67dc3e06ab7f67e63fa200d60f445a018c426a29efff45404ce8f6a017d481",
         "checagens": [
           {
             "nome": "build",
@@ -179,37 +176,13 @@
             "motivo": "script ainda não existe"
           },
           {
-            "nome": "authz",
-            "status": "PASS",
-            "comando": "npm run smoke:authz -w @pef/api",
-            "exit": 0
-          },
-          {
-            "nome": "carga-trilhas",
-            "status": "PASS",
-            "comando": "npm run qg:cat-trilhas -w @pef/api",
-            "exit": 0
-          },
-          {
-            "nome": "smoke-historico-resumo",
-            "status": "PASS",
-            "comando": "npm run smoke:est-03-docs -w @pef/api",
-            "exit": 0
-          },
-          {
-            "nome": "smoke-e4-atividades",
-            "status": "PASS",
-            "comando": "npm run smoke:e4 -w @pef/api",
-            "exit": 0
-          },
-          {
             "nome": "smoke-e5-jogos",
             "status": "PASS",
             "comando": "npm run smoke:e5 -w @pef/api",
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T20-26-49-936Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T21-37-42-147Z.json"
       },
       "ambienteAlternativo": {
         "status": "PASS",
@@ -452,7 +425,7 @@
         "pendencias": []
       },
       "ticket07": {
-        "estado": "IN_VALIDATION",
+        "estado": "COMPLETED",
         "decisoes": [
           "Arquivar Lembrete em três fotos, Alongar ombros sentados, Lista mental da feira e Semana em ordem",
           "Demais 20 atividades com faixa ajustada para 5–12",
@@ -460,12 +433,24 @@
         ],
         "fingerprint": "sha256:999e48ae60e4fd94715b9e26133f2b480650d49293a8f0c8ebab3a79513582b8",
         "verificador": "PASS",
+        "pendencias": []
+      },
+      "ticket10": {
+        "estado": "COMPLETED",
+        "fingerprint": "sha256:737ba3ca49c5ac66f3b456e730699b1502623f9e24a65612e41f1bd24dcde5e3",
+        "verificador": "PASS",
+        "pendencias": []
+      },
+      "ticket16": {
+        "estado": "IN_VALIDATION",
+        "fingerprint": "sha256:2a67dc3e06ab7f67e63fa200d60f445a018c426a29efff45404ce8f6a017d481",
+        "verificador": "PASS",
         "pendencias": [
-          "H17 no celular"
+          "H19 no celular"
         ]
       }
     },
-    "fingerprint": "sha256:999e48ae60e4fd94715b9e26133f2b480650d49293a8f0c8ebab3a79513582b8",
+    "fingerprint": "sha256:2a67dc3e06ab7f67e63fa200d60f445a018c426a29efff45404ce8f6a017d481",
     "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc.",
     "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25.",
     "decisoes": [

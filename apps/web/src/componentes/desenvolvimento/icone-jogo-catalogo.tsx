@@ -1,6 +1,8 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import { Figura } from "@/componentes/desenvolvimento/jogos/figura";
+import estilos from "@/componentes/desenvolvimento/jogos/jogos.module.css";
 
 const CORES: Record<string, { fundo: string; traço: string }> = {
   memoria: { fundo: "#E8EFFC", traço: "#244E95" },
@@ -22,9 +24,36 @@ type Props = {
   style?: CSSProperties;
 };
 
+/**
+ * Ticket 16: figura Twemoji grande sobre placa colorida, no mesmo estilo dos jogos.
+ * Jogos sem figura definida (arquivados) mantêm o ícone de traço.
+ */
+const FIGURA_JOGO: Record<string, string> = {
+  memoria: "🧠",
+  labirinto: "🧭",
+  "entrega-jardim": "🚚",
+  "historias-cenas": "📖",
+  "sudoku-figuras": "🔢",
+  "forme-palavra": "🔤",
+  "menor-maior": "📊",
+  "robo-setas": "🤖",
+};
+
 /** Ícone quadrado editorial por jogo (sem depender de capaRef). */
 export function IconeJogoCatalogo({ jogoId, style }: Props) {
   const cores = CORES[jogoId] ?? { fundo: "#EEF2F7", traço: "#3B4A63" };
+  const figura = FIGURA_JOGO[jogoId];
+  if (figura) {
+    return (
+      <span
+        className={estilos.placaJogo}
+        style={{ background: `linear-gradient(160deg, #fff 0%, ${cores.fundo} 55%)`, border: `2px solid ${cores.traço}33`, ...style }}
+        aria-hidden
+      >
+        <Figura simbolo={figura} rotulo="" />
+      </span>
+    );
+  }
   return (
     <svg
       viewBox="0 0 64 64"

@@ -56,8 +56,9 @@
 }
 
 .figura {
-  font-size: clamp(1.2rem, 5.5vw, 2.35rem);
-  line-height: 1.15;
+  /* Ticket 16: figuras maiores e nítidas (SVG), sem depender da fonte do aparelho. */
+  font-size: clamp(1.9rem, 8vw, 2.75rem);
+  line-height: 1;
 }
 
 .figura[data-face="sombra"] {
@@ -90,8 +91,9 @@
 .peca,
 .pecaAcao {
   display: flex;
-  min-height: 4.5rem;
-  min-width: 0;
+  min-height: 4.75rem;
+  min-width: 4.5rem;
+  padding: 0.5rem 0.4rem;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -370,7 +372,7 @@
   aspect-ratio: 1;
   place-items: center;
   border: 1px solid #c9d4e6;
-  font-size: clamp(1rem, 5vw, 1.6rem);
+  font-size: clamp(1.35rem, 6.5vw, 2rem);
   min-height: 2.75rem;
 }
 .casaSudoku[data-dada="true"] { background: #eef2f7; cursor: default; }
@@ -384,4 +386,28 @@
   opacity: 0.55;
   cursor: not-allowed;
   border-style: dashed;
+}
+
+/* Ticket 16: peças de seleção em grade com tamanho mínimo — quebram linha em vez de espremer. */
+.gradePecas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr));
+  gap: 0.5rem;
+}
+
+/* Ticket 16: cartão da Biblioteca com figura grande sobre placa colorida. */
+.placaJogo {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  border-radius: 22%;
+  font-size: clamp(2rem, 9vw, 2.6rem);
+  box-shadow: inset 0 -4px 0 rgb(0 0 0 / 8%), 0 1px 3px rgb(0 0 0 / 12%);
+}
+
+.creditoLicenca {
+  font-size: 0.625rem;
+  line-height: 1.3;
+  opacity: 0.85;
 }
