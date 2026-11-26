@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** IN_VALIDATION
+**Status:** COMPLETED
 
 **Costura:** check:e5 e roteiro no celular
 
@@ -12,10 +12,14 @@
 
 ## Critérios
 
-- [ ] E5-F04 — no labirinto, andar dois passos e pedir a dica de novo mostra a direção atual
-- [ ] E5-ACE-02 — concluir com dica produz o mesmo resultado (objetivos: PASS; dica e conclusão com ajuda: H9)
-- [ ] E5-ACE-10 — toque, teclado e movimento reduzido preservados
+- [x] E5-F04 — no labirinto, andar dois passos e pedir a dica de novo mostra a direção atual
+- [x] E5-ACE-02 — concluir com dica produz o mesmo resultado (objetivos: PASS; H9 PASS)
+- [x] E5-ACE-10 — toque, teclado e movimento reduzido preservados
 
 ## Pendências
 
 - E5-F04 e E5-ACE-10: confirmar no celular (andar dois passos e pedir a dica de novo; toque, teclado e movimento reduzido).
+
+## Homologação
+
+H6 (dica recalculada), H7 (toque, teclado e movimento reduzido), H8 (regressão) e H9 (dica e conclusão com ajuda): PASS, responsável, 2026-11-26.

@@ -8,6 +8,8 @@ export const CATEGORIAS_BIBLIOTECA = [
   "criatividade",
   "coordenacao",
   "autonomia",
+  // DEV-CAT-P08: contagem, quantidades, formas e ordem.
+  "numeros",
 ] as const;
 export type CategoriaBiblioteca = (typeof CATEGORIAS_BIBLIOTECA)[number];
 

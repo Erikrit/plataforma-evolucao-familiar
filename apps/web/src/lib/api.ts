@@ -32,6 +32,8 @@ export type CartaoInicio = {
   usuarioId?: string;
   /** Metadado administrativo de conta/convite (E2-ACE-05). */
   estadoConta?: EstadoContaPessoa;
+  /** Só para administrador: se a pessoa já tem data de nascimento (M01 §16). */
+  possuiDataNascimento?: boolean;
   resumo: string;
   areasAutorizadas?: AreasAutorizadasCartao;
 };

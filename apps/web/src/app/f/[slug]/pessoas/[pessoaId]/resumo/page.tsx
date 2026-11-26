@@ -32,6 +32,7 @@ import {
   MensagemFeedback,
 } from "@/componentes/feedback";
 import { tituloConsulta, tituloExame } from "@/lib/categorias-compromissos";
+import { ROTULOS_CATEGORIA_DESENVOLVIMENTO } from "@/lib/rotulos-experiencia";
 import { coresPef } from "@/tema/mantine";
 
 function CartaoMetrica({ rotulo, valor }: { rotulo: string; valor: number }) {
@@ -104,7 +105,7 @@ function formatarQuando(iso: string) {
 
 function rotuloCategoria(categoria: string) {
   if (categoria === "nao_classificada") return "Não classificada";
-  return categoria.replaceAll("_", " ");
+  return ROTULOS_CATEGORIA_DESENVOLVIMENTO[categoria] ?? categoria.replaceAll("_", " ");
 }
 
 function rotuloResultado(resultado: string) {

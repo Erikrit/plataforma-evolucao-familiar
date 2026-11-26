@@ -478,6 +478,7 @@ export class ServicoAutorizacoes {
         id: true,
         nome: true,
         vinculo: true,
+        dataNascimento: true,
         usuario: { select: { id: true } },
       },
     });
@@ -547,6 +548,8 @@ export class ServicoAutorizacoes {
           ? { usuarioId: p.usuario.id }
           : {}),
         ...(estadoConta ? { estadoConta } : {}),
+        // Só para quem administra: a tela pede a data ao escolher Desenvolvimento (M01 §16).
+        ...(visao.adminFamilia ? { possuiDataNascimento: Boolean(p.dataNascimento) } : {}),
         resumo: p.vinculo ? `Vínculo: ${p.vinculo}` : "Pessoa da família",
         areasAutorizadas: {
           cuidados,

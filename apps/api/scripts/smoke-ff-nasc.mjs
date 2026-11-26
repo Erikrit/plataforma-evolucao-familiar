@@ -111,6 +111,17 @@ try {
   const crianca = await criarPessoa(familia, "Criança fictícia");
   conferir("FF-NASC-ACE-01 cadastro só com nome", Boolean(crianca.id) && crianca.dataNascimento === null);
 
+  // H1 (homologação 2026-11-26): a tela pede a data assim que Desenvolvimento é escolhido.
+  // O cartão do administrador informa só se a data existe, sem expor o valor.
+  const cartaoDe = async (token, pessoaId) =>
+    (await chamar(`/familias/${familia.familiaId}/inicio`, { token })).dados?.cartoes?.find((c) => c.pessoaId === pessoaId);
+  const cartaoSemData = await cartaoDe(familia.token, crianca.id);
+  conferir(
+    "H1 cartão do administrador indica pessoa sem data, sem expor a data",
+    cartaoSemData?.possuiDataNascimento === false && !("dataNascimento" in (cartaoSemData ?? {})),
+    cartaoSemData,
+  );
+
   // FF-NASC-ACE-02 — concessão
   const semData = await conceder(familia, participante.usuarioId, crianca.id);
   conferir(
@@ -134,6 +145,14 @@ try {
     dataNascimentoAlvo: "2018-05-10",
   });
   const gravada = await prisma.pessoa.findUnique({ where: { id: crianca.id } });
+  const cartaoComData = await cartaoDe(familia.token, crianca.id);
+  const cartaoParticipante = await cartaoDe(participante.token, crianca.id);
+  conferir(
+    "H1 cartão indica data após concessão; participante sem administração não recebe o indicador",
+    cartaoComData?.possuiDataNascimento === true
+      && Boolean(cartaoParticipante) && !("possuiDataNascimento" in cartaoParticipante),
+    { cartaoComData, cartaoParticipante },
+  );
   conferir(
     "FF-NASC-ACE-02 concessão com data grava data e acesso",
     comData.status === 201 && dataIso(gravada?.dataNascimento) === "2018-05-10",

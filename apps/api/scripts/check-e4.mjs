@@ -153,6 +153,21 @@ reg(
   "UI móvel: descoberta sob demanda, ativas, limite e retirada",
 );
 
+// DEV-CAT-P08 (DEV-CAT-M1, ticket 06): área Números em API, filtros e leituras do Módulo 04.
+const rotulosWeb = readFileSync(join(raiz, "apps/web/src/lib/rotulos-experiencia.ts"), "utf8");
+const resumoWeb = readFileSync(join(raiz, "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/resumo/page.tsx"), "utf8");
+const historicoWeb = readFileSync(join(raiz, "apps/web/src/app/f/[slug]/pessoas/[pessoaId]/historico/page.tsx"), "utf8");
+reg(
+  "DEV-CAT-P08-numeros",
+  /CATEGORIAS_BIBLIOTECA = \[[^\]]*"numeros"/.test(constantes) &&
+    /numeros: "Números"/.test(rotulosWeb) &&
+    !/"criatividade",\s*"coordenacao"/.test(sugestoes) &&
+    sugestoes.includes("CATEGORIAS_BIBLIOTECA") &&
+    resumoWeb.includes("ROTULOS_CATEGORIA_DESENVOLVIMENTO") &&
+    historicoWeb.includes("ROTULOS_CATEGORIA_DESENVOLVIMENTO"),
+  "Números aceita na API, nos filtros e com rótulo no Histórico e no Resumo; sugestões sem lista fixa",
+);
+
 const falhas = resultados.filter((r) => !r.ok);
 for (const r of resultados) {
   console.log(

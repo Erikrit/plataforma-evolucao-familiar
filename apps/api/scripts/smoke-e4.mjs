@@ -561,6 +561,66 @@ try {
     { status: semCat.status, id: semCat.corpo?.id },
   );
 
+  // DEV-CAT-P08 / E5-ACE-11 (DEV-CAT-M1, ticket 06): área Números ponta a ponta.
+  // Personalizada categorizada só entra nas ativas quando escolhida (E4); o filtro usa a lista geral.
+  const numeros = await json(
+    await fetch(`${base}/pessoas/${pessoaAId}/desafios`, {
+      method: "POST",
+      headers: hA,
+      body: JSON.stringify({
+        nome: `Contar tampinhas fictícias ${stamp}`,
+        dificuldade: "simples",
+        categoria: "numeros",
+        instrucao: "Contar e separar tampinhas por cor.",
+      }),
+    }),
+  );
+  const filtroNumeros = await json(
+    await fetch(
+      `${base}/pessoas/${pessoaAId}/desafios?categoria=numeros`,
+      { headers: hA },
+    ),
+  );
+  reg(
+    "DEV-CAT-P08-filtro-numeros",
+    numeros.status < 300 &&
+      numeros.corpo?.categoria === "numeros" &&
+      (filtroNumeros.corpo?.desafios ?? []).some((d) => d.id === numeros.corpo?.id) &&
+      (filtroNumeros.corpo?.desafios ?? []).every((d) => d.categoria === "numeros"),
+    { status: numeros.status, filtro: filtroNumeros.status },
+  );
+  const chaveNumeros = `e4-numeros-${stamp}`;
+  const execNumeros = await json(
+    await fetch(`${base}/pessoas/${pessoaAId}/participacoes`, {
+      method: "POST",
+      headers: hA,
+      body: JSON.stringify({ desafioId: numeros.corpo?.id, resultado: "concluiu", execucaoChave: chaveNumeros }),
+    }),
+  );
+  const historicoNumeros = await json(
+    await fetch(`${base}/pessoas/${pessoaAId}/historico?dominio=desenvolvimento`, { headers: hA }),
+  );
+  const resumoNumeros = await json(
+    await fetch(`${base}/pessoas/${pessoaAId}/resumo-desenvolvimento`, { headers: hA }),
+  );
+  reg(
+    "E5-ACE-11-categoria-numeros-no-historico-e-resumo",
+    execNumeros.status < 300 &&
+      (historicoNumeros.corpo?.eventos ?? []).some(
+        (e) => e.categoria === "numeros" && String(e.resumo ?? "").includes("Contar tampinhas"),
+      ) &&
+      (resumoNumeros.corpo?.categoriasExploradas ?? []).some((c) => c.categoria === "numeros"),
+    { exec: execNumeros.status, historico: historicoNumeros.status, resumo: resumoNumeros.status },
+  );
+  const invalida = await json(
+    await fetch(`${base}/pessoas/${pessoaAId}/desafios`, {
+      method: "POST",
+      headers: hA,
+      body: JSON.stringify({ nome: `Inválida ${stamp}`, dificuldade: "simples", categoria: "inexistente", instrucao: "x" }),
+    }),
+  );
+  reg("categoria-desconhecida-recusada", invalida.status === 400, { status: invalida.status });
+
   const cruzado = await json(
     await fetch(`${base}/pessoas/${pessoaBId}/sugestoes`, { headers: hA }),
   );

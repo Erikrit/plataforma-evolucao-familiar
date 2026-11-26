@@ -77,6 +77,7 @@ export const ROTULOS_CATEGORIA_DESENVOLVIMENTO: Record<string, string> = {
   linguagem: "Linguagem",
   criatividade: "Criatividade",
   autonomia: "Autonomia",
+  numeros: "Números",
 };
 
 /**

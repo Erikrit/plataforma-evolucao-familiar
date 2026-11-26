@@ -329,6 +329,12 @@ export function PainelGerenciarFamilia() {
   const pessoaAlvoConvite = pessoasUnicas.find(
     (p) => p.pessoaId === pessoaAlvoConviteId,
   );
+  // M01 §16 e H1 (2026-11-26): ao escolher Desenvolvimento para quem ainda não tem
+  // data, o campo aparece já no formulário, como obrigatório.
+  const pedeDataConcessao =
+    areaConcessao === "Desenvolvimento" && pessoaAlvoSelecionada?.possuiDataNascimento === false;
+  const pedeDataConvite =
+    areaConvite === "Desenvolvimento" && pessoaAlvoConvite?.possuiDataNascimento === false;
   const combinacaoSelecionada = COMBINACOES_ACESSO_CONCEDIVEIS.find(
     (c) => c.responsabilidade === responsabilidadeConcessao,
   );
@@ -570,7 +576,8 @@ export function PainelGerenciarFamilia() {
           convite: true,
         })}`,
       );
-      await recarregarConvites();
+      // O convite pode ter gravado a data: atualiza o indicador dos cartões.
+      await Promise.all([recarregarConvites(), recarregarInicio()]);
     } catch (e) {
       if (e instanceof ErroApi && e.codigo === CODIGO_DATA_NASCIMENTO_OBRIGATORIA) {
         setDataNascimentoConvite((atual) => atual ?? "");
@@ -1051,7 +1058,7 @@ export function PainelGerenciarFamilia() {
                       return;
                     }
                     setErro(null);
-                    setDataNascimentoConcessao(null);
+                    if (!pedeDataConcessao) setDataNascimentoConcessao(null);
                     setEtapaConfirmacao(true);
                   }}
                 >
@@ -1074,6 +1081,7 @@ export function PainelGerenciarFamilia() {
                       value={pessoaAlvoConcessaoId}
                       onChange={(v) => {
                         setPessoaAlvoConcessaoId(v);
+                        setDataNascimentoConcessao(null);
                         setEtapaConfirmacao(false);
                       }}
                       searchable
@@ -1107,13 +1115,24 @@ export function PainelGerenciarFamilia() {
                           pessoaAlvoSelecionada?.nome ?? "",
                         )
                       : null}
+                    {pedeDataConcessao ? (
+                      <CampoDataNascimento
+                        nomePessoa={pessoaAlvoSelecionada?.nome ?? "a pessoa"}
+                        valor={dataNascimentoConcessao ?? ""}
+                        aoMudar={(v) => {
+                          setDataNascimentoConcessao(v);
+                          setEtapaConfirmacao(false);
+                        }}
+                      />
+                    ) : null}
                     <Button
                       type="submit"
                       variant="light"
                       disabled={
                         !participanteUsuarioId ||
                         !pessoaAlvoConcessaoId ||
-                        !responsabilidadeConcessao
+                        !responsabilidadeConcessao ||
+                        (pedeDataConcessao && !dataNascimentoConcessao)
                       }
                     >
                       Revisar
@@ -1132,7 +1151,12 @@ export function PainelGerenciarFamilia() {
                       nomePessoa: pessoaAlvoSelecionada?.nome ?? "",
                     })}
                   </Text>
-                  {dataNascimentoConcessao !== null ? (
+                  {pedeDataConcessao && dataNascimentoConcessao ? (
+                    <Text size="sm">
+                      Data de nascimento: {dataNascimentoConcessao.split("-").reverse().join("/")}
+                    </Text>
+                  ) : null}
+                  {!pedeDataConcessao && dataNascimentoConcessao !== null ? (
                     <CampoDataNascimento
                       nomePessoa={pessoaAlvoSelecionada?.nome ?? "a pessoa"}
                       valor={dataNascimentoConcessao}
@@ -1180,7 +1204,7 @@ export function PainelGerenciarFamilia() {
                     return;
                   }
                   setErro(null);
-                  setDataNascimentoConvite(null);
+                  if (!pedeDataConvite) setDataNascimentoConvite(null);
                   setEtapaConfirmacaoConvite(true);
                 }}
               >
@@ -1209,6 +1233,7 @@ export function PainelGerenciarFamilia() {
                     value={pessoaAlvoConviteId}
                     onChange={(v) => {
                       setPessoaAlvoConviteId(v);
+                      setDataNascimentoConvite(null);
                       setEtapaConfirmacaoConvite(false);
                     }}
                     required
@@ -1240,13 +1265,24 @@ export function PainelGerenciarFamilia() {
                         pessoaAlvoConvite?.nome ?? "",
                       )
                     : null}
+                  {pedeDataConvite ? (
+                    <CampoDataNascimento
+                      nomePessoa={pessoaAlvoConvite?.nome ?? "a pessoa"}
+                      valor={dataNascimentoConvite ?? ""}
+                      aoMudar={(v) => {
+                        setDataNascimentoConvite(v);
+                        setEtapaConfirmacaoConvite(false);
+                      }}
+                    />
+                  ) : null}
                   <Button
                     type="submit"
                     variant="light"
                     disabled={
                       !emailConvite.trim() ||
                       !pessoaAlvoConviteId ||
-                      !responsabilidadeConvite
+                      !responsabilidadeConvite ||
+                      (pedeDataConvite && !dataNascimentoConvite)
                     }
                   >
                     Revisar
@@ -1269,7 +1305,12 @@ export function PainelGerenciarFamilia() {
                     convite: true,
                   })}
                 </Text>
-                {dataNascimentoConvite !== null ? (
+                {pedeDataConvite && dataNascimentoConvite ? (
+                  <Text size="sm">
+                    Data de nascimento: {dataNascimentoConvite.split("-").reverse().join("/")}
+                  </Text>
+                ) : null}
+                {!pedeDataConvite && dataNascimentoConvite !== null ? (
                   <CampoDataNascimento
                     nomePessoa={pessoaAlvoConvite?.nome ?? "a pessoa"}
                     valor={dataNascimentoConvite}

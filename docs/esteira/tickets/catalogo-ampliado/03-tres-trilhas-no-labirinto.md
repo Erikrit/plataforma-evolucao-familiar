@@ -54,7 +54,9 @@ fase agrupa por trilha, com progresso anterior preservado (DEV-CAT-M1, ticket 03
   - Fingerprint `sha256:899fa75dba395fe40996f5116ce8e83d0fafe70ab344632ff6e2f50637af296c` (base `b35587b`).
   - Verificador PASS, depois de um FAIL corrigido (as fases 14 e 15 tinham as mesmas paredes).
 - **Risco:** ramo de duas células ainda conta como decisão. Contando só os ramos com 3 células ou mais, a série cresce no geral, mas não a cada fase.
-- **PENDING_HUMAN:** refazer o H10 no celular com a v3.
+- **H10 (v3):** PASS — homologado pelo responsável em 2026-11-26; a dificuldade evolui conforme o esperado.
+- **Histórico com "de 15":** não é necessário (responsável, 2026-11-26).
+- **Publicação na VPS:** quando o Marco 1 for atingido (migração e carga oficial nessa ocasião).
 
 **mensagemCommit:**
 

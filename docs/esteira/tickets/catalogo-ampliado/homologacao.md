@@ -31,61 +31,61 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 - **Aparelho:** celular, informar modelo e navegador.
 - **Passos:** 1. Gerenciar família → acessos. 2. Conceder Desenvolvimento para "Teste Sem Data". 3. Fechar sem informar a data. 4. Repetir e informar a data.
 - **Esperado:** no passo 3, o acesso não aparece como concedido. No passo 4, só aparece concedido depois de salvar, com a data visível no perfil.
-- **Status:** PENDING_HUMAN
-- **Retorno:** quem / quando / resultado / observação
+- **Status:** PENDING_HUMAN (refazer após o ajuste: ao escolher Desenvolvimento o campo de data já aparece obrigatório, na concessão e no convite)
+- **Retorno:** responsável, 2026-11-26: concessão funciona, mas a data só aparecia depois de tentar conceder. Esperado: ao selecionar Desenvolvimento, o campo de data aparece já como obrigatório; preencher e confirmar. Ajustado na mesma data; refazer o H1.
 
 ### H2 — FF-NASC-ACE-03: pessoa existente sem data é orientada
 - **Preparação:** pessoa fictícia que já tinha Desenvolvimento e progresso antes desta versão, sem data de nascimento (preparada pela equipe).
 - **Aparelho:** celular.
 - **Passos:** 1. Abrir Desenvolvimento dessa pessoa. 2. Seguir a orientação e informar a data. 3. Voltar à Biblioteca e aos jogos.
 - **Esperado:** orientação clara antes de continuar; depois de informar, estrelas, atividades executadas e fases concluídas continuam iguais.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** NOT_APPLICABLE
+- **Retorno:** responsável, 2026-11-26: dispensado; o sistema ainda não tem pessoas reais, e o banco de teste pode ser recriado.
 
 ### H3 — FF-NASC-ACE-01 e regressão de Cuidados
 - **Passos:** 1. Criar uma pessoa só com o nome. 2. Abrir Cuidados dessa pessoa com um responsável autorizado.
 - **Esperado:** cadastro concluído sem pedir data; Cuidados funciona sem data.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
 
 ### H4 — Acesso negado
 - **Preparação:** conta fictícia com acesso só a Cuidados de outra pessoa.
 - **Passos:** abrir o endereço de Desenvolvimento de "Teste Sem Data" diretamente.
 - **Esperado:** sem acesso, e sem revelar a data nem o progresso.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
 
 ### H5 — Falha de rede sem falso sucesso
 - **Passos:** no fluxo de H1 ou H2, ativar o modo avião antes de salvar a data e tentar salvar.
 - **Esperado:** mensagem de que não foi salvo; nada aparece como concluído; ao voltar a rede, salvar funciona.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
 
 ### H6 — E5-F04: dica recalculada no estado atual
 - **Aparelho:** celular.
 - **Passos:** 1. Labirinto: pedir a dica, andar dois passos e pedir de novo. 2. Repetir a ideia na Entrega e na Memória, avançando antes do segundo pedido.
 - **Esperado:** a segunda dica corresponde à posição ou ao estado atual, não à do início.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
 
 ### H7 — E5-ACE-10: toque, teclado e movimento reduzido
 - **Aparelho:** celular para o toque; computador para o teclado; movimento reduzido ativado no sistema.
 - **Passos:** concluir uma fase de Labirinto e uma de Memória em cada modo e sair pelo botão de saída.
 - **Esperado:** foco visível no teclado; toque responde; com movimento reduzido, sem animações intensas; saída sempre disponível.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
 
 ### H8 — Regressão de partida
 - **Passos:** concluir uma fase de um jogo não alterado, sair e reabrir o jogo.
 - **Esperado:** o jogo abre na próxima fase ainda não concluída, e o saldo de estrelas não muda (jogos não movimentam estrelas).
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
 
 ### H9 — E5-ACE-02: dica acessível e conclusão com ajuda
 - **Passos:** em Labirinto, Entrega e Memória, usar a dica até concluir uma fase; em outra fase, concluir sem dica.
 - **Esperado:** dica fácil de achar e entender; a conclusão com dica tem o mesmo resultado (fase concluída e progresso) que a conclusão sem dica.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado.
 
 ## Fora do alcance local
 - Mudança de faixa padrão (FF-NASC-ACE-04, parte 2): ticket 05, aguarda D1.
@@ -96,7 +96,14 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 - **Aparelho:** celular de 320 a 360 px de largura; informar modelo e navegador.
 - **Passos:** 1. Biblioteca → Jogos → Caminhos e labirintos → Escolher fase. 2. Abrir a fase 15 direto. 3. Jogar até a chegada. 4. Abrir Escolher fase de dentro da partida.
 - **Esperado:** fases agrupadas em Pequenos, Médios e Grandes; a fase 15 abre na primeira visita; o mapa cabe na largura sem rolagem horizontal e as setas são tocáveis; conquistas anteriores do labirinto continuam visíveis.
-- **Status:** PENDING_HUMAN (refazer com o labirinto v3)
+- **Status:** PASS (v3)
 - **Retorno anterior (v2, FAIL de dificuldade):** responsável, 2026-11-26: o jogo funcionou até a fase 15 e as marcações de fase funcionaram; porém a dificuldade quase não muda, o mapa só fica maior. Medição confirmou: as decisões no caminho ficam entre 0 e 4 da fase 1 à 15; a régua media só passos.
 - **O que conferir na v3:** a dificuldade cresce de verdade? As decisões no caminho vão de 1 a 15. Os mapas têm até 23 linhas: a rolagem vertical no celular incomoda?
-- **Retorno (v3):**
+- **Retorno (v3):** responsável, 2026-11-26: homologado; a dificuldade evolui conforme o esperado.
+
+### H11 — Ticket 06: área Números (DEV-CAT-P08, E5-ACE-11)
+- **Aparelho:** celular.
+- **Passos:** 1. Biblioteca → Jogos: abrir o filtro de área. 2. Atividades Reais: abrir o filtro de área. 3. Cadastrar uma atividade personalizada fictícia na área Números, escolher para a pessoa e registrar que concluiu. 4. Abrir Histórico e Resumo da pessoa. 5. Cadastrar outra personalizada sem área e usar normalmente.
+- **Esperado:** "Números" aparece nos dois filtros; o filtro mostra estado vazio (ainda não há conteúdo de catálogo em Números, isso não é erro). No Histórico, a conclusão mostra "Área: Números". No Resumo, as áreas aparecem com o nome legível ("Números", "Memória e atenção"). A personalizada sem área continua funcionando.
+- **Status:** PASS
+- **Retorno:** responsável, 2026-11-26: aprovado; a área Números aparece.

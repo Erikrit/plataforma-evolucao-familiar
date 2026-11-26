@@ -9,6 +9,7 @@ import { ServicoPrisma } from "../prisma/servico-prisma";
 import { ServicoAutorizacoes } from "../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../comum/tipos-requisicao";
 import {
+  CATEGORIAS_BIBLIOTECA,
   LIMITE_ATIVAS_POR_CATEGORIA,
   LIMITE_CATALOGO_ATIVO,
   LIMITE_RENOVAR_SUGESTOES,
@@ -452,14 +453,7 @@ export class ServicoSugestoes {
 
     const contagemPorCategoria = new Map<string, number>();
     if (!opts.categoriaFiltro) {
-      for (const cat of [
-        "memoria_atencao",
-        "raciocinio",
-        "linguagem",
-        "criatividade",
-        "coordenacao",
-        "autonomia",
-      ]) {
+      for (const cat of CATEGORIAS_BIBLIOTECA) {
         contagemPorCategoria.set(
           cat,
           await this.contarAtivasNaCategoria(

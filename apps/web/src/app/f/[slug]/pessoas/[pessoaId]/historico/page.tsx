@@ -28,6 +28,7 @@ import {
   MensagemFeedback,
 } from "@/componentes/feedback";
 import { MarcadorEventoHistorico } from "@/componentes/icones-experiencia";
+import { ROTULOS_CATEGORIA_DESENVOLVIMENTO } from "@/lib/rotulos-experiencia";
 import { coresPef } from "@/tema/mantine";
 
 const rotulosTipo: Record<string, string> = {
@@ -121,6 +122,13 @@ function ItemHistorico({ evento }: { evento: EventoHistorico }) {
           <Text fw={600} size="sm">
             {evento.resumo}
           </Text>
+          {evento.dominio === "desenvolvimento" &&
+          evento.categoria &&
+          ROTULOS_CATEGORIA_DESENVOLVIMENTO[evento.categoria] ? (
+            <Text size="xs" c="dimmed">
+              Área: {ROTULOS_CATEGORIA_DESENVOLVIMENTO[evento.categoria]}
+            </Text>
+          ) : null}
           {evento.versaoAtiva === false ? (
             <Text size="xs" c="orange">
               Relato substituído por correção posterior.

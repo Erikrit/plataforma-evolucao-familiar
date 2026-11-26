@@ -46,7 +46,7 @@
   },
   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
   "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
-  "atualizadoEm": "2026-11-26T13:08:25.815Z",
+  "atualizadoEm": "2026-11-26T14:23:47.536Z",
   "modulo": {
     "id": "04-evolucao-familiar",
     "status": "COMPLETED",
@@ -95,18 +95,21 @@
       "apps/api/prisma/carga-oficial.mjs",
       "apps/api/prisma/catalogo-jogos-piloto-e5.mjs",
       "apps/api/scripts/qg-cat-trilhas.mjs",
-      "apps/web/src/lib/trilhas-jogos.ts"
+      "apps/web/src/lib/trilhas-jogos.ts",
+      "apps/api/src/desenvolvimento/constantes-desenvolvimento.ts",
+      "apps/api/src/desenvolvimento/servico-sugestoes.ts",
+      "apps/web/src/lib/rotulos-experiencia.ts"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável faz commit da correção pós-H10, refaz H10 com a v3 e executa H1 a H9; próximo /implementar: ticket 06.",
+    "proximaAcao": "Responsável refaz H1 (ajuste feito) e faz os commits de 06 e do ajuste H1; agente implementa o ticket 09.",
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T13:02:13.611Z",
-        "base": "b35587b5346efe7c87e916d8293d37ee2576262f",
-        "head": "b35587b5346efe7c87e916d8293d37ee2576262f",
-        "fingerprint": "sha256:899fa75dba395fe40996f5116ce8e83d0fafe70ab344632ff6e2f50637af296c",
+        "em": "2026-11-26T14:21:06.745Z",
+        "base": "a056711642ee7700640d509821f805258cfb8569",
+        "head": "a056711642ee7700640d509821f805258cfb8569",
+        "fingerprint": "sha256:456cdc44d2185cd3f7a9e4fc78f0a7f51c7f3cb20caeb169a25a1b900882ff9a",
         "checagens": [
           {
             "nome": "lint",
@@ -134,9 +137,21 @@
             "exit": 0
           },
           {
+            "nome": "check-e1-isolamento",
+            "status": "PASS",
+            "comando": "npm run check:e1-03 -w @pef/api",
+            "exit": 0
+          },
+          {
             "nome": "check-e4",
             "status": "PASS",
             "comando": "npm run check:e4 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "check-e2",
+            "status": "PASS",
+            "comando": "npm run check:e2 -w @pef/api",
             "exit": 0
           },
           {
@@ -144,23 +159,17 @@
             "status": "PASS",
             "comando": "npm run check:e5 -w @pef/api",
             "exit": 0
-          },
-          {
-            "nome": "regua-jogos",
-            "status": "PASS",
-            "comando": "npm run test:regua -w @pef/api",
-            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T13-02-13-611Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T14-21-06-745Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T13:04:53.820Z",
-        "base": "b35587b5346efe7c87e916d8293d37ee2576262f",
-        "head": "b35587b5346efe7c87e916d8293d37ee2576262f",
-        "fingerprint": "sha256:899fa75dba395fe40996f5116ce8e83d0fafe70ab344632ff6e2f50637af296c",
+        "em": "2026-11-26T14:23:20.929Z",
+        "base": "a056711642ee7700640d509821f805258cfb8569",
+        "head": "a056711642ee7700640d509821f805258cfb8569",
+        "fingerprint": "sha256:456cdc44d2185cd3f7a9e4fc78f0a7f51c7f3cb20caeb169a25a1b900882ff9a",
         "checagens": [
           {
             "nome": "build",
@@ -182,9 +191,21 @@
             "exit": 0
           },
           {
-            "nome": "carga-trilhas",
+            "nome": "smoke-ff-nasc",
             "status": "PASS",
-            "comando": "npm run qg:cat-trilhas -w @pef/api",
+            "comando": "npm run smoke:ff-nasc -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-historico-resumo",
+            "status": "PASS",
+            "comando": "npm run smoke:est-03-docs -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e2-acessos",
+            "status": "PASS",
+            "comando": "npm run smoke:e2 -w @pef/api",
             "exit": 0
           },
           {
@@ -200,7 +221,7 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T13-04-53-820Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T14-23-20-929Z.json"
       },
       "ambienteAlternativo": {
         "status": "PASS",
@@ -382,14 +403,45 @@
         "verificador": "PASS (2026-11-26)",
         "revisao": "Padrões: sem violações, 7 julgamentos; Especificação: completa; faixaEtariaMax revertida a 8 (fora do escopo, D1)",
         "migracao": "20261126120000_trilha_fase_jogo aplicada só no banco local",
+        "pendencias": [],
+        "correcaoH10": "Régua: decisões no caminho (principal, crescem) e passos (não caem); variedade por paredes; labirinto v3; verificador PASS",
+        "homologacao": "H10 PASS com a v3 (responsável, 2026-11-26)",
+        "decisoes": [
+          "Histórico sem 'de 15' (não necessário)",
+          "Publicação na VPS ao atingir o Marco 1"
+        ]
+      },
+      "ticket06": {
+        "estado": "COMPLETED",
+        "fingerprint": "sha256:fd0c8342b3ab0b0ce7c16fec5e34f3b94d4b07eefb7da8063ff7894be781459f",
+        "verificador": "PASS (2026-11-26)",
+        "revisao": "Sem violações; 2 julgamentos de estilo",
         "pendencias": [
-          "Refazer H10 no celular com a v3",
-          "Histórico com 'de 15'? (pergunta ao responsável)"
-        ],
-        "correcaoH10": "Régua: decisões no caminho (principal, crescem) e passos (não caem); variedade por paredes; labirinto v3; verificador PASS"
+          "H11 no celular",
+          "Texto exportado do Resumo com código cru da área? (pergunta)"
+        ]
+      },
+      "ticket04ajusteH1": {
+        "fingerprint": "sha256:456cdc44d2185cd3f7a9e4fc78f0a7f51c7f3cb20caeb169a25a1b900882ff9a",
+        "verificador": "PASS (2026-11-26)",
+        "pendencias": [
+          "Refazer H1 no celular (concessão e convite)"
+        ]
+      },
+      "ticket08": {
+        "estado": "COMPLETED",
+        "homologacao": "H6, H7, H8 e H9 PASS (responsável, 2026-11-26)"
+      },
+      "ticket09": {
+        "estado": "IN_PROGRESS",
+        "decisoes": [
+          "Progressão: empate da métrica principal passa só se a semelhança (figuras do mesmo grupo) crescer; em Histórias, se a pista sair",
+          "Palavra e figura: nomes ocultos nos botões, leitor de tela anuncia 'Figura N', nome aparece após o acerto; Pares de sombras: carta de sombra diz só 'Sombra'",
+          "Dica em dois níveis: o 1º orienta sem entregar, o 2º mostra a resposta"
+        ]
       }
     },
-    "fingerprint": "sha256:899fa75dba395fe40996f5116ce8e83d0fafe70ab344632ff6e2f50637af296c",
+    "fingerprint": "sha256:456cdc44d2185cd3f7a9e4fc78f0a7f51c7f3cb20caeb169a25a1b900882ff9a",
     "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc.",
     "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25."
   },

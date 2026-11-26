@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 03, 08
 
-**Status:** READY
+**Status:** IN_PROGRESS
 
 **Costura:** verificador de catálogo, carga oficial e homologação
 
