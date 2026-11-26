@@ -46,7 +46,7 @@
   },
   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
   "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
-  "atualizadoEm": "2026-11-26T18:09:54.136Z",
+  "atualizadoEm": "2026-11-26T18:56:00.435Z",
   "modulo": {
     "id": "04-evolucao-familiar",
     "status": "COMPLETED",
@@ -104,18 +104,19 @@
       "apps/api/prisma/catalogo-jogos-historias-e5.mjs",
       "apps/api/prisma/catalogo-jogos-marco1-e5.mjs",
       "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-sudoku.tsx",
-      "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-robo.tsx"
+      "apps/web/src/componentes/desenvolvimento/jogos/tabuleiro-robo.tsx",
+      "apps/api/src/desenvolvimento/jogos/faixas.ts"
     ],
     "risco": "alto",
-    "proximaAcao": "Agente implementa, pela fronteira: 05, 07, 10, 11 e 14.",
+    "proximaAcao": "Responsável faz o commit do ticket 05 e homologa H15; agente segue com o ticket 07.",
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T17:08:05.400Z",
-        "base": "ddf548b0a61d11f507f966b78b52b5e1fc99edbe",
-        "head": "ddf548b0a61d11f507f966b78b52b5e1fc99edbe",
-        "fingerprint": "sha256:94895ba3563d051fd050e278367d78798b80612f5d65fe39bb1fd04743530b4f",
+        "em": "2026-11-26T18:52:24.176Z",
+        "base": "d6dfeb4226c12696f80bfebad820311738790b0f",
+        "head": "d6dfeb4226c12696f80bfebad820311738790b0f",
+        "fingerprint": "sha256:0efe7609ea63adde41e45bf33905c355ff71299f838e89f3e11f39641210a60d",
         "checagens": [
           {
             "nome": "lint",
@@ -153,23 +154,17 @@
             "status": "PASS",
             "comando": "npm run check:e5 -w @pef/api",
             "exit": 0
-          },
-          {
-            "nome": "regua-jogos",
-            "status": "PASS",
-            "comando": "npm run test:regua -w @pef/api",
-            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T17-08-05-400Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T18-52-24-176Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-26T17:10:46.774Z",
-        "base": "ddf548b0a61d11f507f966b78b52b5e1fc99edbe",
-        "head": "ddf548b0a61d11f507f966b78b52b5e1fc99edbe",
-        "fingerprint": "sha256:94895ba3563d051fd050e278367d78798b80612f5d65fe39bb1fd04743530b4f",
+        "em": "2026-11-26T18:55:33.834Z",
+        "base": "d6dfeb4226c12696f80bfebad820311738790b0f",
+        "head": "d6dfeb4226c12696f80bfebad820311738790b0f",
+        "fingerprint": "sha256:0efe7609ea63adde41e45bf33905c355ff71299f838e89f3e11f39641210a60d",
         "checagens": [
           {
             "nome": "build",
@@ -191,12 +186,6 @@
             "exit": 0
           },
           {
-            "nome": "carga-trilhas",
-            "status": "PASS",
-            "comando": "npm run qg:cat-trilhas -w @pef/api",
-            "exit": 0
-          },
-          {
             "nome": "smoke-historico-resumo",
             "status": "PASS",
             "comando": "npm run smoke:est-03-docs -w @pef/api",
@@ -215,7 +204,7 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T17-10-46-774Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T18-55-33-834Z.json"
       },
       "ambienteAlternativo": {
         "status": "PASS",
@@ -446,9 +435,17 @@
         "verificador": "PASS após FAIL corrigido",
         "pendencias": [],
         "homologacao": "H12, H13 e H14 PASS (responsável, 2026-11-26); commit 33af7ea"
+      },
+      "ticket05": {
+        "estado": "IN_VALIDATION",
+        "fingerprint": "sha256:0efe7609ea63adde41e45bf33905c355ff71299f838e89f3e11f39641210a60d",
+        "verificador": "PASS (após ajuste do P04)",
+        "pendencias": [
+          "H15 no celular"
+        ]
       }
     },
-    "fingerprint": "sha256:94895ba3563d051fd050e278367d78798b80612f5d65fe39bb1fd04743530b4f",
+    "fingerprint": "sha256:0efe7609ea63adde41e45bf33905c355ff71299f838e89f3e11f39641210a60d",
     "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc.",
     "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25.",
     "decisoes": [

@@ -25,11 +25,21 @@ export function faseCorrespondeAoFiltro(
   return true;
 }
 
+/** Ticket 05: faixa escolhida em "Ver outras faixas"; ausente, a da pessoa. */
+export function faixaDosJogos(entrada: string | null): "pequenos" | "medios" | "grandes" | "todas" | undefined {
+  return entrada === "pequenos" || entrada === "medios" || entrada === "grandes" || entrada === "todas"
+    ? entrada
+    : undefined;
+}
+
 export function consultaCatalogoJogos(opcoes: {
   categoria?: string | null;
   fases?: string | null;
+  faixa?: string | null;
 }) {
   const parametros = new URLSearchParams();
+  const faixa = faixaDosJogos(opcoes.faixa ?? null);
+  if (faixa) parametros.set("faixa", faixa);
   const categoria = categoriaDosJogos(opcoes.categoria ?? null);
   if (categoria !== TODAS_CATEGORIAS_JOGOS) {
     parametros.set("categoria", categoria);

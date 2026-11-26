@@ -77,7 +77,8 @@ try {
     chamar(caminho + "/iniciar", { metodo: "POST", token });
   const concluir = (chave, versao, token = familia.token, caminho = fase) =>
     chamar(caminho + "/concluir", { metodo: "POST", token, corpo: { chave, versao } });
-  const lerCatalogo = (token = familia.token) => chamar(catalogo, { token });
+  // Os testes anteriores ao ticket 05 leem todas as faixas; as checagens de faixa ficam no fim.
+  const lerCatalogo = (token = familia.token, faixa = "todas") => chamar(`${catalogo}?faixa=${faixa}`, { token });
   const saldo = () => chamar(`/pessoas/${pessoaId}/estrelas`, { token: familia.token });
 
   conferir("Sessão necessária para catálogo", (await chamar(catalogo)).status === 401);
@@ -87,12 +88,11 @@ try {
   conferir("Outra família sem leitura ou escrita direta", (await lerCatalogo(outra.token)).status === 404
     && (await iniciar(outra.token)).status === 404 && (await concluir(novaChave(), 1, outra.token)).status === 404);
   const acesso = await autorizar(familia, pessoaId, "responsavel_desenvolvimento");
-  // E5-ACE-08 segue vigente até o ticket 05: simula pessoa anterior à regra do M01 §16, sem data.
-  await prisma.pessoa.update({ where: { id: pessoaId }, data: { dataNascimento: null } });
+  // Ticket 05: a pessoa tem data (concedida com 2018-05-10); o catálogo sem data é testado no fim.
 
   const antes = await lerCatalogo();
   const memoria = antes.dados.jogos?.find((jogo) => jogo.id === "memoria");
-  conferir("Catálogo privado e quinze fases abertas sem nascimento", antes.status === 200 && antes.cache === "private, no-store"
+  conferir("Catálogo privado e quinze fases abertas em todas as faixas", antes.status === 200 && antes.cache === "private, no-store"
     && memoria?.fases.length === 15 && memoria.fases.every((item) => item.estado === "nao_explorada"));
   conferir("Catálogo completo e destaques distintos na primeira visita", antes.dados.jogos.length === 8
     && new Set(antes.dados.destaques).size === 3 && antes.dados.destaques[0] === "memoria");
@@ -264,6 +264,42 @@ try {
 
   conferir("Jogo não movimenta estrelas", antesSaldo === (await saldo()).dados.saldoDisponivel
     && await prisma.movimentoEstrelas.count({ where: { pessoaId } }) === 0);
+
+  // DEV-CAT-P04 (ticket 05, D1): sem data, pede a data; com 8 anos, abre em Médios e vê as outras faixas.
+  // P04 substitui o trecho de E5-ACE-08 que mostrava o catálogo sem data: agora pede a data.
+  await prisma.pessoa.update({ where: { id: pessoaId }, data: { dataNascimento: null } });
+  const semData = await chamar(catalogo, { token: familia.token });
+  conferir("Sem data de nascimento, o catálogo pede a data",
+    semData.status === 409 && semData.dados?.codigo === "DATA_NASCIMENTO_OBRIGATORIA");
+  const hojeUtc = new Date();
+  const oitoAnos = new Date(Date.UTC(hojeUtc.getUTCFullYear() - 8, hojeUtc.getUTCMonth(), hojeUtc.getUTCDate()));
+  await prisma.pessoa.update({ where: { id: pessoaId }, data: { dataNascimento: oitoAnos } });
+  const padrao = await chamar(catalogo, { token: familia.token });
+  const grandes = await lerCatalogo(familia.token, "grandes");
+  const todas = await lerCatalogo(familia.token, "todas");
+  const fasesPorJogo = (resposta) => resposta.dados.jogos.map((jogo) => jogo.fases.map((f) => f.numero).join(",")).join("|");
+  conferir("Pessoa de 8 anos abre em Médios e consegue abrir Grandes e todas",
+    padrao.status === 200 && padrao.dados.faixaPadrao === "medios" && padrao.dados.faixa === "medios"
+    && padrao.dados.jogos.every((jogo) => jogo.fases.length === 5 && jogo.fases.every((f) => f.trilha === "medios"))
+    && grandes.dados.faixa === "grandes" && grandes.dados.faixaPadrao === "medios"
+    && grandes.dados.jogos.every((jogo) => jogo.fases.every((f) => f.numero >= 11))
+    && todas.dados.jogos.every((jogo) => jogo.fases.length === 15)
+    && fasesPorJogo(padrao) !== fasesPorJogo(grandes));
+  conferir("Faixa inválida é recusada e outra família continua sem acesso",
+    (await lerCatalogo(familia.token, "adultos")).status === 400
+    && (await lerCatalogo(outra.token, "medios")).status === 404);
+  // P06: de 6 para 7 anos a faixa padrão muda; a fase 5 da Memória, concluída em Pequenos, continua lá.
+  const seisAnos = new Date(Date.UTC(hojeUtc.getUTCFullYear() - 7, hojeUtc.getUTCMonth(), hojeUtc.getUTCDate() + 1));
+  await prisma.pessoa.update({ where: { id: pessoaId }, data: { dataNascimento: seisAnos } });
+  const aosSeis = await chamar(catalogo, { token: familia.token });
+  await prisma.pessoa.update({ where: { id: pessoaId }, data: { dataNascimento: oitoAnos } });
+  const pequenos = await lerCatalogo(familia.token, "pequenos");
+  const memoriaPequenos = pequenos.dados.jogos.find((jogo) => jogo.id === "memoria");
+  conferir("Mudar de faixa preserva descobertas e Pequenos abre por Ver outras faixas",
+    aosSeis.dados.faixaPadrao === "pequenos" && pequenos.dados.faixaPadrao === "medios"
+    && pequenos.dados.faixa === "pequenos" && memoriaPequenos.fases.every((f) => f.numero <= 5)
+    && memoriaPequenos.fases.find((f) => f.numero === 5)?.estado === "concluida"
+    && (await historico()).dados.eventos.filter((e) => e.tipo === "conclusao_fase_jogo").length >= 8);
 
   // E5-ACE-12 (ticket 12): conquista de jogo arquivado continua no Histórico e no Resumo.
   const quando = new Date();

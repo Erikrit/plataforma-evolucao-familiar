@@ -147,3 +147,17 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
   - a 1ª dica orienta e a 2ª diz a próxima cena.
 - **Status:** PASS
 - **Retorno:** responsável, 2026-11-26: homologação aprovada.
+
+### H15 — Ticket 05: Biblioteca na faixa da pessoa
+- **Preparação:** três pessoas fictícias com Desenvolvimento: 6, 8 e 11 anos.
+- **Passos:**
+  1. Abrir Biblioteca → Jogos com cada pessoa.
+  2. Usar "Ver outras faixas" para abrir outra faixa e "Todas as faixas".
+  3. Abrir uma fase e voltar ao catálogo.
+- **Esperado:**
+  - cada pessoa abre na sua faixa: Pequenos, Médios e Grandes, respectivamente;
+  - as fases mostradas são só as da faixa, 5 por jogo;
+  - a faixa escolhida continua depois de voltar da partida;
+  - conquistas de outras faixas continuam visíveis ao abri-las.
+- **Status:** PENDING_HUMAN
+- **Retorno:**

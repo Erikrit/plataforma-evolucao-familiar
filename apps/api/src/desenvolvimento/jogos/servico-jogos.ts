@@ -10,6 +10,8 @@ import { ServicoAutorizacoes } from "../../autorizacoes/servico-autorizacoes";
 import type { UsuarioAutenticado } from "../../comum/tipos-requisicao";
 import { ServicoPrisma } from "../../prisma/servico-prisma";
 import { selecionarDestaquesJogos } from "./destaques-jogos";
+import { faixaPadrao, lerFaixaPedida } from "./faixas";
+import { CODIGO_DATA_NASCIMENTO_OBRIGATORIA } from "../../pessoas/data-nascimento";
 import { obterMotor } from "./motores-jogos";
 
 @Injectable()
@@ -19,8 +21,27 @@ export class ServicoJogos {
     private readonly autorizacoes: ServicoAutorizacoes,
   ) {}
 
-  async listar(pessoaId: string, usuario: UsuarioAutenticado) {
+  /**
+   * Catálogo na faixa pedida (ticket 05): sem pedido, a faixa padrão da pessoa.
+   * Sem data de nascimento, recusa e pede a data. Abrir e concluir fases não depende da faixa.
+   */
+  async listar(pessoaId: string, usuario: UsuarioAutenticado, faixaConsulta?: unknown) {
     const escopo = await this.exigirDesenvolvimento(pessoaId, usuario);
+    const pedida = lerFaixaPedida(faixaConsulta);
+    const pessoa = await this.prisma.pessoa.findUniqueOrThrow({
+      where: { id: escopo.pessoaId },
+      select: { nome: true, dataNascimento: true },
+    });
+    // DEV-CAT-P04/P05: sem data não há faixa; a interface orienta a informar (M01 §16).
+    if (!pessoa.dataNascimento) {
+      throw new ConflictException({
+        statusCode: 409,
+        message: `Informe a data de nascimento de ${pessoa.nome} para abrir os jogos.`,
+        codigo: CODIGO_DATA_NASCIMENTO_OBRIGATORIA,
+      });
+    }
+    const padrao = faixaPadrao(pessoa.dataNascimento);
+    const faixa = pedida ?? padrao;
     const [progresso, catalogo] = await Promise.all([
       this.prisma.progressoFaseJogo.findMany({
         where: escopo,
@@ -36,6 +57,8 @@ export class ServicoJogos {
     ]);
     const porFase = new Map(progresso.map((item) => [`${item.jogoId}/${item.fase}`, item]));
     return {
+      faixaPadrao: padrao,
+      faixa,
       destaques: selecionarDestaquesJogos(catalogo, progresso),
       jogos: catalogo.map((jogo) => ({
         id: jogo.id,
@@ -45,7 +68,7 @@ export class ServicoJogos {
         instrucoes: jogo.instrucoes,
         versao: jogo.versao,
         tipoMecanica: jogo.tipoMecanica,
-        fases: jogo.fases.map((fase) => {
+        fases: jogo.fases.filter((fase) => faixa === "todas" || fase.trilha === faixa).map((fase) => {
           const progressoFase = porFase.get(`${jogo.id}/${fase.numero}`);
           return {
             numero: fase.numero,

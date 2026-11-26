@@ -147,6 +147,7 @@ export function PartidaJogo({
   const consultaCatalogo = consultaCatalogoJogos({
     categoria: busca.get("categoria"),
     fases: busca.get("fases"),
+    faixa: busca.get("faixa"),
   });
   const proximaFase = useMemo(
     () => jogo.fases.find((item) => item.numero === fase.numero + 1) ?? null,

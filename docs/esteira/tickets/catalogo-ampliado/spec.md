@@ -92,7 +92,7 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | 11 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/11-ordem-dos-campos-de-acesso.md` | Ordem dos campos (pedido do H1) |
 | 12 | COMPLETED | — | Sudoku, Forme a palavra, Do menor ao maior e Robô com setas; H13 homologado |
 | 13 | COMPLETED | — | Histórias em três degraus; H14 homologado |
-| 05 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/05-faixa-padrao-e-ver-outras.md` | D1: 5–6, 7–9, 10–12 |
+| 05 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Faixa da pessoa e Ver outras faixas; H15 |
 | 07 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/07-cinco-sugestoes.md` | D2: arquivar atividades de adultos e idosos |
 | 10 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/10-ilustracoes-proprias.md` | D3: Twemoji CC-BY 4.0 |
 | 14 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/14-leitor-de-tela-nas-historias.md` | Leitor de tela diz o objeto da figura |
