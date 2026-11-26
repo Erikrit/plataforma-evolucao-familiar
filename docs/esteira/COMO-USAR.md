@@ -32,12 +32,13 @@ npm run esteira:qg -- --verificar-fingerprint --demanda <id>   # evidência aind
 npm run esteira:validar       # skills, adaptador, espelhos e estado
 npm run esteira:sincronizar   # regenera os espelhos de Codex e Cursor
 npm run esteira:testar        # hooks, QG e validador
+bash scripts/esteira/verificar-local.sh <id> <base> [qg1 qg2 qg3]  # sobe banco e API locais e roda os portões
 ```
 
 | Resultado | O que fazer |
 |---|---|
 | `FAIL` | Ver a saída no JSON de evidência e corrigir a causa |
-| `BLOCKED` | Suprir o requisito citado (Docker, API local, banco local) e repetir |
+| `BLOCKED` | Suprir o requisito citado (Docker, API local, banco local) e repetir; `verificar-local.sh` prepara os três |
 | `NOT_APPLICABLE` | Nada; o motivo está registrado |
 | Fingerprint divergente | Repetir os perfis listados |
 

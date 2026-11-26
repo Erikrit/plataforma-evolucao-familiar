@@ -82,13 +82,23 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | Ticket | Status | Comando | Observação |
 |---|---|---|---|
 | 01 | COMPLETED | — | Verificador sobre o catálogo carregado |
-| 04 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Antes, rodar `npm run esteira:qg -- --perfil qg1 --demanda DEV-CAT-M1` e `--perfil qg2` com Docker para registrar `authz` e smokes; depois homologar no celular |
+| 04 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Antes, rodar a verificação local abaixo para registrar `authz` e smokes; depois homologar no celular |
 | 08 | IN_VALIDATION | `/homologar DEV-CAT-M1` | Celular: andar dois passos no labirinto e pedir a dica de novo |
 | 02 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/02-regua-de-qualidade-automatica.md` | Começar em modo relatório; as falhas conhecidas estão listadas no ticket |
 | 06 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/06-area-numeros.md` | Independente do 02 |
 | 03 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/03-tres-trilhas-no-labirinto.md` | Depois do 02 |
 | 09 | READY | `/implementar docs/esteira/tickets/catalogo-ampliado/09-oito-jogos-com-tres-trilhas.md` | Depois do 03 e do 08 |
 | 05, 07, 10 | NEEDS_DECISION | `/sabatina` com o Produto | Aguardam D1, D2 e D3 |
+
+### Verificação local pendente (tickets 04 e 08)
+
+O agente que implementou não tinha Docker: `authz` e os smokes ficaram `BLOCKED` no `qg.mjs`. Com a `develop` atualizada e a árvore limpa, o Claude Code roda:
+
+```bash
+bash scripts/esteira/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2
+```
+
+O script sobe só o PostgreSQL do docker compose, aplica as migrações versionadas e a carga oficial, faz o build, sobe a API local, roda os portões e confere o fingerprint. Recusa banco ou API que não sejam locais e não faz commit. Resultado esperado: tudo `PASS`, exceto as falhas anteriores listadas abaixo. Depois, registrar o resultado em `atual.json` (`demanda.verificacao`) e seguir para `/homologar DEV-CAT-M1`.
 
 Lembretes para quem executa:
 
