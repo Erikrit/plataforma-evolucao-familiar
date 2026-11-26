@@ -3,9 +3,9 @@
 # authz e smokes com fingerprint. Não faz commit, push nem merge.
 #
 # Uso (no Claude Code ou no terminal, na raiz do repositório):
-#   bash scripts/esteira/verificar-local.sh <DEMANDA> <BASE> [perfis...]
+#   bash scripts/verificar-local.sh <DEMANDA> <BASE> [perfis...]
 # Exemplo:
-#   bash scripts/esteira/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2
+#   bash scripts/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2
 #
 # Segurança: só aceita banco em localhost/127.0.0.1 (PostgreSQL do docker compose,
 # dados fictícios). Nunca apaga nem recria banco; o banco da VPS não é tocado.

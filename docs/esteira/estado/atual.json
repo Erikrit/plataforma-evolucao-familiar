@@ -87,7 +87,7 @@
       "esteira.config.json"
     ],
     "risco": "alto",
-    "proximaAcao": "No Claude Code: bash scripts/esteira/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2; depois /homologar DEV-CAT-M1 (tickets 04 e 08) e /implementar dos tickets 02 e 06, conforme a spec.",
+    "proximaAcao": "No Claude Code: bash scripts/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2; depois /homologar DEV-CAT-M1 (tickets 04 e 08) e /implementar dos tickets 02 e 06, conforme a spec.",
     "verificacao": {
       "qg1": {
         "status": "FAIL",

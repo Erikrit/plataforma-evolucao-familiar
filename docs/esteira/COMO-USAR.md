@@ -32,7 +32,7 @@ npm run esteira:qg -- --verificar-fingerprint --demanda <id>   # evidência aind
 npm run esteira:validar       # skills, adaptador, espelhos e estado
 npm run esteira:sincronizar   # regenera os espelhos de Codex e Cursor
 npm run esteira:testar        # hooks, QG e validador
-bash scripts/esteira/verificar-local.sh <id> <base> [qg1 qg2 qg3]  # sobe banco e API locais e roda os portões
+bash scripts/verificar-local.sh <id> <base> [qg1 qg2 qg3]  # sobe banco e API locais e roda os portões
 ```
 
 | Resultado | O que fazer |

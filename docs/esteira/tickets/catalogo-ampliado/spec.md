@@ -95,7 +95,7 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 O agente que implementou não tinha Docker: `authz` e os smokes ficaram `BLOCKED` no `qg.mjs`. Com a `develop` atualizada e a árvore limpa, o Claude Code roda:
 
 ```bash
-bash scripts/esteira/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2
+bash scripts/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2
 ```
 
 O script sobe só o PostgreSQL do docker compose, aplica as migrações versionadas e a carga oficial, faz o build, sobe a API local, roda os portões e confere o fingerprint. Recusa banco ou API que não sejam locais e não faz commit. Resultado esperado: tudo `PASS`, exceto as falhas anteriores listadas abaixo. Depois, registrar o resultado em `atual.json` (`demanda.verificacao`) e seguir para `/homologar DEV-CAT-M1`.
