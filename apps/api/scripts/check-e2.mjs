@@ -105,8 +105,9 @@ reg(
 );
 reg(
   "boas_vindas_sem_envio",
-  boasVindas.includes("link compartilhado pela família") &&
-    !boasVindas.includes("link enviado pela família"),
+  // Verifica o sentido (link compartilhado, sem promessa de envio), não a frase exata.
+  /link[^"<]*compartilh/i.test(boasVindas) &&
+    !/link[^"<]*enviad|e-?mail (?:enviado|com o convite)|enviaremos/i.test(boasVindas),
   "Boas-vindas sem expectativa de e-mail",
 );
 

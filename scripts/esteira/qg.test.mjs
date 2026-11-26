@@ -4,6 +4,7 @@
  */
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { createServer } from "node:http";
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -15,6 +16,7 @@ import {
   comandoExiste,
   ocultar,
   selecionarChecagens,
+  sondarSaude,
   urlLocal,
   verificarRequisito,
 } from "./qg.mjs";
@@ -270,6 +272,22 @@ test("banco remoto em qualquer fonte bloqueia sem revelar o valor", async (t) =>
   assert.match(motivo, /não local/);
   assert.doesNotMatch(motivo, /segredo|remoto/);
   assert.match(await verificarRequisito(r.raiz, "nada", {}), /sem definição/);
+});
+
+test("saúde tolera conexão derrubada e bloqueia quando persiste", async (t) => {
+  let pedidos = 0;
+  const servidor = createServer((req, res) => {
+    pedidos += 1;
+    if (pedidos === 1) return req.socket.destroy();
+    res.writeHead(req.url === "/saude" ? 200 : 503).end("ok");
+  });
+  await new Promise((ok) => servidor.listen(0, "127.0.0.1", ok));
+  t.after(() => servidor.close());
+  const base = `http://127.0.0.1:${servidor.address().port}`;
+  assert.equal(await sondarSaude("api", new URL("/saude", base), { intervaloMs: 10 }), null);
+  assert.equal(pedidos, 2);
+  assert.match(await sondarSaude("api", new URL("/outra", base), { intervaloMs: 10 }), /respondeu 503/);
+  assert.match(await sondarSaude("api", new URL("http://127.0.0.1:1/saude"), { intervaloMs: 10 }), /sem resposta \(/);
 });
 
 test("segredos são ocultados na saída", () => {

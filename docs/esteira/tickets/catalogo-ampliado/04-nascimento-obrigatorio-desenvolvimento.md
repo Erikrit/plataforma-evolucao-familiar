@@ -13,8 +13,8 @@
 ## Critérios
 
 - [x] FF-NASC-ACE-01 — criar pessoa só com nome continua possível
-- [x] FF-NASC-ACE-02 — concessão sem data pede a data e só conclui após persistir
-- [x] FF-NASC-ACE-03 — pessoa existente sem data é orientada, sem perda de progresso
+- [ ] FF-NASC-ACE-02 — concessão sem data pede a data e só conclui após persistir (API: PASS; tela: H1)
+- [ ] FF-NASC-ACE-03 — pessoa existente sem data é orientada, sem perda de progresso (API: PASS; tela: H2)
 - [ ] FF-NASC-ACE-04 — corrigir a data muda a faixa sem reescrever registros
 
 ## Pendências

@@ -13,7 +13,7 @@
 ## Critérios
 
 - [ ] E5-F04 — no labirinto, andar dois passos e pedir a dica de novo mostra a direção atual
-- [x] E5-ACE-02 — concluir com dica produz o mesmo resultado
+- [ ] E5-ACE-02 — concluir com dica produz o mesmo resultado (objetivos: PASS; dica e conclusão com ajuda: H9)
 - [ ] E5-ACE-10 — toque, teclado e movimento reduzido preservados
 
 ## Pendências

@@ -51,7 +51,8 @@ API_PID=""
 if curl -fs "$API_URL/saude" >/dev/null 2>&1; then
   echo "API já respondendo em $API_URL; usando a existente."
 else
-  ( cd apps/api && node dist/main.js > ../../.esteira-api.local.log 2>&1 ) &
+  # `exec` faz o PID do subshell ser o da API, para o trap encerrá-la.
+  ( cd apps/api && exec node dist/main.js > ../../.esteira-api.local.log 2>&1 ) &
   API_PID=$!
   trap '[ -n "$API_PID" ] && kill "$API_PID" 2>/dev/null || true' EXIT
   for _ in $(seq 1 60); do curl -fs "$API_URL/saude" >/dev/null 2>&1 && break; sleep 1; done

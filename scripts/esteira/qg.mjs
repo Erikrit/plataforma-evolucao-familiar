@@ -169,6 +169,31 @@ function valoresEnv(raiz, nome, arquivos = []) {
   return valores;
 }
 
+/**
+ * Consulta a saúde sem reaproveitar conexão e com até 3 tentativas. Enquanto um
+ * smoke roda em `spawnSync`, o processo não percebe a conexão que o servidor
+ * fechou; a consulta seguinte falhava com ECONNRESET com a API saudável.
+ */
+export async function sondarSaude(nome, url, { tentativas = 3, intervaloMs = 500 } = {}) {
+  let motivo = "sem resposta";
+  for (let i = 0; i < tentativas; i += 1) {
+    if (i) await new Promise((ok) => setTimeout(ok, intervaloMs));
+    try {
+      const resposta = await fetch(url, {
+        signal: AbortSignal.timeout(5000),
+        redirect: "error",
+        headers: { connection: "close" },
+      });
+      await resposta.arrayBuffer();
+      if (resposta.ok) return null;
+      motivo = `respondeu ${resposta.status}`;
+    } catch (erro) {
+      motivo = `sem resposta (${erro.cause?.code ?? erro.name})`;
+    }
+  }
+  return `${nome}: ${motivo}`;
+}
+
 /** Devolve null se disponível, ou o motivo do bloqueio. */
 export async function verificarRequisito(raiz, nome, ambiente = {}) {
   const r = ambiente[nome];
@@ -186,17 +211,7 @@ export async function verificarRequisito(raiz, nome, ambiente = {}) {
     if (valores.length === 0) return `${nome}: ${r.urlEnv} não definida`;
     // Não sabemos qual fonte o comando usará: todas precisam ser locais.
     if (!valores.every(urlLocal)) return `${nome}: ${r.urlEnv} aponta para destino não local`;
-    if (r.caminho) {
-      try {
-        const resposta = await fetch(new URL(r.caminho, valores[0]), {
-          signal: AbortSignal.timeout(5000),
-          redirect: "error",
-        });
-        if (!resposta.ok) return `${nome}: respondeu ${resposta.status}`;
-      } catch {
-        return `${nome}: sem resposta`;
-      }
-    }
+    if (r.caminho) return sondarSaude(nome, new URL(r.caminho, valores[0]));
     return null;
   }
   return `requisito "${nome}" mal definido`;

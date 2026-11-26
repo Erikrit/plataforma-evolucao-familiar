@@ -87,15 +87,15 @@
       "esteira.config.json"
     ],
     "risco": "alto",
-    "proximaAcao": "No Claude Code: bash scripts/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2; depois /homologar DEV-CAT-M1 (tickets 04 e 08) e /implementar dos tickets 02 e 06, conforme a spec.",
+    "proximaAcao": "Responsável executa H1 a H9 do roteiro e informa os retornos; em paralelo, /implementar dos tickets 02 e 06.",
     "verificacao": {
       "qg1": {
-        "status": "FAIL",
+        "status": "PASS",
         "integral": false,
-        "em": "2026-11-25T23:00:02.908Z",
+        "em": "2026-11-26T01:47:08.712Z",
         "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
-        "head": "514b0494ddf31548966dc1d68a328488471b0cd2",
-        "fingerprint": "sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9",
+        "head": "60aa1960ca697a3368e47cd3518aa71fd8f10245",
+        "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
         "checagens": [
           {
             "nome": "lint",
@@ -118,10 +118,9 @@
           },
           {
             "nome": "authz",
-            "status": "BLOCKED",
+            "status": "PASS",
             "comando": "npm run smoke:authz -w @pef/api",
-            "exit": null,
-            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+            "exit": 0
           },
           {
             "nome": "check-e1-isolamento",
@@ -137,9 +136,9 @@
           },
           {
             "nome": "check-e2",
-            "status": "FAIL",
+            "status": "PASS",
             "comando": "npm run check:e2 -w @pef/api",
-            "exit": 1
+            "exit": 0
           },
           {
             "nome": "check-e5",
@@ -148,15 +147,15 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-25T23-00-02-908Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg1-2026-11-26T01-47-08-712Z.json"
       },
       "qg2": {
-        "status": "BLOCKED",
+        "status": "PASS",
         "integral": false,
-        "em": "2026-11-25T23:00:46.531Z",
+        "em": "2026-11-26T01:49:32.214Z",
         "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
-        "head": "514b0494ddf31548966dc1d68a328488471b0cd2",
-        "fingerprint": "sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9",
+        "head": "60aa1960ca697a3368e47cd3518aa71fd8f10245",
+        "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
         "checagens": [
           {
             "nome": "build",
@@ -173,55 +172,48 @@
           },
           {
             "nome": "authz",
-            "status": "BLOCKED",
+            "status": "PASS",
             "comando": "npm run smoke:authz -w @pef/api",
-            "exit": null,
-            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+            "exit": 0
           },
           {
             "nome": "smoke-ff-nasc",
-            "status": "BLOCKED",
+            "status": "PASS",
             "comando": "npm run smoke:ff-nasc -w @pef/api",
-            "exit": null,
-            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+            "exit": 0
           },
           {
             "nome": "smoke-historico-resumo",
-            "status": "BLOCKED",
+            "status": "PASS",
             "comando": "npm run smoke:est-03-docs -w @pef/api",
-            "exit": null,
-            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+            "exit": 0
           },
           {
             "nome": "smoke-e1-isolamento",
-            "status": "BLOCKED",
+            "status": "PASS",
             "comando": "npm run smoke:e1-03 -w @pef/api",
-            "exit": null,
-            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+            "exit": 0
           },
           {
             "nome": "smoke-e2-acessos",
-            "status": "BLOCKED",
+            "status": "PASS",
             "comando": "npm run smoke:e2 -w @pef/api",
-            "exit": null,
-            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+            "exit": 0
           },
           {
             "nome": "smoke-e4-atividades",
-            "status": "BLOCKED",
+            "status": "PASS",
             "comando": "npm run smoke:e4 -w @pef/api",
-            "exit": null,
-            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+            "exit": 0
           },
           {
             "nome": "smoke-e5-jogos",
-            "status": "BLOCKED",
+            "status": "PASS",
             "comando": "npm run smoke:e5 -w @pef/api",
-            "exit": null,
-            "motivo": "docker indisponível (exit 1); banco-local: DATABASE_URL não definida"
+            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-25T23-00-46-531Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg2-2026-11-26T01-49-32-214Z.json"
       },
       "ambienteAlternativo": {
         "status": "PASS",
@@ -267,10 +259,116 @@
         "em": "2026-11-25",
         "nota": "Sem defeito objetivo no código. BLOCKED só porque authz e smokes ficaram BLOCKED no qg.mjs (sem Docker). Achados de convite pendente, transação e cobertura E5-ACE-08 corrigidos e reexecutados em ambiente alternativo. Fingerprint atual após as correções: sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9.",
         "fingerprint": "sha256:4b304fe8888768fc923b4d9f138369c4e847032a053d4b90f87437e5c2402575"
+      },
+      "qg3": {
+        "status": "PASS",
+        "integral": true,
+        "em": "2026-11-26T01:57:05.907Z",
+        "base": "514b0494ddf31548966dc1d68a328488471b0cd2",
+        "head": "60aa1960ca697a3368e47cd3518aa71fd8f10245",
+        "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+        "checagens": [
+          {
+            "nome": "lint",
+            "status": "PASS",
+            "comando": "npm run lint",
+            "exit": 0
+          },
+          {
+            "nome": "typecheck",
+            "status": "PASS",
+            "comando": "npm run typecheck",
+            "exit": 0
+          },
+          {
+            "nome": "build",
+            "status": "PASS",
+            "comando": "npm run build",
+            "exit": 0
+          },
+          {
+            "nome": "testes",
+            "status": "NOT_APPLICABLE",
+            "comando": "npm run test",
+            "exit": null,
+            "motivo": "script ainda não existe"
+          },
+          {
+            "nome": "authz",
+            "status": "PASS",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-ff-nasc",
+            "status": "PASS",
+            "comando": "npm run smoke:ff-nasc -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e1-entrada",
+            "status": "PASS",
+            "comando": "npm run smoke:e1-ent -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-historico-resumo",
+            "status": "PASS",
+            "comando": "npm run smoke:est-03-docs -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e1-isolamento",
+            "status": "PASS",
+            "comando": "npm run smoke:e1-03 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e2-acessos",
+            "status": "PASS",
+            "comando": "npm run smoke:e2 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e3-cuidados",
+            "status": "PASS",
+            "comando": "npm run smoke:e3 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e4-atividades",
+            "status": "PASS",
+            "comando": "npm run smoke:e4 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e5-jogos",
+            "status": "PASS",
+            "comando": "npm run smoke:e5 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "regressao-e1",
+            "status": "PASS",
+            "comando": "npm run smoke:e1-04 -w @pef/api",
+            "exit": 0
+          }
+        ],
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1/qg3-2026-11-26T01-57-05-907Z.json"
+      },
+      "homologacao": {
+        "status": "PENDING_HUMAN",
+        "em": "2026-11-25",
+        "automatico": "QG-3 integral PASS (13 checagens), fingerprint sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+        "humano": "H1 a H9 em PENDING_HUMAN",
+        "pendente": "FF-NASC-ACE-04, mudança de faixa: ticket 05 (D1)",
+        "roteiro": "docs/esteira/tickets/catalogo-ampliado/homologacao.md",
+        "verificador": "FAIL na primeira versão do relatório; corrigido (H8, E5-ACE-02, marcações dos tickets 04 e 08)"
       }
     },
-    "fingerprint": "sha256:2a7cb568d827d5b3bc8dc09f88b2a54841efffcfa0bb83da34ec59a8ae1b79b9",
-    "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc."
+    "fingerprint": "sha256:7c75b6cd391fa5836b736370c579de70cecd2834373e6b90b96bd1ebff7ab81c",
+    "mensagemCommit": "feat(desenvolvimento): exigir nascimento para Desenvolvimento e recalcular dica\n\nTicket 01: check-e5 valida o catálogo carregado; remove cópia antiga.\nTicket 08: contrato único de tabuleiro; dica recalculada a cada pedido.\nTicket 04: concessão e convite de Desenvolvimento pedem a data;\nresponsável informa só a data; data não pode ser apagada com acesso\nou convite pendente. Novo smoke:ff-nasc.",
+    "notaCheckE2": "check:e2 boas_vindas_sem_envio exigia frase anterior ao commit e050a99; passou a verificar o sentido (link compartilhado, sem promessa de envio). Correção L1 só no teste, aprovada pelo responsável em 2026-11-25."
   },
   "demandasConcluidas": [
     {
