@@ -96,5 +96,7 @@ Testes automáticos de unidade: `NOT_APPLICABLE` (sem runner no projeto).
 - **Aparelho:** celular de 320 a 360 px de largura; informar modelo e navegador.
 - **Passos:** 1. Biblioteca → Jogos → Caminhos e labirintos → Escolher fase. 2. Abrir a fase 15 direto. 3. Jogar até a chegada. 4. Abrir Escolher fase de dentro da partida.
 - **Esperado:** fases agrupadas em Pequenos, Médios e Grandes; a fase 15 abre na primeira visita; o mapa cabe na largura sem rolagem horizontal e as setas são tocáveis; conquistas anteriores do labirinto continuam visíveis.
-- **Status:** PENDING_HUMAN
-- **Retorno:**
+- **Status:** PENDING_HUMAN (refazer com o labirinto v3)
+- **Retorno anterior (v2, FAIL de dificuldade):** responsável, 2026-11-26: o jogo funcionou até a fase 15 e as marcações de fase funcionaram; porém a dificuldade quase não muda, o mapa só fica maior. Medição confirmou: as decisões no caminho ficam entre 0 e 4 da fase 1 à 15; a régua media só passos.
+- **O que conferir na v3:** a dificuldade cresce de verdade? As decisões no caminho vão de 1 a 15. Os mapas têm até 23 linhas: a rolagem vertical no celular incomoda?
+- **Retorno (v3):**

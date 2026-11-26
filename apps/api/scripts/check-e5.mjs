@@ -82,7 +82,7 @@ function conferirSequencia(fase) {
   }
 }
 
-/** Menor distância do início à chegada por fase; tem de crescer de uma fase para outra. */
+/** Menor distância do início à chegada por fase; não pode cair de uma fase para outra. */
 const passosLabirinto = new Map();
 
 function conferirLabirinto(fase) {
@@ -129,7 +129,8 @@ for (const jogo of CATALOGO_JOGOS) {
 
 const passos = [...passosLabirinto.values()];
 assert.equal(passos.length, 15);
-assert.ok(passos.every((valor, i) => i === 0 || valor > passos[i - 1]), `Passos do labirinto devem crescer: ${passos.join(",")}`);
+// A dificuldade (decisões no caminho) é medida pela régua (test:regua); aqui os passos só não caem.
+assert.ok(passos.every((valor, i) => i === 0 || valor >= passos[i - 1]), `Passos do labirinto não podem cair: ${passos.join(",")}`);
 
 const editorial = [...CATALOGO_JOGOS, { id: "outro", categoria: "autonomia" }];
 assert.deepEqual(selecionarDestaquesJogos([], []), []);

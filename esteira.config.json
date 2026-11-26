@@ -56,7 +56,7 @@
     { "nome": "check-e4", "padroes": ["^apps/api/src/desenvolvimento/", "^apps/api/prisma/catalogo-", "^apps/web/src/componentes/desenvolvimento/"], "cmd": "npm run check:e4 -w @pef/api", "perfis": ["qg1"] },
     { "nome": "check-e2", "padroes": ["^apps/api/src/(convites|autorizacoes)/", "^apps/web/src/.*(convite|gerenciar-familia)"], "cmd": "npm run check:e2 -w @pef/api", "perfis": ["qg1"] },
     { "nome": "check-e3", "padroes": ["^apps/api/src/(cuidados|anexos)/"], "cmd": "npm run check:e3 -w @pef/api", "perfis": ["qg1"] },
-    { "nome": "check-e5", "padroes": ["^apps/api/src/desenvolvimento/", "^apps/web/src/componentes/desenvolvimento/jogos/"], "cmd": "npm run check:e5 -w @pef/api", "perfis": ["qg1"] },
+    { "nome": "check-e5", "padroes": ["^apps/api/src/desenvolvimento/", "^apps/web/src/componentes/desenvolvimento/jogos/", "^apps/api/prisma/catalogo-jogos-", "^apps/api/scripts/check-e5"], "cmd": "npm run check:e5 -w @pef/api", "perfis": ["qg1"] },
     { "nome": "regua-jogos", "padroes": ["^apps/api/prisma/(catalogo-jogos-|trilhas-jogos)", "^apps/api/scripts/(lib-)?regua-jogos"], "cmd": "npm run test:regua -w @pef/api", "perfis": ["qg1"] },
     { "nome": "carga-trilhas", "padroes": ["^apps/api/prisma/(schema[.]prisma|migrations/|carga-oficial|trilhas-jogos|catalogo-jogos-)"], "cmd": "npm run qg:cat-trilhas -w @pef/api", "requer": ["docker"], "perfis": ["qg2", "qg3"] },
     { "nome": "smoke-ff-nasc", "padroes": ["^apps/api/src/(pessoas|autorizacoes|convites)/"], "cmd": "npm run smoke:ff-nasc -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
@@ -66,7 +66,7 @@
     { "nome": "smoke-e2-acessos", "padroes": ["^apps/api/src/(convites|autorizacoes)/"], "cmd": "npm run smoke:e2 -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
     { "nome": "smoke-e3-cuidados", "padroes": ["^apps/api/src/(cuidados|anexos)/"], "cmd": "npm run smoke:e3 -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
     { "nome": "smoke-e4-atividades", "padroes": ["^apps/api/src/desenvolvimento/", "^apps/api/prisma/catalogo-"], "cmd": "npm run smoke:e4 -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
-    { "nome": "smoke-e5-jogos", "padroes": ["^apps/api/src/desenvolvimento/", "^apps/web/src/componentes/desenvolvimento/jogos/"], "cmd": "npm run smoke:e5 -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
+    { "nome": "smoke-e5-jogos", "padroes": ["^apps/api/src/desenvolvimento/", "^apps/web/src/componentes/desenvolvimento/jogos/", "^apps/api/prisma/catalogo-jogos-", "^apps/api/scripts/smoke-e5"], "cmd": "npm run smoke:e5 -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg2", "qg3"] },
     { "nome": "regressao-e1", "padroes": ["^apps/"], "cmd": "npm run smoke:e1-04 -w @pef/api", "requer": ["docker", "api-local", "banco-local"], "perfis": ["qg3"] }
   ],
   "termosDoProjeto": ["apps/", "docs/produto", "docs/modulos", "docs/arquitetura", "docs/ux-ui", "@pef/", "smoke:", "PEF", "Laurinha", "Vovó", "Plataforma de Evolução"]

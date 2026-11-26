@@ -26,13 +26,26 @@ const falhasDe = (relatorio, regra) => relatorio.falhas.filter((falha) => falha.
 
 const labirintoBom = [
   { mapas: [["#####", "#I.F#", "#####"], ["#####", "#I#.#", "#...#", "#F###", "#####"]] },
-  { mapas: [["#######", "#I...F#", "#######"], ["######", "#I.#.#", "##...#", "#F.###", "######"]] },
+  // Fase 2: as duas variantes têm uma decisão no caminho (a fase 1 não tem nenhuma).
+  { mapas: [["#####", "#I..#", "#.#.#", "#..F#", "#####"], ["######", "#I.#.#", "##...#", "#F.###", "######"]] },
 ];
+const corredor = (n) => ["#".repeat(n + 3), `#I${".".repeat(n - 1)}F#`, "#".repeat(n + 3)];
+const curva = ["#####", "#I..#", "###.#", "#F..#", "#####"];
 
 test("catálogo coerente é aprovado", () => {
   const relatorio = avaliarCatalogo([jogo("labirinto", labirintoBom)]);
   assert.deepEqual(relatorio.falhas, []);
   assert.equal(relatorio.aprovado, true);
+});
+
+test("labirinto que só cresce em passos, sem mais decisões no caminho, reprova (H10)", () => {
+  const relatorio = avaliarCatalogo([jogo("labirinto", [labirintoBom[0], { mapas: [corredor(5), curva] }])]);
+  assert.deepEqual(falhasDe(relatorio, "progressao").map((f) => [f.fase, f.detalhe]), [[2, "decisoes 0 → 0: a métrica do motor não cresce"]]);
+});
+
+test("labirinto com mais decisões mas menos passos também reprova", () => {
+  const relatorio = avaliarCatalogo([jogo("labirinto", [{ mapas: [corredor(7), ["#########", "#I......#", "#######F#", "#########"]] }, labirintoBom[1]])]);
+  assert.deepEqual(falhasDe(relatorio, "progressao").map((f) => [f.fase, f.detalhe]), [[2, "passos 7 → 4: a dificuldade cai"]]);
 });
 
 test("E5-ACE-03: fase sem solução reprova o catálogo", () => {
@@ -163,6 +176,13 @@ test("métrica principal que cai ou empata sem secundária crescer reprova", () 
   assert.deepEqual(falhasDe(relatorio, "progressao").map((f) => f.fase), [3, 4]);
 });
 
+test("variante com as mesmas paredes e só a chegada em outro lugar reprova", () => {
+  const v1 = ["#######", "#I....#", "#.###.#", "#...#F#", "#######"];
+  const v2 = ["#######", "#I....#", "#.###.#", "#F..#.#", "#######"];
+  const relatorio = avaliarCatalogo([jogo("labirinto", [{ mapas: [v1, v2] }])]);
+  assert.deepEqual(falhasDe(relatorio, "variedade").map((f) => f.detalhe), ["variante 2 tem as mesmas paredes da variante 1"]);
+});
+
 test("variante espelhada ou com a mesma solução reprova", () => {
   const mapa = ["#####", "#I..#", "###F#", "#####"];
   const espelho = mapa.map((linha) => [...linha].reverse().join(""));
@@ -197,7 +217,7 @@ test("relatório do catálogo carregado reproduz as falhas conhecidas", () => {
   assert.deepEqual(entrega.fases.map((f) => f.metricas.passos), [4, 14, 8, 14, 33]);
   assert.deepEqual(
     falhasDe(relatorio, "progressao").map((f) => `${f.jogo}:${f.fase}`),
-    ["memoria:5", "ache-intruso:3", "palavra-figura:3", "palavra-figura:5", "entrega-jardim:3", "historias-cenas:3", "historias-cenas:5"],
+    ["memoria:5", "ache-intruso:3", "palavra-figura:3", "palavra-figura:5", "entrega-jardim:3", "entrega-jardim:3", "entrega-jardim:5", "historias-cenas:3", "historias-cenas:5"],
   );
 
   const rotulos = falhasDe(relatorio, "rotulo");

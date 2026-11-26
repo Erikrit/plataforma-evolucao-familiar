@@ -37,3 +37,31 @@ Fase ganha trilha editorial (pequenos, médios, grandes) com migração aditiva 
 carga sem total fixo; labirinto passa a 15 fases aprovadas pela régua e Escolher
 fase agrupa por trilha, com progresso anterior preservado (DEV-CAT-M1, ticket 03).
 ```
+
+## Correção após H10 (2026-11-26)
+
+- **Retorno:** o jogo funcionou até a fase 15, mas a dificuldade quase não mudava; o mapa só ficava maior. Medição: as decisões no caminho ficavam entre 0 e 4 da fase 1 à 15.
+- **Causa:** a régua media o labirinto só por passos; o gerador fazia corredores longos com poucas bifurcações.
+- **Decisão do responsável:** a métrica principal do labirinto passa a ser "decisões no caminho", que crescem a cada fase; os passos não podem cair. A mesma regra vale para Entrega no jardim (ticket 09).
+- **Feito:**
+  - Régua: decisões no caminho como métrica principal; variedade comparada pelas paredes, para que só mover a chegada ou espelhar não conte como variante nova.
+  - Labirinto v3: decisões de 1 a 15, passos de 6 a 46, mapas de até 15×23.
+  - `check:e5` e `smoke:e5` passam a rodar quando o catálogo muda.
+- **Evidências:**
+  - `test:regua` 16/16.
+  - QG-1 PASS: `qg1-2026-11-26T13-02-13-611Z.json`.
+  - QG-2 PASS, com smoke-e5 e carga-trilhas: `qg2-2026-11-26T13-04-53-820Z.json`.
+  - Fingerprint `sha256:899fa75dba395fe40996f5116ce8e83d0fafe70ab344632ff6e2f50637af296c` (base `b35587b`).
+  - Verificador PASS, depois de um FAIL corrigido (as fases 14 e 15 tinham as mesmas paredes).
+- **Risco:** ramo de duas células ainda conta como decisão. Contando só os ramos com 3 células ou mais, a série cresce no geral, mas não a cada fase.
+- **PENDING_HUMAN:** refazer o H10 no celular com a v3.
+
+**mensagemCommit:**
+
+```
+fix(jogos): dificuldade do labirinto medida por decisões no caminho
+
+A homologação mostrou que o mapa crescia sem ficar mais difícil: a régua media
+só passos. Agora as decisões no caminho crescem de 1 a 15 e os passos não caem;
+variantes são comparadas pelas paredes e o labirinto vai à v3 (DEV-CAT-M1, ticket 03).
+```

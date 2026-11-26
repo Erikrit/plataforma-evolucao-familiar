@@ -47,9 +47,13 @@ export const VOCABULARIO_FIGURAS = {
 
 const NOME_FORMA = { circulo: "circulo", quadrado: "quadrado", triangulo: "triangulo", losango: "losango" };
 
-/** Métrica principal (tem de crescer) e secundárias (o empate passa se uma delas cresce). */
+/**
+ * Métrica principal (tem de crescer), secundárias (o empate passa se uma delas cresce)
+ * e métricas que não podem cair. No labirinto, passos sozinhos não mediam dificuldade
+ * (homologação H10, 2026-11-26): o que cresce são as decisões no caminho.
+ */
 const METRICAS = {
-  labirinto: { principal: "passos", secundarias: ["juncoes", "becos"] },
+  labirinto: { principal: "decisoes", secundarias: [], naoCaem: ["passos"], extras: ["juncoes", "becos"] },
   memoria: { principal: "pares", secundarias: [] },
   escolha: { principal: "opcoes", secundarias: [] },
   sequencia: { principal: "periodo", secundarias: ["comprimento", "lacunaNoMeio"] },
@@ -87,7 +91,10 @@ function localizar(mapa, marco) {
   return pontos;
 }
 
-/** Menor percurso que passa por todos os pontos P (qualquer ordem) e termina em F. */
+/**
+ * Menor percurso que passa por todos os pontos P (qualquer ordem) e termina em F.
+ * Devolve as células visitadas, do início à chegada, ou null se não houver.
+ */
 function menorPercurso(mapa) {
   const [inicio] = localizar(mapa, "I");
   const [chegada] = localizar(mapa, "F");
@@ -98,23 +105,39 @@ function menorPercurso(mapa) {
     const i = pontos.findIndex(([pl, pc]) => pl === l && pc === c);
     return i < 0 ? m : m | (1 << i);
   };
-  const origem = [inicio[0], inicio[1], marca(inicio[0], inicio[1], 0), 0];
+  const origem = [inicio[0], inicio[1], marca(inicio[0], inicio[1], 0)];
   const fila = [origem];
-  const vistos = new Set([origem.slice(0, 3).join("/")]);
+  const anterior = new Map([[origem.join("/"), null]]);
   for (let i = 0; i < fila.length; i += 1) {
-    const [l, c, m, passos] = fila[i];
-    if (l === chegada[0] && c === chegada[1] && m === todos) return passos;
+    const [l, c, m] = fila[i];
+    if (l === chegada[0] && c === chegada[1] && m === todos) {
+      const celulas = [];
+      for (let chave = [l, c, m].join("/"); chave; chave = anterior.get(chave)) {
+        celulas.unshift(chave.split("/").slice(0, 2).map(Number));
+      }
+      return celulas;
+    }
     for (const [dl, dc] of VIZINHOS) {
       const [nl, nc] = [l + dl, c + dc];
       if (!aberta(mapa, nl, nc)) continue;
       const nm = marca(nl, nc, m);
       const chave = `${nl}/${nc}/${nm}`;
-      if (vistos.has(chave)) continue;
-      vistos.add(chave);
-      fila.push([nl, nc, nm, passos + 1]);
+      if (anterior.has(chave)) continue;
+      anterior.set(chave, [l, c, m].join("/"));
+      fila.push([nl, nc, nm]);
     }
   }
   return null;
+}
+
+const saidas = (mapa, l, c) => VIZINHOS.filter(([dl, dc]) => aberta(mapa, l + dl, c + dc)).length;
+
+/**
+ * Decisão: célula do percurso em que a criança tem mais de um caminho para seguir,
+ * sem contar o lado de onde veio (no início, duas saídas; depois, três ou mais).
+ */
+function contarDecisoes(mapa, celulas) {
+  return celulas.slice(0, -1).filter(([l, c], i) => saidas(mapa, l, c) >= (i === 0 ? 2 : 3)).length;
 }
 
 function avaliarMapa(mapa) {
@@ -123,15 +146,20 @@ function avaliarMapa(mapa) {
   mapa.forEach((linha, l) =>
     [...linha].forEach((celula, c) => {
       if (celula === "#") return;
-      const saidas = VIZINHOS.filter(([dl, dc]) => aberta(mapa, l + dl, c + dc)).length;
-      if (saidas >= 3) juncoes += 1;
-      if (saidas === 1 && celula !== "I" && celula !== "F") becos += 1;
+      const n = saidas(mapa, l, c);
+      if (n >= 3) juncoes += 1;
+      if (n === 1 && celula !== "I" && celula !== "F") becos += 1;
     }),
   );
-  const passos = menorPercurso(mapa);
+  const celulas = menorPercurso(mapa);
   return {
-    metricas: { passos: passos ?? 0, juncoes, becos },
-    falhas: passos == null ? [["solucao", "sem caminho do início à chegada passando pelos pontos"]] : [],
+    metricas: {
+      decisoes: celulas ? contarDecisoes(mapa, celulas) : 0,
+      passos: celulas ? celulas.length - 1 : 0,
+      juncoes,
+      becos,
+    },
+    falhas: celulas ? [] : [["solucao", "sem caminho do início à chegada passando pelos pontos"]],
   };
 }
 
@@ -146,6 +174,11 @@ const MOTORES = {
     avaliar: (mapa) => avaliarMapa(mapa),
     chave: (mapa) => mapa.join("/"),
     espelhos: (mapa) => [espelhoHorizontal(mapa), espelhoVertical(mapa)].map((m) => m.join("/")),
+    // Só as paredes: mover início, chegada ou pontos não cria variante nova.
+    paredes: (mapa) => {
+      const semMarcos = mapa.map((linha) => linha.replace(/[IFP]/g, "."));
+      return [semMarcos, espelhoHorizontal(semMarcos), espelhoVertical(semMarcos)].map((m) => m.join("/"));
+    },
   },
   memoria: {
     variantes: (config) => config.conjuntos ?? [],
@@ -265,6 +298,14 @@ function avaliarVariedade(motor, variantes) {
         falhas.push(["variedade", `variante ${i + 1} repete a solução da variante ${j + 1}`, i + 1]);
       } else if (motor.espelhos?.(variantes[i]).includes(chaves[j])) {
         falhas.push(["variedade", `variante ${i + 1} é só espelhamento da variante ${j + 1}`, i + 1]);
+      } else if (motor.paredes) {
+        const [proprias, ...espelhadas] = motor.paredes(variantes[i]);
+        const outras = motor.paredes(variantes[j])[0];
+        if (proprias === outras) {
+          falhas.push(["variedade", `variante ${i + 1} tem as mesmas paredes da variante ${j + 1}`, i + 1]);
+        } else if (espelhadas.includes(outras)) {
+          falhas.push(["variedade", `variante ${i + 1} tem as paredes espelhadas da variante ${j + 1}`, i + 1]);
+        }
       }
     }
   });
@@ -287,7 +328,7 @@ export function avaliarCatalogo(catalogo) {
       registrar(undefined, undefined, "motor", `mecânica “${jogo.tipoMecanica}” sem verificador`);
       continue;
     }
-    const { principal, secundarias } = METRICAS[jogo.tipoMecanica];
+    const { principal, secundarias, naoCaem = [], extras = [] } = METRICAS[jogo.tipoMecanica];
     const fases = [];
 
     for (const fase of jogo.fases) {
@@ -302,7 +343,7 @@ export function avaliarCatalogo(catalogo) {
       );
       // A fase vale pela variante mais fácil: a criança pode cair em qualquer uma.
       const metricas = {};
-      for (const nome of [principal, ...secundarias]) {
+      for (const nome of [principal, ...secundarias, ...naoCaem, ...extras]) {
         metricas[nome] = avaliacoes.length ? Math.min(...avaliacoes.map((a) => a.metricas[nome])) : 0;
       }
       fases.push({ numero: fase.numero, metricas });
@@ -315,6 +356,9 @@ export function avaliarCatalogo(catalogo) {
         registrar(fases[i].numero, undefined, "progressao", `${trajeto}: a dificuldade cai`);
       } else if (agora[principal] === antes[principal] && !secundarias.some((s) => agora[s] > antes[s])) {
         registrar(fases[i].numero, undefined, "progressao", `${trajeto}: a métrica do motor não cresce`);
+      }
+      for (const nome of naoCaem.filter((m) => agora[m] < antes[m])) {
+        registrar(fases[i].numero, undefined, "progressao", `${nome} ${antes[nome]} → ${agora[nome]}: a dificuldade cai`);
       }
     }
     jogos.push({ id: jogo.id, tipoMecanica: jogo.tipoMecanica, fases });
