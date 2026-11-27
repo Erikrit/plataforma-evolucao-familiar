@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 02
 
-**Status:** PENDING
+**Status:** READY
 
 **Costura:** régua de atividades, carga oficial e smoke:e4
 

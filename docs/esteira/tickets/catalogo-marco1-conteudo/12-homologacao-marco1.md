@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 01 a 11
 
-**Status:** PENDING
+**Status:** READY
 
 **Costura:** QG-3 e homologação humana
 

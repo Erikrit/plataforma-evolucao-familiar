@@ -1,6 +1,6 @@
 # Catálogo ampliado — Marco 1, conteúdo e jogo 2D
 
-**Demanda:** `DEV-CAT-M1-CONTEUDO` · **Tipo:** nova funcionalidade (conteúdo, motores e 2D) · **Origem:** humano · **Status:** PENDING — direção aprovada pelo responsável pelo Produto em 2026-11-26; aguarda aprovação da divisão em tickets.
+**Demanda:** `DEV-CAT-M1-CONTEUDO` · **Tipo:** nova funcionalidade (conteúdo, motores e 2D) · **Origem:** humano · **Status:** READY — direção e divisão em tickets aprovadas pelo responsável pelo Produto em 2026-11-26.
 
 **Base:** `develop` @ `3dd147f` (fundação DEV-CAT-M1 concluída). **Fonte funcional:** Módulo 03 §15 v1.9 (Marcos, 12 jogos novos e Barquinho no rio).
 
@@ -53,7 +53,7 @@ Marco 2, outros jogos 2D, narração por voz, ranking, metas, notificações, av
 
 ## Execução no Claude Code
 
-Cada ticket começa em sessão nova, na `develop` atualizada. Depois da aprovação da divisão, os tickets ficam `READY`.
+Cada ticket começa em sessão nova, na `develop` atualizada. Divisão aprovada em 2026-11-26: todos os tickets estão `READY`; respeite a coluna “Depende de”.
 
 | Ticket | Comando | Depende de |
 |---|---|---|

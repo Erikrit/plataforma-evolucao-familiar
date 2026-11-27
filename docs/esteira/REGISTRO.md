@@ -18,6 +18,8 @@ Essa referência é para auditoria histórica, **não** para reutilizar um QG-3 
 
 Registrar **somente transições materiais** de demandas novas: ID, tipo, branch/commit, decisão de Produto quando necessária, estado, testes pertinentes, resultado do verificador, aceite humano quando houver e próximo passo. Máximo uma entrada concisa por transição significativa; não colar saídas brutas de npm, builds e smokes.
 
+**2026-11-26 — DEV-CAT-M1-CONTEUDO:** divisão em 12 tickets aprovada pelo responsável; todos `READY`.
+
 **2026-11-26 — DEV-CAT-M1-CONTEUDO:** planejada. Correção da conferência: DEV-CAT-M1 entregou a fundação, não o Marco 1 do M03 §15. O responsável manteve o Marco 1 em 20 jogos e 60 atividades e acrescentou o jogo 2D Barquinho no rio como fechamento; escolheu os 12 jogos novos (M03 §15 v1.9). Decidiu também que o banco da VPS de testes pode ser limpo e recriado por ele na publicação. Spec e 12 tickets `PENDING` em `docs/esteira/tickets/catalogo-marco1-conteudo/`. Base `3dd147f`.
 
 **2026-11-26 — DEV-CAT-M1:** COMPLETED (fundação do Marco 1). Tickets 01–04 e 06–17 homologados; 05 descartado (jogos sem faixa, P04 revisto). QG-3 PASS sobre `master..1cbe2b9` (`sha256:dc49fe59…`). `master` continua em `dcf901d`; publicação a cargo do responsável.

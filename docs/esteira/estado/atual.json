@@ -56,11 +56,11 @@
     "id": "DEV-CAT-M1-CONTEUDO",
     "tipo": "nova_funcionalidade",
     "origem": "humano",
-    "estado": "PENDING",
+    "estado": "READY",
     "aprovacao": {
       "nivel": "L3",
       "status": "APROVADA",
-      "referencia": "Módulo 03 §15 v1.9 (Marcos): 12 jogos novos, 60 atividades e Barquinho no rio, aprovados pelo responsável em 2026-11-26; divisão em tickets aguardando aprovação"
+      "referencia": "Módulo 03 §15 v1.9 (Marcos): 12 jogos novos, 60 atividades e Barquinho no rio, aprovados pelo responsável em 2026-11-26; divisão em tickets aprovada em 2026-11-26"
     },
     "fluxo": [
       "docs/esteira/tickets/catalogo-marco1-conteudo/spec.md"
@@ -73,7 +73,7 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável aprova a divisão em tickets; depois, no Claude Code, /implementar começando pelos tickets 01, 04 e 10 (ver Execução no Claude Code na spec)."
+    "proximaAcao": "No Claude Code, /implementar começando pelos tickets 01, 04 e 10, cada um em sessão nova (ver Execução no Claude Code na spec)."
   },
   "demandasConcluidas": [
     {

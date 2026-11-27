@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** PENDING
+**Status:** READY
 
 **Costura:** régua de jogos, check:e5, carga oficial e smoke:e5
 

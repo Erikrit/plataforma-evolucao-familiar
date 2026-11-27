@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** PENDING
+**Status:** READY
 
 **Costura:** build, check:e5 e medição no celular
 
