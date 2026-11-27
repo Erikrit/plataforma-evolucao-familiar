@@ -73,10 +73,10 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável: E5-HOM do ticket 02 (amostra de 5) e decisões do teto 60 e da conta por faixa (afeta o ticket 03); depois commit. Seguem tickets 04 e 10, um por sessão.",
+    "proximaAcao": "Responsável: commit do ticket 02. Depois, /implementar dos tickets 03, 04 e 10, um por sessão, na develop atualizada. Ticket 13 depois de 01 a 11; 12 fecha.",
     "ticketAtivo": {
       "ticket": "02-atividades-lote-1",
-      "estado": "PENDING_HUMAN",
+      "estado": "COMPLETED",
       "branch": "develop",
       "base": "a9e9e9f",
       "arquivos": [
@@ -95,8 +95,9 @@
       "qg2": "PASS — build, authz, carga-trilhas, smoke-historico-resumo, smoke-e4, smoke-e5",
       "verificador": "PASS (inclui delta pós-revisão)",
       "revisao": "Padrões: objetivos corrigidos; duplicações ao ticket 13. Especificação: teto 60, conta por faixa para o ticket 03 e cobertura de Pequenos levados ao humano",
-      "homologacao": "PENDING_HUMAN — E5-HOM, amostra: feira_mentirinha, quantos_cabem, salada_medida, detetive_janela, massinha_caseira",
-      "mensagemCommit": "feat(desenvolvimento): lote 1 com 20 Atividades Reais novas\n\nVinte fichas novas pela ficha padrão, sete de Números, chegando a 40 ativas sem buraco de faixa × área; a régua passa a reprovar buraco de área. Teto do catálogo sobe de 24 para 60 (Marco 1, DEV-CAT-P09) e contadores da carga, check-e4, smoke-e4 e qg-cat-01 atualizados."
+      "homologacao": "PASS — E5-HOM (amostra de 5) aprovado pelo responsável em 2026-11-27",
+      "mensagemCommit": "feat(desenvolvimento): lote 1 com 20 Atividades Reais novas\n\nVinte fichas novas pela ficha padrão, sete de Números, chegando a 40 ativas sem buraco de faixa × área; a régua passa a reprovar buraco de área. Teto do catálogo sobe de 24 para 60 (Marco 1, DEV-CAT-P09) e contadores da carga, check-e4, smoke-e4 e qg-cat-01 atualizados.",
+      "decisoes": "Teto 60 aprovado; ticket 03 passa a exigir >=20 por faixa, >=3 por faixa×área e diferença <=10 entre faixas (atividade conta em todas as faixas que cobre); pessoas individual fica para o futuro. Texto de E4-ACE-01 (M03 §12) ainda diz 24: atualizar na conversa de planejamento."
     },
     "verificacao": {
       "qg1": {

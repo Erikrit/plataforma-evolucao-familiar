@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 01
 
-**Status:** PENDING_HUMAN — parte automática concluída; falta E5-HOM (amostra de 5)
+**Status:** COMPLETED — homologado pelo responsável em 2026-11-27
 
 **Costura:** régua de atividades, carga oficial e smoke:e4
 
@@ -14,7 +14,7 @@
 
 - [x] Régua de atividades aprova as 40 ativas; matriz sem buraco nas áreas
 - [x] DEV-CAT-P08 — pelo menos 6 atividades de Números (7)
-- [ ] E5-HOM — amostra de 5 atividades homologada pelo responsável
+- [x] E5-HOM — amostra de 5 atividades homologada pelo responsável (2026-11-27)
 
 ## Conclusão técnica (2026-11-27)
 
@@ -24,7 +24,8 @@
 - **Portões (base `a9e9e9f`):** QG-1 PASS (lint, typecheck, authz, check-e4 14/14, check-e5, regua-atividades 18/18); QG-2 PASS (build, authz, carga-trilhas, smoke-historico-resumo, smoke-e4, smoke-e5); verificador PASS, incluindo o delta pós-revisão.
 - **Fingerprint:** `sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077`.
 - **Revisão:** achados objetivos de Padrões corrigidos (buracos de área calculados pela matriz, `FAIXAS` no teste, JSDoc e comentários); duplicações de contadores levadas ao ticket 13. Perguntas de Especificação levadas ao responsável.
-- **Pendente (humano):** E5-HOM com a amostra Feira de mentirinha, Quantos cabem no pote?, Salada de frutas medida, Detetive da janela e Bichos de massinha caseira.
+- **Homologação (2026-11-27):** E5-HOM aprovado pelo responsável, com a amostra Feira de mentirinha, Quantos cabem no pote?, Salada de frutas medida, Detetive da janela e Bichos de massinha caseira.
+- **Decisões do responsável (2026-11-27):** teto de 60 aprovado; conta por faixa resolvida no critério do ticket 03; cobertura individual fica para crescimento futuro do catálogo.
 
 **mensagemCommit:**
 
