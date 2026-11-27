@@ -1,6 +1,6 @@
 /**
  * CAT-01 — validação em bancos descartáveis.
- * 1) Banco novo: migrate + carga ×2 (44 E4, 8 jogos, fases contadas do catálogo; sem família/progresso).
+ * 1) Banco novo: migrate + carga ×2 (60 E4 ativas, 8 jogos, fases contadas do catálogo; sem família/progresso).
  * 2) Banco com progresso piloto: transição aditiva preserva chaves/conclusões.
  * Não toca o banco compartilhado `pef` de forma destrutiva.
  */
@@ -295,7 +295,7 @@ async function main() {
 
   const contNovo = await contagens(dbNovo);
   registrar("contagens_banco_novo", 
-    contNovo.e4 === 44 &&
+    contNovo.e4 === 60 &&
       contNovo.jogos === 8 &&
       contNovo.fases === TOTAL_FASES &&
       contNovo.idsJogos.join(",") === "labirinto,memoria,sequencia" &&
@@ -457,7 +457,7 @@ async function main() {
 
   registrar(
     "catalogo_piloto_apos_carga",
-    contPiloto.e4 === 44 && contPiloto.jogos === 8 && contPiloto.fases === TOTAL_FASES,
+    contPiloto.e4 === 60 && contPiloto.jogos === 8 && contPiloto.fases === TOTAL_FASES,
     { contagens: contPiloto },
   );
 

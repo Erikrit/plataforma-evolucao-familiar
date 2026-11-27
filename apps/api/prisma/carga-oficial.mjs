@@ -51,9 +51,9 @@ export function dadosDesafioCatalogo(item) {
 }
 
 export async function carregarCatalogosOficiais(prisma) {
-  if (CATALOGO_BIBLIOTECA_E4.length !== 44) {
+  if (CATALOGO_BIBLIOTECA_E4.length !== 64) {
     throw new Error(
-      `Catálogo E4 deve ter 44 modelos; encontrado ${CATALOGO_BIBLIOTECA_E4.length}.`,
+      `Catálogo E4 deve ter 64 modelos; encontrado ${CATALOGO_BIBLIOTECA_E4.length}.`,
     );
   }
   // As contagens vêm do catálogo (DEV-CAT-M1, ticket 03): cada jogo numera as fases

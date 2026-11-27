@@ -41,3 +41,5 @@ Registrar **somente transições materiais** de demandas novas: ID, tipo, branch
 **2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 02:** lote 1 com 20 Atividades Reais novas (40 ativas, 7 de Números, sem buraco de faixa × área) na `develop` @ `a9e9e9f`, sem commit. QG-1/QG-2 e verificador PASS; fingerprint `sha256:d6669f8d…`. Teto do catálogo 24 → 60. `PENDING_HUMAN`: E5-HOM da amostra de 5.
 
 **2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 02 concluído:** E5-HOM aprovado pelo responsável; teto de 60 aprovado; critério de faixa do ticket 03 ajustado (mínimo 20 por faixa, 3 por faixa × área, diferença até 10).
+
+**2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 03:** lote 2 com 20 Atividades Reais novas (60 ativas; faixas 45/42/44) na `develop` @ `917ab27`, sem commit. QG-1/QG-2 e verificador PASS; fingerprint `sha256:5a5abd97…`. `PENDING_HUMAN`: E5-HOM da amostra de 5.

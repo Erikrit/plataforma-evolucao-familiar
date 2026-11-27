@@ -73,12 +73,12 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável: commit do ticket 02. Depois, /implementar dos tickets 03, 04 e 10, um por sessão, na develop atualizada. Ticket 13 depois de 01 a 11; 12 fecha.",
+    "proximaAcao": "Responsável: E5-HOM do ticket 03 (amostra de 5) e commit. Seguem tickets 04 e 10, um por sessão.",
     "ticketAtivo": {
-      "ticket": "02-atividades-lote-1",
-      "estado": "COMPLETED",
+      "ticket": "03-atividades-lote-2",
+      "estado": "PENDING_HUMAN",
       "branch": "develop",
-      "base": "a9e9e9f",
+      "base": "917ab27",
       "arquivos": [
         "apps/api/prisma/catalogo-biblioteca-e4.mjs",
         "apps/api/prisma/carga-oficial.mjs",
@@ -86,27 +86,25 @@
         "apps/api/scripts/regua-atividades.mjs",
         "apps/api/scripts/regua-atividades.test.mjs",
         "apps/api/scripts/check-e4.mjs",
-        "apps/api/scripts/smoke-e4.mjs",
         "apps/api/scripts/qg-cat-01.mjs",
-        "apps/api/src/desenvolvimento/constantes-desenvolvimento.ts"
+        "apps/api/scripts/qg-cat-trilhas.mjs"
       ],
-      "qg1": "PASS — lint, typecheck, authz, check-e4 14/14, check-e5, regua-atividades 18/18 (40 ativas, 0 buracos de área)",
-      "fingerprint": "sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077",
-      "qg2": "PASS — build, authz, carga-trilhas, smoke-historico-resumo, smoke-e4, smoke-e5",
+      "qg1": "PASS — lint, typecheck, authz, check-e4 14/14, regua-atividades 21/21 (60 ativas, 0 pendências de faixa)",
+      "fingerprint": "sha256:5a5abd971cf142b499d9afc537b2e5c249e3cac83de699f05251a5c92ade7b57",
+      "qg2": "PASS — build, authz, carga-trilhas (60 ativas e 4 arquivadas após carga ×2), smoke-e4",
       "verificador": "PASS (inclui delta pós-revisão)",
-      "revisao": "Padrões: objetivos corrigidos; duplicações ao ticket 13. Especificação: teto 60, conta por faixa para o ticket 03 e cobertura de Pequenos levados ao humano",
-      "homologacao": "PASS — E5-HOM (amostra de 5) aprovado pelo responsável em 2026-11-27",
-      "mensagemCommit": "feat(desenvolvimento): lote 1 com 20 Atividades Reais novas\n\nVinte fichas novas pela ficha padrão, sete de Números, chegando a 40 ativas sem buraco de faixa × área; a régua passa a reprovar buraco de área. Teto do catálogo sobe de 24 para 60 (Marco 1, DEV-CAT-P09) e contadores da carga, check-e4, smoke-e4 e qg-cat-01 atualizados.",
-      "decisoes": "Teto 60 aprovado; ticket 03 passa a exigir >=20 por faixa, >=3 por faixa×área e diferença <=10 entre faixas (atividade conta em todas as faixas que cobre); pessoas individual fica para o futuro. Texto de E4-ACE-01 (M03 §12) ainda diz 24: atualizar na conversa de planejamento."
+      "revisao": "Padrões: celulasAbaixoDe e catalogoAprovado; duplicações ao ticket 13. Especificação: ficha da corda corrigida; pendência E4-ACE-01 mantida em pendenciasDocumentais",
+      "homologacao": "PENDING_HUMAN — E5-HOM, amostra: sombra_de_quem, lavar_maos_cantando, corda_em_dupla, planta_da_casa, amarelinha",
+      "mensagemCommit": "feat(desenvolvimento): lote 2 fecha 60 Atividades Reais\n\nVinte fichas novas (9 só para Pequenos, 9 só para Grandes e 2 para\ntodas as faixas), chegando a 60 ativas com 45/42/44 por faixa. A régua\npassa a exigir mínimo de 20 por faixa, 3 por faixa × área e diferença\naté 10; qg-cat-trilhas confere 60 ativas e 4 arquivadas após carga ×2."
     },
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T10:51:55.504Z",
-        "base": "a9e9e9f62fd92343afb0b7e1487e5776eb868a73",
-        "head": "a9e9e9f62fd92343afb0b7e1487e5776eb868a73",
-        "fingerprint": "sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077",
+        "em": "2026-11-27T12:10:31.048Z",
+        "base": "917ab27687f5510f67b195892beb25ec85f5e5bf",
+        "head": "917ab27687f5510f67b195892beb25ec85f5e5bf",
+        "fingerprint": "sha256:5a5abd971cf142b499d9afc537b2e5c249e3cac83de699f05251a5c92ade7b57",
         "checagens": [
           {
             "nome": "lint",
@@ -140,27 +138,21 @@
             "exit": 0
           },
           {
-            "nome": "check-e5",
-            "status": "PASS",
-            "comando": "npm run check:e5 -w @pef/api",
-            "exit": 0
-          },
-          {
             "nome": "regua-atividades",
             "status": "PASS",
             "comando": "npm run test:regua-atividades -w @pef/api",
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T10-51-55-504Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T12-10-31-048Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T10:54:30.079Z",
-        "base": "a9e9e9f62fd92343afb0b7e1487e5776eb868a73",
-        "head": "a9e9e9f62fd92343afb0b7e1487e5776eb868a73",
-        "fingerprint": "sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077",
+        "em": "2026-11-27T12:13:10.987Z",
+        "base": "917ab27687f5510f67b195892beb25ec85f5e5bf",
+        "head": "917ab27687f5510f67b195892beb25ec85f5e5bf",
+        "fingerprint": "sha256:5a5abd971cf142b499d9afc537b2e5c249e3cac83de699f05251a5c92ade7b57",
         "checagens": [
           {
             "nome": "build",
@@ -188,28 +180,19 @@
             "exit": 0
           },
           {
-            "nome": "smoke-historico-resumo",
-            "status": "PASS",
-            "comando": "npm run smoke:est-03-docs -w @pef/api",
-            "exit": 0
-          },
-          {
             "nome": "smoke-e4-atividades",
             "status": "PASS",
             "comando": "npm run smoke:e4 -w @pef/api",
             "exit": 0
-          },
-          {
-            "nome": "smoke-e5-jogos",
-            "status": "PASS",
-            "comando": "npm run smoke:e5 -w @pef/api",
-            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T10-54-30-079Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T12-13-10-987Z.json"
       }
     },
-    "fingerprint": "sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077"
+    "fingerprint": "sha256:5a5abd971cf142b499d9afc537b2e5c249e3cac83de699f05251a5c92ade7b57",
+    "pendenciasDocumentais": [
+      "Texto de E4-ACE-01 (M03 §12, linhas 221 e 321) ainda diz 24; teto de 60 aprovado em 2026-11-27. M03 §15 (Marco 1) diz 'cerca de 20 por faixa'; leitura aprovada no ticket 03 (mínimo 20, 3 por faixa × área, diferença até 10). Atualizar na conversa de planejamento."
+    ]
   },
   "demandasConcluidas": [
     {

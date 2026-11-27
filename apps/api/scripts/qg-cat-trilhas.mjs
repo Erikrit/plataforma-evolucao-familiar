@@ -2,7 +2,8 @@
  * DEV-CAT-M1, ticket 03 — trilhas em banco descartável do Postgres local (Docker).
  * 1) Migra até a versão anterior às trilhas e grava labirinto 1–5 e progresso fictício.
  * 2) Aplica a migração de trilhas: fases antigas recebem a trilha pelo número.
- * 3) Carga oficial ×2: contagens vêm do catálogo, sem duplicar; progresso preservado.
+ * 3) Carga oficial ×2: contagens vêm do catálogo, sem duplicar; progresso preservado;
+ *    60 Atividades Reais ativas e 4 arquivadas (DEV-CAT-M1-CONTEUDO, ticket 03).
  * Só cria e apaga o banco descartável abaixo; nunca toca `pef` nem a VPS.
  */
 import { spawnSync } from "node:child_process";
@@ -111,6 +112,13 @@ async function main() {
     conferir("trilha coerente com o número da fase", fases.every((f) => f.trilha === trilhaEsperada(f.numero)));
     conferir("Caminhos e labirintos com 15 fases", fases.filter((f) => f.jogoId === "labirinto").length === 15);
     conferir("conclusões anteriores preservadas", JSON.stringify(await progresso(prisma)) === JSON.stringify(progressoAntes));
+    // DEV-CAT-M1-CONTEUDO, ticket 03: Marco 1 com 60 Atividades Reais ativas; as 4 arquivadas (D2) ficam.
+    const doCatalogo = { familiaId: null, origem: "catalogo" };
+    const [ativas, arquivadas] = await Promise.all([
+      prisma.desafio.count({ where: { ...doCatalogo, ativo: true } }),
+      prisma.desafio.count({ where: { ...doCatalogo, ativo: false } }),
+    ]);
+    conferir("Atividades Reais após carga ×2: 60 ativas e 4 arquivadas", ativas === 60 && arquivadas === 4, { ativas, arquivadas });
   } finally {
     await prisma.$disconnect();
     psql(`DROP DATABASE IF EXISTS ${banco};`);

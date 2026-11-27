@@ -86,8 +86,8 @@ reg(
 reg(
   "DEV-JOG-P01-curadoria",
   fichasCuradoria.every((nome) => catalogo.includes(nome)) &&
-    idsCatalogo.length === 44,
-  "Seis fichas aprovadas no catálogo de 44 (40 ativas + 4 arquivadas)",
+    idsCatalogo.length === 64,
+  "Seis fichas aprovadas no catálogo de 64 (60 ativas + 4 arquivadas)",
 );
 // D2 (2026-11-26): atividades de adultos e idosos arquivadas; as demais ficam em 5 a 12 anos.
 const ARQUIVADAS_D2 = ["desafio_cat_fotos_lembranca", "desafio_cat_alongar_ombro", "desafio_cat_lista_compras_mental", "desafio_cat_calendario_semana"];
@@ -184,8 +184,8 @@ const { avaliarAtividades } = await import("./lib-regua-atividades.mjs");
 const reguaAtividades = avaliarAtividades(CATALOGO_BIBLIOTECA_E4);
 reg(
   "REGUA-ATIVIDADE-REAL-ficha-padrao",
-  reguaAtividades.aprovado && reguaAtividades.atividades.length === 40 && reguaAtividades.buracosDeArea.length === 0,
-  `${reguaAtividades.atividades.length} ativas, ${reguaAtividades.falhas.length} falhas na ficha, ${reguaAtividades.buracosDeArea.length} buracos de área (npm run regua:atividades)`,
+  reguaAtividades.catalogoAprovado && reguaAtividades.atividades.length === 60,
+  `${reguaAtividades.atividades.length} ativas, ${reguaAtividades.falhas.length} falhas na ficha, ${reguaAtividades.buracosDeArea.length} buracos de área, ${reguaAtividades.pendenciasDeFaixa.length} pendências de faixa (npm run regua:atividades)`,
 );
 const fichaWeb = readFileSync(join(raiz, "apps/web/src/componentes/desenvolvimento/ficha-atividade.tsx"), "utf8");
 const camposFicha = ["passos", "variacaoFacil", "variacaoDificil", "adaptacaoSentado", "seguranca", "lugar", "pessoasMin", "pessoasMax"];

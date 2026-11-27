@@ -18,6 +18,7 @@
 - Exports sem uso, como `FAIXAS_FICHA` fora de `ficha-padrao.ts`.
 - `check-e4` valida por busca de trechos de texto, o que é frágil.
 - Do ticket 02: teto `LIMITE_CATALOGO_ATIVO` (60) espelhado em `constantes-desenvolvimento.ts`, no texto procurado pelo `check-e4` e em `smoke-e4`; totais 40/44 soltos em `carga-oficial`, `check-e4`, `qg-cat-01` e no teste da régua; filtros `ativo !== false` repetidos fora da régua.
+- Do ticket 03: totais 60/4 também em `qg-cat-trilhas`; o `where` Prisma `{ familiaId: null, origem: "catalogo" }` repetido entre `qg-cat-trilhas` e `qg-cat-01`.
 
 ## Decisão adiada para este ticket
 

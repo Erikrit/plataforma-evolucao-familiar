@@ -3,6 +3,7 @@
  *
  *   npm run regua:atividades -w @pef/api           # fichas + matriz de cobertura; sai 1 se alguma ficha reprovar
  *                                                  # ou se faltar atividade em alguma faixa × área (desde o ticket 02)
+ *                                                  # ou se a cobertura por faixa não atender COBERTURA_FAIXA (ticket 03)
  *   npm run regua:atividades -w @pef/api -- --json # saída estruturada
  *
  * Buracos de duração, lugar e pessoas são relatados e não mudam a saída.
@@ -33,11 +34,13 @@ if (process.argv.includes("--json")) {
   linha("lugar", matriz.lugar);
   linha("pessoas", matriz.pessoas);
   console.log(`combinações faixa × área × duração × lugar × pessoas preenchidas: ${matriz.combinacoes.length} (lista completa com --json)`);
+  for (const pendencia of relatorio.pendenciasDeFaixa) console.log(`PENDÊNCIA [faixa] ${pendencia}`);
   if (relatorio.buracos.length) console.log(`\nBuracos (${relatorio.buracos.length}): ${relatorio.buracos.join("; ")}`);
   console.log(
     `\nregua-atividades: ${relatorio.atividades.length} ativas, ${relatorio.falhas.length} falhas — ` +
-      `fichas ${relatorio.aprovado ? "APROVADAS" : "REPROVADAS"}, ${relatorio.buracosDeArea.length} buracos de área`,
+      `fichas ${relatorio.aprovado ? "APROVADAS" : "REPROVADAS"}, ${relatorio.buracosDeArea.length} buracos de área, ` +
+      `${relatorio.pendenciasDeFaixa.length} pendências de faixa`,
   );
 }
 
-if (!relatorio.aprovado || relatorio.buracosDeArea.length) process.exitCode = 1;
+if (!relatorio.catalogoAprovado) process.exitCode = 1;

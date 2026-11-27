@@ -183,10 +183,47 @@ test("áreas da régua são as mesmas de CATEGORIAS_BIBLIOTECA na API", () => {
   assert.deepEqual(AREAS, [...bloco.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]));
 });
 
-test("Régua de qualidade (Atividade real): as 40 atividades ativas passam na ficha padrão (ticket 02)", () => {
+test("Régua de qualidade (Atividade real): as 60 atividades ativas passam na ficha padrão (ticket 03)", () => {
   const relatorio = avaliarAtividades(CATALOGO_BIBLIOTECA_E4);
-  assert.equal(relatorio.atividades.length, 40);
+  assert.equal(relatorio.atividades.length, 60);
   assert.deepEqual(relatorio.falhas, []);
+});
+
+test("cobertura por faixa: mínimo de 20 por faixa, 3 por faixa × área e diferença de até 10", () => {
+  const faixas = FAIXAS.map((f) => [f.min, f.max, f.id]);
+  const porCelula = (n) =>
+    AREAS.flatMap((area) =>
+      faixas.flatMap(([min, max, faixa]) =>
+        Array.from({ length: n }, (_, i) =>
+          ficha({ id: `${area}_${faixa}_${i}`, nome: `${area} ${faixa} ${i}`, categoria: area, faixaEtariaMin: min, faixaEtariaMax: max, seguranca: { [faixa]: ["Ok."] } }),
+        ),
+      ),
+    );
+  // 3 por célula = 21 por faixa: atende.
+  assert.deepEqual(avaliarAtividades(porCelula(3)).pendenciasDeFaixa, []);
+  // 2 por célula = 14 por faixa e 2 por célula: reprova as duas regras em cada faixa.
+  const pouco = avaliarAtividades(porCelula(2)).pendenciasDeFaixa;
+  assert.ok(pouco.includes("faixa pequenos com 14 ativas; mínimo 20"));
+  assert.ok(pouco.includes("faixa×área grandes × numeros com 2; mínimo 3"));
+  // 11 a mais só para Médios: diferença de 11 entre faixas reprova.
+  const extras = Array.from({ length: 11 }, (_, i) =>
+    ficha({ id: `extra_${i}`, nome: `Extra ${i}`, faixaEtariaMin: 7, faixaEtariaMax: 9, seguranca: { medios: ["Ok."] } }),
+  );
+  assert.deepEqual(avaliarAtividades([...porCelula(3), ...extras]).pendenciasDeFaixa, [
+    "diferença de 11 entre a faixa com mais (medios, 32) e a com menos (pequenos, 21); máximo 10",
+  ]);
+});
+
+test("cobertura por faixa do catálogo atende ao critério do ticket 03", () => {
+  const relatorio = avaliarAtividades(CATALOGO_BIBLIOTECA_E4);
+  assert.deepEqual(relatorio.pendenciasDeFaixa, []);
+  assert.equal(relatorio.catalogoAprovado, true);
+});
+
+test("catálogo com pendência de faixa não é aprovado, mesmo com todas as fichas certas", () => {
+  const relatorio = avaliarAtividades([ficha()]);
+  assert.equal(relatorio.aprovado, true);
+  assert.equal(relatorio.catalogoAprovado, false);
 });
 
 test("matriz de cobertura sem buraco nas áreas: toda faixa tem atividade em cada área (ticket 02)", () => {

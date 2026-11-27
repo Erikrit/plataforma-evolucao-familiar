@@ -32,6 +32,12 @@ export const LUGARES = ["dentro_de_casa", "area_externa", "ambos"];
 
 export const LIMITE_PASSOS = 3;
 
+/**
+ * Cobertura por faixa (ticket 03, decisão de 2026-11-27): cada atividade conta em todas as
+ * faixas que cobre; "cerca de 20 por faixa" (M03 §15, Marco 1) é oferta mínima com equilíbrio.
+ */
+export const COBERTURA_FAIXA = { minimoPorFaixa: 20, minimoPorFaixaArea: 3, diferencaMaxima: 10 };
+
 const DURACOES = [
   { id: "curta", ate: 10 },
   { id: "media", ate: 20 },
@@ -134,17 +140,44 @@ function buracosDaDimensao(matriz, dimensao) {
     .map(([valor]) => `${ROTULOS_DIMENSAO[dimensao]}: ${valor}`);
 }
 
+/** Células faixa × área com menos de `minimo` atividades: [{ faixa, area, n }]. */
+function celulasAbaixoDe(matriz, minimo) {
+  return Object.entries(matriz.faixaArea).flatMap(([faixa, areas]) =>
+    Object.entries(areas)
+      .filter(([, n]) => n < minimo)
+      .map(([area, n]) => ({ faixa, area, n })),
+  );
+}
+
 function buracosFaixaArea(matriz) {
-  const buracos = [];
-  for (const [faixa, areas] of Object.entries(matriz.faixaArea)) {
-    for (const [area, n] of Object.entries(areas)) if (n === 0) buracos.push(`faixa×área: ${faixa} × ${area}`);
-  }
-  return buracos;
+  return celulasAbaixoDe(matriz, 1).map(({ faixa, area }) => `faixa×área: ${faixa} × ${area}`);
 }
 
 /** Buracos que o catálogo precisa zerar desde o ticket 02: faixa × área e área. */
 function buracosDeAreaDa(matriz) {
   return [...buracosFaixaArea(matriz), ...buracosDaDimensao(matriz, "area")];
+}
+
+/** Pendências de cobertura por faixa; vazio quando o catálogo atende a COBERTURA_FAIXA. */
+function pendenciasDeFaixaDa(matriz) {
+  const { minimoPorFaixa, minimoPorFaixaArea, diferencaMaxima } = COBERTURA_FAIXA;
+  const pendencias = [];
+  for (const [faixa, n] of Object.entries(matriz.faixa)) {
+    if (n < minimoPorFaixa) pendencias.push(`faixa ${faixa} com ${n} ativas; mínimo ${minimoPorFaixa}`);
+  }
+  for (const { faixa, area, n } of celulasAbaixoDe(matriz, minimoPorFaixaArea)) {
+    pendencias.push(`faixa×área ${faixa} × ${area} com ${n}; mínimo ${minimoPorFaixaArea}`);
+  }
+  // Em empate, vale a primeira faixa na ordem de D1.
+  const contagens = Object.entries(matriz.faixa);
+  const maior = contagens.reduce((a, b) => (b[1] > a[1] ? b : a));
+  const menor = contagens.reduce((a, b) => (b[1] < a[1] ? b : a));
+  if (maior[1] - menor[1] > diferencaMaxima) {
+    pendencias.push(
+      `diferença de ${maior[1] - menor[1]} entre a faixa com mais (${maior[0]}, ${maior[1]}) e a com menos (${menor[0]}, ${menor[1]}); máximo ${diferencaMaxima}`,
+    );
+  }
+  return pendencias;
 }
 
 /** Todos os buracos, para o relatório: faixa × área e cada dimensão. */
@@ -153,7 +186,7 @@ function buracosDa(matriz) {
 }
 
 /**
- * Avalia o catálogo: { atividades, falhas, matriz, buracos, buracosDeArea, aprovado }.
+ * Avalia o catálogo: { atividades, falhas, matriz, buracos, buracosDeArea, pendenciasDeFaixa, aprovado, catalogoAprovado }.
  * `aprovado` depende só das fichas; a matriz conta apenas fichas sem falha de faixa/área.
  */
 export function avaliarAtividades(catalogo) {
@@ -200,12 +233,18 @@ export function avaliarAtividades(catalogo) {
   }
   matriz.combinacoes = [...combinacoes.values()];
 
+  const buracosDeArea = buracosDeAreaDa(matriz);
+  const pendenciasDeFaixa = pendenciasDeFaixaDa(matriz);
+  const aprovado = falhas.length === 0;
   return {
     atividades: atividades.map((a) => a.id),
     falhas,
     matriz,
     buracos: buracosDa(matriz),
-    buracosDeArea: buracosDeAreaDa(matriz),
-    aprovado: falhas.length === 0,
+    buracosDeArea,
+    pendenciasDeFaixa,
+    aprovado,
+    /** Catálogo pronto: fichas aprovadas, sem buraco de área e sem pendência de faixa. */
+    catalogoAprovado: aprovado && buracosDeArea.length === 0 && pendenciasDeFaixa.length === 0,
   };
 }
