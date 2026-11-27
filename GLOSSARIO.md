@@ -20,6 +20,8 @@ Fontes: **M01** a **M04** são `docs/modulos/<id>/ESPECIFICACAO.md`.
 | Responsável | Perfil que acompanha e organiza uma pessoa conforme autorização | M01 FUN-07, M02 §2 |
 | Integrante | Perfil de experiência com acesso apenas ao que lhe foi autorizado | M01 §6 |
 | Autoacompanhamento | Acesso da pessoa com conta aos próprios contextos permitidos | M01 §11 |
+| Operador da plataforma | Conta cujo e-mail está na lista do servidor e que só lê as sugestões para a plataforma, sem dados das famílias (PROPOSTA) | M01 §17.3, ADR-019 |
+| Apresentação | Sequência curta de telas por perfil, mostrada no primeiro acesso da conta e revista em Como funciona (PROPOSTA) | M01 §17.1 |
 
 ## Cuidados
 
@@ -46,6 +48,7 @@ Fontes: **M01** a **M04** são `docs/modulos/<id>/ESPECIFICACAO.md`.
 | Brincadeira personalizada | Atividade criada pela família; só o nome é obrigatório | M03 DEV-F02 |
 | Modelo | Atividade do catálogo global compartilhado, sem dados pessoais | M03 §12 |
 | Sugestão | Modelo elegível oferecido sob demanda, até dois por vez | M03 DEV-JOG-P02 |
+| Sugestão para a plataforma | Ideia, problema ou outro enviado por uma conta ao operador; não é sugestão de atividade (PROPOSTA) | M01 §17.2 |
 | Atividade ativa | Atividade escolhida e disponível para nova participação da pessoa | M03 DEV-F03, §12 |
 | Retirar das ativas | Liberar a vaga sem registrar participação nem mover para Executadas | M03 DEV-JOG-P02 |
 | Explorar / Executadas | Estados exclusivos de disponibilidade atual da atividade | M03 DEV-F03 |

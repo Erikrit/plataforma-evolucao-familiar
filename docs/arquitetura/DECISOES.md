@@ -21,6 +21,37 @@ Registro histórico de decisões arquiteturais. **A V1 já possui arquitetura im
 | ADR-015 | Autenticação enxuta por sessão/cookie (uso familiar privado) | Fecha a lacuna de “auth definitiva” sem JWT nem arquitetura empresarial; corrige só falhas comprovadas |
 | ADR-016 | **PROPOSTA** — Esteira v2 no Claude Code com skills componíveis (estende ADR-012) | Separar núcleo reutilizável do adaptador e gerar evidência por script |
 | ADR-018 | Jogos 2D com PixiJS, carregado só ao abrir o jogo | Um terço do peso do Phaser; mesma experiência no teste técnico do Barquinho no rio (ADR-017 está em proposta na spec de DEV-CAT-M1) |
+| ADR-019 | Acesso de operação por lista de e-mails, só leitura das sugestões | Ouvir quem usa sem criar papel global nem abrir o isolamento entre famílias |
+
+## ADR-019 — Acesso de operação por lista de e-mails, só leitura das sugestões
+
+**Status:** APROVADA pelo responsável pelo Produto em 2026-11-27 (decisão de produto: operador só leitura e sem dados das famílias). Regra funcional no [Módulo 01 §17](../modulos/01-fundacao-familiar/ESPECIFICACAO.md). Execução em `docs/esteira/tickets/preparacao-lancamento/`.
+
+### Contexto
+
+A plataforma precisa de um lugar onde quem desenvolve leia as sugestões para a plataforma enviadas pelas famílias (FUN-11). Todo o modelo de acesso é contextual por família e pessoa (ADR-006, ADR-014), e nem o administrador da família vê dados de saúde ou de crianças. Um "super-administrador" com visão de todas as famílias quebraria esse princípio.
+
+### Decisão
+
+1. **Operador da plataforma** é uma conta comum cujo e-mail consta em `PEF_OPERADORES_EMAILS`, variável de ambiente **da API** (lista separada por vírgulas, comparação sem diferenciar maiúsculas e sem espaços). Ausente ou vazia: nenhum operador.
+2. Não há tabela, coluna, responsabilidade ou `Autorizacao` nova para o operador. A condição é calculada a cada requisição a partir da sessão válida e da lista; mudar a lista vale sem migração.
+3. O operador acessa **apenas** a leitura das sugestões para a plataforma (`GET /operacao/sugestoes-plataforma`), protegida por guarda própria depois da `GuardaSessao`. Para quem não é operador, a rota responde **404**, como inexistente.
+4. A resposta é uma **projeção fechada**: tipo, texto, tela de origem, versão do aplicativo, data e e-mail somente quando a pessoa autorizou o contato. Nunca família, slug, pessoa, identificador de conta ou perfil.
+5. A sugestão guarda o autor apenas para o limite diário e para mostrar o e-mail autorizado. A tela de origem é gravada como rótulo legível, sem endereço completo, slug ou identificadores.
+6. O `GET /me` pode informar `operador: true|false` para a interface mostrar o item de menu; a decisão de acesso é sempre do servidor.
+7. Ser operador não altera nenhuma verificação contextual existente.
+
+### Alternativas
+
+- **Papel global de super-administrador no banco:** rejeitado. Cria um caminho de acesso transversal às famílias, exige tela de gestão de papéis e aumenta a superfície de ataque sem necessidade da primeira versão.
+- **Ler as sugestões por consulta direta ao banco ou script:** mais simples, mas exige acesso ao servidor para cada leitura e não atende ao pedido de uma tela.
+- **Enviar por e-mail:** não há envio de e-mail no sistema (Módulo 01 §14).
+
+### Consequências
+
+- Quem tem acesso ao banco ou aos logs da VPS consegue, tecnicamente, relacionar uma sugestão ao autor. A garantia de anonimato é da interface e da API, não do banco; por isso o formulário avisa para não escrever dados de saúde, de crianças ou senhas.
+- Trocar o operador exige alterar a variável e reiniciar a API.
+- Responder sugestões, mudar status, novas telas de operação ou qualquer leitura de dados de família exigem nova decisão de Produto e revisão desta ADR.
 
 ## ADR-018 — Jogos 2D com PixiJS, carregado só ao abrir o jogo
 
