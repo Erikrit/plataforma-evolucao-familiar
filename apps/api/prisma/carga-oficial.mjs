@@ -12,6 +12,7 @@ import { CATALOGO_JOGOS_HISTORIAS_E5 } from "./catalogo-jogos-historias-e5.mjs";
 import { CATALOGO_JOGOS_MARCO1_E5 } from "./catalogo-jogos-marco1-e5.mjs";
 import { CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5 } from "./catalogo-jogos-memoria-escolha-e5.mjs";
 import { CATALOGO_JOGO_BARQUINHO_E5 } from "./catalogo-jogos-barquinho-e5.mjs";
+import { CATALOGO_JOGOS_CORES_E5 } from "./catalogo-jogos-cores-e5.mjs";
 import { trilhaDaFase } from "./trilhas-jogos.mjs";
 
 const PUBLICADO_EM = new Date("2026-11-22T00:00:00.000Z");
@@ -22,6 +23,7 @@ const CATALOGO_JOGOS_E5 = [
   ...CATALOGO_JOGOS_MARCO1_E5,
   ...CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5,
   ...CATALOGO_JOGO_BARQUINHO_E5,
+  ...CATALOGO_JOGOS_CORES_E5,
 ];
 
 /**
@@ -90,6 +92,8 @@ export async function carregarCatalogosOficiais(prisma) {
     // DEV-CAT-M1-CONTEUDO, ticket 04.
     "letra-inicial",
     "adivinha-pista",
+    // DEV-CAT-M1-CONTEUDO, ticket 05.
+    "caminho-cores",
   ];
   for (const id of idsEsperados) {
     if (!CATALOGO_JOGOS_E5.some((jogo) => jogo.id === id && jogo.ativo !== false)) {

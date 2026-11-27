@@ -66,6 +66,8 @@ Fontes: **M01** a **M04** são `docs/modulos/<id>/ESPECIFICACAO.md`.
 | Régua de qualidade | Exigências verificáveis que todo jogo, fase e atividade cumpre antes de publicar; a de atividades roda em `regua:atividades` | M03 §15 Qualidade do conteúdo (PROPOSTA) |
 | Ficha padrão | Campos obrigatórios de uma Atividade real: objetivo lúdico, até três passos, materiais, variação mais fácil e mais difícil, adaptação para brincar sentado, duração, segurança por faixa, lugar e pessoas | M03 §15 Qualidade do conteúdo (PROPOSTA) |
 | Matriz de cobertura | Contagem das Atividades reais ativas por faixa × área × duração × lugar × pessoas; mostra buracos, sem reprovar | M03 §15 Qualidade do conteúdo (PROPOSTA) |
+| Cor indicada | No Caminho de cores, a única cor em que a criança pode pisar naquele momento | M03 §15, ticket 05 de DEV-CAT-M1-CONTEUDO (PROPOSTA) |
+| Casa de troca | No Caminho de cores, casa que sempre pode ser pisada e muda a cor indicada | M03 §15, ticket 05 de DEV-CAT-M1-CONTEUDO (PROPOSTA) |
 
 ## Evolução
 

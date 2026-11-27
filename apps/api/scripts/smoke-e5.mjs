@@ -95,7 +95,7 @@ try {
   const memoria = antes.dados.jogos?.find((jogo) => jogo.id === "memoria");
   conferir("Catálogo privado e quinze fases abertas sem nascimento", antes.status === 200 && antes.cache === "private, no-store"
     && memoria?.fases.length === 15 && memoria.fases.every((item) => item.estado === "nao_explorada"));
-  conferir("Catálogo completo e destaques distintos na primeira visita", antes.dados.jogos.length === 10
+  conferir("Catálogo completo e destaques distintos na primeira visita", antes.dados.jogos.length === 11
     && new Set(antes.dados.destaques).size === 3 && antes.dados.destaques[0] === "memoria");
   conferir("Conclusão exige início persistido", (await concluir(novaChave(), memoria.versao)).status === 409);
   conferir("Acesso direto a fase inexistente falha", (await iniciar(familia.token, `${catalogo}/memoria/fases/16`)).status === 404);
@@ -173,7 +173,7 @@ try {
   const depois = await lerCatalogo();
   const recente = depois.dados.destaques[0];
   conferir("Último jogo aberto ganha destaque estável com acesso a todos",
-    recente === "labirinto" && depois.dados.jogos.length === 10
+    recente === "labirinto" && depois.dados.jogos.length === 11
     && JSON.stringify(depois.dados.destaques) === JSON.stringify((await lerCatalogo()).dados.destaques));
 
   const forme = antes.dados.jogos.find((jogo) => jogo.id === "forme-palavra");
@@ -243,8 +243,15 @@ try {
   // DEV-CAT-M1-CONTEUDO, ticket 11: o Barquinho no rio está desativado e não aparece no catálogo.
   conferir("Barquinho no rio desativado fica fora do catálogo da família",
     !antes.dados.jogos.some((item) => item.id === "barquinho-rio"));
-  const fimNovos = await Promise.all([letra, pista].map(concluirFase1));
-  conferir("Os dois jogos novos concluem com descoberta",
+  // DEV-CAT-M1-CONTEUDO, ticket 05: Caminho de cores abre a grade, a cor indicada, a partida e a chegada.
+  const cores = await abrirFase1("caminho-cores");
+  conferir("Caminho de cores abre a grade com cor indicada, partida e chegada",
+    cores.jogo?.fases.length === 15 && cores.inicio.status === 201 && cores.conteudo.tipo === "cores"
+    && ["a", "v", "m", "r"].includes(cores.conteudo.cor)
+    && cores.conteudo.mapa[cores.conteudo.inicio.linha][cores.conteudo.inicio.coluna] === "I"
+    && cores.conteudo.mapa[cores.conteudo.chegada.linha][cores.conteudo.chegada.coluna] === "F");
+  const fimNovos = await Promise.all([letra, pista, cores].map(concluirFase1));
+  conferir("Os três jogos novos concluem com descoberta",
     fimNovos.every((fim) => fim.status === 201 && fim.dados.primeiraDescoberta));
 
   // Fixture de uma descoberta gravada com outra versão do catálogo.
@@ -266,7 +273,7 @@ try {
   const eventosResposta = await historico();
   const eventos = eventosResposta.dados.eventos.filter((item) => item.tipo === "conclusao_fase_jogo");
   conferir("Histórico deriva uma descoberta por fase com versão da origem", eventosResposta.status === 200
-    && eventos.length === 10 && eventos.some((item) => item.origemId === "labirinto/1")
+    && eventos.length === 11 && eventos.some((item) => item.origemId === "labirinto/1")
     && eventos.some((item) => item.origemId === "memoria/1"
       && item.resumo.includes("Memória de uma edição anterior") && item.detalhe.includes(String(versaoHistorica))));
   const resumoAtual = await resumo();
@@ -274,7 +281,7 @@ try {
     eventosResposta.cache === "private, no-store" && resumoAtual.cache === "private, no-store");
   const jogosResumo = resumoAtual.dados.jogos;
   conferir("Resumo deriva jogos e contagens sem misturar participações", resumoAtual.status === 200
-    && jogosResumo.length === 10
+    && jogosResumo.length === 11
     && jogosResumo.every((jogo) => jogo.totalFases === 15
       && jogo.concluidasAte === 1 && jogo.concluidasNoPeriodo === 1)
     && resumoAtual.dados.experiencias.length === 0);

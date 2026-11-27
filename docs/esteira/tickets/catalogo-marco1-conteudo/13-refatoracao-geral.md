@@ -21,6 +21,7 @@
 - Do ticket 03: totais 60/4 também em `qg-cat-trilhas`; o `where` Prisma `{ familiaId: null, origem: "catalogo" }` repetido entre `qg-cat-trilhas` e `qg-cat-01`.
 - Do ticket 04: `qg-cat-01` confere `jogos === 8`, desatualizado desde DEV-CAT-M1 (a base já tinha 12 jogos) e fora dos portões; `check-cat-04` diz “oficial 8/120” sobre o subconjunto antigo.
 - Do ticket 04 (régua): a divisão por `inicio`/`pista` na escolha se repete em cinco pontos (rótulo, dica, letra inicial, distrações parecidas, regra por trilha); a normalização do início aparece duas vezes; a checagem de fonte do `aria-label` em `check-e5` procura o literal exato.
+- Do ticket 05: `DIRECOES_CORES` e `andar` (caminho-cores.ts) repetem `DIRECOES` e `proximaPosicao` do tabuleiro do labirinto; alfabeto das cores repetido entre lista e regex no motor do servidor.
 - Do ticket 04 (comportamento a decidir): a carga oficial faz upsert e não desativa um jogo que saiu do catálogo. No banco local, o `mae-filhote` carregado antes da retirada ficou ativo e foi desativado à mão (`ativo = false`).
 
 ## Decisão adiada para este ticket

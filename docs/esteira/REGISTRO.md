@@ -58,3 +58,5 @@ Registrar **somente transições materiais** de demandas novas: ID, tipo, branch
 **2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 11:** Barquinho no rio completo (PixiJS, 15 fases, régua com rota e sem becos) na `develop` @ `17006f3`, sem commit. QG-1/QG-2, check-peso-2d e verificador PASS; fingerprint `sha256:1aadadd0…`. `PENDING_HUMAN`: E5-HOM.
 
 **2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 11 BLOCKED:** E5-HOM do Barquinho no rio reprovada; jogo desativado (`ativo: false`) até a revisão depois do Marco 1. Catálogo com 10 jogos ativos. QG-1 e smoke-e5 PASS após a desativação.
+
+**2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 05:** Caminho de cores (motor `cores`, 15 fases) na `develop` @ `ac641ef`, sem commit. QG-1/QG-2 e verificador PASS; fingerprint `sha256:78440228…`. `PENDING_HUMAN`: E5-HOM.

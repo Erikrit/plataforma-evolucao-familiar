@@ -447,6 +447,57 @@ test("dificuldade por trilha não vale para escolha sem letra nem pista", () => 
   assert.deepEqual(falhasDe(relatorio, "dificuldade-trilha"), []);
 });
 
+// ---- DEV-CAT-M1-CONTEUDO, ticket 05: Caminho de cores ----
+// Só se pisa na cor indicada; letra maiúscula é casa de troca: sempre pode ser pisada e muda a cor.
+// a azul, v verde, m amarelo, r vermelho; I partida, F chegada, # parede.
+const cores = (...mapas) => ({ mapas });
+
+test("caminho de cores: sem rota pela cor indicada reprova; com rota, aprova", () => {
+  const comRota = { cor: "a", linhas: ["Iaav", "vvav", "vvaF"] };
+  const semRota = { cor: "a", linhas: ["Iavv", "vvav", "vvaF"] };
+  const relatorio = avaliarCatalogo([jogo("cores", [cores(comRota, semRota)])]);
+  assert.deepEqual(falhasDe(relatorio, "solucao").map((f) => [f.variante, f.detalhe]), [[2, "sem rota pela cor indicada até a chegada"]]);
+});
+
+test("caminho de cores: a casa de troca muda a cor indicada no percurso", () => {
+  // Azul até a casa de troca V; depois só verde até a chegada.
+  const mapa = { cor: "a", linhas: ["IaaV", "mmmv", "Fvvv"] };
+  const relatorio = avaliarCatalogo([jogo("cores", [cores(mapa, { cor: "a", linhas: ["IaaV", "mvmv", "Fvvv"] })])]);
+  assert.deepEqual(falhasDe(relatorio, "solucao"), []);
+  const [fase] = relatorio.jogos[0].fases;
+  assert.deepEqual([fase.metricas.passos, fase.metricas.trocas, fase.metricas.cores], [8, 1, 3]);
+});
+
+test("caminho de cores: cor inicial inválida, sem partida/chegada ou letra fora do alfabeto reprova", () => {
+  const relatorio = avaliarCatalogo([jogo("cores", [cores(
+    { cor: "x", linhas: ["IaaF"] },
+    { cor: "a", linhas: ["aaaF"] },
+    { cor: "a", linhas: ["IaqF"] },
+  )])]);
+  assert.deepEqual(falhasDe(relatorio, "solucao").map((f) => f.variante), [1, 2, 3]);
+});
+
+test("caminho de cores: decisões contam as casas do caminho com mais de uma saída pela cor", () => {
+  // No meio do caminho há um desvio azul sem saída: uma decisão.
+  const mapa = { cor: "a", linhas: ["Iaaa", "vvav", "vvaF"] };
+  const [fase] = avaliarCatalogo([jogo("cores", [cores(mapa, { cor: "a", linhas: ["Iaaa", "vvav", "mvaF"] })])]).jogos[0].fases;
+  assert.equal(fase.metricas.decisoes, 1);
+});
+
+test("caminho de cores: a dificuldade não pode cair (cores e trocas) e os passos crescem", () => {
+  const facil = { cor: "a", linhas: ["Iaaa", "vvva", "vvvF"] };
+  const comTroca = { cor: "a", linhas: ["IaaV", "mmmv", "Fvvv"] };
+  const relatorio = avaliarCatalogo([jogo("cores", [
+    cores(comTroca, { cor: "a", linhas: ["IaaV", "mvmv", "Fvvv"] }),
+    cores(facil, { cor: "a", linhas: ["Iaaa", "vvva", "mvvF"] }),
+  ])]);
+  assert.deepEqual(falhasDe(relatorio, "progressao").map((f) => f.detalhe).sort(), [
+    "cores 3 → 2: a dificuldade cai",
+    "passos 8 → 5: a dificuldade cai",
+    "trocas 1 → 0: a dificuldade cai",
+  ]);
+});
+
 // ---- DEV-CAT-M1-CONTEUDO, ticket 11: Barquinho no rio (motor 2D) ----
 // Rio de cima (B, partida) para baixo (margem final): # margem, . água, o pedra, f folha.
 const rioCom = (correnteza, ...rios) => ({ correnteza, rios });
@@ -523,14 +574,14 @@ test("DEV-CAT-P01 e P03: Letra inicial e Adivinha pela pista com 15 fases aprova
   }
 });
 
-// Tickets 09, 12 e 13, mais o ticket 04 de DEV-CAT-M1-CONTEUDO: 10 jogos ativos com 15 fases cada (o Barquinho no rio, ticket 11, está desativado),
+// Tickets 09, 12 e 13, mais o ticket 04 de DEV-CAT-M1-CONTEUDO: 11 jogos ativos com 15 fases cada (com o Caminho de cores, ticket 05; o Barquinho no rio, ticket 11, está desativado),
 // todos aprovados pela régua (modo estrito).
-test("DEV-CAT-P01 e P03: catálogo carregado com 10 jogos ativos de 15 fases aprovado pela régua", () => {
+test("DEV-CAT-P01 e P03: catálogo carregado com 11 jogos ativos de 15 fases aprovado pela régua", () => {
   const relatorio = avaliarCatalogo(CATALOGO_CARREGADO);
   assert.deepEqual(relatorio.falhas, []);
   const ativos = CATALOGO_CARREGADO.filter((jogo) => jogo.ativo !== false);
   assert.deepEqual(ativos.map((j) => j.id).sort(), [
-    "adivinha-pista", "entrega-jardim", "forme-palavra", "historias-cenas", "labirinto", "letra-inicial",
+    "adivinha-pista", "caminho-cores", "entrega-jardim", "forme-palavra", "historias-cenas", "labirinto", "letra-inicial",
     "memoria", "menor-maior", "robo-setas", "sudoku-figuras",
   ]);
   assert.ok(ativos.every((jogo) => jogo.fases.length === 15));

@@ -422,4 +422,53 @@ assert.deepEqual(selecionarDestaquesJogos(editorial, editorial.map((item) => ({ 
   }
 }
 
+// DEV-CAT-M1-CONTEUDO, ticket 05: motor do Caminho de cores no servidor.
+{
+  const mapas = [{ cor: "a", linhas: ["IaaV", "mmmv", "Fvvv"] }, { cor: "v", linhas: ["Ivva", "mmva", "Fvva"] }];
+  const conteudo = montarConteudoMotor("cores", { mapas }, () => 0);
+  assert.deepEqual(conteudo, { tipo: "cores", mapa: mapas[0].linhas, cor: "a", inicio: { linha: 0, coluna: 0 }, chegada: { linha: 2, coluna: 0 } });
+  const invalidos = [
+    { mapas: [] },
+    { mapas: [{ cor: "x", linhas: ["IaaF"] }] },
+    { mapas: [{ cor: "a", linhas: ["aaaF"] }] },
+    { mapas: [{ cor: "a", linhas: ["IaqF"] }] },
+    { mapas: [{ cor: "a", linhas: ["IaaF", "aa"] }] },
+  ];
+  for (const config of invalidos) assert.throws(() => montarConteudoMotor("cores", config), JSON.stringify(config));
+}
+
+// DEV-CAT-M1-CONTEUDO, ticket 05 (E5-F04 e E5-ACE-10): regras da web do Caminho de cores.
+// Seguir só a dica leva à chegada em todos os mapas; a cor indicada é respeitada; cada cor tem
+// nome e símbolo distintos.
+{
+  const cc = require("../../web/src/componentes/desenvolvimento/jogos/caminho-cores");
+  const mapa = ["IaaV", "mmmv", "Fvvv"];
+  assert.equal(cc.pisar(mapa, { linha: 1, coluna: 0 }, "a"), null, "casa amarela com azul indicado");
+  assert.equal(cc.pisar(mapa, { linha: 0, coluna: 3 }, "a"), "v", "a casa de troca muda a cor");
+  assert.equal(cc.dicaCores(mapa, { linha: 0, coluna: 0 }, "a").id, "direita");
+  assert.match(cc.descreverArredores(mapa, { linha: 0, coluna: 2 }), /direita: troca para verde/);
+  const simbolos = Object.values(cc.CORES_CAMINHO).map((c) => c.simbolo);
+  assert.equal(new Set(simbolos).size, 4, "um símbolo por cor");
+  const { CATALOGO_JOGOS_CORES_E5 } = await import("../prisma/catalogo-jogos-cores-e5.mjs");
+  const [jogoCores] = CATALOGO_JOGOS_CORES_E5;
+  assert.equal(jogoCores.fases.length, 15);
+  for (const fase of jogoCores.fases) assert.doesNotThrow(() => montarConteudoMotor("cores", fase.configuracao, () => 0), `fase ${fase.numero}`);
+  for (const fase of jogoCores.fases) {
+    for (const { cor: corInicial, linhas } of fase.configuracao.mapas) {
+      let posicao = null;
+      linhas.forEach((linha, l) => { const c = linha.indexOf("I"); if (c >= 0) posicao = { linha: l, coluna: c }; });
+      let cor = corInicial;
+      for (let passo = 0; passo < 200 && linhas[posicao.linha][posicao.coluna] !== "F"; passo += 1) {
+        const direcao = cc.dicaCores(linhas, posicao, cor);
+        assert.ok(direcao, `fase ${fase.numero}: sem dica antes da chegada`);
+        const destino = cc.andar(posicao, direcao);
+        cor = cc.pisar(linhas, destino, cor);
+        assert.ok(cor, `fase ${fase.numero}: a dica mandou pisar fora da cor`);
+        posicao = destino;
+      }
+      assert.equal(linhas[posicao.linha][posicao.coluna], "F", `fase ${fase.numero}: seguindo a dica, não chegou`);
+    }
+  }
+}
+
 console.log("check-e5: três jogos, 45 fases em três trilhas, dicas em dois níveis, variantes e destaques determinísticos validados");

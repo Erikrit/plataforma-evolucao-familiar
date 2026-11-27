@@ -1609,6 +1609,15 @@ export type ConteudoSudoku = {
   inicial: number[][];
   solucao: number[][];
 };
+/** DEV-CAT-M1-CONTEUDO, ticket 05: Caminho de cores (só pise na cor indicada). */
+export type ConteudoCores = {
+  tipo: "cores";
+  /** a azul, v verde, m amarelo, r vermelho; maiúscula = casa de troca; I, F e #. */
+  mapa: string[];
+  cor: "a" | "v" | "m" | "r";
+  inicio: PosicaoLabirinto;
+  chegada: PosicaoLabirinto;
+};
 /** DEV-CAT-M1-CONTEUDO, ticket 11: Barquinho no rio (2D, PixiJS pela ADR-018). */
 export type ConteudoBarquinho = {
   tipo: "barquinho";
@@ -1639,7 +1648,8 @@ export type ConteudoPartida =
   | ConteudoLabirinto
   | ConteudoSudoku
   | ConteudoRobo
-  | ConteudoBarquinho;
+  | ConteudoBarquinho
+  | ConteudoCores;
 export type InicioPartida = {
   versao: number;
   tipoMecanica?: string;

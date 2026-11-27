@@ -532,6 +532,51 @@ const motorRobo: MotorJogo<ConfigLabirinto> = {
   },
 };
 
+// ---------- Caminho de cores (DEV-CAT-M1-CONTEUDO, ticket 05): grade do labirinto com cor ----------
+
+/**
+ * Só se pisa na cor indicada (a azul, v verde, m amarelo, r vermelho). Letra maiúscula é
+ * casa de troca: sempre pode ser pisada e muda a cor indicada. I partida, F chegada, # parede.
+ */
+export type ConfigCores = Readonly<{ mapas: readonly Readonly<{ cor: string; linhas: readonly string[] }>[] }>;
+
+const CORES_CAMINHO = ["a", "v", "m", "r"] as const;
+const ALFABETO_CORES = /^[#IFavmrAVMR]+$/;
+
+function lerMapaCores(item: unknown): { cor: string; linhas: string[] } {
+  const mapa = exigirObjeto(item, "cores");
+  const bruto = mapa.linhas;
+  if (!Array.isArray(bruto) || bruto.length === 0 || bruto.some((linha) => typeof linha !== "string")) {
+    throw new BadRequestException("Mapa do caminho de cores inválido.");
+  }
+  const linhas = bruto as string[];
+  if (linhas.some((linha) => linha.length !== linhas[0].length || !ALFABETO_CORES.test(linha))) {
+    throw new BadRequestException("Mapa do caminho de cores inválido.");
+  }
+  if (localizarTodos(linhas, "I").length !== 1 || localizarTodos(linhas, "F").length !== 1) {
+    throw new BadRequestException("Mapa do caminho de cores precisa de uma partida e uma chegada.");
+  }
+  if (typeof mapa.cor !== "string" || !(CORES_CAMINHO as readonly string[]).includes(mapa.cor)) {
+    throw new BadRequestException("Cor inicial do caminho de cores inválida.");
+  }
+  return { cor: mapa.cor, linhas };
+}
+
+const motorCores: MotorJogo<ConfigCores> = {
+  id: "cores",
+  validarConfiguracao(config) {
+    const bruto = exigirObjeto(config, "cores");
+    if (!Array.isArray(bruto.mapas) || bruto.mapas.length === 0) {
+      throw new BadRequestException("Configuração do caminho de cores sem mapas.");
+    }
+    return { mapas: bruto.mapas.map(lerMapaCores) };
+  },
+  montarConteudo(config, sortear = randomInt) {
+    const { cor, linhas } = config.mapas[sortear(config.mapas.length)];
+    return { tipo: "cores", mapa: linhas, cor, inicio: localizar(linhas, "I"), chegada: localizar(linhas, "F") };
+  },
+};
+
 // ---------- Barquinho no rio (DEV-CAT-M1-CONTEUDO, ticket 11): jogo 2D, ADR-018 ----------
 
 /** Rio de cima (B, partida) para baixo (margem final): # margem, . água, o pedra, f folha. */
@@ -586,6 +631,7 @@ const MOTORES: Record<string, MotorJogo> = {
   sudoku: motorSudoku as MotorJogo,
   robo: motorRobo as MotorJogo,
   barquinho: motorBarquinho as MotorJogo,
+  cores: motorCores as MotorJogo,
 };
 
 export function obterMotor(tipoMecanica: string): MotorJogo {

@@ -12,6 +12,7 @@ import { CATALOGO_JOGOS_HISTORIAS_E5 } from "../prisma/catalogo-jogos-historias-
 import { CATALOGO_JOGOS_MARCO1_E5 } from "../prisma/catalogo-jogos-marco1-e5.mjs";
 import { CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5 } from "../prisma/catalogo-jogos-memoria-escolha-e5.mjs";
 import { CATALOGO_JOGO_BARQUINHO_E5 } from "../prisma/catalogo-jogos-barquinho-e5.mjs";
+import { CATALOGO_JOGOS_CORES_E5 } from "../prisma/catalogo-jogos-cores-e5.mjs";
 import { trilhaDaFase } from "../prisma/trilhas-jogos.mjs";
 
 /** Mesma composição que a carga oficial publica (`prisma/carga-oficial.mjs`). */
@@ -22,6 +23,7 @@ export const CATALOGO_CARREGADO = [
   ...CATALOGO_JOGOS_MARCO1_E5,
   ...CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5,
   ...CATALOGO_JOGO_BARQUINHO_E5,
+  ...CATALOGO_JOGOS_CORES_E5,
 ];
 
 /**
@@ -252,6 +254,8 @@ const METRICAS = {
   // Ticket 12: Sudoku cresce em casas vazias; Robô com setas, em curvas (comandos a planejar).
   sudoku: { principal: "vazias", secundarias: ["tamanho"] },
   robo: { principal: "curvas", secundarias: [], naoCaem: ["passos"], extras: ["decisoes"] },
+  // DEV-CAT-M1-CONTEUDO, ticket 05: caminho mais longo; cores e trocas não aliviam; decisões desempatam.
+  cores: { principal: "passos", secundarias: ["decisoes"], naoCaem: ["cores", "trocas"] },
   // DEV-CAT-M1-CONTEUDO, ticket 11: rio mais longo; canal, pedras, curvas e correnteza não aliviam.
   barquinho: { principal: "comprimento", secundarias: [], naoCaem: ["estreitamento", "pedras", "curvas", "correnteza"] },
 };
@@ -433,6 +437,51 @@ const espelhoVertical = (mapa) => [...mapa].reverse();
 
 // ---------- Por motor: variantes, métricas e falhas ----------
 
+// ---------- Caminho de cores (ticket 05) ----------
+
+const CORES_CAMINHO = ["a", "v", "m", "r"];
+// Ordem fixa dos vizinhos: baixo, direita, cima, esquerda (caminho determinístico).
+const VIZINHOS_CORES = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+
+/**
+ * Pode pisar na casa com a cor indicada? Partida e chegada sempre; casa de troca (maiúscula)
+ * sempre, e ele muda a cor; casa comum só se for da cor indicada. Devolve a cor seguinte,
+ * ou null se não pode pisar.
+ */
+function pisarCores(linhas, l, c, cor) {
+  const casa = linhas[l]?.[c];
+  if (casa == null || casa === "#") return null;
+  if (casa === "I" || casa === "F") return cor;
+  if (CORES_CAMINHO.includes(casa.toLowerCase()) && casa === casa.toUpperCase()) return casa.toLowerCase();
+  return casa === cor ? cor : null;
+}
+
+/** Menor caminho pelo par (casa, cor), da partida à chegada; null se não houver. */
+function caminhoCores(linhas, corInicial) {
+  const inicio = localizar(linhas, "I")[0];
+  const chave = (l, c, cor) => `${l}/${c}/${cor}`;
+  const anterior = new Map([[chave(...inicio, corInicial), null]]);
+  const fila = [[...inicio, corInicial]];
+  for (let i = 0; i < fila.length; i += 1) {
+    const [l, c, cor] = fila[i];
+    if (linhas[l][c] === "F") {
+      const caminho = [];
+      for (let k = chave(l, c, cor); k; k = anterior.get(k)) {
+        const [kl, kc, kcor] = k.split("/");
+        caminho.unshift([Number(kl), Number(kc), kcor]);
+      }
+      return caminho;
+    }
+    for (const [dl, dc] of VIZINHOS_CORES) {
+      const proximaCor = pisarCores(linhas, l + dl, c + dc, cor);
+      if (proximaCor == null || anterior.has(chave(l + dl, c + dc, proximaCor))) continue;
+      anterior.set(chave(l + dl, c + dc, proximaCor), chave(l, c, cor));
+      fila.push([l + dl, c + dc, proximaCor]);
+    }
+  }
+  return null;
+}
+
 // ---------- Barquinho no rio (ticket 11) ----------
 
 /**
@@ -494,6 +543,43 @@ const MOTORES = {
       const semMarcos = mapa.map((linha) => linha.replace(/[IFP]/g, "."));
       return [semMarcos, espelhoHorizontal(semMarcos), espelhoVertical(semMarcos)].map((m) => m.join("/"));
     },
+  },
+  cores: {
+    variantes: (config) => config.mapas ?? [],
+    avaliar({ cor, linhas }) {
+      const falhas = [];
+      const metricas = { passos: 0, decisoes: 0, cores: 0, trocas: 0 };
+      const colunas = linhas?.[0]?.length ?? 0;
+      if (!Array.isArray(linhas) || linhas.some((linha) => linha.length !== colunas || !/^[#IFavmrAVMR]+$/.test(linha))) {
+        falhas.push(["solucao", "mapa de cores com linhas desiguais ou letras fora do alfabeto"]);
+        return { metricas, falhas };
+      }
+      if (localizar(linhas, "I").length !== 1 || localizar(linhas, "F").length !== 1) {
+        falhas.push(["solucao", "mapa de cores precisa de uma partida e uma chegada"]);
+        return { metricas, falhas };
+      }
+      if (!CORES_CAMINHO.includes(cor)) {
+        falhas.push(["solucao", `cor inicial inválida: ${cor}`]);
+        return { metricas, falhas };
+      }
+      metricas.cores = new Set([...linhas.join("")].filter((casa) => CORES_CAMINHO.includes(casa.toLowerCase())).map((casa) => casa.toLowerCase())).size;
+      const caminho = caminhoCores(linhas, cor);
+      if (!caminho) {
+        falhas.push(["solucao", "sem rota pela cor indicada até a chegada"]);
+        return { metricas, falhas };
+      }
+      metricas.passos = caminho.length - 1;
+      metricas.trocas = caminho.filter(([l, c]) => /[AVMR]/.test(linhas[l][c])).length;
+      // Decisão: casa do caminho com mais de uma saída pela cor (sem contar a casa de onde veio).
+      metricas.decisoes = caminho.slice(0, -1).filter(([l, c, corAqui], i) => {
+        const veio = caminho[i - 1];
+        return VIZINHOS_CORES.filter(([dl, dc]) =>
+          !(veio && veio[0] === l + dl && veio[1] === c + dc) && pisarCores(linhas, l + dl, c + dc, corAqui) != null,
+        ).length >= 2;
+      }).length;
+      return { metricas, falhas };
+    },
+    chave: ({ cor, linhas }) => `${cor}:${(linhas ?? []).join("/")}`,
   },
   barquinho: {
     variantes: (config) => (config.rios ?? []).map((rio) => ({ rio, correnteza: config.correnteza })),

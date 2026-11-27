@@ -20,6 +20,7 @@ const CORES: Record<string, { fundo: string; traço: string }> = {
   "letra-inicial": { fundo: "#E6F7F5", traço: "#0F6E66" },
   "adivinha-pista": { fundo: "#FFF0F6", traço: "#A61E4D" },
   "barquinho-rio": { fundo: "#E6F4FB", traço: "#1B5E8A" },
+  "caminho-cores": { fundo: "#F3EEFF", traço: "#5B3A8C" },
 };
 
 type Props = {
@@ -43,6 +44,7 @@ const FIGURA_JOGO: Record<string, string> = {
   "letra-inicial": "✏️",
   "adivinha-pista": "🦉",
   "barquinho-rio": "⛵",
+  "caminho-cores": "🌈",
 };
 
 /** Ícone quadrado editorial por jogo (sem depender de capaRef). */
