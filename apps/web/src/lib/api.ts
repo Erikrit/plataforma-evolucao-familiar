@@ -909,7 +909,19 @@ export async function obterHistorico(
   return (await resposta.json()) as HistoricoResposta;
 }
 
-export type DesafioResumo = {
+/** Ficha padrão das Atividades Reais (M03 §15); personalizadas vêm sem ficha. */
+export type FichaPadraoAtividade = {
+  passos: string[];
+  variacaoFacil: string | null;
+  variacaoDificil: string | null;
+  adaptacaoSentado: string | null;
+  seguranca: Partial<Record<"pequenos" | "medios" | "grandes", string[]>> | null;
+  lugar: "dentro_de_casa" | "area_externa" | "ambos" | null;
+  pessoasMin: number | null;
+  pessoasMax: number | null;
+};
+
+export type DesafioResumo = Partial<FichaPadraoAtividade> & {
   id: string;
   nome: string;
   instrucao: string | null;
@@ -921,8 +933,6 @@ export type DesafioResumo = {
   faixaEtariaMax?: number | null;
   origemConteudo?: string | null;
   versaoConteudo?: number;
-  adaptacoes?: string | null;
-  supervisao?: string | null;
   origem: string;
   familiaId: string | null;
   guardado: boolean;
@@ -948,7 +958,7 @@ export class ErroLimiteAtivas extends Error {
   }
 }
 
-export type SugestaoDesafio = {
+export type SugestaoDesafio = FichaPadraoAtividade & {
   id: string;
   nome: string;
   instrucao: string | null;
@@ -960,8 +970,6 @@ export type SugestaoDesafio = {
   faixaEtariaMax: number | null;
   origemConteudo: string | null;
   versaoConteudo: number;
-  adaptacoes: string | null;
-  supervisao: string | null;
   origem: string;
   escolhida: boolean;
   atualizadoEm: string;

@@ -15,6 +15,7 @@ import {
   MENSAGEM_LIMITE_ATIVAS,
   type Dificuldade,
 } from "./constantes-desenvolvimento";
+import { fichaPadrao, SELECT_FICHA_PADRAO } from "./ficha-padrao";
 
 type EntradaDesafioPersonalizado = {
   nome?: string;
@@ -134,8 +135,7 @@ export class ServicoDesafios {
         faixaEtariaMax: true,
         origemConteudo: true,
         versaoConteudo: true,
-        adaptacoes: true,
-        supervisao: true,
+        ...SELECT_FICHA_PADRAO,
         origem: true,
         familiaId: true,
       },
@@ -150,6 +150,7 @@ export class ServicoDesafios {
           : !ultima;
         return {
           ...d,
+          ...fichaPadrao(d),
           guardado: idsGuardados.has(d.id),
           escolhida: idsEscolhidos.has(d.id),
           disponivelParaNovaParticipacao,

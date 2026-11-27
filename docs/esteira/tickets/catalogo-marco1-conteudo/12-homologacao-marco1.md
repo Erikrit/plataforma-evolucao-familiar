@@ -2,7 +2,7 @@
 
 **O que entregar:** QG-3 sobre o Marco 1 completo (20 jogos ativos, 300 fases, 60 atividades e o 2D), roteiro único de homologação no celular e atualização de STATUS, REGISTRO e M03 §15 (Marco 1 concluído). Preparar a nota de publicação para o responsável: merge para `master`, limpeza e recriação do banco da VPS de testes feitas por ele e carga oficial.
 
-**Bloqueado por:** 01 a 11
+**Bloqueado por:** 01 a 11 e 13
 
 **Status:** READY
 

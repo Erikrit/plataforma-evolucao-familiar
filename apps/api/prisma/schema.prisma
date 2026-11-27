@@ -337,7 +337,7 @@ model RegistroAtividade {
 }
 
 /// Biblioteca curada (familiaId nulo) ou brincadeira personalizada da família (DEV-F01/F02).
-/// Catálogo global: metadados E4 (faixa/origem/versão); máx. 24 ativos publicados.
+/// Catálogo global: metadados E4 (faixa/origem/versão) e ficha padrão das Atividades Reais; máx. 24 ativos publicados.
 model Desafio {
   id              String              @id @default(cuid())
   familiaId       String?             @map("familia_id")
@@ -355,8 +355,17 @@ model Desafio {
   origemConteudo  String?             @map("origem_conteudo")
   /// Versão do texto publicado; participações guardam snapshot.
   versaoConteudo  Int                 @default(1) @map("versao_conteudo")
-  adaptacoes      String?
-  supervisao      String?
+  /// Ficha padrão (M03 §15; DEV-CAT-M1-CONTEUDO, ticket 01): de 1 a 3 passos curtos; vazio em personalizadas.
+  passos           String[]           @default([])
+  variacaoFacil    String?            @map("variacao_facil")
+  variacaoDificil  String?            @map("variacao_dificil")
+  adaptacaoSentado String?            @map("adaptacao_sentado")
+  /// Checklist por faixa coberta: { pequenos?: string[], medios?: string[], grandes?: string[] }.
+  seguranca        Json?
+  /// dentro_de_casa | area_externa | ambos.
+  lugar            String?
+  pessoasMin       Int?               @map("pessoas_min")
+  pessoasMax       Int?               @map("pessoas_max")
   origem          String              @default("catalogo")
   ativo           Boolean             @default(true)
   criadoPorId     String?             @map("criado_por_id")

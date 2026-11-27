@@ -46,7 +46,7 @@
   },
   "fingerprint": "82436f727c32c6aa0753f5e1851e56e9",
   "proximaAcao": "Aguardar nova demanda. Push/deploy somente se o responsável pedir.",
-  "atualizadoEm": "2026-11-26",
+  "atualizadoEm": "2026-11-27",
   "modulo": {
     "id": "04-evolucao-familiar",
     "status": "COMPLETED",
@@ -56,7 +56,7 @@
     "id": "DEV-CAT-M1-CONTEUDO",
     "tipo": "nova_funcionalidade",
     "origem": "humano",
-    "estado": "READY",
+    "estado": "IN_PROGRESS",
     "aprovacao": {
       "nivel": "L3",
       "status": "APROVADA",
@@ -73,7 +73,154 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "No Claude Code, /implementar começando pelos tickets 01, 04 e 10, cada um em sessão nova (ver Execução no Claude Code na spec)."
+    "proximaAcao": "Responsável: commit do ticket 01. Depois, /implementar dos tickets 02, 04 e 10, um por sessão, na develop atualizada. Ticket 13 (refatoração geral) depois de 01 a 11; 12 fecha.",
+    "ticketAtivo": {
+      "ticket": "01-ficha-padrao-e-regua-de-atividades",
+      "estado": "COMPLETED",
+      "branch": "develop",
+      "nota": "Reaproveita a implementação da worktree t01-ficha-padrao-atividades (execução paralela descartada pelo responsável), trazida para a develop e revalidada aqui.",
+      "arquivos": [
+        "apps/api/prisma/schema.prisma",
+        "apps/api/prisma/migrations/20261126180000_ficha_padrao_atividade/",
+        "apps/api/prisma/catalogo-biblioteca-e4.mjs",
+        "apps/api/prisma/carga-oficial.mjs",
+        "apps/api/scripts/lib-regua-atividades.mjs",
+        "apps/api/scripts/regua-atividades.mjs",
+        "apps/api/scripts/regua-atividades.test.mjs",
+        "apps/api/scripts/check-e4.mjs",
+        "apps/api/scripts/smoke-e4.mjs",
+        "apps/api/scripts/diag-renovar-sugestoes.mjs",
+        "apps/api/src/desenvolvimento/ficha-padrao.ts",
+        "apps/api/src/desenvolvimento/servico-desafios.ts",
+        "apps/api/src/desenvolvimento/servico-sugestoes.ts",
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/componentes/desenvolvimento/ficha-atividade.tsx",
+        "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx",
+        "apps/api/package.json",
+        "esteira.config.json"
+      ],
+      "qg1": "PASS — lint, typecheck, authz, check-e4 14/14, check-e5, regua-atividades 15/15",
+      "qg2": "PASS — build, authz, carga-trilhas, smoke-e4, smoke-e5, smoke-historico-resumo",
+      "verificador": "PASS (inclui delta pós-revisão)",
+      "revisao": "Padrões e Especificação feitas; objetivos corrigidos (combinações da matriz, pessoas individual, lugar validado, teste áreas=API); julgamentos levados ao humano",
+      "fingerprint": "sha256:0cf06943f1b7f0e73e8af5ab356ee0d7fdbb700aa095a114b933e140decad8f1",
+      "base": "4a5bfc5",
+      "mensagemCommit": "feat(desenvolvimento): ficha padrão e régua das Atividades Reais\n\nPassos, variações, versão sentada, segurança por faixa, lugar e pessoas em Desafio; régua sem banco com matriz de cobertura, as 20 ativas revistas e a ficha compacta na tela de detalhe. Termos no glossário e ticket 13 de refatoração geral.",
+      "homologacao": "PASS — E5-HOM (320 px) aprovado pelo responsável em 2026-11-27",
+      "decisoes": "DROP de adaptacoes/supervisao confirmado; termos no glossário (PROPOSTA); faixas de duração adiadas e duplicações para o ticket 13",
+      "notaFingerprint": "Após o fingerprint, só GLOSSARIO.md mudou (doc). Reexecução dos portões bloqueada: dev:api do responsável segura a DLL do Prisma."
+    },
+    "verificacao": {
+      "qg1": {
+        "status": "PASS",
+        "integral": false,
+        "em": "2026-11-27T03:40:12.277Z",
+        "base": "4a5bfc531e9cd789be5d557e17619f4cded88605",
+        "head": "4a5bfc531e9cd789be5d557e17619f4cded88605",
+        "fingerprint": "sha256:0cf06943f1b7f0e73e8af5ab356ee0d7fdbb700aa095a114b933e140decad8f1",
+        "checagens": [
+          {
+            "nome": "lint",
+            "status": "PASS",
+            "comando": "npm run lint",
+            "exit": 0
+          },
+          {
+            "nome": "typecheck",
+            "status": "PASS",
+            "comando": "npm run typecheck",
+            "exit": 0
+          },
+          {
+            "nome": "testes-afetados",
+            "status": "NOT_APPLICABLE",
+            "comando": "npm run test:afetados",
+            "exit": null,
+            "motivo": "script ainda não existe"
+          },
+          {
+            "nome": "authz",
+            "status": "PASS",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "check-e4",
+            "status": "PASS",
+            "comando": "npm run check:e4 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "check-e5",
+            "status": "PASS",
+            "comando": "npm run check:e5 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "regua-atividades",
+            "status": "PASS",
+            "comando": "npm run test:regua-atividades -w @pef/api",
+            "exit": 0
+          }
+        ],
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T03-40-12-277Z.json"
+      },
+      "qg2": {
+        "status": "PASS",
+        "integral": false,
+        "em": "2026-11-27T03:42:18.560Z",
+        "base": "4a5bfc531e9cd789be5d557e17619f4cded88605",
+        "head": "4a5bfc531e9cd789be5d557e17619f4cded88605",
+        "fingerprint": "sha256:0cf06943f1b7f0e73e8af5ab356ee0d7fdbb700aa095a114b933e140decad8f1",
+        "checagens": [
+          {
+            "nome": "build",
+            "status": "PASS",
+            "comando": "npm run build",
+            "exit": 0
+          },
+          {
+            "nome": "testes",
+            "status": "NOT_APPLICABLE",
+            "comando": "npm run test",
+            "exit": null,
+            "motivo": "script ainda não existe"
+          },
+          {
+            "nome": "authz",
+            "status": "PASS",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "carga-trilhas",
+            "status": "PASS",
+            "comando": "npm run qg:cat-trilhas -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-historico-resumo",
+            "status": "PASS",
+            "comando": "npm run smoke:est-03-docs -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e4-atividades",
+            "status": "PASS",
+            "comando": "npm run smoke:e4 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e5-jogos",
+            "status": "PASS",
+            "comando": "npm run smoke:e5 -w @pef/api",
+            "exit": 0
+          }
+        ],
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T03-42-18-560Z.json"
+      }
+    },
+    "fingerprint": "sha256:0cf06943f1b7f0e73e8af5ab356ee0d7fdbb700aa095a114b933e140decad8f1"
   },
   "demandasConcluidas": [
     {

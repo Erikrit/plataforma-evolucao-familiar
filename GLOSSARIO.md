@@ -60,6 +60,9 @@ Fontes: **M01** a **M04** são `docs/modulos/<id>/ESPECIFICACAO.md`.
 | Faixa etária | Pequenos (5–6), Médios (7–9) ou Grandes (10–12), calculada pela data de nascimento; limites a confirmar | M03 DEV-CAT-P02 (PROPOSTA) |
 | Trilha | Conjunto de cinco fases de um jogo para uma faixa etária; cada jogo tem três | M03 DEV-CAT-P03 (PROPOSTA) |
 | Marco do catálogo | Lote de jogos e atividades publicado só depois de verificação e homologação | M03 §15 (PROPOSTA) |
+| Régua de qualidade | Exigências verificáveis que todo jogo, fase e atividade cumpre antes de publicar; a de atividades roda em `regua:atividades` | M03 §15 Qualidade do conteúdo (PROPOSTA) |
+| Ficha padrão | Campos obrigatórios de uma Atividade real: objetivo lúdico, até três passos, materiais, variação mais fácil e mais difícil, adaptação para brincar sentado, duração, segurança por faixa, lugar e pessoas | M03 §15 Qualidade do conteúdo (PROPOSTA) |
+| Matriz de cobertura | Contagem das Atividades reais ativas por faixa × área × duração × lugar × pessoas; mostra buracos, sem reprovar | M03 §15 Qualidade do conteúdo (PROPOSTA) |
 
 ## Evolução
 

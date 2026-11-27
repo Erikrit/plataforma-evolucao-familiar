@@ -3,7 +3,7 @@
  * Idempotente por chaves estáveis; sem famílias, contas, cuidados ou progresso.
  * Separada do seed fictício de desenvolvimento.
  */
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { pathToFileURL } from "node:url";
 import { CATALOGO_BIBLIOTECA_E4 } from "./catalogo-biblioteca-e4.mjs";
 import { CATALOGO_JOGOS_PILOTO_E5 } from "./catalogo-jogos-piloto-e5.mjs";
@@ -19,6 +19,36 @@ const CATALOGO_JOGOS_E5 = [
   ...CATALOGO_JOGOS_HISTORIAS_E5,
   ...CATALOGO_JOGOS_MARCO1_E5,
 ];
+
+/**
+ * Campos gravados de uma Atividade Real do catálogo, com a ficha padrão (DEV-CAT-M1-CONTEUDO,
+ * ticket 01). Única tradução catálogo → banco: carga oficial e smoke:e4 usam esta.
+ */
+export function dadosDesafioCatalogo(item) {
+  return {
+    familiaId: null,
+    nome: item.nome,
+    instrucao: item.instrucao,
+    categoria: item.categoria,
+    dificuldade: item.dificuldade,
+    materiais: item.materiais,
+    duracaoMinutos: item.duracaoMinutos,
+    faixaEtariaMin: item.faixaEtariaMin,
+    faixaEtariaMax: item.faixaEtariaMax,
+    origemConteudo: "autoral_pef",
+    versaoConteudo: item.versaoConteudo ?? 1,
+    passos: item.passos ?? [],
+    variacaoFacil: item.variacaoFacil ?? null,
+    variacaoDificil: item.variacaoDificil ?? null,
+    adaptacaoSentado: item.adaptacaoSentado ?? null,
+    seguranca: item.seguranca ?? Prisma.DbNull,
+    lugar: item.lugar ?? null,
+    pessoasMin: item.pessoasMin ?? null,
+    pessoasMax: item.pessoasMax ?? null,
+    origem: "catalogo",
+    ativo: item.ativo !== false,
+  };
+}
 
 export async function carregarCatalogosOficiais(prisma) {
   if (CATALOGO_BIBLIOTECA_E4.length !== 24) {
@@ -62,44 +92,11 @@ export async function carregarCatalogosOficiais(prisma) {
 
   await prisma.$transaction(async (tx) => {
     for (const item of CATALOGO_BIBLIOTECA_E4) {
-      const versaoConteudo = item.versaoConteudo ?? 1;
+      const dados = dadosDesafioCatalogo(item);
       await tx.desafio.upsert({
         where: { id: item.id },
-        create: {
-          id: item.id,
-          familiaId: null,
-          nome: item.nome,
-          instrucao: item.instrucao,
-          categoria: item.categoria,
-          dificuldade: item.dificuldade,
-          materiais: item.materiais,
-          duracaoMinutos: item.duracaoMinutos,
-          faixaEtariaMin: item.faixaEtariaMin,
-          faixaEtariaMax: item.faixaEtariaMax,
-          origemConteudo: "autoral_pef",
-          versaoConteudo,
-          adaptacoes: item.adaptacoes,
-          supervisao: item.supervisao,
-          origem: "catalogo",
-          ativo: item.ativo !== false,
-        },
-        update: {
-          nome: item.nome,
-          instrucao: item.instrucao,
-          categoria: item.categoria,
-          dificuldade: item.dificuldade,
-          materiais: item.materiais,
-          duracaoMinutos: item.duracaoMinutos,
-          faixaEtariaMin: item.faixaEtariaMin,
-          faixaEtariaMax: item.faixaEtariaMax,
-          origemConteudo: "autoral_pef",
-          versaoConteudo,
-          adaptacoes: item.adaptacoes,
-          supervisao: item.supervisao,
-          origem: "catalogo",
-          ativo: item.ativo !== false,
-          familiaId: null,
-        },
+        create: { id: item.id, ...dados },
+        update: dados,
       });
     }
 

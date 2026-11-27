@@ -178,6 +178,27 @@ reg(
   "Números aceita na API, nos filtros e com rótulo no Histórico e no Resumo; sugestões sem lista fixa",
 );
 
+// DEV-CAT-M1-CONTEUDO, ticket 01: ficha padrão estruturada, régua de atividades e ficha na tela.
+const { avaliarAtividades } = await import("./lib-regua-atividades.mjs");
+const reguaAtividades = avaliarAtividades(CATALOGO_BIBLIOTECA_E4);
+reg(
+  "REGUA-ATIVIDADE-REAL-ficha-padrao",
+  reguaAtividades.aprovado && reguaAtividades.atividades.length === 20,
+  `${reguaAtividades.atividades.length} ativas, ${reguaAtividades.falhas.length} falhas na ficha (npm run regua:atividades)`,
+);
+const fichaWeb = readFileSync(join(raiz, "apps/web/src/componentes/desenvolvimento/ficha-atividade.tsx"), "utf8");
+const camposFicha = ["passos", "variacaoFacil", "variacaoDificil", "adaptacaoSentado", "seguranca", "lugar", "pessoasMin", "pessoasMax"];
+reg(
+  "REGUA-ATIVIDADE-REAL-ficha-na-api-e-tela",
+  camposFicha.every((campo) => schema.includes(`  ${campo} `) && api.includes(`${campo}`)) &&
+    !/^\s+(adaptacoes|supervisao)\s/m.test(schema) &&
+    sugestoes.includes("SELECT_FICHA_PADRAO") &&
+    readFileSync(join(raiz, "apps/api/src/desenvolvimento/servico-desafios.ts"), "utf8").includes("SELECT_FICHA_PADRAO") &&
+    biblioteca.includes("<FichaAtividade") &&
+    ["Como brincar", "Mais fácil:", "Mais difícil:", "Sentado:", "Segurança"].every((rotulo) => fichaWeb.includes(rotulo)),
+  "Campos da ficha no schema, nas respostas de sugestões e listagem e na ficha da atividade",
+);
+
 const falhas = resultados.filter((r) => !r.ok);
 for (const r of resultados) {
   console.log(

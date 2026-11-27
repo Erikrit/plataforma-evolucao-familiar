@@ -68,7 +68,8 @@ Cada ticket começa em sessão nova, na `develop` atualizada. Divisão aprovada 
 | 09 | `/implementar docs/esteira/tickets/catalogo-marco1-conteudo/09-motor-tracado.md` | — |
 | 10 | `/implementar docs/esteira/tickets/catalogo-marco1-conteudo/10-teste-tecnico-2d.md` | — |
 | 11 | `/implementar docs/esteira/tickets/catalogo-marco1-conteudo/11-barquinho-no-rio.md` | 10 |
-| 12 | `/homologar DEV-CAT-M1-CONTEUDO` | 01 a 11 |
+| 13 | `/implementar docs/esteira/tickets/catalogo-marco1-conteudo/13-refatoracao-geral.md` | 01 a 11 |
+| 12 | `/homologar DEV-CAT-M1-CONTEUDO` | 01 a 11 e 13 |
 
 Verificação com banco e API locais, a cada ticket que toque API, carga ou smokes:
 

@@ -43,7 +43,9 @@
     "check:cat-03": "node scripts/check-cat-03.mjs",
     "check:cat-04": "node scripts/check-cat-04.mjs",
     "regua:jogos": "node scripts/regua-jogos.mjs",
-    "test:regua": "node --test scripts/regua-jogos.test.mjs"
+    "test:regua": "node --test scripts/regua-jogos.test.mjs",
+    "regua:atividades": "node scripts/regua-atividades.mjs",
+    "test:regua-atividades": "node --test scripts/regua-atividades.test.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.12",

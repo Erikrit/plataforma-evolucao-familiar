@@ -5,6 +5,7 @@
  */
 import { PrismaClient } from "@prisma/client";
 import { CATALOGO_BIBLIOTECA_E4 } from "../prisma/catalogo-biblioteca-e4.mjs";
+import { dadosDesafioCatalogo } from "../prisma/carga-oficial.mjs";
 import { provisionarFamiliaComAdmin } from "./lib-provisionar-familia.mjs";
 
 const base = process.env.API_URL ?? "http://localhost:3001";
@@ -44,44 +45,11 @@ async function garantirCatalogo() {
     throw new Error("Catálogo E4 excede 24 itens.");
   }
   for (const item of CATALOGO_BIBLIOTECA_E4) {
-    const versaoConteudo = item.versaoConteudo ?? 1;
+    const dados = dadosDesafioCatalogo(item);
     await prisma.desafio.upsert({
       where: { id: item.id },
-      create: {
-        id: item.id,
-        familiaId: null,
-        nome: item.nome,
-        instrucao: item.instrucao,
-        categoria: item.categoria,
-        dificuldade: item.dificuldade,
-        materiais: item.materiais,
-        duracaoMinutos: item.duracaoMinutos,
-        faixaEtariaMin: item.faixaEtariaMin,
-        faixaEtariaMax: item.faixaEtariaMax,
-        origemConteudo: "autoral_pef",
-        versaoConteudo,
-        adaptacoes: item.adaptacoes,
-        supervisao: item.supervisao,
-        origem: "catalogo",
-        ativo: item.ativo !== false,
-      },
-      update: {
-        nome: item.nome,
-        instrucao: item.instrucao,
-        categoria: item.categoria,
-        dificuldade: item.dificuldade,
-        materiais: item.materiais,
-        duracaoMinutos: item.duracaoMinutos,
-        faixaEtariaMin: item.faixaEtariaMin,
-        faixaEtariaMax: item.faixaEtariaMax,
-        origemConteudo: "autoral_pef",
-        versaoConteudo,
-        adaptacoes: item.adaptacoes,
-        supervisao: item.supervisao,
-        origem: "catalogo",
-        ativo: item.ativo !== false,
-        familiaId: null,
-      },
+      create: { id: item.id, ...dados },
+      update: dados,
     });
   }
   return prisma.desafio.count({
@@ -234,6 +202,29 @@ try {
       // D2: atividades de adultos e idosos arquivadas nunca são sugeridas.
       !sugerir.corpo.sugestoes.some((s) => ["desafio_cat_fotos_lembranca", "desafio_cat_alongar_ombro", "desafio_cat_lista_compras_mental", "desafio_cat_calendario_semana"].includes(s.id)),
     { status: sugerir.status, total: sugerir.corpo?.total, trocadas: sugerir.corpo?.trocadas },
+  );
+
+  // DEV-CAT-M1-CONTEUDO, ticket 01: cada sugestão do catálogo traz a ficha padrão.
+  const fichasIncompletas = (sugerir.corpo?.sugestoes ?? []).filter(
+    (s) =>
+      !Array.isArray(s.passos) ||
+      s.passos.length < 1 ||
+      s.passos.length > 3 ||
+      !s.variacaoFacil ||
+      !s.variacaoDificil ||
+      !s.adaptacaoSentado ||
+      !s.seguranca ||
+      Object.keys(s.seguranca).length === 0 ||
+      !s.lugar ||
+      !s.pessoasMin ||
+      !s.pessoasMax ||
+      "adaptacoes" in s ||
+      "supervisao" in s,
+  );
+  reg(
+    "REGUA-ATIVIDADE-REAL-ficha-nas-sugestoes",
+    idsSug.length > 0 && fichasIncompletas.length === 0,
+    { incompletas: fichasIncompletas.map((s) => s.id) },
   );
 
   const sugLeitura = await json(

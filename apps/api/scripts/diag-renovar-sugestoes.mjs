@@ -50,8 +50,6 @@ async function garantirCatalogo() {
         faixaEtariaMax: item.faixaEtariaMax,
         origemConteudo: "autoral_pef",
         versaoConteudo: 1,
-        adaptacoes: item.adaptacoes,
-        supervisao: item.supervisao,
         origem: "catalogo",
         ativo: true,
       },

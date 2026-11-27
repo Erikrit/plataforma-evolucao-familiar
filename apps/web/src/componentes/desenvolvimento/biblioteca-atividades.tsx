@@ -25,6 +25,7 @@ import {
   mensagemErroAmigavel,
 } from "@/componentes/feedback";
 import { IconeBrincadeira, IconeConcluiu, IconeParticipou } from "@/componentes/icones-experiencia";
+import { FichaAtividade } from "@/componentes/desenvolvimento/ficha-atividade";
 import {
   ErroLimiteAtivas,
   escolherSugestaoDesafio,
@@ -141,8 +142,14 @@ export function BibliotecaAtividades({
       faixaEtariaMax: item.faixaEtariaMax,
       origemConteudo: item.origemConteudo,
       versaoConteudo: item.versaoConteudo,
-      adaptacoes: item.adaptacoes,
-      supervisao: item.supervisao,
+      passos: item.passos,
+      variacaoFacil: item.variacaoFacil,
+      variacaoDificil: item.variacaoDificil,
+      adaptacaoSentado: item.adaptacaoSentado,
+      seguranca: item.seguranca,
+      lugar: item.lugar,
+      pessoasMin: item.pessoasMin,
+      pessoasMax: item.pessoasMax,
       origem: item.origem,
       familiaId: null,
       guardado: false,
@@ -718,26 +725,7 @@ export function BibliotecaAtividades({
             <Text size="sm" c="dimmed">
               {metaSelecionado}
             </Text>
-            {selecionado.instrucao ? (
-              <Text size="sm">{selecionado.instrucao}</Text>
-            ) : (
-              <Text size="sm" c="dimmed">
-                Sem instrução escrita — brinquem do jeito que fizer sentido.
-              </Text>
-            )}
-            {selecionado.materiais ? (
-              <Text size="sm">Materiais: {selecionado.materiais}</Text>
-            ) : null}
-            {selecionado.adaptacoes ? (
-              <Text size="sm" c="dimmed">
-                Adaptações: {selecionado.adaptacoes}
-              </Text>
-            ) : null}
-            {selecionado.supervisao ? (
-              <Text size="sm" c="dimmed">
-                Supervisão: {selecionado.supervisao}
-              </Text>
-            ) : null}
+            <FichaAtividade atividade={selecionado} />
 
             {filtro === "executadas" ||
             selecionado.disponivelParaNovaParticipacao === false ? (

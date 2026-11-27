@@ -17,6 +17,7 @@ import {
   MENSAGEM_LIMITE_ATIVAS,
   MENSAGEM_SEM_NOVAS_SUGESTOES,
 } from "./constantes-desenvolvimento";
+import { fichaPadrao, SELECT_FICHA_PADRAO } from "./ficha-padrao";
 
 type DesafioCatalogo = {
   id: string;
@@ -30,8 +31,14 @@ type DesafioCatalogo = {
   faixaEtariaMax: number | null;
   origemConteudo: string | null;
   versaoConteudo: number;
-  adaptacoes: string | null;
-  supervisao: string | null;
+  passos: string[];
+  variacaoFacil: string | null;
+  variacaoDificil: string | null;
+  adaptacaoSentado: string | null;
+  seguranca: Prisma.JsonValue | null;
+  lugar: string | null;
+  pessoasMin: number | null;
+  pessoasMax: number | null;
   origem: string;
 };
 
@@ -47,8 +54,7 @@ const SELECT_DESAFIO = {
   faixaEtariaMax: true,
   origemConteudo: true,
   versaoConteudo: true,
-  adaptacoes: true,
-  supervisao: true,
+  ...SELECT_FICHA_PADRAO,
   origem: true,
   ativo: true,
 } as const;
@@ -685,8 +691,7 @@ export class ServicoSugestoes {
       faixaEtariaMax: d.faixaEtariaMax,
       origemConteudo: d.origemConteudo,
       versaoConteudo: d.versaoConteudo,
-      adaptacoes: d.adaptacoes,
-      supervisao: d.supervisao,
+      ...fichaPadrao(d),
       origem: d.origem,
       escolhida: linha.escolhida,
       atualizadoEm: linha.atualizadoEm,
