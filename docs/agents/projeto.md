@@ -4,7 +4,9 @@ Plataforma de Evolução Familiar: famílias isoladas, dados de saúde e de cria
 
 ## Fontes oficiais
 
-Carregar só o trecho que a demanda toca.
+Carregar só o trecho que a demanda toca: localizar o ID com `grep -n` e ler a faixa de linhas. Status e governança são lidos na triagem de demanda nova; ticket `READY` com aprovação registrada não os relê.
+
+**Catálogos não são lidos inteiros.** `apps/api/prisma/catalogo-*.mjs` e `apps/api/scripts/lib-regua-jogos.mjs` passam de 40 KB; inspecionar pelos scripts existentes (`npm run test:regua -w @pef/api`, `npm run test:regua-atividades -w @pef/api`, `npm run check:e4 -w @pef/api`, `npm run check:e5 -w @pef/api`) e, para um item, `grep -n` pelo id e leitura da faixa.
 
 | Assunto | Fonte |
 |---|---|

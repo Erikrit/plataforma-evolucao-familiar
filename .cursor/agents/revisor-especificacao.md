@@ -11,8 +11,8 @@ Somente leitura: use o Bash para `git diff`, `git log` e inspeção.
 
 ## Procedimento
 
-1. Ler a especificação, o ticket ou os critérios recebidos. Sem especificação, devolver "especificação não disponível".
-2. Obter o diff pelo comando recebido e ler os arquivos não rastreados indicados.
+1. Usar os trechos de especificação recebidos (ID + `arquivo:linha` + texto). Abrir a fonte só se um trecho faltar ou for ambíguo, e então só a faixa: `grep -n` pelo ID e leitura com offset e limite. Sem especificação, devolver "especificação não disponível".
+2. Obter o diff **arquivo por arquivo** (`git diff <base> -- <arquivo>`), não o diff inteiro de uma vez, e ler os arquivos não rastreados indicados. Arquivo de dados grande: conferir por `grep -n` e faixa de linhas.
 3. Percorrer requisito por requisito e, depois, trecho por trecho do diff.
 
 ## Relatório (até 400 palavras)

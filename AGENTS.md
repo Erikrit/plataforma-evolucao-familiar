@@ -8,7 +8,7 @@ Branches: `develop` é a referência de desenvolvimento; `master` é a branch pa
 
 ## Fontes canônicas — carregar só o necessário
 
-A tabela de fontes, a governança L1–L3/CT, os estados e as proibições estão em `docs/agents/projeto.md`. Ler o estado e a governança no início da tarefa e, depois, só o trecho da demanda.
+A tabela de fontes, a governança L1–L3/CT, os estados e as proibições estão em `docs/agents/projeto.md`. Ler status e governança só na **triagem de demanda nova**; ticket `READY` com aprovação registrada não os relê. Depois, só o trecho da demanda: requisito localizado pelo ID com `grep -n` e lido por faixa de linhas.
 
 O histórico fechado está no [snapshot Git da V1](https://github.com/Erikrit/plataforma-evolucao-familiar/tree/f58d029658499bdfc3807c0488662c0bc4557dae/docs), **não** na árvore atual; consultar somente para auditoria pontual.
 

@@ -17,7 +17,7 @@ Você é o verificador independente da esteira. Contexto do projeto: `docs/agent
 
 ## Procedimento
 
-1. Ler a passagem: demanda ou ticket, requisitos, arquivos, fingerprint declarado, evidências e risco.
+1. Ler a passagem: demanda ou ticket, requisitos citados (ID + `arquivo:linha` + texto), arquivos, fingerprint declarado, evidências e risco. Usar o trecho recebido; abrir a fonte só se faltar algo, por `grep -n` e faixa de linhas. Arquivo de dados grande: conferir por `grep -n` e pelos scripts existentes, nunca inteiro.
 2. Comparar o declarado com a árvore: `git status`, presença dos arquivos, diff e não rastreados.
 3. Executar `node scripts/esteira/qg.mjs --verificar-fingerprint --perfil qg1 --demanda <id>` (sem `--perfil` se QG-2 já rodou nesta versão) e usar esse resultado. Exit diferente de 0: evidência inválida, veredicto `FAIL` ou `BLOCKED` conforme a causa.
 4. Conferir no JSON de evidência o perfil, a base do diff e a presença das checagens críticas exigidas por `esteira.config.json`.

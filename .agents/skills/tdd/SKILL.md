@@ -5,7 +5,7 @@ description: TDD, vermelho → verde em fatias verticais. Use ao construir compo
 
 # TDD
 
-Antes de nomear testes, ler o glossário e as ADRs da área (`docs/agents/dominio.md`).
+Nomear testes com os termos do glossário (`docs/agents/dominio.md`); abri-lo, por `grep -n` e faixa de linhas, só para termo novo. Requisito e ADR: localizar pelo ID com `grep -n` e ler só o trecho. Arquivos de dados grandes (catálogos) são inspecionados pelos scripts que o adaptador indica, nunca lidos inteiros.
 
 ## Costuras
 
