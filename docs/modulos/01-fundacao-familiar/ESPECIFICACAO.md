@@ -1,6 +1,6 @@
 # Módulo 01 — Fundação Familiar
 
-**Versão:** especificação funcional v1.10 — data de nascimento para Desenvolvimento (seção 16) aprovada em 2026-11-25, texto em revisão; v1.9 (E2) aprovada em 2026-11-22  
+**Versão:** especificação funcional v1.11 — preparação para o lançamento (seção 17: apresentação no primeiro acesso, sugestões e acesso de operação) aprovada em 2026-11-27; v1.10 (data de nascimento, seção 16) aprovada em 2026-11-25; v1.9 (E2) aprovada em 2026-11-22  
 **Status funcional:** regras anteriores e recorte E2 v1.9 aprovados pelo Produto; estado do código, evidências e homologação em `docs/produto/STATUS-E-ESCOPO.md`.
 
 ## 1. Objetivo
@@ -76,6 +76,14 @@ Após o login, a navegação segue os contextos de pessoas e áreas autorizadas 
 ### FUN-09 — Boas-vindas e criação da família
 
 Permitir iniciar pela raiz ou por `/f`, cadastrar uma nova família e sua primeira conta pessoal administradora e obter o endereço de acesso na confirmação. E-mail permanece identificador de login; não enviar mensagem de e-mail nesta etapa. Regras e aceite na seção 14.
+
+### FUN-10 — Apresentação no primeiro acesso
+
+No primeiro login de cada conta, apresentar em poucas telas o que é a plataforma, como funciona e, para o administrador, como configurar a família. A apresentação muda conforme o perfil de experiência, pode ser pulada e pode ser revista em **Configurações → Como funciona**. Regras e aceite na seção 17.
+
+### FUN-11 — Sugestões
+
+Qualquer pessoa com conta pode enviar uma ideia ou relatar um problema em **Configurações → Enviar sugestão**. As sugestões são lidas pelo operador da plataforma em uma página própria, só de leitura, sem acesso a dados das famílias (ADR-019). Regras e aceite na seção 17.
 
 ## 4. Fluxos
 
@@ -340,3 +348,66 @@ Retirar acompanhamento bloqueia operações futuras e invalida sessões conforme
 | FF-NASC-ACE-02 | Conceder Desenvolvimento sem data de nascimento pede a data e só conclui após persistir; API direta aplica a mesma regra. |
 | FF-NASC-ACE-03 | Pessoa com Desenvolvimento e sem data é orientada a informar a data; progresso e histórico continuam preservados. |
 | FF-NASC-ACE-04 | Corrigir a data muda a faixa padrão do Módulo 03 sem reescrever registros anteriores. |
+
+## 17. Preparação para o lançamento: apresentação, sugestões e operação (aprovada em 2026-11-27)
+
+**Decisão L3 aprovada pelo responsável pelo Produto em 2026-11-27.** O responsável escolheu, entre as opções apresentadas, só a apresentação no primeiro acesso (sem tour com balões sobre a tela, sem novo conteúdo na tela pública e sem cartão de primeiros passos), o acesso de operação **somente leitura e sem dados das famílias** e sugestões **anônimas por padrão**, com contato opcional. Vigora a partir da implementação homologada. Execução: [`docs/esteira/tickets/preparacao-lancamento/`](../../esteira/tickets/preparacao-lancamento/spec.md).
+
+### 17.1 Apresentação no primeiro acesso (FUN-10)
+
+- **Quando:** depois do primeiro login bem-sucedido de cada conta, antes da página inicial. A tela pública de boas-vindas (seção 14) não muda.
+- **Formato:** uma sequência curta de telas, uma ideia por tela, com **Anterior**, **Próximo** e **Pular** sempre visíveis e indicação textual da posição ("2 de 4"). Arrastar para o lado é atalho, nunca o único meio. Sem avanço automático, sem balões sobre a interface e sem vídeo. Ícones da biblioteca vigente; nenhuma imagem é obrigatória para entender o texto.
+- **Conteúdo por perfil de experiência (FUN-04):** a versão segue o perfil mais amplo da conta: Administrador, depois Responsável, depois Integrante.
+  - **Administrador, até quatro telas:** o que a plataforma faz (lembrar, cuidar, organizar e acompanhar a evolução de cada pessoa); comece pelas pessoas em **Gestão da família**; convide quem ajuda e defina o que cada um acompanha, lembrando que o administrador organiza os acessos mas **não vê automaticamente** dados de saúde e das crianças; cada pessoa tem seu espaço (Cuidados, Desenvolvimento, Histórico e Resumo), que aparece conforme a autorização.
+  - **Responsável, até três telas:** o que a plataforma faz; você acompanha as pessoas que lhe foram confiadas, na área autorizada; os registros viram Histórico e Resumo sem digitar de novo.
+  - **Integrante, até duas telas:** o que a plataforma faz; você vê e registra só o que foi combinado com a família, sem obrigação de preencher tudo.
+  - Os textos finais são decisão de UX dentro destes limites: frases curtas, sem jargão, sem cobrança, sem prometer recurso inexistente (por exemplo, lembretes por notificação).
+- **Fim:** **Começar** (na última tela) ou **Pular** (em qualquer tela) registram a apresentação como vista e levam à página inicial da família.
+- **Registro:** a conta guarda **quando** a apresentação foi vista, no servidor, para não reaparecer em outro aparelho, navegador ou app instalado. Não registrar telas visitadas, tempo nem cliques. Se a gravação falhar, a pessoa segue para a página inicial e a apresentação volta a aparecer no próximo login.
+- **Rever:** **Configurações → Como funciona** abre a mesma apresentação do perfil atual, a qualquer momento, sem alterar o registro.
+- **Contas existentes:** veem a apresentação uma vez no primeiro login após a publicação.
+- **Acessibilidade:** foco na primeira tela ao abrir, título de cada tela anunciado, botões por teclado e toque, contraste do guia de UX, respeito a movimento reduzido e uso em 320 px sem rolagem horizontal.
+
+### 17.2 Sugestões (FUN-11)
+
+- **Nome no domínio:** **sugestão para a plataforma**, para não confundir com as sugestões de Atividades Reais do Módulo 03 (DEV-JOG-P02). Na interface o rótulo continua **Enviar sugestão**.
+- **Quem envia:** qualquer pessoa com conta e sessão válida, em qualquer perfil. Pessoa sem conta não envia.
+- **Onde:** **Configurações → Enviar sugestão**.
+- **Campos:**
+  - **Tipo:** Ideia, Problema ou Outro. Obrigatório.
+  - **Texto:** obrigatório, de 10 a 1.000 caracteres, com contador.
+  - **Pode me contatar por e-mail:** opcional, desmarcado por padrão. Mostra o e-mail da conta que será exibido ao operador.
+  - Junto ao texto, o aviso: "Não escreva informações de saúde, de crianças ou senhas."
+- **Contexto automático:** a **tela de origem**, como rótulo legível de onde a pessoa abriu o formulário (por exemplo, Cuidados · Consultas e exames, Desenvolvimento · Jogos, Gestão da família), e a versão do aplicativo. **Nunca** guardar endereço completo, identificador da família, nome ou identificador de pessoa.
+- **Confirmação:** "Obrigado! Sua sugestão foi enviada." só depois da gravação. Em falha, manter o texto preenchido e permitir tentar de novo; reenvio do mesmo pedido não duplica.
+- **Limite:** até 10 sugestões por conta por dia, com mensagem clara ao atingir.
+- **Primeira versão:** sem lista de "minhas sugestões", resposta, status, votos, anexos ou notificação.
+
+### 17.3 Acesso de operação (ADR-019)
+
+- **Operador da plataforma:** conta comum de alguma família cujo e-mail consta na lista configurada no servidor da API. Não é papel dentro da família e não aparece na gestão de acessos.
+- **O que o operador vê:** a página **Operação → Sugestões**, com as sugestões mais recentes primeiro, filtro por tipo e paginação. Cada item mostra tipo, texto, tela de origem, versão do aplicativo, data e, só quando a pessoa autorizou o contato, o e-mail.
+- **O que o operador não vê nem faz:** nome ou endereço da família, nome de pessoa, perfil de quem enviou e qualquer dado de Cuidados, Desenvolvimento, Histórico ou anexos de outras famílias. Não edita nem apaga sugestões nesta versão. Ser operador não amplia nenhuma permissão dentro da própria família.
+- **Para quem não é operador:** o item de menu não aparece, e a página e a API respondem como inexistentes. Lista vazia ou ausente significa que não há operador.
+- Qualquer ampliação (responder, mudar status, ver dados de família, novas telas de operação) volta para decisão de Produto e revisão da ADR-019.
+
+### 17.4 Critérios de aceitação
+
+| ID | Critério |
+|---|---|
+| LAN-APR-01 | Primeiro login de uma conta abre a apresentação do seu perfil; Administrador, Responsável e Integrante veem versões diferentes, com no máximo 4, 3 e 2 telas. |
+| LAN-APR-02 | Pular ou Começar registram a apresentação como vista no servidor; novo login, em outro navegador, vai direto à página inicial. Reenvio do registro não gera erro nem duplicidade. |
+| LAN-APR-03 | Falha ao registrar não bloqueia a entrada; a apresentação volta no próximo login. |
+| LAN-APR-04 | Configurações → Como funciona reabre a apresentação do perfil atual sem alterar o registro. |
+| LAN-APR-05 | Navegação por Anterior/Próximo/Pular com teclado e toque, posição anunciada em texto, foco correto, movimento reduzido respeitado e 320 px sem rolagem horizontal. |
+| LAN-SUG-01 | Pessoa com conta envia sugestão com tipo e texto válidos e vê a confirmação só após gravar; sem sessão a API recusa. |
+| LAN-SUG-02 | Texto fora de 10 a 1.000 caracteres ou tipo inválido é recusado no servidor com mensagem junto ao campo. |
+| LAN-SUG-03 | A sugestão grava tela de origem e versão, nunca endereço completo, slug, identificador de família ou de pessoa. |
+| LAN-SUG-04 | Contato desmarcado por padrão; marcado, o operador vê o e-mail da conta; desmarcado, não vê nenhum dado de identificação. |
+| LAN-SUG-05 | A 11ª sugestão da mesma conta no dia é recusada com mensagem clara; repetição do mesmo envio não duplica. |
+| LAN-OPE-01 | E-mail na lista vê o item Operação → Sugestões e lista as sugestões de todas as famílias, mais recentes primeiro, com filtro por tipo e paginação. |
+| LAN-OPE-02 | Conta fora da lista não vê o item, e página e API respondem como inexistentes; lista vazia ou ausente não libera ninguém. |
+| LAN-OPE-03 | A resposta da API de operação não contém nome, slug ou identificador de família, nome ou identificador de pessoa, identificador de conta nem perfil. |
+| LAN-OPE-04 | Ser operador não altera as autorizações na própria família nem dá acesso a rotas de outras famílias (regressão `smoke:authz`). |
+| LAN-OPE-05 | Texto da sugestão é exibido como texto puro, sem interpretar HTML ou links. |
+
