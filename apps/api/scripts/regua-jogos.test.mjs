@@ -447,6 +447,66 @@ test("dificuldade por trilha não vale para escolha sem letra nem pista", () => 
   assert.deepEqual(falhasDe(relatorio, "dificuldade-trilha"), []);
 });
 
+// ---- DEV-CAT-M1-CONTEUDO, ticket 11: Barquinho no rio (motor 2D) ----
+// Rio de cima (B, partida) para baixo (margem final): # margem, . água, o pedra, f folha.
+const rioCom = (correnteza, ...rios) => ({ correnteza, rios });
+
+test("barquinho: fase sem rota até a margem final reprova; com rota, aprova", () => {
+  const aberto = ["#..B..#", "#..o..#", "#.....#", "#.....#"];
+  const fechado = ["#..B..#", "#ooooo#", "#.....#", "#.....#"];
+  const relatorio = avaliarCatalogo([jogo("barquinho", [rioCom(1, aberto, fechado)])]);
+  assert.deepEqual(falhasDe(relatorio, "solucao").map((f) => f.variante), [2]);
+  assert.match(falhasDe(relatorio, "solucao")[0].detalhe, /rota/);
+});
+
+test("barquinho: nenhuma casa alcançável é beco sem saída (o barco não sobe o rio)", () => {
+  // Da casa (2,1) não há como descer: pedra embaixo, margem à esquerda, pedra à direita.
+  const comBeco = ["#.B...#", "#.....#", "#.oo..#", "#oo...#", "#.....#"];
+  const semBeco = ["#.B...#", "#.....#", "#..o..#", "#o....#", "#.....#"];
+  const relatorio = avaliarCatalogo([jogo("barquinho", [rioCom(1, semBeco, comBeco)])]);
+  assert.deepEqual(falhasDe(relatorio, "solucao").map((f) => [f.variante, f.detalhe]), [[2, "beco sem saída em 1 casa(s): (2,1)"]]);
+});
+
+test("barquinho: variante que é só o espelho horizontal da outra reprova (Variedade)", () => {
+  const rio = ["#.B...#", "#...o.#", "#.o...#", "#.....#"];
+  const espelho = rio.map((linha) => [...linha].reverse().join(""));
+  const relatorio = avaliarCatalogo([jogo("barquinho", [rioCom(1, rio, espelho)])]);
+  assert.deepEqual(falhasDe(relatorio, "variedade").map((f) => [f.variante, f.detalhe]), [[2, "variante 2 é só espelhamento da variante 1"]]);
+});
+
+test("barquinho: rio precisa de um barco na primeira linha, linhas do mesmo tamanho e margens nas bordas", () => {
+  const semBarco = ["#.....#", "#.....#", "#.....#"];
+  const torto = ["#..B..#", "#....#", "#.....#"];
+  const semMargem = ["...B...", ".......", "......."];
+  const relatorio = avaliarCatalogo([jogo("barquinho", [rioCom(1, semBarco, torto, semMargem)])]);
+  assert.deepEqual(falhasDe(relatorio, "solucao").map((f) => f.variante), [1, 2, 3]);
+});
+
+test("barquinho: métricas de comprimento, estreitamento do canal, pedras e curvas", () => {
+  const largo = ["#..B..#", "#.....#", "#.....#", "#.....#"];
+  const apertado = ["##.B.##", "##...##", "#..o.##", "#...###", "##...##", "##.o.##", "##...##", "##...##"];
+  const relatorio = avaliarCatalogo([jogo("barquinho", [rioCom(1, largo, largo.map((l) => l.replace("B.", ".B"))), rioCom(1.2, apertado, apertado.map((l, i) => (i === 0 ? "##B..##" : l)))])]);
+  const [f1, f2] = relatorio.jogos[0].fases.map((f) => f.metricas);
+  assert.deepEqual([f1.comprimento, f1.estreitamento, f1.pedras, f1.curvas], [4, 2, 0, 0]);
+  // Canal de 3 casas num rio de 7 colunas; 2 pedras em 25 casas de canal; alguma margem muda em 3 linhas.
+  assert.deepEqual([f2.comprimento, f2.estreitamento, f2.pedras, f2.curvas], [8, 4, 8, 3]);
+  assert.equal(f2.correnteza, 1.2);
+  assert.deepEqual(falhasDe(relatorio, "progressao"), []);
+});
+
+test("barquinho: a dificuldade não pode cair de uma fase para a outra (pedras, canal, curvas e correnteza)", () => {
+  const comPedras = ["#..B..#", "#.o...#", "#...o.#", "#.....#"];
+  const semPedras = ["#..B..#", "#.....#", "#.....#", "#.....#", "#.....#"];
+  const relatorio = avaliarCatalogo([jogo("barquinho", [
+    rioCom(1.2, comPedras, comPedras.map((l) => l.replace("B.", ".B"))),
+    rioCom(1, semPedras, semPedras.map((l) => l.replace("B.", ".B"))),
+  ])]);
+  assert.deepEqual(falhasDe(relatorio, "progressao").map((f) => f.detalhe).sort(), [
+    "correnteza 1.2 → 1: a dificuldade cai",
+    "pedras 10 → 0: a dificuldade cai",
+  ]);
+});
+
 // Mãe e filhote e Metades saíram do ticket 04 por decisão do responsável (2026-11-27);
 // serão substituídos depois do Marco 1.
 test("DEV-CAT-P01 e P03: Letra inicial e Adivinha pela pista com 15 fases aprovadas", () => {
@@ -463,14 +523,14 @@ test("DEV-CAT-P01 e P03: Letra inicial e Adivinha pela pista com 15 fases aprova
   }
 });
 
-// Tickets 09, 12 e 13, mais o ticket 04 de DEV-CAT-M1-CONTEUDO: 10 jogos ativos com 15 fases cada,
+// Tickets 09, 12 e 13, mais o ticket 04 de DEV-CAT-M1-CONTEUDO: 11 jogos ativos com 15 fases cada (com o Barquinho no rio, ticket 11),
 // todos aprovados pela régua (modo estrito).
-test("DEV-CAT-P01 e P03: catálogo carregado com 10 jogos ativos de 15 fases aprovado pela régua", () => {
+test("DEV-CAT-P01 e P03: catálogo carregado com 11 jogos ativos de 15 fases aprovado pela régua", () => {
   const relatorio = avaliarCatalogo(CATALOGO_CARREGADO);
   assert.deepEqual(relatorio.falhas, []);
   const ativos = CATALOGO_CARREGADO.filter((jogo) => jogo.ativo !== false);
   assert.deepEqual(ativos.map((j) => j.id).sort(), [
-    "adivinha-pista", "entrega-jardim", "forme-palavra", "historias-cenas", "labirinto", "letra-inicial",
+    "adivinha-pista", "barquinho-rio", "entrega-jardim", "forme-palavra", "historias-cenas", "labirinto", "letra-inicial",
     "memoria", "menor-maior", "robo-setas", "sudoku-figuras",
   ]);
   assert.ok(ativos.every((jogo) => jogo.fases.length === 15));

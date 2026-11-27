@@ -13,7 +13,7 @@
 ## Critérios
 
 - [x] ADR do 2D proposta com medições comparadas (ADR-018 APROVADA em 2026-11-27: PixiJS; peso medido, fluidez só qualitativa)
-- [x] Peso adicional carregado só no jogo 2D; Biblioteca e demais jogos com no máximo 1,5 kB gzip a mais (mapa de pedaços sob demanda do webpack; decisão do responsável em 2026-11-27)
+- [x] Peso adicional carregado só no jogo 2D; Biblioteca e demais jogos com no máximo 1,5 kB gzip a mais (mapa de pedaços sob demanda do webpack; decisão do responsável em 2026-11-27; folga ampliada para 2 kB no ticket 11)
 - [x] Fluidez aceitável em Android simples — **aprovação provisória** do responsável; ele decidiu seguir com o ticket 11 sem a medição numérica
 - [x] E5-ACE-10 — toque, teclado e movimento reduzido no protótipo (código verificado; aprovação provisória no aparelho)
 

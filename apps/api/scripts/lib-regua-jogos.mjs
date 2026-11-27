@@ -11,6 +11,7 @@ import { CATALOGO_JOGOS_EXPANSAO_E5 } from "../prisma/catalogo-jogos-expansao-e5
 import { CATALOGO_JOGOS_HISTORIAS_E5 } from "../prisma/catalogo-jogos-historias-e5.mjs";
 import { CATALOGO_JOGOS_MARCO1_E5 } from "../prisma/catalogo-jogos-marco1-e5.mjs";
 import { CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5 } from "../prisma/catalogo-jogos-memoria-escolha-e5.mjs";
+import { CATALOGO_JOGO_BARQUINHO_E5 } from "../prisma/catalogo-jogos-barquinho-e5.mjs";
 import { trilhaDaFase } from "../prisma/trilhas-jogos.mjs";
 
 /** Mesma composição que a carga oficial publica (`prisma/carga-oficial.mjs`). */
@@ -20,6 +21,7 @@ export const CATALOGO_CARREGADO = [
   ...CATALOGO_JOGOS_HISTORIAS_E5,
   ...CATALOGO_JOGOS_MARCO1_E5,
   ...CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5,
+  ...CATALOGO_JOGO_BARQUINHO_E5,
 ];
 
 /**
@@ -250,6 +252,8 @@ const METRICAS = {
   // Ticket 12: Sudoku cresce em casas vazias; Robô com setas, em curvas (comandos a planejar).
   sudoku: { principal: "vazias", secundarias: ["tamanho"] },
   robo: { principal: "curvas", secundarias: [], naoCaem: ["passos"], extras: ["decisoes"] },
+  // DEV-CAT-M1-CONTEUDO, ticket 11: rio mais longo; canal, pedras, curvas e correnteza não aliviam.
+  barquinho: { principal: "comprimento", secundarias: [], naoCaem: ["estreitamento", "pedras", "curvas", "correnteza"] },
 };
 
 const normalizar = (texto) =>
@@ -429,6 +433,56 @@ const espelhoVertical = (mapa) => [...mapa].reverse();
 
 // ---------- Por motor: variantes, métricas e falhas ----------
 
+// ---------- Barquinho no rio (ticket 11) ----------
+
+/**
+ * Análise do rio, própria da régua e independente da simulação da web. O barco ocupa uma
+ * casa e anda por água (`.`, `f` ou `B`), descendo ou virando para o lado; não sobe.
+ * Devolve se há rota até a última linha e os becos sem saída: casas alcançáveis a partir
+ * da partida que não chegam à última linha. Sem tempo e sem perder (M03 §15), nenhuma
+ * casa pode prender o barco.
+ */
+function analisarRioBarquinho(rio) {
+  const livre = (l, c) => [".", "f", "B"].includes(rio[l]?.[c]);
+  const passos = (l, c) => [[l + 1, c], [l, c - 1], [l, c + 1]].filter(([nl, nc]) => livre(nl, nc));
+  const alcancadas = new Set();
+  const fila = [[0, rio[0].indexOf("B")]];
+  alcancadas.add(fila[0].join("/"));
+  for (let i = 0; i < fila.length; i += 1) {
+    for (const [nl, nc] of passos(...fila[i])) {
+      if (alcancadas.has(`${nl}/${nc}`)) continue;
+      alcancadas.add(`${nl}/${nc}`);
+      fila.push([nl, nc]);
+    }
+  }
+  // Casas que chegam à última linha: propagação de baixo para cima até estabilizar.
+  const chegam = new Set();
+  for (let c = 0; c < rio[0].length; c += 1) if (livre(rio.length - 1, c)) chegam.add(`${rio.length - 1}/${c}`);
+  for (let mudou = true; mudou; ) {
+    mudou = false;
+    for (let l = rio.length - 2; l >= 0; l -= 1) {
+      for (let c = 0; c < rio[l].length; c += 1) {
+        if (!livre(l, c) || chegam.has(`${l}/${c}`)) continue;
+        if (passos(l, c).some(([nl, nc]) => chegam.has(`${nl}/${nc}`))) {
+          chegam.add(`${l}/${c}`);
+          mudou = true;
+        }
+      }
+    }
+  }
+  return {
+    rota: chegam.has(fila[0].join("/")),
+    becos: [...alcancadas].filter((casa) => !chegam.has(casa)).map((casa) => casa.split("/").map(Number)),
+  };
+}
+
+/** Canal de cada linha: primeira e última casa que não é margem. */
+function canalDa(linha) {
+  const esquerda = [...linha].findIndex((c) => c !== "#");
+  const direita = linha.length - 1 - [...linha].reverse().findIndex((c) => c !== "#");
+  return { esquerda, direita, largura: esquerda < 0 ? 0 : direita - esquerda + 1 };
+}
+
 const MOTORES = {
   labirinto: {
     variantes: (config) => config.mapas ?? [],
@@ -440,6 +494,38 @@ const MOTORES = {
       const semMarcos = mapa.map((linha) => linha.replace(/[IFP]/g, "."));
       return [semMarcos, espelhoHorizontal(semMarcos), espelhoVertical(semMarcos)].map((m) => m.join("/"));
     },
+  },
+  barquinho: {
+    variantes: (config) => (config.rios ?? []).map((rio) => ({ rio, correnteza: config.correnteza })),
+    avaliar({ rio, correnteza }) {
+      const falhas = [];
+      const metricas = { comprimento: rio.length, estreitamento: 0, pedras: 0, curvas: 0, correnteza: correnteza ?? 0 };
+      const colunas = rio[0]?.length ?? 0;
+      if (rio.length < 2 || rio.some((linha) => linha.length !== colunas)) {
+        falhas.push(["solucao", "linhas do rio com tamanhos diferentes"]);
+        return { metricas, falhas };
+      }
+      if (rio.some((linha) => linha[0] !== "#" || linha.at(-1) !== "#")) falhas.push(["solucao", "rio sem margem nas bordas"]);
+      if ([...rio[0]].filter((c) => c === "B").length !== 1 || rio.slice(1).some((l) => l.includes("B"))) {
+        falhas.push(["solucao", "o barco (B) precisa estar uma vez, na primeira linha"]);
+        return { metricas, falhas };
+      }
+      const { rota, becos } = analisarRioBarquinho(rio);
+      if (!rota) {
+        falhas.push(["solucao", "sem rota do barco até a margem final"]);
+      } else {
+        if (becos.length) falhas.push(["solucao", `beco sem saída em ${becos.length} casa(s): ${becos.slice(0, 5).map(([l, c]) => `(${l},${c})`).join(", ")}`]);
+      }
+      const canais = rio.map(canalDa);
+      const casasCanal = canais.reduce((total, canal) => total + canal.largura, 0);
+      const pedras = rio.reduce((total, linha) => total + [...linha].filter((c) => c === "o").length, 0);
+      metricas.estreitamento = colunas - Math.min(...canais.map((canal) => canal.largura));
+      metricas.pedras = casasCanal ? Math.round((100 * pedras) / casasCanal) : 0;
+      metricas.curvas = canais.filter((canal, i) => i > 0 && (canal.esquerda !== canais[i - 1].esquerda || canal.direita !== canais[i - 1].direita)).length;
+      return { metricas, falhas };
+    },
+    chave: ({ rio }) => rio.join("/"),
+    espelhos: ({ rio }) => [rio.map((linha) => [...linha].reverse().join("")).join("/")],
   },
   robo: {
     variantes: (config) => config.mapas ?? [],

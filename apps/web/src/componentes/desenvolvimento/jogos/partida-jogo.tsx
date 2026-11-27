@@ -3,7 +3,7 @@
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -40,6 +40,11 @@ import { TabuleiroRobo } from "./tabuleiro-robo";
 import type { ContratoTabuleiro, ObterDica } from "./contrato-tabuleiro";
 import { ID_ACOES_PARTIDA } from "@/lib/acoes-partida";
 import estilos from "./jogos.module.css";
+
+// Ticket 11: o Barquinho (2D) só é baixado quando a partida é dele; os demais jogos não pagam o peso.
+const TabuleiroBarquinho = lazy(() =>
+  import("./barquinho/tabuleiro-barquinho").then((m) => ({ default: m.TabuleiroBarquinho })),
+);
 
 const ROTULOS_ESTADO_FASE: Record<FaseJogoResumo["estado"], string> = {
   nao_explorada: "Não explorada",
@@ -119,6 +124,16 @@ function Tabuleiro({
           aoConcluir={aoConcluir}
           registrarObterDica={registrarObterDica}
         />
+      );
+    case "barquinho":
+      return (
+        <Suspense fallback={<EstadoCarregando rotulo="Preparando o rio…" />}>
+          <TabuleiroBarquinho
+            fase={conteudo}
+            aoConcluir={aoConcluir}
+            registrarObterDica={registrarObterDica}
+          />
+        </Suspense>
       );
   }
 }

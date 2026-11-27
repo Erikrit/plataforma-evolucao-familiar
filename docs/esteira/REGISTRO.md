@@ -54,3 +54,5 @@ Registrar **somente transições materiais** de demandas novas: ID, tipo, branch
 **2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 10 concluído (provisório):** protótipo 2D do Barquinho (PixiJS e Phaser sob demanda), peso medido (PixiJS ~112 kB, Phaser ~347 kB gzip; telas +1,13 kB no máximo, folga de 1,5 kB aprovada). ADR-018 em PROPOSTA (PixiJS). Fluidez em Android aprovada provisoriamente, sem medição numérica. Fingerprint `sha256:c02e7330…`.
 
 **2026-11-27 — ADR-018 aprovada:** PixiJS para os jogos 2D; Phaser removido do código e do `package.json`. O ticket 11 segue sem a medição numérica no Android, por decisão do responsável.
+
+**2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 11:** Barquinho no rio completo (PixiJS, 15 fases, régua com rota e sem becos) na `develop` @ `17006f3`, sem commit. QG-1/QG-2, check-peso-2d e verificador PASS; fingerprint `sha256:1aadadd0…`. `PENDING_HUMAN`: E5-HOM.

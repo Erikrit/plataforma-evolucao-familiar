@@ -39,7 +39,7 @@ Registro histórico de decisões arquiteturais. **A V1 já possui arquitetura im
 | | PixiJS | Phaser |
 |---|---|---|
 | Peso sob demanda (gzip) | cerca de 112 kB (133 kB somando todos os pedaços) | cerca de 347 kB |
-| Telas existentes | no máximo +1,13 kB gzip nas duas opções (mapa de pedaços sob demanda do webpack; folga de 1,5 kB aprovada pelo responsável) | igual |
+| Telas existentes | no máximo +1,13 kB gzip no protótipo (ticket 10); com o jogo completo, +1,58 kB na tela de jogar (ticket 11). Origem: mapa de pedaços sob demanda do webpack. Folga de 1,5 kB aprovada pelo responsável e ampliada para 2 kB no ticket 11 | igual |
 | Fluidez, toque e movimento reduzido em Android | aprovados **provisoriamente** pelo responsável, sem números registrados | idem |
 
 ### Alternativas

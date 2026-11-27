@@ -1609,6 +1609,14 @@ export type ConteudoSudoku = {
   inicial: number[][];
   solucao: number[][];
 };
+/** DEV-CAT-M1-CONTEUDO, ticket 11: Barquinho no rio (2D, PixiJS pela ADR-018). */
+export type ConteudoBarquinho = {
+  tipo: "barquinho";
+  /** De cima (B, partida) para baixo (margem final): # margem, . água, o pedra, f folha. */
+  rio: string[];
+  /** Linhas por segundo. */
+  correnteza: number;
+};
 /** Ticket 12: Robô com setas. */
 export type ConteudoRobo = {
   tipo: "robo";
@@ -1630,7 +1638,8 @@ export type ConteudoPartida =
   | ConteudoOrdenacao
   | ConteudoLabirinto
   | ConteudoSudoku
-  | ConteudoRobo;
+  | ConteudoRobo
+  | ConteudoBarquinho;
 export type InicioPartida = {
   versao: number;
   tipoMecanica?: string;

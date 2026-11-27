@@ -532,6 +532,51 @@ const motorRobo: MotorJogo<ConfigLabirinto> = {
   },
 };
 
+// ---------- Barquinho no rio (DEV-CAT-M1-CONTEUDO, ticket 11): jogo 2D, ADR-018 ----------
+
+/** Rio de cima (B, partida) para baixo (margem final): # margem, . água, o pedra, f folha. */
+export type ConfigBarquinho = Readonly<{ correnteza: number; rios: readonly (readonly string[])[] }>;
+
+const CORRENTEZA_BARQUINHO = { minima: 0.5, maxima: 2 } as const;
+
+function lerRioBarquinho(valor: unknown): string[] {
+  if (!Array.isArray(valor) || valor.length < 2 || valor.some((linha) => typeof linha !== "string")) {
+    throw new BadRequestException("Rio do barquinho inválido.");
+  }
+  const rio = valor as string[];
+  const colunas = rio[0].length;
+  if (colunas < 3 || rio.some((linha) => linha.length !== colunas || !/^[#.ofB]+$/.test(linha))) {
+    throw new BadRequestException("Rio do barquinho inválido.");
+  }
+  const barcos = [...rio.join("")].filter((casa) => casa === "B").length;
+  if (barcos !== 1 || !rio[0].includes("B")) {
+    throw new BadRequestException("O rio precisa de um barco na primeira linha.");
+  }
+  return rio;
+}
+
+const motorBarquinho: MotorJogo<ConfigBarquinho> = {
+  id: "barquinho",
+  validarConfiguracao(config) {
+    const bruto = exigirObjeto(config, "barquinho");
+    const correnteza = bruto.correnteza;
+    if (
+      typeof correnteza !== "number" ||
+      correnteza < CORRENTEZA_BARQUINHO.minima ||
+      correnteza > CORRENTEZA_BARQUINHO.maxima
+    ) {
+      throw new BadRequestException("Correnteza do barquinho inválida.");
+    }
+    if (!Array.isArray(bruto.rios) || bruto.rios.length === 0) {
+      throw new BadRequestException("Configuração do barquinho sem rios.");
+    }
+    return { correnteza, rios: bruto.rios.map(lerRioBarquinho) };
+  },
+  montarConteudo(config, sortear = randomInt) {
+    return { tipo: "barquinho", correnteza: config.correnteza, rio: config.rios[sortear(config.rios.length)] };
+  },
+};
+
 const MOTORES: Record<string, MotorJogo> = {
   memoria: motorMemoria as MotorJogo,
   sequencia: motorSequencia as MotorJogo,
@@ -540,6 +585,7 @@ const MOTORES: Record<string, MotorJogo> = {
   ordenacao: motorOrdenacao as MotorJogo,
   sudoku: motorSudoku as MotorJogo,
   robo: motorRobo as MotorJogo,
+  barquinho: motorBarquinho as MotorJogo,
 };
 
 export function obterMotor(tipoMecanica: string): MotorJogo {

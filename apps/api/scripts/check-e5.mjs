@@ -384,4 +384,42 @@ assert.deepEqual(selecionarDestaquesJogos(editorial, editorial.map((item) => ({ 
   assert.ok(escolha.includes("aria-label={mostrarNomes ? figura.nome : `Figura ${indice + 1}: ${figura.nome}`}"), "escolha com nomes ocultos anuncia o nome da figura ao leitor de tela");
 }
 
+// DEV-CAT-M1-CONTEUDO, ticket 11: motor do Barquinho no rio no servidor.
+// O conteúdo é o rio sorteado entre as variantes e a correnteza; contratos de partida iguais.
+{
+  const rios = [["#..B..#", "#..o..#", "#.....#"], ["#.B...#", "#...o.#", "#.....#"]];
+  const conteudo = montarConteudoMotor("barquinho", { correnteza: 1.2, rios }, () => 1);
+  assert.deepEqual(conteudo, { tipo: "barquinho", correnteza: 1.2, rio: rios[1] });
+  const invalidos = [
+    { correnteza: 1, rios: [] },
+    { correnteza: 1, rios: [["#.....#", "#.....#"]] },
+    { correnteza: 1, rios: [["#..B..#", "#....#"]] },
+    { correnteza: 1, rios: [["#..B..#", "#..x..#"]] },
+    { correnteza: 5, rios: [["#..B..#", "#.....#"]] },
+    { correnteza: 1, rios: [["#..B..#", "#..B..#"]] },
+  ];
+  for (const config of invalidos) assert.throws(() => montarConteudoMotor("barquinho", config), JSON.stringify(config));
+}
+
+// DEV-CAT-M1-CONTEUDO, ticket 11 (E5-F04): em todos os rios do catálogo, seguir só a dica leva
+// o barco à margem final, e a dica nunca falta antes da chegada (simulação da web, sem 2D).
+{
+  const sim = require("../../web/src/componentes/desenvolvimento/jogos/barquinho/simulacao-barquinho");
+  const { CATALOGO_JOGO_BARQUINHO_E5 } = await import("../prisma/catalogo-jogos-barquinho-e5.mjs");
+  const [barquinho] = CATALOGO_JOGO_BARQUINHO_E5;
+  assert.equal(barquinho.fases.length, 15);
+  for (const fase of barquinho.fases) {
+    for (const rio of fase.configuracao.rios) {
+      const partida = { rio, correnteza: fase.configuracao.correnteza };
+      let estado = sim.criarPartidaBarquinho(partida);
+      for (let passo = 0; passo < 2000 && !estado.concluido; passo += 1) {
+        const dica = sim.dicaBarquinho(estado, partida);
+        assert.ok(dica, `fase ${fase.numero}: sem dica antes da chegada`);
+        estado = estado.parado && dica.lado !== 0 ? sim.virarBarco(estado, partida, dica.lado) : sim.avancarBarco(estado, partida, 0.25);
+      }
+      assert.equal(estado.concluido, true, `fase ${fase.numero}: seguindo a dica, o barco não chegou`);
+    }
+  }
+}
+
 console.log("check-e5: três jogos, 45 fases em três trilhas, dicas em dois níveis, variantes e destaques determinísticos validados");

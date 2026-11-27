@@ -73,42 +73,44 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável: commit do ticket 10. Depois, /implementar do ticket 11 (Barquinho no rio completo, PixiJS, sem a medição numérica por decisão do responsável).",
+    "proximaAcao": "Responsável: E5-HOM do Barquinho no rio no celular e commit. Depois, tickets 05 a 09.",
     "ticketAtivo": {
-      "ticket": "10-teste-tecnico-2d",
-      "estado": "COMPLETED",
+      "ticket": "11-barquinho-no-rio",
+      "estado": "PENDING_HUMAN",
       "branch": "develop",
-      "base": "e9cf16f",
-      "nota": "Reaproveita o trabalho da worktree t10-teste-tecnico-2d (execução paralela, base 4a5bfc5), trazido por decisão do responsável em 2026-11-27.",
+      "base": "17006f3",
       "arquivos": [
-        "apps/web/src/componentes/desenvolvimento/jogos/barquinho/",
-        "apps/web/src/app/laboratorio/",
-        "apps/web/src/componentes/laboratorio/",
+        "apps/api/prisma/catalogo-jogos-barquinho-e5.mjs",
+        "apps/api/prisma/carga-oficial.mjs",
+        "apps/api/src/desenvolvimento/jogos/motores-jogos.ts",
+        "apps/api/scripts/lib-regua-jogos.mjs",
+        "apps/api/scripts/regua-jogos.test.mjs",
+        "apps/api/scripts/check-e5.mjs",
+        "apps/api/scripts/smoke-e5.mjs",
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/componentes/desenvolvimento/jogos/partida-jogo.tsx",
+        "apps/web/src/componentes/desenvolvimento/icone-jogo-catalogo.tsx",
+        "apps/web/src/lib/catalogo-visual-jogos.ts",
         "apps/web/scripts/check-peso-2d.mjs",
-        "apps/web/package.json",
-        "package-lock.json",
-        "apps/api/scripts/check-e5.mjs"
+        "docs/arquitetura/DECISOES.md"
       ],
-      "qg1": "PASS — lint, typecheck, check-e4, check-e5",
-      "qg2": "PASS — build, smoke-e5; check-peso-2d PASS (36 rotas, máx. +1,1 kB)",
-      "fingerprint": "sha256:71cdb0e91768c6c4b42cd110233d151061186d9f3b2e751dca648c895f35709d",
-      "peso": "PASS — check-peso-2d contra build de e9cf16f: 36 rotas com no máximo +1,13 kB gzip (folga 1,5 kB aprovada pelo responsável em 2026-11-27); lib 2D só sob demanda (PixiJS 112 kB, Phaser 347 kB gzip)",
-      "verificador": "Parte automática verificada; NEEDS_DECISION de peso resolvido pelo responsável (folga 1,5 kB)",
-      "pendentes": [
-        "Medição numérica de fluidez no Android: o responsável decidiu seguir sem ela (laboratório disponível)"
-      ],
-      "homologacao": "PROVISÓRIA — aprovada pelo responsável em 2026-11-27 sem medições numéricas no Android",
-      "adr": "ADR-018 APROVADA em 2026-11-27 (PixiJS); Phaser removido",
-      "mensagemCommit": "feat(jogos): teste técnico do 2D com protótipo do Barquinho no rio\n\nUma fase do Barquinho comparando PixiJS e Phaser, com simulação testada (sem tempo, sem vidas, movimento reduzido) e laboratório protegido por variável de ambiente. Peso medido e checado por script; ADR-018 aprovada escolhe o PixiJS, carregado só ao abrir o jogo, e o Phaser sai. Fluidez em Android aprovada provisoriamente."
+      "qg1": "PASS — lint, typecheck, authz, check-e4, check-e5, regua-jogos 39/39",
+      "qg2": "PASS — build, authz, carga-trilhas, smoke-historico-resumo, smoke-e4, smoke-e5; check-peso-2d PASS",
+      "fingerprint": "sha256:1aadadd03cbf8cf5271b9400bc0982dd913d58da3c1f12b30c779db6aa58b4f4",
+      "peso": "check-peso-2d PASS: 36 rotas, máx. +1,58 kB (tela de jogar); folga ampliada para 2 kB pelo responsável",
+      "verificador": "PASS (inclui delta pós-revisão)",
+      "revisao": "Padrões: análise única do rio, contagem legível, piso de correnteza alinhado. Especificação: espelhos na régua, ADR com a medição atual; correnteza fora de M03 §15 como pendência",
+      "homologacao": "PENDING_HUMAN — E5-HOM no celular nas três trilhas",
+      "mensagemCommit": "feat(jogos): Barquinho no rio, o primeiro jogo 2D\n\nJogo 2D em PixiJS (ADR-018) com 15 fases em três trilhas: rio mais\nlongo, canal mais estreito, mais pedras e curvas, correnteza leve.\nSem tempo, sem vidas e sem perder: a pedra só desvia o barco e a\nrégua proíbe becos sem saída. Motor no servidor com os contratos de\nsempre, dica que leva à margem em todos os rios e tabuleiro baixado\nsó quando a partida é do Barquinho."
     },
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T17:05:56.618Z",
-        "base": "e9cf16f6988e9ffe507f926318f50beb60bd998e",
-        "head": "e9cf16f6988e9ffe507f926318f50beb60bd998e",
-        "fingerprint": "sha256:71cdb0e91768c6c4b42cd110233d151061186d9f3b2e751dca648c895f35709d",
+        "em": "2026-11-27T17:59:58.801Z",
+        "base": "17006f30116a6f8c74f4cfe198995f909ea0b34f",
+        "head": "17006f30116a6f8c74f4cfe198995f909ea0b34f",
+        "fingerprint": "sha256:1aadadd03cbf8cf5271b9400bc0982dd913d58da3c1f12b30c779db6aa58b4f4",
         "checagens": [
           {
             "nome": "lint",
@@ -130,6 +132,12 @@
             "motivo": "script ainda não existe"
           },
           {
+            "nome": "authz",
+            "status": "PASS",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": 0
+          },
+          {
             "nome": "check-e4",
             "status": "PASS",
             "comando": "npm run check:e4 -w @pef/api",
@@ -140,17 +148,23 @@
             "status": "PASS",
             "comando": "npm run check:e5 -w @pef/api",
             "exit": 0
+          },
+          {
+            "nome": "regua-jogos",
+            "status": "PASS",
+            "comando": "npm run test:regua -w @pef/api",
+            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T17-05-56-618Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T17-59-58-801Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T17:08:20.621Z",
-        "base": "e9cf16f6988e9ffe507f926318f50beb60bd998e",
-        "head": "e9cf16f6988e9ffe507f926318f50beb60bd998e",
-        "fingerprint": "sha256:71cdb0e91768c6c4b42cd110233d151061186d9f3b2e751dca648c895f35709d",
+        "em": "2026-11-27T18:02:48.519Z",
+        "base": "17006f30116a6f8c74f4cfe198995f909ea0b34f",
+        "head": "17006f30116a6f8c74f4cfe198995f909ea0b34f",
+        "fingerprint": "sha256:1aadadd03cbf8cf5271b9400bc0982dd913d58da3c1f12b30c779db6aa58b4f4",
         "checagens": [
           {
             "nome": "build",
@@ -166,19 +180,44 @@
             "motivo": "script ainda não existe"
           },
           {
+            "nome": "authz",
+            "status": "PASS",
+            "comando": "npm run smoke:authz -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "carga-trilhas",
+            "status": "PASS",
+            "comando": "npm run qg:cat-trilhas -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-historico-resumo",
+            "status": "PASS",
+            "comando": "npm run smoke:est-03-docs -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "smoke-e4-atividades",
+            "status": "PASS",
+            "comando": "npm run smoke:e4 -w @pef/api",
+            "exit": 0
+          },
+          {
             "nome": "smoke-e5-jogos",
             "status": "PASS",
             "comando": "npm run smoke:e5 -w @pef/api",
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T17-08-20-621Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T18-02-48-519Z.json"
       }
     },
-    "fingerprint": "sha256:71cdb0e91768c6c4b42cd110233d151061186d9f3b2e751dca648c895f35709d",
+    "fingerprint": "sha256:1aadadd03cbf8cf5271b9400bc0982dd913d58da3c1f12b30c779db6aa58b4f4",
     "pendenciasDocumentais": [
       "Texto de E4-ACE-01 (M03 §12, linhas 221 e 321) ainda diz 24; teto de 60 aprovado em 2026-11-27. M03 §15 (Marco 1) diz 'cerca de 20 por faixa'; leitura aprovada no ticket 03 (mínimo 20, 3 por faixa × área, diferença até 10). Atualizar na conversa de planejamento.",
-      "Marco 1 (M03 §15) lista Mãe e filhote e Metades entre os 12 jogos novos; retirados do ticket 04 em 2026-11-27 pelo responsável, a substituir depois do Marco 1 (Marco 1 com 18 jogos ativos até lá)."
+      "Marco 1 (M03 §15) lista Mãe e filhote e Metades entre os 12 jogos novos; retirados do ticket 04 em 2026-11-27 pelo responsável, a substituir depois do Marco 1 (Marco 1 com 18 jogos ativos até lá).",
+      "M03 §15 (Barquinho no rio) não cita a correnteza leve que o ticket 11 aprovou (1,0/1,2/1,4 linhas por segundo por trilha)."
     ]
   },
   "demandasConcluidas": [

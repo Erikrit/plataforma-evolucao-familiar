@@ -5,8 +5,9 @@
  *
  * 1. Nenhuma rota carrega a biblioteca 2D no download inicial: ela só vem por `import()`.
  * 2. Com uma referência (build da base sem o 2D), cada rota que existe nas duas
- *    sobe no máximo 1,5 kB comprimido: o mapa de pedaços sob demanda do webpack e o
- *    rearranjo dos pedaços compartilhados (decisão do responsável, 2026-11-27).
+ *    sobe no máximo 2 kB comprimido: o mapa de pedaços sob demanda do webpack e o
+ *    rearranjo dos pedaços compartilhados (decisões do responsável de 2026-11-27: 1,5 kB no
+ *    ticket 10, 2 kB no ticket 11, com o tabuleiro do Barquinho também sob demanda).
  * Também informa o peso comprimido dos pedaços de cada biblioteca.
  */
 import assert from "node:assert/strict";
@@ -14,7 +15,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { gzipSync } from "node:zlib";
 
-const FOLGA_BYTES = 1536;
+const FOLGA_BYTES = 2048;
 // Textos internos de cada biblioteca (avisos e faixa de versão), ausentes do código do projeto.
 // ADR-018: só o PixiJS; o Phaser continua marcado para acusar se voltar ao build.
 const MARCAS = { phaser: /Phaser v"\+/, pixi: /PixiJS (Deprecation|Error|Warning|%c)/ };
