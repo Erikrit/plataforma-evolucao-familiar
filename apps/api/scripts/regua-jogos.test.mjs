@@ -313,12 +313,166 @@ test("DEV-CAT-P03: Caminhos e labirintos tem 15 fases em três trilhas aprovadas
   assert.ok(labirinto.fases.every((f) => f.configuracao.mapas.every((m) => m[0].length <= 15)), "até 15 colunas (320 px)");
 });
 
-// Tickets 09, 12 e 13: 8 jogos ativos com 15 fases cada, todos aprovados pela régua (modo estrito).
-test("DEV-CAT-P01 e P03: catálogo carregado com 8 jogos ativos de 15 fases aprovado pela régua", () => {
+// ---- DEV-CAT-M1-CONTEUDO, ticket 04: pares diferentes entre si e escolha sem rótulo que entregue ----
+
+test("letra inicial: só a resposta começa com a letra ou sílaba pedida", () => {
+  const conjunto = (inicio, resposta, opcoes) => ({ enunciado: `Qual figura começa com ${inicio}?`, inicio, ocultarNomes: true, resposta, opcoes });
+  const relatorio = avaliarCatalogo([
+    jogo("escolha", [
+      {
+        conjuntos: [
+          conjunto("B", "bola", [fig("bola", "Bola", "⚽"), fig("barco", "Barco", "⛵"), fig("gato", "Gato", "🐈")]),
+          conjunto("PA", "peixe", [fig("peixe", "Peixe", "🐟"), fig("pato", "Pato", "🦆"), fig("lua", "Lua", "🌙")]),
+          conjunto("MA", "maca", [fig("maca", "Maçã", "🍎"), fig("pao", "Pão", "🍞"), fig("uva", "Uva", "🍇")]),
+        ],
+      },
+    ]),
+  ]);
+  assert.deepEqual(falhasDe(relatorio, "resposta-unica").map((f) => f.variante), [1]);
+  assert.deepEqual(falhasDe(relatorio, "solucao").map((f) => f.variante), [2]);
+});
+
+test("adivinha pela pista: pista e dica não dizem o nome da resposta", () => {
+  const conjunto = (enunciado, dica) => ({ enunciado, dica, pista: true, ocultarNomes: true, resposta: "banana", opcoes: [fig("banana", "Banana", "🍌"), fig("uva", "Uva", "🍇")] });
+  const relatorio = avaliarCatalogo([
+    jogo("escolha", [
+      {
+        conjuntos: [
+          conjunto("Sou amarela, comprida e nasço na bananeira. Quem sou eu?", "Pense na cor."),
+          conjunto("Sou amarela e comprida. Quem sou eu?", "Lembre do cacho de bananas."),
+          conjunto("Sou amarela e comprida. Os macacos adoram me comer. Quem sou eu?", "Pense na cor."),
+        ],
+      },
+    ]),
+  ]);
+  assert.deepEqual(falhasDe(relatorio, "rotulo").map((f) => f.variante), [1]);
+  assert.deepEqual(falhasDe(relatorio, "dica").map((f) => f.variante), [2]);
+});
+
+// Homologação de 2026-11-27: a dificuldade tem de subir de verdade, com distrações cada vez
+// mais parecidas com a resposta, e não só com mais opções.
+const escolhaPorTrilha = (conjuntosPorTrilha) => ({
+  id: "jogo-escolha-trilhas",
+  nome: "Jogo de escolha",
+  tipoMecanica: "escolha",
+  fases: conjuntosPorTrilha.map((conjuntos, indice) => ({
+    numero: indice + 1,
+    trilha: ["pequenos", "medios", "grandes"][indice],
+    titulo: `Fase ${indice + 1}`,
+    objetivo: "Objetivo.",
+    configuracao: { conjuntos },
+  })),
+});
+const letra = (inicio, resposta, opcoes) => ({ enunciado: `Qual figura começa com ${inicio}?`, inicio, ocultarNomes: true, resposta, opcoes, dica: "Fale devagar." });
+const pistaDe = (enunciado, resposta, opcoes) => ({ enunciado, pista: true, ocultarNomes: true, resposta, opcoes, dica: "Pense bem." });
+const parecidasDe = (relatorio) => relatorio.jogos[0].fases.map((f) => f.metricas.parecidas);
+
+test("letra inicial: distrações parecidas são as de som vizinho (B/P, F/V…) e, na sílaba, as de mesma letra", () => {
+  const relatorio = avaliarCatalogo([
+    escolhaPorTrilha([
+      [letra("B", "bola", [fig("bola", "Bola", "⚽"), fig("gato", "Gato", "🐈")]), letra("S", "sol", [fig("sol", "Sol", "☀️"), fig("lua", "Lua", "🌙")])],
+      [
+        letra("B", "bola", [fig("bola", "Bola", "⚽"), fig("pato", "Pato", "🦆"), fig("gato", "Gato", "🐈")]),
+        letra("F", "foguete", [fig("foguete", "Foguete", "🚀"), fig("vela", "Vela", "🕯️"), fig("lua", "Lua", "🌙")]),
+      ],
+      [
+        letra("PA", "pato", [fig("pato", "Pato", "🦆"), fig("pera", "Pera", "🍐"), fig("pipa", "Pipa", "🪁"), fig("peixe", "Peixe", "🐟")]),
+        letra("MA", "maca", [fig("maca", "Maçã", "🍎"), fig("milho", "Milho", "🌽"), fig("mel", "Mel", "🍯"), fig("meia", "Meia", "🧦")]),
+      ],
+    ]),
+  ]);
+  assert.deepEqual(parecidasDe(relatorio), [0, 1, 3]);
+  assert.deepEqual(falhasDe(relatorio, "dificuldade-trilha"), []);
+});
+
+test("adivinha pela pista: distrações parecidas são as do mesmo grupo de figuras da resposta", () => {
+  const relatorio = avaliarCatalogo([
+    escolhaPorTrilha([
+      [pistaDe("Tenho oito braços.", "polvo", [fig("polvo", "Polvo", "🐙"), fig("carro", "Carro", "🚗")]), pistaDe("Faço mel.", "abelha", [fig("abelha", "Abelha", "🐝"), fig("sol", "Sol", "☀️")])],
+      [
+        pistaDe("Sou uma fruta pequena e vermelha.", "cereja", [fig("cereja", "Cereja", "🍒"), fig("morango", "Morango", "🍓"), fig("carro", "Carro", "🚗")]),
+        pistaDe("Sou amarela e comprida.", "banana", [fig("banana", "Banana", "🍌"), fig("pera", "Pera", "🍐"), fig("bola", "Bola", "⚽")]),
+      ],
+      [
+        pistaDe("Sou vermelha e venho em dupla no cabinho.", "cereja", [fig("cereja", "Cereja", "🍒"), fig("morango", "Morango", "🍓"), fig("maca", "Maçã", "🍎"), fig("uva", "Uva", "🍇")]),
+        pistaDe("Sou redonda, laranja e cheia de gomos.", "laranja", [fig("laranja", "Laranja", "🍊"), fig("limao", "Limão", "🍋"), fig("pessego", "Pêssego", "🍑"), fig("banana", "Banana", "🍌")]),
+      ],
+    ]),
+  ]);
+  assert.deepEqual(parecidasDe(relatorio), [0, 1, 3]);
+  assert.deepEqual(falhasDe(relatorio, "dificuldade-trilha"), []);
+});
+
+test("dificuldade por trilha: reprova quando as distrações não ficam mais parecidas de uma trilha para a outra", () => {
+  const igual = (opcoes) => letra("B", "bola", [fig("bola", "Bola", "⚽"), ...opcoes]);
+  const relatorio = avaliarCatalogo([
+    escolhaPorTrilha([
+      [igual([fig("pato", "Pato", "🦆")]), igual([fig("pera", "Pera", "🍐")])],
+      [igual([fig("pato", "Pato", "🦆"), fig("gato", "Gato", "🐈")]), igual([fig("pera", "Pera", "🍐"), fig("lua", "Lua", "🌙")])],
+      [igual([fig("pato", "Pato", "🦆"), fig("gato", "Gato", "🐈"), fig("lua", "Lua", "🌙")]), igual([fig("pera", "Pera", "🍐"), fig("sol", "Sol", "☀️"), fig("uva", "Uva", "🍇")])],
+    ]),
+  ]);
+  assert.deepEqual(falhasDe(relatorio, "dificuldade-trilha").map((f) => [f.fase, f.detalhe]), [
+    [3, "grandes: 1 de 3 distrações parecidas; todas precisam ser"],
+    [2, "distrações parecidas em medios (1) não passam das de pequenos (1)"],
+    [3, "distrações parecidas em grandes (1) não passam das de medios (1)"],
+  ]);
+});
+
+test("dificuldade por trilha: nos Médios, pelo menos metade das distrações é parecida, e dentro da trilha não cai", () => {
+  const b = (opcoes) => letra("B", "bola", [fig("bola", "Bola", "⚽"), ...opcoes]);
+  const p = (opcoes) => letra("P", "pato", [fig("pato", "Pato", "🦆"), ...opcoes]);
+  const fases = [
+    { trilha: "pequenos", conjuntos: [b([fig("gato", "Gato", "🐈")]), p([fig("lua", "Lua", "🌙")])] },
+    { trilha: "medios", conjuntos: [b([fig("pera", "Pera", "🍐"), fig("pipa", "Pipa", "🪁"), fig("gato", "Gato", "🐈")]), p([fig("barco", "Barco", "⛵"), fig("bolo", "Bolo", "🎂"), fig("lua", "Lua", "🌙")])] },
+    { trilha: "medios", conjuntos: [b([fig("pera", "Pera", "🍐"), fig("gato", "Gato", "🐈"), fig("lua", "Lua", "🌙"), fig("sol", "Sol", "☀️")]), p([fig("barco", "Barco", "⛵"), fig("gato", "Gato", "🐈"), fig("lua", "Lua", "🌙"), fig("sol", "Sol", "☀️")])] },
+    { trilha: "grandes", conjuntos: [letra("PA", "pato", [fig("pato", "Pato", "🦆"), fig("pera", "Pera", "🍐"), fig("pipa", "Pipa", "🪁"), fig("peixe", "Peixe", "🐟"), fig("polvo", "Polvo", "🐙")]), letra("BA", "barco", [fig("barco", "Barco", "⛵"), fig("bola", "Bola", "⚽"), fig("bolo", "Bolo", "🎂"), fig("bicicleta", "Bicicleta", "🚲"), fig("biscoito", "Biscoito", "🍪")])] },
+  ];
+  const relatorio = avaliarCatalogo([{
+    id: "jogo-escolha-medios",
+    nome: "Jogo",
+    tipoMecanica: "escolha",
+    fases: fases.map(({ trilha, conjuntos }, i) => ({ numero: i + 1, trilha, titulo: "Fase", objetivo: "Objetivo.", configuracao: { conjuntos } })),
+  }]);
+  assert.deepEqual(falhasDe(relatorio, "dificuldade-trilha").map((f) => [f.fase, f.detalhe]), [
+    [3, "medios: 1 de 4 distrações parecidas; mínimo metade"],
+    [3, "parecidas 2 → 1 dentro de medios: a dificuldade cai"],
+  ]);
+});
+
+test("dificuldade por trilha não vale para escolha sem letra nem pista", () => {
+  const relatorio = avaliarCatalogo([jogo("escolha", [
+    { conjuntos: [{ enunciado: "Qual é a fruta?", resposta: "maca", opcoes: [fig("maca", "Maçã", "🍎"), fig("carro", "Carro", "🚗")] }, { enunciado: "Qual é a fruta?", resposta: "pera", opcoes: [fig("pera", "Pera", "🍐"), fig("bola", "Bola", "⚽")] }] },
+  ])]);
+  assert.deepEqual(falhasDe(relatorio, "dificuldade-trilha"), []);
+});
+
+// Mãe e filhote e Metades saíram do ticket 04 por decisão do responsável (2026-11-27);
+// serão substituídos depois do Marco 1.
+test("DEV-CAT-P01 e P03: Letra inicial e Adivinha pela pista com 15 fases aprovadas", () => {
+  const ids = ["letra-inicial", "adivinha-pista"];
+  const novos = ids.map((id) => CATALOGO_CARREGADO.find((j) => j.id === id));
+  assert.ok(novos.every(Boolean), "os dois jogos estão na carga");
+  assert.deepEqual(avaliarCatalogo(novos).falhas, []);
+  assert.ok(novos.every((j) => j.ativo !== false && j.fases.length === 15));
+  const [letra, pista] = novos;
+  for (const id of ["mae-filhote", "metades"]) assert.equal(CATALOGO_CARREGADO.some((j) => j.id === id), false, `${id} fora da carga`);
+  // Escolha sem rótulo que entregue: nomes ocultos, regra declarada e dica de 1º nível curada.
+  for (const [j, campo] of [[letra, "inicio"], [pista, "pista"]]) {
+    assert.ok(j.fases.every((f) => f.configuracao.conjuntos.every((c) => c.ocultarNomes === true && c[campo] && c.dica)));
+  }
+});
+
+// Tickets 09, 12 e 13, mais o ticket 04 de DEV-CAT-M1-CONTEUDO: 10 jogos ativos com 15 fases cada,
+// todos aprovados pela régua (modo estrito).
+test("DEV-CAT-P01 e P03: catálogo carregado com 10 jogos ativos de 15 fases aprovado pela régua", () => {
   const relatorio = avaliarCatalogo(CATALOGO_CARREGADO);
   assert.deepEqual(relatorio.falhas, []);
   const ativos = CATALOGO_CARREGADO.filter((jogo) => jogo.ativo !== false);
-  assert.deepEqual(ativos.map((j) => j.id).sort(), ["entrega-jardim", "forme-palavra", "historias-cenas", "labirinto", "memoria", "menor-maior", "robo-setas", "sudoku-figuras"]);
+  assert.deepEqual(ativos.map((j) => j.id).sort(), [
+    "adivinha-pista", "entrega-jardim", "forme-palavra", "historias-cenas", "labirinto", "letra-inicial",
+    "memoria", "menor-maior", "robo-setas", "sudoku-figuras",
+  ]);
   assert.ok(ativos.every((jogo) => jogo.fases.length === 15));
   assert.deepEqual(CATALOGO_CARREGADO.filter((j) => j.ativo === false).map((j) => j.id).sort(), ["ache-intruso", "palavra-figura", "pares-sombras", "sequencia"]);
   assert.ok(CATALOGO_CARREGADO.every((jogo) => jogo.fases.every((f) => f.trilha === (f.numero <= 5 ? "pequenos" : f.numero <= 10 ? "medios" : "grandes"))));

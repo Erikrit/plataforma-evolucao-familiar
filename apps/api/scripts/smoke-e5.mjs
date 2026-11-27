@@ -95,7 +95,7 @@ try {
   const memoria = antes.dados.jogos?.find((jogo) => jogo.id === "memoria");
   conferir("Catálogo privado e quinze fases abertas sem nascimento", antes.status === 200 && antes.cache === "private, no-store"
     && memoria?.fases.length === 15 && memoria.fases.every((item) => item.estado === "nao_explorada"));
-  conferir("Catálogo completo e destaques distintos na primeira visita", antes.dados.jogos.length === 8
+  conferir("Catálogo completo e destaques distintos na primeira visita", antes.dados.jogos.length === 10
     && new Set(antes.dados.destaques).size === 3 && antes.dados.destaques[0] === "memoria");
   conferir("Conclusão exige início persistido", (await concluir(novaChave(), memoria.versao)).status === 409);
   conferir("Acesso direto a fase inexistente falha", (await iniciar(familia.token, `${catalogo}/memoria/fases/16`)).status === 404);
@@ -173,7 +173,7 @@ try {
   const depois = await lerCatalogo();
   const recente = depois.dados.destaques[0];
   conferir("Último jogo aberto ganha destaque estável com acesso a todos",
-    recente === "labirinto" && depois.dados.jogos.length === 8
+    recente === "labirinto" && depois.dados.jogos.length === 10
     && JSON.stringify(depois.dados.destaques) === JSON.stringify((await lerCatalogo()).dados.destaques));
 
   const forme = antes.dados.jogos.find((jogo) => jogo.id === "forme-palavra");
@@ -227,6 +227,23 @@ try {
   conferir("Histórias em cenas conclui com descoberta",
     fimHistorias.status === 201 && fimHistorias.dados.primeiraDescoberta);
 
+  // DEV-CAT-M1-CONTEUDO, ticket 04: escolha sem rótulo que entregue.
+  const abrirFase1 = async (id) => {
+    const jogo = antes.dados.jogos.find((item) => item.id === id);
+    const inicio = await iniciar(familia.token, `${catalogo}/${id}/fases/1`);
+    return { jogo, inicio, conteudo: inicio.dados.conteudo };
+  };
+  const concluirFase1 = async ({ jogo }) => concluir(novaChave(), jogo.versao, familia.token, `${catalogo}/${jogo.id}/fases/1`);
+  const letra = await abrirFase1("letra-inicial");
+  const pista = await abrirFase1("adivinha-pista");
+  conferir("Letra inicial e Adivinha pela pista abrem escolha com nomes ocultos e dica",
+    [letra, pista].every(({ jogo, inicio, conteudo }) => jogo?.fases.length === 15 && jogo.categoria === "linguagem"
+      && inicio.status === 201 && conteudo.tipo === "escolha" && conteudo.ocultarNomes === true
+      && typeof conteudo.dica === "string" && conteudo.opcoes.some((opcao) => opcao.id === conteudo.resposta)));
+  const fimNovos = await Promise.all([letra, pista].map(concluirFase1));
+  conferir("Os dois jogos novos concluem com descoberta",
+    fimNovos.every((fim) => fim.status === 201 && fim.dados.primeiraDescoberta));
+
   // Fixture de uma descoberta gravada com outra versão do catálogo.
   const versaoHistorica = memoria.versao + 1;
   await prisma.progressoFaseJogo.update({
@@ -246,7 +263,7 @@ try {
   const eventosResposta = await historico();
   const eventos = eventosResposta.dados.eventos.filter((item) => item.tipo === "conclusao_fase_jogo");
   conferir("Histórico deriva uma descoberta por fase com versão da origem", eventosResposta.status === 200
-    && eventos.length === 8 && eventos.some((item) => item.origemId === "labirinto/1")
+    && eventos.length === 10 && eventos.some((item) => item.origemId === "labirinto/1")
     && eventos.some((item) => item.origemId === "memoria/1"
       && item.resumo.includes("Memória de uma edição anterior") && item.detalhe.includes(String(versaoHistorica))));
   const resumoAtual = await resumo();
@@ -254,7 +271,7 @@ try {
     eventosResposta.cache === "private, no-store" && resumoAtual.cache === "private, no-store");
   const jogosResumo = resumoAtual.dados.jogos;
   conferir("Resumo deriva jogos e contagens sem misturar participações", resumoAtual.status === 200
-    && jogosResumo.length === 8
+    && jogosResumo.length === 10
     && jogosResumo.every((jogo) => jogo.totalFases === 15
       && jogo.concluidasAte === 1 && jogo.concluidasNoPeriodo === 1)
     && resumoAtual.dados.experiencias.length === 0);

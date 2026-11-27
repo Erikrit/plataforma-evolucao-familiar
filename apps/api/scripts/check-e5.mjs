@@ -198,6 +198,38 @@ assert.ok(passos.every((valor, i) => i === 0 || valor >= passos[i - 1]), `Passos
   assert.match(dicaRobo({ mapa, inicio: { linha: 1, coluna: 1 }, chegada: { linha: 3, coluna: 1 } }, [{ direcao: "direita", passos: 2 }], 2), /baixo.*2/i);
 }
 
+// DEV-CAT-M1-CONTEUDO, ticket 04: escolha sem rótulo que entregue.
+{
+  const { CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5 } = await import("../prisma/catalogo-jogos-memoria-escolha-e5.mjs");
+  const par = (id, faces) => ({ id, faces });
+  // Mãe e filhote e Metades saíram do ticket 04 (responsável, 2026-11-27): a memória segue só com objeto e sombra.
+  for (const face of ["filhote", "metade-esquerda"]) {
+    assert.throws(() => montarConteudoMotor("memoria", { conjuntos: [[par("x", [{ nome: "X", simbolo: "🍎" }, { nome: "X", simbolo: "🍎", face }])]] }), face);
+  }
+  assert.deepEqual(CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5.map((j) => j.id), ["letra-inicial", "adivinha-pista"]);
+  for (const jogo of CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5) {
+    assert.ok(CATEGORIAS_BIBLIOTECA.includes(jogo.categoria));
+    assert.deepEqual(jogo.fases.map((f) => f.numero), Array.from({ length: 15 }, (_, i) => i + 1));
+    for (const fase of jogo.fases) {
+      for (const indice of fase.configuracao.conjuntos.keys()) {
+        let sorteios = 0;
+        const conteudo = montarConteudoMotor(jogo.tipoMecanica, fase.configuracao, () => (sorteios++ === 0 ? indice : 0));
+        if (jogo.tipoMecanica === "memoria") {
+          assert.equal(conteudo.cartas.length, fase.configuracao.conjuntos[indice].length * 2);
+          assert.equal(Boolean(conteudo.ocultarNomes), Boolean(fase.configuracao.ocultarNomes));
+        } else {
+          // Escolha: nomes ocultos até o acerto e dica de 1º nível curada que não aponta a figura.
+          assert.equal(conteudo.ocultarNomes, true);
+          const d1 = dicaEscolha(conteudo, 1);
+          assert.equal(d1.texto, fase.configuracao.conjuntos[indice].dica);
+          assert.equal(d1.destacar, null);
+          assert.equal(dicaEscolha(conteudo, 2).destacar, conteudo.resposta);
+        }
+      }
+    }
+  }
+}
+
 // Ticket 10 (D3, 2026-11-26): toda figura de jogo ativo tem SVG Twemoji local e origem registrada.
 {
   const { readFileSync, existsSync } = await import("node:fs");
@@ -264,5 +296,13 @@ assert.deepEqual(selecionarDestaquesJogos(editorial, [...aberturas].reverse()), 
 const todosExplorados = editorial.map((item, indice) => ({ jogoId: item.id, ultimaAberturaEm: new Date(indice) }));
 assert.deepEqual(selecionarDestaquesJogos(editorial, todosExplorados), ["outro", "memoria", "sequencia"]);
 assert.deepEqual(selecionarDestaquesJogos(editorial, editorial.map((item) => ({ jogoId: item.id, ultimaAberturaEm: new Date(5000) }))), ["memoria", "sequencia", "labirinto"]);
+
+// DEV-CAT-M1-CONTEUDO, ticket 04 (E5-ACE-10): com nomes ocultos na tela, o leitor de tela
+// ainda ouve o que a figura mostra (texto equivalente), como na memória.
+{
+  const { readFileSync } = await import("node:fs");
+  const escolha = readFileSync(fileURLToPath(new URL("../../web/src/componentes/desenvolvimento/jogos/tabuleiro-escolha.tsx", import.meta.url)), "utf8");
+  assert.ok(escolha.includes("aria-label={mostrarNomes ? figura.nome : `Figura ${indice + 1}: ${figura.nome}`}"), "escolha com nomes ocultos anuncia o nome da figura ao leitor de tela");
+}
 
 console.log("check-e5: três jogos, 45 fases em três trilhas, dicas em dois níveis, variantes e destaques determinísticos validados");

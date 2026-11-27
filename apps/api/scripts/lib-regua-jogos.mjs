@@ -10,6 +10,8 @@ import { CATALOGO_JOGOS_PILOTO_E5 } from "../prisma/catalogo-jogos-piloto-e5.mjs
 import { CATALOGO_JOGOS_EXPANSAO_E5 } from "../prisma/catalogo-jogos-expansao-e5.mjs";
 import { CATALOGO_JOGOS_HISTORIAS_E5 } from "../prisma/catalogo-jogos-historias-e5.mjs";
 import { CATALOGO_JOGOS_MARCO1_E5 } from "../prisma/catalogo-jogos-marco1-e5.mjs";
+import { CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5 } from "../prisma/catalogo-jogos-memoria-escolha-e5.mjs";
+import { trilhaDaFase } from "../prisma/trilhas-jogos.mjs";
 
 /** Mesma composição que a carga oficial publica (`prisma/carga-oficial.mjs`). */
 export const CATALOGO_CARREGADO = [
@@ -17,6 +19,7 @@ export const CATALOGO_CARREGADO = [
   ...CATALOGO_JOGOS_EXPANSAO_E5,
   ...CATALOGO_JOGOS_HISTORIAS_E5,
   ...CATALOGO_JOGOS_MARCO1_E5,
+  ...CATALOGO_JOGOS_MEMORIA_ESCOLHA_E5,
 ];
 
 /**
@@ -170,7 +173,7 @@ for (const [simbolo, termos] of Object.entries(TERMOS_CENAS)) {
  * Usado para desempatar a progressão por semelhança (decisão de 2026-11-26).
  */
 const GRUPOS_FIGURAS = {
-  animais: "🐈🐶🐟🐝🐇🐦🦋🦅🪰🐢🐸🐄🐖🐑🐴🐘🦒🐒🦁🐧🦆🐌🐞🦀🐙🐳🐔🐭",
+  animais: "🐈🐶🐟🐝🐇🐦🦋🦅🪰🐢🐸🐄🐖🐑🐴🐘🦒🐒🦁🐧🦆🐌🐞🦀🐙🐳🐔🐭🐣",
   plantas: "🌳🌸🍃🌵🌻🍄🌱🪴🌷",
   frutas: "🍎🍐🍌🍊🍓🍇🍒🍉🍍🍑🥝🥥🍋🥭",
   comidas: "🥕🌽🥦🍅🥔🍞🧀🥚🍪🎂🥪🥣",
@@ -190,6 +193,29 @@ const SUPERGRUPOS = {
 };
 const grupoDe = (simbolo) =>
   Object.entries(GRUPOS_FIGURAS).find(([, simbolos]) => [...new Intl.Segmenter().segment(simbolos)].some((p) => p.segment === simbolo))?.[0] ?? null;
+
+/** Letras de som vizinho, que a criança confunde ao falar o nome (Letra inicial). L/R ficam de fora: o R inicial não soa como L. */
+const SONS_VIZINHOS = { b: "p", p: "b", f: "v", v: "f", t: "d", d: "t", m: "n", n: "m", c: "g", g: "c", s: "z", z: "s" };
+
+/**
+ * Distrações parecidas com a resposta (homologação de 2026-11-27):
+ * - letra (`inicio` de uma letra): a distração começa com a letra de som vizinho;
+ * - sílaba (`inicio` de duas ou mais letras): a distração começa com a mesma letra;
+ * - pista: a distração é do mesmo grupo de figuras da resposta.
+ */
+function distracoesParecidas(conjunto, correta, distratores) {
+  if (conjunto.inicio) {
+    const inicio = normalizar(conjunto.inicio);
+    const primeira = (opcao) => normalizar(opcao.nome)[0];
+    const alvo = inicio.length > 1 ? inicio[0] : SONS_VIZINHOS[inicio];
+    return distratores.filter((d) => primeira(d) === alvo).length;
+  }
+  if (conjunto.pista) {
+    const grupo = grupoDe(correta.simbolo);
+    return grupo ? distratores.filter((d) => grupoDe(d.simbolo) === grupo).length : 0;
+  }
+  return 0;
+}
 
 /** 2 por distrator do mesmo grupo da resposta, 1 se só do mesmo supergrupo. */
 function semelhancaComResposta(resposta, distratores) {
@@ -215,7 +241,9 @@ const NOME_FORMA = { circulo: "circulo", quadrado: "quadrado", triangulo: "trian
 const METRICAS = {
   labirinto: { principal: "decisoes", secundarias: [], naoCaem: ["passos"], extras: ["juncoes", "becos"] },
   memoria: { principal: "pares", secundarias: ["semelhanca"] },
-  escolha: { principal: "opcoes", secundarias: ["semelhanca"] },
+  // Homologação de 2026-11-27: "parecidas" mede o quanto as distrações confundem (letra/pista)
+  // e desempata a progressão; "proporcao" é a fração das distrações que são parecidas.
+  escolha: { principal: "opcoes", secundarias: ["semelhanca", "parecidas"], extras: ["proporcao"] },
   sequencia: { principal: "periodo", secundarias: ["comprimento", "lacunaNoMeio"] },
   // Ticket 13: Pequenos com nome, Médios sem nome, Grandes com intrusas; a pista sai nos empates.
   ordenacao: { principal: "cenas", secundarias: ["semNomes", "intrusas", "semPista"] },
@@ -228,6 +256,16 @@ const normalizar = (texto) =>
   texto.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").trim();
 const palavras = (texto) => normalizar(texto).split(/\s+/).filter(Boolean);
 const igualVisivel = (a, b) => a.simbolo === b.simbolo && normalizar(a.nome) === normalizar(b.nome);
+const listaNomes = (nomes) => nomes.map((nome) => `“${nome}”`).join(", ");
+
+/**
+ * O texto cita o nome (ou palavra derivada dele): alguma palavra começa pelo radical
+ * de uma palavra do nome (a palavra sem a última letra, com ao menos três letras).
+ */
+function citaNome(texto, nome) {
+  const radicais = palavras(nome).filter((p) => p.length >= 3).map((p) => p.slice(0, Math.max(3, p.length - 1)));
+  return palavras(texto).some((p) => radicais.some((r) => p.startsWith(r)));
+}
 
 // ---------- Nome × figura ----------
 
@@ -467,10 +505,7 @@ const MOTORES = {
           }
         }
       }
-      if (vazamentos.length) {
-        const nomes = vazamentos.map((nome) => `“${nome}”`).join(", ");
-        falhas.push(["rotulo", `a sombra mostra o nome do objeto (${nomes})`]);
-      }
+      if (vazamentos.length) falhas.push(["rotulo", `a sombra mostra o nome do objeto (${listaNomes(vazamentos)})`]);
       // Semelhança: pares menos grupos distintos (mais pares do mesmo grupo, mais difícil).
       const grupos = new Set(objetos.map((o, i) => grupoDe(o.simbolo) ?? `sem-grupo-${i}`));
       return { metricas: { pares: contagem.size, semelhanca: contagem.size - grupos.size }, falhas };
@@ -498,18 +533,37 @@ const MOTORES = {
         if (visiveis && vezes(normalizar(correta.nome)) === 1 && distratoras.every((nome) => vezes(nome) >= 2)) {
           motivos.push(`só a resposta tem nome diferente (“${correta.nome}”)`);
         }
+        // Adivinha pela pista (ticket 04): a pista não diz o nome da resposta, nem em palavra derivada.
+        if (conjunto.pista && citaNome(conjunto.enunciado, correta.nome)) {
+          motivos.push(`a pista diz o nome da resposta (“${correta.nome}”)`);
+        }
         if (motivos.length) falhas.push(["rotulo", motivos.join("; ")]);
         // Dica de primeiro nível não pode dizer o nome da resposta.
-        if (conjunto.dica && ` ${palavras(conjunto.dica).join(" ")} `.includes(` ${palavras(correta.nome).join(" ")} `)) {
-          falhas.push(["dica", `a dica entrega a resposta (“${correta.nome}”)`]);
+        const dicaCita = conjunto.pista
+          ? citaNome(conjunto.dica ?? "", correta.nome)
+          : conjunto.dica && ` ${palavras(conjunto.dica).join(" ")} `.includes(` ${palavras(correta.nome).join(" ")} `);
+        if (dicaCita) falhas.push(["dica", `a dica entrega a resposta (“${correta.nome}”)`]);
+        // Letra inicial (ticket 04): a resposta começa com a letra ou sílaba pedida, e só ela.
+        if (conjunto.inicio) {
+          const inicio = normalizar(conjunto.inicio);
+          const comeca = (opcao) => normalizar(opcao.nome).startsWith(inicio);
+          const outras = opcoes.filter((opcao) => opcao !== correta && comeca(opcao));
+          if (!comeca(correta)) {
+            falhas.push(["solucao", `“${correta.nome}” não começa com ${conjunto.inicio}`]);
+          } else if (outras.length) {
+            falhas.push(["resposta-unica", `também começa com ${conjunto.inicio}: ${listaNomes(outras.map((opcao) => opcao.nome))}`]);
+          }
         }
       }
       for (const opcao of opcoes) {
         const erro = conferirFigura(opcao);
         if (erro) falhas.push(["nome-figura", erro]);
       }
-      const semelhanca = correta ? semelhancaComResposta(correta, opcoes.filter((o) => o !== correta)) : 0;
-      return { metricas: { opcoes: opcoes.length, semelhanca }, falhas };
+      const distratores = opcoes.filter((o) => o !== correta);
+      const semelhanca = correta ? semelhancaComResposta(correta, distratores) : 0;
+      const parecidas = correta ? distracoesParecidas(conjunto, correta, distratores) : 0;
+      const proporcao = distratores.length ? parecidas / distratores.length : 1;
+      return { metricas: { opcoes: opcoes.length, semelhanca, parecidas, proporcao }, falhas };
     },
     chave: (conjunto) => `${conjunto.resposta}:${(conjunto.opcoes ?? []).map((o) => o.id).sort().join(",")}`,
   },
@@ -598,6 +652,48 @@ function avaliarVariedade(motor, variantes) {
 }
 
 /**
+ * Escolha com letra ou pista (homologação de 2026-11-27). Mais opções sozinhas não bastam:
+ * - Médios: em cada fase, pelo menos metade das distrações é parecida;
+ * - Grandes: todas as distrações são parecidas;
+ * - dentro de cada trilha, as distrações parecidas não diminuem de uma fase para a outra;
+ * - a média de distrações parecidas cresce de Pequenos para Médios e de Médios para Grandes.
+ */
+function avaliarDificuldadePorTrilha(jogo, fases) {
+  if (jogo.tipoMecanica !== "escolha") return [];
+  const regrada = jogo.fases.some((fase) => (fase.configuracao?.conjuntos ?? []).some((c) => c.inicio || c.pista));
+  if (!regrada) return [];
+  const trilhaDe = (fase) => fase.trilha ?? trilhaDaFase(fase.numero);
+  const porTrilha = new Map();
+  const falhas = [];
+  jogo.fases.forEach((fase, i) => {
+    const trilha = trilhaDe(fase);
+    const { parecidas, proporcao, opcoes } = fases[i].metricas;
+    // A fase vale pela variante mais fácil; a proporção é a menor entre as variantes.
+    const distratores = Math.max(0, opcoes - 1);
+    const contagem = `${Math.round(proporcao * distratores)} de ${distratores} distrações parecidas`;
+    if (trilha === "medios" && proporcao < 0.5) falhas.push([fase.numero, `medios: ${contagem}; mínimo metade`]);
+    if (trilha === "grandes" && proporcao < 1) falhas.push([fase.numero, `grandes: ${contagem}; todas precisam ser`]);
+    const lista = porTrilha.get(trilha) ?? [];
+    const anterior = lista.at(-1);
+    if (anterior && parecidas < anterior.parecidas) {
+      falhas.push([fase.numero, `parecidas ${anterior.parecidas} → ${parecidas} dentro de ${trilha}: a dificuldade cai`]);
+    }
+    lista.push({ numero: fase.numero, parecidas });
+    porTrilha.set(trilha, lista);
+  });
+  const media = (lista) => lista.reduce((t, f) => t + f.parecidas, 0) / lista.length;
+  const arred = (n) => Math.round(n * 10) / 10;
+  const ordem = ["pequenos", "medios", "grandes"].filter((t) => porTrilha.has(t));
+  for (let i = 1; i < ordem.length; i += 1) {
+    const [antes, agora] = [porTrilha.get(ordem[i - 1]), porTrilha.get(ordem[i])];
+    if (media(agora) <= media(antes)) {
+      falhas.push([agora[0].numero, `distrações parecidas em ${ordem[i]} (${arred(media(agora))}) não passam das de ${ordem[i - 1]} (${arred(media(antes))})`]);
+    }
+  }
+  return falhas;
+}
+
+/**
  * Avalia o catálogo de jogos. `aprovado` é falso se houver qualquer falha.
  * Variantes e fases são numeradas a partir de 1.
  */
@@ -646,6 +742,7 @@ export function avaliarCatalogo(catalogo) {
         registrar(fases[i].numero, undefined, "progressao", `${nome} ${antes[nome]} → ${agora[nome]}: a dificuldade cai`);
       }
     }
+    avaliarDificuldadePorTrilha(jogo, fases).forEach(([fase, detalhe]) => registrar(fase, undefined, "dificuldade-trilha", detalhe));
     jogos.push({ id: jogo.id, tipoMecanica: jogo.tipoMecanica, fases });
   }
 

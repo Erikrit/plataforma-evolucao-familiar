@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 02
 
-**Status:** PENDING_HUMAN — parte automática concluída; falta E5-HOM (amostra de 5)
+**Status:** COMPLETED — homologado pelo responsável em 2026-11-27
 
 **Costura:** régua de atividades, carga oficial e smoke:e4
 
@@ -16,7 +16,7 @@
 
 - [x] Régua de atividades aprova as 60 ativas; cada faixa com pelo menos 20 ativas e pelo menos 3 em cada área, e diferença de no máximo 10 entre a faixa com mais e a com menos oferta
 - [x] Carga oficial idempotente com 60 ativas e as arquivadas preservadas
-- [ ] E5-HOM — amostra de 5 atividades homologada pelo responsável
+- [x] E5-HOM — amostra de 5 atividades homologada pelo responsável (2026-11-27)
 
 ## Conclusão técnica (2026-11-27)
 
@@ -33,7 +33,7 @@
   - Amarelinha sem a variação "de olhos fechados".
   - Percurso de células unificado e aprovação do catálogo num campo só.
   - Duplicações levadas ao ticket 13.
-- **Pendente (humano):** E5-HOM com a amostra Sombra de quem?, Lavar as mãos cantando, Pular corda em dupla, Planta da casa e Amarelinha.
+- **Homologação (2026-11-27):** E5-HOM aprovado pelo responsável, com a amostra Sombra de quem?, Lavar as mãos cantando, Pular corda em dupla, Planta da casa e Amarelinha.
 
 **mensagemCommit:**
 

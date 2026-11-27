@@ -43,3 +43,8 @@ Registrar **somente transições materiais** de demandas novas: ID, tipo, branch
 **2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 02 concluído:** E5-HOM aprovado pelo responsável; teto de 60 aprovado; critério de faixa do ticket 03 ajustado (mínimo 20 por faixa, 3 por faixa × área, diferença até 10).
 
 **2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 03:** lote 2 com 20 Atividades Reais novas (60 ativas; faixas 45/42/44) na `develop` @ `917ab27`, sem commit. QG-1/QG-2 e verificador PASS; fingerprint `sha256:5a5abd97…`. `PENDING_HUMAN`: E5-HOM da amostra de 5.
+
+**2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 03 concluído:** commit `421e958`; E5-HOM aprovado pelo responsável. Marco 1 com 60 Atividades Reais.
+
+
+**2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 04:** primeira E5-HOM reprovada (dificuldade não subia; Metades parecido com Memória). Mãe e filhote e Metades retirados para substituição depois do Marco 1; Letra inicial e Adivinha refeitos com distrações parecidas e régua `dificuldade-trilha`. QG-1/QG-2 e verificador PASS; fingerprint `sha256:f9f9259a…`. `PENDING_HUMAN`: nova E5-HOM.

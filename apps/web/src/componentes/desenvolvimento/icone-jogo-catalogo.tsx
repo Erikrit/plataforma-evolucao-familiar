@@ -17,6 +17,8 @@ const CORES: Record<string, { fundo: string; traço: string }> = {
   "forme-palavra": { fundo: "#E6F7F5", traço: "#0F6E66" },
   "menor-maior": { fundo: "#FDF3E1", traço: "#8A5A00" },
   "robo-setas": { fundo: "#F0E8FA", traço: "#5B3A8C" },
+  "letra-inicial": { fundo: "#E6F7F5", traço: "#0F6E66" },
+  "adivinha-pista": { fundo: "#FFF0F6", traço: "#A61E4D" },
 };
 
 type Props = {
@@ -37,6 +39,8 @@ const FIGURA_JOGO: Record<string, string> = {
   "forme-palavra": "🔤",
   "menor-maior": "📊",
   "robo-setas": "🤖",
+  "letra-inicial": "✏️",
+  "adivinha-pista": "🦉",
 };
 
 /** Ícone quadrado editorial por jogo (sem depender de capaRef). */

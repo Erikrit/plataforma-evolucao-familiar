@@ -73,38 +73,45 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável: E5-HOM do ticket 03 (amostra de 5) e commit. Seguem tickets 04 e 10, um por sessão.",
+    "proximaAcao": "Responsável: nova E5-HOM do ticket 04 no celular (Letra inicial e Adivinha pela pista) e commit (dar git add nos arquivos MM antes). Depois, ticket 10.",
     "ticketAtivo": {
-      "ticket": "03-atividades-lote-2",
+      "ticket": "04-jogos-memoria-e-escolha",
       "estado": "PENDING_HUMAN",
       "branch": "develop",
-      "base": "917ab27",
+      "base": "421e958",
+      "nota": "Reaproveita a implementação da worktree t04-jogos-memoria-escolha (execução paralela, base 4a5bfc5), trazida para a develop por decisão do responsável em 2026-11-27 e revalidada aqui.",
       "arquivos": [
-        "apps/api/prisma/catalogo-biblioteca-e4.mjs",
+        "apps/api/prisma/catalogo-jogos-memoria-escolha-e5.mjs",
         "apps/api/prisma/carga-oficial.mjs",
-        "apps/api/scripts/lib-regua-atividades.mjs",
-        "apps/api/scripts/regua-atividades.mjs",
-        "apps/api/scripts/regua-atividades.test.mjs",
-        "apps/api/scripts/check-e4.mjs",
-        "apps/api/scripts/qg-cat-01.mjs",
-        "apps/api/scripts/qg-cat-trilhas.mjs"
+        "apps/api/scripts/check-e5.mjs",
+        "apps/api/scripts/lib-regua-jogos.mjs",
+        "apps/api/scripts/regua-jogos.test.mjs",
+        "apps/api/scripts/smoke-e5.mjs",
+        "apps/api/src/desenvolvimento/jogos/motores-jogos.ts",
+        "apps/web/src/componentes/desenvolvimento/icone-jogo-catalogo.tsx",
+        "apps/web/src/componentes/desenvolvimento/jogos/",
+        "apps/web/src/lib/api.ts",
+        "apps/web/src/lib/catalogo-visual-jogos.ts",
+        "apps/web/src/lib/figuras-twemoji.ts",
+        "apps/web/public/figuras/twemoji/"
       ],
-      "qg1": "PASS — lint, typecheck, authz, check-e4 14/14, regua-atividades 21/21 (60 ativas, 0 pendências de faixa)",
-      "fingerprint": "sha256:5a5abd971cf142b499d9afc537b2e5c249e3cac83de699f05251a5c92ade7b57",
-      "qg2": "PASS — build, authz, carga-trilhas (60 ativas e 4 arquivadas após carga ×2), smoke-e4",
-      "verificador": "PASS (inclui delta pós-revisão)",
-      "revisao": "Padrões: celulasAbaixoDe e catalogoAprovado; duplicações ao ticket 13. Especificação: ficha da corda corrigida; pendência E4-ACE-01 mantida em pendenciasDocumentais",
-      "homologacao": "PENDING_HUMAN — E5-HOM, amostra: sombra_de_quem, lavar_maos_cantando, corda_em_dupla, planta_da_casa, amarelinha",
-      "mensagemCommit": "feat(desenvolvimento): lote 2 fecha 60 Atividades Reais\n\nVinte fichas novas (9 só para Pequenos, 9 só para Grandes e 2 para\ntodas as faixas), chegando a 60 ativas com 45/42/44 por faixa. A régua\npassa a exigir mínimo de 20 por faixa, 3 por faixa × área e diferença\naté 10; qg-cat-trilhas confere 60 ativas e 4 arquivadas após carga ×2."
+      "qg1": "PASS — lint, typecheck, authz, check-e4, check-e5, regua-jogos 33/33 (14 jogos, 0 falhas)",
+      "fingerprint": "sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064",
+      "decisoes": "Mãe e filhote e Metades retirados (substituir depois do Marco 1). Letra inicial e Adivinha refeitos com distrações parecidas; régua mede parecidas por trilha.",
+      "qg2": "PASS — build, authz, carga-trilhas, smoke-e4, smoke-e5",
+      "verificador": "PASS (após FAIL corrigido: pista do Limão, Grandes com traço único, L/R)",
+      "revisao": "Padrões: trilhaDaFase reaproveitada; julgamentos de desenho ao ticket 13. Especificação: Pequenos e sons vizinhos alinhados no ticket; Grandes sem traço único",
+      "homologacao": "Primeira E5-HOM REPROVADA em 2026-11-27 (dificuldade e Metades). Refeito; nova E5-HOM PENDING_HUMAN.",
+      "mensagemCommit": "feat(jogos): Letra inicial e Adivinha pela pista com dificuldade real\n\nDois jogos novos do Marco 1, com 15 fases em três trilhas. As\ndistrações ficam cada vez mais parecidas com a resposta: sons\nvizinhos e mesma letra na Letra inicial; figuras do mesmo tipo e\ntraços combinados na Adivinha. A régua passa a medir isso por trilha.\nLeitor de tela ouve o nome da figura na escolha com nomes ocultos.\nMãe e filhote e Metades saíram e serão substituídos depois do Marco 1."
     },
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T12:10:31.048Z",
-        "base": "917ab27687f5510f67b195892beb25ec85f5e5bf",
-        "head": "917ab27687f5510f67b195892beb25ec85f5e5bf",
-        "fingerprint": "sha256:5a5abd971cf142b499d9afc537b2e5c249e3cac83de699f05251a5c92ade7b57",
+        "em": "2026-11-27T14:55:18.745Z",
+        "base": "421e95820ca126d1af9922735fcb0278be356594",
+        "head": "421e95820ca126d1af9922735fcb0278be356594",
+        "fingerprint": "sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064",
         "checagens": [
           {
             "nome": "lint",
@@ -138,21 +145,27 @@
             "exit": 0
           },
           {
-            "nome": "regua-atividades",
+            "nome": "check-e5",
             "status": "PASS",
-            "comando": "npm run test:regua-atividades -w @pef/api",
+            "comando": "npm run check:e5 -w @pef/api",
+            "exit": 0
+          },
+          {
+            "nome": "regua-jogos",
+            "status": "PASS",
+            "comando": "npm run test:regua -w @pef/api",
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T12-10-31-048Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T14-55-18-745Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T12:13:10.987Z",
-        "base": "917ab27687f5510f67b195892beb25ec85f5e5bf",
-        "head": "917ab27687f5510f67b195892beb25ec85f5e5bf",
-        "fingerprint": "sha256:5a5abd971cf142b499d9afc537b2e5c249e3cac83de699f05251a5c92ade7b57",
+        "em": "2026-11-27T14:58:06.476Z",
+        "base": "421e95820ca126d1af9922735fcb0278be356594",
+        "head": "421e95820ca126d1af9922735fcb0278be356594",
+        "fingerprint": "sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064",
         "checagens": [
           {
             "nome": "build",
@@ -184,14 +197,21 @@
             "status": "PASS",
             "comando": "npm run smoke:e4 -w @pef/api",
             "exit": 0
+          },
+          {
+            "nome": "smoke-e5-jogos",
+            "status": "PASS",
+            "comando": "npm run smoke:e5 -w @pef/api",
+            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T12-13-10-987Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T14-58-06-476Z.json"
       }
     },
-    "fingerprint": "sha256:5a5abd971cf142b499d9afc537b2e5c249e3cac83de699f05251a5c92ade7b57",
+    "fingerprint": "sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064",
     "pendenciasDocumentais": [
-      "Texto de E4-ACE-01 (M03 §12, linhas 221 e 321) ainda diz 24; teto de 60 aprovado em 2026-11-27. M03 §15 (Marco 1) diz 'cerca de 20 por faixa'; leitura aprovada no ticket 03 (mínimo 20, 3 por faixa × área, diferença até 10). Atualizar na conversa de planejamento."
+      "Texto de E4-ACE-01 (M03 §12, linhas 221 e 321) ainda diz 24; teto de 60 aprovado em 2026-11-27. M03 §15 (Marco 1) diz 'cerca de 20 por faixa'; leitura aprovada no ticket 03 (mínimo 20, 3 por faixa × área, diferença até 10). Atualizar na conversa de planejamento.",
+      "Marco 1 (M03 §15) lista Mãe e filhote e Metades entre os 12 jogos novos; retirados do ticket 04 em 2026-11-27 pelo responsável, a substituir depois do Marco 1 (Marco 1 com 18 jogos ativos até lá)."
     ]
   },
   "demandasConcluidas": [

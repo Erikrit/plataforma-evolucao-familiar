@@ -21,6 +21,7 @@ export function TabuleiroEscolha({
   const pedidosDica = useRef(0);
   const foco = useRef<HTMLDivElement>(null);
   // Em Palavra e figura o nome entrega a resposta: só aparece depois do acerto.
+  // O leitor de tela continua ouvindo o nome (texto equivalente à figura, E5-ACE-10; ticket 04).
   const mostrarNomes = !conteudo.ocultarNomes || acertou;
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export function TabuleiroEscolha({
             key={figura.id}
             className={estilos.pecaAcao}
             onClick={() => escolher(figura)}
-            aria-label={mostrarNomes ? figura.nome : `Figura ${indice + 1}`}
+            aria-label={mostrarNomes ? figura.nome : `Figura ${indice + 1}: ${figura.nome}`}
             data-dica={destacada === figura.id}
           >
             <span className={estilos.figura} aria-hidden="true">
