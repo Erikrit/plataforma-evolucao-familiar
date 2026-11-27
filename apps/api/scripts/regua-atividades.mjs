@@ -2,9 +2,10 @@
  * Régua das Atividades Reais sobre o catálogo versionado, sem banco (DEV-CAT-M1-CONTEUDO, ticket 01).
  *
  *   npm run regua:atividades -w @pef/api           # fichas + matriz de cobertura; sai 1 se alguma ficha reprovar
+ *                                                  # ou se faltar atividade em alguma faixa × área (desde o ticket 02)
  *   npm run regua:atividades -w @pef/api -- --json # saída estruturada
  *
- * Buracos da matriz são relatados e não mudam a saída.
+ * Buracos de duração, lugar e pessoas são relatados e não mudam a saída.
  */
 import { CATALOGO_BIBLIOTECA_E4 } from "../prisma/catalogo-biblioteca-e4.mjs";
 import { AREAS, FAIXAS, avaliarAtividades } from "./lib-regua-atividades.mjs";
@@ -35,8 +36,8 @@ if (process.argv.includes("--json")) {
   if (relatorio.buracos.length) console.log(`\nBuracos (${relatorio.buracos.length}): ${relatorio.buracos.join("; ")}`);
   console.log(
     `\nregua-atividades: ${relatorio.atividades.length} ativas, ${relatorio.falhas.length} falhas — ` +
-      `fichas ${relatorio.aprovado ? "APROVADAS" : "REPROVADAS"}`,
+      `fichas ${relatorio.aprovado ? "APROVADAS" : "REPROVADAS"}, ${relatorio.buracosDeArea.length} buracos de área`,
   );
 }
 
-if (!relatorio.aprovado) process.exitCode = 1;
+if (!relatorio.aprovado || relatorio.buracosDeArea.length) process.exitCode = 1;

@@ -53,6 +53,8 @@ const acompanhamento = readFileSync(
 
 const idsCatalogo = [...catalogo.matchAll(/id:\s*"([^"]+)"/g)].map((m) => m[1]);
 const idsUnicos = new Set(idsCatalogo);
+const { CATALOGO_BIBLIOTECA_E4 } = await import("../prisma/catalogo-biblioteca-e4.mjs");
+const ativosCatalogo = CATALOGO_BIBLIOTECA_E4.filter((a) => a.ativo !== false).length;
 const fichasCuradoria = [
   "O que sumiu?",
   "Mapa do tesouro",
@@ -64,11 +66,11 @@ const fichasCuradoria = [
 
 reg(
   "E4-ACE-01-limite-constante",
-  constantes.includes("LIMITE_CATALOGO_ATIVO = 24") &&
+  constantes.includes("LIMITE_CATALOGO_ATIVO = 60") &&
     catalogo.includes("CATALOGO_BIBLIOTECA_E4") &&
-    idsCatalogo.length <= 24 &&
+    ativosCatalogo <= 60 &&
     idsCatalogo.length === idsUnicos.size,
-  `Catálogo com ${idsCatalogo.length} ids únicos ≤ 24`,
+  `Catálogo com ${idsCatalogo.length} ids únicos; ativos ≤ 60 (Marco 1)`,
 );
 reg(
   "E4-ACE-01-metadados-schema",
@@ -84,18 +86,17 @@ reg(
 reg(
   "DEV-JOG-P01-curadoria",
   fichasCuradoria.every((nome) => catalogo.includes(nome)) &&
-    idsCatalogo.length === 24,
-  "Seis fichas aprovadas no catálogo de 24",
+    idsCatalogo.length === 44,
+  "Seis fichas aprovadas no catálogo de 44 (40 ativas + 4 arquivadas)",
 );
 // D2 (2026-11-26): atividades de adultos e idosos arquivadas; as demais ficam em 5 a 12 anos.
 const ARQUIVADAS_D2 = ["desafio_cat_fotos_lembranca", "desafio_cat_alongar_ombro", "desafio_cat_lista_compras_mental", "desafio_cat_calendario_semana"];
-const { CATALOGO_BIBLIOTECA_E4 } = await import("../prisma/catalogo-biblioteca-e4.mjs");
 reg(
   "D2-catalogo-5-a-12",
   CATALOGO_BIBLIOTECA_E4.filter((a) => a.ativo === false).map((a) => a.id).sort().join() === [...ARQUIVADAS_D2].sort().join() &&
     CATALOGO_BIBLIOTECA_E4.filter((a) => a.ativo !== false).every((a) => a.faixaEtariaMin >= 5 && a.faixaEtariaMax <= 12) &&
     sugestoes.includes("faixaDaPessoa"),
-  "Quatro atividades de adultos e idosos arquivadas; 20 ativas em 5 a 12 anos; sugestões priorizam a faixa",
+  "Quatro atividades de adultos e idosos arquivadas; ativas em 5 a 12 anos; sugestões priorizam a faixa",
 );
 reg(
   "E4-ACE-02-sugestoes",
@@ -183,8 +184,8 @@ const { avaliarAtividades } = await import("./lib-regua-atividades.mjs");
 const reguaAtividades = avaliarAtividades(CATALOGO_BIBLIOTECA_E4);
 reg(
   "REGUA-ATIVIDADE-REAL-ficha-padrao",
-  reguaAtividades.aprovado && reguaAtividades.atividades.length === 20,
-  `${reguaAtividades.atividades.length} ativas, ${reguaAtividades.falhas.length} falhas na ficha (npm run regua:atividades)`,
+  reguaAtividades.aprovado && reguaAtividades.atividades.length === 40 && reguaAtividades.buracosDeArea.length === 0,
+  `${reguaAtividades.atividades.length} ativas, ${reguaAtividades.falhas.length} falhas na ficha, ${reguaAtividades.buracosDeArea.length} buracos de área (npm run regua:atividades)`,
 );
 const fichaWeb = readFileSync(join(raiz, "apps/web/src/componentes/desenvolvimento/ficha-atividade.tsx"), "utf8");
 const camposFicha = ["passos", "variacaoFacil", "variacaoDificil", "adaptacaoSentado", "seguranca", "lugar", "pessoasMin", "pessoasMax"];

@@ -73,15 +73,13 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável: commit do ticket 01. Depois, /implementar dos tickets 02, 04 e 10, um por sessão, na develop atualizada. Ticket 13 (refatoração geral) depois de 01 a 11; 12 fecha.",
+    "proximaAcao": "Responsável: E5-HOM do ticket 02 (amostra de 5) e decisões do teto 60 e da conta por faixa (afeta o ticket 03); depois commit. Seguem tickets 04 e 10, um por sessão.",
     "ticketAtivo": {
-      "ticket": "01-ficha-padrao-e-regua-de-atividades",
-      "estado": "COMPLETED",
+      "ticket": "02-atividades-lote-1",
+      "estado": "PENDING_HUMAN",
       "branch": "develop",
-      "nota": "Reaproveita a implementação da worktree t01-ficha-padrao-atividades (execução paralela descartada pelo responsável), trazida para a develop e revalidada aqui.",
+      "base": "a9e9e9f",
       "arquivos": [
-        "apps/api/prisma/schema.prisma",
-        "apps/api/prisma/migrations/20261126180000_ficha_padrao_atividade/",
         "apps/api/prisma/catalogo-biblioteca-e4.mjs",
         "apps/api/prisma/carga-oficial.mjs",
         "apps/api/scripts/lib-regua-atividades.mjs",
@@ -89,35 +87,25 @@
         "apps/api/scripts/regua-atividades.test.mjs",
         "apps/api/scripts/check-e4.mjs",
         "apps/api/scripts/smoke-e4.mjs",
-        "apps/api/scripts/diag-renovar-sugestoes.mjs",
-        "apps/api/src/desenvolvimento/ficha-padrao.ts",
-        "apps/api/src/desenvolvimento/servico-desafios.ts",
-        "apps/api/src/desenvolvimento/servico-sugestoes.ts",
-        "apps/web/src/lib/api.ts",
-        "apps/web/src/componentes/desenvolvimento/ficha-atividade.tsx",
-        "apps/web/src/componentes/desenvolvimento/biblioteca-atividades.tsx",
-        "apps/api/package.json",
-        "esteira.config.json"
+        "apps/api/scripts/qg-cat-01.mjs",
+        "apps/api/src/desenvolvimento/constantes-desenvolvimento.ts"
       ],
-      "qg1": "PASS — lint, typecheck, authz, check-e4 14/14, check-e5, regua-atividades 15/15",
-      "qg2": "PASS — build, authz, carga-trilhas, smoke-e4, smoke-e5, smoke-historico-resumo",
+      "qg1": "PASS — lint, typecheck, authz, check-e4 14/14, check-e5, regua-atividades 18/18 (40 ativas, 0 buracos de área)",
+      "fingerprint": "sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077",
+      "qg2": "PASS — build, authz, carga-trilhas, smoke-historico-resumo, smoke-e4, smoke-e5",
       "verificador": "PASS (inclui delta pós-revisão)",
-      "revisao": "Padrões e Especificação feitas; objetivos corrigidos (combinações da matriz, pessoas individual, lugar validado, teste áreas=API); julgamentos levados ao humano",
-      "fingerprint": "sha256:0cf06943f1b7f0e73e8af5ab356ee0d7fdbb700aa095a114b933e140decad8f1",
-      "base": "4a5bfc5",
-      "mensagemCommit": "feat(desenvolvimento): ficha padrão e régua das Atividades Reais\n\nPassos, variações, versão sentada, segurança por faixa, lugar e pessoas em Desafio; régua sem banco com matriz de cobertura, as 20 ativas revistas e a ficha compacta na tela de detalhe. Termos no glossário e ticket 13 de refatoração geral.",
-      "homologacao": "PASS — E5-HOM (320 px) aprovado pelo responsável em 2026-11-27",
-      "decisoes": "DROP de adaptacoes/supervisao confirmado; termos no glossário (PROPOSTA); faixas de duração adiadas e duplicações para o ticket 13",
-      "notaFingerprint": "Após o fingerprint, só GLOSSARIO.md mudou (doc). Reexecução dos portões bloqueada: dev:api do responsável segura a DLL do Prisma."
+      "revisao": "Padrões: objetivos corrigidos; duplicações ao ticket 13. Especificação: teto 60, conta por faixa para o ticket 03 e cobertura de Pequenos levados ao humano",
+      "homologacao": "PENDING_HUMAN — E5-HOM, amostra: feira_mentirinha, quantos_cabem, salada_medida, detetive_janela, massinha_caseira",
+      "mensagemCommit": "feat(desenvolvimento): lote 1 com 20 Atividades Reais novas\n\nVinte fichas novas pela ficha padrão, sete de Números, chegando a 40 ativas sem buraco de faixa × área; a régua passa a reprovar buraco de área. Teto do catálogo sobe de 24 para 60 (Marco 1, DEV-CAT-P09) e contadores da carga, check-e4, smoke-e4 e qg-cat-01 atualizados."
     },
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T03:40:12.277Z",
-        "base": "4a5bfc531e9cd789be5d557e17619f4cded88605",
-        "head": "4a5bfc531e9cd789be5d557e17619f4cded88605",
-        "fingerprint": "sha256:0cf06943f1b7f0e73e8af5ab356ee0d7fdbb700aa095a114b933e140decad8f1",
+        "em": "2026-11-27T10:51:55.504Z",
+        "base": "a9e9e9f62fd92343afb0b7e1487e5776eb868a73",
+        "head": "a9e9e9f62fd92343afb0b7e1487e5776eb868a73",
+        "fingerprint": "sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077",
         "checagens": [
           {
             "nome": "lint",
@@ -163,15 +151,15 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T03-40-12-277Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T10-51-55-504Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T03:42:18.560Z",
-        "base": "4a5bfc531e9cd789be5d557e17619f4cded88605",
-        "head": "4a5bfc531e9cd789be5d557e17619f4cded88605",
-        "fingerprint": "sha256:0cf06943f1b7f0e73e8af5ab356ee0d7fdbb700aa095a114b933e140decad8f1",
+        "em": "2026-11-27T10:54:30.079Z",
+        "base": "a9e9e9f62fd92343afb0b7e1487e5776eb868a73",
+        "head": "a9e9e9f62fd92343afb0b7e1487e5776eb868a73",
+        "fingerprint": "sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077",
         "checagens": [
           {
             "nome": "build",
@@ -217,10 +205,10 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T03-42-18-560Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T10-54-30-079Z.json"
       }
     },
-    "fingerprint": "sha256:0cf06943f1b7f0e73e8af5ab356ee0d7fdbb700aa095a114b933e140decad8f1"
+    "fingerprint": "sha256:d6669f8dbd8666675f6566b790d30f4e877fb6368e381a9eff9cd11e3f0ed077"
   },
   "demandasConcluidas": [
     {

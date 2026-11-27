@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { CATALOGO_BIBLIOTECA_E4 } from "../prisma/catalogo-biblioteca-e4.mjs";
-import { AREAS, avaliarAtividades, faixasDaAtividade } from "./lib-regua-atividades.mjs";
+import { AREAS, FAIXAS, avaliarAtividades, faixasDaAtividade } from "./lib-regua-atividades.mjs";
 
 function ficha(extra = {}) {
   return {
@@ -143,6 +143,19 @@ test("matriz de cobertura conta faixa × área e cada dimensão, e aponta os bur
   assert.ok(relatorio.buracos.includes("área: memoria_atencao"));
   assert.ok(relatorio.buracos.includes("duração: media"));
   assert.equal(relatorio.aprovado, true, "buracos são relatados, não reprovam a ficha");
+  assert.ok(relatorio.buracosDeArea.includes("faixa×área: grandes × numeros"));
+  assert.ok(relatorio.buracosDeArea.includes("área: memoria_atencao"));
+  assert.ok(!relatorio.buracosDeArea.includes("duração: media"), "duração, lugar e pessoas não são buraco de área");
+});
+
+test("catálogo que cobre toda faixa × área não tem buraco de área", () => {
+  const faixas = FAIXAS.map((f) => [f.min, f.max, f.id]);
+  const catalogo = AREAS.flatMap((area) =>
+    faixas.map(([min, max, faixa]) =>
+      ficha({ id: `${area}_${faixa}`, nome: `${area} ${faixa}`, categoria: area, faixaEtariaMin: min, faixaEtariaMax: max, seguranca: { [faixa]: ["Ok."] } }),
+    ),
+  );
+  assert.deepEqual(avaliarAtividades(catalogo).buracosDeArea, []);
 });
 
 test("matriz emite a combinação completa faixa × área × duração × lugar × pessoas", () => {
@@ -170,8 +183,17 @@ test("áreas da régua são as mesmas de CATEGORIAS_BIBLIOTECA na API", () => {
   assert.deepEqual(AREAS, [...bloco.matchAll(/"([a-z_]+)"/g)].map((m) => m[1]));
 });
 
-test("Régua de qualidade (Atividade real): as 20 atividades ativas passam na ficha padrão", () => {
+test("Régua de qualidade (Atividade real): as 40 atividades ativas passam na ficha padrão (ticket 02)", () => {
   const relatorio = avaliarAtividades(CATALOGO_BIBLIOTECA_E4);
-  assert.equal(relatorio.atividades.length, 20);
+  assert.equal(relatorio.atividades.length, 40);
   assert.deepEqual(relatorio.falhas, []);
+});
+
+test("matriz de cobertura sem buraco nas áreas: toda faixa tem atividade em cada área (ticket 02)", () => {
+  assert.deepEqual(avaliarAtividades(CATALOGO_BIBLIOTECA_E4).buracosDeArea, []);
+});
+
+test("DEV-CAT-P08: pelo menos 6 atividades ativas de Números", () => {
+  const numeros = CATALOGO_BIBLIOTECA_E4.filter((a) => a.ativo !== false && a.categoria === "numeros");
+  assert.ok(numeros.length >= 6, `${numeros.length} atividades de Números`);
 });

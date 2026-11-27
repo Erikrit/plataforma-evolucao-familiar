@@ -13,8 +13,8 @@ export const CATEGORIAS_BIBLIOTECA = [
 ] as const;
 export type CategoriaBiblioteca = (typeof CATEGORIAS_BIBLIOTECA)[number];
 
-/** Limites E4 (Módulo 03 §12) — aplicados no servidor. */
-export const LIMITE_CATALOGO_ATIVO = 24;
+/** Limites E4 (Módulo 03 §12), aplicados no servidor. Teto do catálogo global: as 60 Atividades Reais do Marco 1 (M03 §15); o de 24 (E4-ACE-01) cai com o Marco 1 (DEV-CAT-P09). */
+export const LIMITE_CATALOGO_ATIVO = 60;
 /** DEV-CAT-P09: até cinco sugestões e cinco renovações. */
 export const LIMITE_SUGESTOES_PESSOA = 5;
 export const LIMITE_RENOVAR_SUGESTOES = 5;

@@ -17,6 +17,7 @@
 - Tipo `DesafioCatalogo` repete os campos de `LinhaFicha`; `smoke-e4` reimplementa parte da checagem da ficha.
 - Exports sem uso, como `FAIXAS_FICHA` fora de `ficha-padrao.ts`.
 - `check-e4` valida por busca de trechos de texto, o que é frágil.
+- Do ticket 02: teto `LIMITE_CATALOGO_ATIVO` (60) espelhado em `constantes-desenvolvimento.ts`, no texto procurado pelo `check-e4` e em `smoke-e4`; totais 40/44 soltos em `carga-oficial`, `check-e4`, `qg-cat-01` e no teste da régua; filtros `ativo !== false` repetidos fora da régua.
 
 ## Decisão adiada para este ticket
 

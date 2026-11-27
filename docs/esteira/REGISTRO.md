@@ -37,3 +37,5 @@ Registrar **somente transições materiais** de demandas novas: ID, tipo, branch
 **2026-11-24 — DEV-JOG-P01..P03:** demanda `DEV-JOG-P01-P03` (`melhoria_funcional`) triada na `develop` @ `3becc90` (protótipo v2 e §12/§14 aprovados). Escopo: Atividades Reais (descoberta sob demanda, limite 10, retirada, curadoria). Homologação humana da implementação permanece pendente. Jogos Digitais fora.
 
 **2026-11-24 — UX-01..05:** demanda `UX-01-05` (`melhoria_ux`) implementada na `develop` em [`9320988`](https://github.com/Erikrit/plataforma-evolucao-familiar/commit/9320988556c6353c99f5fd6556411b8c35548251). QG-1/QG-2 e verifier PASS; fingerprint `e60960a1…`. Homologação humana das cinco correções confirmada pelo responsável pelo Produto na conversa de aprovação, sem detalhamento por aparelho.
+
+**2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 02:** lote 1 com 20 Atividades Reais novas (40 ativas, 7 de Números, sem buraco de faixa × área) na `develop` @ `a9e9e9f`, sem commit. QG-1/QG-2 e verificador PASS; fingerprint `sha256:d6669f8d…`. Teto do catálogo 24 → 60. `PENDING_HUMAN`: E5-HOM da amostra de 5.

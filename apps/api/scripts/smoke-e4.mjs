@@ -8,6 +8,9 @@ import { CATALOGO_BIBLIOTECA_E4 } from "../prisma/catalogo-biblioteca-e4.mjs";
 import { dadosDesafioCatalogo } from "../prisma/carga-oficial.mjs";
 import { provisionarFamiliaComAdmin } from "./lib-provisionar-familia.mjs";
 
+/** Espelho de LIMITE_CATALOGO_ATIVO (constantes-desenvolvimento.ts): 60 do Marco 1. */
+const LIMITE_CATALOGO_ATIVO = 60;
+
 const base = process.env.API_URL ?? "http://localhost:3001";
 const prisma = new PrismaClient();
 const stamp = Date.now();
@@ -41,8 +44,8 @@ function headers(token) {
 }
 
 async function garantirCatalogo() {
-  if (CATALOGO_BIBLIOTECA_E4.length > 24) {
-    throw new Error("Catálogo E4 excede 24 itens.");
+  if (CATALOGO_BIBLIOTECA_E4.filter((item) => item.ativo !== false).length > LIMITE_CATALOGO_ATIVO) {
+    throw new Error(`Catálogo E4 excede ${LIMITE_CATALOGO_ATIVO} ativas.`);
   }
   for (const item of CATALOGO_BIBLIOTECA_E4) {
     const dados = dadosDesafioCatalogo(item);
@@ -70,7 +73,7 @@ try {
   const curadoriaOk = nomesCuradoria.every((nome) =>
     CATALOGO_BIBLIOTECA_E4.some((item) => item.nome === nome),
   );
-  reg("E4-ACE-01-catalogo-ativo", ativosAntes <= 24 && ativosAntes >= 6 && curadoriaOk, {
+  reg("E4-ACE-01-catalogo-ativo", ativosAntes <= LIMITE_CATALOGO_ATIVO && ativosAntes >= 6 && curadoriaOk, {
     ativos: ativosAntes,
     curadoriaOk,
   });

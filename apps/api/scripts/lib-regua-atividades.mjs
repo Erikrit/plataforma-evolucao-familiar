@@ -4,8 +4,8 @@
  *
  * Reprova a ficha incompleta e emite a matriz de cobertura
  * (faixa × área × duração × lugar × pessoas). Só as atividades ativas entram;
- * as arquivadas (D2) ficam de fora. Buracos da matriz são relatados sem reprovar:
- * os lotes de conteúdo (tickets 02 e 03) decidem quando passam a ser exigidos.
+ * as arquivadas (D2) ficam de fora. Buracos da matriz não reprovam a ficha; os de área
+ * (faixa × área e área) saem também em `buracosDeArea`, que o catálogo zera desde o ticket 02.
  * Qualidade do texto continua com a revisão humana.
  */
 
@@ -126,20 +126,34 @@ function matrizVazia() {
   };
 }
 
-function buracosDa(matriz) {
+const ROTULOS_DIMENSAO = { faixa: "faixa", area: "área", duracao: "duração", lugar: "lugar", pessoas: "pessoas" };
+
+function buracosDaDimensao(matriz, dimensao) {
+  return Object.entries(matriz[dimensao])
+    .filter(([, n]) => n === 0)
+    .map(([valor]) => `${ROTULOS_DIMENSAO[dimensao]}: ${valor}`);
+}
+
+function buracosFaixaArea(matriz) {
   const buracos = [];
   for (const [faixa, areas] of Object.entries(matriz.faixaArea)) {
     for (const [area, n] of Object.entries(areas)) if (n === 0) buracos.push(`faixa×área: ${faixa} × ${area}`);
   }
-  const rotulos = { faixa: "faixa", area: "área", duracao: "duração", lugar: "lugar", pessoas: "pessoas" };
-  for (const [dimensao, rotulo] of Object.entries(rotulos)) {
-    for (const [valor, n] of Object.entries(matriz[dimensao])) if (n === 0) buracos.push(`${rotulo}: ${valor}`);
-  }
   return buracos;
 }
 
+/** Buracos que o catálogo precisa zerar desde o ticket 02: faixa × área e área. */
+function buracosDeAreaDa(matriz) {
+  return [...buracosFaixaArea(matriz), ...buracosDaDimensao(matriz, "area")];
+}
+
+/** Todos os buracos, para o relatório: faixa × área e cada dimensão. */
+function buracosDa(matriz) {
+  return [...buracosFaixaArea(matriz), ...Object.keys(ROTULOS_DIMENSAO).flatMap((d) => buracosDaDimensao(matriz, d))];
+}
+
 /**
- * Avalia o catálogo: { atividades, falhas, matriz, buracos, aprovado }.
+ * Avalia o catálogo: { atividades, falhas, matriz, buracos, buracosDeArea, aprovado }.
  * `aprovado` depende só das fichas; a matriz conta apenas fichas sem falha de faixa/área.
  */
 export function avaliarAtividades(catalogo) {
@@ -186,5 +200,12 @@ export function avaliarAtividades(catalogo) {
   }
   matriz.combinacoes = [...combinacoes.values()];
 
-  return { atividades: atividades.map((a) => a.id), falhas, matriz, buracos: buracosDa(matriz), aprovado: falhas.length === 0 };
+  return {
+    atividades: atividades.map((a) => a.id),
+    falhas,
+    matriz,
+    buracos: buracosDa(matriz),
+    buracosDeArea: buracosDeAreaDa(matriz),
+    aprovado: falhas.length === 0,
+  };
 }
