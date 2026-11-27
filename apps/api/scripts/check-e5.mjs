@@ -281,6 +281,85 @@ assert.ok(passos.every((valor, i) => i === 0 || valor >= passos[i - 1]), `Passos
   assert.deepEqual(repetem, [], `Objeto igual ao nome da ação: ${repetem.join(", ")}`);
 }
 
+// DEV-CAT-M1-CONTEUDO, ticket 10: simulação do Barquinho no rio, sem biblioteca 2D.
+// Sem tempo, sem vidas e sem perder: a pedra só desvia o barco; caminho fechado só para o barco.
+{
+  const sim = require("../../web/src/componentes/desenvolvimento/jogos/barquinho/simulacao-barquinho");
+  const { criarControladorBarquinho } = require("../../web/src/componentes/desenvolvimento/jogos/barquinho/controlador-barquinho");
+  const rio = {
+    correnteza: 1,
+    rio: ["#..B..#", "#.....#", "#..o..#", "#..f..#", "#.ooo.#", "#.....#", "#.....#"],
+  };
+  const inicio = sim.criarPartidaBarquinho(rio);
+  assert.deepEqual([inicio.linha, inicio.coluna, inicio.concluido], [0, 3, false]);
+  assert.equal(sim.existeRotaBarquinho(rio), true);
+
+  let e = sim.avancarBarco(inicio, rio, 1);
+  assert.deepEqual([e.linha, e.coluna, e.desvios], [1, 3, 0]);
+  e = sim.avancarBarco(e, rio, 1);
+  assert.deepEqual([e.linha, e.coluna, e.desvios], [2, 2, 1], "a pedra desvia o barco para a faixa livre");
+  assert.match(e.aviso, /desvi/i);
+  e = sim.avancarBarco(e, rio, 2);
+  assert.deepEqual([e.linha, e.coluna, e.desvios], [4, 1, 2]);
+  e = sim.avancarBarco(e, rio, 5);
+  assert.deepEqual([e.linha, e.concluido], [6, true], "chegar na margem final conclui a fase");
+  assert.deepEqual(sim.avancarBarco(e, rio, 3), e, "concluída, a fase não muda mais");
+  const deUmaVez = sim.avancarBarco(inicio, rio, 10);
+  assert.deepEqual([deUmaVez.linha, deUmaVez.coluna, deUmaVez.desvios, deUmaVez.concluido], [6, 1, 2, true]);
+
+  let lado = sim.virarBarco(inicio, rio, 1);
+  lado = sim.virarBarco(lado, rio, 1);
+  assert.equal(lado.coluna, 5);
+  lado = sim.virarBarco(lado, rio, 1);
+  assert.equal(lado.coluna, 5, "a margem não deixa o barco sair do rio");
+  assert.match(lado.aviso, /margem/i);
+
+  const folha = { correnteza: 1, rio: ["#.B.#", "#.f.#", "#...#"] };
+  const comFolha = sim.avancarBarco(sim.criarPartidaBarquinho(folha), folha, 1);
+  assert.deepEqual(comFolha.folhas, ["1/2"]);
+  assert.equal(sim.totalFolhas(folha), 1);
+
+  const fechado = { correnteza: 1, rio: ["#.B..#", "#ooo.#", "#....#"] };
+  assert.equal(sim.existeRotaBarquinho(fechado), true);
+  const dica = sim.dicaBarquinho(sim.criarPartidaBarquinho(fechado), fechado);
+  assert.equal(dica.lado, 1);
+  assert.match(dica.texto, /direita/);
+  let parado = sim.avancarBarco(sim.criarPartidaBarquinho(fechado), fechado, 3);
+  assert.deepEqual([parado.linha, parado.coluna, parado.parado, parado.concluido], [0, 2, true, false], "sem saída à frente, o barco espera");
+  assert.match(parado.aviso, /direita/);
+  parado = sim.virarBarco(sim.virarBarco(parado, fechado, 1), fechado, 1);
+  parado = sim.avancarBarco(parado, fechado, 2);
+  assert.deepEqual([parado.coluna, parado.concluido], [4, true]);
+
+  assert.equal(sim.existeRotaBarquinho({ correnteza: 1, rio: ["#.B.#", "#ooo#", "#...#"] }), false);
+  const livre = sim.dicaBarquinho(sim.criarPartidaBarquinho(folha), folha);
+  assert.equal(livre.lado, 0);
+  const pausado = sim.pausarBarco(inicio, true);
+  assert.deepEqual(sim.avancarBarco(pausado, rio, 5), pausado, "pausado, o barco não anda");
+
+  // E5-ACE-10: com movimento reduzido, o barco anda por linhas inteiras, sem deslizar.
+  const reduzido = criarControladorBarquinho(rio, { movimentoReduzido: true });
+  for (let i = 0; i < 3; i += 1) reduzido.passo(200);
+  assert.equal(reduzido.estado.linha, 0);
+  for (let i = 0; i < 3; i += 1) reduzido.passo(200);
+  assert.equal(reduzido.estado.linha, 1);
+  const fluido = criarControladorBarquinho(rio, { movimentoReduzido: false });
+  fluido.passo(200);
+  assert.equal(fluido.estado.linha, 0.2);
+  fluido.passo(30000);
+  assert.ok(fluido.estado.linha <= 0.5, "aba escondida não faz o barco pular o rio");
+  let concluidas = 0;
+  fluido.aoConcluir = () => { concluidas += 1; };
+  for (let i = 0; i < 60; i += 1) fluido.passo(250);
+  assert.equal(concluidas, 1, "o aviso de conclusão sai uma vez");
+
+  const { FASE_PROTOTIPO_BARQUINHO: prototipo } = require("../../web/src/componentes/desenvolvimento/jogos/barquinho/fase-prototipo-barquinho");
+  assert.ok(prototipo.rio.every((linha) => linha.length === prototipo.rio[0].length), "rio retangular");
+  assert.equal(sim.existeRotaBarquinho(prototipo), true, "a fase do protótipo tem rota até a margem");
+  const semToque = sim.avancarBarco(sim.criarPartidaBarquinho(prototipo), prototipo, 120);
+  assert.equal(semToque.concluido, true, "só com os desvios das pedras, o barco chega na margem");
+}
+
 const editorial = [...CATALOGO_JOGOS, { id: "outro", categoria: "autonomia" }];
 assert.deepEqual(selecionarDestaquesJogos([], []), []);
 assert.deepEqual(selecionarDestaquesJogos(editorial.slice(0, 1), []), ["memoria"]);

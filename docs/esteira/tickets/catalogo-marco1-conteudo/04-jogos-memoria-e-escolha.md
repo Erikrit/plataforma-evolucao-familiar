@@ -4,7 +4,7 @@
 
 **Bloqueado por:** nenhum
 
-**Status:** PENDING_HUMAN — refeito após a homologação reprovada; falta nova E5-HOM no celular
+**Status:** COMPLETED — homologado pelo responsável em 2026-11-27 (segunda rodada)
 
 **Costura:** régua de jogos, check:e5, carga oficial e smoke:e5
 
@@ -26,7 +26,7 @@
 
 - [x] DEV-CAT-P01 e P03 — dois jogos com regra própria e 15 fases aprovadas pela régua, com dificuldade que sobe de verdade (Mãe e filhote e Metades saíram; ver Escopo alterado)
 - [x] Régua (Rótulos) — nenhum texto visível entrega a resposta
-- [ ] E5-HOM — homologação no celular nas três trilhas
+- [x] E5-HOM — homologação no celular nas três trilhas (aprovada em 2026-11-27, segunda rodada)
 
 
 ## Conclusão técnica (2026-11-27, após a homologação reprovada)
@@ -48,7 +48,7 @@
   - Verificador PASS, depois de um FAIL corrigido (pista do Limão, Grandes com traço único e L/R).
 - **Fingerprint:** `sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064`.
 - **Ambiente:** no banco local, `mae-filhote` e `metades` foram desativados à mão (`ativo = false`).
-- **Pendente (humano):** nova E5-HOM no celular nas três trilhas dos dois jogos.
+- **Homologação:** primeira E5-HOM reprovada; segunda aprovada pelo responsável em 2026-11-27.
 
 **mensagemCommit:**
 

@@ -48,3 +48,9 @@ Registrar **somente transições materiais** de demandas novas: ID, tipo, branch
 
 
 **2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 04:** primeira E5-HOM reprovada (dificuldade não subia; Metades parecido com Memória). Mãe e filhote e Metades retirados para substituição depois do Marco 1; Letra inicial e Adivinha refeitos com distrações parecidas e régua `dificuldade-trilha`. QG-1/QG-2 e verificador PASS; fingerprint `sha256:f9f9259a…`. `PENDING_HUMAN`: nova E5-HOM.
+
+**2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 04 concluído:** segunda E5-HOM aprovada pelo responsável.
+
+**2026-11-27 — DEV-CAT-M1-CONTEUDO, ticket 10 concluído (provisório):** protótipo 2D do Barquinho (PixiJS e Phaser sob demanda), peso medido (PixiJS ~112 kB, Phaser ~347 kB gzip; telas +1,13 kB no máximo, folga de 1,5 kB aprovada). ADR-018 em PROPOSTA (PixiJS). Fluidez em Android aprovada provisoriamente, sem medição numérica. Fingerprint `sha256:c02e7330…`.
+
+**2026-11-27 — ADR-018 aprovada:** PixiJS para os jogos 2D; Phaser removido do código e do `package.json`. O ticket 11 segue sem a medição numérica no Android, por decisão do responsável.

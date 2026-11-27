@@ -20,6 +20,37 @@ Registro histórico de decisões arquiteturais. **A V1 já possui arquitetura im
 | ADR-014 | Gestão de acessos reutiliza as três responsabilidades contextuais | Atende CT-20261119-003 sem matriz nova, sem papel inédito e com fechamento dos controles de administrador |
 | ADR-015 | Autenticação enxuta por sessão/cookie (uso familiar privado) | Fecha a lacuna de “auth definitiva” sem JWT nem arquitetura empresarial; corrige só falhas comprovadas |
 | ADR-016 | **PROPOSTA** — Esteira v2 no Claude Code com skills componíveis (estende ADR-012) | Separar núcleo reutilizável do adaptador e gerar evidência por script |
+| ADR-018 | Jogos 2D com PixiJS, carregado só ao abrir o jogo | Um terço do peso do Phaser; mesma experiência no teste técnico do Barquinho no rio (ADR-017 está em proposta na spec de DEV-CAT-M1) |
+
+## ADR-018 — Jogos 2D com PixiJS, carregado só ao abrir o jogo
+
+**Status:** APROVADA pelo responsável pelo Produto em 2026-11-27. Teste técnico em DEV-CAT-M1-CONTEUDO, ticket 10.
+
+### Decisão
+
+1. O primeiro jogo 2D (Barquinho no rio) e os seguintes usam **PixiJS** (pixi.js 8, licença MIT) como biblioteca de desenho.
+2. A biblioteca entra só por `import()` ao abrir o jogo. Nenhuma outra tela a baixa (`apps/web/scripts/check-peso-2d.mjs`).
+3. O jogo 2D implementa o contrato único de tabuleiro (`contrato-tabuleiro.ts`): montar, dica sob demanda e aviso de conclusão. Os contratos de servidor de início, conclusão e versão não mudam.
+4. A regra do jogo fica numa simulação sem biblioteca (`simulacao-barquinho.ts`), testada no `check-e5`. A biblioteca só desenha.
+5. Movimento reduzido: o barco anda por linhas inteiras, sem deslizar. Toque e teclado são obrigatórios. A saída fica sempre visível na tela da partida.
+
+### Medições comparadas (protótipo de uma fase, build de produção)
+
+| | PixiJS | Phaser |
+|---|---|---|
+| Peso sob demanda (gzip) | cerca de 112 kB (133 kB somando todos os pedaços) | cerca de 347 kB |
+| Telas existentes | no máximo +1,13 kB gzip nas duas opções (mapa de pedaços sob demanda do webpack; folga de 1,5 kB aprovada pelo responsável) | igual |
+| Fluidez, toque e movimento reduzido em Android | aprovados **provisoriamente** pelo responsável, sem números registrados | idem |
+
+### Alternativas
+
+**Phaser** (motor de jogo completo: física, cenas, áudio). Fica descartado: tem três vezes o peso, e o Barquinho não usa física nem áudio. **Canvas sem biblioteca**: mais código próprio de desenho e de escala de tela, sem ganho de peso relevante sobre o PixiJS.
+
+### Consequências
+
+- O Phaser saiu do `package.json` e do código com a aprovação (2026-11-27).
+- A fluidez em Android simples ainda não tem medição numérica. O responsável decidiu seguir com o ticket 11 sem ela; a página `/laboratorio/barquinho` (só com `PEF_LABORATORIO_2D=1`) continua disponível para medir.
+- Pela página de laboratório, os pedaços JS do protótipo ficam em `/_next/static` mesmo com a página desligada. Não contêm dados.
 
 ## ADR-016 — Esteira v2 no Claude Code com skills componíveis
 

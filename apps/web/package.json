@@ -6,13 +6,15 @@
     "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start --port 3000",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "check:peso-2d": "node scripts/check-peso-2d.mjs"
   },
   "dependencies": {
     "@mantine/core": "^8.3.18",
     "@mantine/hooks": "^8.3.18",
     "@mantine/notifications": "^8.3.18",
     "next": "^15.2.3",
+    "pixi.js": "^8.23.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

@@ -73,45 +73,42 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável: nova E5-HOM do ticket 04 no celular (Letra inicial e Adivinha pela pista) e commit (dar git add nos arquivos MM antes). Depois, ticket 10.",
+    "proximaAcao": "Responsável: commit do ticket 10. Depois, /implementar do ticket 11 (Barquinho no rio completo, PixiJS, sem a medição numérica por decisão do responsável).",
     "ticketAtivo": {
-      "ticket": "04-jogos-memoria-e-escolha",
-      "estado": "PENDING_HUMAN",
+      "ticket": "10-teste-tecnico-2d",
+      "estado": "COMPLETED",
       "branch": "develop",
-      "base": "421e958",
-      "nota": "Reaproveita a implementação da worktree t04-jogos-memoria-escolha (execução paralela, base 4a5bfc5), trazida para a develop por decisão do responsável em 2026-11-27 e revalidada aqui.",
+      "base": "e9cf16f",
+      "nota": "Reaproveita o trabalho da worktree t10-teste-tecnico-2d (execução paralela, base 4a5bfc5), trazido por decisão do responsável em 2026-11-27.",
       "arquivos": [
-        "apps/api/prisma/catalogo-jogos-memoria-escolha-e5.mjs",
-        "apps/api/prisma/carga-oficial.mjs",
-        "apps/api/scripts/check-e5.mjs",
-        "apps/api/scripts/lib-regua-jogos.mjs",
-        "apps/api/scripts/regua-jogos.test.mjs",
-        "apps/api/scripts/smoke-e5.mjs",
-        "apps/api/src/desenvolvimento/jogos/motores-jogos.ts",
-        "apps/web/src/componentes/desenvolvimento/icone-jogo-catalogo.tsx",
-        "apps/web/src/componentes/desenvolvimento/jogos/",
-        "apps/web/src/lib/api.ts",
-        "apps/web/src/lib/catalogo-visual-jogos.ts",
-        "apps/web/src/lib/figuras-twemoji.ts",
-        "apps/web/public/figuras/twemoji/"
+        "apps/web/src/componentes/desenvolvimento/jogos/barquinho/",
+        "apps/web/src/app/laboratorio/",
+        "apps/web/src/componentes/laboratorio/",
+        "apps/web/scripts/check-peso-2d.mjs",
+        "apps/web/package.json",
+        "package-lock.json",
+        "apps/api/scripts/check-e5.mjs"
       ],
-      "qg1": "PASS — lint, typecheck, authz, check-e4, check-e5, regua-jogos 33/33 (14 jogos, 0 falhas)",
-      "fingerprint": "sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064",
-      "decisoes": "Mãe e filhote e Metades retirados (substituir depois do Marco 1). Letra inicial e Adivinha refeitos com distrações parecidas; régua mede parecidas por trilha.",
-      "qg2": "PASS — build, authz, carga-trilhas, smoke-e4, smoke-e5",
-      "verificador": "PASS (após FAIL corrigido: pista do Limão, Grandes com traço único, L/R)",
-      "revisao": "Padrões: trilhaDaFase reaproveitada; julgamentos de desenho ao ticket 13. Especificação: Pequenos e sons vizinhos alinhados no ticket; Grandes sem traço único",
-      "homologacao": "Primeira E5-HOM REPROVADA em 2026-11-27 (dificuldade e Metades). Refeito; nova E5-HOM PENDING_HUMAN.",
-      "mensagemCommit": "feat(jogos): Letra inicial e Adivinha pela pista com dificuldade real\n\nDois jogos novos do Marco 1, com 15 fases em três trilhas. As\ndistrações ficam cada vez mais parecidas com a resposta: sons\nvizinhos e mesma letra na Letra inicial; figuras do mesmo tipo e\ntraços combinados na Adivinha. A régua passa a medir isso por trilha.\nLeitor de tela ouve o nome da figura na escolha com nomes ocultos.\nMãe e filhote e Metades saíram e serão substituídos depois do Marco 1."
+      "qg1": "PASS — lint, typecheck, check-e4, check-e5",
+      "qg2": "PASS — build, smoke-e5; check-peso-2d PASS (36 rotas, máx. +1,1 kB)",
+      "fingerprint": "sha256:71cdb0e91768c6c4b42cd110233d151061186d9f3b2e751dca648c895f35709d",
+      "peso": "PASS — check-peso-2d contra build de e9cf16f: 36 rotas com no máximo +1,13 kB gzip (folga 1,5 kB aprovada pelo responsável em 2026-11-27); lib 2D só sob demanda (PixiJS 112 kB, Phaser 347 kB gzip)",
+      "verificador": "Parte automática verificada; NEEDS_DECISION de peso resolvido pelo responsável (folga 1,5 kB)",
+      "pendentes": [
+        "Medição numérica de fluidez no Android: o responsável decidiu seguir sem ela (laboratório disponível)"
+      ],
+      "homologacao": "PROVISÓRIA — aprovada pelo responsável em 2026-11-27 sem medições numéricas no Android",
+      "adr": "ADR-018 APROVADA em 2026-11-27 (PixiJS); Phaser removido",
+      "mensagemCommit": "feat(jogos): teste técnico do 2D com protótipo do Barquinho no rio\n\nUma fase do Barquinho comparando PixiJS e Phaser, com simulação testada (sem tempo, sem vidas, movimento reduzido) e laboratório protegido por variável de ambiente. Peso medido e checado por script; ADR-018 aprovada escolhe o PixiJS, carregado só ao abrir o jogo, e o Phaser sai. Fluidez em Android aprovada provisoriamente."
     },
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T14:55:18.745Z",
-        "base": "421e95820ca126d1af9922735fcb0278be356594",
-        "head": "421e95820ca126d1af9922735fcb0278be356594",
-        "fingerprint": "sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064",
+        "em": "2026-11-27T17:05:56.618Z",
+        "base": "e9cf16f6988e9ffe507f926318f50beb60bd998e",
+        "head": "e9cf16f6988e9ffe507f926318f50beb60bd998e",
+        "fingerprint": "sha256:71cdb0e91768c6c4b42cd110233d151061186d9f3b2e751dca648c895f35709d",
         "checagens": [
           {
             "nome": "lint",
@@ -133,12 +130,6 @@
             "motivo": "script ainda não existe"
           },
           {
-            "nome": "authz",
-            "status": "PASS",
-            "comando": "npm run smoke:authz -w @pef/api",
-            "exit": 0
-          },
-          {
             "nome": "check-e4",
             "status": "PASS",
             "comando": "npm run check:e4 -w @pef/api",
@@ -149,23 +140,17 @@
             "status": "PASS",
             "comando": "npm run check:e5 -w @pef/api",
             "exit": 0
-          },
-          {
-            "nome": "regua-jogos",
-            "status": "PASS",
-            "comando": "npm run test:regua -w @pef/api",
-            "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T14-55-18-745Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T17-05-56-618Z.json"
       },
       "qg2": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T14:58:06.476Z",
-        "base": "421e95820ca126d1af9922735fcb0278be356594",
-        "head": "421e95820ca126d1af9922735fcb0278be356594",
-        "fingerprint": "sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064",
+        "em": "2026-11-27T17:08:20.621Z",
+        "base": "e9cf16f6988e9ffe507f926318f50beb60bd998e",
+        "head": "e9cf16f6988e9ffe507f926318f50beb60bd998e",
+        "fingerprint": "sha256:71cdb0e91768c6c4b42cd110233d151061186d9f3b2e751dca648c895f35709d",
         "checagens": [
           {
             "nome": "build",
@@ -181,34 +166,16 @@
             "motivo": "script ainda não existe"
           },
           {
-            "nome": "authz",
-            "status": "PASS",
-            "comando": "npm run smoke:authz -w @pef/api",
-            "exit": 0
-          },
-          {
-            "nome": "carga-trilhas",
-            "status": "PASS",
-            "comando": "npm run qg:cat-trilhas -w @pef/api",
-            "exit": 0
-          },
-          {
-            "nome": "smoke-e4-atividades",
-            "status": "PASS",
-            "comando": "npm run smoke:e4 -w @pef/api",
-            "exit": 0
-          },
-          {
             "nome": "smoke-e5-jogos",
             "status": "PASS",
             "comando": "npm run smoke:e5 -w @pef/api",
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T14-58-06-476Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T17-08-20-621Z.json"
       }
     },
-    "fingerprint": "sha256:f9f9259a411c56e01dd9d3af4349f08e0d96e51cc620be300bb301786be2b064",
+    "fingerprint": "sha256:71cdb0e91768c6c4b42cd110233d151061186d9f3b2e751dca648c895f35709d",
     "pendenciasDocumentais": [
       "Texto de E4-ACE-01 (M03 §12, linhas 221 e 321) ainda diz 24; teto de 60 aprovado em 2026-11-27. M03 §15 (Marco 1) diz 'cerca de 20 por faixa'; leitura aprovada no ticket 03 (mínimo 20, 3 por faixa × área, diferença até 10). Atualizar na conversa de planejamento.",
       "Marco 1 (M03 §15) lista Mãe e filhote e Metades entre os 12 jogos novos; retirados do ticket 04 em 2026-11-27 pelo responsável, a substituir depois do Marco 1 (Marco 1 com 18 jogos ativos até lá)."
