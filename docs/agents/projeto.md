@@ -58,7 +58,7 @@ Autenticação, autorização, privacidade, persistência, saúde e criança. As
 
 ## Reservado ao humano
 
-Commit, push, merge, PR, tag, release, deploy, Git destrutivo e reset de banco. O agente entrega `mensagemCommit`; o hook bloqueia o resto. O banco da VPS nunca é apagado ou recriado automaticamente. Dados e exemplos são sempre fictícios; `.env` e `backups/` não são lidos pelo agente.
+Commit, push, merge, PR, tag, release, deploy, Git destrutivo e reset de banco. O agente entrega `mensagemCommit`; o hook bloqueia o resto. O banco da VPS nunca é apagado ou recriado automaticamente. Exceção decidida pelo responsável em 2026-11-26: enquanto houver só dados fictícios, ele pode limpar e recriar o banco da VPS de testes na publicação, executando ele mesmo; com isso, migrações não precisam preservar dados já gravados na VPS, mas continuam versionadas e reproduzíveis numa instalação do zero. Dados e exemplos são sempre fictícios; `.env` e `backups/` não são lidos pelo agente.
 
 ## Nomes anteriores à esteira v2
 

@@ -1,6 +1,6 @@
 # Módulo 03 — Desenvolvimento da Laurinha
 
-**Versão:** 1.8 — direção do catálogo ampliado (Jogos Digitais e Atividades Reais) aprovada em 2026-11-25; texto em revisão\
+**Versão:** 1.9 — catálogo ampliado: decisões D1 a D3 e revisões de 2026-11-26 incorporadas; Marco 1 redefinido com 12 jogos novos, 60 atividades e um jogo 2D\
 **Estado:** regras de atividades reais nas seções 1–12 e recorte E5 na seção 13. A seção 14 registra as decisões UX-03 a UX-05 e a aprovação do recorte de Atividades Reais. A seção 15 registra a direção aprovada para o catálogo ampliado; as regras das seções 12 e 13 continuam vigentes até a implementação de cada incremento. Implementação e homologação são registradas em [STATUS-E-ESCOPO.md](../../produto/STATUS-E-ESCOPO.md) e na esteira.\
 **Dependência:** Módulo 01 — Fundação Familiar.  
 **Fonte de histórico aprofundado e relatórios:** Módulo 04.
@@ -369,18 +369,19 @@ O conteúdo é produzido em formato versionado e pode ser rascunhado com apoio d
 
 | Marco | Conteúdo | Condição para avançar |
 |---|---|---|
-| 1 | **20 jogos** (os 8 atuais refeitos com três trilhas e 12 novos) e **60 Atividades Reais** (cerca de 20 por faixa) | Verificadores automáticos aprovados e homologação humana no celular |
+| 1 — fundação (concluída em 2026-11-26) | Régua, três trilhas, data de nascimento, área Números, cinco sugestões, ilustrações Twemoji e **8 jogos ativos** com 15 fases (4 refeitos e 4 novos: Sudoku de figuras, Forme a palavra, Do menor ao maior e Robô com setas) | Homologada (DEV-CAT-M1) |
+| 1 — conteúdo (em planejamento) | **12 jogos novos** (total de 20 ativos), **60 Atividades Reais** pela ficha padrão (cerca de 20 por faixa, todas as áreas, inclusive Números) e **um jogo 2D, Barquinho no rio**, que fecha o Marco 1 | Régua aprovada, desempenho e acessibilidade do 2D medidos e homologação humana no celular |
 | 2 em diante | Lotes de cerca de 10 jogos e 40 atividades | Mesma régua e homologação por lote |
-| Jogos 2D | Teste com um jogo 2D somente após o Marco 1 | Desempenho em celular simples, toque e teclado, movimento reduzido e saída sempre visível |
 
-Proposta de 12 jogos novos do Marco 1, sujeita à curadoria: Conte e toque, Qual tem mais?, Do menor ao maior (Números); Sudoku de figuras, Robô com setas (Raciocínio); Mãe e filhote, Metades (Memória e atenção); Letra inicial, Adivinha pela pista (Linguagem); Separar o lixo, Animais por habitat (Autonomia); Caminho de cores (Coordenação). Três motores novos: contagem, sudoku e classificar em caixas.
+**12 jogos novos do Marco 1 (escolha do responsável em 2026-11-26):** Conte e toque e Qual tem mais? (Números); Mãe e filhote e Metades (Memória e atenção); Letra inicial e Adivinha pela pista (Linguagem); Separar o lixo e Animais por habitat (Autonomia); Caminho de cores e Ligue os pontos (Coordenação); Encontre as diferenças e Ache o objeto escondido (Memória e atenção). Motores novos: contagem, classificar em caixas, diferenças (cenas montadas com as ilustrações) e traçado. Ache o intruso, Complete a sequência, Pares de sombras e Palavra e figura ficam arquivados por serem fáceis demais (ticket 12 de DEV-CAT-M1).
+
+**Jogo 2D do Marco 1 — Barquinho no rio (escolha do responsável em 2026-11-26).** A criança guia um barco rio abaixo, desviando de pedras e pegando folhas, em ritmo lento, **sem tempo, sem vidas e sem perder**: bater numa pedra só desvia o barco. Toque simples ou teclado, 15 fases em três trilhas (rio mais longo, canal mais estreito, mais pedras e curvas), movimento reduzido respeitado e saída sempre visível. Mesmo contrato de servidor dos demais jogos (início, conclusão, versão) e mesma separação entre descobertas digitais e estrelas.
 
 ### Fora deste recorte
 
 Ranking, metas, notificações de retorno, avaliação cognitiva, IA durante o jogo, anúncios, chat, multijogador e narração por voz. As Atividades Reais para adultos e idosos previstas na seção 12 saem do catálogo (decisão do responsável do Produto em 2026-11-26, D2): ficam arquivadas, sem oferta nem sugestão, e as participações anteriores continuam no Histórico. *Substitui, na seção 12, a oferta para adultos e idosos.*
 
-### Pendências de decisão
+### Decisões registradas
 
-1. Confirmar os limites das faixas (5–6, 7–9, 10–12).
-2. Confirmar se as atividades para adultos e idosos continuam no catálogo, fora das faixas infantis.
-3. Aprovar a lista de jogos do Marco 1 após a curadoria.
+- D1, D2 e D3 decididas em 2026-11-26 (ver P02, “Fora deste recorte” e a régua, linha Origem).
+- 2026-11-26: Marco 1 mantido em 20 jogos e 60 atividades, mais o jogo 2D Barquinho no rio; a lista de 12 jogos novos acima substitui a proposta anterior.

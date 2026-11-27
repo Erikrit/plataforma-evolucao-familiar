@@ -101,15 +101,9 @@ A implementação desta demanda roda no Claude Code com a esteira v2. As convers
 | 16 | COMPLETED | — | Licença discreta, ícones novos e peças legíveis; H19 homologado |
 | 17 | COMPLETED | — | Robô anda passo a passo (sem explosão); H22 homologado |
 
-### Verificação local pendente (tickets 04 e 08)
+### Verificação local (resolvida)
 
-O agente que implementou não tinha Docker: `authz` e os smokes ficaram `BLOCKED` no `qg.mjs`. Com a `develop` atualizada e a árvore limpa, o Claude Code roda:
-
-```bash
-bash scripts/verificar-local.sh DEV-CAT-M1 514b0494ddf31548966dc1d68a328488471b0cd2 qg1 qg2
-```
-
-O script sobe só o PostgreSQL do docker compose, aplica as migrações versionadas e a carga oficial, faz o build, sobe a API local, roda os portões e confere o fingerprint. Recusa banco ou API que não sejam locais e não faz commit. Resultado esperado: tudo `PASS`, exceto as falhas anteriores listadas abaixo. Depois, registrar o resultado em `atual.json` (`demanda.verificacao`) e seguir para `/homologar DEV-CAT-M1`.
+A verificação com Docker dos tickets 04 e 08 foi feita no Claude Code e registrada no QG-3 do encerramento.
 
 Lembretes para quem executa:
 
@@ -120,4 +114,4 @@ Lembretes para quem executa:
 
 ## Encerramento (2026-11-26)
 
-Marco 1 atingido. Todos os tickets homologados (05 descartado). QG-1, QG-2 e QG-3 PASS sobre `master..1cbe2b9`, fingerprint `sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860`. Publicação na VPS a cargo do responsável.
+**Fundação do Marco 1 concluída** (correção de 2026-11-26: o Marco 1 do M03 §15 continua com 20 jogos, 60 atividades e o jogo 2D, em [DEV-CAT-M1-CONTEUDO](../catalogo-marco1-conteudo/spec.md)). Todos os tickets homologados (05 descartado). QG-1, QG-2 e QG-3 PASS sobre `master..1cbe2b9`, fingerprint `sha256:dc49fe598c9dedacdc9f69c856fb1d66752ad7ce9b6b9628974dc09a28025860`. Publicação na VPS a cargo do responsável.
