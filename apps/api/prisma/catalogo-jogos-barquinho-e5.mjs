@@ -5,9 +5,13 @@
  * Rio de cima (B, partida) para baixo (margem final): # margem, . água, o pedra, f folha.
  * Gerado de forma determinística e congelado; a régua confere rota e progressão
  * (npm run regua:jogos -w @pef/api -- --estrito).
+ *
+ * DESATIVADO (ativo: false) desde 2026-11-27: a homologação humana reprovou o jogo, que será
+ * revisto depois de completar o Marco 1. Código e conteúdo ficam; a carga não o oferece.
  */
 export const CATALOGO_JOGO_BARQUINHO_E5 = [{
   id: "barquinho-rio",
+  ativo: false,
   nome: "Barquinho no rio",
   descricao: "Guie o barquinho rio abaixo, desviando das pedras.",
   categoria: "coordenacao",

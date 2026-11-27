@@ -90,8 +90,6 @@ export async function carregarCatalogosOficiais(prisma) {
     // DEV-CAT-M1-CONTEUDO, ticket 04.
     "letra-inicial",
     "adivinha-pista",
-    // DEV-CAT-M1-CONTEUDO, ticket 11.
-    "barquinho-rio",
   ];
   for (const id of idsEsperados) {
     if (!CATALOGO_JOGOS_E5.some((jogo) => jogo.id === id && jogo.ativo !== false)) {

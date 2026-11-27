@@ -523,18 +523,18 @@ test("DEV-CAT-P01 e P03: Letra inicial e Adivinha pela pista com 15 fases aprova
   }
 });
 
-// Tickets 09, 12 e 13, mais o ticket 04 de DEV-CAT-M1-CONTEUDO: 11 jogos ativos com 15 fases cada (com o Barquinho no rio, ticket 11),
+// Tickets 09, 12 e 13, mais o ticket 04 de DEV-CAT-M1-CONTEUDO: 10 jogos ativos com 15 fases cada (o Barquinho no rio, ticket 11, está desativado),
 // todos aprovados pela régua (modo estrito).
-test("DEV-CAT-P01 e P03: catálogo carregado com 11 jogos ativos de 15 fases aprovado pela régua", () => {
+test("DEV-CAT-P01 e P03: catálogo carregado com 10 jogos ativos de 15 fases aprovado pela régua", () => {
   const relatorio = avaliarCatalogo(CATALOGO_CARREGADO);
   assert.deepEqual(relatorio.falhas, []);
   const ativos = CATALOGO_CARREGADO.filter((jogo) => jogo.ativo !== false);
   assert.deepEqual(ativos.map((j) => j.id).sort(), [
-    "adivinha-pista", "barquinho-rio", "entrega-jardim", "forme-palavra", "historias-cenas", "labirinto", "letra-inicial",
+    "adivinha-pista", "entrega-jardim", "forme-palavra", "historias-cenas", "labirinto", "letra-inicial",
     "memoria", "menor-maior", "robo-setas", "sudoku-figuras",
   ]);
   assert.ok(ativos.every((jogo) => jogo.fases.length === 15));
-  assert.deepEqual(CATALOGO_CARREGADO.filter((j) => j.ativo === false).map((j) => j.id).sort(), ["ache-intruso", "palavra-figura", "pares-sombras", "sequencia"]);
+  assert.deepEqual(CATALOGO_CARREGADO.filter((j) => j.ativo === false).map((j) => j.id).sort(), ["ache-intruso", "barquinho-rio", "palavra-figura", "pares-sombras", "sequencia"]);
   assert.ok(CATALOGO_CARREGADO.every((jogo) => jogo.fases.every((f) => f.trilha === (f.numero <= 5 ? "pequenos" : f.numero <= 10 ? "medios" : "grandes"))));
   // Ticket 13: Histórias com nome até a fase 5, só figuras a partir da 6 e intrusas a partir da 11.
   const historias = CATALOGO_CARREGADO.find((j) => j.id === "historias-cenas");

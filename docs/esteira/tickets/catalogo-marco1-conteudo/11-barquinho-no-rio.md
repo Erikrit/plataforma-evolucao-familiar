@@ -4,7 +4,7 @@
 
 **Bloqueado por:** 10
 
-**Status:** PENDING_HUMAN — parte automática concluída; falta E5-HOM no celular
+**Status:** BLOCKED — homologação humana reprovada em 2026-11-27; jogo desativado (`ativo: false`) até a revisão depois do Marco 1
 
 **Costura:** régua de jogos, check:e5, carga oficial, smoke:e5 e homologação
 
@@ -16,7 +16,7 @@
 - [x] Régua (Solução) — toda fase tem rota possível com a largura do barco, e nenhuma casa alcançável é beco sem saída
 - [x] E5-F04 — dica útil no estado atual (seguindo só a dica, o barco chega nos 30 rios)
 - [ ] E5-ACE-10 — toque, teclado, movimento reduzido e saída sempre visível (código verificado; falta conferir no aparelho)
-- [ ] E5-HOM — homologação no celular nas três trilhas
+- [ ] E5-HOM — homologação no celular nas três trilhas (**reprovada** em 2026-11-27; jogo desativado)
 
 ## Conclusão técnica (2026-11-27)
 
@@ -39,17 +39,21 @@
   - Verificador PASS, inclusive no delta pós-revisão.
 - **Fingerprint:** `sha256:1aadadd03cbf8cf5271b9400bc0982dd913d58da3c1f12b30c779db6aa58b4f4`.
 - **Decisão do responsável:** seguir sem a medição numérica de fluidez no Android (ADR-018).
-- **Pendente (humano):** E5-HOM no celular nas três trilhas: ritmo dos Pequenos, toque, movimento reduzido e foco no tabuleiro.
+- **Homologação (2026-11-27):** reprovada pelo responsável, sem motivo detalhado. Decisão: desativar o jogo (`ativo: false` no catálogo) e revê-lo depois de completar o Marco 1. Código, conteúdo, régua e laboratório ficam. A carga não oferece o jogo, o smoke confere que ele fica fora do catálogo, e o catálogo volta a 10 jogos ativos.
+- **Portões após a desativação:**
+  - QG-1 PASS: lint, typecheck, authz, check-e4, check-e5 e régua de jogos 39/39.
+  - smoke-e5 PASS: 50 checagens, rodado contra a API local.
+  - O QG-2 completo (com build) fica pendente: os dev servers do responsável estavam no ar. Comando: `bash scripts/verificar-local.sh DEV-CAT-M1-CONTEUDO 17006f3 qg1 qg2`.
+- **Fingerprint após a desativação:** `sha256:ae3ab89ce9b4ba20733d40dca3f9b11c4ec2349b6eb269684787a6cc75ea12d5`.
 
 **mensagemCommit:**
 
 ```
-feat(jogos): Barquinho no rio, o primeiro jogo 2D
+feat(jogos): Barquinho no rio 2D, desativado até revisão
 
-Jogo 2D em PixiJS (ADR-018) com 15 fases em três trilhas: rio mais
-longo, canal mais estreito, mais pedras e curvas, correnteza leve.
-Sem tempo, sem vidas e sem perder: a pedra só desvia o barco e a
-régua proíbe becos sem saída. Motor no servidor com os contratos de
-sempre, dica que leva à margem em todos os rios e tabuleiro baixado
-só quando a partida é do Barquinho.
+Jogo 2D em PixiJS (ADR-018) com 15 fases, motor no servidor e régua
+com rota, sem becos sem saída e métricas do 2D. A homologação humana
+reprovou o jogo; ele fica com ativo: false e será revisto depois de
+completar o Marco 1. Código e conteúdo permanecem; o catálogo segue
+com 10 jogos ativos.
 ```

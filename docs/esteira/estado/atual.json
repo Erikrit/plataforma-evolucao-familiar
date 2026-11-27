@@ -73,10 +73,10 @@
       "docs/esteira/tickets/catalogo-marco1-conteudo/"
     ],
     "risco": "alto",
-    "proximaAcao": "Responsável: E5-HOM do Barquinho no rio no celular e commit. Depois, tickets 05 a 09.",
+    "proximaAcao": "Responsável: commit do ticket 11 (Barquinho desativado). QG-2 completo com dev servers parados, se quiser o carimbo. Depois, tickets 05 a 09.",
     "ticketAtivo": {
       "ticket": "11-barquinho-no-rio",
-      "estado": "PENDING_HUMAN",
+      "estado": "BLOCKED",
       "branch": "develop",
       "base": "17006f3",
       "arquivos": [
@@ -94,23 +94,24 @@
         "apps/web/scripts/check-peso-2d.mjs",
         "docs/arquitetura/DECISOES.md"
       ],
-      "qg1": "PASS — lint, typecheck, authz, check-e4, check-e5, regua-jogos 39/39",
-      "qg2": "PASS — build, authz, carga-trilhas, smoke-historico-resumo, smoke-e4, smoke-e5; check-peso-2d PASS",
-      "fingerprint": "sha256:1aadadd03cbf8cf5271b9400bc0982dd913d58da3c1f12b30c779db6aa58b4f4",
+      "qg1": "PASS — lint, typecheck, authz, check-e4, check-e5, regua-jogos 39/39 (após desativação)",
+      "qg2": "PENDENTE após a desativação (build bloqueado: dev servers do responsável no ar); smoke-e5 PASS 50/50 contra a API local; QG-2 completo PASS antes da desativação (fingerprint sha256:1aadadd0…)",
+      "fingerprint": "sha256:ae3ab89ce9b4ba20733d40dca3f9b11c4ec2349b6eb269684787a6cc75ea12d5",
       "peso": "check-peso-2d PASS: 36 rotas, máx. +1,58 kB (tela de jogar); folga ampliada para 2 kB pelo responsável",
       "verificador": "PASS (inclui delta pós-revisão)",
       "revisao": "Padrões: análise única do rio, contagem legível, piso de correnteza alinhado. Especificação: espelhos na régua, ADR com a medição atual; correnteza fora de M03 §15 como pendência",
-      "homologacao": "PENDING_HUMAN — E5-HOM no celular nas três trilhas",
-      "mensagemCommit": "feat(jogos): Barquinho no rio, o primeiro jogo 2D\n\nJogo 2D em PixiJS (ADR-018) com 15 fases em três trilhas: rio mais\nlongo, canal mais estreito, mais pedras e curvas, correnteza leve.\nSem tempo, sem vidas e sem perder: a pedra só desvia o barco e a\nrégua proíbe becos sem saída. Motor no servidor com os contratos de\nsempre, dica que leva à margem em todos os rios e tabuleiro baixado\nsó quando a partida é do Barquinho."
+      "homologacao": "REPROVADA em 2026-11-27 — jogo desativado (ativo: false) até revisão depois do Marco 1",
+      "mensagemCommit": "feat(jogos): Barquinho no rio 2D, desativado até revisão\n\nJogo 2D em PixiJS (ADR-018) com 15 fases, motor no servidor e régua\ncom rota, sem becos sem saída e métricas do 2D. A homologação humana\nreprovou o jogo; ele fica com ativo: false e será revisto depois de\ncompletar o Marco 1. Código e conteúdo permanecem; o catálogo segue\ncom 10 jogos ativos.",
+      "notaFingerprint": "Depois do QG-1 (sha256:ae3ab89c…) apareceu na raiz o arquivo não rastreado verificar-preparacao-lancamento.sh, alheio ao ticket e criado fora desta sessão; ele altera o fingerprint. Revalidar com o QG-2 completo quando os dev servers estiverem parados."
     },
     "verificacao": {
       "qg1": {
         "status": "PASS",
         "integral": false,
-        "em": "2026-11-27T17:59:58.801Z",
-        "base": "17006f30116a6f8c74f4cfe198995f909ea0b34f",
-        "head": "17006f30116a6f8c74f4cfe198995f909ea0b34f",
-        "fingerprint": "sha256:1aadadd03cbf8cf5271b9400bc0982dd913d58da3c1f12b30c779db6aa58b4f4",
+        "em": "2026-11-27T18:42:49.738Z",
+        "base": "d1a7cef309ad7e29716a90cc2194abe876f04bb0",
+        "head": "44cbae16122f676ee6285225c742bab1c3091a4f",
+        "fingerprint": "sha256:ae3ab89ce9b4ba20733d40dca3f9b11c4ec2349b6eb269684787a6cc75ea12d5",
         "checagens": [
           {
             "nome": "lint",
@@ -156,7 +157,7 @@
             "exit": 0
           }
         ],
-        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T17-59-58-801Z.json"
+        "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg1-2026-11-27T18-42-49-738Z.json"
       },
       "qg2": {
         "status": "PASS",
@@ -213,11 +214,12 @@
         "evidencia": "docs/esteira/evidencias/DEV-CAT-M1-CONTEUDO/qg2-2026-11-27T18-02-48-519Z.json"
       }
     },
-    "fingerprint": "sha256:1aadadd03cbf8cf5271b9400bc0982dd913d58da3c1f12b30c779db6aa58b4f4",
+    "fingerprint": "sha256:ae3ab89ce9b4ba20733d40dca3f9b11c4ec2349b6eb269684787a6cc75ea12d5",
     "pendenciasDocumentais": [
       "Texto de E4-ACE-01 (M03 §12, linhas 221 e 321) ainda diz 24; teto de 60 aprovado em 2026-11-27. M03 §15 (Marco 1) diz 'cerca de 20 por faixa'; leitura aprovada no ticket 03 (mínimo 20, 3 por faixa × área, diferença até 10). Atualizar na conversa de planejamento.",
       "Marco 1 (M03 §15) lista Mãe e filhote e Metades entre os 12 jogos novos; retirados do ticket 04 em 2026-11-27 pelo responsável, a substituir depois do Marco 1 (Marco 1 com 18 jogos ativos até lá).",
-      "M03 §15 (Barquinho no rio) não cita a correnteza leve que o ticket 11 aprovou (1,0/1,2/1,4 linhas por segundo por trilha)."
+      "M03 §15 (Barquinho no rio) não cita a correnteza leve que o ticket 11 aprovou (1,0/1,2/1,4 linhas por segundo por trilha).",
+      "Barquinho no rio (jogo 2D que fecha o Marco 1 em M03 §15) foi reprovado na homologação e desativado; revisão depois de completar o Marco 1."
     ]
   },
   "demandasConcluidas": [
